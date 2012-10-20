@@ -167,9 +167,9 @@ _key_is_modifier(guint keyval);
 static void
 _request_surrounding_text (FcitxIMContext **context);
 
-static gint
-_key_snooper_cb (GtkWidget   *widget,
-                 GdkEventKey *event,
+static GdkFilterReturn
+_key_snooper_cb (GdkXEvent   *xevent,
+                 GdkEvent    *event,
                  gpointer     user_data);
 
 static GType _fcitx_type_im_context = 0;
@@ -186,7 +186,7 @@ static gboolean _use_sync_mode = 0;
 static GtkIMContext *_focus_im_context = NULL;
 static const gchar *_no_snooper_apps = NO_SNOOPER_APPS;
 static gboolean _use_key_snooper = _ENABLE_SNOOPER;
-static guint    _key_snooper_id = 0;
+static gboolean _event_filter_installed = 0;
 
 /* Copied from gtk+2.0-2.20.1/modules/input/imcedilla.c to fix crosbug.com/11421.
 * Overwrite the original Gtk+'s compose table in gtk+-2.x.y/gtk/gtkimcontextsimple.c. */
@@ -338,17 +338,19 @@ fcitx_im_context_class_init(FcitxIMContextClass *klass)
     _use_sync_mode = fcitx_utils_get_boolean_env("IBUS_ENABLE_SYNC_MODE", FALSE)
                      || fcitx_utils_get_boolean_env("FCITX_ENABLE_SYNC_MODE", FALSE);
     /* always install snooper */
-    if (_key_snooper_id == 0)
-        _key_snooper_id = gtk_key_snooper_install (_key_snooper_cb, NULL);
+    if (!_event_filter_installed) {
+        _event_filter_installed = TRUE;
+        gdk_window_add_filter(NULL, _key_snooper_cb, NULL);
+    }
 }
 
 
 static void
 fcitx_im_context_class_fini (FcitxIMContextClass *klass)
 {
-    if (_key_snooper_id != 0) {
-        gtk_key_snooper_remove (_key_snooper_id);
-        _key_snooper_id = 0;
+    if (_event_filter_installed) {
+        gdk_window_remove_filter(NULL, _key_snooper_cb, NULL);
+        _event_filter_installed = FALSE;
     }
 }
 
@@ -1373,11 +1375,16 @@ _request_surrounding_text (FcitxIMContext **context)
 }
 
 
-static gint
-_key_snooper_cb (GtkWidget   *widget,
-                 GdkEventKey *event,
+static GdkFilterReturn
+_key_snooper_cb (GdkXEvent   *xevent,
+                 GdkEvent    *rawevent,
                  gpointer     user_data)
 {
+    if (rawevent->type != GDK_KEY_PRESS && rawevent->type != GDK_KEY_RELEASE)
+        return GDK_FILTER_CONTINUE;
+
+    GdkEventKey* event = (GdkEventKey*) rawevent;
+
     gboolean retval = FALSE;
 
     FcitxIMContext *fcitxcontext = (FcitxIMContext *) _focus_im_context;
