@@ -75,6 +75,7 @@ fcitx_input_method_new(GBusType             bus_type,
                        GCancellable        *cancellable,
                        GError             **error);
 GPtrArray*   fcitx_input_method_get_imlist(FcitxInputMethod* im);
+GPtrArray*   fcitx_input_method_get_imlist_nofree(FcitxInputMethod* im);
 void         fcitx_input_method_set_imlist(FcitxInputMethod* im, GPtrArray* array);
 void         fcitx_input_method_exit(FcitxInputMethod* im);
 void         fcitx_input_method_restart(FcitxInputMethod* im);

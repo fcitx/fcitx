@@ -127,16 +127,31 @@ fcitx_input_method_init(FcitxInputMethod *im)
 }
 
 /**
- * fcitx_input_method_get_imlist:
- * @im: A #FcitxInputMethod
- *
- * Get Fcitx all im list
- *
- * Returns: (transfer container) (element-type FcitxIMItem): A #FcitxIMItem List
+ * fcitx_input_method_get_imlist: (skip)
  **/
 FCITX_EXPORT_API
 GPtrArray*
 fcitx_input_method_get_imlist(FcitxInputMethod* im)
+{
+    GPtrArray *array = fcitx_input_method_get_imlist_nofree(im);
+    if (array)
+        g_ptr_array_set_free_func(array, (GDestroyNotify)fcitx_im_item_free);
+    return array;
+}
+
+/**
+ * fcitx_input_method_get_imlist_nofree:
+ * @im: A #FcitxInputMethod
+ *
+ * Get Fcitx all im list
+ *
+ * Returns: (transfer full) (element-type FcitxIMItem): A #FcitxIMItem List
+ *
+ * Rename to: fcitx_input_method_get_imlist
+ **/
+FCITX_EXPORT_API
+GPtrArray*
+fcitx_input_method_get_imlist_nofree(FcitxInputMethod* im)
 {
     GPtrArray *array = NULL;
     GVariant* value;
@@ -169,14 +184,15 @@ fcitx_input_method_get_imlist(FcitxInputMethod* im)
     }
 
     if (value) {
-        array = g_ptr_array_new_with_free_func((GDestroyNotify) fcitx_im_item_free);
+        array = g_ptr_array_new();
         g_variant_get(value, "a(sssb)", &iter);
         while (g_variant_iter_next(iter, "(sssb)", &name, &unique_name, &langcode, &enable, NULL)) {
-            FcitxIMItem* item = fcitx_im_item_new(name, unique_name, langcode, enable);
+            FcitxIMItem *item = g_slice_new(FcitxIMItem);
+            item->name = name;
+            item->unique_name = unique_name;
+            item->langcode = langcode;
+            item->enable = enable;
             g_ptr_array_add(array, item);
-            g_free(name);
-            g_free(unique_name);
-            g_free(langcode);
         }
         g_variant_iter_free(iter);
 
@@ -322,14 +338,11 @@ fcitx_input_method_new(GBusType             bus_type,
                                            "g-object-path", FCITX_IM_DBUS_PATH,
                                            "g-interface-name", FCITX_IM_DBUS_INTERFACE,
                                            NULL);
-
-    if (im != NULL)
-        return FCITX_INPUT_METHOD(im);
-    return NULL;
+    return FCITX_INPUT_METHOD(im);
 }
 
 /**
- * fcitx_im_item_new: (skip)
+ * fcitx_im_item_new:
  * @name: name of im
  * @unique_name: unique_name of im
  * @langcode: language code
@@ -352,7 +365,8 @@ static
 FcitxIMItem*
 fcitx_im_item_copy(FcitxIMItem* src)
 {
-    return fcitx_im_item_new(src->name, src->unique_name, src->langcode, src->enable);
+    return fcitx_im_item_new(src->name, src->unique_name,
+                             src->langcode, src->enable);
 }
 
 /**
@@ -371,7 +385,8 @@ void fcitx_im_item_free(FcitxIMItem* data)
     g_slice_free(FcitxIMItem, data);
 }
 
-G_DEFINE_BOXED_TYPE(FcitxIMItem, fcitx_im_item, fcitx_im_item_copy, fcitx_im_item_free)
+G_DEFINE_BOXED_TYPE(FcitxIMItem, fcitx_im_item, fcitx_im_item_copy,
+                    fcitx_im_item_free)
 
 void _fcitx_im_item_foreach_cb(gpointer       data,
                                    gpointer       user_data)

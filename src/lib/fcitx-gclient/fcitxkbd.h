@@ -36,6 +36,9 @@
         (G_TYPE_CHECK_CLASS_CAST((klass), FCITX_TYPE_KBD, FcitxKbdClass))
 #define FCITX_KBD_GET_CLASS(object)\
         (G_TYPE_INSTANCE_GET_CLASS ((object), FCITX_TYPE_KBD, FcitxKbdClass))
+#define FCITX_TYPE_LAYOUT_ITEM (fcitx_layout_item_get_type())
+#define FCITX_VALUE_HOLDS_LAYOUT_ITEM(x)                \
+    (G_VALUE_HOLDS((x), FCITX_TYPE_LAYOUT_ITEM))
 
 G_BEGIN_DECLS
 
@@ -63,7 +66,8 @@ struct _FcitxLayoutItem {
     gchar* langcode;
 };
 
-GType        fcitx_kbd_get_type(void) G_GNUC_CONST;
+GType fcitx_kbd_get_type(void) G_GNUC_CONST;
+GType fcitx_layout_item_get_type() G_GNUC_CONST;
 
 FcitxKbd*
 fcitx_kbd_new(GBusType             bus_type,
@@ -72,11 +76,10 @@ fcitx_kbd_new(GBusType             bus_type,
               GCancellable        *cancellable,
               GError             **error);
 GPtrArray*   fcitx_kbd_get_layouts(FcitxKbd* kbd);
+GPtrArray*   fcitx_kbd_get_layouts_nofree(FcitxKbd* kbd);
 void        fcitx_kbd_get_layout_for_im(FcitxKbd* kbd, const gchar* imname, gchar** layout, gchar** variant);
 void         fcitx_kbd_set_layout_for_im(FcitxKbd* kbd, const gchar* imname, const gchar* layout, const gchar* variant);
 void         fcitx_kbd_set_default_layout(FcitxKbd* kbd, const gchar* layout, const gchar* variant);
-
-void fcitx_layout_item_free(gpointer data);
 
 G_END_DECLS
 

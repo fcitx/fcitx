@@ -26,7 +26,13 @@
 #include "fcitxconnection.h"
 #include "marshall.h"
 
-#define fcitx_gclient_debug(...) g_log ("fcitx-connection",       \
+/**
+ * FcitxConnection:
+ *
+ * A FcitxConnection allow to create a input context via DBus
+ */
+
+#define fcitx_gclient_debug(...) g_log ("fcitx-connection", \
                                       G_LOG_LEVEL_DEBUG,    \
                                       __VA_ARGS__)
 struct _FcitxConnectionPrivate {
@@ -369,20 +375,29 @@ fcitx_connection_class_init(FcitxConnectionClass *klass)
 
 }
 
+/**
+ * fcitx_connection_new:
+ *
+ * New a #FcitxConnection
+ *
+ * Returns: A newly allocated #FcitxConnection
+ **/
 FCITX_EXPORT_API
 FcitxConnection*
 fcitx_connection_new()
 {
     FcitxConnection* self = g_object_new(FCITX_TYPE_CONNECTION, NULL);
-
-    if (self != NULL) {
-        return FCITX_CONNECTION(self);
-    }
-    else
-        return NULL;
-    return self;
+    return FCITX_CONNECTION(self);
 }
 
+/**
+ * fcitx_connection_is_valid:
+ * @connection: A #FcitxConnection
+ *
+ * Check #FcitxConnection is valid to communicate with Fcitx
+ *
+ * Returns: #FcitxConnection is valid or not
+ **/
 FCITX_EXPORT_API
 gboolean
 fcitx_connection_is_valid(FcitxConnection* self)
@@ -390,11 +405,20 @@ fcitx_connection_is_valid(FcitxConnection* self)
     return self->priv->connection != NULL;
 }
 
-GDBusConnection* fcitx_connection_get_g_dbus_connection(FcitxConnection* connection)
+/**
+ * fcitx_connection_get_g_dbus_connection:
+ * @connection: A #FcitxConnection
+ *
+ * Return the current #GDBusConnection
+ *
+ * Returns: (transfer none): #GDBusConnection for current connection
+ **/
+FCITX_EXPORT_API
+GDBusConnection*
+fcitx_connection_get_g_dbus_connection(FcitxConnection* connection)
 {
     return connection->priv->connection;
 }
-
 
 static void
 _fcitx_connection_socket_file_changed_cb (GFileMonitor       *monitor,

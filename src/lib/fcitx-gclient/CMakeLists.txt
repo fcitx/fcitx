@@ -31,6 +31,7 @@ set(FCITX_GCLIENT_HEADERS
     fcitxclient.h
     fcitxinputmethod.h
     fcitxkbd.h
+    fcitxconnection.h
 )
 
 set(FCITX_GCLIENT_BUILT_HEADERS

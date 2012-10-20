@@ -975,13 +975,7 @@ FcitxClient*
 fcitx_client_new()
 {
     FcitxClient* self = g_object_new(FCITX_TYPE_CLIENT, NULL);
-
-    if (self != NULL) {
-        return FCITX_CLIENT(self);
-    }
-    else
-        return NULL;
-    return self;
+    return FCITX_CLIENT(self);
 }
 
 /**
