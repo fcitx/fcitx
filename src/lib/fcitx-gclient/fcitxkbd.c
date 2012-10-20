@@ -21,6 +21,12 @@
 #include "module/dbus/dbusstuff.h"
 #include "fcitxkbd.h"
 
+/**
+ * FcitxKbd:
+ *
+ * A #FcitxKbd allow you to control fcitx via DBus.
+ */
+
 static const gchar introspection_xml[] =
 "<node>"
 "    <interface name=\"org.fcitx.Fcitx.Keyboard\">"
@@ -91,6 +97,18 @@ fcitx_kbd_class_init(FcitxKbdClass *klass)
 
 }
 
+/**
+ * fcitx_kbd_new:
+ * @bus_type: #GBusType
+ * @flags:  #GDBusProxyFlags
+ * @display_number: display_number
+ * @cancellable: A #GCancellable or %NULL
+ * @error: Error or %NULL
+ *
+ * New a #fcitxKbd.
+ *
+ * Returns: A newly allocated #FcitxKbd.
+ */
 FCITX_EXPORT_API
 FcitxKbd*
 fcitx_kbd_new(GBusType             bus_type,
@@ -118,6 +136,14 @@ fcitx_kbd_new(GBusType             bus_type,
     return NULL;
 }
 
+/**
+ * fcitx_kbd_get_layouts:
+ * @kbd: A #FcitxKbd
+ *
+ * Get Fcitx all im list
+ *
+ * Returns: (transfer full) (element-type FcitxLayoutItem): A #FcitxLayoutItem List
+ **/
 FCITX_EXPORT_API
 GPtrArray* fcitx_kbd_get_layouts(FcitxKbd* kbd)
 {
@@ -159,6 +185,15 @@ GPtrArray* fcitx_kbd_get_layouts(FcitxKbd* kbd)
     return array;
 }
 
+/**
+ * fcitx_kbd_get_layout_for_im:
+ * @kbd: A #FcitxKbd
+ * @imname: input method name
+ * @layout: (out): return'd layout
+ * @variant: (out): return'd variant
+ *
+ * Get a layout binding with input method
+ **/
 FCITX_EXPORT_API
 void fcitx_kbd_get_layout_for_im(FcitxKbd* kbd, const gchar* imname, gchar** layout, gchar** variant)
 {
@@ -183,6 +218,15 @@ void fcitx_kbd_get_layout_for_im(FcitxKbd* kbd, const gchar* imname, gchar** lay
 
 }
 
+/**
+ * fcitx_kbd_set_layout_for_im:
+ * @kbd: A #FcitxKbd
+ * @imname: input method name
+ * @layout: layout
+ * @variant: variant
+ *
+ * Set a layout binding with input method
+ **/
 FCITX_EXPORT_API
 void fcitx_kbd_set_layout_for_im(FcitxKbd* kbd, const gchar* imname, const gchar* layout, const gchar* variant)
 {
@@ -197,6 +241,14 @@ void fcitx_kbd_set_layout_for_im(FcitxKbd* kbd, const gchar* imname, const gchar
                      );
 }
 
+/**
+ * fcitx_kbd_set_default_layout:
+ * @kbd: A #FcitxKbd
+ * @layout: layout
+ * @variant: variant
+ *
+ * Set a layout binding with the state when there is no input method
+ **/
 FCITX_EXPORT_API
 void fcitx_kbd_set_default_layout(FcitxKbd* kbd, const gchar* layout, const gchar* variant)
 {
@@ -211,6 +263,12 @@ void fcitx_kbd_set_default_layout(FcitxKbd* kbd, const gchar* layout, const gcha
                      );
 }
 
+/**
+ * fcitx_layout_item_free: (skip)
+ * @data: (type FcitxLayoutItem): A #FcitxLayoutItem
+ *
+ * free an im_item
+ **/
 void fcitx_layout_item_free(gpointer data)
 {
     FcitxLayoutItem* item = data;

@@ -334,8 +334,7 @@ fcitx_connection_class_init(FcitxConnectionClass *klass)
 
     /* install signals */
     /**
-     * FcitxConnection::connected
-     *
+     * FcitxConnection::connected:
      * @connection: A FcitxConnection
      *
      * Emit when connected to fcitx and created ic
@@ -352,8 +351,7 @@ fcitx_connection_class_init(FcitxConnectionClass *klass)
                                      0);
 
     /**
-     * FcitxConnection::disconnected
-     *
+     * FcitxConnection::disconnected:
      * @connection: A FcitxConnection
      *
      * Emit when disconnected from fcitx

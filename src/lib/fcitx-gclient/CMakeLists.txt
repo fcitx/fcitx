@@ -66,6 +66,7 @@ gobject_introspection(
     COMPILER_ARGS "--includedir=${CMAKE_CURRENT_SOURCE_DIR}"
     SYMBOL_PREFIXES fcitx
     SOURCES ${FCITX_GCLIENT_SOURCES} ${FCITX_GCLIENT_HEADERS}
+    QUIET
 )
 
 
