@@ -183,7 +183,7 @@ extern "C" {
         return FcitxModuleInvokeOnAddon(addon, func, &args);           \
     }
 
-#define MODULE_ARGS(var, ARGV...)                       \
+#define FCITX_DEF_MODULE_ARGS(var, ARGV...)             \
     FcitxModuleFunctionArg var = { .args = {ARGV} }
     /* void *__##var##_array[] = {ARGV};                                   \ */
     /* size_t __##var##_length = sizeof(__##var##_array) / sizeof(void*);  \ */

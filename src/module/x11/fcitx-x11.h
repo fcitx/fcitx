@@ -32,7 +32,7 @@ DEFINE_GET_AND_INVOKE_FUNC(X11, GetDisplay, 0)
 static inline Display*
 FcitxX11GetDisplay(FcitxInstance *instance)
 {
-    MODULE_ARGS(args);
+    FCITX_DEF_MODULE_ARGS(args);
     return (Display*)(intptr_t)FcitxX11InvokeGetDisplay(instance, args);
 }
 
@@ -41,7 +41,7 @@ static inline void
 FcitxX11AddXEventHandler(FcitxInstance *instance,
                          FcitxX11XEventHandler arg0, void *arg1)
 {
-    MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+    FCITX_DEF_MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
     FcitxX11InvokeAddXEventHandler(instance, args);
 }
 
@@ -50,7 +50,7 @@ static inline void
 FcitxX11RemoveXEventHandler(FcitxInstance *instance,
                             void *arg0)
 {
-    MODULE_ARGS(args, (void*)(intptr_t)arg0);
+    FCITX_DEF_MODULE_ARGS(args, (void*)(intptr_t)arg0);
     FcitxX11InvokeRemoveXEventHandler(instance, args);
 }
 
@@ -58,7 +58,7 @@ DEFINE_GET_AND_INVOKE_FUNC(X11, FindARGBVisual, 3)
 static inline Visual*
 FcitxX11FindARGBVisual(FcitxInstance *instance)
 {
-    MODULE_ARGS(args);
+    FCITX_DEF_MODULE_ARGS(args);
     return (Visual*)(intptr_t)FcitxX11InvokeFindARGBVisual(instance, args);
 }
 
@@ -69,9 +69,9 @@ FcitxX11InitWindowAttribute(FcitxInstance *instance,
                             XSetWindowAttributes *arg2,
                             unsigned long *arg3, int *arg4)
 {
-    MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
-                (void*)(intptr_t)arg2, (void*)(intptr_t)arg3,
-                (void*)(intptr_t)arg4);
+    FCITX_DEF_MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
+                          (void*)(intptr_t)arg2, (void*)(intptr_t)arg3,
+                          (void*)(intptr_t)arg4);
     FcitxX11InvokeInitWindowAttribute(instance, args);
 }
 
@@ -80,8 +80,8 @@ static inline void
 FcitxX11SetWindowProp(FcitxInstance *instance,
                       Window *arg0, FcitxXWindowType *arg1, char *arg2)
 {
-    MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
-                (void*)(intptr_t)arg2);
+    FCITX_DEF_MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
+                          (void*)(intptr_t)arg2);
     FcitxX11InvokeSetWindowProp(instance, args);
 }
 
@@ -90,7 +90,7 @@ static inline void
 FcitxX11GetScreenSize(FcitxInstance *instance,
                       int *arg0, int *arg1)
 {
-    MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+    FCITX_DEF_MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
     FcitxX11InvokeGetScreenSize(instance, args);
 }
 
@@ -99,8 +99,8 @@ static inline void
 FcitxX11MouseClick(FcitxInstance *instance,
                    Window *arg0, int *arg1, int *arg2, boolean *arg3)
 {
-    MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
-                (void*)(intptr_t)arg2, (void*)(intptr_t)arg3);
+    FCITX_DEF_MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
+                          (void*)(intptr_t)arg2, (void*)(intptr_t)arg3);
     FcitxX11InvokeMouseClick(instance, args);
 }
 
@@ -109,7 +109,7 @@ static inline void
 FcitxX11AddCompositeHandler(FcitxInstance *instance,
                             FcitxX11CompositeHandler arg0, void *arg1)
 {
-    MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+    FCITX_DEF_MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
     FcitxX11InvokeAddCompositeHandler(instance, args);
 }
 
@@ -118,8 +118,8 @@ static inline void
 FcitxX11GetScreenGeometry(FcitxInstance *instance,
                           int *arg0, int *arg1, FcitxRect *arg2)
 {
-    MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
-                (void*)(intptr_t)arg2);
+    FCITX_DEF_MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
+                          (void*)(intptr_t)arg2);
     FcitxX11InvokeGetScreenGeometry(instance, args);
 }
 
@@ -127,7 +127,7 @@ DEFINE_GET_AND_INVOKE_FUNC(X11, ProcessRemainEvent, 10)
 static inline void
 FcitxX11ProcessRemainEvent(FcitxInstance *instance)
 {
-    MODULE_ARGS(args);
+    FCITX_DEF_MODULE_ARGS(args);
     FcitxX11InvokeProcessRemainEvent(instance, args);
 }
 
@@ -136,7 +136,7 @@ static inline void
 FcitxX11GetDPI(FcitxInstance *instance,
                int *arg0, int *arg1)
 {
-    MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+    FCITX_DEF_MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
     FcitxX11InvokeGetDPI(instance, args);
 }
 
@@ -147,9 +147,9 @@ FcitxX11RegSelectNotify(FcitxInstance *instance,
                         X11SelectionNotifyCallback arg2,
                         void *arg3, FcitxDestroyNotify arg4)
 {
-    MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
-                (void*)(intptr_t)arg2, (void*)(intptr_t)arg3,
-                (void*)(intptr_t)arg4);
+    FCITX_DEF_MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
+                          (void*)(intptr_t)arg2, (void*)(intptr_t)arg3,
+                          (void*)(intptr_t)arg4);
     return (unsigned int)(intptr_t)FcitxX11InvokeRegSelectNotify(instance, args);
 }
 
@@ -158,7 +158,7 @@ static inline void
 FcitxX11RemoveSelectNotify(FcitxInstance *instance,
                            unsigned int arg0)
 {
-    MODULE_ARGS(args, (void*)(intptr_t)arg0);
+    FCITX_DEF_MODULE_ARGS(args, (void*)(intptr_t)arg0);
     FcitxX11InvokeRemoveSelectNotify(instance, args);
 }
 
@@ -166,7 +166,7 @@ DEFINE_GET_AND_INVOKE_FUNC(X11, DefaultEventWindow, 14)
 static inline Window
 FcitxX11DefaultEventWindow(FcitxInstance *instance)
 {
-    MODULE_ARGS(args);
+    FCITX_DEF_MODULE_ARGS(args);
     return (Window)(intptr_t)FcitxX11InvokeDefaultEventWindow(instance, args);
 }
 
@@ -177,9 +177,9 @@ FcitxX11RequestConvertSelect(FcitxInstance *instance,
                              X11ConvertSelectionCallback arg3,
                              void *arg4, FcitxDestroyNotify arg5)
 {
-    MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
-                (void*)(intptr_t)arg2, (void*)(intptr_t)arg3,
-                (void*)(intptr_t)arg4, (void*)(intptr_t)arg5);
+    FCITX_DEF_MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
+                          (void*)(intptr_t)arg2, (void*)(intptr_t)arg3,
+                          (void*)(intptr_t)arg4, (void*)(intptr_t)arg5);
     return (unsigned int)(intptr_t)FcitxX11InvokeRequestConvertSelect(instance, args);
 }
 
