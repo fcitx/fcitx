@@ -26,6 +26,8 @@
 # (To distribute this file outside of Fcitx, substitute the full
 #  License text for the above reference.)
 
+include(CMakeParseArguments)
+
 FIND_PROGRAM(INTLTOOL_EXTRACT intltool-extract)
 FIND_PROGRAM(INTLTOOL_UPDATE intltool-update)
 FIND_PROGRAM(INTLTOOL_MERGE intltool-merge)
@@ -139,6 +141,11 @@ endfunction()
 __fcitx_global_targets()
 
 function(fcitx_scan_addon_with_name subdir name)
+  set(options NO_INSTALL)
+  set(oneValueArgs)
+  set(multiValueArgs)
+  cmake_parse_arguments(FCITX_SCAN
+    "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
   get_property(FCITX_INTERNAL_BUILD GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD")
   # too lazy to set variables instead of simply copy the command twice here...
   if(FCITX_INTERNAL_BUILD)
@@ -156,9 +163,11 @@ function(fcitx_scan_addon_with_name subdir name)
       DEPENDS "${name}.fxaddon"
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
   endif()
-  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${name}.h"
-    DESTINATION "${includedir}/${FCITX4_PACKAGE_NAME}/module/${subdir}")
   add_custom_target(${name}-scan-addon.target
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${name}.h")
   add_dependencies(fcitx-scan-addons.target ${name}-scan-addon.target)
+  if(NOT FCITX_SCAN_NO_INSTALL)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${name}.h"
+      DESTINATION "${includedir}/${FCITX4_PACKAGE_NAME}/module/${subdir}")
+  endif()
 endfunction()
