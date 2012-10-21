@@ -123,12 +123,16 @@ function(FCITX_ADD_ADDON_HEADER subdir)
     DESTINATION "${includedir}/${FCITX4_PACKAGE_NAME}/module/${subdir}")
 endfunction()
 
-function(fcitx_scanner_addon subdir name)
+function(fcitx_scan_addon subdir)
+  fcitx_scan_addon_with_name("${subdir}" "fcitx-${subdir}")
+endfunction()
+
+function(fcitx_scan_addon_with_name subdir name)
   get_property(FCITX_INTERNAL_BUILD GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD")
   # too lazy to set variables instead of simply copy the command twice here...
   if(FCITX_INTERNAL_BUILD)
     add_custom_command(
-      COMMAND "${PROJECT_BINARY_DIR}/tools/fcitx-scanner" "${name}.fxaddon"
+      COMMAND "${PROJECT_BINARY_DIR}/tools/dev/fcitx-scanner" "${name}.fxaddon"
       "${CMAKE_CURRENT_BINARY_DIR}/${name}.h"
       OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${name}.h"
       DEPENDS "${name}.fxaddon" fcitx-scanner
