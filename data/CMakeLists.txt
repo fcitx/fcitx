@@ -70,7 +70,7 @@ if (_ENABLE_DBUS)
 install(FILES daemon.conf DESTINATION share/fcitx/dbus/)
 endif (_ENABLE_DBUS)
 
-set(SPELL_EN_DICT_VER 20120815)
+set(SPELL_EN_DICT_VER 20121020)
 set(SPELL_EN_DICT en_dict.fscd)
 set(SPELL_EN_DICT_SRC en_dict.txt)
 set(SPELL_EN_DICT_TAR ${CMAKE_CURRENT_SOURCE_DIR}/en_dict-${SPELL_EN_DICT_VER}.tar.gz)
