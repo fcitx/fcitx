@@ -212,7 +212,7 @@ void* QuickPhraseLaunch(void* arg, FcitxModuleFunctionArg args)
     _QuickPhraseLaunch(qpstate);
     FcitxUIUpdateInputWindow(qpstate->owner);
 
-    return (void*) true;
+    return (void*)true;
 }
 
 void QuickPhraseFillKeyString(QuickPhraseState* qpstate, char c[2])
@@ -239,7 +239,7 @@ void _QuickPhraseLaunch(QuickPhraseState* qpstate)
     ShowQuickPhraseMessage(qpstate);
 
     if (c[0]) {
-        FcitxKeySym s = qpstate->curTriggerKey[0].sym;
+        int s = qpstate->curTriggerKey[0].sym;
         char *strTemp = FcitxPuncGetPunc(qpstate->owner, &s);
         const char* full = strTemp ? strTemp : c;
         FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Space for %s Enter for %s") , full, c);
@@ -360,7 +360,7 @@ boolean QuickPhrasePreFilter(void *arg, FcitxKeySym sym,
             ((qpstate->useDupKeyInput &&
               FcitxHotkeyIsHotKey(keymain, state, qpstate->curTriggerKey)) ||
              FcitxHotkeyIsHotKey(keymain, state, FCITX_SPACE))) {
-            FcitxKeySym s = qpstate->curTriggerKey[0].sym;
+            int s = qpstate->curTriggerKey[0].sym;
             char *strTemp = FcitxPuncGetPunc(qpstate->owner, &s);
             strcpy(FcitxInputStateGetOutputString(input), strTemp ? strTemp : c);
             *retval = IRV_COMMIT_STRING;

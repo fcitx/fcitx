@@ -48,7 +48,7 @@
 #include "sp.h"
 #include "pyconfig.h"
 #include "spdata.h"
-#include "module/quickphrase/quickphrase.h"
+#include "module/quickphrase/fcitx-quickphrase.h"
 
 #define PY_INDEX_MAGIC_NUMBER 0xf7462e34
 #define PINYIN_TEMP_FILE "pinyin_XXXXXX"
@@ -538,8 +538,8 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 int key = sym;
                 boolean useDup = false;
                 boolean append = true;
-                if (InvokeVaArgs(pystate->owner, FCITX_QUICKPHRASE,
-                                 LAUNCHQUICKPHRASE, &key, &useDup, &append))
+                if (FcitxQuickPhraseLaunch(pystate->owner, &key,
+                                           &useDup, &append))
                     return IRV_DISPLAY_MESSAGE;
             }
 
