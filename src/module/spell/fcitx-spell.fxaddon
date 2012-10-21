@@ -1,0 +1,52 @@
+[FcitxAddon]
+Name=fcitx-spell
+Prefix=Spell
+Include0="spell.h"
+Function0=HintWords
+Function1=AddPersonal
+Function2=DictAvailable
+Function3=GetCandWords
+Function4=CandWordGetCommit
+Function5=
+Function6=
+Function7=
+Function8=
+
+[HintWords]
+Name=hint-words
+Return=SpellHint*
+Arg0=const char*
+Arg1=const char*
+Arg2=const char*
+Arg3=unsigned int
+Arg4=const char*
+Arg5=const char*
+
+[AddPersonal]
+Name=add-personal
+Return=boolean
+Arg0=const char*
+Arg1=const char*
+
+[DictAvailable]
+Name=dict-available
+Return=boolean
+Arg0=const char*
+Arg1=const char*
+
+[GetCandWords]
+Name=get-cand-words
+Return=FcitxCandidateWordList*
+Arg0=const char*
+Arg1=const char*
+Arg2=const char*
+Arg3=unsigned int
+Arg4=const char*
+Arg5=const char*
+Arg6=FcitxSpellGetCandWordCb
+Arg7=void*
+
+[CandWordGetCommit]
+Name=cand-word-get-commit
+Return=const char*
+Arg0=FcitxCandidateWord*

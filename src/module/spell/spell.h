@@ -43,6 +43,9 @@ enum {
     FCITX_SPELL_CANDWORD_GET_COMMIT,
 };
 
+typedef INPUT_RETURN_VALUE (*FcitxSpellGetCandWordCb)(void *arg,
+                                                      const char *commit);
+
 typedef SpellHint* FCITX_SPELL_HINT_WORDS_RETURNTYPE;
 typedef unsigned long FCITX_SPELL_ADD_PERSONAL_RETURNTYPE;
 typedef unsigned long FCITX_SPELL_DICT_AVAILABLE_RETURNTYPE;

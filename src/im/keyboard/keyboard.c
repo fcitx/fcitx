@@ -40,7 +40,7 @@
 #include "fcitx/hook.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
-#include "module/spell/spell.h"
+#include "module/spell/fcitx-spell.h"
 
 #include "keyboard.h"
 #if defined(ENABLE_LIBXML2)
@@ -509,10 +509,9 @@ void  FcitxKeyboardResetIM(void *arg)
     keyboard->n_compose = 0;
 }
 
-boolean IsDictAvailable(FcitxKeyboard* keyboard)
+static boolean IsDictAvailable(FcitxKeyboard* keyboard)
 {
-    return InvokeVaArgs(keyboard->owner, FCITX_SPELL, DICT_AVAILABLE,
-                        keyboard->dictLang, NULL);
+    return FcitxSpellDictAvailable(keyboard->owner, keyboard->dictLang, NULL);
 }
 
 /* a little bit funny here LOL.... */
@@ -559,8 +558,8 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 
         if (FcitxHotkeyIsHotKey(sym, state,
                                 keyboard->config.hkAddToUserDict)) {
-            if (InvokeVaArgs(instance, FCITX_SPELL, ADD_PERSONAL,
-                             keyboard->buffer, keyboard->dictLang))
+            if (FcitxSpellAddPersonal(instance, keyboard->buffer,
+                                      keyboard->dictLang))
                 return IRV_DO_NOTHING;
         }
 
@@ -701,11 +700,10 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
         return IRV_DISPLAY_CANDWORDS;
 
     FcitxCandidateWordList *candList;
-    candList = InvokeVaArgs(instance, FCITX_SPELL, GET_CANDWORDS,
-                            NULL, keyboard->buffer, NULL,
-                            (void*)(long)keyboard->config.maximumHintLength,
-                            keyboard->dictLang, NULL,
-                            FcitxKeyboardGetCandWordCb, layout);
+    candList = FcitxSpellGetCandWords(instance, NULL, keyboard->buffer, NULL,
+                                      keyboard->config.maximumHintLength,
+                                      keyboard->dictLang, NULL,
+                                      FcitxKeyboardGetCandWordCb, layout);
     if (!candList)
         return IRV_DISPLAY_CANDWORDS;
     FcitxCandidateWordMerge(FcitxInputStateGetCandidateList(input),

@@ -16,6 +16,7 @@ endif()
 
 link_directories(${DL_LIBRARY_DIRS})
 
+fcitx_scan_addon(spell)
 fcitx_add_addon(fcitx-spell ${FCITX_SPELL_SOURCES})
 target_link_libraries(fcitx-spell ${DL_LIBRARIES})
 

@@ -39,7 +39,7 @@
 #include "fcitx/context.h"
 #include "module/punc/fcitx-punc.h"
 #include "module/lua/luamod.h"
-#include "module/spell/spell.h"
+#include "module/spell/fcitx-spell.h"
 
 #include "fcitx/ime.h"
 
@@ -528,9 +528,8 @@ QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
     } else {
         search = qpstate->buffer;
     }
-    new_list = InvokeVaArgs(qpstate->owner, FCITX_SPELL, GET_CANDWORDS,
-                            NULL, search, NULL, (void*)(long)space_left,
-                            "en", "cus", NULL, NULL);
+    new_list = FcitxSpellGetCandWords(qpstate->owner, NULL, search, NULL,
+                                      space_left, "en", "cus", NULL, NULL);
     if (new_list) {
         FcitxCandidateWordMerge(cand_list, new_list, -1);
         FcitxCandidateWordFreeList(new_list);
