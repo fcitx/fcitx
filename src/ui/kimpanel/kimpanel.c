@@ -266,7 +266,7 @@ void* KimpanelCreate(FcitxInstance* instance)
 {
     FcitxKimpanelUI *kimpanel = fcitx_utils_malloc0(sizeof(FcitxKimpanelUI));
 
-    kimpanel->addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-kimpanel");
+    kimpanel->addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-kimpanel-ui");
     kimpanel->lastCursor = -2;
     kimpanel->version = 1;
     kimpanel->iCursorPos = 0;
