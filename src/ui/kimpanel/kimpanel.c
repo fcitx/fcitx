@@ -28,8 +28,7 @@
 #include "config.h"
 #include "fcitx/ui.h"
 #include "fcitx-utils/log.h"
-#include <dbus/dbus.h>
-#include "module/dbus/dbusstuff.h"
+#include "module/dbus/fcitx-dbus.h"
 #include "fcitx/instance.h"
 #include "fcitx/module.h"
 #include "fcitx/frontend.h"
@@ -271,7 +270,7 @@ void* KimpanelCreate(FcitxInstance* instance)
     kimpanel->version = 1;
     kimpanel->iCursorPos = 0;
     kimpanel->owner = instance;
-    kimpanel->conn = InvokeVaArgs(instance, FCITX_DBUS, GETCONNECTION);
+    kimpanel->conn = FcitxDBusGetConnection(instance);
 
     DBusError err;
     dbus_error_init(&err);

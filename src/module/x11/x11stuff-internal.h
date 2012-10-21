@@ -58,7 +58,6 @@ typedef struct {
     FcitxRect* rects;
     int screenCount;
     int defaultScreen;
-    FcitxAddon* xim;
     double dpif;
     int dpi;
     boolean firstRun;
