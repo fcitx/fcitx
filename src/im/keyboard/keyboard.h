@@ -28,7 +28,7 @@
 #include <fcitx/ime.h>
 #include <fcitx-utils/utarray.h>
 #include <fcitx-config/fcitx-config.h>
-#include "rules.h"
+#include "module/xkb/fcitx-xkb.h"
 
 #define FCITX_KEYBOARD_MAX_BUFFER 20
 #define FCITX_MAX_COMPOSE_LEN 7

@@ -1487,7 +1487,7 @@ void PYAddFreqCandWord(PyFreq* pyFreq, HZ * hz, char *strPY, PYCandWord* pycandW
  * 将一个词组保存到用户词组库中
  * 返回true表示是新词组
  */
-boolean PYAddUserPhrase(FcitxPinyinState* pystate, char *phrase, char *map, boolean incHit)
+boolean PYAddUserPhrase(FcitxPinyinState* pystate, const char *phrase, const char *map, boolean incHit)
 {
     PyUsrPhrase *userPhrase, *newPhrase, *temp;
     char str[UTF8_MAX_LENGTH + 1];
@@ -2034,7 +2034,7 @@ void PYAddRemindCandWord(FcitxPinyinState* pystate, PyPhrase * phrase, PYCandWor
     pyRemindCandWords->iLength = strlen(pystate->strPYRemindSource) - fcitx_utf8_char_len(pystate->strPYRemindSource);
 }
 
-void PYGetPYByHZ(FcitxPinyinState*pystate, char *strHZ, char *strPY)
+void PYGetPYByHZ(FcitxPinyinState*pystate, const char *strHZ, char *strPY)
 {
     int i, j;
     char str_PY[MAX_PY_LENGTH + 1];
@@ -2076,7 +2076,7 @@ void* LoadPYBaseDictWrapper(void * arg, FcitxModuleFunctionArg args)
 void* PYGetPYByHZWrapper(void * arg, FcitxModuleFunctionArg args)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    char *a = args.args[0];
+    const char *a = args.args[0];
     char *b = args.args[1];
     PYGetPYByHZ(pystate, a, b);
     return NULL;
@@ -2089,8 +2089,8 @@ void* DoPYInputWrapper(void * arg, FcitxModuleFunctionArg args)
     unsigned int *b = args.args[1];
     DoPYInput(pystate, *a, *b);
     return NULL;
-
 }
+
 void* PYGetCandWordsWrapper(void * arg, FcitxModuleFunctionArg args)
 {
     PYGetCandWords(arg);
@@ -2242,7 +2242,7 @@ int PYCandWordCmp(const void* b, const void *a, void* arg)
 void* PYSP2QP(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    char* strSP = args.args[0];
+    const char* strSP = args.args[0];
     char strQP[MAX_PY_LENGTH + 1];
     strQP[0] = 0;
 
@@ -2274,7 +2274,9 @@ void*
 PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    char* strHZ = args.args[0], *sp, *pivot;
+    const char *strHZ = args.args[0];
+    const char *pivot;
+    char *sp;
     char singleHZ[UTF8_MAX_LENGTH + 1];
     char strMap[3];
     if (!fcitx_utf8_check_string(strHZ))

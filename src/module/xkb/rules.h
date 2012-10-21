@@ -21,52 +21,7 @@
 #ifndef FCITX_KEYBOARD_RULES_H
 #define FCITX_KEYBOARD_RULES_H
 
-#include <fcitx-utils/utarray.h>
-#include <fcitx-config/fcitx-config.h>
-
-typedef struct _FcitxXkbRules {
-    UT_array* layoutInfos;
-    UT_array* modelInfos;
-    UT_array* optionGroupInfos;
-    char* version;
-} FcitxXkbRules;
-
-typedef struct _FcitxXkbRulesHandler {
-    UT_array* path;
-    FcitxXkbRules* rules;
-    boolean fromExtra;
-} FcitxXkbRulesHandler;
-
-typedef struct _FcitxXkbLayoutInfo {
-    UT_array* variantInfos;
-    char* name;
-    char* description;
-    UT_array* languages;
-} FcitxXkbLayoutInfo;
-
-typedef struct _FcitxXkbVariantInfo {
-    char* name;
-    char* description;
-    UT_array* languages;
-} FcitxXkbVariantInfo;
-
-typedef struct _FcitxXkbModelInfo {
-    char* name;
-    char* description;
-    char* vendor;
-} FcitxXkbModelInfo;
-
-typedef struct _FcitxXkbOptionGroupInfo {
-    UT_array* optionInfos;
-    char* name;
-    char* description;
-    boolean exclusive;
-} FcitxXkbOptionGroupInfo;
-
-typedef struct _FcitxXkbOptionInfo {
-    char* name;
-    char* description;
-} FcitxXkbOptionInfo;
+#include "xkb.h"
 
 FcitxXkbRules* FcitxXkbReadRules(const char* file);
 void FcitxXkbRulesFree(FcitxXkbRules* rules);

@@ -21,8 +21,7 @@
 #include "config.h"
 
 #include "libintl.h"
-#include "module/xkb/xkb.h"
-#include "module/xkb/rules.h"
+#include "module/xkb/fcitx-xkb.h"
 #include "module/dbus/fcitx-dbus.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/module.h"
@@ -95,7 +94,7 @@ void* FcitxXkbDBusCreate(FcitxInstance* instance)
             FcitxLog(ERROR, "No memory");
             break;
         }
-        FcitxXkbRules *rules = InvokeVaArgs(instance, FCITX_XKB, GETRULES);
+        FcitxXkbRules *rules = FcitxXkbGetRules(instance);
 
         if (!rules)
             break;
@@ -208,8 +207,7 @@ DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
         dbus_error_init(&error);
         char* im, *layout, *variant;
         if (dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &im, DBUS_TYPE_STRING, &layout, DBUS_TYPE_STRING, &variant, DBUS_TYPE_INVALID)) {
-            InvokeVaArgs(xkbdbus->owner, FCITX_XKB, SETLAYOUTOVERRIDE,
-                         im, layout, variant);
+            FcitxXkbSetLayoutOverride(xkbdbus->owner, im, layout, variant);
         }
         DBusMessage *reply = dbus_message_new_method_return(message);
         dbus_connection_send(connection, reply, NULL);
@@ -221,8 +219,7 @@ DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
         dbus_error_init(&error);
         char *layout, *variant;
         if (dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &layout, DBUS_TYPE_STRING, &variant, DBUS_TYPE_INVALID)) {
-            InvokeVaArgs(xkbdbus->owner, FCITX_XKB, SETDEFAULTLAYOUT,
-                           layout, variant);
+            FcitxXkbSetDefaultLayout(xkbdbus->owner, layout, variant);
         }
         DBusMessage *reply = dbus_message_new_method_return(message);
         dbus_connection_send(connection, reply, NULL);
@@ -233,9 +230,9 @@ DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
         DBusError error;
         dbus_error_init(&error);
         char* im = NULL, *layout = NULL, *variant = NULL;
-        if (dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &im, DBUS_TYPE_INVALID)) {
-            InvokeVaArgs(xkbdbus->owner, FCITX_XKB, GETLAYOUTOVERRIDE,
-                         im, &layout, &variant);
+        if (dbus_message_get_args(message, &error, DBUS_TYPE_STRING,
+                                  &im, DBUS_TYPE_INVALID)) {
+            FcitxXkbGetLayoutOverride(xkbdbus->owner, im, &layout, &variant);
 
             if (!layout)
                 layout = "";

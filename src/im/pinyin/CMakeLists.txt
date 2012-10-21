@@ -1,4 +1,3 @@
-
 set(FCITX_PINYIN_SOURCES
     py.c
     PYFA.c
@@ -9,6 +8,7 @@ set(FCITX_PINYIN_SOURCES
 )
 
 fcitx_add_addon(fcitx-pinyin ${FCITX_PINYIN_SOURCES})
+fcitx_scan_addon(pinyin)
 
 fcitx_add_addon_header(pinyin pydef.h)
 fcitx_add_configdesc_file(fcitx-pinyin.desc)

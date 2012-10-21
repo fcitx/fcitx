@@ -105,10 +105,11 @@ MACRO(EXTRACT_FCITX_ADDON_CONF_POSTRING)
 ENDMACRO(EXTRACT_FCITX_ADDON_CONF_POSTRING)
 
 MACRO(FCITX_ADD_ADDON target)
-    set(_args ${ARGN})
-    set(_SRCS ${_args})
+    set(_SRCS ${ARGN})
     add_library(${target} MODULE ${_SRCS})
+    add_dependencies(fcitx-modules.target ${target})
     set_target_properties( ${target} PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
+  add_dependencies(${target} fcitx-scan-addons.target)
     install(TARGETS ${target} DESTINATION ${FCITX4_ADDON_INSTALL_DIR})
 ENDMACRO(FCITX_ADD_ADDON)
 
@@ -126,6 +127,16 @@ endfunction()
 function(fcitx_scan_addon subdir)
   fcitx_scan_addon_with_name("${subdir}" "fcitx-${subdir}")
 endfunction()
+
+function(__fcitx_global_targets)
+  get_property(__target_added GLOBAL PROPERTY "__FCITX_TARGETS_ADDED")
+  add_custom_target(fcitx-modules.target ALL)
+  add_custom_target(fcitx-scan-addons.target)
+  add_dependencies(fcitx-modules.target fcitx-scan-addons.target)
+  set_property(GLOBAL PROPERTY "__FCITX_TARGETS_ADDED" 1)
+endfunction()
+
+__fcitx_global_targets()
 
 function(fcitx_scan_addon_with_name subdir name)
   get_property(FCITX_INTERNAL_BUILD GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD")
@@ -147,6 +158,7 @@ function(fcitx_scan_addon_with_name subdir name)
   endif()
   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${name}.h"
     DESTINATION "${includedir}/${FCITX4_PACKAGE_NAME}/module/${subdir}")
-  add_custom_target(${name}-scan-addon.target ALL
+  add_custom_target(${name}-scan-addon.target
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${name}.h")
+  add_dependencies(fcitx-scan-addons.target ${name}-scan-addon.target)
 endfunction()

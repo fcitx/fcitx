@@ -13,6 +13,8 @@ set(fcitx_xkb_SOURCES
     xkbconfig.c
 )
 
+fcitx_scan_addon(xkb)
+fcitx_add_addon_header(xkb xkb.h)
 fcitx_add_addon(fcitx-xkb ${fcitx_xkb_SOURCES})
 target_link_libraries(fcitx-xkb ${X11_X11_LIB} ${XKBFILE_LIBRARIES} ${LIBXML2_LIBRARIES})
 

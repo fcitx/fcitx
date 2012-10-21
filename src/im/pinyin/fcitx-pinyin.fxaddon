@@ -1,0 +1,46 @@
+[FcitxAddon]
+Name=fcitx-pinyin
+Prefix=Pinyin
+Include0="pydef.h"
+Include1="fcitx-utils/keysymgen.h"
+Function0=LoadBaseDict
+Function1=GetPyByHZ
+Function2=DoInput
+Function3=GetCandwords
+Function4=GetFindString
+Function5=Reset
+Function6=SP2QP
+Function7=AddUserPhrase
+Function8=
+
+[LoadBaseDict]
+Name=load-base-dict
+
+[GetPyByHZ]
+Name=get-py-by-hz
+Arg0=const char*
+Arg1=char*
+
+[DoInput]
+Name=do-input
+Arg0=FcitxKeySym
+Arg1=unsigned int
+
+[GetCandwords]
+Name=get-candwords
+
+[GetFindString]
+Name=get-find-string
+Return=char*
+
+[Reset]
+Name=reset
+
+[SP2QP]
+Name=sp2qp
+Return=char*
+Arg0=const char*
+
+[AddUserPhrase]
+Name=add-user-phrase
+Arg0=const char*

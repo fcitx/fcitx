@@ -67,6 +67,8 @@ FCITX_DEFINE_PLUGIN(fcitx_pinyin_enhance, module, FcitxModule) = {
     .ReloadConfig = PinyinEnhanceReloadConfig
 };
 
+DEFINE_GET_AND_INVOKE_FUNC(SunPinyin, GetFullPinyin, 0)
+
 static int
 check_im_type(PinyinEnhance *pyenhance)
 {
@@ -84,7 +86,7 @@ check_im_type(PinyinEnhance *pyenhance)
         boolean sp = false;
         char *str;
         FCITX_DEF_MODULE_ARGS(args, "", &sp);
-        str = FcitxModuleInvokeByPrefix(im->owner->owner, SunPinyin, 0, args);
+        str = FcitxSunPinyinInvokeGetFullPinyin(im->owner->owner, args);
         fcitx_utils_free(str);
         return sp ? PY_IM_SHUANGPIN : PY_IM_PINYIN;
     }

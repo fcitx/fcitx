@@ -42,7 +42,6 @@
 #include "fcitx-utils/log.h"
 #include "module/spell/spell.h"
 
-#include "xkb.h"
 #include "keyboard.h"
 #if defined(ENABLE_LIBXML2)
 #include "isocodes.h"
@@ -238,8 +237,8 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
     }
     else {
         boolean result = false;
-        InvokeVaArgs(keyboard->owner, FCITX_XKB, LAYOUTEXISTS,
-                     (void*)layoutString, (void*)variantString, &result);
+        FcitxXkbLayoutExists(keyboard->owner, layoutString,
+                             variantString, &result);
         if (result)
             iPriority = 50;
     }
@@ -305,14 +304,14 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
 
     FcitxInstanceRegisterHotkeyFilter(instance, hk);
 
-    FcitxXkbRules* rules = InvokeVaArgs(instance, FCITX_XKB, GETRULES);
+    FcitxXkbRules* rules = FcitxXkbGetRules(instance);
     keyboard->rules = rules;
 
     keyboard->initialLayout = NULL;
     keyboard->initialVariant = NULL;
 
-    InvokeVaArgs(instance, FCITX_XKB, GETCURRENTLAYOUT,
-                 &keyboard->initialLayout, &keyboard->initialVariant);
+    FcitxXkbGetCurrentLayout(instance, &keyboard->initialLayout,
+                             &keyboard->initialVariant);
     if (!keyboard->initialLayout)
         keyboard->initialLayout = strdup("us");
 

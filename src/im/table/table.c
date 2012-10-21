@@ -40,7 +40,7 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/utarray.h"
 #include "fcitx-utils/utils.h"
-#include "im/pinyin/pydef.h"
+#include "im/pinyin/fcitx-pinyin.h"
 #include "module/punc/punc.h"
 #include "tablepinyinwrapper.h"
 
@@ -323,11 +323,11 @@ boolean TableInit(void *arg)
         FcitxInstanceSetContext(tbl->owner, CONTEXT_ALTERNATIVE_PREVPAGE_KEY, table->hkAlternativePrevPage);
         FcitxInstanceSetContext(tbl->owner, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY, table->hkAlternativeNextPage);
     }
-    FcitxAddon* pyaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(tbl->owner), "fcitx-pinyin");
+    FcitxAddon* pyaddon = FcitxPinyinGetAddon(tbl->owner);
     tbl->pyaddon = pyaddon;
     tbl->PYBaseOrder = AD_FREQ;
 
-    Table_ResetPY(tbl->pyaddon);
+    FcitxPinyinReset(tbl->owner);
     return true;
 }
 
@@ -613,7 +613,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
             char            strPY[100];
 
             //如果拼音单字字库没有读入，则读入它
-            Table_LoadPYBaseDict(tbl->pyaddon);
+            FcitxPinyinLoadBaseDict(tbl->owner);
 
             //如果刚刚输入的是个词组，刚不查拼音
             if (fcitx_utf8_strlen(output_str) != 1)
@@ -627,7 +627,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 
             FcitxMessagesAddMessageStringsAtLast(
                 FcitxInputStateGetAuxDown(input), MSG_CODE, _("Pinyin: "));
-            Table_PYGetPYByHZ(tbl->pyaddon, output_str, strPY);
+            FcitxPinyinGetPyByHZ(tbl->owner, output_str, strPY);
             FcitxMessagesAddMessageStringsAtLast(
                 FcitxInputStateGetAuxDown(input), MSG_TIPS,
                 (strPY[0]) ? strPY : _("Cannot found Pinyin"));
@@ -875,15 +875,17 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords(TableMetaData* table)
 
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
 
-    strcpy(Table_PYGetFindString(tbl->pyaddon), FcitxInputStateGetRawInputBuffer(input) + 1);
+    strcpy(FcitxPinyinGetFindString(tbl->owner),
+           FcitxInputStateGetRawInputBuffer(input) + 1);
 
-    Table_DoPYInput(tbl->pyaddon, 0, 0);
-    Table_PYGetCandWords(tbl->pyaddon);
+    FcitxPinyinDoInput(tbl->owner, 0, 0);
+    FcitxPinyinGetCandwords(tbl->owner);
 
     FcitxInputStateGetRawInputBuffer(input)[0] = table->cPinyin;
     FcitxInputStateGetRawInputBuffer(input)[1] = '\0';
 
-    strcat(FcitxInputStateGetRawInputBuffer(input), Table_PYGetFindString(tbl->pyaddon));
+    strcat(FcitxInputStateGetRawInputBuffer(input),
+           FcitxPinyinGetFindString(tbl->owner));
     FcitxInputStateSetRawInputBufferSize(input, strlen(FcitxInputStateGetRawInputBuffer(input)));
 
     FcitxInstanceCleanInputWindowUp(instance);

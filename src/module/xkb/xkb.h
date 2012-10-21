@@ -21,21 +21,54 @@
 #ifndef FCITX_XKB_H
 #define FCITX_XKB_H
 
-#include "fcitx/instance.h"
-#define FCITX_XKB_NAME "fcitx-xkb"
-#define FCITX_XKB_GETRULES 0
-#define FCITX_XKB_GETRULES_RETURNTYPE FcitxXkbRules*
-#define FCITX_XKB_GETCURRENTLAYOUT 1
-#define FCITX_XKB_GETCURRENTLAYOUT_RETURNTYPE void
-#define FCITX_XKB_LAYOUTEXISTS 2
-#define FCITX_XKB_LAYOUTEXISTS_RETURNTYPE void
-#define FCITX_XKB_GETLAYOUTOVERRIDE 3
-#define FCITX_XKB_GETLAYOUTOVERRIDE_RETURNTYPE void
-#define FCITX_XKB_SETLAYOUTOVERRIDE 4
-#define FCITX_XKB_SETLAYOUTOVERRIDE_RETURNTYPE void
-#define FCITX_XKB_SETDEFAULTLAYOUT 5
-#define FCITX_XKB_SETDEFAULTLAYOUT_RETURNTYPE void
+#include <fcitx-utils/utarray.h>
+#include <fcitx-config/fcitx-config.h>
 
 #define FCITX_XKB_PATH "/keyboard"
 #define FCITX_XKB_INTERFACE "org.fcitx.Fcitx.Keyboard"
+
+typedef struct _FcitxXkbRules {
+    UT_array* layoutInfos;
+    UT_array* modelInfos;
+    UT_array* optionGroupInfos;
+    char* version;
+} FcitxXkbRules;
+
+typedef struct _FcitxXkbRulesHandler {
+    UT_array* path;
+    FcitxXkbRules* rules;
+    boolean fromExtra;
+} FcitxXkbRulesHandler;
+
+typedef struct _FcitxXkbLayoutInfo {
+    UT_array* variantInfos;
+    char* name;
+    char* description;
+    UT_array* languages;
+} FcitxXkbLayoutInfo;
+
+typedef struct _FcitxXkbVariantInfo {
+    char* name;
+    char* description;
+    UT_array* languages;
+} FcitxXkbVariantInfo;
+
+typedef struct _FcitxXkbModelInfo {
+    char* name;
+    char* description;
+    char* vendor;
+} FcitxXkbModelInfo;
+
+typedef struct _FcitxXkbOptionGroupInfo {
+    UT_array* optionInfos;
+    char* name;
+    char* description;
+    boolean exclusive;
+} FcitxXkbOptionGroupInfo;
+
+typedef struct _FcitxXkbOptionInfo {
+    char* name;
+    char* description;
+} FcitxXkbOptionInfo;
+
 #endif

@@ -102,6 +102,7 @@ extern "C" {
      * @param args arguments
      * @return void*
      **/
+    FCITX_DEPRECATED
     void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
 #define FcitxModuleInvokeVaArgs(addon, functionId, ARGV...)             \
     (FcitxModuleInvokeFunction(addon, functionId,                       \
@@ -189,9 +190,6 @@ extern "C" {
     /* size_t __##var##_length = sizeof(__##var##_array) / sizeof(void*);  \ */
     /* FcitxModuleFunctionArg var[] = { { .n = __##var##_length,           \ */
     /*                                    .args = __##var##_array } } */
-
-#define FcitxModuleInvokeByPrefix(instance, prefix, fid, args)          \
-    FcitxModuleInvokeFunction(Fcitx##prefix##GetAddon(instance), fid, args)
 
 #ifdef __cplusplus
 }

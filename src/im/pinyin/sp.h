@@ -44,7 +44,7 @@ struct _FcitxPinyinState;
 void            LoadSPData(struct _FcitxPinyinState* pystate);
 
 //void            QP2SP (char *strQP, char *strSP);
-void            SP2QP(struct _FcitxPinyinConfig* pyconfig, char* strSP, char* strQP);
+void            SP2QP(struct _FcitxPinyinConfig* pyconfig, const char* strSP, char* strQP);
 int             GetSPIndexQP_C(struct _FcitxPinyinConfig* pyconfig, char *str);
 int             GetSPIndexQP_S(struct _FcitxPinyinConfig* pyconfig, char *str);
 int             GetSPIndexJP_C(struct _FcitxPinyinConfig* pyconfig, char c, int iStart);
