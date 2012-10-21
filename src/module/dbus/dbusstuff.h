@@ -25,6 +25,7 @@
 extern "C" {
 #endif
 
+#include <dbus/dbus.h>
 #include <fcitx-config/fcitx-config.h>
 
 #define FCITX_DBUS_NAME "fcitx-dbus"

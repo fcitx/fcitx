@@ -1,0 +1,22 @@
+[FcitxAddon]
+Name=fcitx-chttrans
+Prefix=Chttrans
+# not necessary here but harmless to include
+Include0="chttrans.h"
+Function0=S2T
+Function1=T2S
+Function2=
+Function3=
+Function4=
+Function5=
+Function6=
+
+[S2T]
+Name=s2t
+Return=char*
+Arg0=const char*
+
+[T2S]
+Name=t2s
+Return=char*
+Arg0=const char*

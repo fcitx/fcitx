@@ -17,13 +17,12 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include <dbus/dbus.h>
 #include <limits.h>
 
 #include "fcitx/fcitx.h"
 #include "fcitx/frontend.h"
 #include "fcitx-utils/utils.h"
-#include "module/dbus/dbusstuff.h"
+#include "module/dbus/fcitx-dbus.h"
 #include "fcitx/instance.h"
 #include "fcitx/module.h"
 #include "fcitx-utils/log.h"
@@ -328,8 +327,8 @@ void* IPCCreate(FcitxInstance* instance, int frontendid)
     ipc->frontendid = frontendid;
     ipc->owner = instance;
 
-    ipc->_conn = InvokeVaArgs(instance, FCITX_DBUS, GETCONNECTION);
-    ipc->_privconn = InvokeVaArgs(instance, FCITX_DBUS, GETPRIVCONNECTION);
+    ipc->_conn = FcitxDBusGetConnection(instance);
+    ipc->_privconn = FcitxDBusGetPrivConnection(instance);
 
     if (ipc->_conn == NULL && ipc->_privconn == NULL) {
         FcitxLog(ERROR, "DBus Not initialized");

@@ -144,6 +144,7 @@ static void
 write_includes(FILE *ofp, UT_array *includes)
 {
     _write_str(ofp, "#include <stdint.h>\n");
+    _write_str(ofp, "#include <fcitx/instance.h>\n");
     _write_str(ofp, "#include <fcitx/addon.h>\n");
     _write_str(ofp, "#include <fcitx/module.h>");
     char **p;

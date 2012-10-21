@@ -147,6 +147,6 @@ function(fcitx_scan_addon_with_name subdir name)
   endif()
   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${name}.h"
     DESTINATION "${includedir}/${FCITX4_PACKAGE_NAME}/module/${subdir}")
-  add_custom_target(${name}.target ALL
+  add_custom_target(${name}-scan-addon.target ALL
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${name}.h")
 endfunction()

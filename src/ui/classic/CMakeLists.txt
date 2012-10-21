@@ -48,3 +48,4 @@ install(FILES fcitx-skin-installer.sh RENAME fcitx-skin-installer DESTINATION ${
 intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx-skin-installer.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-skin-installer.desktop )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-skin-installer.desktop DESTINATION share/applications/)
 install(FILES x-fskin.xml DESTINATION share/mime/packages/ )
+fcitx_scan_addon(classicui)

@@ -18,14 +18,12 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include <dbus/dbus.h>
-
 #include "config.h"
 
 #include "libintl.h"
 #include "module/xkb/xkb.h"
 #include "module/xkb/rules.h"
-#include "module/dbus/dbusstuff.h"
+#include "module/dbus/fcitx-dbus.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/module.h"
 #include <im/keyboard/isocodes.h>
@@ -84,8 +82,7 @@ void* FcitxXkbDBusCreate(FcitxInstance* instance)
     FcitxXkbDBus* xkbdbus = fcitx_utils_new(FcitxXkbDBus);
     xkbdbus->owner = instance;
     do {
-        DBusConnection *conn = InvokeVaArgs(instance, FCITX_DBUS,
-                                            GETCONNECTION);
+        DBusConnection *conn = FcitxDBusGetConnection(instance);
         if (conn == NULL) {
             FcitxLog(ERROR, "DBus Not initialized");
             break;

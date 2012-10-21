@@ -9,6 +9,7 @@ set(FCITX_DBUS_SOURCES
     dbuslauncher.c
 )
 
+fcitx_scan_addon(dbus)
 fcitx_add_addon(fcitx-dbus ${FCITX_DBUS_SOURCES})
 target_link_libraries( fcitx-dbus ${DBUS_LIBRARIES})
 fcitx_add_addon_header(dbus dbusstuff.h)
