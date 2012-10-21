@@ -41,7 +41,7 @@
 #include "fcitx-utils/utarray.h"
 #include "fcitx-utils/utils.h"
 #include "im/pinyin/fcitx-pinyin.h"
-#include "module/punc/punc.h"
+#include "module/punc/fcitx-punc.h"
 #include "tablepinyinwrapper.h"
 
 #define MAX_TABLE_INPUT 50
@@ -484,8 +484,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                         retVal = TableGetCandWords(table);
                         int key = FcitxInputStateGetRawInputBuffer(input)[0];
                         if (!table->bIgnorePunc) {
-                            strTemp = InvokeVaArgs(instance, FCITX_PUNC,
-                                                   GETPUNC, &key);
+                            strTemp = FcitxPuncGetPunc(instance, &key);
                         } else {
                             strTemp = NULL;
                         }

@@ -37,7 +37,7 @@
 #include "fcitx/frontend.h"
 #include "fcitx/candidate.h"
 #include "fcitx/context.h"
-#include "module/punc/punc.h"
+#include "module/punc/fcitx-punc.h"
 #include "module/lua/luamod.h"
 #include "module/spell/spell.h"
 
@@ -240,7 +240,7 @@ void _QuickPhraseLaunch(QuickPhraseState* qpstate)
 
     if (c[0]) {
         FcitxKeySym s = qpstate->curTriggerKey[0].sym;
-        char *strTemp = InvokeVaArgs(qpstate->owner, FCITX_PUNC, GETPUNC, &s);
+        char *strTemp = FcitxPuncGetPunc(qpstate->owner, &s);
         const char* full = strTemp ? strTemp : c;
         FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Space for %s Enter for %s") , full, c);
     }
@@ -361,8 +361,7 @@ boolean QuickPhrasePreFilter(void *arg, FcitxKeySym sym,
               FcitxHotkeyIsHotKey(keymain, state, qpstate->curTriggerKey)) ||
              FcitxHotkeyIsHotKey(keymain, state, FCITX_SPACE))) {
             FcitxKeySym s = qpstate->curTriggerKey[0].sym;
-            char *strTemp = InvokeVaArgs(qpstate->owner, FCITX_PUNC,
-                                         GETPUNC, &s);
+            char *strTemp = FcitxPuncGetPunc(qpstate->owner, &s);
             strcpy(FcitxInputStateGetOutputString(input), strTemp ? strTemp : c);
             *retval = IRV_COMMIT_STRING;
         } else {
