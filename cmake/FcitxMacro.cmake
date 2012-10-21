@@ -112,8 +112,37 @@ MACRO(FCITX_ADD_ADDON target)
     install(TARGETS ${target} DESTINATION ${FCITX4_ADDON_INSTALL_DIR})
 ENDMACRO(FCITX_ADD_ADDON)
 
-MACRO(FCITX_ADD_ADDON_HEADER subdir)
-    set(_args ${ARGN})
-    set(_SRCS ${_args})
-    install(FILES ${_SRCS} DESTINATION ${includedir}/${FCITX4_PACKAGE_NAME}/module/${subdir})
-ENDMACRO(FCITX_ADD_ADDON_HEADER)
+function(FCITX_ADD_ADDON_HEADER subdir)
+  set(_SRCS ${ARGN})
+  # for fcitx_scanner_addon
+  foreach(src ${_SRCS})
+    get_filename_component(fullsrc "${src}" ABSOLUTE)
+    execute_process(COMMAND ln -sft "${CMAKE_CURRENT_BINARY_DIR}" "${fullsrc}")
+  endforeach()
+  install(FILES ${_SRCS}
+    DESTINATION "${includedir}/${FCITX4_PACKAGE_NAME}/module/${subdir}")
+endfunction()
+
+function(fcitx_scanner_addon subdir name)
+  get_property(FCITX_INTERNAL_BUILD GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD")
+  # too lazy to set variables instead of simply copy the command twice here...
+  if(FCITX_INTERNAL_BUILD)
+    add_custom_command(
+      COMMAND "${PROJECT_BINARY_DIR}/tools/fcitx-scanner" "${name}.fxaddon"
+      "${CMAKE_CURRENT_BINARY_DIR}/${name}.h"
+      OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${name}.h"
+      DEPENDS "${name}.fxaddon" fcitx-scanner
+      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+  else()
+    add_custom_command(
+      COMMAND fcitx-scanner "${name}.fxaddon"
+      "${CMAKE_CURRENT_BINARY_DIR}/${name}.h"
+      OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${name}.h"
+      DEPENDS "${name}.fxaddon"
+      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+  endif()
+  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${name}.h"
+    DESTINATION "${includedir}/${FCITX4_PACKAGE_NAME}/module/${subdir}")
+  add_custom_target(${name}.target ALL
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${name}.h")
+endfunction()

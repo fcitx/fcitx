@@ -5,6 +5,7 @@ project(fcitx)
 set(version 4.2.7)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+set_property(GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD" On)
 
 option(ENABLE_X11 "Enable X11 as dependency" ON)
 option(ENABLE_GLIB2 "Enable GLib2 as depenedency" ON)
