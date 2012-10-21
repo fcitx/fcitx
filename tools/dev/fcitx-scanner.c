@@ -163,6 +163,9 @@ write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
     grp = fcitx_desktop_file_find_group(dfile, func_name);
     if (!grp)
         return;
+    /* require the Name entry although not used now. */
+    if (!fcitx_desktop_group_find_entry(grp, "Name"))
+        return;
     UT_array args;
     utarray_init(&args, &const_str_icd);
     char arg_buff[strlen("Arg") + FCITX_INT_LEN + 1];
