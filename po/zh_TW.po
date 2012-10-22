@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-13 11:48-0400\n"
-"PO-Revision-Date: 2012-10-13 11:14-0400\n"
+"POT-Creation-Date: 2012-10-22 19:11-0400\n"
+"PO-Revision-Date: 2012-10-22 19:07-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_TW\n"
@@ -23,6 +23,11 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1384
 msgid " Ctrl+Delete To Delete"
 msgstr " 用 Ctrl+Delete 刪除"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:425
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:442
+msgid "(Unavailable)"
+msgstr "(不可用)"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1532
 msgid "/min  Time Used: "
@@ -460,7 +465,7 @@ msgid "Configure"
 msgstr "設定"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:458
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:730
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:734
 msgid "Configure Current Input Method"
 msgstr ""
 
@@ -574,8 +579,8 @@ msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr ""
 
 #: unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:244
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:249
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:245
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:250
 msgid "Disabled"
 msgstr "停用"
 
@@ -702,7 +707,7 @@ msgstr ""
 msgid "Fallback UI Addon"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:364
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:366
 #: ../..//data/fcitx.desktop.in.h:1
 msgid "Fcitx"
 msgstr "Fcitx"
@@ -1003,8 +1008,8 @@ msgstr ""
 msgid "Input Method"
 msgstr "輸入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:245
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:250
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:246
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:251
 msgid "Input Method Disabled"
 msgstr "停用輸入法"
 
@@ -1058,9 +1063,12 @@ msgid "Key Color On Virutal Keyboard"
 msgstr ""
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:335
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:359
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:379
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:349
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:375
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:423
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:436
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:461
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:467
 msgid "Keyboard"
 msgstr "鍵盤"
 
@@ -1294,8 +1302,8 @@ msgstr "無可用輸入法"
 msgid "No available frontend"
 msgstr "無可用前端"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:217
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:218
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:219
 msgid "No input window"
 msgstr "沒有輸入視窗"
 
@@ -1584,7 +1592,7 @@ msgid "Resize Margin Top"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:460
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:735
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:739
 msgid "Restart"
 msgstr ""
 
@@ -1911,7 +1919,7 @@ msgstr ""
 msgid "Toggle Half/Full width Character"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:727
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:731
 msgid "Toggle Input Method"
 msgstr ""
 

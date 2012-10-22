@@ -96,14 +96,16 @@ void FcitxProfileSave(FcitxProfile* profile)
         if (!profileDesc)
             break;
         // make ~/.config/fcitx
-        char* tempfile;
+        char* tempfile = NULL;
         FcitxXDGGetFileUserWithPrefix("", "", "w", NULL);
         FcitxXDGGetFileUserWithPrefix("", PROFILE_TEMP_FILE, NULL, &tempfile);
         int fd = mkstemp(tempfile);
 
         FILE* fp;
-        if (fd <= 0)
+        if (fd <= 0) {
+            fcitx_utils_free(tempfile);
             break;
+        }
 
         fp = fdopen(fd, "w");
         FcitxConfigSaveConfigFileFp(fp, &profile->gconfig, profileDesc);

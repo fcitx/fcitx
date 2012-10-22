@@ -226,6 +226,10 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
         layout->variantString = strdup(variantString);
     layout->owner = keyboard;
 
+    if (fcitx_utils_strcmp0(layoutString, "en") == 0
+        && fcitx_utils_strcmp0(layoutString, "us") == 0)
+        keyboard->enUSRegistered = true;
+
     int iPriority = 100;
     if (strcmp(keyboard->initialLayout, layoutString) == 0 &&
         fcitx_utils_strcmp0(keyboard->initialVariant, variantString) == 0) {
@@ -302,8 +306,6 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
 
     FcitxXkbRules* rules = InvokeVaArgs(instance, FCITX_XKB, GETRULES);
     keyboard->rules = rules;
-#if defined(ENABLE_LIBXML2)
-#endif
 
     keyboard->initialLayout = NULL;
     keyboard->initialVariant = NULL;
@@ -315,6 +317,18 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
 
 #if defined(ENABLE_LIBXML2)
     if (rules && utarray_len(rules->layoutInfos)) {
+        char* tempfile = NULL;
+        FcitxXDGGetFileUserWithPrefix("", "", "w", NULL);
+        FcitxXDGGetFileUserWithPrefix("", "cached_layout_XXXXXX", NULL, &tempfile);
+        int fd = mkstemp(tempfile);
+
+        FILE* fp = NULL;
+        if (fd > 0)
+            fp = fdopen(fd, "w");
+        else {
+            free(tempfile);
+        }
+
         FcitxIsoCodes* isocodes = FcitxXkbReadIsoCodes(ISOCODES_ISO639_XML, ISOCODES_ISO3166_XML);
         FcitxXkbLayoutInfo* layoutInfo;
         for (layoutInfo = (FcitxXkbLayoutInfo*) utarray_front(rules->layoutInfos);
@@ -338,6 +352,8 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
                 FcitxKeyboardLayoutCreate(keyboard, description,
                                           lang, layoutInfo->name, NULL);
                 free(description);
+                if (fp)
+                    fprintf(fp, "%s:%s:%s\n", layoutInfo->description, layoutInfo->name, lang ? lang : "");
             }
             FcitxXkbVariantInfo* variantInfo;
             for (variantInfo = (FcitxXkbVariantInfo*) utarray_front(layoutInfo->variantInfos);
@@ -364,20 +380,91 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
                                                    variantInfo->description));
                 FcitxKeyboardLayoutCreate(keyboard, description, lang,
                                           layoutInfo->name, variantInfo->name);
+                if (fp)
+                    fprintf(fp, "%s:%s:%s:%s:%s\n",
+                            layoutInfo->description, layoutInfo->name,
+                            variantInfo->description, variantInfo->name,
+                            lang ? lang : "");
                 free(description);
             }
         }
         FcitxIsoCodesFree(isocodes);
+
+        if (fp) {
+            fclose(fp);
+            char* layoutFileName = 0;
+            FcitxXDGGetFileUserWithPrefix("", "cached_layout", NULL, &layoutFileName);
+            if (access(layoutFileName, 0))
+                unlink(layoutFileName);
+            rename(tempfile, layoutFileName);
+
+            free(tempfile);
+            free(layoutFileName);
+        }
     }
     else
 #endif
     {
-        fcitx_utils_free(keyboard->initialLayout);
-        keyboard->initialLayout = strdup("us");
-        fcitx_utils_free(keyboard->initialVariant);
-        keyboard->initialVariant = NULL;
-        FcitxKeyboardLayoutCreate(keyboard, _("Keyboard"), "en", "us", NULL);
+        /* though this is unrelated to libxml2, but can only generated with libxml2 enabled */
+#if defined(ENABLE_LIBXML2)
+        FILE* fp = FcitxXDGGetFileUserWithPrefix("", "cached_layout", "r", NULL);
+        if (fp) {
+            char *buf = NULL, *buf1 = NULL;
+            size_t len = 0;
+            while (getline(&buf, &len, fp) != -1) {
+                fcitx_utils_free(buf1);
+                buf1 = fcitx_utils_trim(buf);
+                UT_array* list = fcitx_utils_split_string(buf1, ':');
+                if (utarray_len(list) == 3) {
+                    char** layoutDescription = (char**)utarray_eltptr(list, 0);
+                    char** layoutName = (char**)utarray_eltptr(list, 1);
+                    char** layoutLang = (char**)utarray_eltptr(list, 2);
+                    char *description;
+                    fcitx_utils_alloc_cat_str(description, _("Keyboard"), " - ",
+                                              dgettext("xkeyboard-config",
+                                                     *layoutDescription), " ", _("(Unavailable)"));
+                    FcitxKeyboardLayoutCreate(keyboard, description,
+                                            *layoutLang, *layoutName, NULL);
+                }
+                else if (utarray_len(list) == 5) {
+                    char** layoutDescription = (char**)utarray_eltptr(list, 0);
+                    char** layoutName = (char**)utarray_eltptr(list, 1);
+                    char** variantDescription = (char**)utarray_eltptr(list, 2);
+                    char** variantName = (char**)utarray_eltptr(list, 3);
+                    char** variantLang = (char**)utarray_eltptr(list, 4);
+                    char *description;
+                    fcitx_utils_alloc_cat_str(description, _("Keyboard"), " - ",
+                                              dgettext("xkeyboard-config",
+                                                       *layoutDescription),
+                                              " - ",
+                                              dgettext("xkeyboard-config",
+                                                       *variantDescription),
+                                              " ", _("(Unavailable)"));
+                    FcitxKeyboardLayoutCreate(keyboard, description, *variantLang,
+                                              *layoutName, *variantName);
+                }
+                fcitx_utils_free_string_list(list);
+            }
+
+            fcitx_utils_free(buf);
+            fcitx_utils_free(buf1);
+
+            fclose(fp);
+        }
+        else
+#endif
+        {
+            fcitx_utils_free(keyboard->initialLayout);
+            keyboard->initialLayout = strdup("us");
+            fcitx_utils_free(keyboard->initialVariant);
+            keyboard->initialVariant = NULL;
+            FcitxKeyboardLayoutCreate(keyboard, _("Keyboard"), "en", "us", NULL);
+        }
     }
+
+    /* always have en us is better */
+    if (!keyboard->enUSRegistered)
+        FcitxKeyboardLayoutCreate(keyboard, _("Keyboard"), "en", "us", NULL);
 
     keyboard->lastLength = 10;
     keyboard->tempBuffer = fcitx_utils_malloc0(keyboard->lastLength);
