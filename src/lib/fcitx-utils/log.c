@@ -44,23 +44,23 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
     }
 
 #ifndef _DEBUG
-    if (e == DEBUG)
+    if (e == FCITX_DEBUG)
         return;
 #endif
     switch (e) {
-    case INFO:
+    case FCITX_INFO:
         fprintf(stderr, "(INFO-");
         break;
-    case ERROR:
+    case FCITX_ERROR:
         fprintf(stderr, "(ERROR-");
         break;
-    case DEBUG:
+    case FCITX_DEBUG:
         fprintf(stderr, "(DEBUG-");
         break;
-    case WARNING:
+    case FCITX_WARNING:
         fprintf(stderr, "(WARN-");
         break;
-    case FATAL:
+    case FCITX_FATAL:
         fprintf(stderr, "(FATAL-");
         break;
     }

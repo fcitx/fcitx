@@ -52,17 +52,17 @@ extern "C" {
      **/
     typedef enum _ErrorLevel
     {
-        DEBUG,
-        ERROR,
-        INFO,
-        FATAL,
-        WARNING
+        FCITX_DEBUG,
+        FCITX_ERROR,
+        FCITX_INFO,
+        FCITX_FATAL,
+        FCITX_WARNING
     } ErrorLevel;
 
 /**
  * a convenient macro for log, it will automatically printed current file and code line number.
  */
-#define FcitxLog(e, fmt...) FcitxLogFunc(e, __FILE__, __LINE__, fmt)
+#define FcitxLog(e, fmt...) FcitxLogFunc(FCITX_##e, __FILE__, __LINE__, fmt)
 
     /**
      * print a log string to stderr, should use FcitxLog instead of this function

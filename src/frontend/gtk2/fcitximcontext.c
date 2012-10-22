@@ -39,8 +39,6 @@
 #include "fcitx-utils/log.h"
 #include <dbus/dbus-glib.h>
 
-#define LOG_LEVEL DEBUG
-
 #if !GTK_CHECK_VERSION (2, 91, 0)
 # define DEPRECATED_GDK_KEYSYMS 1
 #endif
@@ -353,7 +351,7 @@ fcitx_im_context_class_fini (FcitxIMContextClass *klass)
 static void
 fcitx_im_context_init(FcitxIMContext *context)
 {
-    FcitxLog(LOG_LEVEL, "fcitx_im_context_init");
+    FcitxLog(DEBUG, "fcitx_im_context_init");
     context->client = NULL;
     context->area.x = -1;
     context->area.y = -1;
@@ -404,7 +402,7 @@ fcitx_im_context_init(FcitxIMContext *context)
 static void
 fcitx_im_context_finalize(GObject *obj)
 {
-    FcitxLog(LOG_LEVEL, "fcitx_im_context_finalize");
+    FcitxLog(DEBUG, "fcitx_im_context_finalize");
     FcitxIMContext *context = FCITX_IM_CONTEXT(obj);
 
     FcitxIMClientClose(context->client);
@@ -454,7 +452,7 @@ static void
 fcitx_im_context_set_client_window(GtkIMContext          *context,
                                    GdkWindow             *client_window)
 {
-    FcitxLog(LOG_LEVEL, "fcitx_im_context_set_client_window");
+    FcitxLog(DEBUG, "fcitx_im_context_set_client_window");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
     set_ic_client_window(fcitxcontext, client_window);
 }
@@ -473,7 +471,7 @@ static gboolean
 fcitx_im_context_filter_keypress(GtkIMContext *context,
                                  GdkEventKey  *event)
 {
-    FcitxLog(LOG_LEVEL, "fcitx_im_context_filter_keypress");
+    FcitxLog(DEBUG, "fcitx_im_context_filter_keypress");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
     /* check this first, since we use key snooper, most key will be handled. */
@@ -560,7 +558,7 @@ _fcitx_im_context_process_key_cb(DBusGProxy *proxy,
 static void
 _fcitx_im_context_update_preedit_cb(DBusGProxy* proxy, char* str, int cursor_pos, void* user_data)
 {
-    FcitxLog(LOG_LEVEL, "_fcitx_im_context_commit_string_cb");
+    FcitxLog(DEBUG, "_fcitx_im_context_commit_string_cb");
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
 
     gboolean visible = false;
@@ -609,7 +607,7 @@ _fcitx_im_context_update_preedit_cb(DBusGProxy* proxy, char* str, int cursor_pos
 static void
 _fcitx_im_context_update_formatted_preedit_cb(DBusGProxy* proxy, GPtrArray* array, int cursor_pos, void* user_data)
 {
-    FcitxLog(LOG_LEVEL, "_fcitx_im_context_commit_string_cb");
+    FcitxLog(DEBUG, "_fcitx_im_context_commit_string_cb");
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
 
     gboolean visible = false;
@@ -725,7 +723,7 @@ _fcitx_im_context_update_formatted_preedit_cb(DBusGProxy* proxy, GPtrArray* arra
 static void
 fcitx_im_context_focus_in(GtkIMContext *context)
 {
-    FcitxLog(LOG_LEVEL, "fcitx_im_context_focus_in");
+    FcitxLog(DEBUG, "fcitx_im_context_focus_in");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
     if (fcitxcontext->has_focus)
@@ -768,7 +766,7 @@ fcitx_im_context_focus_in(GtkIMContext *context)
 static void
 fcitx_im_context_focus_out(GtkIMContext *context)
 {
-    FcitxLog(LOG_LEVEL, "fcitx_im_context_focus_out");
+    FcitxLog(DEBUG, "fcitx_im_context_focus_out");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
     if (!fcitxcontext->has_focus) {
@@ -804,7 +802,7 @@ static void
 fcitx_im_context_set_cursor_location(GtkIMContext *context,
                                      GdkRectangle *area)
 {
-    FcitxLog(LOG_LEVEL, "fcitx_im_context_set_cursor_location %d %d %d %d", area->x, area->y, area->height, area->width);
+    FcitxLog(DEBUG, "fcitx_im_context_set_cursor_location %d %d %d %d", area->x, area->y, area->height, area->width);
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
     if (fcitxcontext->area.x == area->x &&
@@ -868,7 +866,7 @@ static void
 fcitx_im_context_set_use_preedit(GtkIMContext *context,
                                  gboolean      use_preedit)
 {
-    FcitxLog(LOG_LEVEL, "fcitx_im_context_set_use_preedit");
+    FcitxLog(DEBUG, "fcitx_im_context_set_use_preedit");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
     fcitxcontext->use_preedit = use_preedit;
@@ -1009,7 +1007,7 @@ _fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext, gboolean force)
 static void
 fcitx_im_context_reset(GtkIMContext *context)
 {
-    FcitxLog(LOG_LEVEL, "fcitx_im_context_reset");
+    FcitxLog(DEBUG, "fcitx_im_context_reset");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
     if (IsFcitxIMClientValid(fcitxcontext->client)) {
@@ -1025,7 +1023,7 @@ fcitx_im_context_get_preedit_string(GtkIMContext   *context,
                                     PangoAttrList **attrs,
                                     gint           *cursor_pos)
 {
-    FcitxLog(LOG_LEVEL, "fcitx_im_context_get_preedit_string");
+    FcitxLog(DEBUG, "fcitx_im_context_get_preedit_string");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
     if (IsFcitxIMClientValid(fcitxcontext->client)) {
@@ -1129,14 +1127,14 @@ _slave_delete_surrounding_cb(GtkIMContext *slave,
 
 void _fcitx_im_context_enable_im_cb(DBusGProxy* proxy, void* user_data)
 {
-    FcitxLog(LOG_LEVEL, "_fcitx_im_context_enable_im_cb");
+    FcitxLog(DEBUG, "_fcitx_im_context_enable_im_cb");
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
     FcitxIMClientSetEnabled(context->client, true);
 }
 
 void _fcitx_im_context_close_im_cb(DBusGProxy* proxy, void* user_data)
 {
-    FcitxLog(LOG_LEVEL, "_fcitx_im_context_close_im_cb");
+    FcitxLog(DEBUG, "_fcitx_im_context_close_im_cb");
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
     FcitxIMClientSetEnabled(context->client, false);
 
@@ -1150,14 +1148,14 @@ void _fcitx_im_context_close_im_cb(DBusGProxy* proxy, void* user_data)
 
 void _fcitx_im_context_commit_string_cb(DBusGProxy* proxy, char* str, void* user_data)
 {
-    FcitxLog(LOG_LEVEL, "_fcitx_im_context_commit_string_cb");
+    FcitxLog(DEBUG, "_fcitx_im_context_commit_string_cb");
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
     g_signal_emit(context, _signal_commit_id, 0, str);
 }
 
 void _fcitx_im_context_forward_key_cb(DBusGProxy* proxy, guint keyval, guint state, gint type, void* user_data)
 {
-    FcitxLog(LOG_LEVEL, "_fcitx_im_context_forward_key_cb");
+    FcitxLog(DEBUG, "_fcitx_im_context_forward_key_cb");
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
     FcitxKeyEventType tp = (FcitxKeyEventType) type;
     GdkEventKey* event = _create_gdk_event(context, keyval, state, tp);
@@ -1407,7 +1405,7 @@ _request_surrounding_text (FcitxIMContext **context)
     if (*context &&
         IsFcitxIMClientValid((*context)->client)) {
         gboolean return_value;
-        FcitxLog(LOG_LEVEL, "requesting surrounding text");
+        FcitxLog(DEBUG, "requesting surrounding text");
 
         /* according to RH#859879, something bad could happen here. */
         g_object_add_weak_pointer ((GObject *) *context,
