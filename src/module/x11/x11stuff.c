@@ -44,6 +44,7 @@
 static void* X11Create(FcitxInstance* instance);
 static void X11SetFD(void* arg);
 static void X11ProcessEvent(void *arg);
+static void X11Destroy(void* arg);
 static void* X11GetDisplay(void* x11priv, FcitxModuleFunctionArg arg);
 static void* X11AddEventHandler(void* x11priv, FcitxModuleFunctionArg arg);
 static void* X11RemoveEventHandler(void* x11priv, FcitxModuleFunctionArg arg);
@@ -79,7 +80,7 @@ FCITX_DEFINE_PLUGIN(fcitx_x11, module, FcitxModule) = {
     X11Create,
     X11SetFD,
     X11ProcessEvent,
-    NULL,
+    X11Destroy,
     NULL
 };
 
@@ -141,6 +142,15 @@ void* X11Create(FcitxInstance* instance)
 
     InitXErrorHandler(x11priv);
     return x11priv;
+}
+
+void X11Destroy(void* arg)
+{
+    FcitxX11* x11priv = (FcitxX11*)arg;
+    UnsetXErrorHandler();
+    if (x11priv->eventWindow) {
+        XDestroyWindow(x11priv->dpy, x11priv->eventWindow);
+    }
 }
 
 void X11SetFD(void* arg)

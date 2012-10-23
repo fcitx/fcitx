@@ -23,7 +23,8 @@
 
 #include "x11stuff-internal.h"
 
-void InitXErrorHandler(FcitxX11*);
+void InitXErrorHandler(FcitxX11* x11priv);
+void UnsetXErrorHandler();
 
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

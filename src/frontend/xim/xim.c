@@ -140,8 +140,10 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     xim->iScreen = DefaultScreen(xim->display);
     xim->owner = instance;
     xim->frontendid = frontendid;
-    Window xim_window = FcitxX11DefaultEventWindow(instance);
-    if (!xim_window) {
+    xim->xim_window = XCreateWindow(xim->display, DefaultRootWindow(xim->display),
+                                      0, 0, 1, 1, 0, 0, InputOnly,
+                                      CopyFromParent, 0, NULL);
+    if (!xim->xim_window) {
         FcitxLog(FATAL, _("Can't Create imWindow"));
         free(xim);
         return NULL;
@@ -225,7 +227,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
 
     xim->ims = IMOpenIM(xim->display,
                         IMModifiers, "Xi18n",
-                        IMServerWindow, xim_window,
+                        IMServerWindow, xim->xim_window,
                         IMServerName, imname,
                         IMLocale, strLocale,
                         IMServerTransport, "X/",
@@ -338,6 +340,7 @@ boolean XimDestroy(void* arg)
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
 
     if (xim->ims) {
+        XDestroyWindow(xim->display, xim->xim_window);
         IMCloseIM(xim->ims);
         xim->ims = NULL;
     }

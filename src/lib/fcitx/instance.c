@@ -66,6 +66,7 @@ FCITX_SETTER(FcitxInstance, MaxFD, maxfd, int)
 FCITX_GETTER_VALUE(FcitxInstance, GlobalConfig, config, FcitxGlobalConfig*)
 FCITX_GETTER_VALUE(FcitxInstance, Profile, profile, FcitxProfile*)
 FCITX_GETTER_VALUE(FcitxInstance, InputState, input, FcitxInputState*)
+FCITX_GETTER_VALUE(FcitxInstance, IsDestroying, destroy, boolean)
 
 const UT_icd stat_icd = {sizeof(FcitxUIStatus), 0, 0, 0};
 const UT_icd compstat_icd = {sizeof(FcitxUIComplexStatus), 0, 0, 0};
@@ -303,6 +304,10 @@ void* RunInstance(void* arg)
 FCITX_EXPORT_API
 void FcitxInstanceEnd(FcitxInstance* instance)
 {
+    /* avoid duplicate destroy */
+    if (instance->destroy)
+        return;
+
     if (!instance->initialized) {
         if (!instance->loadingFatalError) {
             if (!instance->quietQuit)
@@ -312,6 +317,8 @@ void FcitxInstanceEnd(FcitxInstance* instance)
         }
         return;
     }
+
+    instance->destroy = true;
 
     FcitxProfileSave(instance->profile);
     FcitxInstanceSaveAllIM(instance);

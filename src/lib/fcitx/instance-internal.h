@@ -142,6 +142,7 @@ struct _FcitxInstance {
     UT_array icdata;
     boolean loadingFatalError;
     boolean quietQuit;
+    boolean destroy;
     int fd;
 };
 

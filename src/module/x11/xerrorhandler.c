@@ -38,8 +38,19 @@ void InitXErrorHandler(FcitxX11* x11priv)
     oldXIOErrorHandler = XSetIOErrorHandler(FcitxXIOErrorHandler);
 }
 
+void UnsetXErrorHandler(FcitxX11* x11priv) {
+    x11handle = NULL;
+    /* we don't set back to old handler, to avoid any x error  */
+}
+
 int FcitxXIOErrorHandler(Display *d)
 {
+    if (!x11handle)
+        return 0;
+
+    if (FcitxInstanceGetIsDestroying(x11handle->owner))
+        return 0;
+
     /* Do not log, because this is likely to happen while log out */
     FcitxInstanceSaveAllIM(x11handle->owner);
 
@@ -49,6 +60,12 @@ int FcitxXIOErrorHandler(Display *d)
 
 int FcitxXErrorHandler(Display * dpy, XErrorEvent * event)
 {
+    if (!x11handle)
+        return 0;
+
+    if (FcitxInstanceGetIsDestroying(x11handle->owner))
+        return 0;
+
     char    str[256];
     FILE* fp = NULL;
 

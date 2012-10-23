@@ -125,6 +125,16 @@ extern "C" {
     void FcitxInstanceEnd(FcitxInstance* instance);
 
     /**
+     * check whether FcitxInstanceEnd is called or not
+     *
+     * @param instance fcitx instance
+     * @return boolean
+     *
+     * @since 4.2.7
+     **/
+    boolean FcitxInstanceGetIsDestroying(FcitxInstance* instance);
+
+    /**
      * Get Current Input Context
      *
      * @param instance
