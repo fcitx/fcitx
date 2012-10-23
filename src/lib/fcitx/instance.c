@@ -305,7 +305,8 @@ void FcitxInstanceEnd(FcitxInstance* instance)
 {
     if (!instance->initialized) {
         if (!instance->loadingFatalError) {
-            FcitxLog(ERROR, "Exiting.");
+            if (!instance->quietQuit)
+                FcitxLog(ERROR, "Exiting.");
             instance->loadingFatalError = true;
             sem_post(instance->sem);
         }
@@ -464,6 +465,7 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
                 }
                 break;
             default:
+                instance->quietQuit = true;
                 Usage();
                 return false;
             }
