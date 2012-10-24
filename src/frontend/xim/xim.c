@@ -141,8 +141,8 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     xim->owner = instance;
     xim->frontendid = frontendid;
     xim->xim_window = XCreateWindow(xim->display, DefaultRootWindow(xim->display),
-                                      0, 0, 1, 1, 0, 0, InputOnly,
-                                      CopyFromParent, 0, NULL);
+                                    0, 0, 1, 1, 0, 0, InputOnly,
+                                    CopyFromParent, 0, NULL);
     if (!xim->xim_window) {
         FcitxLog(FATAL, _("Can't Create imWindow"));
         free(xim);
@@ -239,7 +239,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
 
     if (xim->ims == (XIMS) NULL) {
         FcitxLog(ERROR, _("Start XIM error. Another XIM daemon named %s is running?"), imname);
-        free(xim);
+        XimDestroy(xim);
         FcitxInstanceEnd(instance);
         return NULL;
     }
@@ -338,13 +338,21 @@ Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data)
 boolean XimDestroy(void* arg)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
-
-    if (xim->ims) {
+    /**
+     * Destroy the window BEFORE(!!!!!) CloseIM!!!
+     * Work arround for a bug in libX11. See wengxt's commit log:
+     * f773dd4f7152a4b4b7f406fe01bff466e0de3dc2
+     * [xim, x11] correctly shutdown xim, destroy x11 with error handling
+     **/
+    if (xim->xim_window) {
         XDestroyWindow(xim->display, xim->xim_window);
+    }
+    if (xim->ims) {
         IMCloseIM(xim->ims);
         xim->ims = NULL;
     }
-
+    XimQueueDestroy(xim);
+    free(xim);
     return true;
 }
 

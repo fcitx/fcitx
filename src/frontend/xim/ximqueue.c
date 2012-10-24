@@ -20,6 +20,11 @@ void XimQueueInit(FcitxXimFrontend* xim)
     utarray_new(xim->queue, &ptr_icd);
 }
 
+void XimQueueDestroy(FcitxXimFrontend* xim)
+{
+    utarray_free(xim->queue);
+}
+
 void* XimConsumeQueue(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxXimFrontend* xim = arg;
