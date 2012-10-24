@@ -42,7 +42,6 @@
 #include "fcitx-utils/utils.h"
 #include "im/pinyin/fcitx-pinyin.h"
 #include "module/punc/fcitx-punc.h"
-#include "tablepinyinwrapper.h"
 
 #define MAX_TABLE_INPUT 50
 
@@ -55,6 +54,8 @@ typedef struct {
 static void *TableCreate(FcitxInstance* instance);
 static int TableCandCmp(const void* a, const void* b, void* arg);
 static INPUT_RETURN_VALUE TableKeyBlocker(void* arg, FcitxKeySym sym, unsigned int state);
+static INPUT_RETURN_VALUE Table_PYGetCandWord(void *arg,
+                                              FcitxCandidateWord *candidateWord);
 
 FCITX_DEFINE_PLUGIN(fcitx_table, ime2, FcitxIMClass2) =  {
     TableCreate,
@@ -1497,6 +1498,22 @@ void ReloadTableConfig(void* arg)
     LoadTableConfig(&tbl->config);
     if (LoadTableInfo(tbl))
         FcitxInstanceUpdateIMList(tbl->owner);
+}
+
+INPUT_RETURN_VALUE
+Table_PYGetCandWord(void* arg, FcitxCandidateWord* candidateWord)
+{
+    TableMetaData* table = arg;
+    FcitxTableState* tbl = table->owner;
+    INPUT_RETURN_VALUE retVal = tbl->pygetcandword(tbl->pyaddon->addonInstance,
+                                                   candidateWord);
+    FcitxPinyinReset(tbl->owner);
+    FcitxInputState *state = FcitxInstanceGetInputState(tbl->owner);
+    if (!(retVal & IRV_FLAG_PENDING_COMMIT_STRING)) {
+        strcpy(FcitxInputStateGetOutputString(state), candidateWord->strWord);
+    }
+
+    return IRV_COMMIT_STRING | IRV_FLAG_RESET_INPUT;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -1,7 +1,5 @@
-
 set(FCITX_TABLE_SOURCES
     tabledict.c
-    tablepinyinwrapper.c
     table.c
     tableconfig.c
 )
