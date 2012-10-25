@@ -147,4 +147,3 @@ struct _FcitxInstance {
 };
 
 #endif
-

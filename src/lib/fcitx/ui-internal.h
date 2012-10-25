@@ -63,4 +63,3 @@ typedef enum _FcitxUIFlag {
 } FcitxUIFlag;
 
 #endif
-

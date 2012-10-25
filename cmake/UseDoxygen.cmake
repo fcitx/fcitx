@@ -30,15 +30,15 @@
 #  DOXYFILE_EXTRA_SOURCES - Additional source diretories/files for Doxygen to scan.
 #  	The Paths should be in double quotes and separated by space. e.g.:
 #  	 "${CMAKE_CURRENT_BINARY_DIR}/foo.c" "${CMAKE_CURRENT_BINARY_DIR}/bar/"
-#  
+#
 #  DOXYFILE_OUTPUT_DIR - Path where the Doxygen output is stored.
 #  	Defaults to "${CMAKE_CURRENT_BINARY_DIR}/doc".
-#  
+#
 #  DOXYFILE_LATEX - ON/OFF; Set to "ON" if you want the LaTeX documentation
 #  	to be built.
 #  DOXYFILE_LATEX_DIR - Directory relative to DOXYFILE_OUTPUT_DIR where
 #  	the Doxygen LaTeX output is stored. Defaults to "latex".
-#  
+#
 #  DOXYFILE_HTML_DIR - Directory relative to DOXYFILE_OUTPUT_DIR where
 #  	the Doxygen html output is stored. Defaults to "html".
 #
@@ -87,14 +87,14 @@ if(DOXYGEN_FOUND AND DOXYFILE_IN_FOUND)
 		DOXYFILE_SOURCE_DIR DOXYFILE_EXTRA_SOURCE_DIRS DOXYFILE_IN)
 
 
-	set_property(DIRECTORY 
+	set_property(DIRECTORY
 		APPEND PROPERTY
 		ADDITIONAL_MAKE_CLEAN_FILES
 		"${DOXYFILE_OUTPUT_DIR}/${DOXYFILE_HTML_DIR}")
 
 	add_custom_target(doxygen
 		COMMAND "${DOXYGEN_EXECUTABLE}"
-			"${DOXYFILE}" 
+			"${DOXYFILE}"
 		COMMENT "Writing documentation to ${DOXYFILE_OUTPUT_DIR}..."
 		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 

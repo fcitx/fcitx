@@ -23,7 +23,7 @@ cjkvinput-table-wubi.txt 的相关贡献者∶
 
 Rasir Dex
         email: rasir at rasir.com
-         
+
 梁昌泰
         自由输入法平台项目组管理者，xcin-gb项目组成员
         URL: http://www.sourceforge.net/projects/cjkvinput
@@ -45,7 +45,7 @@ Rasir Dex
 ===========================================================================
 cjkvinput-table-wubi.txt 的组成和来源∶
 
-hfwb4unix.txt: 
+hfwb4unix.txt:
         从海峰五笔的源码表当中整理出来的码表。这是为了给GNU/Linux
         以及其他操作系统输入法平台提供的五笔输入法码表。已经在GNU
         系统上使用一些工具进行了整理，去掉了一些重复的编码。原始
@@ -62,7 +62,7 @@ extra4unix.txt:
         作为hfwb4unix.txt的补充。该码表原始作者为∶
                 黄宇(Yu_Huang at engr.usask.ca).
                 Rasir Dex(rasir at rasir.com)
-         
+
 final4unix.txt(cjkvinput-table-wubi.txt):
         这是合并从海峰五笔整理得来的hfwb4unix.txt以及从黄宇等整理出来
         的五笔码表之补充部分所成的完整无重复版本。这是目前自由大词库

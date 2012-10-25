@@ -40,6 +40,7 @@ typedef struct {
     FcitxGenericConfig gconfig;
     boolean save_history;
     int history_len;
+    int cand_max_len;
     FcitxHotkey trigger_key[2];
     ClipboardChooseModifier choose_modifier;
     boolean use_primary;
@@ -54,6 +55,7 @@ typedef struct {
     FcitxInstance *owner;
     FcitxClipboardConfig config;
     boolean active;
+    int cand_half_len;
     ClipboardSelectionStr primary;
     uint32_t clp_hist_len;
     ClipboardSelectionStr clp_hist_lst[CLIPBOARD_MAX_LEN];

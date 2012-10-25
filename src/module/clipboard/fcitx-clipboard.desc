@@ -10,6 +10,15 @@ Min=1
 Max=16
 Description=Length of Clipboard History to Save
 
+[Clipboard/CandidateMaxLength]
+Type=Integer
+DefaultValue=23
+Min=13
+Max=157
+Advance=True
+Description=Maximum length of each candidate word
+LongDescription=Roughly the same length with this number of english letters, the actual length depends on the font and the content
+
 [Clipboard/TriggerKey]
 Type=Hotkey
 DefaultValue=CTRL_;

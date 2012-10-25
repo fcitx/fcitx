@@ -10,4 +10,3 @@ fcitx_add_addon(fcitx-ipc ${fcitx_ipc_SOURCES})
 target_link_libraries( fcitx-ipc ${DBUS_LIBRARIES} )
 fcitx_add_addon_header(ipc ipc.h)
 fcitx_add_addon_conf_file(fcitx-ipc.conf)
-

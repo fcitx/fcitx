@@ -488,4 +488,3 @@ void FcitxXkbVariantInfoCopy(void* dst, const void* src)
     variantInfoDst->description = COPY_IF_NOT_NULL(variantInfoSrc->description);
     utarray_clone(variantInfoDst->languages, variantInfoSrc->languages);
 }
-

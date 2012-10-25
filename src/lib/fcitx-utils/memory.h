@@ -69,6 +69,8 @@ FcitxMemoryPool* fcitx_memory_pool_create();
  * @return void*
  **/
 void* fcitx_memory_pool_alloc(FcitxMemoryPool* pool, size_t size);
+#define fcitx_memory_pool_alloc(pool, size)             \
+    fcitx_memory_pool_alloc_align(pool, size, 0)
 
 void* fcitx_memory_pool_alloc_align(FcitxMemoryPool* pool, size_t size, int align);
 /**
