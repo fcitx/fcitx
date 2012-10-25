@@ -226,8 +226,9 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
         layout->variantString = strdup(variantString);
     layout->owner = keyboard;
 
-    if (fcitx_utils_strcmp0(layoutString, "en") == 0
-        && fcitx_utils_strcmp0(layoutString, "us") == 0)
+    if (fcitx_utils_strcmp0(langCode, "en") == 0
+        && fcitx_utils_strcmp0(layoutString, "us") == 0
+        && fcitx_utils_strcmp0(variantString, NULL) == 0)
         keyboard->enUSRegistered = true;
 
     int iPriority = 100;
