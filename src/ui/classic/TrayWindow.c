@@ -287,4 +287,3 @@ boolean TrayEventHandler(void *arg, XEvent* event)
     return false;
 }
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
-

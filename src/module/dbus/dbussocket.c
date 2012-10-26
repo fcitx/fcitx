@@ -89,4 +89,3 @@ void DBusProcessEventForConnection(DBusConnection* connection)
         dbus_connection_unref(connection);
     }
 }
-

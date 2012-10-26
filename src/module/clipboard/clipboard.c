@@ -208,26 +208,16 @@ ClipboardPreHook(void *arg, FcitxKeySym sym, unsigned int state,
     return true;
 }
 
-#define CLIPBOARD_CAND_LIMIT (127)
-#define CLIPBOARD_CAND_HALF (60)
 #define case_blank case ' ': case '\t': case '\b': case '\n': case '\f': \
 case '\v': case '\r'
 #define CLIPBOARD_CAND_SEP "  \xe2\x80\xa6  "
 
 static char*
-ClipboardSelectionStrip(const char *str, uint32_t len)
+ClipboardSelectionStrip(FcitxClipboard *clipboard,
+                        const char *str, uint32_t len)
 {
-    const char *begin = str;
+    const char *begin = str + strspn(str, " \t\b\n\f\v\r");
     const char *end = str + len;
-    for (;begin < end;begin++) {
-        switch (*begin) {
-        case_blank:
-            continue;
-        default:
-            break;
-        }
-        break;
-    }
     for (;end >= begin;end--) {
         switch (*(end - 1)) {
         case_blank:
@@ -242,14 +232,14 @@ ClipboardSelectionStrip(const char *str, uint32_t len)
     len = end - begin;
     char *res;
     char *p;
-    if (len < CLIPBOARD_CAND_LIMIT) {
+    if (len < clipboard->config.cand_max_len) {
         res = malloc(len + 1);
         memcpy(res, begin, len);
         res[len] = '\0';
         goto out;
     }
-    const char *begin_end = begin + CLIPBOARD_CAND_HALF;
-    const char *end_begin = end - CLIPBOARD_CAND_HALF;
+    const char *begin_end = begin + clipboard->cand_half_len;
+    const char *end_begin = end - clipboard->cand_half_len;
     for (;begin_end < end_begin;begin_end++) {
         if (fcitx_utf8_valid_start(*begin_end))
             break;
@@ -280,9 +270,10 @@ out:
 }
 
 static void
-ClipboardSetCandWord(FcitxCandidateWord *cand_word, ClipboardSelectionStr *str)
+ClipboardSetCandWord(FcitxClipboard *clipboard,
+                     FcitxCandidateWord *cand_word, ClipboardSelectionStr *str)
 {
-    cand_word->strWord = ClipboardSelectionStrip(str->str, str->len);
+    cand_word->strWord = ClipboardSelectionStrip(clipboard, str->str, str->len);
     char *real = malloc(str->len + 1);
     cand_word->priv = real;
     memcpy(real, str->str, str->len);
@@ -317,24 +308,25 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
     char *preedit_str = NULL;
     if (clipboard->clp_hist_len) {
         preedit_str = clipboard->clp_hist_lst[0].str;
-        ClipboardSetCandWord(&cand_word, clipboard->clp_hist_lst);
+        ClipboardSetCandWord(clipboard, &cand_word, clipboard->clp_hist_lst);
         FcitxCandidateWordAppend(cand_list, &cand_word);
     }
     if (clipboard->primary.len && config->use_primary) {
         if (!preedit_str)
             preedit_str = clipboard->primary.str;
-        ClipboardSetCandWord(&cand_word, &clipboard->primary);
+        ClipboardSetCandWord(clipboard, &cand_word, &clipboard->primary);
         FcitxCandidateWordAppend(cand_list, &cand_word);
     }
     FcitxMessages *msg;
     msg = FcitxInputStateGetAuxUp(input);
     FcitxInputStateSetShowCursor(input, false);
     FcitxMessagesSetMessageCount(msg, 0);
-    FcitxMessagesAddMessageStringsAtLast(msg, MSG_INPUT,
+    FcitxMessagesAddMessageStringsAtLast(msg, MSG_TIPS,
                                          _("Select to paste"));
     int i;
     for (i = 1;i < clipboard->clp_hist_len;i++) {
-        ClipboardSetCandWord(&cand_word, clipboard->clp_hist_lst + i);
+        ClipboardSetCandWord(clipboard, &cand_word,
+                             clipboard->clp_hist_lst + i);
         FcitxCandidateWordAppend(cand_list, &cand_word);
     }
     *ret_val = IRV_FLAG_UPDATE_INPUT_WINDOW;
@@ -391,6 +383,9 @@ ClipboardDestroy(void *arg)
     free(arg);
 }
 
+#define CAND_MAX_LEN_MAX 127
+#define CAND_MAX_LEN_MIN 13
+
 static void
 ApplyClipboardConfig(FcitxClipboard *clipboard)
 {
@@ -408,6 +403,13 @@ ApplyClipboardConfig(FcitxClipboard *clipboard)
         config->choose_modifier = MODIFIERS_COUNT - 1;
     }
     ClipboardWriteHistory(clipboard);
+    if (config->cand_max_len < CAND_MAX_LEN_MIN) {
+        config->cand_max_len = CAND_MAX_LEN_MIN;
+    } else if (config->cand_max_len > CAND_MAX_LEN_MAX) {
+        config->cand_max_len = CAND_MAX_LEN_MAX;
+    }
+    clipboard->cand_half_len = (config->cand_max_len -
+                                strlen(CLIPBOARD_CAND_SEP)) / 2;
 }
 
 static void

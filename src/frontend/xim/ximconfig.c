@@ -23,4 +23,3 @@
 CONFIG_BINDING_BEGIN(FcitxXimFrontend)
 CONFIG_BINDING_REGISTER("Xim", "UseOnTheSpotStyle", bUseOnTheSpotStyle)
 CONFIG_BINDING_END()
-

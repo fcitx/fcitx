@@ -25,4 +25,3 @@
 void InitFcitxModules(UT_array* modules);
 
 #endif
-

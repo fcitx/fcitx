@@ -22,6 +22,7 @@
 #define _UTILS_HANDLER_TABLE_H
 
 #include <fcitx-utils/utils.h>
+#include <fcitx-utils/objpool.h>
 
 #ifdef __cplusplus
 extern "C" {

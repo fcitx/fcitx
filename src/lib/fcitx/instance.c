@@ -614,6 +614,18 @@ boolean FcitxInstanceCheckTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCal
 }
 
 FCITX_EXPORT_API
+boolean FcitxInstanceCheckTimeoutById(FcitxInstance *instance, uint64_t id)
+{
+    TimeoutItem *ti;
+    for (ti = (TimeoutItem*)utarray_front(&instance->timeout);ti;
+         ti = (TimeoutItem*)utarray_next(&instance->timeout, ti)) {
+        if (ti->idx == id)
+            return true;
+    }
+    return false;
+}
+
+FCITX_EXPORT_API
 boolean FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback)
 {
     TimeoutItem* ti;

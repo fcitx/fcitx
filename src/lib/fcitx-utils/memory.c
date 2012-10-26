@@ -106,6 +106,8 @@ void* fcitx_memory_pool_alloc_align(FcitxMemoryPool* pool, size_t size, int alig
     return result;
 }
 
+#undef fcitx_memory_pool_alloc
+
 FCITX_EXPORT_API
 void* fcitx_memory_pool_alloc(FcitxMemoryPool* pool, size_t size)
 {

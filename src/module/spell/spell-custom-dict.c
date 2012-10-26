@@ -219,7 +219,8 @@ SpellCustomMapDict(FcitxSpell *spell, SpellCustomDict *dict, const char *lang)
     if (fstat(fd, &stat_buf) == -1 ||
         stat_buf.st_size <= sizeof(uint32_t) + strlen(DICT_BIN_MAGIC))
         goto out;
-    read(fd, magic_buff, strlen(DICT_BIN_MAGIC));
+    if (read(fd, magic_buff, strlen(DICT_BIN_MAGIC)) <= 0)
+        goto out;
     if (memcmp(DICT_BIN_MAGIC, magic_buff, strlen(DICT_BIN_MAGIC)))
         goto out;
     total_len = stat_buf.st_size - strlen(DICT_BIN_MAGIC);
