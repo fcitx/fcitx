@@ -76,6 +76,14 @@ typedef int32_t boolean;
  */
 #define false (0)
 
+#define FCITX_INT_LEN ((int)(sizeof(int) * 2.5) + 2)
+#define FCITX_LONG_LEN ((int)(sizeof(long) * 2.5) + 2)
+#define FCITX_INT32_LEN (22)
+#define FCITX_INT64_LEN (42)
+
+#define fcitx_container_of(ptr, type, member)           \
+    ((type*)(((void*)(ptr)) - offsetof(type, member)))
+
 #ifdef __cplusplus
 extern "C" {
 #endif

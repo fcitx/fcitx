@@ -215,30 +215,25 @@ FcitxXDGGetPath(size_t *len, const char* homeEnv, const char* homeDefault,
                 const char* suffixHome, const char* dirsDefault,
                 const char* suffixGlobal)
 {
-    const char *dirHome;
     const char *xdgDirHome = getenv(homeEnv);
-    size_t dh_len, he_len, hd_len;
-    const char *env_home;
+    const char *dirHome;
+    char *home_buff;
+    size_t dh_len;
 
     if (xdgDirHome && xdgDirHome[0]) {
+        home_buff = NULL;
         dirHome = xdgDirHome;
-        dh_len = 0;
+        dh_len = strlen(dirHome);
     } else {
-        env_home = getenv("HOME");
+        const char *env_home = getenv("HOME");
         if (!(env_home && env_home[0]))
             return NULL;
-        he_len = strlen(env_home);
-        hd_len = strlen(homeDefault);
+        size_t he_len = strlen(env_home);
+        size_t hd_len = strlen(homeDefault);
         dh_len = he_len + hd_len + 1;
-    }
-
-    char *home_buff = NULL;
-    if (dh_len) {
         home_buff = malloc(dh_len + 1);
         dirHome = home_buff;
         combine_path_with_len(home_buff, env_home, he_len, homeDefault, hd_len);
-    } else {
-        dh_len = strlen(dirHome);
     }
 
     char *dirs;

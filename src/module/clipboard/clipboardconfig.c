@@ -22,6 +22,7 @@
 CONFIG_BINDING_BEGIN(FcitxClipboardConfig);
 CONFIG_BINDING_REGISTER("Clipboard", "SaveHistoryToFile", save_history);
 CONFIG_BINDING_REGISTER("Clipboard", "HistoryLength", history_len);
+CONFIG_BINDING_REGISTER("Clipboard", "CandidateMaxLength", cand_max_len);
 CONFIG_BINDING_REGISTER("Clipboard", "TriggerKey", trigger_key);
 CONFIG_BINDING_REGISTER("Clipboard", "UsePrimary", use_primary);
 CONFIG_BINDING_REGISTER("Clipboard", "ChooseModifier", choose_modifier);

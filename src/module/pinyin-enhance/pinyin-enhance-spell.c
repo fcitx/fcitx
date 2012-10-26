@@ -239,9 +239,9 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
                 }
             }
             last_start = last_start + word_len;
-        }
             spaces++;
             continue;
+        }
         case_vowel:
         case_consonant:
             letters++;

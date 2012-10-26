@@ -79,4 +79,10 @@ ClipboardInitX11(FcitxClipboard *clipboard)
     clipboard->x11_clipboard_notify_id = FcitxX11RegSelectNotify(
         instance, "CLIPBOARD", clipboard,
         _X11ClipboardClipboardNotifyCb, NULL, NULL);
+    FcitxX11RequestConvertSelect(clipboard->owner, "PRIMARY", NULL,
+                                 clipboard, _X11ClipboardPrimaryConvertCb,
+                                 NULL, NULL);
+    FcitxX11RequestConvertSelect(clipboard->owner, "CLIPBOARD", NULL,
+                                 clipboard, _X11ClipboardClipboardConvertCb,
+                                 NULL, NULL);
 }

@@ -58,4 +58,3 @@ cat >> $KEYSYMGEN_HEADER <<EOF
 
 #endif
 EOF
-
