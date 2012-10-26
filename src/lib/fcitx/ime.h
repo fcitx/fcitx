@@ -538,6 +538,20 @@ extern "C" {
     void FcitxInstanceSaveAllIM(struct _FcitxInstance* instance);
 
     /**
+     * reload only an addon's configuration, there are some short hand for reloading
+     * other configuration, "global" for ~/.config/fcitx/config, "profile" for
+     * ~/.config/fcitx/profile, "addon" for addon info. "ui" for current user interface
+     * Input method unique can be also used here.
+     *
+     * @param instance fcitx instance
+     * @param addon addon name
+     * @return void
+     *
+     * @since 4.2.7
+     **/
+    void FcitxInstanceReloadAddonConfig(struct _FcitxInstance* instance, const char* addon);
+
+    /**
      * reload all config
      *
      * @param instance fcitx instance

@@ -1114,6 +1114,59 @@ INPUT_RETURN_VALUE ImProcessReload(void *arg)
 }
 
 FCITX_EXPORT_API
+void FcitxInstanceReloadAddonConfig(FcitxInstance *instance, const char* addonname)
+{
+    if (!addonname)
+        return;
+
+    if (strcmp(addonname, "global") == 0) {
+        if (!FcitxGlobalConfigLoad(instance->config))
+            FcitxInstanceEnd(instance);
+
+        FcitxCandidateWordSetPageSize(instance->input->candList, instance->config->iMaxCandWord);
+    } else if (strcmp(addonname, "profile") == 0) {
+        if (!FcitxProfileLoad(instance->profile, instance))
+            FcitxInstanceEnd(instance);
+    } else if (strcmp(addonname, "ui") == 0) {
+        if (instance->ui && instance->ui->ui->ReloadConfig)
+            instance->ui->ui->ReloadConfig(instance->ui->addonInstance);
+    } else if (strcmp(addonname, "addon") == 0) {
+        FcitxAddon* addonHead = FcitxAddonsLoadInternal(&instance->addons, true);
+        FcitxInstanceFillAddonOwner(instance, addonHead);
+        FcitxInstanceResolveAddonDependencyInternal(instance, addonHead);
+        FcitxInstanceLoadAllIM(instance);
+    } else {
+        do {
+            FcitxIM* im = FcitxInstanceGetIMByName(instance, addonname);
+            if (im && im->ReloadConfig) {
+                im->ReloadConfig(im->klass);
+                break;
+            }
+
+            FcitxAddon *addon = FcitxAddonsGetAddonByName(&instance->addons, addonname);
+            if (!addon || !addon->bEnabled || !addon->addonInstance)
+                break;
+            switch (addon->category) {
+                case AC_MODULE:
+                    if (addon->module->ReloadConfig)
+                        addon->module->ReloadConfig(addon->addonInstance);
+                    break;
+                case AC_UI:
+                    if (addon->ui->ReloadConfig)
+                        addon->ui->ReloadConfig(addon->addonInstance);
+                    break;
+                case AC_FRONTEND:
+                    if (addon->frontend->ReloadConfig)
+                        addon->frontend->ReloadConfig(addon->addonInstance);
+                    break;
+                default:
+                    break;
+            }
+        } while(0);
+    }
+}
+
+FCITX_EXPORT_API
 void FcitxInstanceReloadConfig(FcitxInstance *instance)
 {
     if (!FcitxGlobalConfigLoad(instance->config))

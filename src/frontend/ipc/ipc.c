@@ -178,6 +178,9 @@ const char * im_introspection_xml =
     "    </method>\n"
     "    <method name=\"ReloadConfig\">\n"
     "    </method>\n"
+    "    <method name=\"ReloadAddonConfig\">\n"
+    "      <arg name=\"addon\" direction=\"in\" type=\"s\"/>\n"
+    "    </method>\n"
     "    <method name=\"Restart\">\n"
     "    </method>\n"
     "    <method name=\"Configure\">\n"
@@ -725,6 +728,20 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             dbus_message_unref(reply);
             if (imname) {
                 fcitx_utils_launch_configure_tool_for_addon(imname);
+            }
+        }
+        dbus_error_free(&error);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ReloadAddonConfig")) {
+        DBusError error;
+        dbus_error_init(&error);
+        char* addonname = NULL;
+        if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &addonname, DBUS_TYPE_INVALID)) {
+            DBusMessage *reply = dbus_message_new_method_return(msg);
+            dbus_connection_send(connection, reply, NULL);
+            dbus_message_unref(reply);
+            if (addonname) {
+                FcitxInstanceReloadAddonConfig(instance, addonname);
             }
         }
         dbus_error_free(&error);
