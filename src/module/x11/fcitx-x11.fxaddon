@@ -17,7 +17,7 @@ Function11=GetDPI
 Function12=RegSelectNotify
 Function13=RemoveSelectNotify
 Function14=DefaultEventWindow
-Function15=
+Function15=RequestConvertSelect
 Function16=
 Function17=
 Function18=
@@ -42,7 +42,7 @@ Return=Visual*
 
 [InitWindowAttribute]
 Name=init-window-attribute
-Arg0=Viaual**
+Arg0=Visual**
 Arg1=Colormap*
 Arg2=XSetWindowAttributes*
 Arg3=unsigned long*
@@ -101,3 +101,13 @@ Arg0=unsigned int
 [DefaultEventWindow]
 Name=default-event-window
 Return=Window
+
+[RequestConvertSelect]
+Name=request-convert-select
+Return=unsigned int
+Arg0=const char*
+Arg1=const char*
+Arg2=void*
+Arg3=X11ConvertSelectionCallback
+Arg4=void*
+Arg5=FcitxDestroyNotify
