@@ -489,6 +489,7 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
     }
     file->comments = comments;
     fcitx_desktop_file_clean(file);
+    fcitx_utils_free(buff);
     return true;
 }
 
