@@ -253,25 +253,17 @@ FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE *fp)
 
         if (groupNameLen == 0 || optionNameLen == 0)
             continue;
-
-        char *groupName = malloc(sizeof(char) * (groupNameLen + 1));
-
-        strncpy(groupName, group->groupName, groupNameLen);
-
-        groupName[groupNameLen] = '\0';
-
-        char *optionName = strdup(p + 1);
-
-        HASH_FIND_STR(cfdesc->groupsDesc, groupName, cgdesc);
-
+        HASH_FIND(hh, cfdesc->groupsDesc, group->groupName,
+                  groupNameLen, cgdesc);
         if (!cgdesc) {
-            cgdesc = fcitx_utils_malloc0(sizeof(FcitxConfigGroupDesc));
-            cgdesc->groupName = groupName;
+            cgdesc = fcitx_utils_new(FcitxConfigGroupDesc);
+            cgdesc->groupName = fcitx_utils_set_str_with_len(
+                NULL, group->groupName, groupNameLen);
             cgdesc->optionsDesc = NULL;
-            HASH_ADD_KEYPTR(hh, cfdesc->groupsDesc, cgdesc->groupName, groupNameLen, cgdesc);
-        } else
-            free(groupName);
-
+            HASH_ADD_KEYPTR(hh, cfdesc->groupsDesc, cgdesc->groupName,
+                            groupNameLen, cgdesc);
+        }
+        char *optionName = strdup(p + 1);
         FcitxConfigOptionDesc2 *codesc2 = fcitx_utils_new(FcitxConfigOptionDesc2);
         FcitxConfigOptionDesc *codesc = (FcitxConfigOptionDesc*) codesc2;
 
