@@ -893,25 +893,23 @@ FcitxConfigFile* FcitxConfigParseIniFp(FILE *fp, FcitxConfigFile *cfile)
                 return NULL;
             }
 
-            char *groupName;
-
-            groupName = malloc(sizeof(char) * (lineLen - 2 + 1));
-            strncpy(groupName, line + 1, lineLen - 2);
-            groupName[lineLen - 2] = '\0';
-            HASH_FIND_STR(cfile->groups, groupName, curGroup);
-
+            size_t grp_len = lineLen - 2;
+            HASH_FIND(hh, cfile->groups, line + 1, grp_len, curGroup);
             if (curGroup) {
-                FcitxLog(DEBUG, _("Duplicate group name, merge with the previous: %s :line %d"), groupName, lineNo);
-                free(groupName);
+                FcitxLog(DEBUG, _("Duplicate group name, "
+                                  "merge with the previous: %s :line %d"),
+                         curGroup->groupName, lineNo);
                 continue;
             }
 
+            char *groupName;
+            groupName = fcitx_utils_set_str_with_len(NULL, line + 1, grp_len);
             curGroup = fcitx_utils_malloc0(sizeof(FcitxConfigGroup));
-
             curGroup->groupName = groupName;
             curGroup->options = NULL;
             curGroup->groupDesc = NULL;
-            HASH_ADD_KEYPTR(hh, cfile->groups, curGroup->groupName, strlen(curGroup->groupName), curGroup);
+            HASH_ADD_KEYPTR(hh, cfile->groups, curGroup->groupName,
+                            grp_len, curGroup);
         } else {
             if (curGroup == NULL)
                 continue;
