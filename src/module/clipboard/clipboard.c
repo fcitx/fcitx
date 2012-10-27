@@ -445,9 +445,12 @@ ClipboardSetPrimary(FcitxClipboard *clipboard, uint32_t len, const char *str)
 {
     if (!(len && str && *str))
         return;
-    clipboard->primary.str = fcitx_utils_set_str_with_len(
-        clipboard->primary.str, str, len);
-    clipboard->primary.len = len;
+    if (clipboard->primary.len != len) {
+        clipboard->primary.len = len;
+        clipboard->primary.str = realloc(clipboard->primary.str, len + 1);
+    }
+    memcpy(clipboard->primary.str, str, len);
+    clipboard->primary.str[len] = '\0';
 }
 
 void

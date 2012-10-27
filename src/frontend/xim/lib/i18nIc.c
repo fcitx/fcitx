@@ -34,6 +34,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "Xi18n.h"
 #include "FrameMgr.h"
 #include "XimFunc.h"
+#include "fcitx-utils/utils.h"
 
 #define IC_SIZE 64
 
@@ -51,7 +52,7 @@ static void SetCardAttribute(XICAttribute *value_ret,
         return;
     /*endif*/
     if (value_length == sizeof(CARD8)) {
-        memmove(buf, p, value_length);
+        memcpy(buf, p, value_length);
     } else if (value_length == sizeof(CARD16)) {
         INT16 value;
         extern XimFrameRec short_fr[];
@@ -60,7 +61,7 @@ static void SetCardAttribute(XICAttribute *value_ret,
         /* get data */
         FrameMgrGetToken(fm, value);
         FrameMgrFree(fm);
-        memmove(buf, &value, value_length);
+        memcpy(buf, &value, value_length);
     } else if (value_length == sizeof(CARD32)) {
         INT32 value;
         extern XimFrameRec long_fr[];
@@ -69,7 +70,7 @@ static void SetCardAttribute(XICAttribute *value_ret,
         /* get data */
         FrameMgrGetToken(fm, value);
         FrameMgrFree(fm);
-        memmove(buf, &value, value_length);
+        memcpy(buf, &value, value_length);
     }
     /*endif*/
     value_ret->attribute_id = ic_attr->attribute_id;
@@ -132,9 +133,9 @@ static void SetPointAttribute(XICAttribute *value_ret,
     FrameMgrGetToken(fm, buf->y);
     FrameMgrFree(fm);
 
-    memmove(&(buf->x), p, sizeof(INT16));
+    memcpy(&(buf->x), p, sizeof(INT16));
     p += sizeof(INT16);
-    memmove(&(buf->y), p, sizeof(INT16));
+    memcpy(&(buf->y), p, sizeof(INT16));
 
     value_ret->attribute_id = ic_attr->attribute_id;
     value_ret->name = ic_attr->name;
@@ -186,7 +187,7 @@ static void SetHotKeyAttribute(XICAttribute *value_ret,
     INT32 list_number;
     XIMTriggerKey *hotkeys;
 
-    memmove(&list_number, p, sizeof(INT32));
+    memcpy(&list_number, p, sizeof(INT32));
     p += sizeof(INT32);
 
     hotkeys = (XIMTriggerKey *) malloc(list_number * sizeof(XIMTriggerKey));
@@ -194,7 +195,7 @@ static void SetHotKeyAttribute(XICAttribute *value_ret,
         return;
     /*endif*/
 
-    memmove(hotkeys, p, list_number * sizeof(XIMTriggerKey));
+    memcpy(hotkeys, p, list_number * sizeof(XIMTriggerKey));
 
     value_ret->attribute_id = ic_attr->attribute_id;
     value_ret->name = ic_attr->name;
@@ -467,7 +468,7 @@ static XICAttribute *CreateNestedList(CARD16 attr_id,
 
     nest_list->attribute_id = attr_id;
     nest_list->value_length = value_length;
-    memmove(nest_list->value, values, value_length);
+    memcpy(nest_list->value, values, value_length);
 
     XFree(values);
     return nest_list;
@@ -514,9 +515,11 @@ static int GetICValue(Xi18n i18n_core,
             for (j = 0;  j < i18n_core->address.ic_attr_num;  j++) {
                 if (xic_attr[j].attribute_id == id_list[i]) {
                     attr_ret[n].attribute_id = xic_attr[j].attribute_id;
-                    attr_ret[n].name_length = xic_attr[j].length;
-                    attr_ret[n].name = malloc(xic_attr[j].length + 1);
-                    strcpy(attr_ret[n].name, xic_attr[j].name);
+                    int size = xic_attr[j].length;
+                    attr_ret[n].name_length = size;
+                    size++;
+                    attr_ret[n].name = malloc(size);
+                    memcpy(attr_ret[n].name, xic_attr[j].name, size);
                     attr_ret[n].type = xic_attr[j].type;
                     n++;
                     i++;
@@ -531,9 +534,11 @@ static int GetICValue(Xi18n i18n_core,
         for (j = 0;  j < i18n_core->address.ic_attr_num;  j++) {
             if (xic_attr[j].attribute_id == id_list[i]) {
                 attr_ret[n].attribute_id = xic_attr[j].attribute_id;
-                attr_ret[n].name_length = xic_attr[j].length;
-                attr_ret[n].name = malloc(xic_attr[j].length + 1);
-                strcpy(attr_ret[n].name, xic_attr[j].name);
+                int size = xic_attr[j].length;
+                attr_ret[n].name_length = size;
+                size++;
+                attr_ret[n].name = malloc(size);
+                memcpy(attr_ret[n].name, xic_attr[j].name, size);
                 attr_ret[n].type = xic_attr[j].type;
                 n++;
                 break;
@@ -614,9 +619,8 @@ void _Xi18nChangeIC(XIMS ims,
         FrameMgrSetSize(fm, value_length);
         attrib_list[attrib_num].value_length = value_length;
         FrameMgrGetToken(fm, value);
-        attrib_list[attrib_num].value = (void *) malloc(value_length + 1);
-        memmove(attrib_list[attrib_num].value, value, value_length);
-        ((char *)attrib_list[attrib_num].value)[value_length] = '\0';
+        attrib_list[attrib_num].value = fcitx_utils_set_str_with_len(
+            NULL, value, value_length);
         attrib_num++;
     }
     /*endwhile*/

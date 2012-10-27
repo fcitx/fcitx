@@ -724,7 +724,11 @@ fcitx_utils_strcmp_empty(const char* a, const char* b)
 FCITX_EXPORT_API char*
 fcitx_utils_set_str_with_len(char *res, const char *str, size_t len)
 {
-    res = realloc(res, len + 1);
+    if (res) {
+        res = realloc(res, len + 1);
+    } else {
+        res = malloc(len + 1);
+    }
     memcpy(res, str, len);
     res[len] = '\0';
     return res;
@@ -773,11 +777,15 @@ fcitx_utils_unescape_str_inplace(char *str)
 FCITX_EXPORT_API char*
 fcitx_utils_set_unescape_str(char *res, const char *str)
 {
-    res = realloc(res, strlen(str) + 1);
+    size_t len = strlen(str) + 1;
+    if (res) {
+        res = realloc(res, len);
+    } else {
+        res = malloc(len);
+    }
     char *dest = res;
     const char *src = str;
     const char *pos;
-    size_t len;
     while ((len = strcspn(src, "\\")), *(pos = src + len)) {
         memcpy(dest, src, len);
         dest += len;
@@ -815,12 +823,16 @@ fcitx_utils_set_escape_str_with_set(char *res, const char *str, const char *set)
 {
     if (!set)
         set = FCITX_CHAR_NEED_ESCAPE;
-    res = realloc(res, strlen(str) * 2 + 1);
+    size_t len = strlen(str) * 2 + 1;
+    if (res) {
+        res = realloc(res, len);
+    } else {
+        res = malloc(len);
+    }
     char *dest = res;
     const char *src = str;
     const char *pos;
-    size_t len;
-    while ((len = strcspn(src, FCITX_CHAR_NEED_ESCAPE)), *(pos = src + len)) {
+    while ((len = strcspn(src, set)), *(pos = src + len)) {
         memcpy(dest, src, len);
         dest += len;
         *dest = '\\';

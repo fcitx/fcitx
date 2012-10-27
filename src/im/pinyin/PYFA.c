@@ -1270,7 +1270,8 @@ void InitPYTable(FcitxPinyinConfig* pyconfig)
     iBaseCount = 0;
 
     while (PYTable_template[iBaseCount].strPY[0] != '\0') {
-        strcpy(pyconfig->PYTable[iBaseCount].strPY, PYTable_template[iBaseCount].strPY);
+        strcpy(pyconfig->PYTable[iBaseCount].strPY,
+               PYTable_template[iBaseCount].strPY);
 
         switch (PYTable_template[iBaseCount].control) {
 

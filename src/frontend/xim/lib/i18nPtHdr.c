@@ -364,9 +364,11 @@ static XIMExt *MakeExtensionList(Xi18n i18n_core,
         for (i = 0;  i < im_ext_len;  i++) {
             ext_list[i].major_opcode = im_ext[i].major_opcode;
             ext_list[i].minor_opcode = im_ext[i].minor_opcode;
-            ext_list[i].length = im_ext[i].length;
-            ext_list[i].name = malloc(im_ext[i].length + 1);
-            strcpy(ext_list[i].name, im_ext[i].name);
+            int size = im_ext[i].length;
+            ext_list[i].length = size;
+            size++;
+            ext_list[i].name = malloc(size);
+            memcpy(ext_list[i].name, im_ext[i].name, size);
         }
         /*endfor*/
     } else {
@@ -377,9 +379,11 @@ static XIMExt *MakeExtensionList(Xi18n i18n_core,
                 if (strcmp(lib_extension[j].name, im_ext[i].name) == 0) {
                     ext_list[n].major_opcode = im_ext[i].major_opcode;
                     ext_list[n].minor_opcode = im_ext[i].minor_opcode;
-                    ext_list[n].length = im_ext[i].length;
-                    ext_list[n].name = malloc(im_ext[i].length + 1);
-                    strcpy(ext_list[n].name, im_ext[i].name);
+                    int size = im_ext[i].length;
+                    ext_list[n].length = size;
+                    size++;
+                    ext_list[n].name = malloc(size);
+                    memcpy(ext_list[n].name, im_ext[i].name, size);
                     n++;
                     break;
                 }
@@ -590,7 +594,7 @@ static void GetIMValueFromName(Xi18n i18n_core,
             for (i = 0;  i < (int) styles->count_styles;  i++)
                 FrameMgrPutToken(fm, styles->supported_styles[i]);
             /*endfor*/
-            memmove(buf, data, total_size);
+            memcpy(buf, data, total_size);
             FrameMgrFree(fm);
 
             /* add by hurrica...@126.com */
@@ -1050,7 +1054,7 @@ static void ForwardEventMessageProc(XIMS ims,
     FrameMgrGetToken(fm, forward->sync_bit);
     FrameMgrGetToken(fm, forward->serial_number);
     p += sizeof(CARD16) * 4;
-    memmove(&wire_event, p, sizeof(xEvent));
+    memcpy(&wire_event, p, sizeof(xEvent));
 
     FrameMgrFree(fm);
 

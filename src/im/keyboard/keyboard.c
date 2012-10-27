@@ -195,13 +195,13 @@ static const char* FcitxKeyboardGetFutureStream(void* arg)
             break;
         int len = surlen - cursor + 1;
         if (keyboard->lastLength < len) {
-            free(keyboard->tempBuffer);
             while (keyboard->lastLength < len)
                 keyboard->lastLength *= 2;
-            keyboard->tempBuffer = fcitx_utils_malloc0(keyboard->lastLength);
+            keyboard->tempBuffer = realloc(keyboard->tempBuffer,
+                                           keyboard->lastLength);
         }
 
-        strcpy(keyboard->tempBuffer, &surrounding[cursor]);
+        memcpy(keyboard->tempBuffer, &surrounding[cursor], len);
         result = keyboard->tempBuffer;
     } while(0);
 
@@ -687,8 +687,9 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     FcitxCandidateWordSetChooseAndModifier(
         FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE,
         cmodtable[keyboard->config.chooseModifier]);
-    ssize_t bufferlen = strlen(keyboard->buffer);
-    strcpy(FcitxInputStateGetRawInputBuffer(input), keyboard->buffer);
+    size_t bufferlen = strlen(keyboard->buffer);
+    memcpy(FcitxInputStateGetRawInputBuffer(input),
+           keyboard->buffer, bufferlen + 1);
     FcitxInputStateSetRawInputBufferSize(input, bufferlen);
     FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetClientPreedit(input),
                                          MSG_INPUT, keyboard->buffer);

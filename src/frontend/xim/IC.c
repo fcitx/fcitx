@@ -102,15 +102,17 @@ static void StoreIC(FcitxXimIC * rec, IMChangeICStruct * call_data)
             rec->pre_attr.bg_pixmap = *(Pixmap *) pre_attr->value;
 
         else if (Is(XNFontSet, pre_attr)) {
-            int             str_length = strlen((char *) pre_attr->value);
-
+            int size = strlen((char*)pre_attr->value);
             if (rec->pre_attr.base_font != NULL) {
-                if (Is(rec->pre_attr.base_font, pre_attr))
+                if (Is(rec->pre_attr.base_font, pre_attr)) {
                     continue;
-                XFree(rec->pre_attr.base_font);
+                }
+                rec->pre_attr.base_font = realloc(rec->pre_attr.base_font,
+                                                  size);
+            } else {
+                rec->pre_attr.base_font = malloc(size);
             }
-            rec->pre_attr.base_font = (char *) malloc(str_length + 1);
-            strcpy(rec->pre_attr.base_font, (char *) pre_attr->value);
+            memcpy(rec->pre_attr.base_font, pre_attr->value, size);
         } else if (Is(XNLineSpace, pre_attr))
             rec->pre_attr.line_space = *(CARD32 *) pre_attr->value;
         else if (Is(XNCursor, pre_attr))
@@ -137,21 +139,21 @@ static void StoreIC(FcitxXimIC * rec, IMChangeICStruct * call_data)
             rec->sts_attr.bg_pixmap = *(Pixmap *) sts_attr->value;
 
         else if (Is(XNFontSet, sts_attr)) {
-            int             str_length = strlen((char *) sts_attr->value);
-
+            int size = strlen((char*)sts_attr->value) + 1;
             if (rec->sts_attr.base_font != NULL) {
                 if (Is(rec->sts_attr.base_font, sts_attr))
                     continue;
-                XFree(rec->sts_attr.base_font);
+                rec->sts_attr.base_font = realloc(rec->sts_attr.base_font,
+                                                  size);
+            } else {
+                rec->sts_attr.base_font = malloc(size);
             }
-            rec->sts_attr.base_font = (char *) malloc(str_length + 1);
-            strcpy(rec->sts_attr.base_font, (char *) sts_attr->value);
-        } else if (Is(XNLineSpace, sts_attr))
+            memcpy(rec->sts_attr.base_font, sts_attr->value, size);
+        } else if (Is(XNLineSpace, sts_attr)) {
             rec->sts_attr.line_space = *(CARD32 *) sts_attr->value;
-
-        else if (Is(XNCursor, sts_attr))
-
+        } else if (Is(XNCursor, sts_attr)) {
             rec->sts_attr.cursor = *(Cursor *) sts_attr->value;
+        }
     }
 }
 
@@ -283,7 +285,7 @@ void XimGetIC(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 
             pre_attr->value = (void *) malloc(total_len);
             p = (char *) pre_attr->value;
-            memmove(p, &base_len, sizeof(CARD16));
+            memcpy(p, &base_len, sizeof(CARD16));
             p += sizeof(CARD16);
             strncpy(p, rec->pre_attr.base_font, base_len);
             pre_attr->value_length = total_len;
@@ -324,7 +326,7 @@ void XimGetIC(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 
             sts_attr->value = (void *) malloc(total_len);
             p = (char *) sts_attr->value;
-            memmove(p, &base_len, sizeof(CARD16));
+            memcpy(p, &base_len, sizeof(CARD16));
             p += sizeof(CARD16);
             strncpy(p, rec->sts_attr.base_font, base_len);
             sts_attr->value_length = total_len;

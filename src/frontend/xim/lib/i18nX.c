@@ -116,13 +116,13 @@ static unsigned char *ReadXIMMessage(XIMS ims,
             return (unsigned char *) NULL;
 
         p1 = p;
-        memmove(p1, &major_opcode, sizeof(CARD8));
+        memcpy(p1, &major_opcode, sizeof(CARD8));
         p1 += sizeof(CARD8);
-        memmove(p1, &minor_opcode, sizeof(CARD8));
+        memcpy(p1, &minor_opcode, sizeof(CARD8));
         p1 += sizeof(CARD8);
-        memmove(p1, &length, sizeof(CARD16));
+        memcpy(p1, &length, sizeof(CARD16));
         p1 += sizeof(CARD16);
-        memmove(p1, rec, length * 4);
+        memcpy(p1, rec, length * 4);
     } else if (ev->format == 32) {
         /* ClientMessage and WindowProperty */
         unsigned long length = (unsigned long) ev->data.l[0];
@@ -162,7 +162,7 @@ static unsigned char *ReadXIMMessage(XIMS ims,
         if ((p = (unsigned char *) malloc(length)) == NULL)
             return (unsigned char *) NULL;
 
-        memmove(p, prop, length);
+        memcpy(p, prop, length);
         XFree(prop);
     }
     return (unsigned char *) p;
@@ -323,12 +323,12 @@ static Bool Xi18nXSend(XIMS ims,
         event.xclient.format = 8;
 
         /* Clear unused field with NULL */
-        memmove(buffer, reply, length);
+        memcpy(buffer, reply, length);
         for (i = length; i < XCM_DATA_LIMIT; i++)
             buffer[i] = (char) 0;
         /*endfor*/
         length = XCM_DATA_LIMIT;
-        memmove(event.xclient.data.b, buffer, length);
+        memcpy(event.xclient.data.b, buffer, length);
     }
     XSendEvent(i18n_core->address.dpy,
                x_client->client_win,
