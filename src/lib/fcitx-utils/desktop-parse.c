@@ -88,9 +88,9 @@ fcitx_desktop_file_init(FcitxDesktopFile *file, FcitxDesktopVTable *vtable,
     if (!fcitx_desktop_parse_check_vtable(vtable))
         return false;
     memset(file, 0, sizeof(FcitxDesktopFile));
+    utarray_init(&file->comments, fcitx_str_icd);
     file->vtable = vtable;
     file->owner = owner;
-    utarray_init(&file->comments, fcitx_str_icd);
     return true;
 }
 
@@ -103,15 +103,15 @@ _find_none_blank(char *str)
 static void
 fcitx_desktop_entry_reset(FcitxDesktopEntry *entry)
 {
-    utarray_done(&entry->comments);
+    utarray_clear(&entry->comments);
     entry->flags = 0;
 }
 
 static void
 fcitx_desktop_group_reset(FcitxDesktopGroup *group)
 {
-    utarray_done(&group->comments);
     FcitxDesktopEntry *entry;
+    utarray_clear(&group->comments);
     for (entry = group->first;entry;entry = entry->next)
         fcitx_desktop_entry_reset(entry);
     group->flags = 0;
@@ -120,10 +120,10 @@ fcitx_desktop_group_reset(FcitxDesktopGroup *group)
 static void
 fcitx_desktop_file_reset(FcitxDesktopFile *file)
 {
-    utarray_done(&file->comments);
     FcitxDesktopGroup *group;
     for (group = file->first;group;group = group->next)
         fcitx_desktop_group_reset(group);
+    utarray_clear(&file->comments);
     file->first = NULL;
     file->last = NULL;
 }
@@ -253,6 +253,7 @@ fcitx_desktop_file_hash_new_group(FcitxDesktopFile *file,
     new_group->name = malloc(name_len + 1);
     memcpy(new_group->name, name, name_len);
     new_group->name[name_len] = '\0';
+    utarray_init(&new_group->comments, fcitx_str_icd);
     HASH_ADD_KEYPTR(hh, file->groups, new_group->name, name_len, new_group);
     return new_group;
 }
@@ -275,6 +276,7 @@ fcitx_desktop_group_hash_new_entry(FcitxDesktopGroup *group,
     new_entry->name = malloc(name_len + 1);
     memcpy(new_entry->name, name, name_len);
     new_entry->name[name_len] = '\0';
+    utarray_init(&new_entry->comments, fcitx_str_icd);
     HASH_ADD_KEYPTR(hh, group->entries, new_entry->name, name_len, new_entry);
     return new_entry;
 }
@@ -395,9 +397,8 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
     char *buff = NULL;
     size_t buff_len = 0;
     int lineno = 0;
-    UT_array comments;
-    utarray_init(&comments, fcitx_str_icd);
     fcitx_desktop_file_reset(file);
+    UT_array *comments = &file->comments;
     FcitxDesktopGroup *cur_group = NULL;
 
     while (getline(&buff, &buff_len, fp) != -1) {
@@ -408,7 +409,7 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
         switch (*line) {
         case '#':
             line++;
-            utarray_push_back(&comments, &line);
+            utarray_push_back(comments, &line);
         case '\0':
             continue;
         case '[': {
@@ -427,21 +428,23 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
                                                               name_len);
             } else {
                 if (new_group->flags & FX_DESKTOP_GROUP_UPDATED) {
-                    FcitxLog(ERROR, _("Duplicate group %s in a desktop file,"
-                                      "@ line %d, override previous one."),
+                    FcitxLog(WARNING, _("Duplicate group %s in a desktop file,"
+                                        "@ line %d, merge with previous one."),
                              new_group->name, lineno);
                     if (new_group == cur_group)
                         cur_group = new_group->prev;
                     fcitx_desktop_group_unlink(file, new_group);
-                    fcitx_desktop_group_reset(new_group);
+                    utarray_clear(&new_group->comments);
+                } else {
+                    new_group->first = NULL;
+                    new_group->last = NULL;
                 }
-                new_group->first = NULL;
-                new_group->last = NULL;
             }
             new_group->flags |= FX_DESKTOP_GROUP_UPDATED;
             fcitx_desktop_file_link_group_after(file, cur_group, new_group);
-            new_group->comments = comments;
-            utarray_init(&comments, fcitx_str_icd);
+            UT_array tmp_ary = *comments;
+            *comments = new_group->comments;
+            new_group->comments = tmp_ary;
             cur_group = new_group;
             continue;
         }
@@ -474,26 +477,25 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
         new_entry->flags |= FX_DESKTOP_ENTRY_UPDATED;
         fcitx_desktop_group_link_entry_after(cur_group, cur_group->last,
                                              new_entry);
-        new_entry->comments = comments;
-        utarray_init(&comments, fcitx_str_icd);
+        UT_array tmp_ary = *comments;
+        *comments = new_entry->comments;
+        new_entry->comments = tmp_ary;
         char *value = line + key_len + 1;
         int value_len = buff + line_len - value;
         if (value_len <= 0) {
             fcitx_utils_free(new_entry->value);
             new_entry->value = NULL;
         } else {
-            new_entry->value = realloc(new_entry->value, value_len + 1);
-            memcpy(new_entry->value, value, value_len);
-            new_entry->value[value_len] = '\0';
+            new_entry->value = fcitx_utils_set_str_with_len(new_entry->value,
+                                                            value, value_len);
         }
     }
-    file->comments = comments;
     fcitx_desktop_file_clean(file);
     fcitx_utils_free(buff);
     return true;
 }
 
-boolean
+FCITX_EXPORT_API boolean
 fcitx_desktop_file_load(FcitxDesktopFile *file, const char *name)
 {
     boolean res;
@@ -536,11 +538,7 @@ fcitx_desktop_write_comments(FILE *fp, UT_array *comments)
         size_t len = _check_single_line(*comment);
         if (!len)
             continue;
-        if (**comment == ' ' || **comment == '#') {
-            _write_str(fp, "#");
-        } else {
-            _write_str(fp, "# ");
-        }
+        _write_str(fp, "#");
         _write_len(fp, *comment, len);
         _write_str(fp, "\n");
     }
@@ -673,7 +671,6 @@ fcitx_desktop_file_add_group_after_with_len(
     if (!new_group) {
         new_group = fcitx_desktop_file_hash_new_group(file, name, name_len);
         fcitx_desktop_file_link_group_after(file, group, new_group);
-        utarray_init(&new_group->comments, fcitx_str_icd);
     } else if (move && !(new_group == group)) {
         fcitx_desktop_group_unlink(file, new_group);
         fcitx_desktop_file_link_group_after(file, group, new_group);
@@ -700,7 +697,6 @@ fcitx_desktop_file_add_group_before_with_len(
     if (!new_group) {
         new_group = fcitx_desktop_file_hash_new_group(file, name, name_len);
         fcitx_desktop_file_link_group_before(file, group, new_group);
-        utarray_init(&new_group->comments, fcitx_str_icd);
     } else if (move && !(new_group == group)) {
         fcitx_desktop_group_unlink(file, new_group);
         fcitx_desktop_file_link_group_before(file, group, new_group);
