@@ -466,12 +466,16 @@ FcitxXkbSetLayout  (FcitxXkb* xkb,
 
     model_line = fcitx_utils_join_string_list(xkb->defaultModels, ',');
 
-    retval = FcitxXkbSetRules(xkb,
-                              FcitxXkbGetRulesName(xkb), model_line,
-                              layouts_line, variants_line, options_line);
-    FcitxXkbUpdateProperties(xkb,
-                             FcitxXkbGetRulesName(xkb), model_line,
-                             layouts_line, variants_line, options_line);
+    char* rulesName = FcitxXkbGetRulesName(xkb);
+    if (rulesName) {
+        retval = FcitxXkbSetRules(xkb,
+                                  rulesName, model_line,
+                                  layouts_line, variants_line, options_line);
+        FcitxXkbUpdateProperties(xkb,
+                                 rulesName, model_line,
+                                 layouts_line, variants_line, options_line);
+        free(rulesName);
+    }
     free (layouts_line);
     free (variants_line);
     free (options_line);
