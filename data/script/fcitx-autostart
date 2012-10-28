@@ -1,9 +1,5 @@
 #!/bin/sh
 
-function run_autostart() {
-# avoid conflict with existing autostart
-sleep 8
-
 # Test whether fcitx is running correctly with dbus...
 fcitx-remote > /dev/null 2>&1
 
@@ -14,6 +10,3 @@ else
     echo "Fcitx is running correctly."
 fi
 
-}
-
-run_autostart &
