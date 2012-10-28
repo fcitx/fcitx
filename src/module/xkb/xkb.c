@@ -152,8 +152,8 @@ static char* FcitxXkbGetRulesName(FcitxXkb* xkb)
     XkbRF_VarDefsRec vd;
     char *tmp = NULL;
 
-    if (XkbRF_GetNamesProp(xkb->dpy, &tmp, &vd) && tmp != NULL ) {
-        return strdup(tmp);
+    if (XkbRF_GetNamesProp(xkb->dpy, &tmp, &vd) && tmp != NULL) {
+        return tmp;
     }
     return NULL;
 }
@@ -221,11 +221,12 @@ FcitxXkbInitDefaultLayout (FcitxXkb* xkb)
     if (xkb->defaultOptions) fcitx_utils_free_string_list(xkb->defaultOptions);
     if (xkb->defaultVariants) fcitx_utils_free_string_list(xkb->defaultVariants);
 
-    if (!XkbRF_GetNamesProp(dpy, &tmp, &vd) || !tmp)
-    {
+    if (!XkbRF_GetNamesProp(dpy, &tmp, &vd) || !tmp) {
         FcitxLog(WARNING, "Couldn't interpret %s property",
                  _XKB_RF_NAMES_PROP_ATOM);
         return;
+    } else {
+        free(tmp);
     }
     if (!vd.model || !vd.layout) {
         FcitxLog (WARNING, "Could not get group layout from X property");
