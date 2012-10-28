@@ -265,11 +265,9 @@ AutoEngCheckPreedit(FcitxAutoEngState *autoEngState)
     char *preedit;
     input = FcitxInstanceGetInputState(autoEngState->owner);
     preedit = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
-    if (preedit && *fcitx_utils_get_ascii_end(preedit)) {
-        free(preedit);
-        return false;
-    }
-    return true;
+    boolean res = !(preedit && *fcitx_utils_get_ascii_end(preedit));
+    free(preedit);
+    return res;
 }
 
 void *AutoEngCreate(FcitxInstance *instance)

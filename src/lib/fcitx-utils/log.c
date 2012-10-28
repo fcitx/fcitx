@@ -74,6 +74,7 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
 
     if (is_utf8) {
         fprintf(stderr, "%s\n", buffer);
+        free(buffer);
         return;
     }
 
