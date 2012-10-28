@@ -1,25 +1,11 @@
 #!/bin/sh
 
-# test DISPLAY
-if [ "x$DISPLAY" != "x" ]; then
-    number=`echo $DISPLAY | sed 's|\:\([0-9]\+\)\(\..*\)\?|\1|g'`
-    if [ "x$number" = "x" ]; then
-        exit 1
-    fi
-else
-    number=0
-fi
+function run_autostart() {
+# avoid conflict with existing autostart
+sleep 8
 
-# find dbus-send
-DBUS_SEND=`which dbus-send`
-
-if [ ! -x "${DBUS_SEND}" ]; then
-    echo "Cannot find dbus-send"
-    exit 1
-fi
-
-# use dbus-send to check fcitx is running or not
-"${DBUS_SEND}" --print-reply --type=method_call --session --dest=org.fcitx.Fcitx-$number /inputmethod org.freedesktop.DBus.Introspectable.Introspect > /dev/null 2>&1
+# Test whether fcitx is running correctly with dbus...
+fcitx-remote > /dev/null 2>&1
 
 if [ $? = "1" ]; then
     echo "Fcitx seems is not running"
@@ -27,3 +13,7 @@ if [ $? = "1" ]; then
 else
     echo "Fcitx is running correctly."
 fi
+
+}
+
+run_autostart &
