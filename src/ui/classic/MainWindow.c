@@ -312,7 +312,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                 const char *path;
                 if (icon[0] != '/') {
                     if (icon[0] == '\0') {
-                        path = compstatus->name;
+                        path = compstatus->shortDescription;
                     } else {
                         fcitx_utils_alloc_cat_str(tmpstr, icon, ".png");
                         path = tmpstr;
@@ -361,7 +361,6 @@ void DrawMainWindow(MainWindow* mainWindow)
                 fcitx_utils_alloc_cat_str(path, status->name, active ?
                                           "_active.png" : "_inactive.png");
                 SkinImage* statusicon = LoadImage(sc, path, false);
-                free(path);
                 if (statusicon == NULL || statusicon->textIcon) {
                     if (activeIcon) {
                         statusicon = LoadImageWithText(classicui, sc, path, status->shortDescription,
@@ -371,6 +370,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                                                       );
                     }
                 }
+                free(path);
                 if (statusicon == NULL)
                     continue;
                 currentX += cairo_image_surface_get_width(statusicon->image);
