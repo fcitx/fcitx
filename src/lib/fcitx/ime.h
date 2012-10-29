@@ -298,7 +298,7 @@ extern "C" {
     const char* FcitxInputStateGetLastCommitString(FcitxInputState * input);
 
     /**
-     * get current input method
+     * get current input method, return result can be NULL.
      *
      * @param instance fcitx instance
      * @return _FcitxIM*

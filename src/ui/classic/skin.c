@@ -992,6 +992,8 @@ void ParsePlacement(UT_array* sps, char* placment)
 SkinImage* GetIMIcon(FcitxClassicUI* classicui, FcitxSkin *sc, const char* fallbackIcon, int flag, boolean fallbackToDefault)
 {
     FcitxIM* im = FcitxInstanceGetCurrentIM(classicui->owner);
+    if (!im)
+        return NULL;
     const char *path;
     char *tmpstr = NULL;
     if (im->strIconName[0] == '/') {
