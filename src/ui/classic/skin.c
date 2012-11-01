@@ -159,7 +159,7 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
     cairo_t* c = cairo_create(newsurface);
 
     int min = w > h? h: w;
-    min = min * 0.8;
+    min = min * 0.7;
 
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
     cairo_set_source_rgba(c ,1, 1, 1, 0.0);
