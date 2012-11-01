@@ -794,7 +794,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
         cursorY2 = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos + fontHeight;
     }
     else {
-        cursorY1 = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - fontHeight - 4;
+        cursorY1 = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - fontHeight;
         cursorY2 = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos;
     }
 
@@ -881,7 +881,6 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
     int i ;
     DIR *dir;
     struct dirent *drt;
-    struct stat fileStat;
     size_t len;
     char **skinPath = FcitxXDGGetPathWithPrefix(&len, "skin");
     for (i = 0; i < len; i++) {

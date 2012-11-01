@@ -225,9 +225,15 @@ OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, int dpi, co
     PangoContext *pc = pango_cairo_create_context(c);
     pango_cairo_context_set_resolution(pc, dpi);
     PangoLayout *layout = pango_layout_new(pc);
-    pango_layout_set_text(layout, str, -1);
     pango_layout_set_font_description(layout, desc);
-    cairo_move_to(c, x, y);
+    int height1, height2;
+    pango_layout_set_text(layout, "Ayg中", -1);
+    pango_layout_get_pixel_size(layout, NULL, &height1);
+
+    pango_layout_set_text(layout, str, -1);
+    pango_layout_get_pixel_size(layout, NULL, &height2);
+
+    cairo_move_to(c, x, y + (height1 - height2));
     pango_cairo_show_layout(c, layout);
 
     cairo_restore(c);
