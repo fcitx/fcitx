@@ -894,12 +894,10 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
                 strcmp(drt->d_name, "..") == 0)
                 continue;
             char *pathBuf;
-            fcitx_utils_alloc_cat_str(pathBuf, skinPath[i], "/", drt->d_name);
-            int statresult = stat(pathBuf, &fileStat);
+            fcitx_utils_alloc_cat_str(pathBuf, skinPath[i], "/", drt->d_name, "/fcitx_skin.conf");
+            boolean result = fcitx_utils_isreg(pathBuf);
             free(pathBuf);
-            if (statresult == -1)
-                continue;
-            if (S_ISDIR(fileStat.st_mode)) {
+            if (result) {
                 /* check duplicate name */
                 int j = 0;
                 for (; j < skinBuf->i; j++) {
