@@ -1,7 +1,3 @@
-include_directories(${PROJECT_SOURCE_DIR}/src/)
-include_directories(${PROJECT_SOURCE_DIR}/src/lib/)
-include_directories(${LIBICONV_INCLUDE_DIR})
-
 set(createPYMB_SOURCES
     createPYMB.c
     ${PROJECT_SOURCE_DIR}/src/im/pinyin/pyParser.c

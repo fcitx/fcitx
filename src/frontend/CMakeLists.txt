@@ -1,3 +1,5 @@
+add_subdirectory(simple)
+
 if (ENABLE_X11)
     add_subdirectory(xim)
 endif (ENABLE_X11)

@@ -1,0 +1,9 @@
+[Addon]
+Name=fcitx-simple-module
+_GeneralName=module used by simple frontend
+_Comment=Frontend that make fcitx can be used as a library
+Category=Module
+Enabled=False
+Library=fcitx-simple.so
+Type=SharedLibrary
+Advance=True

@@ -96,7 +96,8 @@ void Usage()
            "\t-v\t\t\tdisplay the version information and exit\n"
            "\t-u, --ui\t\tspecify the user interface to use\n"
            "\t--enable\t\tspecify a comma separated list for addon that will override the enable option\n"
-           "\t--disable\t\tspecify a comma separated list for addon that will explicitly disabled, priority is higher than --enable\n"
+           "\t--disable\t\tspecify a comma separated list for addon that will explicitly disabled,\n"
+           "\t\t\t\t\tpriority is lower than --enable, can use all for disable all module\n"
            "\t-h, --help\t\tdisplay this help and exit\n");
 }
 
@@ -115,7 +116,7 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
 }
 
 FCITX_EXPORT_API
-FcitxInstance* FcitxInstanceCreateWithFD(sem_t *sem, int argc, char* argv[], int fd)
+FcitxInstance* FcitxInstanceCreatePause(sem_t *sem, int argc, char* argv[], int fd)
 {
     FcitxInstance* instance = fcitx_utils_malloc0(sizeof(FcitxInstance));
     FcitxAddonsInit(&instance->addons);
@@ -189,13 +190,30 @@ FcitxInstance* FcitxInstanceCreateWithFD(sem_t *sem, int argc, char* argv[], int
         return instance;
     }
 
-    /* make in order to use block X, query is not good here */
-    pthread_create(&instance->pid, NULL, RunInstance, instance);
-
     return instance;
 
 error_exit:
     FcitxInstanceEnd(instance);
+    return instance;
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceStart(FcitxInstance* instance)
+{
+    if (!instance->loadingFatalError) {
+        /* make in order to use block X, query is not good here */
+        pthread_create(&instance->pid, NULL, RunInstance, instance);
+    }
+}
+
+
+FCITX_EXPORT_API
+FcitxInstance* FcitxInstanceCreateWithFD(sem_t *sem, int argc, char* argv[], int fd)
+{
+    FcitxInstance* instance = FcitxInstanceCreatePause(sem, argc, argv, fd);
+
+    FcitxInstanceStart(instance);
+
     return instance;
 
 }
@@ -214,13 +232,15 @@ void* RunInstance(void* arg)
     while (1) {
         FcitxAddon** pmodule;
         uint8_t signo = 0;
-        while (read(instance->fd, &signo, sizeof(char)) > 0) {
-            if (signo == SIGINT || signo == SIGTERM || signo == SIGQUIT)
-                FcitxInstanceEnd(instance);
-            else if (signo == SIGHUP)
-                fcitx_utils_launch_restart();
-            else if (signo == SIGUSR1)
-                FcitxInstanceReloadConfig(instance);
+        if (instance->fd) {
+            while (read(instance->fd, &signo, sizeof(char)) > 0) {
+                if (signo == SIGINT || signo == SIGTERM || signo == SIGQUIT)
+                    FcitxInstanceEnd(instance);
+                else if (signo == SIGHUP)
+                    fcitx_utils_launch_restart();
+                else if (signo == SIGUSR1)
+                    FcitxInstanceReloadConfig(instance);
+            }
         }
         do {
             instance->uiflag = UI_NONE;
