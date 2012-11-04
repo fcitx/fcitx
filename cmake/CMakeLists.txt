@@ -11,3 +11,8 @@ install(FILES
   DESTINATION "${prefix}/share/cmake/fcitx/"
   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
   GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+install(FILES
+  fcitx-parse-po.sh
+  fcitx-write-po.sh
+  DESTINATION "${prefix}/share/cmake/fcitx/"
+  PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
