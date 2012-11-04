@@ -33,6 +33,12 @@ set(FCITX_MACRO_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 set(FCITX_TRANSLATION_SCAN_POT "${FCITX_MACRO_CMAKE_DIR}/fcitx-scan-pot.sh")
 set(FCITX_TRANSLATION_MERGE_CONFIG
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-merge-config.sh")
+set(FCITX_TRANSLATION_EXTRACT_CPP
+  "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-cpp.sh")
+set(FCITX_TRANSLATION_EXTRACT_DESKTOP
+  "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-desktop.sh")
+set(FCITX_TRANSLATION_EXTRACT_CONFDESC
+  "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-confdesc.sh")
 
 # Function to create a unique target in certain namespace
 # Useful when it is hard to determine a unique legal target name
@@ -217,6 +223,7 @@ endfunction()
 function(fcitx_install_addon_desc)
   __fcitx_addon_get_unique_name(install-desc desc_target)
   add_custom_target("${desc_target}" ALL)
+  fcitx_translate_add_sources(${ARGN})
   __fcitx_install_addon_desc("${desc_target}" ${ARGN})
 endfunction()
 
@@ -317,6 +324,9 @@ function(_fcitx_translate_add_handler script)
     "${full_name}" --add-handler "${script}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
 endfunction()
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_CPP}")
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_DESKTOP}")
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_CONFDESC}")
 
 # Add files to apply translation
 function(fcitx_translate_add_apply_source in_file out_file)

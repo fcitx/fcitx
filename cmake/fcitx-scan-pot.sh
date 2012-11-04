@@ -26,14 +26,15 @@ case "${action}" in
         echo "$1 $2" >> "${po_cache}"
         exit 0
         ;;
-    --add-script)
-        echo "${script}" >> "${handler_cache}"
+    --add-handler)
+        echo "${1}" >> "${handler_cache}"
         exit 0
         ;;
     --pot)
         file_list=()
         while read file; do
-            file_list=("${file_list[@]}" "${file}")
+            file_list=("${file_list[@]}"
+                "$(realpath -es --relative-to="${PWD}" "${file}")")
         done < <(sort -u "${src_cache}")
         po_dir="${cache_base}/sub_pos"
         mkdir -p "${po_dir}"
@@ -53,8 +54,21 @@ case "${action}" in
             let "po_num++"
             po_filename="${po_dir}/subpo_${po_num}.po"
             "${handler}" -w "${po_filename}" "${handled_list[@]}"
+            po_list=("${po_list[@]}" "${po_filename}")
         done < "${handler_cache}"
-        rm -f "${src_cache}"
+        if ! [[ -z "${file_list[*]}" ]]; then
+            echo "Warning: Following files are added but not handled."
+            for extra_file in "${file_list[@]}"; do
+                echo $'\t'"${extra_file}"
+            done
+        fi
+        msgcat -o "${pot_file}" --use-first --to-code=utf-8 "${po_list[@]}"
+        while read line; do
+            po_lang="${line%% *}"
+            po_file="${line#* }"
+            msgmerge --quiet --update --backup=none -s --lang="${po_lang}" \
+                "${po_file}" "${pot_file}"
+        done < "${po_cache}"
         exit 0
         ;;
     --clean)

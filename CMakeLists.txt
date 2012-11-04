@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required(VERSION 2.8.4)
 
 project(fcitx)
 
@@ -251,6 +251,7 @@ include_directories(${PROJECT_BINARY_DIR}/src/)
 include_directories(${PROJECT_SOURCE_DIR}/src/)
 include_directories(${PROJECT_SOURCE_DIR}/src/lib/)
 
+# must be the first
 add_subdirectory(po)
 add_subdirectory(src)
 add_subdirectory(doc)
