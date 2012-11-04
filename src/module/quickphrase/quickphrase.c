@@ -38,7 +38,7 @@
 #include "fcitx/candidate.h"
 #include "fcitx/context.h"
 #include "module/punc/fcitx-punc.h"
-#include "module/lua/luamod.h"
+#include "module/lua/fcitx-lua.h"
 #include "module/spell/fcitx-spell.h"
 
 #include "fcitx/ime.h"
@@ -556,11 +556,8 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
 
     pKey = &searchKey;
 
-    {
-        char *text = qpstate->buffer;
-        InvokeVaArgs(qpstate->owner, FCITX_LUA, CALLCOMMAND,
-                     text, QuickPhraseGetLuaCandWord, qpstate);
-    }
+    FcitxLuaCallCommand(qpstate->owner, qpstate->buffer,
+                        QuickPhraseGetLuaCandWord, qpstate);
 
     do {
         if (!qpstate->quickPhrases)
