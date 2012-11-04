@@ -8,16 +8,7 @@ if [[ -z $cur_msgid ]] || [[ -z $cur_msgstr ]]; then
     exit 0
 fi
 
-quote ()
-{
-    local quoted=${1//\'/\'\\\'\'};
-    printf "'%s'" "$quoted"
-}
-msgid_to_varname() {
-    local prefix="${1}"
-    local msgid="${2}"
-    echo -n "${prefix}_$(echo -n "${msgid}" | base64 -w0 | sed -e 's:=:_1:g' -e 's:\+:_2:g' -e 's:/:_3:g')"
-}
+. "$(dirname ${BASH_SOURCE})/fcitx-parse-po.sh"
 
 varname="$(msgid_to_varname "${var_prefix}" "${cur_msgid}")"
 varquote="$(quote "${cur_msgstr}")"

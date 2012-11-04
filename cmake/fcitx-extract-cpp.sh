@@ -4,18 +4,7 @@ action="$1"
 
 shift 1 || exit 1
 
-str_match() {
-    local pattern="$1"
-    local string="$2"
-    case "${string}" in
-        $pattern)
-            return 0
-            ;;
-        *)
-            return 1
-            ;;
-    esac
-}
+. "$(dirname ${BASH_SOURCE})/fcitx-parse-po.sh"
 
 case "${action}" in
     -c)
