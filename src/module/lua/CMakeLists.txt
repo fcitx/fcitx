@@ -1,14 +1,17 @@
-find_package(Lua51 REQUIRED)
-
-include_directories(${LUA_INCLUDE_DIR})
+if(ENABLE_LUA)
+  find_package(Lua51 REQUIRED)
+  include_directories(${LUA_INCLUDE_DIR})
+  set(lua_noinstall)
+else()
+  set(lua_noinstall NO_INSTALL)
+endif()
 
 set(FCITX_LUA_SOURCES
-    lua.c
-    luawrap.c
-)
+  lua.c
+  luawrap.c)
 
-fcitx_add_addon(fcitx-lua ${FCITX_LUA_SOURCES})
-fcitx_add_addon_conf_file(fcitx-lua.conf)
-fcitx_add_addon_header(lua luamod.h)
-
-target_link_libraries(fcitx-lua ${LUA_LIBRARIES})
+fcitx_add_addon_full(lua SCAN ${lua_noinstall}
+  SOURCES ${FCITX_LUA_SOURCES}
+  HEADERS luamod.h
+  LINK_LIBS ${LUA_LIBRARIES}
+  EXTRA_PO luawrap.h)

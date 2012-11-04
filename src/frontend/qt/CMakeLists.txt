@@ -1,4 +1,18 @@
-if (ENABLE_QT_IM_MODULE)
+set(qtim_fcitx_SRCS
+  fcitx-plugin.cpp
+  fcitx-input-context.cpp
+  fcitx-formatted-preedit.cpp
+  )
+
+fcitx_translate_add_sources(${qtim_fcitx_SRCS}
+  fcitx-formatted-preedit.h
+  keyserver_x11.h
+  fcitx-input-context.h
+  )
+
+if(NOT ENABLE_QT_IM_MODULE)
+  return()
+endif()
 find_package(Qt4 4.5 COMPONENTS QtCore QtGui QtDBus REQUIRED)
 
 # use newer macro from Qt4Macro.cmake
@@ -11,23 +25,23 @@ MACRO(FCITX_QT4_ADD_DBUS_INTERFACE _sources _interface _basename)
   GET_SOURCE_FILE_PROPERTY(_nonamespace ${_interface} NO_NAMESPACE)
   IF(_nonamespace)
     SET(_params -N -m)
-  ELSE(_nonamespace)
+  ELSE()
     SET(_params -m)
-  ENDIF(_nonamespace)
+  ENDIF()
 
   GET_SOURCE_FILE_PROPERTY(_classname ${_interface} CLASSNAME)
   IF(_classname)
     SET(_params ${_params} -c ${_classname})
-  ENDIF(_classname)
+  ENDIF()
 
   GET_SOURCE_FILE_PROPERTY(_include ${_interface} INCLUDE)
   IF(_include)
     SET(_params ${_params} -i ${_include})
-  ENDIF(_include)
+  ENDIF()
 
   ADD_CUSTOM_COMMAND(OUTPUT ${_impl} ${_header}
-      COMMAND ${QT_DBUSXML2CPP_EXECUTABLE} ${_params} -p ${_basename} ${_infile}
-      DEPENDS ${_infile} VERBATIM)
+    COMMAND ${QT_DBUSXML2CPP_EXECUTABLE} ${_params} -p ${_basename} ${_infile}
+    DEPENDS ${_infile} VERBATIM)
 
   SET_SOURCE_FILES_PROPERTIES(${_impl} PROPERTIES SKIP_AUTOMOC TRUE)
 
@@ -35,89 +49,79 @@ MACRO(FCITX_QT4_ADD_DBUS_INTERFACE _sources _interface _basename)
 
   SET(${_sources} ${${_sources}} ${_impl} ${_header} ${_moc})
   MACRO_ADD_FILE_DEPENDENCIES(${_impl} ${_moc})
-
-ENDMACRO(FCITX_QT4_ADD_DBUS_INTERFACE)
+ENDMACRO()
 
 include_directories(
-    ${QT_INCLUDE_DIR}
-    ${QT_QTCORE_INCLUDE_DIR}
-    ${QT_QTGUI_INCLUDE_DIR}
-    ${QT_QTDBUS_INCLUDE_DIR}
-    ${X11_INCLUDE_DIRS}
-    ${DBUS_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
+  ${QT_INCLUDE_DIR}
+  ${QT_QTCORE_INCLUDE_DIR}
+  ${QT_QTGUI_INCLUDE_DIR}
+  ${QT_QTDBUS_INCLUDE_DIR}
+  ${X11_INCLUDE_DIRS}
+  ${DBUS_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  )
 
 link_directories(
-    ${X11_LIBRARY_DIRS}
-    ${DBUS_LIBRARY_DIRS}
-)
+  ${X11_LIBRARY_DIRS}
+  ${DBUS_LIBRARY_DIRS}
+  )
 
-if (ENABLE_X11)
-    include_directories(${X11_INCLUDE_DIRS})
-    link_directories(${X11_LIBRARY_DIRS})
-endif (ENABLE_X11)
+if(ENABLE_X11)
+  include_directories(${X11_INCLUDE_DIRS})
+  link_directories(${X11_LIBRARY_DIRS})
+endif()
 
-set(
-    qtim_fcitx_SRCS
-    fcitx-plugin.cpp
-    fcitx-input-context.cpp
-    fcitx-formatted-preedit.cpp
-)
 
 set_property(
-    SOURCE org.fcitx.Fcitx.InputContext.xml
-    PROPERTY INCLUDE fcitx-formatted-preedit.h
-)
+  SOURCE org.fcitx.Fcitx.InputContext.xml
+  PROPERTY INCLUDE fcitx-formatted-preedit.h
+  )
 
 FCITX_QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS
-    org.fcitx.Fcitx.InputContext.xml
-    org.fcitx.Fcitx.InputContext
-)
+  org.fcitx.Fcitx.InputContext.xml
+  org.fcitx.Fcitx.InputContext
+  )
 
 FCITX_QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS
-    org.fcitx.Fcitx.InputMethod.xml
-    org.fcitx.Fcitx.InputMethod
-)
+  org.fcitx.Fcitx.InputMethod.xml
+  org.fcitx.Fcitx.InputMethod
+  )
 
-set(
-    qtim_fcitx_MOC_HDRS
-    fcitx-input-context.h
-)
+set(qtim_fcitx_MOC_HDRS
+  fcitx-input-context.h
+  )
 
 QT4_AUTOMOC(${qtim_fcitx_SRCS})
-QT4_WRAP_CPP(
-    qtim_fcitx_MOC_SRCS
-    ${qtim_fcitx_MOC_HDRS}
-)
+QT4_WRAP_CPP(qtim_fcitx_MOC_SRCS
+  ${qtim_fcitx_MOC_HDRS}
+  )
 
 add_library(
-    qtim-fcitx MODULE
-    ${qtim_fcitx_SRCS}
-    ${qtim_fcitx_MOC_SRCS}
-)
+  qtim-fcitx MODULE
+  ${qtim_fcitx_SRCS}
+  ${qtim_fcitx_MOC_SRCS}
+  )
 
-set_target_properties( qtim-fcitx PROPERTIES COMPILE_FLAGS "-fvisibility=hidden" LINK_FLAGS "-Wl,--no-undefined")
+set_target_properties( qtim-fcitx PROPERTIES COMPILE_FLAGS
+  "-fvisibility=hidden" LINK_FLAGS "-Wl,--no-undefined")
 
 target_link_libraries(
-    qtim-fcitx
-    debug ${QT_QTCORE_LIBRARY_DEBUG}
-    debug ${QT_QTDBUS_LIBRARY_DEBUG}
-    debug ${QT_QTGUI_LIBRARY_DEBUG}
-    optimized ${QT_QTCORE_LIBRARY_RELEASE}
-    optimized ${QT_QTDBUS_LIBRARY_RELEASE}
-    optimized ${QT_QTGUI_LIBRARY_RELEASE}
-    fcitx-config
-)
+  qtim-fcitx
+  debug ${QT_QTCORE_LIBRARY_DEBUG}
+  debug ${QT_QTDBUS_LIBRARY_DEBUG}
+  debug ${QT_QTGUI_LIBRARY_DEBUG}
+  optimized ${QT_QTCORE_LIBRARY_RELEASE}
+  optimized ${QT_QTDBUS_LIBRARY_RELEASE}
+  optimized ${QT_QTGUI_LIBRARY_RELEASE}
+  fcitx-config
+  )
 
-if (ENABLE_X11)
-    target_link_libraries(qtim-fcitx ${X11_LIBRARIES})
-endif (ENABLE_X11)
+if(ENABLE_X11)
+  target_link_libraries(qtim-fcitx ${X11_LIBRARIES})
+endif()
 
 install(
-    TARGETS qtim-fcitx
-    LIBRARY DESTINATION
-    ${QT_PLUGINS_DIR}/inputmethods)
-
-endif (ENABLE_QT_IM_MODULE)
+  TARGETS qtim-fcitx
+  LIBRARY DESTINATION
+  "${QT_PLUGINS_DIR}/inputmethods")
