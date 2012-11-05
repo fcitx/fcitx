@@ -24,6 +24,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdint.h>
+#include <stdarg.h>
 #include <unistd.h>
 #include <string.h>
 #include <fcitx-utils/desktop-parse.h>
@@ -106,6 +107,31 @@ str_case_cmp_len(const char *str1, const char *str2)
 }
 
 static boolean
+str_case_strip_cmp_list(const char *str, ...)
+{
+    va_list ap;
+    const char *cmp;
+    int len;
+    if (!str)
+        return false;
+    str += strspn(str, " \b\f\v\r\t");
+    if (!*str)
+        return false;
+    va_start(ap, str);
+    while ((cmp = va_arg(ap, const char*))) {
+        len = str_case_cmp_len(str, cmp);
+        if (len)
+            break;
+    }
+    va_end(ap);
+    if (!len)
+        return false;
+    str += len;
+    str += strspn(str, " \b\f\v\r\t");
+    return *str == '\0';
+}
+
+static boolean
 get_cache_result(FcitxDesktopGroup *grp)
 {
     FcitxDesktopEntry *ety;
@@ -113,23 +139,18 @@ get_cache_result(FcitxDesktopGroup *grp)
     if (!ety)
         return false;
     const char *cache = ety->value;
-    if (!cache)
-        return false;
-    cache += strspn(cache, " \b\f\v\r\t");
-    if (!*cache)
-        return false;
-    int len;
-    if ((len = str_case_cmp_len(cache, "on")) ||
-        (len = str_case_cmp_len(cache, "true")) ||
-        (len = str_case_cmp_len(cache, "yes")) ||
-        (len = str_case_cmp_len(cache, "1"))) {
-        cache += len;
-        cache += strspn(cache, " \b\f\v\r\t");
-        if (!*cache) {
-            return true;
-        }
-    }
-    return false;
+    return str_case_strip_cmp_list(cache, "on", "true", "yes", "1", NULL);
+}
+
+static boolean
+get_enable_wrapper(FcitxDesktopGroup *grp)
+{
+    FcitxDesktopEntry *ety;
+    ety = fcitx_desktop_group_find_entry(grp, "EnableWrapper");
+    if (!ety)
+        return true;
+    const char *cache = ety->value;
+    return !str_case_strip_cmp_list(cache, "off", "false", "no", "0", NULL);
 }
 
 static void
@@ -230,6 +251,7 @@ write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
     const char *type = get_return_type(grp);
     const char *err_ret = get_error_return(grp);
     boolean cache = get_cache_result(grp);
+    boolean enable_wrapper = get_enable_wrapper(grp);
     if (cache && !type) {
         FcitxLog(WARNING, "Cannot cache result of type void.");
         cache = false;
@@ -253,6 +275,8 @@ write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
         _write_str(ofp, err_ret);
         _write_str(ofp, ")\n");
     }
+    if (!enable_wrapper)
+        _write_str(ofp, "#if 0\n");
     _write_str(ofp, "static inline ");
     _write_str(ofp, type ? type : "void");
     _write_str(ofp, "\nFcitx");
@@ -304,7 +328,13 @@ write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
         _write_str(ofp, type);
         _write_str(ofp, ")(intptr_t)result;\n");
     }
-    _write_str(ofp, "}\n\n");
+    if (enable_wrapper) {
+        _write_str(ofp, "}\n\n");
+    } else {
+        _write_str(ofp,
+                   "}\n"
+                   "#endif\n\n");
+    }
     utarray_done(&args);
 }
 
