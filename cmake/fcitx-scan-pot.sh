@@ -70,15 +70,13 @@ case "${action}" in
                 echo $'\t'"${extra_file}"
             done
         fi
-        if [[ -z "${po_list[*]}" ]]; then
-            write_po_header "${pot_file}"
-        else
-            msgcat -o "${pot_file}" --use-first --to-code=utf-8 "${po_list[@]}"
-        fi
+        echo "Merging sub po files..."
+        merge_all_pos "${pot_file}" "${po_list[@]}"
         mapfile -t lines < "${po_cache}"
         for line in "${lines[@]}"; do
             po_lang="${line%% *}"
             po_file="${line#* }"
+            echo "Updating ${po_file} ..."
             msgmerge --quiet --update --backup=none -s --lang="${po_lang}" \
                 "${po_file}" "${pot_file}"
         done

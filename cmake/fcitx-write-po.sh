@@ -61,3 +61,21 @@ record_po_msg() {
     fi
     eval "${var_name}=(\"\${${var_name}[@]}\" \"\${in_file}:\${line_num}\")"
 }
+
+fix_po_charset_utf8() {
+    local po_file="$1"
+    local regex='^[[:blank:]]*"Content-Type:.*; charset=.*\\n"[[:blank:]]*$'
+    local fix_res='"Content-Type: text/plain; charset=utf-8\\n"'
+    sed -i "${po_file}" -e "0,/${regex}/s|${regex}|${fix_res}|"
+}
+
+merge_all_pos() {
+    local pot_file="$1"
+    shift
+    local po_list=("$@")
+    if [[ -z "${po_list[*]}" ]]; then
+        write_po_header "${pot_file}"
+    else
+        msgcat -o "${pot_file}" --use-first --to-code=utf-8 "${po_list[@]}"
+    fi
+}

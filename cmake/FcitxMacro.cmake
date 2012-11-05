@@ -39,6 +39,8 @@ set(FCITX_TRANSLATION_EXTRACT_DESKTOP
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-desktop.sh")
 set(FCITX_TRANSLATION_EXTRACT_CONFDESC
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-confdesc.sh")
+set(FCITX_TRANSLATION_EXTRACT_PO
+  "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-po.sh")
 
 # Function to create a unique target in certain namespace
 # Useful when it is hard to determine a unique legal target name
@@ -327,6 +329,7 @@ endfunction()
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_CPP}")
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_DESKTOP}")
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_CONFDESC}")
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_PO}")
 
 # Add files to apply translation
 function(fcitx_translate_add_apply_source in_file out_file)

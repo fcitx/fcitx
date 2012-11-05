@@ -4,7 +4,7 @@ action="$1"
 
 shift 1 || exit 1
 
-. "$(dirname ${BASH_SOURCE})/fcitx-parse-po.sh"
+. "$(dirname ${BASH_SOURCE})/fcitx-write-po.sh"
 
 case "${action}" in
     -c)
@@ -48,7 +48,7 @@ case "${action}" in
             --keyword=gettext --keyword=ngettext:1,2 --keyword=dgettext:2 \
             --keyword=dcgettext:2 --keyword=dcngettext:2,3 \
             --keyword=dngettext:2,3 "$@"
-        sed -i "${out_file}" -e '0,/^"Content-Type:.*; charset=.*\\n"$/s|^"Content-Type:.*; charset=.*\\n"$|"Content-Type: text/plain; charset=utf-8\\n"|'
+        fix_po_charset_utf8 "${out_file}"
         exit 0
         ;;
 esac
