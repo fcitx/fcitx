@@ -6,6 +6,8 @@ action="$3"
 
 shift 3 || exit 1
 
+. "$(dirname ${BASH_SOURCE})/fcitx-write-po.sh"
+
 src_cache="${cache_base}/fcitx-translation-src-cache.txt"
 po_cache="${cache_base}/fcitx-translation-po-cache.txt"
 handler_cache="${cache_base}/fcitx-translation-handler-cache.txt"
@@ -32,15 +34,17 @@ case "${action}" in
         ;;
     --pot)
         file_list=()
-        while read file; do
+        mapfile -t lines < <(sort -u "${src_cache}")
+        for file in "${lines[@]}"; do
             file_list=("${file_list[@]}"
                 "$(realpath -es --relative-to="${PWD}" "${file}")")
-        done < <(sort -u "${src_cache}")
+        done
         po_dir="${cache_base}/sub_pos"
         mkdir -p "${po_dir}"
         po_list=()
         po_num=0
-        while read handler; do
+        mapfile -t lines < "${handler_cache}"
+        for handler in "${lines[@]}"; do
             file_left=()
             handled_list=()
             for file in "${file_list[@]}"; do
@@ -51,24 +55,33 @@ case "${action}" in
                 fi
             done
             file_list=("${file_left[@]}")
+            if [[ -z "${handled_list[*]}" ]]; then
+                continue
+            fi
             let "po_num++"
             po_filename="${po_dir}/subpo_${po_num}.po"
             "${handler}" -w "${po_filename}" "${handled_list[@]}"
             po_list=("${po_list[@]}" "${po_filename}")
-        done < "${handler_cache}"
+        done
+
         if ! [[ -z "${file_list[*]}" ]]; then
             echo "Warning: Following files are added but not handled."
             for extra_file in "${file_list[@]}"; do
                 echo $'\t'"${extra_file}"
             done
         fi
-        msgcat -o "${pot_file}" --use-first --to-code=utf-8 "${po_list[@]}"
-        while read line; do
+        if [[ -z "${po_list[*]}" ]]; then
+            write_po_header "${pot_file}"
+        else
+            msgcat -o "${pot_file}" --use-first --to-code=utf-8 "${po_list[@]}"
+        fi
+        mapfile -t lines < "${po_cache}"
+        for line in "${lines[@]}"; do
             po_lang="${line%% *}"
             po_file="${line#* }"
             msgmerge --quiet --update --backup=none -s --lang="${po_lang}" \
                 "${po_file}" "${pot_file}"
-        done < "${po_cache}"
+        done
         exit 0
         ;;
     --clean)

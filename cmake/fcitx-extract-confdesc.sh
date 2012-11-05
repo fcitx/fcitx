@@ -10,7 +10,10 @@ extract_confdesc() {
     local in_file="$1"
     local out_file="$2"
     local line_num=0
-    while read line; do
+    local line
+    local lines
+    mapfile -t lines < "${in_file}"
+    for line in "${lines[@]}"; do
         ((line_num++))
         if [[ $line =~ ^\[(.*)/(.*)\]$ ]]; then
             record_po_msg "${in_file}" "${BASH_REMATCH[1]}" "${line_num}"
@@ -18,7 +21,7 @@ extract_confdesc() {
         elif [[ $line =~ ^[\ \t]*(Description|LongDescription|Enum[0-9]+)=(.*)$ ]]; then
             record_po_msg "${in_file}" "${BASH_REMATCH[2]}" "${line_num}"
         fi
-    done < "${in_file}"
+    done
 }
 
 case "${action}" in

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+filter_src="$(dirname ${BASH_SOURCE})/fcitx-filter-po.sh"
+
 quote ()
 {
     local quoted=${1//\'/\'\\\'\'};
@@ -48,14 +50,18 @@ lang_to_prefix() {
 }
 
 load_all_pos() {
-    local po_cache="${1}"
+    local po_cache="$1"
+    local cache_base="$2"
     local po_lang
     local po_file
     local prefix
     local po_parse_cache_file
     local po_parse_cache_dir="${cache_base}/fcitx_lang_parse"
     mkdir -p "${po_parse_cache_dir}"
-    while read line; do
+    local line
+    local lines
+    mapfile -t lines < "${po_cache}"
+    for line in "${lines[@]}"; do
         po_lang="${line%% *}"
         po_file="${line#* }"
         prefix="$(lang_to_prefix "${po_lang}")"
@@ -66,7 +72,7 @@ load_all_pos() {
         fi
         . "${po_parse_cache_file}"
         all_po_langs=("${all_po_langs[@]}" "${po_lang}")
-    done < "${po_cache}"
+    done
 }
 
 find_str_for_lang() {

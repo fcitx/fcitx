@@ -8,18 +8,19 @@ out_file="$5"
 
 shift 5 || exit 1
 
-filter_src="$(dirname ${BASH_SOURCE})/fcitx-filter-po.sh"
 . "$(dirname ${BASH_SOURCE})/fcitx-parse-po.sh"
 
 merge_config() {
     local in_file="${1}"
     local out_file="${2}"
-    local line
     local key
     local msgid
     local msgstr
     local lang
-    while read line; do
+    local line
+    local lines
+    mapfile -t lines < "${in_file}"
+    for line in "${lines[@]}"; do
         case "${line}" in
             _*=*)
                 line="${line#_}"
@@ -38,7 +39,7 @@ merge_config() {
                 echo "${line}"
                 ;;
         esac
-    done < "${in_file}" > "${out_file}"
+    done > "${out_file}"
 }
 
 case "${action}" in
@@ -53,7 +54,7 @@ case "${action}" in
         exit 1
         ;;
     -w)
-        load_all_pos "${po_cache}"
+        load_all_pos "${po_cache}" "${cache_base}"
         merge_config "${in_file}" "${out_file}"
         exit 0
         ;;
