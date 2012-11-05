@@ -171,6 +171,23 @@ load_includes(UT_array *ret, FcitxDesktopGroup *addon_grp)
 }
 
 static void
+load_macros(UT_array *ret, FcitxDesktopGroup *addon_grp)
+{
+    utarray_init(ret, &const_str_icd);
+    char include_buff[strlen("Macro") + FCITX_INT_LEN + 1];
+    strcpy(include_buff, "Macro");
+    int i;
+    FcitxDesktopEntry *tmp_ety;
+    for (i = 0;;i++) {
+        sprintf(include_buff + strlen("Macro"), "%d", i);
+        tmp_ety = fcitx_desktop_group_find_entry(addon_grp, include_buff);
+        if (!tmp_ety)
+            break;
+        utarray_push_back(ret, &tmp_ety->value);
+    }
+}
+
+static void
 load_functions(UT_array *ret, FcitxDesktopGroup *addon_grp)
 {
     utarray_init(ret, &const_str_icd);
@@ -222,6 +239,61 @@ write_includes(FILE *ofp, UT_array *includes)
         _write_str(ofp, *p);
     }
     _write_str(ofp, "\n\n");
+}
+
+static boolean
+macro_get_define(FcitxDesktopGroup *grp)
+{
+    FcitxDesktopEntry *ety;
+    ety = fcitx_desktop_group_find_entry(grp, "Define");
+    if (ety) {
+        return str_case_strip_cmp_list(ety->value,
+                                       "on", "true", "yes", "1", NULL);
+    }
+    ety = fcitx_desktop_group_find_entry(grp, "Undefine");
+    if (ety) {
+        return !str_case_strip_cmp_list(ety->value,
+                                        "on", "true", "yes", "1", NULL);
+    }
+    return true;
+}
+
+static const char*
+macro_get_value(FcitxDesktopGroup *grp)
+{
+    FcitxDesktopEntry *ety;
+    ety = fcitx_desktop_group_find_entry(grp, "Value");
+    if (!ety)
+        return NULL;
+    return ety->value;
+}
+
+static void
+write_macro(FILE *ofp, FcitxDesktopFile *dfile, const char *macro_name)
+{
+    FcitxDesktopGroup *grp;
+    grp = fcitx_desktop_file_find_group(dfile, macro_name);
+    if (!grp)
+        return;
+    const char *value = macro_get_value(grp);
+    boolean define = macro_get_define(grp);
+    _write_str(ofp, "#ifdef ");
+    _write_str(ofp, macro_name);
+    _write_str(ofp,
+               "\n"
+               "#  undef ");
+    _write_str(ofp, macro_name);
+    _write_str(ofp, "\n");
+    _write_str(ofp, "#endif\n");
+    if (define) {
+        _write_str(ofp, "#define ");
+        _write_str(ofp, macro_name);
+        if (value && *value) {
+            _write_str(ofp, " ");
+            _write_str(ofp, value);
+        }
+        _write_str(ofp, "\n");
+    }
 }
 
 static void
@@ -338,12 +410,13 @@ write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
     utarray_done(&args);
 }
 
-
 static int
 scan_fxaddon(FILE *ifp, FILE *ofp)
 {
     FcitxDesktopFile dfile;
     char *buff = NULL;
+    int i;
+    char **p;
     if (!fcitx_desktop_file_init(&dfile, NULL, NULL))
         return 1;
     if (!fcitx_desktop_file_load_fp(&dfile, ifp))
@@ -362,6 +435,8 @@ scan_fxaddon(FILE *ifp, FILE *ofp)
     if (!tmp_ety)
         return 1;
     const char *prefix = tmp_ety->value;
+    UT_array macros;
+    load_macros(&macros, addon_grp);
     UT_array includes;
     load_includes(&includes, addon_grp);
     UT_array functions;
@@ -376,6 +451,10 @@ scan_fxaddon(FILE *ifp, FILE *ofp)
     _write_str(ofp, "#define __FCITX_MODULE_");
     _write_len(ofp, buff, name_len);
     _write_str(ofp, "_H\n");
+    for (i = 0;i < utarray_len(&macros);i++) {
+        p = (char**)_utarray_eltptr(&macros, i);
+        write_macro(ofp, &dfile, *p);
+    }
     write_includes(ofp, &includes);
     utarray_done(&includes);
     _write_str(ofp, "DEFINE_GET_ADDON(\"");
@@ -383,8 +462,6 @@ scan_fxaddon(FILE *ifp, FILE *ofp)
     _write_str(ofp, "\", ");
     _write_str(ofp, prefix);
     _write_str(ofp, ")\n\n");
-    int i;
-    char **p;
     for (i = 0;i < utarray_len(&functions);i++) {
         p = (char**)_utarray_eltptr(&functions, i);
         write_function(ofp, &dfile, prefix, *p, i);

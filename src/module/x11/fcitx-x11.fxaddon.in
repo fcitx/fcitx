@@ -2,6 +2,7 @@
 Name=fcitx-x11
 Prefix=X11
 Include0="x11stuff.h"
+Macro0=FCITX_DISABLE_X11
 Function0=GetDisplay
 Function1=AddXEventHandler
 Function2=RemoveXEventHandler
@@ -27,11 +28,13 @@ Function19=
 Name=get-display
 Return=Display*
 CacheResult=True
+EnableWrapper=@ENABLE_X11@
 
 [AddXEventHandler]
 Name=add-xevent-handler
 Arg0=FcitxX11XEventHandler
 Arg1=void*
+EnableWrapper=@ENABLE_X11@
 
 [RemoveXEventHandler]
 Name=remove-xevent-handler
@@ -40,6 +43,7 @@ Arg0=void*
 [FindARGBVisual]
 Name=find-argb-visual
 Return=Visual*
+EnableWrapper=@ENABLE_X11@
 
 [InitWindowAttribute]
 Name=init-window-attribute
@@ -48,12 +52,14 @@ Arg1=Colormap*
 Arg2=XSetWindowAttributes*
 Arg3=unsigned long*
 Arg4=int*
+EnableWrapper=@ENABLE_X11@
 
 [SetWindowProp]
 Name=set-window-prop
 Arg0=Window*
 Arg1=FcitxXWindowType*
 Arg2=char*
+EnableWrapper=@ENABLE_X11@
 
 [GetScreenSize]
 Name=get-screen-size
@@ -66,6 +72,7 @@ Arg0=Window*
 Arg1=int*
 Arg2=int*
 Arg3=boolean*
+EnableWrapper=@ENABLE_X11@
 
 [AddCompositeHandler]
 Name=add-composite-handler
@@ -103,6 +110,7 @@ Arg0=unsigned int
 Name=default-event-window
 Return=Window
 CacheResult=True
+EnableWrapper=@ENABLE_X11@
 
 [RequestConvertSelect]
 Name=request-convert-select
@@ -113,3 +121,6 @@ Arg2=void*
 Arg3=X11ConvertSelectionCallback
 Arg4=void*
 Arg5=FcitxDestroyNotify
+
+[FCITX_DISABLE_X11]
+Undefine=@ENABLE_X11@

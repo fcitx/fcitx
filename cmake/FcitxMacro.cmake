@@ -85,6 +85,10 @@ __fcitx_cmake_init()
 #     SCAN: Generate api header, the path of the input file is determined by the
 #         FXADDON_SRC arguement and the name of the generated header file is
 #         determined by the FXADDON_GEN arguement.
+#     SCAN_IN: Generate api header from .in, the path of the fxaddon.in file
+#         (without the .in suffix) is determined by the
+#         FXADDON_SRC arguement and the name of the generated header file is
+#         determined by the FXADDON_GEN arguement.
 #     DESC: Install main config-desc file, the path of the file (with the .desc
 #         suffix) is determined by the DESC_SRC arguement.
 # single value arguments:
@@ -92,7 +96,8 @@ __fcitx_cmake_init()
 #         of the addon will be installed (default ${short_name})
 #     LIB_NAME: The name of the addon binary (default fcitx-${short_name})
 #     FXADDON_SRC: the path of the fxaddon file. Setting this argument will
-#          automatically set the SCAN option as well.
+#          automatically set the SCAN option as well, when using with SCAN_IN
+#          the value of this argument shouldn't contain the .in suffix
 #          (default: fcitx-${short_name}.fxaddon)
 #     FXADDON_GEN: the name of the generated header file. (path will be ignored)
 #          Setting this argument will automatically set the SCAN option as well.
@@ -112,7 +117,7 @@ __fcitx_cmake_init()
 #     LINK_LIBS: external libraies to link
 #     DEPENDS: extra targets or files the addon library should depend on.
 function(fcitx_add_addon_full short_name)
-  set(options NO_INSTALL SCAN DESC)
+  set(options NO_INSTALL SCAN DESC SCAN_IN)
   set(one_value_args HEADER_DIR FXADDON_SRC FXADDON_GEN
     CONF_SRC DESC_SRC UNIQUE_NAME LIB_NAME)
   set(multi_value_args SOURCES HEADERS EXTRA_DESC EXTRA_PO LINK_LIBS
@@ -138,7 +143,8 @@ function(fcitx_add_addon_full short_name)
   foreach(im_config ${FCITX_ADDON_IM_CONFIG})
     set(files_to_translate ${files_to_translate} "${im_config}.in")
   endforeach()
-  if(FCITX_ADDON_SCAN OR FCITX_ADDON_FXADDON_SRC OR FCITX_ADDON_FXADDON_GEN)
+  if(FCITX_ADDON_SCAN OR FCITX_ADDON_SCAN_IN OR
+      FCITX_ADDON_FXADDON_SRC OR FCITX_ADDON_FXADDON_GEN)
     if(NOT FCITX_ADDON_FXADDON_SRC)
       set(FCITX_ADDON_FXADDON_SRC "fcitx-${short_name}.fxaddon")
     endif()
@@ -150,6 +156,15 @@ function(fcitx_add_addon_full short_name)
         "${FCITX_ADDON_FXADDON_GEN}" NAME)
       set(FCITX_ADDON_FXADDON_GEN
         "${CMAKE_CURRENT_BINARY_DIR}/${FCITX_ADDON_FXADDON_GEN}")
+    endif()
+    if(FCITX_ADDON_SCAN_IN)
+      set(fxaddon_in "${FCITX_ADDON_FXADDON_SRC}.in")
+      get_filename_component(FCITX_ADDON_FXADDON_SRC
+        "${FCITX_ADDON_FXADDON_SRC}" NAME)
+      set(FCITX_ADDON_FXADDON_SRC
+        "${CMAKE_CURRENT_BINARY_DIR}/${FCITX_ADDON_FXADDON_SRC}")
+      configure_file("${fxaddon_in}" "${FCITX_ADDON_FXADDON_SRC}"
+        IMMEDIATE @ONLY)
     endif()
   endif()
   if(FCITX_ADDON_DESC OR FCITX_ADDON_DESC_SRC)

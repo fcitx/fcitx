@@ -60,11 +60,11 @@ typedef struct {
     ClipboardSelectionStr primary;
     uint32_t clp_hist_len;
     ClipboardSelectionStr clp_hist_lst[CLIPBOARD_MAX_LEN];
-#ifdef ENABLE_X11
+// #ifdef ENABLE_X11
     FcitxAddon *x11;
     unsigned int x11_primary_notify_id;
     unsigned int x11_clipboard_notify_id;
-#endif
+// #endif
 } FcitxClipboard;
 
 void ClipboardSetPrimary(FcitxClipboard *clipboard,

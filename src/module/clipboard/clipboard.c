@@ -34,9 +34,9 @@
 #include "fcitx-utils/utf8.h"
 
 #include "clipboard-internal.h"
-#ifdef ENABLE_X11
+/* #ifdef ENABLE_X11 */
 #include "clipboard-x11.h"
-#endif
+/* #endif */
 
 CONFIG_DEFINE_LOAD_AND_SAVE(FcitxClipboard, FcitxClipboardConfig,
                             "fcitx-clipboard");
@@ -371,7 +371,9 @@ ClipboardCreate(FcitxInstance *instance)
         return NULL;
     }
     ClipboardInitReadHistory(clipboard);
+/* #ifdef ENABLE_X11 */
     ClipboardInitX11(clipboard);
+/* #endif */
     ApplyClipboardConfig(clipboard);
 
     FcitxKeyFilterHook key_hook = {
