@@ -30,7 +30,8 @@ include(CMakeParseArguments)
 find_package(Gettext REQUIRED)
 
 set(FCITX_MACRO_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}")
-set(FCITX_TRANSLATION_SCAN_POT "${FCITX_MACRO_CMAKE_DIR}/fcitx-scan-pot.sh")
+set(FCITX_TRANSLATION_SCAN_POT "${FCITX_MACRO_CMAKE_DIR}/fcitx-scan-pot.sh"
+  CACHE INTERNAL "fcitx-scann-pot" FORCE)
 set(FCITX_TRANSLATION_MERGE_CONFIG
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-merge-config.sh")
 set(FCITX_TRANSLATION_EXTRACT_CPP
@@ -132,6 +133,11 @@ function(fcitx_add_addon_full short_name)
     DEPENDS IM_CONFIG)
   cmake_parse_arguments(FCITX_ADDON
     "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
+  if(FCITX_ADDON_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR
+      "Unknown arguments given to fcitx_add_addon_full "
+      "\"${FCITX_ADDON_UNPARSED_ARGUMENTS}\"")
+  endif()
   set(files_to_translate)
   set(all_conf_descs)
   message(STATUS "Adding Fcitx Addon ${short_name}")
@@ -147,9 +153,9 @@ function(fcitx_add_addon_full short_name)
   if(NOT FCITX_ADDON_LIB_NAME)
     set(FCITX_ADDON_LIB_NAME "fcitx-${short_name}")
   endif()
-  set(files_to_translate ${files_to_translate} "${FCITX_ADDON_CONF_SRC}.in")
+  list(APPEND files_to_translate "${FCITX_ADDON_CONF_SRC}.in")
   foreach(im_config ${FCITX_ADDON_IM_CONFIG})
-    set(files_to_translate ${files_to_translate} "${im_config}.in")
+    list(APPEND files_to_translate "${im_config}.in")
   endforeach()
   if(FCITX_ADDON_SCAN OR FCITX_ADDON_SCAN_IN OR
       FCITX_ADDON_FXADDON_SRC OR FCITX_ADDON_FXADDON_GEN)
@@ -179,30 +185,30 @@ function(fcitx_add_addon_full short_name)
     if(NOT FCITX_ADDON_DESC_SRC)
       set(FCITX_ADDON_DESC_SRC "fcitx-${short_name}.desc")
     endif()
-    set(files_to_translate ${files_to_translate} "${FCITX_ADDON_DESC_SRC}")
-    set(all_conf_descs ${all_conf_descs} "${FCITX_ADDON_DESC_SRC}")
+    list(APPEND files_to_translate "${FCITX_ADDON_DESC_SRC}")
+    list(APPEND all_conf_descs "${FCITX_ADDON_DESC_SRC}")
   endif()
   if(NOT FCITX_ADDON_SOURCES)
     MESSAGE(FATAL_ERROR "No source file for addon ${short_name}.")
   endif()
-  set(files_to_translate ${files_to_translate}
+  list(APPEND files_to_translate
     ${FCITX_ADDON_SOURCES} ${FCITX_ADDON_HEADERS}
     ${FCITX_ADDON_EXTRA_DESC} ${FCITX_ADDON_EXTRA_PO})
-  set(all_conf_descs ${all_conf_descs} ${FCITX_ADDON_EXTRA_DESC})
+  list(APPEND all_conf_descs ${FCITX_ADDON_EXTRA_DESC})
 
   __fcitx_link_addon_headers(${FCITX_ADDON_HEADERS})
   if(FCITX_ADDON_FXADDON_GEN)
-    __fcitx_scan_addon("${FCITX_ADDON_FXADDON_SRC}"
+    __fcitx_scan_addon("${FCITX_ADDON_UNIQUE_NAME}"
+      "${FCITX_ADDON_FXADDON_SRC}"
       "${FCITX_ADDON_FXADDON_GEN}")
-    set(FCITX_ADDON_HEADERS ${FCITX_ADDON_HEADERS}
-      "${FCITX_ADDON_FXADDON_GEN}")
+    list(APPEND FCITX_ADDON_HEADERS "${FCITX_ADDON_FXADDON_GEN}")
   endif()
   fcitx_translate_add_sources(${files_to_translate})
   if(FCITX_ADDON_NO_INSTALL)
     return()
   endif()
 
-  __fcitx_addon_get_unique_name(add-addon target_name)
+  set(target_name "${FCITX_ADDON_UNIQUE_NAME}--addon")
   add_custom_target("${target_name}" ALL)
 
   __fcitx_addon_config_file("${target_name}" "${FCITX_ADDON_CONF_SRC}"
@@ -220,7 +226,7 @@ function(fcitx_add_addon_full short_name)
     ${FCITX_ADDON_HEADERS})
   __fcitx_install_addon_desc("${target_name}" ${all_conf_descs})
   if(FCITX_ADDON_DEPENDS)
-    __fcitx_addon_get_unique_name(addon-depends depends_target)
+    set(depends_target "fcitx-addon-depends--${FCITX_ADDON_UNIQUE_NAME}")
     add_custom_target("${depends_target}" DEPENDS ${FCITX_ADDON_DEPENDS})
     add_dependencies("${FCITX_ADDON_LIB_NAME}" "${depends_target}")
   endif()
@@ -238,7 +244,7 @@ endfunction()
 
 function(__fcitx_install_addon_desc target_name)
   set(descs ${ARGN})
-  __fcitx_addon_get_unique_name(addon-desc desc_target)
+  __fcitx_addon_get_unique_name("${target_name}--desc" desc_target)
   add_custom_target("${desc_target}" DEPENDS ${descs})
   add_dependencies("${target_name}" "${desc_target}")
   install(FILES ${descs}
@@ -254,7 +260,7 @@ endfunction()
 
 function(__fcitx_install_addon_headers target_name subdir)
   set(headers ${ARGN})
-  __fcitx_addon_get_unique_name(addon-headers header_target)
+  __fcitx_addon_get_unique_name("${target_name}--headers" header_target)
   add_custom_target("${header_target}" DEPENDS ${headers})
   add_dependencies("${target_name}" "${header_target}")
   install(FILES ${headers}
@@ -273,7 +279,7 @@ function(__fcitx_link_addon_headers)
   endforeach()
 endfunction()
 
-function(__fcitx_scan_addon in_file out_file)
+function(__fcitx_scan_addon name in_file out_file)
   if(NOT FCITX_SCANNER_EXECUTABLE)
     message(FATAL_ERROR "Cannot find fcitx-scanner")
   endif()
@@ -282,7 +288,7 @@ function(__fcitx_scan_addon in_file out_file)
     "${in_file}" "${out_file}"
     OUTPUT "${out_file}" DEPENDS "${in_file}" "${FCITX_SCANNER_EXECUTABLE}"
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
-  __fcitx_addon_get_unique_name(scan-addon target_name)
+  __fcitx_addon_get_unique_name("${name}--scan" target_name)
   add_custom_target("${target_name}" DEPENDS "${out_file}")
   add_dependencies(fcitx-scan-addons.target "${target_name}")
 endfunction()
@@ -292,7 +298,7 @@ function(__fcitx_addon_config_file target conf_file dest_dir)
   get_filename_component(base_name "${conf_file}" NAME)
   set(TGT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${base_name}")
   fcitx_translate_add_apply_source("${SRC_FILE}" "${TGT_FILE}")
-  __fcitx_addon_get_unique_name(addon-conf conf_target)
+  __fcitx_addon_get_unique_name("${target}--conf" conf_target)
   add_custom_target("${conf_target}" DEPENDS "${TGT_FILE}")
   add_dependencies("${target}" "${conf_target}")
   install(FILES "${TGT_FILE}" DESTINATION "${dest_dir}")
@@ -489,7 +495,8 @@ FIND_PROGRAM(INTLTOOL_MERGE intltool-merge)
 MACRO(INTLTOOL_MERGE_TRANSLATION infile outfile)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${outfile}
-    COMMAND LC_ALL=C ${INTLTOOL_MERGE} -d -u ${PROJECT_SOURCE_DIR}/po ${infile} ${outfile}
+    COMMAND LC_ALL=C ${INTLTOOL_MERGE} -d -u ${PROJECT_SOURCE_DIR}/po
+    ${infile} ${outfile}
     DEPENDS ${infile}
     )
 ENDMACRO(INTLTOOL_MERGE_TRANSLATION)
@@ -506,15 +513,18 @@ MACRO(EXTRACT_FCITX_DESC_FILE_POSTRING)
   ENDIF(NOT _FCITX_GETDESCPO_PATH)
 
   ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/desc.po
-    COMMAND ${_FCITX_GETDESCPO_PATH} ${PROJECT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+    COMMAND "${_FCITX_GETDESCPO_PATH}" "${PROJECT_SOURCE_DIR}"
+    "${CMAKE_CURRENT_BINARY_DIR}")
 ENDMACRO(EXTRACT_FCITX_DESC_FILE_POSTRING)
 
 
 MACRO(FCITX_ADD_ADDON_CONF_FILE conffilename)
-  intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/${conffilename}.in ${CMAKE_CURRENT_BINARY_DIR}/${conffilename})
+  intltool_merge_translation("${CMAKE_CURRENT_SOURCE_DIR}/${conffilename}.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/${conffilename}")
   __FCITX_CONF_FILE_GET_UNIQUE_TARGET_NAME(fcitx_addon_conf targetname)
   add_custom_target(${targetname} ALL DEPENDS ${conffilename})
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${conffilename} DESTINATION ${FCITX4_ADDON_CONFIG_INSTALL_DIR})
+  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${conffilename}"
+    DESTINATION "${FCITX4_ADDON_CONFIG_INSTALL_DIR}")
 ENDMACRO(FCITX_ADD_ADDON_CONF_FILE conffilename)
 
 MACRO(FCITX_ADD_INPUTMETHOD_CONF_FILE conffilename)
@@ -522,7 +532,8 @@ MACRO(FCITX_ADD_INPUTMETHOD_CONF_FILE conffilename)
     "${CMAKE_CURRENT_BINARY_DIR}/${conffilename}")
   __FCITX_CONF_FILE_GET_UNIQUE_TARGET_NAME(fcitx_inputmethod_conf targetname)
   add_custom_target(${targetname} ALL DEPENDS ${conffilename})
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${conffilename} DESTINATION ${FCITX4_INPUTMETHOD_CONFIG_INSTALL_DIR})
+  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${conffilename}"
+    DESTINATION "${FCITX4_INPUTMETHOD_CONFIG_INSTALL_DIR}")
 ENDMACRO()
 
 MACRO(FCITX_ADD_CONFIGDESC_FILE)
@@ -535,12 +546,13 @@ MACRO(EXTRACT_FCITX_ADDON_CONF_POSTRING)
   foreach(EXTRACTFILE ${POTFILES_IN})
     if ("${EXTRACTFILE}" MATCHES ".conf.in")
       get_filename_component(_EXTRAFILENAME ${EXTRACTFILE} NAME)
-      add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/tmp/${_EXTRAFILENAME}.h
+      add_custom_command(
+        OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/tmp/${_EXTRAFILENAME}.h"
         COMMAND ${INTLTOOL_EXTRACT} --srcdir=${PROJECT_BINARY_DIR}
         --local --type=gettext/ini ${EXTRACTFILE}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
-      set(TEMPHEADER ${TEMPHEADER}
+      list(APPEND TEMPHEADER
         "${CMAKE_CURRENT_BINARY_DIR}/tmp/${_EXTRAFILENAME}.h")
     endif()
   endforeach()
