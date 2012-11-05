@@ -63,6 +63,7 @@ function(__fcitx_cmake_init)
   if(fcitx_initiated)
     return()
   endif()
+  get_property(FCITX_INTERNAL_BUILD GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD")
   add_custom_target(fcitx-modules.target ALL)
   add_custom_target(fcitx-scan-addons.target)
   add_dependencies(fcitx-modules.target fcitx-scan-addons.target)
@@ -76,6 +77,13 @@ function(__fcitx_cmake_init)
     "${full_name}" --clean)
   set_property(GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET" 0)
   set_property(GLOBAL PROPERTY "${property_name}" 1)
+  if(FCITX_INTERNAL_BUILD)
+    set(FCITX_SCANNER_EXECUTABLE
+      "${PROJECT_BINARY_DIR}/tools/dev/fcitx-scanner"
+      CACHE INTERNAL "fcitx-scanner" FORCE)
+  else()
+    find_program(FCITX_SCANNER_EXECUTABLE fcitx-scanner)
+  endif()
 endfunction()
 __fcitx_cmake_init()
 
@@ -266,20 +274,14 @@ function(__fcitx_link_addon_headers)
 endfunction()
 
 function(__fcitx_scan_addon in_file out_file)
-  get_property(FCITX_INTERNAL_BUILD GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD")
-  # too lazy to set variables instead of simply copy the command twice here...
-  if(FCITX_INTERNAL_BUILD)
-    add_custom_command(
-      COMMAND "${PROJECT_BINARY_DIR}/tools/dev/fcitx-scanner"
-      "${in_file}" "${out_file}"
-      OUTPUT "${out_file}" DEPENDS "${in_file}" fcitx-scanner
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
-  else()
-    add_custom_command(
-      COMMAND fcitx-scanner "${in_file}" "${out_file}"
-      OUTPUT "${out_file}" DEPENDS "${in_file}"
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+  if(NOT FCITX_SCANNER_EXECUTABLE)
+    message(FATAL_ERROR "Cannot find fcitx-scanner")
   endif()
+  add_custom_command(
+    COMMAND "${FCITX_SCANNER_EXECUTABLE}"
+    "${in_file}" "${out_file}"
+    OUTPUT "${out_file}" DEPENDS "${in_file}" "${FCITX_SCANNER_EXECUTABLE}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
   __fcitx_addon_get_unique_name(scan-addon target_name)
   add_custom_target("${target_name}" DEPENDS "${out_file}")
   add_dependencies(fcitx-scan-addons.target "${target_name}")
