@@ -8,6 +8,7 @@ install(FILES
   fcitx-extract-cpp.sh
   fcitx-extract-confdesc.sh
   fcitx-extract-desktop.sh
+  fcitx-extract-po.sh
   DESTINATION "${prefix}/share/cmake/fcitx/"
   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
   GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
