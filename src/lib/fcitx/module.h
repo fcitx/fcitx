@@ -27,6 +27,7 @@
 #define _FCITX_MODULE_H
 #include <fcitx-config/fcitx-config.h>
 #include <fcitx-utils/utarray.h>
+#include <fcitx-utils/utils.h>
 #include <fcitx/addon.h>
 #include <fcitx/fcitx.h>
 

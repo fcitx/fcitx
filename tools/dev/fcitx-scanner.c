@@ -228,10 +228,12 @@ name_to_macro(char *name)
 static void
 write_includes(FILE *ofp, UT_array *includes)
 {
-    _write_str(ofp, "#include <stdint.h>\n");
-    _write_str(ofp, "#include <fcitx/instance.h>\n");
-    _write_str(ofp, "#include <fcitx/addon.h>\n");
-    _write_str(ofp, "#include <fcitx/module.h>");
+    _write_str(ofp,
+               "#include <stdint.h>\n"
+               "#include <fcitx-utils/utils.h>\n"
+               "#include <fcitx/instance.h>\n"
+               "#include <fcitx/addon.h>\n"
+               "#include <fcitx/module.h>");
     char **p;
     for (p = (char**)utarray_front(includes);p;
          p = (char**)utarray_next(includes, p)) {
