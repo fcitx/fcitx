@@ -84,6 +84,15 @@ typedef int32_t boolean;
 #define fcitx_container_of(ptr, type, member)           \
     ((type*)(((void*)(ptr)) - offsetof(type, member)))
 
+#if defined(__GNUC__) && (__GNUC__ > 2)
+#  define fcitx_expect(exp, var) __builtin_expect(exp, var)
+#else
+#  define fcitx_expect(exp, var) (exp)
+#endif
+
+#define fcitx_likely(x) fcitx_expect(!!(x), 1)
+#define fcitx_unlikely(x) fcitx_expect(!!(x), 0)
+
 #ifdef __cplusplus
 extern "C" {
 #endif

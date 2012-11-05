@@ -132,8 +132,7 @@ FcitxModuleFindFunction(FcitxAddon *addon, int func_id)
     return NULL;
 }
 
-FCITX_EXPORT_API
-void*
+FCITX_EXPORT_API void*
 FcitxModuleInvokeOnAddon(FcitxAddon *addon, FcitxModuleFunction func,
                          FcitxModuleFunctionArg *args)
 {
@@ -142,8 +141,9 @@ FcitxModuleInvokeOnAddon(FcitxAddon *addon, FcitxModuleFunction func,
     return func(addon->addonInstance, *args);
 }
 
-FCITX_EXPORT_API
-void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args)
+static void*
+_FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId,
+                           FcitxModuleFunctionArg args)
 {
     FcitxModuleFunction func = FcitxModuleFindFunction(addon, functionId);
     if (!func) {
@@ -154,6 +154,13 @@ void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFu
     return func(addon->addonInstance, args);
 }
 
+FCITX_EXPORT_API void*
+FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId,
+                          FcitxModuleFunctionArg args)
+{
+    return _FcitxModuleInvokeFunction(addon, functionId, args);
+}
+
 FCITX_EXPORT_API
 void* FcitxModuleInvokeFunctionByName(FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args)
 {
@@ -162,7 +169,7 @@ void* FcitxModuleInvokeFunctionByName(FcitxInstance* instance, const char* name,
     if (module == NULL) {
         return NULL;
     } else {
-        return FcitxModuleInvokeFunction(module, functionId, args);
+        return _FcitxModuleInvokeFunction(module, functionId, args);
     }
 }
 

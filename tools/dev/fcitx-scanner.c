@@ -28,6 +28,7 @@
 #include <string.h>
 #include <fcitx-utils/desktop-parse.h>
 #include <fcitx-utils/utils.h>
+#include <fcitx-utils/log.h>
 #include <fcitx-utils/utarray.h>
 
 static const char *copyright_str =
@@ -83,6 +84,52 @@ get_return_type(FcitxDesktopGroup *grp)
         !type[strlen("void") + strspn(type + strlen("void"), " \b\f\v\r\t")])
         return NULL;
     return type;
+}
+
+static const char*
+get_error_return(FcitxDesktopGroup *grp)
+{
+    FcitxDesktopEntry *ety;
+    ety = fcitx_desktop_group_find_entry(grp, "ErrorReturn");
+    if (!ety)
+        return NULL;
+    return ety->value;
+}
+
+static inline int
+str_case_cmp_len(const char *str1, const char *str2)
+{
+    int len = strlen(str2);
+    if (!strncasecmp(str1, str2, len))
+        return len;
+    return 0;
+}
+
+static boolean
+get_cache_result(FcitxDesktopGroup *grp)
+{
+    FcitxDesktopEntry *ety;
+    ety = fcitx_desktop_group_find_entry(grp, "CacheResult");
+    if (!ety)
+        return false;
+    const char *cache = ety->value;
+    if (!cache)
+        return false;
+    cache += strspn(cache, " \b\f\v\r\t");
+    if (!*cache)
+        return false;
+    int len;
+    if ((len = str_case_cmp_len(cache, "on")) ||
+        (len = str_case_cmp_len(cache, "true")) ||
+        (len = str_case_cmp_len(cache, "yes")) ||
+        (len = str_case_cmp_len(cache, "1"))) {
+        cache += len;
+        cache += strspn(cache, " \b\f\v\r\t");
+        if (!*cache) {
+            return true;
+        }
+    }
+    return false;
 }
 
 static void
@@ -181,13 +228,31 @@ write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
         utarray_push_back(&args, &tmp_ety->value);
     }
     const char *type = get_return_type(grp);
-    _write_str(ofp, "DEFINE_GET_AND_INVOKE_FUNC(");
-    _write_str(ofp, prefix);
-    _write_str(ofp, ", ");
-    _write_str(ofp, func_name);
-    _write_str(ofp, ", ");
-    fprintf(ofp, "%d", id);
-    _write_str(ofp, ")\n");
+    const char *err_ret = get_error_return(grp);
+    boolean cache = get_cache_result(grp);
+    if (cache && !type) {
+        FcitxLog(WARNING, "Cannot cache result of type void.");
+        cache = false;
+    }
+    if (!err_ret) {
+        _write_str(ofp, "DEFINE_GET_AND_INVOKE_FUNC(");
+        _write_str(ofp, prefix);
+        _write_str(ofp, ", ");
+        _write_str(ofp, func_name);
+        _write_str(ofp, ", ");
+        fprintf(ofp, "%d", id);
+        _write_str(ofp, ")\n");
+    } else {
+        _write_str(ofp, "DEFINE_GET_AND_INVOKE_FUNC_WITH_ERROR(");
+        _write_str(ofp, prefix);
+        _write_str(ofp, ", ");
+        _write_str(ofp, func_name);
+        _write_str(ofp, ", ");
+        fprintf(ofp, "%d", id);
+        _write_str(ofp, ", ");
+        _write_str(ofp, err_ret);
+        _write_str(ofp, ")\n");
+    }
     _write_str(ofp, "static inline ");
     _write_str(ofp, type ? type : "void");
     _write_str(ofp, "\nFcitx");
@@ -204,8 +269,21 @@ write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
     }
     _write_str(ofp,
                ")\n"
-               "{\n"
-               "    FCITX_DEF_MODULE_ARGS(args");
+               "{\n");
+    if (cache) {
+        _write_str(ofp,
+                   "    static boolean _init = false;\n"
+                   "    static void *result = NULL;\n"
+                   "    if (fcitx_likely(_init))\n"
+                   "        return (");
+        _write_str(ofp, type);
+        _write_str(ofp,
+                   ")(intptr_t)result;\n"
+                   "    _init = true;\n");
+    } else if (type) {
+        _write_str(ofp, "    void *result;\n");
+    }
+    _write_str(ofp, "    FCITX_DEF_MODULE_ARGS(args");
     for (i = 0;i < utarray_len(&args);i++) {
         _write_str(ofp, ", (void*)(intptr_t)arg");
         fprintf(ofp, "%d", i);
@@ -214,17 +292,19 @@ write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
                ");\n"
                "    ");
     if (type) {
-        _write_str(ofp, "return (");
-        _write_str(ofp, type);
-        _write_str(ofp, ")(intptr_t)");
+        _write_str(ofp, "result = ");
     }
     _write_str(ofp, "Fcitx");
     _write_str(ofp, prefix);
     _write_str(ofp, "Invoke");
     _write_str(ofp, func_name);
-    _write_str(ofp,
-               "(instance, args);\n"
-               "}\n\n");
+    _write_str(ofp, "(instance, args);\n");
+    if (type) {
+        _write_str(ofp, "    return (");
+        _write_str(ofp, type);
+        _write_str(ofp, ")(intptr_t)result;\n");
+    }
+    _write_str(ofp, "}\n\n");
     utarray_done(&args);
 }
 

@@ -26,6 +26,7 @@ Function19=
 [GetDisplay]
 Name=get-display
 Return=Display*
+CacheResult=True
 
 [AddXEventHandler]
 Name=add-xevent-handler
@@ -101,6 +102,7 @@ Arg0=unsigned int
 [DefaultEventWindow]
 Name=default-event-window
 Return=Window
+CacheResult=True
 
 [RequestConvertSelect]
 Name=request-convert-select

@@ -155,7 +155,7 @@ extern "C" {
     {                                                            \
         static int _init = false;                                \
         static FcitxAddon *addon = NULL;                         \
-        if (!_init) {                                            \
+        if (fcitx_unlikely(!_init)) {                            \
             _init = true;                                        \
             addon = FcitxAddonsGetAddonByName(                   \
                 FcitxInstanceGetAddons(instance), name);         \
@@ -163,13 +163,16 @@ extern "C" {
         return addon;                                            \
     }
 
-#define DEFINE_GET_AND_INVOKE_FUNC(prefix, suffix, id)                 \
+#define DEFINE_GET_AND_INVOKE_FUNC(prefix, suffix, id)                  \
+    DEFINE_GET_AND_INVOKE_FUNC_WITH_ERROR(prefix, suffix, id, NULL)
+
+#define DEFINE_GET_AND_INVOKE_FUNC_WITH_ERROR(prefix, suffix, id, err_ret) \
     static inline FcitxModuleFunction                                  \
     Fcitx##prefix##Find##suffix(FcitxAddon *addon)                     \
     {                                                                  \
         static int _init = false;                                      \
         static FcitxModuleFunction func = NULL;                        \
-        if (!_init) {                                                  \
+        if (fcitx_unlikely(!_init)) {                                  \
             _init = true;                                              \
             func = FcitxModuleFindFunction(addon, id);                 \
         }                                                              \
@@ -179,8 +182,13 @@ extern "C" {
     Fcitx##prefix##Invoke##suffix(FcitxInstance *instance,             \
                                   FcitxModuleFunctionArg args)         \
     {                                                                  \
+        static void *const on_err = (void*)(intptr_t)(err_ret);        \
         FcitxAddon *addon = Fcitx##prefix##GetAddon(instance);         \
+        if (fcitx_unlikely(!addon))                                    \
+            return on_err;                                             \
         FcitxModuleFunction func = Fcitx##prefix##Find##suffix(addon); \
+        if (fcitx_unlikely(!func))                                     \
+            return on_err;                                             \
         return FcitxModuleInvokeOnAddon(addon, func, &args);           \
     }
 
