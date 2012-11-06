@@ -97,6 +97,7 @@ typedef int32_t boolean;
 extern "C" {
 #endif
 
+    extern const UT_icd *const fcitx_ptr_icd;
     extern const UT_icd *const fcitx_str_icd;
     extern const UT_icd *const fcitx_int_icd;
 

@@ -54,8 +54,9 @@ CONFIG_BINDING_REGISTER("Addon", "UIFallback", uifallback)
 CONFIG_BINDING_REGISTER("Addon", "Advance", advance)
 CONFIG_BINDING_END()
 
-static const UT_icd function_icd = {sizeof(void*), 0, 0 , 0};
-static const UT_icd addon_icd = {sizeof(FcitxAddon), NULL , NULL, FcitxAddonFree};
+static const UT_icd addon_icd = {
+    sizeof(FcitxAddon), NULL , NULL, FcitxAddonFree
+};
 static int AddonPriorityCmp(const void* a, const void* b)
 {
     FcitxAddon *aa = (FcitxAddon*)a, *ab = (FcitxAddon*)b;
@@ -118,7 +119,7 @@ FcitxAddon* FcitxAddonsLoadInternal(UT_array* addons, boolean reloadIM)
         if (cfile) {
             utarray_extend_back(addons);
             FcitxAddon *a = (FcitxAddon*) utarray_back(addons);
-            utarray_init(&a->functionList, &function_icd);
+            utarray_init(&a->functionList, fcitx_ptr_icd);
             FcitxAddonConfigBind(a, cfile, FcitxAddonGetConfigDesc());
             FcitxConfigBindSync((FcitxGenericConfig*)a);
             FcitxLog(DEBUG, _("Addon Config %s is %s"), string->name, (a->bEnabled) ? "Enabled" : "Disabled");

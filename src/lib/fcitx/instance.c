@@ -68,11 +68,18 @@ FCITX_GETTER_VALUE(FcitxInstance, Profile, profile, FcitxProfile*)
 FCITX_GETTER_VALUE(FcitxInstance, InputState, input, FcitxInputState*)
 FCITX_GETTER_VALUE(FcitxInstance, IsDestroying, destroy, boolean)
 
-const UT_icd stat_icd = {sizeof(FcitxUIStatus), 0, 0, 0};
-const UT_icd compstat_icd = {sizeof(FcitxUIComplexStatus), 0, 0, 0};
-const UT_icd menup_icd = {sizeof(FcitxUIMenu*), 0, 0, 0};
-const UT_icd timeout_icd = {sizeof(TimeoutItem), 0, 0, 0};
-const UT_icd icdata_icd = {sizeof(FcitxICDataInfo), NULL, NULL, NULL };
+static const UT_icd stat_icd = {
+    sizeof(FcitxUIStatus), NULL, NULL, NULL
+};
+static const UT_icd compstat_icd = {
+    sizeof(FcitxUIComplexStatus), NULL, NULL, NULL
+};
+static const UT_icd timeout_icd = {
+    sizeof(TimeoutItem), NULL, NULL, NULL
+};
+static const UT_icd icdata_icd = {
+    sizeof(FcitxICDataInfo), NULL, NULL, NULL
+};
 static void FcitxInitThread(FcitxInstance* inst);
 static void ToggleRemindState(void* arg);
 static boolean GetRemindEnabled(void* arg);
@@ -125,7 +132,7 @@ FcitxInstance* FcitxInstanceCreateWithFD(sem_t *sem, int argc, char* argv[], int
     InitFcitxModules(&instance->eventmodules);
     utarray_init(&instance->uistats, &stat_icd);
     utarray_init(&instance->uicompstats, &compstat_icd);
-    utarray_init(&instance->uimenus, &menup_icd);
+    utarray_init(&instance->uimenus, fcitx_ptr_icd);
     utarray_init(&instance->timeout, &timeout_icd);
     utarray_init(&instance->icdata, &icdata_icd);
     instance->input = FcitxInputStateCreate();

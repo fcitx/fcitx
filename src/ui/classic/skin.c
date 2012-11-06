@@ -60,7 +60,7 @@
 #include "fcitx/hook.h"
 #include "fcitx/candidate.h"
 
-static const UT_icd place_icd = {sizeof(SkinPlacement), NULL, NULL, NULL };
+static const UT_icd place_icd = { sizeof(SkinPlacement), NULL, NULL, NULL };
 
 static boolean SkinMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateSkinMenu(FcitxUIMenu* menu);

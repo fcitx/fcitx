@@ -85,7 +85,9 @@ static void FcitxUIShowInputWindow(FcitxInstance* instance);
 static boolean FcitxUILoadInternal(FcitxInstance* instance, FcitxAddon* addon);
 static void FcitxMenuItemFree(void* arg);
 
-static const UT_icd menuICD = { sizeof(FcitxMenuItem), NULL, NULL, FcitxMenuItemFree };
+static const UT_icd menuICD = {
+    sizeof(FcitxMenuItem), NULL, NULL, FcitxMenuItemFree
+};
 
 FCITX_EXPORT_API
 FcitxMessages* FcitxMessagesNew()

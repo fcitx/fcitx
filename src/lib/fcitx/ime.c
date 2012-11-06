@@ -112,8 +112,7 @@ static const FcitxHotkey* imSWPrevKey2[] = {
 };
 
 
-static const UT_icd ime_icd = {sizeof(FcitxIM), NULL , NULL, NULL};
-static const UT_icd imclass_icd = {sizeof(FcitxAddon*), NULL , NULL, NULL};
+static const UT_icd ime_icd = { sizeof(FcitxIM), NULL , NULL, NULL };
 static boolean IMMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateIMMenuItem(FcitxUIMenu *menu);
 static void FcitxInstanceEnableIMInternal(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState);
@@ -223,7 +222,7 @@ void FcitxInstanceInitIM(FcitxInstance* instance)
 {
     utarray_init(&instance->imes, &ime_icd);
     utarray_init(&instance->availimes, &ime_icd);
-    utarray_init(&instance->imeclasses, &imclass_icd);
+    utarray_init(&instance->imeclasses, fcitx_ptr_icd);
 }
 
 FCITX_EXPORT_API

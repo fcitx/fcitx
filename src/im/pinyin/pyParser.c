@@ -530,8 +530,6 @@ struct _PYMappedSplitData {
     UT_hash_handle hh;
 };
 
-const UT_icd splitData_icd = { sizeof(PYMappedSplitData), 0, 0, 0 };
-
 void InitPYSplitData(FcitxPinyinConfig* pyconfig)
 {
     size_t size = sizeof(pySplitData) / sizeof(pySplitData[0]);

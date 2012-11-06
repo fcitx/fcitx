@@ -58,8 +58,6 @@ FCITX_DEFINE_PLUGIN(fcitx_pinyin, ime, FcitxIMClass) = {
     NULL
 };
 
-const UT_icd pycand_icd = {sizeof(PYCandWord*) , NULL, NULL, NULL };
-
 typedef struct {
     PY_CAND_WORD_TYPE type;
     ADJUSTORDER order;
@@ -1262,7 +1260,7 @@ void PYGetPhraseCandWords(FcitxPinyinState* pystate)
         return;
 
     UT_array candtemp;
-    utarray_init(&candtemp, &pycand_icd);
+    utarray_init(&candtemp, fcitx_ptr_icd);
 
     str[0] = pystate->findMap.strMap[0][0];
     str[1] = pystate->findMap.strMap[0][1];
@@ -1377,7 +1375,7 @@ void PYGetBaseCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
     FcitxPinyinConfig* pyconfig = &pystate->pyconfig;
     FcitxInputState* input = FcitxInstanceGetInputState(pystate->owner);
     UT_array candtemp;
-    utarray_init(&candtemp, &pycand_icd);
+    utarray_init(&candtemp, fcitx_ptr_icd);
 
     str[0] = pystate->findMap.strMap[0][0];
     str[1] = pystate->findMap.strMap[0][1];
@@ -1435,7 +1433,7 @@ void PYGetFreqCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
     HZ *hz;
     UT_array candtemp;
     FcitxInputState* input = FcitxInstanceGetInputState(pystate->owner);
-    utarray_init(&candtemp, &pycand_icd);
+    utarray_init(&candtemp, fcitx_ptr_icd);
 
     if (pCurFreq) {
         hz = pCurFreq->HZList->next;
@@ -1949,7 +1947,7 @@ _HIT:
         return IRV_TO_PROCESS;
 
     UT_array candtemp;
-    utarray_init(&candtemp, &pycand_icd);
+    utarray_init(&candtemp, fcitx_ptr_icd);
 
     for (i = 0; i < pyBaseForRemind->iPhrase; i++) {
 

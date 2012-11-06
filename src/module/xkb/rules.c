@@ -49,11 +49,26 @@ static void FcitxXkbOptionInfoFree(void* arg);
 static inline FcitxXkbLayoutInfo* FindByName(FcitxXkbRules* rules, const char* name);
 static void MergeRules(FcitxXkbRules* rules, FcitxXkbRules* rulesextra);
 
-static const UT_icd layout_icd = {sizeof(FcitxXkbLayoutInfo), FcitxXkbLayoutInfoInit, FcitxXkbLayoutInfoCopy, FcitxXkbLayoutInfoFree };
-static const UT_icd variant_icd = {sizeof(FcitxXkbVariantInfo), FcitxXkbVariantInfoInit, FcitxXkbVariantInfoCopy, FcitxXkbVariantInfoFree };
-static const UT_icd model_icd = {sizeof(FcitxXkbModelInfo), FcitxXkbModelInfoInit, FcitxXkbModelInfoCopy, FcitxXkbModelInfoFree };
-static const UT_icd option_group_icd = {sizeof(FcitxXkbOptionGroupInfo), FcitxXkbOptionGroupInfoInit, FcitxXkbOptionGroupInfoCopy, FcitxXkbOptionGroupInfoFree };
-static const UT_icd option_icd = {sizeof(FcitxXkbOptionInfo), FcitxXkbOptionInfoInit, FcitxXkbOptionInfoCopy, FcitxXkbOptionInfoFree };
+static const UT_icd layout_icd = {
+    sizeof(FcitxXkbLayoutInfo), FcitxXkbLayoutInfoInit,
+    FcitxXkbLayoutInfoCopy, FcitxXkbLayoutInfoFree
+};
+static const UT_icd variant_icd = {
+    sizeof(FcitxXkbVariantInfo), FcitxXkbVariantInfoInit,
+    FcitxXkbVariantInfoCopy, FcitxXkbVariantInfoFree
+};
+static const UT_icd model_icd = {
+    sizeof(FcitxXkbModelInfo), FcitxXkbModelInfoInit,
+    FcitxXkbModelInfoCopy, FcitxXkbModelInfoFree
+};
+static const UT_icd option_group_icd = {
+    sizeof(FcitxXkbOptionGroupInfo), FcitxXkbOptionGroupInfoInit,
+    FcitxXkbOptionGroupInfoCopy, FcitxXkbOptionGroupInfoFree
+};
+static const UT_icd option_icd = {
+    sizeof(FcitxXkbOptionInfo), FcitxXkbOptionInfoInit,
+    FcitxXkbOptionInfoCopy, FcitxXkbOptionInfoFree
+};
 #define COPY_IF_NOT_NULL(x) ((x)?(strdup(x)):NULL)
 #define utarray_clone(t, f) do { \
         utarray_new((t), (f)->icd); \
@@ -136,9 +151,8 @@ void MergeRules(FcitxXkbRules* rules, FcitxXkbRules* rulesextra)
     utarray_concat(rules->optionGroupInfos, rulesextra->optionGroupInfos);
 
     FcitxXkbLayoutInfo* layoutInfo;
-    UT_icd icd = {sizeof(FcitxXkbLayoutInfo*), 0, 0, 0};
     UT_array toAdd;
-    utarray_init(&toAdd, &icd);
+    utarray_init(&toAdd, fcitx_ptr_icd);
     for (layoutInfo = (FcitxXkbLayoutInfo*) utarray_front(rulesextra->layoutInfos);
          layoutInfo != NULL;
          layoutInfo = (FcitxXkbLayoutInfo*) utarray_next(rulesextra->layoutInfos, layoutInfo))

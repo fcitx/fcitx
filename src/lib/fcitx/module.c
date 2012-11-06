@@ -32,11 +32,9 @@
 #include "addon-internal.h"
 #include "ime-internal.h"
 
-static UT_icd  module_icd = {sizeof(FcitxAddon*), NULL, NULL, NULL};
-
 void InitFcitxModules(UT_array* modules)
 {
-    utarray_init(modules, &module_icd);
+    utarray_init(modules, fcitx_ptr_icd);
 }
 
 FCITX_EXPORT_API

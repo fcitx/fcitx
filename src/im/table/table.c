@@ -46,7 +46,6 @@
 #define MAX_TABLE_INPUT 50
 
 static void TableMetaDataFree(TableMetaData *table);
-const UT_icd tableCand_icd = {sizeof(TABLECANDWORD*), NULL, NULL, NULL };
 typedef struct {
     ADJUSTORDER order;
 } TableCandWordSortContext;
@@ -968,7 +967,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
     TableCandWordSortContext context;
     context.order = table->tableOrder;
     UT_array candTemp;
-    utarray_init(&candTemp, &tableCand_icd);
+    utarray_init(&candTemp, fcitx_ptr_icd);
 
     while (table->tableDict->currentRecord && table->tableDict->currentRecord != table->tableDict->recordHead) {
         if (table->tableDict->currentRecord->type != RECORDTYPE_CONSTRUCT &&

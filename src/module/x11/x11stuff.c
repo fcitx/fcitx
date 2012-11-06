@@ -72,9 +72,12 @@ static inline boolean RectIntersects(FcitxRect rt1, FcitxRect rt2);
 static inline int RectWidth(FcitxRect r);
 static inline int RectHeight(FcitxRect r);
 
-static const UT_icd handler_icd = {sizeof(FcitxXEventHandler), 0, 0, 0};
-static const UT_icd comphandler_icd = {sizeof(FcitxCompositeChangedHandler),
-                                       0, 0, 0};
+static const UT_icd handler_icd = {
+    sizeof(FcitxXEventHandler), NULL, NULL, NULL
+};
+static const UT_icd comphandler_icd = {
+    sizeof(FcitxCompositeChangedHandler), NULL, NULL, NULL
+};
 
 FCITX_DEFINE_PLUGIN(fcitx_x11, module, FcitxModule) = {
     X11Create,

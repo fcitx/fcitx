@@ -77,7 +77,7 @@ static const unsigned int cmodtable[] = {
     FcitxKeyState_Shift
 };
 
-static const UT_icd autoeng_icd = { sizeof(AUTO_ENG), 0, 0, 0 };
+static const UT_icd autoeng_icd = { sizeof(AUTO_ENG), NULL, NULL, NULL };
 
 CONFIG_BINDING_BEGIN(FcitxAutoEngConfig);
 CONFIG_BINDING_REGISTER("Auto English", "ChooseModifier", chooseModifier);

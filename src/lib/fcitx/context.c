@@ -43,7 +43,9 @@ struct _FcitxContext {
     UT_hash_handle hh;
 };
 
-static const UT_icd ci_icd = {sizeof(FcitxContextCallbackInfo), NULL, NULL, NULL};
+static const UT_icd ci_icd = {
+    sizeof(FcitxContextCallbackInfo), NULL, NULL, NULL
+};
 static void FcitxInstanceSetContextInternal(FcitxInstance* instance, FcitxContext* context, const void* value);
 
 FCITX_EXPORT_API
