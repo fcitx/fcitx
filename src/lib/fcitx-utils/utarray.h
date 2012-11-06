@@ -336,6 +336,27 @@ static const UT_icd ut_int_icd _UNUSED_ = {
     for (key = (type*)utarray_front(array);key;         \
          key = (type*)utarray_next((array), key))
 
+static inline UT_array*
+utarray_clone(UT_array *from)
+{
+    UT_array *to;
+    utarray_new(to, from->icd);
+    if (utarray_len(from) == 0)
+        return to;
+    utarray_reserve(to, utarray_len(from));
+    if (to->icd->copy) {
+        size_t i;
+        for(i = 0;i < from->i;i++) {
+            to->icd->copy(_utarray_eltptr(to, i), _utarray_eltptr(from, i));
+        }
+    } else {
+        memcpy(_utarray_eltptr(to, 0), _utarray_eltptr(from, 0),
+               utarray_len(from) * (to->icd->sz));
+    }
+    to->i = utarray_len(from);
+    return to;
+}
+
 #endif /* UTARRAY_H */
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
