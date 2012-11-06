@@ -44,9 +44,9 @@ int main()
     assert(strcmp(localcat2, "a,b,c") == 0);
 
     const char *orig = "\r78\"1\n\\\e\\3\f\a\v\'cc\td\b";
-    const char *expect = "\\r78\\\"1\\n\\\\\\e\\\\3\\f\\a\\v\\\'cc\\td\\b";
     char *escape = fcitx_utils_set_escape_str(NULL, orig);
-    assert(strcmp(escape, expect) == 0);
+    assert(strcmp(escape,
+                  "\\r78\\\"1\\n\\\\\\e\\\\3\\f\\a\\v\\\'cc\\td\\b") == 0);
     char *back = fcitx_utils_set_unescape_str(NULL, escape);
     assert(strcmp(orig, back) == 0);
     fcitx_utils_unescape_str_inplace(escape);
