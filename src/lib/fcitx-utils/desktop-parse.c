@@ -39,7 +39,7 @@ enum {
 static const void *empty_vtable_padding[DESKTOP_PADDING_LEN] = {};
 
 static boolean
-fcitx_desktop_parse_check_vtable(FcitxDesktopVTable *vtable)
+fcitx_desktop_parse_check_vtable(const FcitxDesktopVTable *vtable)
 {
     if (!vtable)
         return true;
@@ -52,7 +52,7 @@ fcitx_desktop_parse_check_vtable(FcitxDesktopVTable *vtable)
 }
 
 static FcitxDesktopGroup*
-fcitx_desktop_parse_new_group(FcitxDesktopVTable *vtable, void *owner)
+fcitx_desktop_parse_new_group(const FcitxDesktopVTable *vtable, void *owner)
 {
     FcitxDesktopGroup *group;
     if (vtable && vtable->new_group) {
@@ -67,7 +67,7 @@ fcitx_desktop_parse_new_group(FcitxDesktopVTable *vtable, void *owner)
 }
 
 static FcitxDesktopEntry*
-fcitx_desktop_parse_new_entry(FcitxDesktopVTable *vtable, void *owner)
+fcitx_desktop_parse_new_entry(const FcitxDesktopVTable *vtable, void *owner)
 {
     FcitxDesktopEntry *entry;
     if (vtable && vtable->new_entry) {
@@ -82,8 +82,8 @@ fcitx_desktop_parse_new_entry(FcitxDesktopVTable *vtable, void *owner)
 }
 
 FCITX_EXPORT_API boolean
-fcitx_desktop_file_init(FcitxDesktopFile *file, FcitxDesktopVTable *vtable,
-                        void *owner)
+fcitx_desktop_file_init(FcitxDesktopFile *file,
+                        const FcitxDesktopVTable *vtable, void *owner)
 {
     if (!fcitx_desktop_parse_check_vtable(vtable))
         return false;
@@ -236,7 +236,7 @@ fcitx_desktop_file_clean(FcitxDesktopFile *file)
 }
 
 FCITX_EXPORT_API FcitxDesktopGroup*
-fcitx_desktop_file_find_group_with_len(FcitxDesktopFile *file,
+fcitx_desktop_file_find_group_with_len(const FcitxDesktopFile *file,
                                        const char *name, size_t name_len)
 {
     FcitxDesktopGroup *group = NULL;
@@ -259,7 +259,7 @@ fcitx_desktop_file_hash_new_group(FcitxDesktopFile *file,
 }
 
 FCITX_EXPORT_API FcitxDesktopEntry*
-fcitx_desktop_group_find_entry_with_len(FcitxDesktopGroup *group,
+fcitx_desktop_group_find_entry_with_len(const FcitxDesktopGroup *group,
                                         const char *name, size_t name_len)
 {
     FcitxDesktopEntry *entry = NULL;
@@ -532,7 +532,7 @@ _check_single_line(char *str)
 }
 
 static void
-fcitx_desktop_write_comments(FILE *fp, UT_array *comments)
+fcitx_desktop_write_comments(FILE *fp, const UT_array *comments)
 {
     utarray_foreach(comment, comments, char*) {
         size_t len = _check_single_line(*comment);
@@ -567,7 +567,7 @@ _check_entry_key(char *str)
 }
 
 static void
-fcitx_desktop_entry_write_fp(FcitxDesktopEntry *entry, FILE *fp)
+fcitx_desktop_entry_write_fp(const FcitxDesktopEntry *entry, FILE *fp)
 {
     size_t key_len = _check_entry_key(entry->name);
     if (!key_len)
@@ -594,7 +594,7 @@ _check_group_name(char *str)
 }
 
 static void
-fcitx_desktop_group_write_fp(FcitxDesktopGroup *group, FILE *fp)
+fcitx_desktop_group_write_fp(const FcitxDesktopGroup *group, FILE *fp)
 {
     FcitxDesktopEntry *entry;
     size_t name_len = _check_group_name(group->name);
@@ -610,7 +610,7 @@ fcitx_desktop_group_write_fp(FcitxDesktopGroup *group, FILE *fp)
 }
 
 FCITX_EXPORT_API boolean
-fcitx_desktop_file_write_fp(FcitxDesktopFile *file, FILE *fp)
+fcitx_desktop_file_write_fp(const FcitxDesktopFile *file, FILE *fp)
 {
     if (!(file && fp))
         return false;
@@ -623,7 +623,7 @@ fcitx_desktop_file_write_fp(FcitxDesktopFile *file, FILE *fp)
 }
 
 boolean
-fcitx_desktop_file_write(FcitxDesktopFile *file, const char *name)
+fcitx_desktop_file_write(const FcitxDesktopFile *file, const char *name)
 {
     boolean res;
     FILE *fp = fopen(name, "w");
