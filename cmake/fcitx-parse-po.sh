@@ -65,7 +65,7 @@ load_all_pos() {
         po_lang="${line%% *}"
         po_file="${line#* }"
         prefix="$(lang_to_prefix "${po_lang}")"
-        po_parse_cache_file="${po_parse_cache_dir}/${prefix}"
+        po_parse_cache_file="${po_parse_cache_dir}/${prefix}.fxpo"
         if [[ "${po_parse_cache_file}" -ot "${po_file}" ]]; then
             echo "Parsing po file: ${po_file}"
             local unique_fname="${po_parse_cache_file}.$$"
