@@ -367,7 +367,6 @@ function(fcitx_translate_add_apply_source in_file out_file)
     PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
   get_property(po_lang_files GLOBAL PROPERTY "FCITX_TRANSLATION_PO_FILES")
   get_property(pot_target_set GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET")
-  set(parse_po_stamp "${translation_cache_base}/parse_po.stamp")
   set(all_po_files)
   foreach(po_lang_file ${po_lang_files})
     string(REGEX REPLACE "^[^ ]* " "" po_file "${po_lang_file}")
@@ -387,19 +386,10 @@ function(fcitx_translate_add_apply_source in_file out_file)
       add_custom_command(OUTPUT "${out_file}"
         COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
         "${translation_cache_base}" "." --apply-po-merge
-        "${script}" "${in_file}" "${out_file}" "${parse_po_stamp}"
-        DEPENDS fcitx-parse-po-stamp.target "${in_file}" "${script}"
+        "${script}" "${in_file}" "${out_file}"
+        DEPENDS fcitx-parse-pos.target "${in_file}" "${script}"
         "${FCITX_TRANSLATION_SCAN_POT}" ${all_po_files}
         WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
-      # add_custom_command(OUTPUT "${out_file}"
-      #   COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
-      #   "${translation_cache_base}" "."
-      #   --parse-pos "${parse_po_stamp}"
-      #   COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
-      #   "${translation_cache_base}" "." --apply-po-merge
-      #   "${script}" "${in_file}" "${out_file}"
-      #   DEPENDS "${in_file}" "${script}" "${FCITX_TRANSLATION_SCAN_POT}"
-      #   ${all_po_files} WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
       return()
     endif()
   endforeach()
@@ -456,10 +446,9 @@ function(fcitx_translate_set_pot_target target domain pot_file)
     list(APPEND all_mo_files "${po_dir}/${domain}.mo")
     list(APPEND all_po_files "${po_file}")
   endforeach()
-  set(parse_po_stamp "${translation_cache_base}/parse_po.stamp")
-  add_custom_target(fcitx-parse-po-stamp.target ALL
+  add_custom_target(fcitx-parse-pos.target
     COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
-    "${translation_cache_base}" "${full_name}" --parse-pos "${parse_po_stamp}"
+    "${translation_cache_base}" "${full_name}" --parse-pos
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
     DEPENDS ${all_po_files})
   add_custom_target(fcitx-compile-mo.target ALL
@@ -484,6 +473,7 @@ function(fcitx_translate_add_po_file locale po_file)
   if(NOT pot_target_set)
     return()
   endif()
+  message(WARNING "PO files should be added before the pot target is set.")
   get_property(domain GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_DOMAIN")
   set(po_dir "${translation_cache_base}/fcitx_mo/${locale}")
   add_custom_command(OUTPUT "${po_dir}/${domain}.mo"
