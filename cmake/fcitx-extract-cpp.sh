@@ -43,6 +43,7 @@ case "${action}" in
     -w)
         out_file="${1}"
         shift || exit 1
+        echo "Extracting po string from c sources."
         xgettext -o "${out_file}" --from-code=utf-8 --force-po \
             --keyword=_ --keyword=N_ --keyword=D_:2 --keyword=i18n \
             --keyword=gettext --keyword=ngettext:1,2 --keyword=dgettext:2 \

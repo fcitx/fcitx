@@ -66,6 +66,7 @@ case "${action}" in
         po_list=()
         po_num=0
         mapfile -t lines < "${handler_cache}"
+        echo "Classifying Files to be translated..."
         for handler in "${lines[@]}"; do
             file_left=()
             handled_list=()
