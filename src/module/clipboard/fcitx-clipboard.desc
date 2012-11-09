@@ -41,5 +41,11 @@ Enum1=Alt
 Enum2=Ctrl
 Enum3=Shift
 
+[Clipboard/IgnoreBlank]
+Description=Ignore blank selections
+Type=Boolean
+DefaultValue=True
+Advance=True
+
 [DescriptionFile]
 LocaleDomain=fcitx

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-04 11:31-0500\n"
+"POT-Creation-Date: 2012-11-09 01:32-0500\n"
 "PO-Revision-Date: 2012-07-23 14:12+0000\n"
 "Last-Translator: mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: src/im/table/table.c:1386
+#: src/im/table/table.c:1385
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -27,7 +27,7 @@ msgstr ""
 msgid "(Unavailable)"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1585
+#: src/lib/fcitx/ime.c:1584
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -35,23 +35,23 @@ msgstr ""
 msgid "0 for commit immediately, -1 for keep all words"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:596
+#: src/module/unicode/charselectdata.c:592
 msgid "<Low Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:592
+#: src/module/unicode/charselectdata.c:588
 msgid "<Non Private Use High Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:594
+#: src/module/unicode/charselectdata.c:590
 msgid "<Private Use High Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:598
+#: src/module/unicode/charselectdata.c:594
 msgid "<Private Use>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:626
+#: src/module/unicode/charselectdata.c:622
 msgid "<not assigned>"
 msgstr ""
 
@@ -144,7 +144,7 @@ msgstr ""
 msgid "Addon"
 msgstr "アドオン"
 
-#: src/lib/fcitx/addon.c:124
+#: src/lib/fcitx/addon.c:125
 #, c-format
 msgid "Addon Config %s is %s"
 msgstr ""
@@ -294,7 +294,7 @@ msgstr ""
 msgid "CTRL_SUPER"
 msgstr ""
 
-#: src/im/pinyin/py.c:359
+#: src/im/pinyin/py.c:357
 msgid "Can not find System Database of Pinyin!"
 msgstr ""
 
@@ -333,22 +333,22 @@ msgstr ""
 msgid "Cangjie"
 msgstr ""
 
-#: src/im/pinyin/py.c:1685
+#: src/im/pinyin/py.c:1683
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: src/im/pinyin/py.c:1747
+#: src/im/pinyin/py.c:1745
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
 
-#: src/im/pinyin/py.c:1622
+#: src/im/pinyin/py.c:1620
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: src/im/table/table.c:633
+#: src/im/table/table.c:632
 msgid "Cannot found Pinyin"
 msgstr ""
 
@@ -371,15 +371,15 @@ msgstr ""
 msgid "Choose key modifier"
 msgstr ""
 
-#: src/im/table/table.c:698
+#: src/im/table/table.c:697
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:690
+#: src/im/table/table.c:689
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:706
+#: src/im/table/table.c:705
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
@@ -437,7 +437,7 @@ msgstr ""
 msgid "Code Table Name"
 msgstr ""
 
-#: src/im/table/table.c:1382
+#: src/im/table/table.c:1381
 msgid "Code is "
 msgstr ""
 
@@ -614,7 +614,7 @@ msgstr ""
 msgid "Disable Pinyin Symbol"
 msgstr ""
 
-#: src/lib/fcitx/addon.c:272
+#: src/lib/fcitx/addon.c:273
 #, c-format
 msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr ""
@@ -645,12 +645,12 @@ msgstr ""
 msgid "Do not show spell hint"
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:471
+#: src/lib/fcitx-utils/desktop-parse.c:525
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:431
+#: src/lib/fcitx-utils/desktop-parse.c:485
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
@@ -852,11 +852,11 @@ msgstr ""
 msgid "Frontend Used by IM Modules"
 msgstr ""
 
-#: src/lib/fcitx/frontend.c:539
+#: src/lib/fcitx/frontend.c:537
 msgid "Frontend: bad frontend"
 msgstr ""
 
-#: src/lib/fcitx/frontend.c:527
+#: src/lib/fcitx/frontend.c:525
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr ""
@@ -996,12 +996,12 @@ msgstr ""
 msgid "Hotkey of Deleting Frequent Word"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:299
+#: src/lib/fcitx/ime.c:298
 #, c-format
 msgid "IM: bad im %s"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:280
+#: src/lib/fcitx/ime.c:279
 #, c-format
 msgid "IM: open %s fail %s"
 msgstr ""
@@ -1027,6 +1027,10 @@ msgstr "現在のIM"
 
 #: src/im/table/table.desc:191
 msgid "Ignore Punctuation"
+msgstr ""
+
+#: src/module/clipboard/fcitx-clipboard.desc:45
+msgid "Ignore blank selections"
 msgstr ""
 
 #: data/config.desc:39
@@ -1071,7 +1075,7 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1491
+#: src/lib/fcitx/ime.c:1490
 msgid "Input Method"
 msgstr ""
 
@@ -1083,7 +1087,7 @@ msgstr ""
 msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1582
+#: src/lib/fcitx/ime.c:1581
 msgid "Input Speed: "
 msgstr ""
 
@@ -1110,12 +1114,12 @@ msgstr ""
 msgid "Invalid Entry: line %d missing '='"
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:461
+#: src/lib/fcitx-utils/desktop-parse.c:515
 #, c-format
 msgid "Invalid entry line @ line %d %s"
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:419
+#: src/lib/fcitx-utils/desktop-parse.c:473
 #, c-format
 msgid "Invalid group name line @ line %d %s"
 msgstr ""
@@ -1191,7 +1195,7 @@ msgstr ""
 msgid "Latin punct"
 msgstr ""
 
-#: src/im/table/table.c:601
+#: src/im/table/table.c:600
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1201,23 +1205,23 @@ msgstr ""
 msgid "Length of Clipboard History to Save"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:533
+#: src/module/unicode/charselectdata.c:529
 msgid "Letter, Lowercase"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:534
+#: src/module/unicode/charselectdata.c:530
 msgid "Letter, Modifier"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:535
+#: src/module/unicode/charselectdata.c:531
 msgid "Letter, Other"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:536
+#: src/module/unicode/charselectdata.c:532
 msgid "Letter, Titlecase"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:537
+#: src/module/unicode/charselectdata.c:533
 msgid "Letter, Uppercase"
 msgstr ""
 
@@ -1225,7 +1229,7 @@ msgstr ""
 msgid "Library"
 msgstr ""
 
-#: src/lib/fcitx/addon.c:137
+#: src/lib/fcitx/addon.c:138
 #, c-format
 msgid "Load Addon Config File:%s"
 msgstr ""
@@ -1238,7 +1242,7 @@ msgstr ""
 msgid "Load Table Dict OK"
 msgstr ""
 
-#: src/im/pinyin/py.c:375
+#: src/im/pinyin/py.c:373
 #, c-format
 msgid "Load extra dict: %s"
 msgstr ""
@@ -1287,15 +1291,15 @@ msgstr "メインウインドウのX方向の位置"
 msgid "Main Window Position Y"
 msgstr "メインウインドウのY方向の位置"
 
-#: src/module/unicode/charselectdata.c:539
+#: src/module/unicode/charselectdata.c:535
 msgid "Mark, Enclosing"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:540
+#: src/module/unicode/charselectdata.c:536
 msgid "Mark, Non-Spacing"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:538
+#: src/module/unicode/charselectdata.c:534
 msgid "Mark, Spacing Combining"
 msgstr ""
 
@@ -1345,7 +1349,7 @@ msgstr "メニューのフォント"
 msgid "Menu Font Size"
 msgstr "メニューのフォントの大きさ"
 
-#: src/im/pinyin/py.c:2137
+#: src/im/pinyin/py.c:2135
 msgid "Migrate the old file path to the new one"
 msgstr ""
 
@@ -1370,11 +1374,11 @@ msgstr ""
 msgid "Module"
 msgstr "モジュール"
 
-#: src/lib/fcitx/module.c:75
+#: src/lib/fcitx/module.c:73
 msgid "Module: bad module"
 msgstr ""
 
-#: src/lib/fcitx/module.c:63
+#: src/lib/fcitx/module.c:61
 #, c-format
 msgid "Module: open %s fail %s"
 msgstr ""
@@ -1408,11 +1412,11 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:508
+#: src/lib/fcitx/ime.c:507
 msgid "No available Input Method"
 msgstr ""
 
-#: src/lib/fcitx/frontend.c:562
+#: src/lib/fcitx/frontend.c:560
 msgid "No available frontend"
 msgstr ""
 
@@ -1424,16 +1428,16 @@ msgstr ""
 msgid "No local input method"
 msgstr ""
 
-#: src/lib/fcitx/instance.c:177 src/lib/fcitx/instance.c:423
+#: src/lib/fcitx/instance.c:184 src/lib/fcitx/instance.c:430
 msgid "No remind"
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:455
+#: src/lib/fcitx-utils/desktop-parse.c:509
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:495
+#: src/module/unicode/charselectdata.c:491
 msgid "Non-printable"
 msgstr ""
 
@@ -1453,15 +1457,15 @@ msgstr ""
 msgid "Number"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:541
+#: src/module/unicode/charselectdata.c:537
 msgid "Number, Decimal Digit"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:542
+#: src/module/unicode/charselectdata.c:538
 msgid "Number, Letter"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:543
+#: src/module/unicode/charselectdata.c:539
 msgid "Number, Other"
 msgstr ""
 
@@ -1491,23 +1495,23 @@ msgstr ""
 msgid "Other Color"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:528
+#: src/module/unicode/charselectdata.c:524
 msgid "Other, Control"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:529
+#: src/module/unicode/charselectdata.c:525
 msgid "Other, Format"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:530
+#: src/module/unicode/charselectdata.c:526
 msgid "Other, Not Assigned"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:531
+#: src/module/unicode/charselectdata.c:527
 msgid "Other, Private Use"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:532
+#: src/module/unicode/charselectdata.c:528
 msgid "Other, Surrogate"
 msgstr ""
 
@@ -1529,11 +1533,11 @@ msgstr ""
 msgid "PerProgram"
 msgstr ""
 
-#: src/im/table/table.c:1378
+#: src/im/table/table.c:1377
 msgid "Phrase is already in Dict "
 msgstr ""
 
-#: src/im/pinyin/py.c:106
+#: src/im/pinyin/py.c:104
 msgid "Pinyin"
 msgstr ""
 
@@ -1547,7 +1551,7 @@ msgstr ""
 msgid "Pinyin Enhance"
 msgstr ""
 
-#: src/im/pinyin/py.c:425
+#: src/im/pinyin/py.c:423
 msgid "Pinyin Index Magic Number Doesn't match"
 msgstr ""
 
@@ -1555,7 +1559,7 @@ msgstr ""
 msgid "Pinyin Key"
 msgstr ""
 
-#: src/im/table/table.c:629
+#: src/im/table/table.c:628
 msgid "Pinyin: "
 msgstr ""
 
@@ -1583,12 +1587,12 @@ msgstr ""
 msgid "Preferred Enchant provider"
 msgstr ""
 
-#: src/im/pinyin/py.c:729
+#: src/im/pinyin/py.c:727
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:731
+#: src/im/pinyin/py.c:729
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
@@ -1601,11 +1605,11 @@ msgstr ""
 msgid "Press Switch Key twice to Change Mode"
 msgstr ""
 
-#: src/im/pinyin/py.c:688
+#: src/im/pinyin/py.c:686
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:701
+#: src/im/pinyin/py.c:699
 msgid "Press number to make word in frequent list"
 msgstr ""
 
@@ -1667,31 +1671,31 @@ msgstr ""
 msgid "Punctuation Support"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:546
+#: src/module/unicode/charselectdata.c:542
 msgid "Punctuation, Close"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:544
+#: src/module/unicode/charselectdata.c:540
 msgid "Punctuation, Connector"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:545
+#: src/module/unicode/charselectdata.c:541
 msgid "Punctuation, Dash"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:547
+#: src/module/unicode/charselectdata.c:543
 msgid "Punctuation, Final Quote"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:548
+#: src/module/unicode/charselectdata.c:544
 msgid "Punctuation, Initial Quote"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:550
+#: src/module/unicode/charselectdata.c:546
 msgid "Punctuation, Open"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:549
+#: src/module/unicode/charselectdata.c:545
 msgid "Punctuation, Other"
 msgstr ""
 
@@ -1739,11 +1743,11 @@ msgstr "右Shift"
 msgid "Register IM"
 msgstr ""
 
-#: src/im/table/table.c:1270
+#: src/im/table/table.c:1269
 msgid "Remind:"
 msgstr ""
 
-#: src/im/pinyin/py.c:2003
+#: src/im/pinyin/py.c:2001
 msgid "Remind: "
 msgstr ""
 
@@ -1856,7 +1860,7 @@ msgstr ""
 msgid "Select specific input method via keyboard"
 msgstr ""
 
-#: src/module/clipboard/clipboard.c:344
+#: src/module/clipboard/clipboard.c:346
 msgid "Select to paste"
 msgstr ""
 
@@ -1876,15 +1880,15 @@ msgstr ""
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr "非活動モードの時入力したテキストをそのままに送信する"
 
-#: src/module/unicode/charselectdata.c:555
+#: src/module/unicode/charselectdata.c:551
 msgid "Separator, Line"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:556
+#: src/module/unicode/charselectdata.c:552
 msgid "Separator, Paragraph"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:557
+#: src/module/unicode/charselectdata.c:553
 msgid "Separator, Space"
 msgstr ""
 
@@ -1931,7 +1935,7 @@ msgstr "バージョンを表示する"
 msgid "Shuang Pin Schema"
 msgstr ""
 
-#: src/im/pinyin/py.c:122
+#: src/im/pinyin/py.c:120
 msgid "Shuangpin"
 msgstr ""
 
@@ -2130,19 +2134,19 @@ msgstr ""
 msgid "Symbol File"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:551
+#: src/module/unicode/charselectdata.c:547
 msgid "Symbol, Currency"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:553
+#: src/module/unicode/charselectdata.c:549
 msgid "Symbol, Math"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:552
+#: src/module/unicode/charselectdata.c:548
 msgid "Symbol, Modifier"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:554
+#: src/module/unicode/charselectdata.c:550
 msgid "Symbol, Other"
 msgstr ""
 
@@ -2181,7 +2185,7 @@ msgstr "全角文字を使用"
 msgid "Toggle Input Method"
 msgstr "現在のIM"
 
-#: src/lib/fcitx/instance.c:178 src/lib/fcitx/instance.c:424
+#: src/lib/fcitx/instance.c:185 src/lib/fcitx/instance.c:431
 msgid "Toggle Remind"
 msgstr ""
 
@@ -2245,11 +2249,11 @@ msgstr ""
 msgid "UI"
 msgstr ""
 
-#: src/lib/fcitx/ui.c:202
+#: src/lib/fcitx/ui.c:204
 msgid "UI: bad ui"
 msgstr ""
 
-#: src/lib/fcitx/ui.c:189
+#: src/lib/fcitx/ui.c:191
 #, c-format
 msgid "UI: open %s fail %s"
 msgstr ""
@@ -2266,7 +2270,7 @@ msgstr ""
 msgid "UniqueName"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:558
+#: src/module/unicode/charselectdata.c:554
 msgid "Unknown"
 msgstr ""
 
@@ -2331,7 +2335,7 @@ msgstr ""
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr ""
 
-#: src/lib/fcitx/instance.c:177 src/lib/fcitx/instance.c:423
+#: src/lib/fcitx/instance.c:184 src/lib/fcitx/instance.c:430
 msgid "Use remind"
 msgstr ""
 
@@ -2443,7 +2447,7 @@ msgstr ""
 msgid "Ziranma"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1588
+#: src/lib/fcitx/ime.c:1587
 msgid "min Num of Characters: "
 msgstr ""
 
@@ -2456,7 +2460,7 @@ msgstr ""
 msgid "no valid font."
 msgstr "正しいフォントではありません"
 
-#: src/lib/fcitx/instance.c:399
+#: src/lib/fcitx/instance.c:406
 msgid "pthread mutex init failed"
 msgstr ""
 

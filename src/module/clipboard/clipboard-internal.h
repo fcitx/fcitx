@@ -45,6 +45,7 @@ typedef struct {
     FcitxHotkey trigger_key[2];
     ClipboardChooseModifier choose_modifier;
     boolean use_primary;
+    boolean ignore_blank;
 } FcitxClipboardConfig;
 
 typedef struct {

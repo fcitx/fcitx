@@ -38,6 +38,8 @@
 #include "clipboard-x11.h"
 /* #endif */
 
+#define FCITX_CLIPBOARD_BLANK " \b\f\v\r\t"
+
 CONFIG_DEFINE_LOAD_AND_SAVE(FcitxClipboard, FcitxClipboardConfig,
                             "fcitx-clipboard");
 
@@ -442,10 +444,22 @@ ClipboardReloadConfig(void* arg)
     ApplyClipboardConfig(clipboard);
 }
 
+static boolean
+ClipboardCheckBlank(FcitxClipboard *clipboard, const char *str)
+{
+    if (clipboard->config.ignore_blank) {
+        if (!str[strspn(str, FCITX_CLIPBOARD_BLANK)])
+            return false;
+    }
+    return true;
+}
+
 void
 ClipboardSetPrimary(FcitxClipboard *clipboard, uint32_t len, const char *str)
 {
     if (!(len && str && *str))
+        return;
+    if (!ClipboardCheckBlank(clipboard, str))
         return;
     if (clipboard->primary.len != len) {
         clipboard->primary.len = len;
@@ -459,6 +473,8 @@ void
 ClipboardPushClipboard(FcitxClipboard *clipboard, uint32_t len, const char *str)
 {
     if (!(len && str && *str))
+        return;
+    if (!ClipboardCheckBlank(clipboard, str))
         return;
     int i = ClipboardSelectionClipboardFind(clipboard, str, len);
     if (i == 0) {
