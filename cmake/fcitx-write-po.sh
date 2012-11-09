@@ -2,7 +2,7 @@
 
 . "$(dirname ${BASH_SOURCE})/fcitx-parse-po.sh"
 
-write_po_header() {
+fcitx_write_po_header() {
     local out_file="$1"
     cat > "${out_file}"  <<EOF
 # SOME DESCRIPTIVE TITLE.
@@ -28,12 +28,12 @@ EOF
 
 all_msg_id=()
 
-write_all_po() {
+fcitx_write_all_po() {
     local out_file="$1"
     local var_name
     local places
     for msgid in "${all_msg_id[@]}"; do
-        var_name="$(msgid_to_varname MSGID "${msgid}")"
+        var_name="$(fcitx_msgid_to_varname MSGID "${msgid}")"
         eval "places=(\"\${${var_name}[@]}\")"
         echo
         for place in "${places[@]}"; do
@@ -46,14 +46,14 @@ write_all_po() {
     done >> "${out_file}"
 }
 
-record_po_msg() {
+fcitx_record_po_msg() {
     local in_file="$1"
     local msgid="$2"
     local line_num="$3"
     if [[ -z "${msgid}" ]]; then
         continue
     fi
-    local var_name="$(msgid_to_varname MSGID "${msgid}")"
+    local var_name="$(fcitx_msgid_to_varname MSGID "${msgid}")"
     local tmp
     eval "tmp=\"\${${var_name}[*]}\""
     if [[ -z "${tmp}" ]]; then
@@ -62,19 +62,19 @@ record_po_msg() {
     eval "${var_name}=(\"\${${var_name}[@]}\" \"\${in_file}:\${line_num}\")"
 }
 
-fix_po_charset_utf8() {
+fcitx_fix_po_charset_utf8() {
     local po_file="$1"
     local regex='^[[:blank:]]*"Content-Type:.*; charset=.*\\n"[[:blank:]]*$'
     local fix_res='"Content-Type: text/plain; charset=utf-8\\n"'
     sed -i "${po_file}" -e "0,/${regex}/s|${regex}|${fix_res}|"
 }
 
-merge_all_pos() {
+fcitx_merge_all_pos() {
     local pot_file="$1"
     shift
     local po_list=("$@")
     if [[ -z "${po_list[*]}" ]]; then
-        write_po_header "${pot_file}"
+        fcitx_write_po_header "${pot_file}"
     else
         msgcat -o "${pot_file}" --use-first --to-code=utf-8 "${po_list[@]}"
     fi

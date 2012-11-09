@@ -9,33 +9,33 @@ shift 1 || exit 1
 case "${action}" in
     -c)
         in_file="${1}"
-        if str_match "*.c" "${in_file}"; then
+        if fcitx_str_match "*.c" "${in_file}"; then
             exit 0
-        elif str_match "*.h" "${in_file}"; then
+        elif fcitx_str_match "*.h" "${in_file}"; then
             exit 0
-        elif str_match "*.cpp" "${in_file}"; then
+        elif fcitx_str_match "*.cpp" "${in_file}"; then
             exit 0
-        elif str_match "*.cxx" "${in_file}"; then
+        elif fcitx_str_match "*.cxx" "${in_file}"; then
             exit 0
-        elif str_match "*.C" "${in_file}"; then
+        elif fcitx_str_match "*.C" "${in_file}"; then
             exit 0
-        elif str_match "*.cc" "${in_file}"; then
+        elif fcitx_str_match "*.cc" "${in_file}"; then
             exit 0
-        elif str_match "*.hh" "${in_file}"; then
+        elif fcitx_str_match "*.hh" "${in_file}"; then
             exit 0
-        elif str_match "*.H" "${in_file}"; then
+        elif fcitx_str_match "*.H" "${in_file}"; then
             exit 0
-        elif str_match "*.hxx" "${in_file}"; then
+        elif fcitx_str_match "*.hxx" "${in_file}"; then
             exit 0
-        elif str_match "*.hpp" "${in_file}"; then
+        elif fcitx_str_match "*.hpp" "${in_file}"; then
             exit 0
-        elif str_match "*.sh" "${in_file}"; then
+        elif fcitx_str_match "*.sh" "${in_file}"; then
             exit 0
-        elif str_match "*.bash" "${in_file}"; then
+        elif fcitx_str_match "*.bash" "${in_file}"; then
             exit 0
-        elif str_match "*.csh" "${in_file}"; then
+        elif fcitx_str_match "*.csh" "${in_file}"; then
             exit 0
-        elif str_match "*.zsh" "${in_file}"; then
+        elif fcitx_str_match "*.zsh" "${in_file}"; then
             exit 0
         fi
         exit 1
@@ -49,7 +49,7 @@ case "${action}" in
             --keyword=gettext --keyword=ngettext:1,2 --keyword=dgettext:2 \
             --keyword=dcgettext:2 --keyword=dcngettext:2,3 \
             --keyword=dngettext:2,3 "$@"
-        fix_po_charset_utf8 "${out_file}"
+        fcitx_fix_po_charset_utf8 "${out_file}"
         exit 0
         ;;
 esac

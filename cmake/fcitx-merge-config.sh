@@ -28,7 +28,7 @@ merge_config() {
                 key="${line%%=*}"
                 msgid="${line#*=}"
                 for lang in "${all_po_langs[@]}"; do
-                    msgstr="$(find_str_for_lang "${lang}" "${msgid}")"
+                    msgstr="$(fcitx_find_str_for_lang "${lang}" "${msgid}")"
                     if [[ -z ${msgstr} ]]; then
                         continue
                     fi
@@ -44,17 +44,17 @@ merge_config() {
 
 case "${action}" in
     -c)
-        if str_match "*.conf.in" "${in_file}" &&
-            str_match "*.conf" "${out_file}"; then
+        if fcitx_str_match "*.conf.in" "${in_file}" &&
+            fcitx_str_match "*.conf" "${out_file}"; then
             exit 0
-        elif str_match "*.desktop.in" "${in_file}" &&
-            str_match "*.desktop" "${out_file}"; then
+        elif fcitx_str_match "*.desktop.in" "${in_file}" &&
+            fcitx_str_match "*.desktop" "${out_file}"; then
             exit 0
         fi
         exit 1
         ;;
     -w)
-        load_all_pos "${po_cache}" "${parse_cache}"
+        fcitx_load_all_pos "${po_cache}" "${parse_cache}"
         merge_config "${in_file}" "${out_file}"
         exit 0
         ;;

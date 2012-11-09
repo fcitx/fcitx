@@ -9,9 +9,9 @@ shift 1 || exit 1
 case "${action}" in
     -c)
         in_file="${1}"
-        if str_match "*.po" "${in_file}"; then
+        if fcitx_str_match "*.po" "${in_file}"; then
             exit 0
-        elif str_match "*.pot" "${in_file}"; then
+        elif fcitx_str_match "*.pot" "${in_file}"; then
             exit 0
         fi
         exit 1
@@ -19,7 +19,7 @@ case "${action}" in
     -w)
         out_file="${1}"
         shift || exit 1
-        merge_all_pos "${out_file}" "$@"
+        fcitx_merge_all_pos "${out_file}" "$@"
         exit 0
         ;;
 esac

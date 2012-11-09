@@ -16,10 +16,10 @@ extract_confdesc() {
     for line in "${lines[@]}"; do
         ((line_num++))
         if [[ $line =~ ^\[(.*)/(.*)\]$ ]]; then
-            record_po_msg "${in_file}" "${BASH_REMATCH[1]}" "${line_num}"
-            # record_po_msg "${in_file}" "${BASH_REMATCH[2]}" "${line_num}"
+            fcitx_record_po_msg "${in_file}" "${BASH_REMATCH[1]}" "${line_num}"
+            # fcitx_record_po_msg "${in_file}" "${BASH_REMATCH[2]}" "${line_num}"
         elif [[ $line =~ ^[\ \t]*(Description|LongDescription|Enum[0-9]+)=(.*)$ ]]; then
-            record_po_msg "${in_file}" "${BASH_REMATCH[2]}" "${line_num}"
+            fcitx_record_po_msg "${in_file}" "${BASH_REMATCH[2]}" "${line_num}"
         fi
     done
 }
@@ -27,7 +27,7 @@ extract_confdesc() {
 case "${action}" in
     -c)
         in_file="${1}"
-        if str_match "*.desc" "${in_file}"; then
+        if fcitx_str_match "*.desc" "${in_file}"; then
             exit 0
         fi
         exit 1
@@ -35,12 +35,12 @@ case "${action}" in
     -w)
         out_file="${1}"
         shift || exit 1
-        write_po_header "${out_file}"
+        fcitx_write_po_header "${out_file}"
         for rel_path in "$@"; do
             echo "Extracting po string from ${rel_path}"
             extract_confdesc "${rel_path}" "${out_file}"
         done
-        write_all_po "${out_file}"
+        fcitx_write_all_po "${out_file}"
         exit 0
         ;;
 esac
