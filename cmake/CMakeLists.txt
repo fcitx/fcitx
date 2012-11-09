@@ -4,7 +4,7 @@ install(FILES FcitxConfig.cmake FcitxMacro.cmake
 install(FILES
   fcitx-filter-po.sh
   fcitx-merge-config.sh
-  fcitx-scan-pot.sh
+  fcitx-cmake-helper.sh
   fcitx-extract-cpp.sh
   fcitx-extract-confdesc.sh
   fcitx-extract-desktop.sh

@@ -30,8 +30,8 @@ include(CMakeParseArguments)
 find_package(Gettext REQUIRED)
 
 set(FCITX_MACRO_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}")
-set(FCITX_TRANSLATION_SCAN_POT "${FCITX_MACRO_CMAKE_DIR}/fcitx-scan-pot.sh"
-  CACHE INTERNAL "fcitx-scann-pot" FORCE)
+set(FCITX_CMAKE_HELPER_SCRIPT "${FCITX_MACRO_CMAKE_DIR}/fcitx-cmake-helper.sh"
+  CACHE INTERNAL "fcitx-scan-pot" FORCE)
 set(FCITX_TRANSLATION_MERGE_CONFIG
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-merge-config.sh")
 set(FCITX_TRANSLATION_EXTRACT_CPP
@@ -74,7 +74,7 @@ function(__fcitx_cmake_init)
     "${translation_cache_base}")
   get_property(full_name GLOBAL
     PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
-  execute_process(COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+  execute_process(COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}"
     "${full_name}" --clean)
   set_property(GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET" 0)
@@ -315,7 +315,7 @@ function(__fcitx_translate_add_sources_internal)
     PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
   get_property(target GLOBAL
     PROPERTY "__FCITX_TRANSLATION_TARGET_NAME")
-  execute_process(COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+  execute_process(COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}"
     "${full_name}" --add-sources ${ARGN}
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
@@ -345,7 +345,7 @@ function(_fcitx_translate_add_handler script)
     PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
   get_property(full_name GLOBAL
     PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
-  execute_process(COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+  execute_process(COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}"
     "${full_name}" --add-handler "${script}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
@@ -379,16 +379,16 @@ function(fcitx_translate_add_apply_source in_file out_file)
   endif()
 
   foreach(script ${scripts})
-    execute_process(COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+    execute_process(COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}"
       "${translation_cache_base}" "${full_name}" --check-apply-handler
       "${script}" "${in_file}" "${out_file}" RESULT_VARIABLE result)
     if(NOT result)
       add_custom_command(OUTPUT "${out_file}"
-        COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+        COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}"
         "${translation_cache_base}" "." --apply-po-merge
         "${script}" "${in_file}" "${out_file}"
         DEPENDS fcitx-parse-pos.target "${in_file}" "${script}"
-        "${FCITX_TRANSLATION_SCAN_POT}" ${all_po_files}
+        "${FCITX_CMAKE_HELPER_SCRIPT}" ${all_po_files}
         WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
       return()
     endif()
@@ -422,7 +422,7 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_NAME" "${target}")
   set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_DOMAIN" "${domain}")
   add_custom_target(fcitx-translate-pot.target
-    COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+    COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}" "${full_name}" --pot
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
   add_custom_target("${target}")
@@ -447,7 +447,7 @@ function(fcitx_translate_set_pot_target target domain pot_file)
     list(APPEND all_po_files "${po_file}")
   endforeach()
   add_custom_target(fcitx-parse-pos.target
-    COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+    COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}" "${full_name}" --parse-pos
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
     DEPENDS ${all_po_files})
@@ -465,7 +465,7 @@ function(fcitx_translate_add_po_file locale po_file)
     PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
   set_property(GLOBAL APPEND PROPERTY "FCITX_TRANSLATION_PO_FILES"
     "${locale} ${po_file}")
-  execute_process(COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+  execute_process(COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}"
     "${full_name}" --add-po "${locale}" "${po_file}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
@@ -485,6 +485,12 @@ function(fcitx_translate_add_po_file locale po_file)
     DESTINATION "share/locale/${locale}/LC_MESSAGES")
   __fcitx_addon_get_unique_name(translated-po po_target)
   add_custom_target("${po_target}" ALL DEPENDS "${po_dir}/${domain}.mo")
+endfunction()
+
+function(_fcitx_add_uninstall_target)
+  add_custom_target(uninstall
+    COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}" "." "." --uninstall
+    WORKING_DIRECTORY "${PROJECT_BINARY_DIR}")
 endfunction()
 
 

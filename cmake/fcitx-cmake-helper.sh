@@ -115,6 +115,18 @@ case "${action}" in
         rm -f "${src_cache}" "${po_cache}" "${handler_cache}"
         exit 0
         ;;
+    --uninstall)
+        mapfile -t installed_files < install_manifest.txt || exit 1
+        for file in "${installed_files[@]}"; do
+            file="${DESTDIR}/${file}"
+            [[ -f "${file}" ]] || [[ -L "${file}" ]] || {
+                echo "File: ${file}, doesn't exist or is not a regular file."
+                continue
+            }
+            rm -v "${file}" || exit 1
+        done
+        exit 0
+        ;;
     *)
         exit 1
         ;;
