@@ -865,4 +865,38 @@ fcitx_utils_set_escape_str_with_set(char *res, const char *str, const char *set)
     return res;
 }
 
+#ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
+/**
+ * Also define lib function when there is builtin function for
+ * atomic operation in case the function address is needed or the builtin
+ * is not available when compiling other modules.
+ **/
+#define FCITX_UTIL_DEFINE_ATOMIC(name, op, type)                        \
+    FCITX_EXPORT_API type                                               \
+    (fcitx_utils_atomic_##name)(volatile type *atomic, type val)        \
+    {                                                                   \
+        return __sync_fetch_and_##name(atomic, val);                    \
+    }
+#else
+static pthread_mutex_t __fcitx_utils_atomic_lock = PTHREAD_MUTEX_INITIALIZER;
+#define FCITX_UTIL_DEFINE_ATOMIC(name, op, type)                        \
+    FCITX_EXPORT_API type                                               \
+    (fcitx_utils_atomic_##name)(volatile type *atomic, type val)        \
+    {                                                                   \
+        type oldval;                                                    \
+        pthread_mutex_lock(&__fcitx_utils_atomic_lock);                 \
+        oldval = *atomic;                                               \
+        *atomic = oldval op val;                                        \
+        pthread_mutex_unlock(&__fcitx_utils_atomic_lock);               \
+        return oldval;                                                  \
+    }
+#endif
+
+FCITX_UTIL_DEFINE_ATOMIC(add, +, int32_t)
+FCITX_UTIL_DEFINE_ATOMIC(and, &, uint32_t)
+FCITX_UTIL_DEFINE_ATOMIC(or, |, uint32_t)
+FCITX_UTIL_DEFINE_ATOMIC(xor, ^, uint32_t)
+
+#undef FCITX_UTIL_DEFINE_ATOMIC
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

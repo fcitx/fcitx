@@ -677,6 +677,40 @@ extern "C" {
     UT_array *fcitx_utils_string_list_append_no_copy(UT_array *list, char *str);
     UT_array *fcitx_utils_string_list_append_len(UT_array *list,
                                                  const char *str, size_t len);
+#ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
+#define FCITX_UTIL_DECLARE_ATOMIC(name, type)                           \
+    type fcitx_utils_atomic_##name(volatile type *atomic, type val);    \
+    static inline type                                                  \
+    __fcitx_utils_atomic_##name(volatile type *atomic, type val)        \
+    {                                                                   \
+        return __sync_fetch_and_##name(atomic, val);                    \
+    }
+#else
+#define FCITX_UTIL_DECLARE_ATOMIC(name, type)                           \
+    type fcitx_utils_atomic_##name(volatile type *atomic, type val);    \
+    static inline type                                                  \
+    __fcitx_utils_atomic_##name(volatile type *atomic, type val)        \
+    {                                                                   \
+        return __fcitx_utils_atomic_##name(atomic, val);                \
+    }
+#endif
+
+    FCITX_UTIL_DECLARE_ATOMIC(add, int32_t)
+    FCITX_UTIL_DECLARE_ATOMIC(and, uint32_t)
+    FCITX_UTIL_DECLARE_ATOMIC(or, uint32_t)
+    FCITX_UTIL_DECLARE_ATOMIC(xor, uint32_t)
+
+#define fcitx_utils_atomic_add(atomic, val)     \
+    __fcitx_utils_atomic_add(atomic, val)
+#define fcitx_utils_atomic_and(atomic, val)     \
+    __fcitx_utils_atomic_and(atomic, val)
+#define fcitx_utils_atomic_or(atomic, val)      \
+    __fcitx_utils_atomic_or(atomic, val)
+#define fcitx_utils_atomic_xor(atomic, val)     \
+    __fcitx_utils_atomic_xor(atomic, val)
+
+#undef FCITX_UTIL_DECLARE_ATOMIC
+
 #ifdef __cplusplus
 }
 #endif
