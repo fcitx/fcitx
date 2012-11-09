@@ -11,5 +11,5 @@ fi
 . "$(dirname ${BASH_SOURCE})/fcitx-parse-po.sh"
 
 varname="$(msgid_to_varname "${var_prefix}" "${cur_msgid}")"
-varquote="$(quote "${cur_msgstr}")"
-echo "${varname}=${varquote}"
+varbase64="$(echo -n "${cur_msgstr}" | base64 -w0)"
+echo "${varname}=${varbase64}"

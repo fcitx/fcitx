@@ -2,8 +2,7 @@
 
 filter_src="$(dirname ${BASH_SOURCE})/fcitx-filter-po.sh"
 
-quote ()
-{
+quote () {
     local quoted=${1//\'/\'\\\'\'};
     printf "'%s'" "$quoted"
 }
@@ -31,14 +30,16 @@ parse_po_file() {
     local prefix="${1}"
     local pofile="${2}"
     local parse_res="${3}"
-    msgexec -i "${pofile}" "${filter_src}" "${prefix}" > "${parse_res}"
+    msgattrib -o- --translated --no-fuzzy --no-obsolete --force-po "${pofile}" |
+    msgconv -tutf-8 --force-po |
+    msgexec -i- "${filter_src}" "${prefix}" > "${parse_res}"
 }
 
 find_str() {
     local prefix="${1}"
     local msgid="${2}"
     local varname="$(msgid_to_varname "${prefix}" "${msgid}")"
-    echo -n "${!varname}"
+    echo -n "${!varname}" | base64 -d
 }
 
 all_po_langs=()
@@ -68,9 +69,13 @@ load_all_pos() {
         po_parse_cache_file="${po_parse_cache_dir}/${prefix}"
         if [[ "${po_parse_cache_file}" -ot "${po_file}" ]]; then
             echo "Parsing po file: ${po_file}"
-            parse_po_file "${prefix}" "${po_file}" "${po_parse_cache_file}"
+            local unique_fname="${po_parse_cache_file}.$$"
+            parse_po_file "${prefix}" "${po_file}" "${unique_fname}"
+            . "${unique_fname}"
+            mv "${unique_fname}" "${po_parse_cache_file}"
+        else
+            . "${po_parse_cache_file}"
         fi
-        . "${po_parse_cache_file}"
         all_po_langs=("${all_po_langs[@]}" "${po_lang}")
     done
 }
