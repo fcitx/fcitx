@@ -19,6 +19,7 @@ add_sources() {
 
 case "${action}" in
     --check-apply-handler)
+        # full_name may be invalid
         script="$1"
         in_file="$2"
         out_file="$3"
@@ -26,11 +27,27 @@ case "${action}" in
         exit $?
         ;;
     --apply-po-merge)
+        # full_name may be invalid
         script="$1"
         in_file="$2"
         out_file="$3"
+        parse_po_stamp="$4"
+        if [[ "${out_file}" -nt "${in_file}" ]] &&
+            [[ "${out_file}" -nt "${script}" ]] &&
+            [[ "${out_file}" -nt "${BASH_SOURCE}" ]] &&
+            [[ "${out_file}" -nt "${parse_po_stamp}" ]]; then
+            echo "${out_file} is already the newest."
+            exit 0;
+        fi
         "${script}" "${parse_cache}" "${po_cache}" -w "${in_file}" "${out_file}"
         exit $?
+        ;;
+    --parse-pos)
+        # full_name may be invalid
+        parse_po_stamp="$1"
+        load_all_pos "${po_cache}" "${parse_cache}"
+        touch "${parse_po_stamp}"
+        exit 0
         ;;
     --add-sources)
         add_sources "$@" || {

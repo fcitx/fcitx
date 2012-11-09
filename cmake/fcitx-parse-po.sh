@@ -72,6 +72,7 @@ load_all_pos() {
             parse_po_file "${prefix}" "${po_file}" "${unique_fname}"
             . "${unique_fname}"
             mv "${unique_fname}" "${po_parse_cache_file}"
+            echo "Finished parsing po file: ${po_file}"
         else
             . "${po_parse_cache_file}"
         fi

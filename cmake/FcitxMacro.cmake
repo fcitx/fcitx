@@ -366,6 +366,8 @@ function(fcitx_translate_add_apply_source in_file out_file)
   get_property(full_name GLOBAL
     PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
   get_property(po_lang_files GLOBAL PROPERTY "FCITX_TRANSLATION_PO_FILES")
+  get_property(pot_target_set GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET")
+  set(parse_po_stamp "${translation_cache_base}/parse_po.stamp")
   set(all_po_files)
   foreach(po_lang_file ${po_lang_files})
     string(REGEX REPLACE "^[^ ]* " "" po_file "${po_lang_file}")
@@ -384,10 +386,20 @@ function(fcitx_translate_add_apply_source in_file out_file)
     if(NOT result)
       add_custom_command(OUTPUT "${out_file}"
         COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
-        "${translation_cache_base}" "${full_name}" --apply-po-merge
-        "${script}" "${in_file}" "${out_file}"
-        DEPENDS "${in_file}" "${script}" "${FCITX_TRANSLATION_SCAN_POT}"
-        ${all_po_files} WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+        "${translation_cache_base}" "." --apply-po-merge
+        "${script}" "${in_file}" "${out_file}" "${parse_po_stamp}"
+        DEPENDS fcitx-parse-po-stamp.target "${in_file}" "${script}"
+        "${FCITX_TRANSLATION_SCAN_POT}" ${all_po_files}
+        WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+      # add_custom_command(OUTPUT "${out_file}"
+      #   COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+      #   "${translation_cache_base}" "."
+      #   --parse-pos "${parse_po_stamp}"
+      #   COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+      #   "${translation_cache_base}" "." --apply-po-merge
+      #   "${script}" "${in_file}" "${out_file}"
+      #   DEPENDS "${in_file}" "${script}" "${FCITX_TRANSLATION_SCAN_POT}"
+      #   ${all_po_files} WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
       return()
     endif()
   endforeach()
@@ -429,6 +441,7 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   __fcitx_translate_add_sources_internal(${sources})
   get_property(po_lang_files GLOBAL PROPERTY "FCITX_TRANSLATION_PO_FILES")
   set(all_mo_files)
+  set(all_po_files)
   foreach(po_lang_file ${po_lang_files})
     string(REGEX REPLACE "^[^ ]* " "" po_file "${po_lang_file}")
     string(REGEX REPLACE " .*$" "" po_lang "${po_lang_file}")
@@ -441,7 +454,14 @@ function(fcitx_translate_set_pot_target target domain pot_file)
     install(FILES "${po_dir}/${domain}.mo"
       DESTINATION "share/locale/${po_lang}/LC_MESSAGES")
     list(APPEND all_mo_files "${po_dir}/${domain}.mo")
+    list(APPEND all_po_files "${po_file}")
   endforeach()
+  set(parse_po_stamp "${translation_cache_base}/parse_po.stamp")
+  add_custom_target(fcitx-parse-po-stamp.target ALL
+    COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+    "${translation_cache_base}" "${full_name}" --parse-pos "${parse_po_stamp}"
+    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+    DEPENDS ${all_po_files})
   add_custom_target(fcitx-compile-mo.target ALL
     DEPENDS ${all_mo_files})
 endfunction()
