@@ -52,12 +52,11 @@ lang_to_prefix() {
 
 load_all_pos() {
     local po_cache="$1"
-    local cache_base="$2"
+    local po_parse_cache_dir="$2"
     local po_lang
     local po_file
     local prefix
     local po_parse_cache_file
-    local po_parse_cache_dir="${cache_base}/fcitx_lang_parse"
     mkdir -p "${po_parse_cache_dir}"
     local line
     local lines

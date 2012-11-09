@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cache_base="$1"
+parse_cache="$1"
 po_cache="$2"
 action="$3"
 in_file="$4"
@@ -54,7 +54,7 @@ case "${action}" in
         exit 1
         ;;
     -w)
-        load_all_pos "${po_cache}" "${cache_base}"
+        load_all_pos "${po_cache}" "${parse_cache}"
         merge_config "${in_file}" "${out_file}"
         exit 0
         ;;

@@ -68,7 +68,8 @@ function(__fcitx_cmake_init)
   add_custom_target(fcitx-modules.target ALL)
   add_custom_target(fcitx-scan-addons.target)
   add_dependencies(fcitx-modules.target fcitx-scan-addons.target)
-  set(translation_cache_base "${PROJECT_BINARY_DIR}")
+  set(translation_cache_base "${PROJECT_BINARY_DIR}/fcitx_po_cache")
+  file(MAKE_DIRECTORY "${translation_cache_base}")
   set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_CACHE_BASE"
     "${translation_cache_base}")
   get_property(full_name GLOBAL
@@ -362,8 +363,8 @@ function(fcitx_translate_add_apply_source in_file out_file)
   get_filename_component(out_file "${out_file}" ABSOLUTE)
   get_property(translation_cache_base GLOBAL
     PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
-  set(po_cache "${translation_cache_base}/fcitx-translation-po-cache.txt")
-
+  get_property(full_name GLOBAL
+    PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
   get_property(po_lang_files GLOBAL PROPERTY "FCITX_TRANSLATION_PO_FILES")
   set(all_po_files)
   foreach(po_lang_file ${po_lang_files})
@@ -377,15 +378,16 @@ function(fcitx_translate_add_apply_source in_file out_file)
   endif()
 
   foreach(script ${scripts})
-    execute_process(COMMAND "${script}" "${translation_cache_base}"
-      "${po_cache}" -c "${in_file}" "${out_file}"
-      RESULT_VARIABLE result)
+    execute_process(COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+      "${translation_cache_base}" "${full_name}" --check-apply-handler
+      "${script}" "${in_file}" "${out_file}" RESULT_VARIABLE result)
     if(NOT result)
       add_custom_command(OUTPUT "${out_file}"
-        COMMAND "${script}" "${translation_cache_base}" "${po_cache}"
-        -w "${in_file}" "${out_file}"
-        DEPENDS "${in_file}" "${script}" ${all_po_files}
-        WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+        COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
+        "${translation_cache_base}" "${full_name}" --apply-po-merge
+        "${script}" "${in_file}" "${out_file}"
+        DEPENDS "${in_file}" "${script}" "${FCITX_TRANSLATION_SCAN_POT}"
+        ${all_po_files} WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
       return()
     endif()
   endforeach()
@@ -419,8 +421,7 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_DOMAIN" "${domain}")
   add_custom_target(fcitx-translate-pot.target
     COMMAND "${FCITX_TRANSLATION_SCAN_POT}"
-    "${translation_cache_base}"
-    "${full_name}" --pot
+    "${translation_cache_base}" "${full_name}" --pot
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
   add_custom_target("${target}")
   add_dependencies("${target}" fcitx-translate-pot.target)
@@ -431,7 +432,7 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   foreach(po_lang_file ${po_lang_files})
     string(REGEX REPLACE "^[^ ]* " "" po_file "${po_lang_file}")
     string(REGEX REPLACE " .*$" "" po_lang "${po_lang_file}")
-    set(po_dir "${translation_cache_base}/fcitx_mo/${po_lang}")
+    set(po_dir "${translation_cache_base}/mo/${po_lang}")
     add_custom_command(OUTPUT "${po_dir}/${domain}.mo"
       COMMAND mkdir -p "${po_dir}"
       COMMAND "${GETTEXT_MSGFMT_EXECUTABLE}"

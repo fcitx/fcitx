@@ -8,15 +8,30 @@ shift 3 || exit 1
 
 . "$(dirname ${BASH_SOURCE})/fcitx-write-po.sh"
 
-src_cache="${cache_base}/fcitx-translation-src-cache.txt"
-po_cache="${cache_base}/fcitx-translation-po-cache.txt"
-handler_cache="${cache_base}/fcitx-translation-handler-cache.txt"
+src_cache="${cache_base}/sources-cache.txt"
+po_cache="${cache_base}/pos-cache.txt"
+handler_cache="${cache_base}/handlers-cache.txt"
+parse_cache="${cache_base}/parse_po_cache"
 
 add_sources() {
     realpath -es "$@" >> "${src_cache}" || exit 1
 }
 
 case "${action}" in
+    --check-apply-handler)
+        script="$1"
+        in_file="$2"
+        out_file="$3"
+        "${script}" "${parse_cache}" "${po_cache}" -c "${in_file}" "${out_file}"
+        exit $?
+        ;;
+    --apply-po-merge)
+        script="$1"
+        in_file="$2"
+        out_file="$3"
+        "${script}" "${parse_cache}" "${po_cache}" -w "${in_file}" "${out_file}"
+        exit $?
+        ;;
     --add-sources)
         add_sources "$@" || {
             rm -f "${src_cache}"
