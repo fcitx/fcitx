@@ -63,6 +63,7 @@ fcitx_desktop_parse_new_group(const FcitxDesktopVTable *vtable, void *owner)
     }
     group->vtable = vtable;
     group->owner = owner;
+    group->ref_count = 1;
     return group;
 }
 
@@ -78,6 +79,7 @@ fcitx_desktop_parse_new_entry(const FcitxDesktopVTable *vtable, void *owner)
     }
     entry->vtable = vtable;
     entry->owner = owner;
+    entry->ref_count = 1;
     return entry;
 }
 
@@ -105,6 +107,8 @@ fcitx_desktop_entry_reset(FcitxDesktopEntry *entry)
 {
     utarray_clear(&entry->comments);
     entry->flags = 0;
+    entry->prev = NULL;
+    entry->next = NULL;
 }
 
 static void
@@ -115,6 +119,10 @@ fcitx_desktop_group_reset(FcitxDesktopGroup *group)
     for (entry = group->first;entry;entry = entry->next)
         fcitx_desktop_entry_reset(entry);
     group->flags = 0;
+    group->prev = NULL;
+    group->next = NULL;
+    group->first = NULL;
+    group->last = NULL;
 }
 
 static void
@@ -158,10 +166,8 @@ fcitx_desktop_entry_key_len(const char *str)
 }
 
 static void
-fcitx_desktop_group_hash_remove_entry(FcitxDesktopGroup *group,
-                                      FcitxDesktopEntry *entry)
+fcitx_desktop_entry_free(FcitxDesktopEntry *entry)
 {
-    HASH_DEL(group->entries, entry);
     free(entry->name);
     fcitx_utils_free(entry->value);
     utarray_done(&entry->comments);
@@ -172,13 +178,36 @@ fcitx_desktop_group_hash_remove_entry(FcitxDesktopGroup *group,
     }
 }
 
+FCITX_EXPORT_API void
+fcitx_desktop_entry_unref(FcitxDesktopEntry *entry)
+{
+    if (fcitx_utils_atomic_add(&entry->ref_count, -1) <= 1) {
+        fcitx_desktop_entry_free(entry);
+    }
+}
+
+FCITX_EXPORT_API FcitxDesktopEntry*
+fcitx_desktop_entry_ref(FcitxDesktopEntry *entry)
+{
+    fcitx_utils_atomic_add(&entry->ref_count, 1);
+    return entry;
+}
+
 static void
-fcitx_desktop_file_hash_remove_group(FcitxDesktopFile *file,
-                                     FcitxDesktopGroup *group)
+fcitx_desktop_group_hash_remove_entry(FcitxDesktopGroup *group,
+                                      FcitxDesktopEntry *entry)
+{
+    HASH_DEL(group->entries, entry);
+    entry->prev = NULL;
+    entry->next = NULL;
+    fcitx_desktop_entry_unref(entry);
+}
+
+static void
+fcitx_desktop_group_free(FcitxDesktopGroup *group)
 {
     FcitxDesktopEntry *entry;
     FcitxDesktopEntry *next;
-    HASH_DEL(file->groups, group);
     for (entry = group->entries;entry;entry = next) {
         next = entry->hh.next;
         fcitx_desktop_group_hash_remove_entry(group, entry);
@@ -190,6 +219,31 @@ fcitx_desktop_file_hash_remove_group(FcitxDesktopFile *file,
     } else {
         free(group);
     }
+}
+
+FCITX_EXPORT_API void
+fcitx_desktop_group_unref(FcitxDesktopGroup *group)
+{
+    if (fcitx_utils_atomic_add(&group->ref_count, -1) <= 1) {
+        fcitx_desktop_group_free(group);
+    }
+}
+
+FCITX_EXPORT_API FcitxDesktopGroup*
+fcitx_desktop_group_ref(FcitxDesktopGroup *group)
+{
+    fcitx_utils_atomic_add(&group->ref_count, 1);
+    return group;
+}
+
+static void
+fcitx_desktop_file_hash_remove_group(FcitxDesktopFile *file,
+                                     FcitxDesktopGroup *group)
+{
+    HASH_DEL(file->groups, group);
+    group->prev = NULL;
+    group->next = NULL;
+    fcitx_desktop_group_unref(group);
 }
 
 FCITX_EXPORT_API void

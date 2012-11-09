@@ -20,6 +20,7 @@
 #ifndef _FCITX_DESKTOP_PARSE_H_
 #define _FCITX_DESKTOP_PARSE_H_
 
+#include <stdint.h>
 #include <fcitx-utils/utils.h>
 
 typedef struct _FcitxDesktopFile FcitxDesktopFile;
@@ -37,40 +38,48 @@ typedef struct {
 } FcitxDesktopVTable;
 
 struct _FcitxDesktopFile {
-    const FcitxDesktopVTable *vtable;
-    FcitxDesktopGroup *groups;
     FcitxDesktopGroup *first;
     FcitxDesktopGroup *last;
     UT_array comments; /* comment at the end of the file */
+
+    /* private */
+    const FcitxDesktopVTable *vtable;
+    FcitxDesktopGroup *groups;
     void *owner;
     void *padding[3];
 };
 
 struct _FcitxDesktopGroup {
-    const FcitxDesktopVTable *vtable;
-    FcitxDesktopEntry *entries;
     FcitxDesktopEntry *first;
     FcitxDesktopEntry *last;
     FcitxDesktopGroup *prev;
     FcitxDesktopGroup *next;
-    UT_hash_handle hh;
-    char *name; /* DO NOT touch */
+    char *name; /* Read-only */
     UT_array comments; /* comment before the group name */
-    uint32_t flags; /* private */
+
+    /* private */
+    const FcitxDesktopVTable *vtable;
+    FcitxDesktopEntry *entries;
+    UT_hash_handle hh;
+    uint32_t flags;
     void *owner;
+    int32_t ref_count;
     void *padding[3];
 };
 
 struct _FcitxDesktopEntry {
-    const FcitxDesktopVTable *vtable;
     FcitxDesktopEntry *prev;
     FcitxDesktopEntry *next;
-    UT_hash_handle hh;
-    char *name; /* DO NOT touch */
-    char *value;
+    char *name; /* Read-only */
     UT_array comments; /* comment before the entry */
-    uint32_t flags; /* private */
+    char *value;
+
+    /* private */
+    const FcitxDesktopVTable *vtable;
+    UT_hash_handle hh;
+    uint32_t flags;
     void *owner;
+    int32_t ref_count;
     void *padding[3];
 };
 
@@ -261,6 +270,11 @@ extern "C" {
                                             FcitxDesktopGroup *group);
     boolean fcitx_desktop_group_delete_entry(FcitxDesktopGroup *group,
                                              FcitxDesktopEntry *entry);
+    void fcitx_desktop_entry_unref(FcitxDesktopEntry *entry);
+    FcitxDesktopEntry *fcitx_desktop_entry_ref(FcitxDesktopEntry *entry);
+    void fcitx_desktop_group_unref(FcitxDesktopGroup *group);
+    FcitxDesktopGroup *fcitx_desktop_group_ref(FcitxDesktopGroup *group);
+
 #ifdef __cplusplus
 }
 #endif
