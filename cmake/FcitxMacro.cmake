@@ -26,8 +26,89 @@
 # (To distribute this file outside of Fcitx, substitute the full
 #  License text for the above reference.)
 
-include(CMakeParseArguments)
 find_package(Gettext REQUIRED)
+
+# The following definition of fcitx_parse_arguments is copied from
+# CMakeParseArguments.cmake, which is a standard cmake module since 2.8.3,
+# with some minor format changes and is renamed to avoid conflict with newer
+# cmake versions. (see cmake documentation for usage)
+# It is included to lower the required cmake version.
+
+#=============================================================================
+# Copyright 2010 Alexander Neundorf <neundorf@kde.org>
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+# (To distribute this file outside of CMake, substitute the full
+#  License text for the above reference.)
+
+function(fcitx_parse_arguments prefix _optionNames
+    _singleArgNames _multiArgNames)
+  # first set all result variables to empty/FALSE
+  foreach(arg_name ${_singleArgNames} ${_multiArgNames})
+    set(${prefix}_${arg_name})
+  endforeach()
+
+  foreach(option ${_optionNames})
+    set(${prefix}_${option} FALSE)
+  endforeach()
+
+  set(${prefix}_UNPARSED_ARGUMENTS)
+
+  set(insideValues FALSE)
+  set(currentArgName)
+
+  # now iterate over all arguments and fill the result variables
+  foreach(currentArg ${ARGN})
+    # ... then this marks the end of the arguments belonging to this keyword
+    list(FIND _optionNames "${currentArg}" optionIndex)
+    # ... then this marks the end of the arguments belonging to this keyword
+    list(FIND _singleArgNames "${currentArg}" singleArgIndex)
+    # ... then this marks the end of the arguments belonging to this keyword
+    list(FIND _multiArgNames "${currentArg}" multiArgIndex)
+
+    if(${optionIndex} EQUAL -1 AND
+        ${singleArgIndex} EQUAL -1 AND
+        ${multiArgIndex} EQUAL -1)
+      if(insideValues)
+        if("${insideValues}" STREQUAL "SINGLE")
+          set(${prefix}_${currentArgName} ${currentArg})
+          set(insideValues FALSE)
+        elseif("${insideValues}" STREQUAL "MULTI")
+          list(APPEND ${prefix}_${currentArgName} ${currentArg})
+        endif()
+      else()
+        list(APPEND ${prefix}_UNPARSED_ARGUMENTS ${currentArg})
+      endif()
+    else()
+      if(NOT ${optionIndex} EQUAL -1)
+        set(${prefix}_${currentArg} TRUE)
+        set(insideValues FALSE)
+      elseif(NOT ${singleArgIndex} EQUAL -1)
+        set(currentArgName ${currentArg})
+        set(${prefix}_${currentArgName})
+        set(insideValues "SINGLE")
+      elseif(NOT ${multiArgIndex} EQUAL -1)
+        set(currentArgName ${currentArg})
+        set(${prefix}_${currentArgName})
+        set(insideValues "MULTI")
+      endif()
+    endif()
+
+  endforeach()
+
+  # propagate the result variables to the caller:
+  foreach(arg_name ${_singleArgNames} ${_multiArgNames} ${_optionNames})
+    set(${prefix}_${arg_name}  ${${prefix}_${arg_name}} PARENT_SCOPE)
+  endforeach()
+  set(${prefix}_UNPARSED_ARGUMENTS ${${prefix}_UNPARSED_ARGUMENTS} PARENT_SCOPE)
+endfunction()
+
 
 set(FCITX_MACRO_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 set(FCITX_CMAKE_HELPER_SCRIPT "${FCITX_MACRO_CMAKE_DIR}/fcitx-cmake-helper.sh"
@@ -132,7 +213,7 @@ function(fcitx_add_addon_full short_name)
     CONF_SRC DESC_SRC UNIQUE_NAME LIB_NAME)
   set(multi_value_args SOURCES HEADERS EXTRA_DESC EXTRA_PO LINK_LIBS
     DEPENDS IM_CONFIG)
-  cmake_parse_arguments(FCITX_ADDON
+  fcitx_parse_arguments(FCITX_ADDON
     "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
   if(FCITX_ADDON_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR

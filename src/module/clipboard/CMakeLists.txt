@@ -5,7 +5,7 @@ set(FCITX_CLIPBOARD_SOURCES
 
 # do not disable clipboard-x11 even if x11 is diabled, since fcitx-scanner and
 # fcitx_add_addon_full is capable for doing this.
-if(on)
+if(1)
   set(FCITX_CLIPBOARD_SOURCES ${FCITX_CLIPBOARD_SOURCES} clipboard-x11.c)
 endif()
 
