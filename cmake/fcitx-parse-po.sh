@@ -59,9 +59,7 @@ fcitx_load_all_pos() {
     local prefix
     local po_parse_cache_file
     local line
-    local lines
-    mapfile -t lines < "${po_cache}"
-    for line in "${lines[@]}"; do
+    while read line; do
         po_lang="${line%% *}"
         po_file="${line#* }"
         prefix="$(fcitx_lang_to_prefix "${po_lang}")"
@@ -77,7 +75,9 @@ fcitx_load_all_pos() {
             . "${po_parse_cache_file}"
         fi
         all_po_langs=("${all_po_langs[@]}" "${po_lang}")
-    done
+    done <<EOF
+$(cat "${po_cache}")
+EOF
 }
 
 fcitx_find_str_for_lang() {

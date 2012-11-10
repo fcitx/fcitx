@@ -18,9 +18,7 @@ merge_config() {
     local msgstr
     local lang
     local line
-    local lines
-    mapfile -t lines < "${in_file}"
-    for line in "${lines[@]}"; do
+    while read line; do
         case "${line}" in
             _*=*)
                 line="${line#_}"
@@ -39,7 +37,9 @@ merge_config() {
                 echo "${line}"
                 ;;
         esac
-    done > "${out_file}"
+    done > "${out_file}" <<EOF
+$(cat "${in_file}")
+EOF
 }
 
 case "${action}" in

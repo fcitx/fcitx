@@ -19,20 +19,18 @@ add_sources() {
 
 generate_pot() {
     file_list=()
-    mapfile -t lines <<EOF
-$(sort -u "${src_cache}")
-EOF
-    for file in "${lines[@]}"; do
+    while read file; do
         file_list=("${file_list[@]}"
             "$(realpath -es --relative-to="${PWD}" "${file}")")
-    done
+    done <<EOF
+$(sort -u "${src_cache}")
+EOF
     po_dir="${cache_base}/sub_pos"
     mkdir -p "${po_dir}"
     po_list=()
     po_num=0
-    mapfile -t lines < "${handler_cache}"
     echo "Classifying Files to be translated..."
-    for handler in "${lines[@]}"; do
+    while read handler; do
         file_left=()
         handled_list=()
         for file in "${file_list[@]}"; do
@@ -50,7 +48,9 @@ EOF
         po_filename="${po_dir}/subpo_${po_num}.po"
         "${handler}" -w "${po_filename}" "${handled_list[@]}"
         po_list=("${po_list[@]}" "${po_filename}")
-    done
+    done <<EOF
+$(cat "${handler_cache}")
+EOF
 
     if ! [[ -z "${file_list[*]}" ]]; then
         echo "Warning: Following files are added but not handled."
@@ -60,14 +60,15 @@ EOF
     fi
     echo "Merging sub po files..."
     fcitx_merge_all_pos "${pot_file}" "${po_list[@]}"
-    mapfile -t lines < "${po_cache}"
-    for line in "${lines[@]}"; do
+    while read line; do
         po_lang="${line%% *}"
         po_file="${line#* }"
         echo "Updating ${po_file} ..."
         msgmerge --quiet --update --backup=none -s --lang="${po_lang}" \
             "${po_file}" "${pot_file}"
-    done
+    done <<EOF
+$(cat "${po_cache}")
+EOF
 }
 
 case "${action}" in
@@ -116,15 +117,16 @@ case "${action}" in
         exit 0
         ;;
     --uninstall)
-        mapfile -t installed_files < install_manifest.txt || exit 1
-        for file in "${installed_files[@]}"; do
+        while read file; do
             file="${DESTDIR}/${file}"
             [[ -f "${file}" ]] || [[ -L "${file}" ]] || {
                 echo "File: ${file}, doesn't exist or is not a regular file."
                 continue
             }
             rm -v "${file}" || exit 1
-        done
+        done <<EOF
+$(cat install_manifest.txt)
+EOF
         exit 0
         ;;
     *)

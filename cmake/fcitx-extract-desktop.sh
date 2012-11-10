@@ -24,9 +24,7 @@ extract_desktop() {
     local out_file="$2"
     local line_num=0
     local line
-    local lines
-    mapfile -t lines < "${in_file}"
-    for line in "${lines[@]}"; do
+    while read line; do
         ((line_num++))
         case "${line}" in
             _*=*)
@@ -41,7 +39,9 @@ extract_desktop() {
                 extract_subconfig "${sub_config}" "${in_file}" "${line_num}"
                 ;;
         esac
-    done
+    done <<EOF
+$(cat "${in_file}")
+EOF
 }
 
 case "${action}" in
