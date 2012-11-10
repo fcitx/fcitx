@@ -12,7 +12,7 @@ extract_confdesc() {
     local line_num=0
     local line
     while read line; do
-        ((line_num++))
+        : $((line_num++))
         if [[ $line =~ ^\[(.*)/(.*)\]$ ]]; then
             fcitx_record_po_msg "${in_file}" "${BASH_REMATCH[1]}" "${line_num}"
             # fcitx_record_po_msg "${in_file}" "${BASH_REMATCH[2]}" "${line_num}"

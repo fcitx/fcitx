@@ -25,7 +25,7 @@ extract_desktop() {
     local line_num=0
     local line
     while read line; do
-        ((line_num++))
+        : $((line_num++))
         case "${line}" in
             _*=*)
                 line="${line#_}"
