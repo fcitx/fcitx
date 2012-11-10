@@ -38,7 +38,7 @@
 #include "clipboard-x11.h"
 /* #endif */
 
-#define FCITX_CLIPBOARD_BLANK " \b\f\v\r\t"
+#define FCITX_CLIPBOARD_BLANK " \b\f\v\r\t\n"
 
 CONFIG_DEFINE_LOAD_AND_SAVE(FcitxClipboard, FcitxClipboardConfig,
                             "fcitx-clipboard");

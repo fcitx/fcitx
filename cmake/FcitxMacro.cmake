@@ -208,6 +208,7 @@ __fcitx_cmake_init()
 #     EXTRA_PO: extra files to scan string for translation
 #     LINK_LIBS: external libraies to link
 #     DEPENDS: extra targets or files the addon library should depend on.
+#     IM_CONFIG: input method config files.
 function(fcitx_add_addon_full short_name)
   set(options NO_INSTALL SCAN DESC SCAN_IN)
   set(one_value_args HEADER_DIR FXADDON_SRC FXADDON_GEN
