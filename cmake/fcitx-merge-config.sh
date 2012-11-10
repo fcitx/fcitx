@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 parse_cache="$1"
 po_cache="$2"
@@ -8,7 +8,7 @@ out_file="$5"
 
 shift 5 || exit 1
 
-. "$(dirname ${BASH_SOURCE})/fcitx-parse-po.sh"
+. "$(dirname "$(realpath -es $0)")/fcitx-parse-po.sh"
 
 merge_config() {
     local in_file="${1}"
@@ -25,9 +25,9 @@ merge_config() {
                 echo "${line}"
                 key="${line%%=*}"
                 msgid="${line#*=}"
-                for lang in "${all_po_langs[@]}"; do
+                for lang in $all_po_langs; do
                     msgstr="$(fcitx_find_str_for_lang "${lang}" "${msgid}")"
-                    if [[ -z ${msgstr} ]]; then
+                    if [ -z "${msgstr}" ]; then
                         continue
                     fi
                     echo "${key}[${lang}]=${msgstr}"

@@ -502,8 +502,10 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_FILE" "${full_name}")
   set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_NAME" "${target}")
   set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_DOMAIN" "${domain}")
+
+  # make pot will require bash, but this is only a dev time dependency.
   add_custom_target(fcitx-translate-pot.target
-    COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}"
+    COMMAND bash "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}" "${full_name}" --pot
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
   add_custom_target("${target}")

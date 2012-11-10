@@ -1,6 +1,4 @@
-#!/bin/bash
-
-filter_src="$(dirname ${BASH_SOURCE})/fcitx-filter-po.sh"
+filter_src="$(dirname "$(realpath -es $0)")/fcitx-filter-po.sh"
 
 fcitx_quote () {
     local quoted=${1//\'/\'\\\'\'};
@@ -39,10 +37,10 @@ fcitx_find_str() {
     local prefix="${1}"
     local msgid="${2}"
     local varname="$(fcitx_msgid_to_varname "${prefix}" "${msgid}")"
-    echo -n "${!varname}" | base64 -d
+    eval "echo -n \"\${${varname}}\"" | base64 -d
 }
 
-all_po_langs=()
+all_po_langs=''
 
 fcitx_lang_to_prefix() {
     local lang="${1}"
@@ -64,7 +62,8 @@ fcitx_load_all_pos() {
         po_file="${line#* }"
         prefix="$(fcitx_lang_to_prefix "${po_lang}")"
         po_parse_cache_file="${po_parse_cache_dir}/${prefix}.fxpo"
-        if [[ "${po_parse_cache_file}" -ot "${po_file}" ]]; then
+        if [ "${po_parse_cache_file}" -ot "${po_file}" ] ||
+            ! [ -f "${po_parse_cache_file}" ]; then
             echo "Parsing po file: ${po_file}"
             local unique_fname="${po_parse_cache_file}.$$"
             fcitx_parse_po_file "${prefix}" "${po_file}" "${unique_fname}"
@@ -74,7 +73,7 @@ fcitx_load_all_pos() {
         else
             . "${po_parse_cache_file}"
         fi
-        all_po_langs=("${all_po_langs[@]}" "${po_lang}")
+        all_po_langs="${all_po_langs} ${po_lang}"
     done <<EOF
 $(cat "${po_cache}")
 EOF

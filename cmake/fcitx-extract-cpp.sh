@@ -4,7 +4,7 @@ action="$1"
 
 shift 1 || exit 1
 
-. "$(dirname ${BASH_SOURCE})/fcitx-write-po.sh"
+. "$(dirname "${BASH_SOURCE}")/fcitx-write-po.sh"
 
 case "${action}" in
     -c)

@@ -1,6 +1,4 @@
-#!/bin/bash
-
-. "$(dirname ${BASH_SOURCE})/fcitx-parse-po.sh"
+. "$(dirname "${BASH_SOURCE}")/fcitx-parse-po.sh"
 
 fcitx_write_po_header() {
     local out_file="$1"
@@ -78,4 +76,58 @@ fcitx_merge_all_pos() {
     else
         msgcat -o "${pot_file}" --use-first --to-code=utf-8 "${po_list[@]}"
     fi
+}
+
+fcitx_generate_pot() {
+    file_list=()
+    while read file; do
+        file_list=("${file_list[@]}"
+            "$(realpath -es --relative-to="${PWD}" "${file}")")
+    done <<EOF
+$(sort -u "${src_cache}")
+EOF
+    po_dir="${cache_base}/sub_pos"
+    mkdir -p "${po_dir}"
+    po_list=()
+    po_num=0
+    echo "Classifying Files to be translated..."
+    while read handler; do
+        file_left=()
+        handled_list=()
+        for file in "${file_list[@]}"; do
+            if "${handler}" -c "${file}" &> /dev/null; then
+                handled_list=("${handled_list[@]}" "${file}")
+            else
+                file_left=("${file_left[@]}" "${file}")
+            fi
+        done
+        file_list=("${file_left[@]}")
+        if [[ -z "${handled_list[*]}" ]]; then
+            continue
+        fi
+        let "po_num++"
+        po_filename="${po_dir}/subpo_${po_num}.po"
+        "${handler}" -w "${po_filename}" "${handled_list[@]}"
+        po_list=("${po_list[@]}" "${po_filename}")
+    done <<EOF
+$(cat "${handler_cache}")
+EOF
+
+    if ! [[ -z "${file_list[*]}" ]]; then
+        echo "Warning: Following files are added but not handled."
+        for extra_file in "${file_list[@]}"; do
+            echo $'\t'"${extra_file}"
+        done
+    fi
+    echo "Merging sub po files..."
+    fcitx_merge_all_pos "${pot_file}" "${po_list[@]}"
+    while read line; do
+        po_lang="${line%% *}"
+        po_file="${line#* }"
+        echo "Updating ${po_file} ..."
+        msgmerge --quiet --update --backup=none -s --lang="${po_lang}" \
+            "${po_file}" "${pot_file}"
+    done <<EOF
+$(cat "${po_cache}")
+EOF
 }

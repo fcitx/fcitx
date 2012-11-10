@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 cache_base="$1"
 pot_file="$2"
@@ -6,7 +6,7 @@ action="$3"
 
 shift 3 || exit 1
 
-. "$(dirname ${BASH_SOURCE})/fcitx-write-po.sh"
+. "$(dirname "$(realpath -es $0)")/fcitx-parse-po.sh"
 
 src_cache="${cache_base}/sources-cache.txt"
 po_cache="${cache_base}/pos-cache.txt"
@@ -15,60 +15,6 @@ parse_cache="${cache_base}/parse_po_cache"
 
 add_sources() {
     realpath -es "$@" >> "${src_cache}" || exit 1
-}
-
-generate_pot() {
-    file_list=()
-    while read file; do
-        file_list=("${file_list[@]}"
-            "$(realpath -es --relative-to="${PWD}" "${file}")")
-    done <<EOF
-$(sort -u "${src_cache}")
-EOF
-    po_dir="${cache_base}/sub_pos"
-    mkdir -p "${po_dir}"
-    po_list=()
-    po_num=0
-    echo "Classifying Files to be translated..."
-    while read handler; do
-        file_left=()
-        handled_list=()
-        for file in "${file_list[@]}"; do
-            if "${handler}" -c "${file}" &> /dev/null; then
-                handled_list=("${handled_list[@]}" "${file}")
-            else
-                file_left=("${file_left[@]}" "${file}")
-            fi
-        done
-        file_list=("${file_left[@]}")
-        if [[ -z "${handled_list[*]}" ]]; then
-            continue
-        fi
-        let "po_num++"
-        po_filename="${po_dir}/subpo_${po_num}.po"
-        "${handler}" -w "${po_filename}" "${handled_list[@]}"
-        po_list=("${po_list[@]}" "${po_filename}")
-    done <<EOF
-$(cat "${handler_cache}")
-EOF
-
-    if ! [[ -z "${file_list[*]}" ]]; then
-        echo "Warning: Following files are added but not handled."
-        for extra_file in "${file_list[@]}"; do
-            echo $'\t'"${extra_file}"
-        done
-    fi
-    echo "Merging sub po files..."
-    fcitx_merge_all_pos "${pot_file}" "${po_list[@]}"
-    while read line; do
-        po_lang="${line%% *}"
-        po_file="${line#* }"
-        echo "Updating ${po_file} ..."
-        msgmerge --quiet --update --backup=none -s --lang="${po_lang}" \
-            "${po_file}" "${pot_file}"
-    done <<EOF
-$(cat "${po_cache}")
-EOF
 }
 
 case "${action}" in
@@ -109,7 +55,8 @@ case "${action}" in
         exit 0
         ;;
     --pot)
-        generate_pot
+        . "$(dirname "${BASH_SOURCE}")/fcitx-write-po.sh"
+        fcitx_generate_pot
         exit 0
         ;;
     --clean)
@@ -119,7 +66,7 @@ case "${action}" in
     --uninstall)
         while read file; do
             file="${DESTDIR}/${file}"
-            [[ -f "${file}" ]] || [[ -L "${file}" ]] || {
+            [ -f "${file}" ] || [ -L "${file}" ] || {
                 echo "File: ${file}, doesn't exist or is not a regular file."
                 continue
             }
