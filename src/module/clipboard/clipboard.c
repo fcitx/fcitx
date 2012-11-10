@@ -305,11 +305,13 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
     if (!((clipboard->primary.len && config->use_primary) ||
           clipboard->clp_hist_len))
         return false;
+    FcitxInstance *instance = clipboard->owner;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    if (FcitxInputStateGetRawInputBufferSize(input))
+        return false;
     if (!FcitxHotkeyIsHotKey(sym, state, config->trigger_key))
         return false;
     clipboard->active = true;
-    FcitxInstance *instance = clipboard->owner;
-    FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
     FcitxGlobalConfig *gconfig = FcitxInstanceGetGlobalConfig(instance);
     int i;
