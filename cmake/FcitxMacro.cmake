@@ -113,6 +113,7 @@ endfunction()
 set(FCITX_MACRO_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 set(FCITX_CMAKE_HELPER_SCRIPT "${FCITX_MACRO_CMAKE_DIR}/fcitx-cmake-helper.sh"
   CACHE INTERNAL "fcitx-scan-pot" FORCE)
+mark_as_advanced(FORCE FCITX_CMAKE_HELPER_SCRIPT)
 set(FCITX_TRANSLATION_MERGE_CONFIG
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-merge-config.sh")
 set(FCITX_TRANSLATION_EXTRACT_CPP
@@ -333,6 +334,8 @@ function(__fcitx_install_addon_desc target_name)
     DESTINATION "${FCITX4_CONFIGDESC_INSTALL_DIR}")
 endfunction()
 
+# Add additional config-desc files, the file will be added to extracte
+# po strings from and will be installed
 function(fcitx_install_addon_desc)
   __fcitx_addon_get_unique_name(install-desc desc_target)
   add_custom_target("${desc_target}" ALL)
@@ -420,7 +423,18 @@ function(fcitx_translate_add_sources)
 endfunction()
 
 # Should be used in cmake modules, add a handler script to generate a po file
-# from a set of certain type of files, the script must be executable
+# from a set of certain type of files, the script must be executable.
+#
+# When classifying source files, the script will be called with -c as the first
+# arguement and the file name as the second one. The script should return 0 in
+# this case to indicate a source file can be handled and should return non-zero
+# otherwise.
+#
+# When extracting po strings from source files, the script will be called with
+# first argument -w, the second argument the file name of the output po file
+# followed by a list of source files to extract po strings from. The script
+# should extract po strings from the given source files and write the result
+# to the po file.
 function(_fcitx_translate_add_handler script)
   get_property(translation_cache_base GLOBAL
     PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
@@ -437,6 +451,10 @@ _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_CONFDESC}")
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_PO}")
 
 # Add files to apply translation
+# this will generate a rule to generate ${out_file} from ${in_file} by
+# l10n it using the handler script found.
+# Proper handler script has to be added before this macro is called, or there
+# will be a FATAL_ERROR
 function(fcitx_translate_add_apply_source in_file out_file)
   get_property(scripts GLOBAL
     PROPERTY FCITX_TRANSLATION_APPLY_HANDLERS)
@@ -480,7 +498,21 @@ endfunction()
 
 # Should be used in cmake modules, add a handler script to update a set of
 # certain type of files from the translated mo files.
-# the script must be executable
+# The script must be executable.
+#
+# When classifying source files, the script will be called with first arguement
+# the directory name po's parse results are in, the second arguement a file
+# containing space separated language code and translated po file name
+# in each line, the third argument -c, followed by the file name of the input
+# and output files (argument 4 and 5). The script should decide from the
+# filename of input and output files to decide whether it can handle this
+# conversion and should return 0 if it can or non-zero otherwise.
+#
+# When doing the l18n conversion, the script will be called with arguments
+# the same with the previous case except the thrid argument is -w. The script
+# should read language code list from the file given in the second argument
+# fetch translation from either files in the first argument or po files in
+# the second argument and then use these to l18n input file to output files.
 function(_fcitx_translate_add_apply_handler script)
   get_filename_component(script "${script}" ABSOLUTE)
   set_property(GLOBAL APPEND PROPERTY "FCITX_TRANSLATION_APPLY_HANDLERS"
@@ -490,6 +522,11 @@ _fcitx_translate_add_apply_handler("${FCITX_TRANSLATION_MERGE_CONFIG}")
 
 # Set the pot file and the target to update it
 # (the second time it is called in one project will raise an error)
+# A target with name ${target} will be added to update ${pot_file} and
+# po files added by fcitx_translate_add_po_file from all the sources added by
+# `fcitx_translate_add_sources`.
+# This also generate rules and targets to generate mo files from po files
+# and install them to the given ${domain}
 function(fcitx_translate_set_pot_target target domain pot_file)
   get_property(pot_target_set GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET")
   if(pot_target_set)
@@ -538,8 +575,10 @@ function(fcitx_translate_set_pot_target target domain pot_file)
     DEPENDS ${all_mo_files})
 endfunction()
 
-# Add translated po files to be updated and installed
-# need to be done before any files that needs to be merged is added
+# Add translated po files to be updated and installed.
+# Need to be done before any files that needs to be l10n'ized is added.
+# (or the recompile dependency won't be correct although there shouldn't be
+# any problem for one-time build.)
 function(fcitx_translate_add_po_file locale po_file)
   get_filename_component(po_file "${po_file}" ABSOLUTE)
   get_property(translation_cache_base GLOBAL
@@ -570,6 +609,7 @@ function(fcitx_translate_add_po_file locale po_file)
   add_custom_target("${po_target}" ALL DEPENDS "${po_dir}/${domain}.mo")
 endfunction()
 
+# Add a uninstall target to the project
 function(_fcitx_add_uninstall_target)
   add_custom_target(uninstall
     COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}" "." "." --uninstall
