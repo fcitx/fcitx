@@ -9,3 +9,7 @@ if (_ENABLE_DBUS AND ENABLE_GLIB2)
     endif (GIO2_FOUND)
 endif (_ENABLE_DBUS AND ENABLE_GLIB2)
 add_subdirectory(fcitx)
+
+if (ENABLE_QT_IM_MODULE)
+    add_subdirectory(fcitx-qt)
+endif (ENABLE_QT_IM_MODULE)

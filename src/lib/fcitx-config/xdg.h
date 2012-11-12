@@ -51,6 +51,14 @@ extern "C"
      **/
     FILE *FcitxXDGGetLibFile(const char *filename, const char *mode, char **retFile);
 
+    /**
+     * Get library path
+     *
+     * @param len length
+     * @return char**
+     **/
+    char** FcitxXDGGetLibPath(size_t* len);
+
 #ifdef FCITX_CONFIG_XDG_DEPRECATED
     /**
      * get a xdg file pointer with given path, if mode contains "w", it will create necessary parent folder,

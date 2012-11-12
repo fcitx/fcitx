@@ -97,6 +97,10 @@ if (ENABLE_ICU)
     find_package(ICU REQUIRED)
 endif (ENABLE_ICU)
 
+if (ENABLE_QT_IM_MODULE)
+find_package(Qt4 4.5 COMPONENTS QtCore QtGui QtDBus REQUIRED)
+endif (ENABLE_QT_IM_MODULE)
+
 FIND_PROGRAM(WGET wget)
 FIND_PROGRAM(TAR tar)
 

@@ -33,6 +33,7 @@
 #include "im/keyboard/fcitx-compose-data.h"
 #include "fcitx-input-context.h"
 #include "keyserver_x11.h"
+#include <fcitx-qt/fcitxconnection.h>
 
 #if defined(Q_WS_X11)
 #include <QX11Info>
@@ -112,140 +113,8 @@ typedef QInputMethodEvent::Attribute QAttribute;
 
 static bool key_filtered = false;
 
-QByteArray QFcitxInputContext::localMachineId()
-{
-#if QT_VERSION >= QT_VERSION_CHECK(4, 8, 0)
-    return QDBusConnection::localMachineId();
-#else
-    QFile file1("/var/lib/dbus/machine-id");
-    QFile file2("/etc/machine-id");
-    QFile* fileToRead = NULL;
-    if (file1.open(QIODevice::ReadOnly)) {
-        fileToRead = &file1;
-    }
-    else if (file2.open(QIODevice::ReadOnly)) {
-        fileToRead = &file2;
-    }
-    if (fileToRead) {
-        QByteArray result = fileToRead->readLine(1024);
-        fileToRead->close();
-        result = result.trimmed();
-        if (!result.isEmpty())
-            return result;
-    }
-    return "machine-id";
-#endif
-}
-
-int QFcitxInputContext::displayNumber() {
-    if (m_displayNumber >= 0)
-        return m_displayNumber;
-    Display * dpy = QX11Info::display();
-    int displayNumber = 0;
-    if (dpy) {
-        char* display = XDisplayString(dpy);
-        if (display) {
-            char* strDisplayNumber = NULL;
-            display = strdup(display);
-            char* p = display;
-            for (; *p != ':' && *p != '\0'; p++);
-
-            if (*p == ':') {
-                *p = '\0';
-                p++;
-                strDisplayNumber = p;
-            }
-            for (; *p != '.' && *p != '\0'; p++);
-
-            if (*p == '.') {
-                *p = '\0';
-            }
-
-            if (strDisplayNumber) {
-                displayNumber = atoi(strDisplayNumber);
-            }
-
-            free(display);
-        }
-    }
-    else
-        displayNumber = fcitx_utils_get_display_number();
-
-    m_displayNumber = displayNumber;
-
-    return displayNumber;
-}
-
-QString
-QFcitxInputContext::socketFile()
-{
-    if (!m_socketFile.isEmpty())
-        return m_socketFile;
-
-    char* addressFile = NULL;
-
-    asprintf(&addressFile, "%s-%d", localMachineId().data(), displayNumber());
-
-    char* file = NULL;
-
-    FcitxXDGGetFileUserWithPrefix("dbus", addressFile, NULL, &file);
-
-    QString path = QString::fromUtf8(file);
-    free(file);
-    free(addressFile);
-
-    m_socketFile = path;
-
-    return m_socketFile;
-
-}
-
-QString
-QFcitxInputContext::address()
-{
-    QString addr;
-    QByteArray addrVar = qgetenv("FCITX_DBUS_ADDRESS");
-    if (!addrVar.isNull())
-        return QString::fromLocal8Bit(addrVar);
-
-    QFile file(socketFile());
-    if (!file.open(QIODevice::ReadOnly))
-        return QString();
-
-    const int BUFSIZE = 1024;
-
-    char buffer[BUFSIZE];
-    size_t sz = file.read(buffer, BUFSIZE);
-    file.close();
-    if (sz == 0)
-        return QString();
-    char* p = buffer;
-    while(*p)
-        p++;
-    size_t addrlen = p - buffer;
-    if (sz != addrlen + 2 * sizeof(pid_t) + 1)
-        return QString();
-
-    /* skip '\0' */
-    p++;
-    pid_t *ppid = (pid_t*) p;
-    pid_t daemonpid = ppid[0];
-    pid_t fcitxpid = ppid[1];
-
-    if (!fcitx_utils_pid_exists(daemonpid)
-        || !fcitx_utils_pid_exists(fcitxpid))
-        return QString();
-
-    addr = QLatin1String(buffer);
-
-    return addr;
-
-}
-
 QFcitxInputContext::QFcitxInputContext()
-    : m_watcher(new QFileSystemWatcher(this)),
-      m_connection(0),
-      m_improxy(0),
+    : m_improxy(0),
       m_icproxy(0),
       m_capacity(0),
       m_id(0),
@@ -255,33 +124,15 @@ QFcitxInputContext::QFcitxInputContext()
       m_cursorPos(0),
       m_useSurroundingText(false),
       m_syncMode(true),
-      m_displayNumber(-1)
+      m_connection(new FcitxConnection(this))
 {
     FcitxFormattedPreedit::registerMetaType();
 
     memset(m_compose_buffer, 0, sizeof(uint) * (FCITX_MAX_COMPOSE_LEN + 1));
+    connect(m_connection, SIGNAL(connected()), this, SLOT(createInputContext()));
+    connect(m_connection, SIGNAL(disconnected()), this, SLOT(cleanUp()));
 
-    m_serviceName = QString("%1-%2").arg(FCITX_DBUS_SERVICE).arg(displayNumber());
-    m_serviceWatcher.setConnection(QDBusConnection::sessionBus());
-    m_serviceWatcher.addWatchedService(m_serviceName);
-
-    QFileInfo info(socketFile());
-    QDir dir(info.path());
-    if (!dir.exists()) {
-        QDir rt(QDir::root());
-        rt.mkpath(info.path());
-    }
-    m_watcher.data()->addPath(info.path());
-    if (info.exists()) {
-        m_watcher.data()->addPath(info.filePath());
-    }
-
-    connect(m_watcher.data(), SIGNAL(fileChanged(QString)), this, SLOT(socketFileChanged()));
-    connect(m_watcher.data(), SIGNAL(directoryChanged(QString)), this, SLOT(socketFileChanged()));
-#if QT_VERSION < QT_VERSION_CHECK(4, 8, 0)
-    connect(qApp, SIGNAL(aboutToQuit()), m_watcher.data(), SLOT(deleteLater()));
-#endif
-    createConnection();
+    m_connection->startConnection();
 }
 
 QFcitxInputContext::~QFcitxInputContext()
@@ -291,91 +142,21 @@ QFcitxInputContext::~QFcitxInputContext()
     }
 
     cleanUp();
-
-    if (!m_watcher.isNull())
-        delete m_watcher.data();
-}
-
-void QFcitxInputContext::socketFileChanged()
-{
-    if (m_watcher.isNull())
-        return;
-
-    QFileInfo info(socketFile());
-    if (info.exists()) {
-        if (m_watcher.data()->files().indexOf(info.filePath()) == -1)
-            m_watcher.data()->addPath(info.filePath());
-    }
-
-    QString addr = address();
-    if (addr.isNull())
-        return;
-
-    cleanUp();
-    createConnection();
 }
 
 void QFcitxInputContext::cleanUp()
 {
-    QDBusConnection::disconnectFromBus("fcitx");
-    if (m_connection) {
-        delete m_connection;
-        m_connection = NULL;
-    }
-
     if (m_improxy) {
         delete m_improxy;
-        m_improxy = NULL;
+        m_improxy = 0;
     }
 
     if (m_icproxy) {
         delete m_icproxy;
-        m_icproxy = NULL;
+        m_icproxy = 0;
     }
 
     reset();
-}
-
-void QFcitxInputContext::createConnection()
-{
-    m_serviceWatcher.disconnect(SIGNAL(serviceOwnerChanged(QString,QString,QString)));
-    QString addr = address();
-    // qDebug() << addr;
-    if (!addr.isNull()) {
-        QDBusConnection connection(QDBusConnection::connectToBus(addr, "fcitx"));
-        if (connection.isConnected()) {
-            // qDebug() << "create private";
-            m_connection = new QDBusConnection(connection);
-        }
-        else
-            QDBusConnection::disconnectFromBus("fcitx");
-    }
-
-    bool needCreate = true;
-    if (!m_connection) {
-        m_connection = new QDBusConnection(QDBusConnection::sessionBus());
-        connect(&m_serviceWatcher, SIGNAL(serviceOwnerChanged(QString,QString,QString)), this, SLOT(imChanged(QString,QString,QString)));
-        QDBusReply<bool> registered = m_connection->interface()->isServiceRegistered(m_serviceName);
-        if (!registered.isValid() || !registered.value())
-            needCreate = false;
-    }
-
-    m_connection->connect ("org.freedesktop.DBus.Local",
-                           "/org/freedesktop/DBus/Local",
-                           "org.freedesktop.DBus.Local",
-                           "Disconnected",
-                           this,
-                           SLOT (dbusDisconnect ()));
-
-    if (needCreate)
-        createInputContext();
-}
-
-void QFcitxInputContext::dbusDisconnect()
-{
-    cleanUp();
-    emit dbusDisconnected();
-    createConnection();
 }
 
 QString QFcitxInputContext::identifierName()
@@ -519,7 +300,7 @@ bool QFcitxInputContext::filterEvent(const QEvent* event)
 
     result.waitForFinished();
 
-    if (!m_connection || !result.isFinished() || result.isError() || result.value() <= 0)
+    if (!m_connection->isConnected() || !result.isFinished() || result.isError() || result.value() <= 0)
         return QInputContext::filterEvent(event);
     else {
         update();
@@ -665,7 +446,7 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     if (Q_LIKELY(m_syncMode)) {
         result.waitForFinished();
 
-        if (!m_connection || !result.isFinished() || result.isError() || result.value() <= 0) {
+        if (!m_connection->isConnected() || !result.isFinished() || result.isError() || result.value() <= 0) {
             QTimer::singleShot(0, this, SLOT(updateIM()));
             return x11FilterEventFallback(event, sym);
         } else {
@@ -715,32 +496,9 @@ bool QFcitxInputContext::x11FilterEventFallback(XEvent *event, KeySym sym)
 
 #endif // Q_WS_X11
 
-
-void QFcitxInputContext::imChanged(const QString& service, const QString& oldowner, const QString& newowner)
-{
-    if (service == m_serviceName) {
-        /* old die */
-        if (oldowner.length() > 0 || newowner.length() > 0)
-            cleanUp();
-
-        /* new rise */
-        if (newowner.length() > 0) {
-            QTimer::singleShot(100, this, SLOT(newServiceAppear()));
-        }
-    }
-}
-
-void QFcitxInputContext::newServiceAppear()
-{
-    if (!isConnected()) {
-        cleanUp();
-        createConnection();
-    }
-}
-
 void QFcitxInputContext::createInputContext()
 {
-    if (!m_connection)
+    if (!m_connection->isConnected())
         return;
 
     // qDebug() << "create Input Context" << m_connection->name();
@@ -750,7 +508,7 @@ void QFcitxInputContext::createInputContext()
         delete m_improxy;
         m_improxy = NULL;
     }
-    m_improxy = new org::fcitx::Fcitx::InputMethod(m_serviceName, FCITX_IM_DBUS_PATH, *m_connection, this);
+    m_improxy = new FcitxInputMethodProxy(m_connection->serviceName(), QLatin1String(FCITX_IM_DBUS_PATH), *m_connection->connection(), this);
 
     if (!m_improxy->isValid())
         return;
@@ -771,7 +529,7 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
             break;
         }
 
-        if (!m_connection)
+        if (!m_connection->isConnected())
             break;
 
         this->m_id = qdbus_cast<int>(result.argumentAt(0));
@@ -780,7 +538,7 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
             delete m_icproxy;
             m_icproxy = NULL;
         }
-        m_icproxy = new org::fcitx::Fcitx::InputContext(m_serviceName, m_path, *m_connection, this);
+        m_icproxy = new FcitxInputContextProxy(m_connection->serviceName(), m_path, *m_connection->connection(), this);
         connect(m_icproxy, SIGNAL(CommitString(QString)), this, SLOT(commitString(QString)));
         connect(m_icproxy, SIGNAL(ForwardKey(uint, uint, int)), this, SLOT(forwardKey(uint, uint, int)));
         connect(m_icproxy, SIGNAL(UpdateFormattedPreedit(FcitxFormattedPreeditList,int)), this, SLOT(updateFormattedPreedit(FcitxFormattedPreeditList,int)));
@@ -935,14 +693,9 @@ XEvent* QFcitxInputContext::createXEvent(Display* dpy, WId wid, uint keyval, uin
 }
 #endif
 
-bool QFcitxInputContext::isConnected()
-{
-    return m_connection != NULL && m_connection->isConnected();
-}
-
 bool QFcitxInputContext::isValid()
 {
-    return m_icproxy != NULL && m_icproxy->isValid();
+    return m_icproxy && m_icproxy->isValid();
 }
 
 bool

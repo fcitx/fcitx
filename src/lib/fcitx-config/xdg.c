@@ -275,6 +275,18 @@ char** FcitxXDGGetPathUserWithPrefix(size_t* len, const char* prefix)
 }
 
 FCITX_EXPORT_API
+char** FcitxXDGGetLibPath(size_t* len)
+{
+    char **path;
+    char *libdir = fcitx_utils_get_fcitx_path("libdir");
+    path = FcitxXDGGetPath(len, "XDG_CONFIG_HOME", ".config",
+                           PACKAGE "/lib" , libdir, PACKAGE);
+    free(libdir);
+    return path;
+}
+
+
+FCITX_EXPORT_API
 char** FcitxXDGGetPathWithPrefix(size_t* len, const char* prefix)
 {
     char *prefixpath;

@@ -19,8 +19,7 @@
 
 #include <QDBusMetaType>
 
-#include "fcitx-formatted-preedit.h"
-
+#include "fcitxformattedpreedit.h"
 
 void FcitxFormattedPreedit::registerMetaType()
 {

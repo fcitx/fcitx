@@ -20,11 +20,12 @@
 #ifndef FCITX_FORMATTED_PREEDIT_H
 #define FCITX_FORMATTED_PREEDIT_H
 
-#include <QMetaType>
-#include <QDebug>
-#include <QDBusArgument>
+#include <fcitx/fcitx.h>
 
-class FcitxFormattedPreedit {
+#include <QtCore/QMetaType>
+#include <QtDBus/QDBusArgument>
+
+class FCITX_EXPORT_API FcitxFormattedPreedit {
 public:
     const QString& string() const;
     qint32 format() const;

@@ -29,14 +29,16 @@
 #include <QApplication>
 #include <QWeakPointer>
 
-#include "org.fcitx.Fcitx.InputMethod.h"
-#include "org.fcitx.Fcitx.InputContext.h"
+#include "fcitx-qt/fcitxinputcontextproxy.h"
+#include "fcitx-qt/fcitxinputmethodproxy.h"
 #include "fcitx-config/hotkey.h"
 #include "fcitx/ime.h"
 
 #if defined(Q_WS_X11)
 #include <X11/Xlib.h>
 #include "fcitx/frontend.h"
+
+class FcitxConnection;
 
 class ProcessKeyWatcher : public QDBusPendingCallWatcher
 {
@@ -85,32 +87,21 @@ public:
     virtual bool filterEvent(const QEvent* event);
     virtual void mouseHandler(int x, QMouseEvent* event);
 
-Q_SIGNALS:
-    void dbusDisconnected();
-
 private Q_SLOTS:
-    void socketFileChanged();
-    void dbusDisconnect();
-    void imChanged(const QString& service, const QString& oldowner, const QString& newowner);
+    void createInputContext();
+    void cleanUp();
     void commitString(const QString& str);
     void updateFormattedPreedit(const FcitxFormattedPreeditList& preeditList, int cursorPos);
     void forwardKey(uint keyval, uint state, int type);
     void deleteSurroundingText(int offset, uint nchar);
     void createInputContextFinished(QDBusPendingCallWatcher* watcher);
     void updateIM();
+    void updateCursor();
 #if defined(Q_WS_X11) && defined(ENABLE_X11)
     void x11ProcessKeyEventCallback(QDBusPendingCallWatcher* watcher);
-    void newServiceAppear();
-    void updateCursor();
 #endif
 private:
-    static QByteArray localMachineId();
-    QString socketFile();
-    QString address();
     QWidget* validFocusWidget();
-    void cleanUp();
-    void createConnection();
-    void createInputContext();
     bool processCompose(uint keyval, uint state, FcitxKeyEventType event);
     bool checkAlgorithmically();
     bool checkCompactTable(const struct _FcitxComposeTableCompact *table);
@@ -143,20 +134,14 @@ private:
     void updateCapacity();
     void commitPreedit();
 
-    int displayNumber();
-
-    QWeakPointer<QFileSystemWatcher> m_watcher;
-    QDBusServiceWatcher m_serviceWatcher;
-    QDBusConnection* m_connection;
-    org::fcitx::Fcitx::InputMethod* m_improxy;
-    org::fcitx::Fcitx::InputContext* m_icproxy;
+    FcitxInputMethodProxy* m_improxy;
+    FcitxInputContextProxy* m_icproxy;
     QFlags<FcitxCapacityFlags> m_capacity;
     int m_id;
     QString m_path;
     bool m_has_focus;
     uint m_compose_buffer[FCITX_MAX_COMPOSE_LEN + 1];
     int m_n_compose;
-    QString m_serviceName;
     QString m_preedit;
     QString m_commitPreedit;
     FcitxFormattedPreeditList m_preeditList;
@@ -164,8 +149,7 @@ private:
     boolean m_useSurroundingText;
     boolean m_syncMode;
     QRect m_rect;
-    int m_displayNumber;
-    QString m_socketFile;
+    FcitxConnection* m_connection;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_

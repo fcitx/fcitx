@@ -67,6 +67,7 @@
  * fcitx boolean
  **/
 typedef int32_t boolean;
+#ifndef __cplusplus
 /**
  * fcitx true
  */
@@ -75,6 +76,7 @@ typedef int32_t boolean;
  * fcitx false
  */
 #define false (0)
+#endif
 
 #define FCITX_INT_LEN ((int)(sizeof(int) * 2.5) + 2)
 #define FCITX_LONG_LEN ((int)(sizeof(long) * 2.5) + 2)
