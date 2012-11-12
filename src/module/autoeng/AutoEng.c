@@ -35,7 +35,7 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx-utils/log.h"
 #include "fcitx-config/xdg.h"
-#include "module/spell/spell.h"
+#include "module/spell/fcitx-spell.h"
 
 #include "AutoEng.h"
 #define case_autoeng_replace case ' ': case '\'': case '-': case '_':   \
@@ -77,7 +77,7 @@ static const unsigned int cmodtable[] = {
     FcitxKeyState_Shift
 };
 
-static const UT_icd autoeng_icd = { sizeof(AUTO_ENG), 0, 0, 0 };
+static const UT_icd autoeng_icd = { sizeof(AUTO_ENG), NULL, NULL, NULL };
 
 CONFIG_BINDING_BEGIN(FcitxAutoEngConfig);
 CONFIG_BINDING_REGISTER("Auto English", "ChooseModifier", chooseModifier);
@@ -495,8 +495,9 @@ boolean SwitchToEng(FcitxAutoEngState *autoEngState, const char *str)
 }
 
 static INPUT_RETURN_VALUE
-AutoEngGetCandWordCb(FcitxAutoEngState *autoEngState, const char *commit)
+AutoEngGetCandWordCb(void *arg, const char *commit)
 {
+    FcitxAutoEngState *autoEngState = arg;
     INPUT_RETURN_VALUE res = IRV_DO_NOTHING;
     if (autoEngState->config.maxKeep == 0 &&
         !autoEngState->config.selectAddSpace) {
@@ -522,10 +523,11 @@ AutoEngGetSpellHint(FcitxAutoEngState *autoEngState)
     FcitxCandidateWordList *candList;
     if (autoEngState->config.disableSpell)
         return;
-    candList = InvokeVaArgs(autoEngState->owner, FCITX_SPELL, GET_CANDWORDS,
-                            NULL, autoEngState->buf, NULL,
-                            (void*)(long)autoEngState->config.maxHintLength,
-                            "en", "cus", AutoEngGetCandWordCb, autoEngState);
+    candList = FcitxSpellGetCandWords(autoEngState->owner, NULL,
+                                      autoEngState->buf, NULL,
+                                      autoEngState->config.maxHintLength,
+                                      "en", "cus", AutoEngGetCandWordCb,
+                                      autoEngState);
     if (candList) {
         FcitxInputState *input = FcitxInstanceGetInputState(autoEngState->owner);
         FcitxCandidateWordList *iList = FcitxInputStateGetCandidateList(input);

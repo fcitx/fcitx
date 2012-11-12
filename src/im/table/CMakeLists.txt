@@ -1,12 +1,20 @@
-
 set(FCITX_TABLE_SOURCES
-    tabledict.c
-    tablepinyinwrapper.c
-    table.c
-    tableconfig.c
-)
+  tabledict.c
+  table.c
+  tableconfig.c
+  )
+set(FCITX_TABLE_HEADERS
+  tabledict.h
+  table.h
+  utf8_in_gb18030.h
+  )
+if(ENABLE_TABLE)
+  set(table_noinstall)
+else()
+  set(table_noinstall NO_INSTALL)
+endif()
 
-fcitx_add_addon(fcitx-table ${FCITX_TABLE_SOURCES})
-fcitx_add_addon_conf_file(fcitx-table.conf)
-fcitx_add_configdesc_file(table.desc)
-fcitx_add_configdesc_file(fcitx-table.desc)
+fcitx_add_addon_full(table DESC ${table_noinstall}
+  SOURCES ${FCITX_TABLE_SOURCES}
+  EXTRA_DESC table.desc
+  EXTRA_PO ${FCITX_TABLE_HEADERS})

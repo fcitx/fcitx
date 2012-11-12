@@ -26,7 +26,7 @@
 #include <libintl.h>
 
 #include "pinyin-enhance-spell.h"
-#include "module/spell/spell.h"
+#include "module/spell/fcitx-spell.h"
 
 #include "config.h"
 
@@ -139,9 +139,8 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
         (position < 1 && !pyenhance->config.allow_replace_first)) {
         position = 1;
     }
-    newList = InvokeVaArgs(instance, FCITX_SPELL, GET_CANDWORDS,
-                           NULL, (void*)string, NULL, (void*)(long)len_limit,
-                           "en", "cus", NULL, pyenhance);
+    newList = FcitxSpellGetCandWords(instance, NULL, (void*)string, NULL,
+                                     len_limit, "en", "cus", NULL, pyenhance);
     if (!newList)
         return false;
     if (position == 0) {

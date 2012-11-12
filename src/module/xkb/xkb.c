@@ -438,7 +438,7 @@ FcitxXkbSetLayout  (FcitxXkb* xkb,
                const char *variants,
                const char *options)
 {
-    boolean retval;
+    boolean retval = False;
     char *layouts_line;
     char *options_line;
     char *variants_line;

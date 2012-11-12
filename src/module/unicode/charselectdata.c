@@ -38,24 +38,20 @@ typedef struct _UnicodeSet {
     UT_hash_handle hh;
 } UnicodeSet;
 
-const UT_icd int16_icd = {sizeof(int16_t), NULL, NULL, NULL};
-const UT_icd pidx_icd = {sizeof(CharSelectDataIndex*), NULL, NULL, NULL};
+static const UT_icd int16_icd = { sizeof(int16_t), NULL, NULL, NULL };
 
-static const char JAMO_L_TABLE[][4] =
-    {
+static const char JAMO_L_TABLE[][4] = {
         "G", "GG", "N", "D", "DD", "R", "M", "B", "BB",
         "S", "SS", "", "J", "JJ", "C", "K", "T", "P", "H"
     };
 
-static const char JAMO_V_TABLE[][4] =
-    {
+static const char JAMO_V_TABLE[][4] = {
         "A", "AE", "YA", "YAE", "EO", "E", "YEO", "YE", "O",
         "WA", "WAE", "OE", "YO", "U", "WEO", "WE", "WI",
         "YU", "EU", "YI", "I"
     };
 
-static const char JAMO_T_TABLE[][4] =
-    {
+static const char JAMO_T_TABLE[][4] = {
         "", "G", "GG", "GS", "N", "NJ", "NH", "D", "L", "LG", "LM",
         "LB", "LS", "LT", "LP", "LH", "M", "B", "BS",
         "S", "SS", "NG", "J", "C", "K", "T", "P", "H"
@@ -1106,7 +1102,7 @@ void CharSelectDataCreateIndex(CharSelectData* charselect)
          }
      }
 
-     utarray_new(charselect->indexList, &pidx_icd);
+     utarray_new(charselect->indexList, fcitx_ptr_icd);
 
      CharSelectDataIndex* idx = charselect->index;
      while(idx) {

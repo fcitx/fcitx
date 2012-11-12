@@ -72,9 +72,12 @@ static inline boolean RectIntersects(FcitxRect rt1, FcitxRect rt2);
 static inline int RectWidth(FcitxRect r);
 static inline int RectHeight(FcitxRect r);
 
-static const UT_icd handler_icd = {sizeof(FcitxXEventHandler), 0, 0, 0};
-static const UT_icd comphandler_icd = {sizeof(FcitxCompositeChangedHandler),
-                                       0, 0, 0};
+static const UT_icd handler_icd = {
+    sizeof(FcitxXEventHandler), NULL, NULL, NULL
+};
+static const UT_icd comphandler_icd = {
+    sizeof(FcitxCompositeChangedHandler), NULL, NULL, NULL
+};
 
 FCITX_DEFINE_PLUGIN(fcitx_x11, module, FcitxModule) = {
     X11Create,
@@ -84,13 +87,14 @@ FCITX_DEFINE_PLUGIN(fcitx_x11, module, FcitxModule) = {
     NULL
 };
 
+DEFINE_GET_ADDON("fcitx-xim", Xim)
+DEFINE_GET_AND_INVOKE_FUNC(Xim, ConsumeQueue, 0)
+
 void* X11Create(FcitxInstance* instance)
 {
     FcitxX11 *x11priv = fcitx_utils_new(FcitxX11);
     FcitxAddon *x11addon = FcitxX11GetAddon(instance);
     x11priv->dpy = XOpenDisplay(NULL);
-    x11priv->xim = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
-                                             "fcitx-xim");
     if (x11priv->dpy == NULL)
         return NULL;
 
@@ -298,7 +302,8 @@ void X11ProcessEvent(void *arg)
 {
     FcitxX11 *x11priv = (FcitxX11*)arg;
     X11ProcessEventRealInternal(x11priv);
-    FcitxModuleInvokeVaArgs(x11priv->xim, 0);
+    FCITX_DEF_MODULE_ARGS(args);
+    FcitxXimInvokeConsumeQueue(x11priv->owner, args);
 }
 
 void* X11GetDisplay(void* arg, FcitxModuleFunctionArg args)

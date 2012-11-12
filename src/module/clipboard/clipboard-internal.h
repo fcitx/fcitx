@@ -24,6 +24,7 @@
 #include "fcitx/instance.h"
 #include "fcitx-config/fcitx-config.h"
 #include <stdint.h>
+#include <fcitx/module.h>
 
 #include "clipboard.h"
 
@@ -44,6 +45,7 @@ typedef struct {
     FcitxHotkey trigger_key[2];
     ClipboardChooseModifier choose_modifier;
     boolean use_primary;
+    boolean ignore_blank;
 } FcitxClipboardConfig;
 
 typedef struct {
@@ -59,11 +61,11 @@ typedef struct {
     ClipboardSelectionStr primary;
     uint32_t clp_hist_len;
     ClipboardSelectionStr clp_hist_lst[CLIPBOARD_MAX_LEN];
-#ifdef ENABLE_X11
+// #ifdef ENABLE_X11
     FcitxAddon *x11;
     unsigned int x11_primary_notify_id;
     unsigned int x11_clipboard_notify_id;
-#endif
+// #endif
 } FcitxClipboard;
 
 void ClipboardSetPrimary(FcitxClipboard *clipboard,
@@ -72,15 +74,6 @@ void ClipboardPushClipboard(FcitxClipboard *clipboard,
                             uint32_t len, const char *str);
 CONFIG_BINDING_DECLARE(FcitxClipboardConfig);
 
-static inline FcitxAddon*
-FcitxClipboardGetAddon(FcitxInstance *instance)
-{
-    static FcitxAddon *addon = NULL;
-    if (!addon) {
-        addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
-                                          "fcitx-clipboard");
-    }
-    return addon;
-}
+DEFINE_GET_ADDON("fcitx-clipboard", Clipboard)
 
 #endif

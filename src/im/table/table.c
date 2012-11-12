@@ -40,14 +40,12 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/utarray.h"
 #include "fcitx-utils/utils.h"
-#include "im/pinyin/pydef.h"
-#include "module/punc/punc.h"
-#include "tablepinyinwrapper.h"
+#include "im/pinyin/fcitx-pinyin.h"
+#include "module/punc/fcitx-punc.h"
 
 #define MAX_TABLE_INPUT 50
 
 static void TableMetaDataFree(TableMetaData *table);
-const UT_icd tableCand_icd = {sizeof(TABLECANDWORD*), NULL, NULL, NULL };
 typedef struct {
     ADJUSTORDER order;
 } TableCandWordSortContext;
@@ -55,6 +53,8 @@ typedef struct {
 static void *TableCreate(FcitxInstance* instance);
 static int TableCandCmp(const void* a, const void* b, void* arg);
 static INPUT_RETURN_VALUE TableKeyBlocker(void* arg, FcitxKeySym sym, unsigned int state);
+static INPUT_RETURN_VALUE Table_PYGetCandWord(void *arg,
+                                              FcitxCandidateWord *candidateWord);
 
 FCITX_DEFINE_PLUGIN(fcitx_table, ime2, FcitxIMClass2) =  {
     TableCreate,
@@ -323,11 +323,11 @@ boolean TableInit(void *arg)
         FcitxInstanceSetContext(tbl->owner, CONTEXT_ALTERNATIVE_PREVPAGE_KEY, table->hkAlternativePrevPage);
         FcitxInstanceSetContext(tbl->owner, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY, table->hkAlternativeNextPage);
     }
-    FcitxAddon* pyaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(tbl->owner), "fcitx-pinyin");
+    FcitxAddon* pyaddon = FcitxPinyinGetAddon(tbl->owner);
     tbl->pyaddon = pyaddon;
     tbl->PYBaseOrder = AD_FREQ;
 
-    Table_ResetPY(tbl->pyaddon);
+    FcitxPinyinReset(tbl->owner);
     return true;
 }
 
@@ -484,8 +484,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                         retVal = TableGetCandWords(table);
                         int key = FcitxInputStateGetRawInputBuffer(input)[0];
                         if (!table->bIgnorePunc) {
-                            strTemp = InvokeVaArgs(instance, FCITX_PUNC,
-                                                   GETPUNC, &key);
+                            strTemp = FcitxPuncGetPunc(instance, &key);
                         } else {
                             strTemp = NULL;
                         }
@@ -613,7 +612,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
             char            strPY[100];
 
             //如果拼音单字字库没有读入，则读入它
-            Table_LoadPYBaseDict(tbl->pyaddon);
+            FcitxPinyinLoadBaseDict(tbl->owner);
 
             //如果刚刚输入的是个词组，刚不查拼音
             if (fcitx_utf8_strlen(output_str) != 1)
@@ -627,7 +626,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 
             FcitxMessagesAddMessageStringsAtLast(
                 FcitxInputStateGetAuxDown(input), MSG_CODE, _("Pinyin: "));
-            Table_PYGetPYByHZ(tbl->pyaddon, output_str, strPY);
+            FcitxPinyinGetPyByHZ(tbl->owner, output_str, strPY);
             FcitxMessagesAddMessageStringsAtLast(
                 FcitxInputStateGetAuxDown(input), MSG_TIPS,
                 (strPY[0]) ? strPY : _("Cannot found Pinyin"));
@@ -875,15 +874,17 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords(TableMetaData* table)
 
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
 
-    strcpy(Table_PYGetFindString(tbl->pyaddon), FcitxInputStateGetRawInputBuffer(input) + 1);
+    strcpy(FcitxPinyinGetFindString(tbl->owner),
+           FcitxInputStateGetRawInputBuffer(input) + 1);
 
-    Table_DoPYInput(tbl->pyaddon, 0, 0);
-    Table_PYGetCandWords(tbl->pyaddon);
+    FcitxPinyinDoInput(tbl->owner, 0, 0);
+    FcitxPinyinGetCandwords(tbl->owner);
 
     FcitxInputStateGetRawInputBuffer(input)[0] = table->cPinyin;
     FcitxInputStateGetRawInputBuffer(input)[1] = '\0';
 
-    strcat(FcitxInputStateGetRawInputBuffer(input), Table_PYGetFindString(tbl->pyaddon));
+    strcat(FcitxInputStateGetRawInputBuffer(input),
+           FcitxPinyinGetFindString(tbl->owner));
     FcitxInputStateSetRawInputBufferSize(input, strlen(FcitxInputStateGetRawInputBuffer(input)));
 
     FcitxInstanceCleanInputWindowUp(instance);
@@ -966,7 +967,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
     TableCandWordSortContext context;
     context.order = table->tableOrder;
     UT_array candTemp;
-    utarray_init(&candTemp, &tableCand_icd);
+    utarray_init(&candTemp, fcitx_ptr_icd);
 
     while (table->tableDict->currentRecord && table->tableDict->currentRecord != table->tableDict->recordHead) {
         if (table->tableDict->currentRecord->type != RECORDTYPE_CONSTRUCT &&
@@ -1496,6 +1497,22 @@ void ReloadTableConfig(void* arg)
     LoadTableConfig(&tbl->config);
     if (LoadTableInfo(tbl))
         FcitxInstanceUpdateIMList(tbl->owner);
+}
+
+INPUT_RETURN_VALUE
+Table_PYGetCandWord(void* arg, FcitxCandidateWord* candidateWord)
+{
+    TableMetaData* table = arg;
+    FcitxTableState* tbl = table->owner;
+    INPUT_RETURN_VALUE retVal = tbl->pygetcandword(tbl->pyaddon->addonInstance,
+                                                   candidateWord);
+    FcitxPinyinReset(tbl->owner);
+    FcitxInputState *state = FcitxInstanceGetInputState(tbl->owner);
+    if (!(retVal & IRV_FLAG_PENDING_COMMIT_STRING)) {
+        strcpy(FcitxInputStateGetOutputString(state), candidateWord->strWord);
+    }
+
+    return IRV_COMMIT_STRING | IRV_FLAG_RESET_INPUT;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

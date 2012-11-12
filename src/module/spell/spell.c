@@ -498,9 +498,8 @@ SpellLangIsLang(const char *full_lang, const char *lang)
     return false;
 }
 
-typedef INPUT_RETURN_VALUE (*GetCandWordCb)(void *arg, const char *commit);
 typedef struct {
-    GetCandWordCb cb;
+    FcitxSpellGetCandWordCb cb;
     void *arg;
 } GetCandWordsArgs;
 
@@ -533,7 +532,7 @@ FcitxSpellGetCandWord(void *arg, FcitxCandidateWord *candWord)
 }
 
 static void*
-SpellNewGetCandWordArgs(GetCandWordCb cb, void *arg, const char *commit)
+SpellNewGetCandWordArgs(FcitxSpellGetCandWordCb cb, void *arg, const char *commit)
 {
     int len;
     void *res;
@@ -552,7 +551,7 @@ FcitxSpellGetCandWords(void *arg, FcitxModuleFunctionArg args)
     SpellHint *hints;
     int i;
     FcitxCandidateWordList* cand_list;
-    GetCandWordCb get_cand_word_cb = args.args[HINT_WORDS_ARGC]; // 6
+    FcitxSpellGetCandWordCb get_cand_word_cb = args.args[HINT_WORDS_ARGC]; // 6
     void *get_cand_word_arg = args.args[HINT_WORDS_ARGC + 1]; // 7
     hints = FcitxSpellHintWords(arg, args);
     if (!hints)

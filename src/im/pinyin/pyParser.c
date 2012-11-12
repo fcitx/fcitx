@@ -497,7 +497,8 @@ int Cmp2Map(FcitxPinyinConfig* pyconfig, char map1[3], char map2[3], boolean bSP
  * 否 返回值不为0
  * *iMatchedLength 记录了二者能够匹配的长度
  */
-int CmpMap(FcitxPinyinConfig* pyconfig, char *strMap1, char *strMap2, int *iMatchedLength, boolean bSP)
+int CmpMap(FcitxPinyinConfig* pyconfig, const char *strMap1,
+           const char *strMap2, int *iMatchedLength, boolean bSP)
 {
     int             val;
 
@@ -528,8 +529,6 @@ struct _PYMappedSplitData {
     float freq;
     UT_hash_handle hh;
 };
-
-const UT_icd splitData_icd = { sizeof(PYMappedSplitData), 0, 0, 0 };
 
 void InitPYSplitData(FcitxPinyinConfig* pyconfig)
 {

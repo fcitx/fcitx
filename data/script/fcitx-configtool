@@ -93,16 +93,22 @@ run_gtk3() {
 run_xdg() {
     if command="$(which xdg-open 2>/dev/null)"; then
         if [ x"$1" != x ]; then
-            exec $command "$HOME/.config/fcitx/conf/$1.config"
+            exec "$command" "$HOME/.config/fcitx/conf/$1.config"
         else
-            exec $command "$HOME/.config/fcitx/config"
+            exec "$command" "$HOME/.config/fcitx/config"
         fi
     fi
 }
 
+_which_cmdline() {
+    cmd="$(which "$1")" || return 1
+    shift
+    echo "$cmd $*"
+}
+
 run_editor() {
-    if command="$(which "${EDITOR}" 2>/dev/null)" ||
-        command="$(which "${VISUAL}" 2>/dev/null)"; then
+    if command="$(_which_cmdline ${EDITOR} 2>/dev/null)" ||
+        command="$(_which_cmdline ${VISUAL} 2>/dev/null)"; then
         if [ x"$1" != x ]; then
             exec $command "$HOME/.config/fcitx/conf/$1.config"
         else

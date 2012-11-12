@@ -27,7 +27,9 @@
 #define _FCITX_MODULE_H
 #include <fcitx-config/fcitx-config.h>
 #include <fcitx-utils/utarray.h>
+#include <fcitx-utils/utils.h>
 #include <fcitx/addon.h>
+#include <fcitx/fcitx.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -82,6 +84,18 @@ extern "C" {
     void FcitxModuleLoad(struct _FcitxInstance* instance);
 
     /**
+     * Find a exported function of a addon.
+     *
+     * @param addon addon
+     * @param functionId function index
+     * @return FcitxModuleFunction
+     **/
+    FcitxModuleFunction FcitxModuleFindFunction(FcitxAddon *addon,
+                                                int func_id);
+
+    void *FcitxModuleInvokeOnAddon(FcitxAddon *addon, FcitxModuleFunction func,
+                                   FcitxModuleFunctionArg *args);
+    /**
      * invode inter module function wiht addon pointer, returns NULL when fails (the function itself can also return NULL)
      *
      * @param addon addon
@@ -89,6 +103,7 @@ extern "C" {
      * @param args arguments
      * @return void*
      **/
+    FCITX_DEPRECATED
     void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
 #define FcitxModuleInvokeVaArgs(addon, functionId, ARGV...)             \
     (FcitxModuleInvokeFunction(addon, functionId,                       \
@@ -103,6 +118,7 @@ extern "C" {
      * @param args arguments
      * @return void*
      **/
+    FCITX_DEPRECATED
     void* FcitxModuleInvokeFunctionByName(struct _FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args);
 #define FcitxModuleInvokeVaArgsByName(instance, name, functionId, ARGV...) \
     (FcitxModuleInvokeFunctionByName(instance, name, functionId,        \
@@ -116,18 +132,13 @@ extern "C" {
     ((MODULE##_##FUNC##_RETURNTYPE)FcitxModuleInvokeFunctionByName(     \
         INST, MODULE##_NAME, MODULE##_##FUNC,                           \
         (FcitxModuleFunctionArg){ .args = {ARGV} }))
-/**
- * NOTE: (int)(sizeof((void*[]){ARGV}) / sizeof(void*)) can be used to get
- * the number of arguements. (can be useful for removing the argument number
- * limit) as well as directly call the function without a FunctionArg wrapper.
- **/
 
 /** add a function to a addon */
-#define AddFunction(ADDON, Realname)                   \
-    do {                                               \
-       void *temp = (void*)Realname;                   \
-       utarray_push_back(&ADDON->functionList, &temp); \
-   } while(0)
+#define AddFunction(ADDON, Realname)                    \
+    do {                                                \
+        void *temp = (void*)Realname;                   \
+        utarray_push_back(&ADDON->functionList, &temp); \
+    } while(0)
 
     /**
      * add a function to a addon
@@ -136,6 +147,58 @@ extern "C" {
      * @param func
      **/
     void FcitxModuleAddFunction(FcitxAddon *addon, FcitxModuleFunction func);
+
+// Well won't work if there are multiple instances, but that will also break
+// lots of other things anyway.
+#define DEFINE_GET_ADDON(name, prefix)                           \
+    static inline FcitxAddon*                                    \
+    Fcitx##prefix##GetAddon(FcitxInstance *instance)             \
+    {                                                            \
+        static int _init = false;                                \
+        static FcitxAddon *addon = NULL;                         \
+        if (fcitx_unlikely(!_init)) {                            \
+            _init = true;                                        \
+            addon = FcitxAddonsGetAddonByName(                   \
+                FcitxInstanceGetAddons(instance), name);         \
+        }                                                        \
+        return addon;                                            \
+    }
+
+#define DEFINE_GET_AND_INVOKE_FUNC(prefix, suffix, id)                  \
+    DEFINE_GET_AND_INVOKE_FUNC_WITH_ERROR(prefix, suffix, id, NULL)
+
+#define DEFINE_GET_AND_INVOKE_FUNC_WITH_ERROR(prefix, suffix, id, err_ret) \
+    static inline FcitxModuleFunction                                  \
+    Fcitx##prefix##Find##suffix(FcitxAddon *addon)                     \
+    {                                                                  \
+        static int _init = false;                                      \
+        static FcitxModuleFunction func = NULL;                        \
+        if (fcitx_unlikely(!_init)) {                                  \
+            _init = true;                                              \
+            func = FcitxModuleFindFunction(addon, id);                 \
+        }                                                              \
+        return func;                                                   \
+    }                                                                  \
+    static inline void*                                                \
+    Fcitx##prefix##Invoke##suffix(FcitxInstance *instance,             \
+                                  FcitxModuleFunctionArg args)         \
+    {                                                                  \
+        static void *const on_err = (void*)(intptr_t)(err_ret);        \
+        FcitxAddon *addon = Fcitx##prefix##GetAddon(instance);         \
+        if (fcitx_unlikely(!addon))                                    \
+            return on_err;                                             \
+        FcitxModuleFunction func = Fcitx##prefix##Find##suffix(addon); \
+        if (fcitx_unlikely(!func))                                     \
+            return on_err;                                             \
+        return FcitxModuleInvokeOnAddon(addon, func, &args);           \
+    }
+
+#define FCITX_DEF_MODULE_ARGS(var, ARGV...)             \
+    FcitxModuleFunctionArg var = { .args = {ARGV} }
+    /* void *__##var##_array[] = {ARGV};                                   \ */
+    /* size_t __##var##_length = sizeof(__##var##_array) / sizeof(void*);  \ */
+    /* FcitxModuleFunctionArg var[] = { { .n = __##var##_length,           \ */
+    /*                                    .args = __##var##_array } } */
 
 #ifdef __cplusplus
 }

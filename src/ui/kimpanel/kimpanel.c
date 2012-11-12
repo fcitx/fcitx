@@ -25,18 +25,19 @@
 #include <ctype.h>
 #include <limits.h>
 #include <libintl.h>
+#include <sys/socket.h>
+#include <dbus/dbus.h>
+
 #include "config.h"
 #include "fcitx/ui.h"
 #include "fcitx-utils/log.h"
-#include <dbus/dbus.h>
-#include "module/dbus/dbusstuff.h"
+#include "module/dbus/fcitx-dbus.h"
 #include "fcitx/instance.h"
 #include "fcitx/module.h"
 #include "fcitx/frontend.h"
 #include "fcitx/hook.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx/candidate.h"
-#include <sys/socket.h>
 
 #define FCITX_KIMPANEL_INTERFACE "org.kde.kimpanel.inputmethod"
 #define FCITX_KIMPANEL_PATH "/kimpanel"
@@ -271,7 +272,7 @@ void* KimpanelCreate(FcitxInstance* instance)
     kimpanel->version = 1;
     kimpanel->iCursorPos = 0;
     kimpanel->owner = instance;
-    kimpanel->conn = InvokeVaArgs(instance, FCITX_DBUS, GETCONNECTION);
+    kimpanel->conn = FcitxDBusGetConnection(instance);
 
     DBusError err;
     dbus_error_init(&err);

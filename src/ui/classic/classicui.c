@@ -535,7 +535,7 @@ void ClassicUIMainWindowSizeHint(void* arg, int* x, int* y, int* w, int* h)
 void* ClassicUILoadImage(void *arg, FcitxModuleFunctionArg args)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    char *name = args.args[0];
+    const char *name = args.args[0];
     boolean *fallback = args.args[1];
     SkinImage* image = LoadImage(&classicui->skin, name, *fallback);
     if (image == NULL)

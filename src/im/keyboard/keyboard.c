@@ -40,9 +40,8 @@
 #include "fcitx/hook.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
-#include "module/spell/spell.h"
+#include "module/spell/fcitx-spell.h"
 
-#include "xkb.h"
 #include "keyboard.h"
 #if defined(ENABLE_LIBXML2)
 #include "isocodes.h"
@@ -195,13 +194,13 @@ static const char* FcitxKeyboardGetFutureStream(void* arg)
             break;
         int len = surlen - cursor + 1;
         if (keyboard->lastLength < len) {
-            free(keyboard->tempBuffer);
             while (keyboard->lastLength < len)
                 keyboard->lastLength *= 2;
-            keyboard->tempBuffer = fcitx_utils_malloc0(keyboard->lastLength);
+            keyboard->tempBuffer = realloc(keyboard->tempBuffer,
+                                           keyboard->lastLength);
         }
 
-        strcpy(keyboard->tempBuffer, &surrounding[cursor]);
+        memcpy(keyboard->tempBuffer, &surrounding[cursor], len);
         result = keyboard->tempBuffer;
     } while(0);
 
@@ -238,8 +237,8 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
     }
     else {
         boolean result = false;
-        InvokeVaArgs(keyboard->owner, FCITX_XKB, LAYOUTEXISTS,
-                     (void*)layoutString, (void*)variantString, &result);
+        FcitxXkbLayoutExists(keyboard->owner, layoutString,
+                             variantString, &result);
         if (result)
             iPriority = 50;
     }
@@ -305,14 +304,14 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
 
     FcitxInstanceRegisterHotkeyFilter(instance, hk);
 
-    FcitxXkbRules* rules = InvokeVaArgs(instance, FCITX_XKB, GETRULES);
+    FcitxXkbRules* rules = FcitxXkbGetRules(instance);
     keyboard->rules = rules;
 
     keyboard->initialLayout = NULL;
     keyboard->initialVariant = NULL;
 
-    InvokeVaArgs(instance, FCITX_XKB, GETCURRENTLAYOUT,
-                 &keyboard->initialLayout, &keyboard->initialVariant);
+    FcitxXkbGetCurrentLayout(instance, &keyboard->initialLayout,
+                             &keyboard->initialVariant);
     if (!keyboard->initialLayout)
         keyboard->initialLayout = strdup("us");
 
@@ -510,10 +509,9 @@ void  FcitxKeyboardResetIM(void *arg)
     keyboard->n_compose = 0;
 }
 
-boolean IsDictAvailable(FcitxKeyboard* keyboard)
+static boolean IsDictAvailable(FcitxKeyboard* keyboard)
 {
-    return InvokeVaArgs(keyboard->owner, FCITX_SPELL, DICT_AVAILABLE,
-                        keyboard->dictLang, NULL);
+    return FcitxSpellDictAvailable(keyboard->owner, keyboard->dictLang, NULL);
 }
 
 /* a little bit funny here LOL.... */
@@ -560,8 +558,8 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 
         if (FcitxHotkeyIsHotKey(sym, state,
                                 keyboard->config.hkAddToUserDict)) {
-            if (InvokeVaArgs(instance, FCITX_SPELL, ADD_PERSONAL,
-                             keyboard->buffer, keyboard->dictLang))
+            if (FcitxSpellAddPersonal(instance, keyboard->buffer,
+                                      keyboard->dictLang))
                 return IRV_DO_NOTHING;
         }
 
@@ -687,8 +685,9 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     FcitxCandidateWordSetChooseAndModifier(
         FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE,
         cmodtable[keyboard->config.chooseModifier]);
-    ssize_t bufferlen = strlen(keyboard->buffer);
-    strcpy(FcitxInputStateGetRawInputBuffer(input), keyboard->buffer);
+    size_t bufferlen = strlen(keyboard->buffer);
+    memcpy(FcitxInputStateGetRawInputBuffer(input),
+           keyboard->buffer, bufferlen + 1);
     FcitxInputStateSetRawInputBufferSize(input, bufferlen);
     FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetClientPreedit(input),
                                          MSG_INPUT, keyboard->buffer);
@@ -701,11 +700,10 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
         return IRV_DISPLAY_CANDWORDS;
 
     FcitxCandidateWordList *candList;
-    candList = InvokeVaArgs(instance, FCITX_SPELL, GET_CANDWORDS,
-                            NULL, keyboard->buffer, NULL,
-                            (void*)(long)keyboard->config.maximumHintLength,
-                            keyboard->dictLang, NULL,
-                            FcitxKeyboardGetCandWordCb, layout);
+    candList = FcitxSpellGetCandWords(instance, NULL, keyboard->buffer, NULL,
+                                      keyboard->config.maximumHintLength,
+                                      keyboard->dictLang, NULL,
+                                      FcitxKeyboardGetCandWordCb, layout);
     if (!candList)
         return IRV_DISPLAY_CANDWORDS;
     FcitxCandidateWordMerge(FcitxInputStateGetCandidateList(input),

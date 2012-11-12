@@ -34,9 +34,11 @@
 #include "fcitx-utils/utf8.h"
 
 #include "clipboard-internal.h"
-#ifdef ENABLE_X11
+/* #ifdef ENABLE_X11 */
 #include "clipboard-x11.h"
-#endif
+/* #endif */
+
+#define FCITX_CLIPBOARD_BLANK " \b\f\v\r\t\n"
 
 CONFIG_DEFINE_LOAD_AND_SAVE(FcitxClipboard, FcitxClipboardConfig,
                             "fcitx-clipboard");
@@ -62,6 +64,25 @@ static const unsigned int cmodifiers[] = {
 };
 
 #define MODIFIERS_COUNT (sizeof(cmodifiers) / sizeof(unsigned int))
+
+static boolean
+ClipboardSelectionEqual(ClipboardSelectionStr *sel, const char *str, size_t len)
+{
+    return len == sel->len && !memcmp(sel->str, str, len);
+}
+
+static int
+ClipboardSelectionClipboardFind(FcitxClipboard *clipboard,
+                                const char *str, size_t len)
+{
+    int i;
+    for (i = 0;i < clipboard->clp_hist_len;i++) {
+        if (ClipboardSelectionEqual(clipboard->clp_hist_lst + i, str, len)) {
+            return i;
+        }
+    }
+    return -1;
+}
 
 static void*
 ClipboardGetPrimary(void *arg, FcitxModuleFunctionArg args)
@@ -233,9 +254,7 @@ ClipboardSelectionStrip(FcitxClipboard *clipboard,
     char *res;
     char *p;
     if (len < clipboard->config.cand_max_len) {
-        res = malloc(len + 1);
-        memcpy(res, begin, len);
-        res[len] = '\0';
+        res = fcitx_utils_set_str_with_len(NULL, begin, len);
         goto out;
     }
     const char *begin_end = begin + clipboard->cand_half_len;
@@ -274,10 +293,7 @@ ClipboardSetCandWord(FcitxClipboard *clipboard,
                      FcitxCandidateWord *cand_word, ClipboardSelectionStr *str)
 {
     cand_word->strWord = ClipboardSelectionStrip(clipboard, str->str, str->len);
-    char *real = malloc(str->len + 1);
-    cand_word->priv = real;
-    memcpy(real, str->str, str->len);
-    real[str->len] = '\0';
+    cand_word->priv = fcitx_utils_set_str_with_len(NULL, str->str, str->len);
 }
 
 static boolean
@@ -289,13 +305,17 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
     if (!((clipboard->primary.len && config->use_primary) ||
           clipboard->clp_hist_len))
         return false;
+    FcitxInstance *instance = clipboard->owner;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    if (FcitxInputStateGetRawInputBufferSize(input))
+        return false;
     if (!FcitxHotkeyIsHotKey(sym, state, config->trigger_key))
         return false;
     clipboard->active = true;
-    FcitxInstance *instance = clipboard->owner;
-    FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
     FcitxGlobalConfig *gconfig = FcitxInstanceGetGlobalConfig(instance);
+    int i;
+    FcitxMessages *msg;
     FcitxCandidateWord cand_word = {
         .callback = ClipboardCommitCallback,
         .wordType = MSG_OTHER,
@@ -305,26 +325,30 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
     FcitxCandidateWordSetPageSize(cand_list, gconfig->iMaxCandWord);
     FcitxCandidateWordSetChooseAndModifier(
         cand_list, DIGIT_STR_CHOOSE, cmodifiers[config->choose_modifier]);
-    char *preedit_str = NULL;
     if (clipboard->clp_hist_len) {
-        preedit_str = clipboard->clp_hist_lst[0].str;
         ClipboardSetCandWord(clipboard, &cand_word, clipboard->clp_hist_lst);
         FcitxCandidateWordAppend(cand_list, &cand_word);
     }
+    int primary_found;
     if (clipboard->primary.len && config->use_primary) {
-        if (!preedit_str)
-            preedit_str = clipboard->primary.str;
+        primary_found = ClipboardSelectionClipboardFind(
+            clipboard, clipboard->primary.str, clipboard->primary.len);
+        if (primary_found == 0)
+            goto skip_primary;
         ClipboardSetCandWord(clipboard, &cand_word, &clipboard->primary);
         FcitxCandidateWordAppend(cand_list, &cand_word);
+    } else {
+        primary_found = -1;
     }
-    FcitxMessages *msg;
+skip_primary:
     msg = FcitxInputStateGetAuxUp(input);
     FcitxInputStateSetShowCursor(input, false);
     FcitxMessagesSetMessageCount(msg, 0);
     FcitxMessagesAddMessageStringsAtLast(msg, MSG_TIPS,
                                          _("Select to paste"));
-    int i;
     for (i = 1;i < clipboard->clp_hist_len;i++) {
+        if (i == primary_found)
+            continue;
         ClipboardSetCandWord(clipboard, &cand_word,
                              clipboard->clp_hist_lst + i);
         FcitxCandidateWordAppend(cand_list, &cand_word);
@@ -351,7 +375,9 @@ ClipboardCreate(FcitxInstance *instance)
         return NULL;
     }
     ClipboardInitReadHistory(clipboard);
+/* #ifdef ENABLE_X11 */
     ClipboardInitX11(clipboard);
+/* #endif */
     ApplyClipboardConfig(clipboard);
 
     FcitxKeyFilterHook key_hook = {
@@ -420,15 +446,29 @@ ClipboardReloadConfig(void* arg)
     ApplyClipboardConfig(clipboard);
 }
 
+static boolean
+ClipboardCheckBlank(FcitxClipboard *clipboard, const char *str)
+{
+    if (clipboard->config.ignore_blank) {
+        if (!str[strspn(str, FCITX_CLIPBOARD_BLANK)])
+            return false;
+    }
+    return true;
+}
+
 void
 ClipboardSetPrimary(FcitxClipboard *clipboard, uint32_t len, const char *str)
 {
     if (!(len && str && *str))
         return;
-    clipboard->primary.str = realloc(clipboard->primary.str, len + 1);
+    if (!ClipboardCheckBlank(clipboard, str))
+        return;
+    if (clipboard->primary.len != len) {
+        clipboard->primary.len = len;
+        clipboard->primary.str = realloc(clipboard->primary.str, len + 1);
+    }
     memcpy(clipboard->primary.str, str, len);
     clipboard->primary.str[len] = '\0';
-    clipboard->primary.len = len;
 }
 
 void
@@ -436,10 +476,18 @@ ClipboardPushClipboard(FcitxClipboard *clipboard, uint32_t len, const char *str)
 {
     if (!(len && str && *str))
         return;
-    if (clipboard->clp_hist_len &&
-        len == clipboard->clp_hist_lst->len &&
-        !memcmp(clipboard->clp_hist_lst->str, str, len))
+    if (!ClipboardCheckBlank(clipboard, str))
         return;
+    int i = ClipboardSelectionClipboardFind(clipboard, str, len);
+    if (i == 0) {
+        return;
+    } else if (i > 0) {
+        ClipboardSelectionStr sel = clipboard->clp_hist_lst[i];
+        memmove(clipboard->clp_hist_lst + 1, clipboard->clp_hist_lst,
+                i * sizeof(ClipboardSelectionStr));
+        clipboard->clp_hist_lst[0] = sel;
+        return;
+    }
     char *new_str;
     if (clipboard->clp_hist_len < clipboard->config.history_len) {
         clipboard->clp_hist_len++;
@@ -449,9 +497,7 @@ ClipboardPushClipboard(FcitxClipboard *clipboard, uint32_t len, const char *str)
     }
     memmove(clipboard->clp_hist_lst + 1, clipboard->clp_hist_lst,
             (clipboard->clp_hist_len - 1) * sizeof(ClipboardSelectionStr));
-    new_str = realloc(new_str, len + 1);
-    memcpy(new_str, str, len);
-    new_str[len] = '\0';
+    new_str = fcitx_utils_set_str_with_len(new_str, str, len);
     clipboard->clp_hist_lst->len = len;
     clipboard->clp_hist_lst->str = new_str;
 }

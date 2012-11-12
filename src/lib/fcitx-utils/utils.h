@@ -86,9 +86,22 @@ typedef int32_t boolean;
 #define fcitx_container_of(ptr, type, member)           \
     ((type*)(((void*)(ptr)) - offsetof(type, member)))
 
+#if defined(__GNUC__) && (__GNUC__ > 2)
+#  define fcitx_expect(exp, var) __builtin_expect(exp, var)
+#else
+#  define fcitx_expect(exp, var) (exp)
+#endif
+
+#define fcitx_likely(x) fcitx_expect(!!(x), 1)
+#define fcitx_unlikely(x) fcitx_expect(!!(x), 0)
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+    extern const UT_icd *const fcitx_ptr_icd;
+    extern const UT_icd *const fcitx_str_icd;
+    extern const UT_icd *const fcitx_int_icd;
 
     /**
      * Function used to free the pointer
@@ -384,6 +397,8 @@ extern "C" {
      * @return void
      **/
     void fcitx_utils_string_swap(char** obj, const char* str);
+    void fcitx_utils_string_swap_with_len(char** obj,
+                                          const char* str, size_t len);
 
     /**
      * similar with strcmp, but can handle the case that a or b is null.
@@ -606,6 +621,17 @@ extern "C" {
                             __str_list, __size_list);                   \
     } while (0)
 
+#define fcitx_utils_set_cat_str(dest, strs...) do {                     \
+        const char *__str_list[] = {strs};                              \
+        size_t __cat_str_n = sizeof(__str_list) / sizeof(char*);        \
+        size_t __size_list[sizeof(__str_list) / sizeof(char*)];         \
+        size_t __total_size = fcitx_utils_str_lens(__cat_str_n,         \
+                                                   __str_list, __size_list); \
+        dest = realloc(dest, __total_size);                             \
+        fcitx_utils_cat_str(dest, __cat_str_n,                          \
+                            __str_list, __size_list);                   \
+    } while (0)
+
     static inline int fcitx_utils_isdir(const char *path)
     {
         struct stat stats;
@@ -625,6 +651,67 @@ extern "C" {
         struct stat stats;
         return stat(path, &stats) == 0 && S_ISLNK(stats.st_mode);
     }
+    char *fcitx_utils_set_str_with_len(char *res, const char *str, size_t len);
+    static inline char*
+    fcitx_utils_set_str(char *res, const char *str)
+    {
+        return fcitx_utils_set_str_with_len(res, str, strlen(str));
+    }
+    char fcitx_utils_unescape_char(char c);
+    char *fcitx_utils_unescape_str_inplace(char *str);
+    char *fcitx_utils_set_unescape_str(char *res, const char *str);
+#define FCITX_CHAR_NEED_ESCAPE "\a\b\f\n\r\t\e\v\'\"\\"
+    char fcitx_utils_escape_char(char c);
+    char *fcitx_utils_set_escape_str_with_set(char *res, const char *str,
+                                              const char *set);
+    static inline char*
+    fcitx_utils_set_escape_str(char *res, const char *str)
+    {
+        return fcitx_utils_set_escape_str_with_set(res, str, NULL);
+    }
+    UT_array *fcitx_utils_append_split_string(UT_array *list, const char* str,
+                                              const char *delm);
+    static inline UT_array*
+    fcitx_utils_append_lines(UT_array *list, const char* str)
+    {
+        return fcitx_utils_append_split_string(list, str, "\n");
+    }
+    UT_array *fcitx_utils_string_list_append_no_copy(UT_array *list, char *str);
+    UT_array *fcitx_utils_string_list_append_len(UT_array *list,
+                                                 const char *str, size_t len);
+#ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
+#define FCITX_UTIL_DECLARE_ATOMIC(name, type)                           \
+    type fcitx_utils_atomic_##name(volatile type *atomic, type val);    \
+    static inline type                                                  \
+    __fcitx_utils_atomic_##name(volatile type *atomic, type val)        \
+    {                                                                   \
+        return __sync_fetch_and_##name(atomic, val);                    \
+    }
+#else
+#define FCITX_UTIL_DECLARE_ATOMIC(name, type)                           \
+    type fcitx_utils_atomic_##name(volatile type *atomic, type val);    \
+    static inline type                                                  \
+    __fcitx_utils_atomic_##name(volatile type *atomic, type val)        \
+    {                                                                   \
+        return __fcitx_utils_atomic_##name(atomic, val);                \
+    }
+#endif
+
+    FCITX_UTIL_DECLARE_ATOMIC(add, int32_t)
+    FCITX_UTIL_DECLARE_ATOMIC(and, uint32_t)
+    FCITX_UTIL_DECLARE_ATOMIC(or, uint32_t)
+    FCITX_UTIL_DECLARE_ATOMIC(xor, uint32_t)
+
+#define fcitx_utils_atomic_add(atomic, val)     \
+    __fcitx_utils_atomic_add(atomic, val)
+#define fcitx_utils_atomic_and(atomic, val)     \
+    __fcitx_utils_atomic_and(atomic, val)
+#define fcitx_utils_atomic_or(atomic, val)      \
+    __fcitx_utils_atomic_or(atomic, val)
+#define fcitx_utils_atomic_xor(atomic, val)     \
+    __fcitx_utils_atomic_xor(atomic, val)
+
+#undef FCITX_UTIL_DECLARE_ATOMIC
 
 #ifdef __cplusplus
 }

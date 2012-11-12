@@ -9,4 +9,3 @@ if [ $? = "1" ]; then
 else
     echo "Fcitx is running correctly."
 fi
-

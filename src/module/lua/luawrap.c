@@ -110,8 +110,12 @@ const char *kFcitxLua =
     "ime.get_last_commit = function()"
     "    return __ime_get_last_commit();"
     "end;";
-const UT_icd FunctionItem_icd = {sizeof(FunctionItem), NULL, FunctionItemCopy, FunctionItemDtor};
-const UT_icd LuaResultItem_icd = {sizeof(LuaResultItem), NULL, LuaResultItemCopy, LuaResultItemDtor};
+static const UT_icd FunctionItem_icd = {
+    sizeof(FunctionItem), NULL, FunctionItemCopy, FunctionItemDtor
+};
+static const UT_icd LuaResultItem_icd = {
+    sizeof(LuaResultItem), NULL, LuaResultItemCopy, LuaResultItemDtor
+};
 
 LuaModule * LuaModuleAlloc(FcitxInstance *fcitx) {
     LuaModule *module;

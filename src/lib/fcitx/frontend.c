@@ -35,8 +35,6 @@
 #include "instance-internal.h"
 #include "addon-internal.h"
 
-static const UT_icd frontend_icd = {sizeof(FcitxAddon*), NULL, NULL, NULL };
-static const UT_icd ptr_icd = {sizeof(void*), NULL, NULL, NULL };
 static void FcitxInstanceCleanUpIC(FcitxInstance* instance);
 static void NewICData(FcitxInstance* instance, FcitxInputContext* ic);
 static void FreeICData(FcitxInstance* instance, FcitxInputContext* ic);
@@ -59,7 +57,7 @@ void FillICData(FcitxInstance* instance, FcitxInputContext* ic)
 void NewICData(FcitxInstance* instance, FcitxInputContext* ic)
 {
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
-    utarray_new(ic2->data, &ptr_icd);
+    utarray_new(ic2->data, fcitx_ptr_icd);
     FillICData(instance, ic);
 }
 
@@ -139,7 +137,7 @@ void FcitxInstanceSetICData(struct _FcitxInstance* instance, FcitxInputContext* 
 FCITX_EXPORT_API
 void FcitxFrontendsInit(UT_array* frontends)
 {
-    utarray_init(frontends, &frontend_icd);
+    utarray_init(frontends, fcitx_ptr_icd);
 }
 
 FCITX_EXPORT_API

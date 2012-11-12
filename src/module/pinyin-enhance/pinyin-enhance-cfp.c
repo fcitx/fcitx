@@ -64,7 +64,7 @@ CharFromPhraseModeGetCandCb(void *arg, FcitxCandidateWord *cand_word)
     int len2 = strlen(cand_word->strWord);
     pyenhance->cfp_mode_selected = realloc(pyenhance->cfp_mode_selected,
                                            len + len2 + 1);
-    strcpy(pyenhance->cfp_mode_selected + len, cand_word->strWord);
+    memcpy(pyenhance->cfp_mode_selected + len, cand_word->strWord, len2 + 1);
     FcitxInstanceCommitString(pyenhance->owner,
                               FcitxInstanceGetCurrentIC(pyenhance->owner),
                               pyenhance->cfp_mode_selected);
@@ -326,9 +326,10 @@ CharFromPhraseModePre(PinyinEnhance *pyenhance, FcitxKeySym sym,
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
         int len = strlen(pyenhance->cfp_mode_selected);
         char *cur_full = *pyenhance->cfp_mode_lists[pyenhance->cfp_mode_cur];
+        int len2 = strlen(cur_full);
         pyenhance->cfp_mode_selected = realloc(pyenhance->cfp_mode_selected,
-                                               len + strlen(cur_full) + 1);
-        strcpy(pyenhance->cfp_mode_selected + len, cur_full);
+                                               len + len2 + 1);
+        memcpy(pyenhance->cfp_mode_selected + len, cur_full, len2 + 1);
         FcitxInstanceCommitString(pyenhance->owner,
                                   FcitxInstanceGetCurrentIC(pyenhance->owner),
                                   pyenhance->cfp_mode_selected);
@@ -365,10 +366,8 @@ CharFromPhraseModeListFromWord(const char *word)
         return NULL;
     do {
         if ((len = p - word) > 1) {
-            buff[n] = malloc(len + 1);
+            buff[n] = fcitx_utils_set_str_with_len(NULL, word, len);
             strncat(full, word, len);
-            memcpy(buff[n], word, len);
-            buff[n][len] = '\0';
             n++;
         }
         if (!*p)

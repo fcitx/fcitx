@@ -1,10 +1,11 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required(VERSION 2.6)
 
 project(fcitx)
 
 set(version 4.2.7)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+set_property(GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD" On)
 
 option(ENABLE_X11 "Enable X11 as dependency" ON)
 option(ENABLE_GLIB2 "Enable GLib2 as depenedency" ON)
@@ -39,21 +40,13 @@ if (NOT NO_SNOOPER_APPS)
 set(NO_SNOOPER_APPS ".*chrome.*,.*chromium.*,firefox.*,Do.*" CACHE STRING "Disable Key Snooper for following app")
 endif (NOT NO_SNOOPER_APPS)
 
-# uninstall target
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-    IMMEDIATE @ONLY)
-
-add_custom_target(uninstall
-    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
 include(FindPkgConfig)
 include(UseDoxygen OPTIONAL)
 include(FcitxMacro)
 
+_fcitx_add_uninstall_target()
 check_include_files(unistd.h HAVE_UNISTD_H)
 check_include_files(malloc.h HAVE_MALLOC_H)
 check_include_files(stdbool.h HAVE_STDBOOL_H)
@@ -250,15 +243,19 @@ configure_file("${PROJECT_SOURCE_DIR}/cmake/FcitxConfigVersion.cmake.in"
 )
 
 include_directories(${PROJECT_BINARY_DIR})
+include_directories(${PROJECT_BINARY_DIR}/src/)
+include_directories(${PROJECT_SOURCE_DIR}/src/)
+include_directories(${PROJECT_SOURCE_DIR}/src/lib/)
 
+# must be the first
+add_subdirectory(po)
 add_subdirectory(src)
 add_subdirectory(doc)
 add_subdirectory(skin)
 add_subdirectory(tools)
 add_subdirectory(data)
-add_subdirectory(po)
 add_subdirectory(cmake)
 
-if (ENABLE_TEST)
-    add_subdirectory(test)
-endif (ENABLE_TEST)
+if(ENABLE_TEST)
+  add_subdirectory(test)
+endif()

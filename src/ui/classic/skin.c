@@ -60,7 +60,7 @@
 #include "fcitx/hook.h"
 #include "fcitx/candidate.h"
 
-static const UT_icd place_icd = {sizeof(SkinPlacement), NULL, NULL, NULL };
+static const UT_icd place_icd = { sizeof(SkinPlacement), NULL, NULL, NULL };
 
 static boolean SkinMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateSkinMenu(FcitxUIMenu* menu);
@@ -921,7 +921,7 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
 
 void InitSkinMenu(FcitxClassicUI* classicui)
 {
-    utarray_init(&classicui->skinBuf, &ut_str_icd);
+    utarray_init(&classicui->skinBuf, fcitx_str_icd);
     FcitxMenuInit(&classicui->skinMenu);
     classicui->skinMenu.candStatusBind = NULL;
     classicui->skinMenu.name =  strdup(_("Skin"));

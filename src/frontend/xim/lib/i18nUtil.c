@@ -152,9 +152,9 @@ void _Xi18nSendMessage(XIMS ims,
     reply_length = header_size + length;
     reply = (unsigned char *) malloc(reply_length);
     replyp = reply;
-    memmove(reply, reply_hdr, header_size);
+    memcpy(reply, reply_hdr, header_size);
     replyp += header_size;
-    memmove(replyp, data, length);
+    memcpy(replyp, data, length);
 
     i18n_core->methods.send(ims, connect_id, reply, reply_length);
 

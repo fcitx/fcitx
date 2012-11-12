@@ -48,7 +48,7 @@
 #include "sp.h"
 #include "pyconfig.h"
 #include "spdata.h"
-#include "module/quickphrase/quickphrase.h"
+#include "module/quickphrase/fcitx-quickphrase.h"
 
 #define PY_INDEX_MAGIC_NUMBER 0xf7462e34
 #define PINYIN_TEMP_FILE "pinyin_XXXXXX"
@@ -57,8 +57,6 @@ FCITX_DEFINE_PLUGIN(fcitx_pinyin, ime, FcitxIMClass) = {
     PYCreate,
     NULL
 };
-
-const UT_icd pycand_icd = {sizeof(PYCandWord*) , NULL, NULL, NULL };
 
 typedef struct {
     PY_CAND_WORD_TYPE type;
@@ -538,8 +536,8 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 int key = sym;
                 boolean useDup = false;
                 boolean append = true;
-                if (InvokeVaArgs(pystate->owner, FCITX_QUICKPHRASE,
-                                 LAUNCHQUICKPHRASE, &key, &useDup, &append))
+                if (FcitxQuickPhraseLaunch(pystate->owner, &key,
+                                           &useDup, &append))
                     return IRV_DISPLAY_MESSAGE;
             }
 
@@ -1262,7 +1260,7 @@ void PYGetPhraseCandWords(FcitxPinyinState* pystate)
         return;
 
     UT_array candtemp;
-    utarray_init(&candtemp, &pycand_icd);
+    utarray_init(&candtemp, fcitx_ptr_icd);
 
     str[0] = pystate->findMap.strMap[0][0];
     str[1] = pystate->findMap.strMap[0][1];
@@ -1377,7 +1375,7 @@ void PYGetBaseCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
     FcitxPinyinConfig* pyconfig = &pystate->pyconfig;
     FcitxInputState* input = FcitxInstanceGetInputState(pystate->owner);
     UT_array candtemp;
-    utarray_init(&candtemp, &pycand_icd);
+    utarray_init(&candtemp, fcitx_ptr_icd);
 
     str[0] = pystate->findMap.strMap[0][0];
     str[1] = pystate->findMap.strMap[0][1];
@@ -1435,7 +1433,7 @@ void PYGetFreqCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
     HZ *hz;
     UT_array candtemp;
     FcitxInputState* input = FcitxInstanceGetInputState(pystate->owner);
-    utarray_init(&candtemp, &pycand_icd);
+    utarray_init(&candtemp, fcitx_ptr_icd);
 
     if (pCurFreq) {
         hz = pCurFreq->HZList->next;
@@ -1487,7 +1485,7 @@ void PYAddFreqCandWord(PyFreq* pyFreq, HZ * hz, char *strPY, PYCandWord* pycandW
  * 将一个词组保存到用户词组库中
  * 返回true表示是新词组
  */
-boolean PYAddUserPhrase(FcitxPinyinState* pystate, char *phrase, char *map, boolean incHit)
+boolean PYAddUserPhrase(FcitxPinyinState* pystate, const char *phrase, const char *map, boolean incHit)
 {
     PyUsrPhrase *userPhrase, *newPhrase, *temp;
     char str[UTF8_MAX_LENGTH + 1];
@@ -1949,7 +1947,7 @@ _HIT:
         return IRV_TO_PROCESS;
 
     UT_array candtemp;
-    utarray_init(&candtemp, &pycand_icd);
+    utarray_init(&candtemp, fcitx_ptr_icd);
 
     for (i = 0; i < pyBaseForRemind->iPhrase; i++) {
 
@@ -2034,7 +2032,7 @@ void PYAddRemindCandWord(FcitxPinyinState* pystate, PyPhrase * phrase, PYCandWor
     pyRemindCandWords->iLength = strlen(pystate->strPYRemindSource) - fcitx_utf8_char_len(pystate->strPYRemindSource);
 }
 
-void PYGetPYByHZ(FcitxPinyinState*pystate, char *strHZ, char *strPY)
+void PYGetPYByHZ(FcitxPinyinState*pystate, const char *strHZ, char *strPY)
 {
     int i, j;
     char str_PY[MAX_PY_LENGTH + 1];
@@ -2076,7 +2074,7 @@ void* LoadPYBaseDictWrapper(void * arg, FcitxModuleFunctionArg args)
 void* PYGetPYByHZWrapper(void * arg, FcitxModuleFunctionArg args)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    char *a = args.args[0];
+    const char *a = args.args[0];
     char *b = args.args[1];
     PYGetPYByHZ(pystate, a, b);
     return NULL;
@@ -2089,8 +2087,8 @@ void* DoPYInputWrapper(void * arg, FcitxModuleFunctionArg args)
     unsigned int *b = args.args[1];
     DoPYInput(pystate, *a, *b);
     return NULL;
-
 }
+
 void* PYGetCandWordsWrapper(void * arg, FcitxModuleFunctionArg args)
 {
     PYGetCandWords(arg);
@@ -2242,7 +2240,7 @@ int PYCandWordCmp(const void* b, const void *a, void* arg)
 void* PYSP2QP(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    char* strSP = args.args[0];
+    const char* strSP = args.args[0];
     char strQP[MAX_PY_LENGTH + 1];
     strQP[0] = 0;
 
@@ -2274,7 +2272,9 @@ void*
 PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    char* strHZ = args.args[0], *sp, *pivot;
+    const char *strHZ = args.args[0];
+    const char *pivot;
+    char *sp;
     char singleHZ[UTF8_MAX_LENGTH + 1];
     char strMap[3];
     if (!fcitx_utf8_check_string(strHZ))

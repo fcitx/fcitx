@@ -38,7 +38,7 @@
 #include "module/x11/fcitx-x11.h"
 #include "ui/cairostuff/cairostuff.h"
 #include "ui/cairostuff/font.h"
-#include "ui/classic/classicuiinterface.h"
+#include "ui/classic/fcitx-classicui.h"
 
 #define VK_FILE "vk.conf"
 
@@ -339,8 +339,8 @@ cairo_surface_t* LoadVKImage(VKWindow* vkWindow)
     FcitxVKState* vkstate = vkWindow->owner;
     boolean fallback = true;
     char vkimage[] = "keyboard.png";
-    cairo_surface_t *image = InvokeVaArgs(vkstate->owner, FCITX_CLASSIC_UI,
-                                          LOADIMAGE, vkimage, &fallback);
+    cairo_surface_t *image = FcitxClassicUILoadImage(vkstate->owner,
+                                                     vkimage, &fallback);
 
     if (image)
         return image;
@@ -366,15 +366,15 @@ void DestroyVKWindow(VKWindow* vkWindow)
 
 void DrawVKWindow(VKWindow* vkWindow)
 {
-    int             i;
-    int             iPos;
+    int i;
+    int iPos;
     cairo_t *cr;
     FcitxVKState *vkstate = vkWindow->owner;
     VKS *vks = vkstate->vks;
 
-    FcitxConfigColor *fontColor = InvokeVaArgs(vkstate->owner, FCITX_CLASSIC_UI,
-                                               GETKEYBOARDFONTCOLOR);
-    char **font = InvokeVaArgs(vkstate->owner, FCITX_CLASSIC_UI, GETFONT);
+    FcitxConfigColor *fontColor;
+    fontColor = FcitxClassicUIGetKeyboardFontColor(vkstate->owner);
+    char **font = FcitxClassicUIGetFont(vkstate->owner);
 
     if (!fontColor || !font) {
         fontColor = &blackColor;

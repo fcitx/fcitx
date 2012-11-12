@@ -37,9 +37,9 @@
 #include "fcitx/frontend.h"
 #include "fcitx/candidate.h"
 #include "fcitx/context.h"
-#include "module/punc/punc.h"
-#include "module/lua/luamod.h"
-#include "module/spell/spell.h"
+#include "module/punc/fcitx-punc.h"
+#include "module/lua/fcitx-lua.h"
+#include "module/spell/fcitx-spell.h"
 
 #include "fcitx/ime.h"
 
@@ -94,7 +94,7 @@ static void FreeQuickPhrase(void* arg);
 static void ReloadQuickPhrase(void* arg);
 static INPUT_RETURN_VALUE QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state);
 static INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate);
-static UT_icd qp_icd = {sizeof(QUICK_PHRASE), NULL, NULL, NULL};
+static UT_icd qp_icd = { sizeof(QUICK_PHRASE), NULL, NULL, NULL };
 static void ShowQuickPhraseMessage(QuickPhraseState *qpstate);
 static INPUT_RETURN_VALUE QuickPhraseGetCandWord(void* arg, FcitxCandidateWord* candWord);
 static INPUT_RETURN_VALUE QuickPhraseGetLuaCandWord(void* arg, FcitxCandidateWord* candWord);
@@ -212,7 +212,7 @@ void* QuickPhraseLaunch(void* arg, FcitxModuleFunctionArg args)
     _QuickPhraseLaunch(qpstate);
     FcitxUIUpdateInputWindow(qpstate->owner);
 
-    return (void*) true;
+    return (void*)true;
 }
 
 void QuickPhraseFillKeyString(QuickPhraseState* qpstate, char c[2])
@@ -239,8 +239,8 @@ void _QuickPhraseLaunch(QuickPhraseState* qpstate)
     ShowQuickPhraseMessage(qpstate);
 
     if (c[0]) {
-        FcitxKeySym s = qpstate->curTriggerKey[0].sym;
-        char *strTemp = InvokeVaArgs(qpstate->owner, FCITX_PUNC, GETPUNC, &s);
+        int s = qpstate->curTriggerKey[0].sym;
+        char *strTemp = FcitxPuncGetPunc(qpstate->owner, &s);
         const char* full = strTemp ? strTemp : c;
         FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Space for %s Enter for %s") , full, c);
     }
@@ -360,9 +360,8 @@ boolean QuickPhrasePreFilter(void *arg, FcitxKeySym sym,
             ((qpstate->useDupKeyInput &&
               FcitxHotkeyIsHotKey(keymain, state, qpstate->curTriggerKey)) ||
              FcitxHotkeyIsHotKey(keymain, state, FCITX_SPACE))) {
-            FcitxKeySym s = qpstate->curTriggerKey[0].sym;
-            char *strTemp = InvokeVaArgs(qpstate->owner, FCITX_PUNC,
-                                         GETPUNC, &s);
+            int s = qpstate->curTriggerKey[0].sym;
+            char *strTemp = FcitxPuncGetPunc(qpstate->owner, &s);
             strcpy(FcitxInputStateGetOutputString(input), strTemp ? strTemp : c);
             *retval = IRV_COMMIT_STRING;
         } else {
@@ -529,9 +528,8 @@ QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
     } else {
         search = qpstate->buffer;
     }
-    new_list = InvokeVaArgs(qpstate->owner, FCITX_SPELL, GET_CANDWORDS,
-                            NULL, search, NULL, (void*)(long)space_left,
-                            "en", "cus", NULL, NULL);
+    new_list = FcitxSpellGetCandWords(qpstate->owner, NULL, search, NULL,
+                                      space_left, "en", "cus", NULL, NULL);
     if (new_list) {
         FcitxCandidateWordMerge(cand_list, new_list, -1);
         FcitxCandidateWordFreeList(new_list);
@@ -558,11 +556,8 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
 
     pKey = &searchKey;
 
-    {
-        char *text = qpstate->buffer;
-        InvokeVaArgs(qpstate->owner, FCITX_LUA, CALLCOMMAND,
-                     text, QuickPhraseGetLuaCandWord, qpstate);
-    }
+    FcitxLuaCallCommand(qpstate->owner, qpstate->buffer,
+                        QuickPhraseGetLuaCandWord, qpstate);
 
     do {
         if (!qpstate->quickPhrases)

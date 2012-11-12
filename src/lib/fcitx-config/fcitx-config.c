@@ -253,25 +253,17 @@ FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE *fp)
 
         if (groupNameLen == 0 || optionNameLen == 0)
             continue;
-
-        char *groupName = malloc(sizeof(char) * (groupNameLen + 1));
-
-        strncpy(groupName, group->groupName, groupNameLen);
-
-        groupName[groupNameLen] = '\0';
-
-        char *optionName = strdup(p + 1);
-
-        HASH_FIND_STR(cfdesc->groupsDesc, groupName, cgdesc);
-
+        HASH_FIND(hh, cfdesc->groupsDesc, group->groupName,
+                  groupNameLen, cgdesc);
         if (!cgdesc) {
-            cgdesc = fcitx_utils_malloc0(sizeof(FcitxConfigGroupDesc));
-            cgdesc->groupName = groupName;
+            cgdesc = fcitx_utils_new(FcitxConfigGroupDesc);
+            cgdesc->groupName = fcitx_utils_set_str_with_len(
+                NULL, group->groupName, groupNameLen);
             cgdesc->optionsDesc = NULL;
-            HASH_ADD_KEYPTR(hh, cfdesc->groupsDesc, cgdesc->groupName, groupNameLen, cgdesc);
-        } else
-            free(groupName);
-
+            HASH_ADD_KEYPTR(hh, cfdesc->groupsDesc, cgdesc->groupName,
+                            groupNameLen, cgdesc);
+        }
+        char *optionName = strdup(p + 1);
         FcitxConfigOptionDesc2 *codesc2 = fcitx_utils_new(FcitxConfigOptionDesc2);
         FcitxConfigOptionDesc *codesc = (FcitxConfigOptionDesc*) codesc2;
 
@@ -893,25 +885,23 @@ FcitxConfigFile* FcitxConfigParseIniFp(FILE *fp, FcitxConfigFile *cfile)
                 return NULL;
             }
 
-            char *groupName;
-
-            groupName = malloc(sizeof(char) * (lineLen - 2 + 1));
-            strncpy(groupName, line + 1, lineLen - 2);
-            groupName[lineLen - 2] = '\0';
-            HASH_FIND_STR(cfile->groups, groupName, curGroup);
-
+            size_t grp_len = lineLen - 2;
+            HASH_FIND(hh, cfile->groups, line + 1, grp_len, curGroup);
             if (curGroup) {
-                FcitxLog(DEBUG, _("Duplicate group name, merge with the previous: %s :line %d"), groupName, lineNo);
-                free(groupName);
+                FcitxLog(DEBUG, _("Duplicate group name, "
+                                  "merge with the previous: %s :line %d"),
+                         curGroup->groupName, lineNo);
                 continue;
             }
 
+            char *groupName;
+            groupName = fcitx_utils_set_str_with_len(NULL, line + 1, grp_len);
             curGroup = fcitx_utils_malloc0(sizeof(FcitxConfigGroup));
-
             curGroup->groupName = groupName;
             curGroup->options = NULL;
             curGroup->groupDesc = NULL;
-            HASH_ADD_KEYPTR(hh, cfile->groups, curGroup->groupName, strlen(curGroup->groupName), curGroup);
+            HASH_ADD_KEYPTR(hh, cfile->groups, curGroup->groupName,
+                            grp_len, curGroup);
         } else {
             if (curGroup == NULL)
                 continue;

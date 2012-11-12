@@ -69,6 +69,30 @@
 #include <sys/endian.h>
 #endif
 
+static const UT_icd __fcitx_ptr_icd = {
+    sizeof(void*), NULL, NULL, NULL
+};
+
+FCITX_EXPORT_API const UT_icd *const fcitx_ptr_icd = &__fcitx_ptr_icd;
+FCITX_EXPORT_API const UT_icd *const fcitx_str_icd = &ut_str_icd;
+FCITX_EXPORT_API const UT_icd *const fcitx_int_icd = &ut_int_icd;
+
+FCITX_EXPORT_API UT_array*
+fcitx_utils_string_list_append_no_copy(UT_array *list, char *str)
+{
+    utarray_extend_back(list);
+    *(char**)utarray_back(list) = str;
+    return list;
+}
+
+FCITX_EXPORT_API UT_array*
+fcitx_utils_string_list_append_len(UT_array *list, const char *str, size_t len)
+{
+    char *buff = fcitx_utils_set_str_with_len(NULL, str, len);
+    fcitx_utils_string_list_append_no_copy(list, buff);
+    return list;
+}
+
 FCITX_EXPORT_API
 int fcitx_utils_calculate_record_number(FILE* fpDict)
 {
@@ -81,8 +105,7 @@ int fcitx_utils_calculate_record_number(FILE* fpDict)
     }
     rewind(fpDict);
 
-    if (strBuf)
-        free(strBuf);
+    fcitx_utils_free(strBuf);
 
     return nNumber;
 }
@@ -153,30 +176,33 @@ FCITX_EXPORT_API
 UT_array* fcitx_utils_new_string_list()
 {
     UT_array* array;
-    utarray_new(array, &ut_str_icd);
+    utarray_new(array, fcitx_str_icd);
     return array;
+}
+
+FCITX_EXPORT_API UT_array*
+fcitx_utils_append_split_string(UT_array *list,
+                                const char* str, const char *delm)
+{
+    const char *src = str;
+    const char *pos;
+    size_t len;
+    while ((len = strcspn(src, delm)), *(pos = src + len)) {
+        fcitx_utils_string_list_append_len(list, src, len);
+        src = pos + 1;
+    }
+    if (len)
+        fcitx_utils_string_list_append_len(list, src, len);
+    return list;
 }
 
 FCITX_EXPORT_API
 UT_array* fcitx_utils_split_string(const char* str, char delm)
 {
     UT_array* array;
-    utarray_new(array, &ut_str_icd);
-    char *bakstr = strdup(str);
-    size_t len = strlen(bakstr);
-    size_t i = 0, last = 0;
-    if (len) {
-        for (i = 0 ; i <= len ; i++) {
-            if (bakstr[i] == delm || bakstr[i] == '\0') {
-                bakstr[i] = '\0';
-                char *p = &bakstr[last];
-                utarray_push_back(array, &p);
-                last = i + 1;
-            }
-        }
-    }
-    free(bakstr);
-    return array;
+    char delm_s[2] = {delm, '\0'};
+    utarray_new(array, fcitx_str_icd);
+    return fcitx_utils_append_split_string(array, str, delm_s);
 }
 
 FCITX_EXPORT_API
@@ -187,8 +213,7 @@ void fcitx_utils_string_list_printf_append(UT_array* list, const char* fmt,...)
     va_start(ap, fmt);
     vasprintf(&buffer, fmt, ap);
     va_end(ap);
-    utarray_push_back(list, &buffer);
-    free(buffer);
+    fcitx_utils_string_list_append_no_copy(list, buffer);
 }
 
 FCITX_EXPORT_API
@@ -209,16 +234,17 @@ char* fcitx_utils_join_string_list(UT_array* list, char delm)
         len += strlen(*str) + 1;
     }
 
-    char* result = (char*) fcitx_utils_malloc0(sizeof(char) * len);
+    char* result = (char*)malloc(sizeof(char) * len);
     char* p = result;
     for (str = (char**) utarray_front(list);
          str != NULL;
          str = (char**) utarray_next(list, str))
     {
         size_t strl = strlen(*str);
-        strcpy(p, *str);
-        p[strl] = delm;
-        p += strl + 1;
+        memcpy(p, *str, strl);
+        p += strl;
+        *p = delm;
+        p++;
     }
     result[len - 1] = '\0';
 
@@ -273,8 +299,7 @@ char* fcitx_utils_trim(const char* s)
 {
     register const char *end;
 
-    while (isspace(*s))                 /* skip leading space */
-        ++s;
+    s += strspn(s, "\f\n\r\t\v ");
     end = s + (strlen(s) - 1);
     while (end >= s && isspace(*end))               /* skip trailing space */
         --end;
@@ -283,39 +308,27 @@ char* fcitx_utils_trim(const char* s)
 
     size_t len = end - s;
 
-    char* result = fcitx_utils_malloc0(len + 1);
+    char* result = malloc(len + 1);
     memcpy(result, s, len);
     result[len] = '\0';
     return result;
 }
 
-FCITX_EXPORT_API
-int fcitx_utils_get_display_number()
+FCITX_EXPORT_API int
+fcitx_utils_get_display_number()
 {
-    int displayNumber = 0;
-    char* display = getenv("DISPLAY"), *strDisplayNumber = NULL;
-    if (display != NULL) {
-        display = strdup(display);
-        char* p = display;
-        for (; *p != ':' && *p != '\0'; p++);
-
-        if (*p == ':') {
-            *p = '\0';
-            p++;
-            strDisplayNumber = p;
-        }
-        for (; *p != '.' && *p != '\0'; p++);
-
-        if (*p == '.') {
-            *p = '\0';
-        }
-
-        if (strDisplayNumber) {
-            displayNumber = atoi(strDisplayNumber);
-        }
-
-        free(display);
-    }
+    const char *display = getenv("DISPLAY");
+    if (!display)
+        return 0;
+    size_t len;
+    const char *p = display + strcspn(display, ":");
+    if (*p != ':')
+        return 0;
+    p++;
+    len = strcspn(p, ".");
+    char *str_disp_num = fcitx_utils_set_str_with_len(NULL, p, len);
+    int displayNumber = atoi(str_disp_num);
+    free(str_disp_num);
     return displayNumber;
 }
 
@@ -347,16 +360,8 @@ char* fcitx_utils_get_current_langcode()
         if (!p)
             p = getenv("LANG");
     }
-    if (p) {
-        char* result = strdup(p);
-        char* m;
-        m = strchr(result, '.');
-        if (m) *m = '\0';
-
-        m = strchr(result, '@');
-        if (m) *m= '\0';
-        return result;
-    }
+    if (p)
+        return fcitx_utils_set_str_with_len(NULL, p, strcspn(p, ".@"));
     return strdup("C");
 }
 
@@ -489,28 +494,35 @@ char* fcitx_utils_get_fcitx_path_with_filename(const char* type, const char* fil
 FCITX_EXPORT_API
 void fcitx_utils_string_swap(char** obj, const char* str)
 {
-    fcitx_utils_free(*obj);
-
-    if (str)
-        *obj = strdup(str);
-    else
+    if (str) {
+        *obj = fcitx_utils_set_str(*obj, str);
+    } else if (*obj) {
+        free(*obj);
         *obj = NULL;
+    }
 }
 
 FCITX_EXPORT_API
-void fcitx_utils_launch_tool(const char* name, const char* arg)
+void fcitx_utils_string_swap_with_len(char** obj, const char* str, size_t len)
+{
+    if (str) {
+        *obj = fcitx_utils_set_str_with_len(*obj, str, len);
+    } else if (*obj) {
+        free(*obj);
+        *obj = NULL;
+    }
+}
+
+FCITX_EXPORT_API void
+fcitx_utils_launch_tool(const char* name, const char* arg)
 {
     char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", name);
-    char* darg = NULL;
-    if (arg)
-        darg = strdup(arg);
     char* args[] = {
         command,
-        darg,
-        0
+        (char*)(intptr_t)arg, /* parent process haven't even touched this... */
+        NULL
     };
     fcitx_utils_start_process(args);
-    fcitx_utils_free(darg);
     free(command);
 }
 
@@ -724,5 +736,167 @@ fcitx_utils_strcmp_empty(const char* a, const char* b)
         return 1;
     return strcmp(a, b);
 }
+
+FCITX_EXPORT_API char*
+fcitx_utils_set_str_with_len(char *res, const char *str, size_t len)
+{
+    if (res) {
+        res = realloc(res, len + 1);
+    } else {
+        res = malloc(len + 1);
+    }
+    memcpy(res, str, len);
+    res[len] = '\0';
+    return res;
+}
+
+FCITX_EXPORT_API char
+fcitx_utils_unescape_char(char c)
+{
+    switch (c) {
+#define CASE_UNESCAPE(from, to) case from: return to
+        CASE_UNESCAPE('a', '\a');
+        CASE_UNESCAPE('b', '\b');
+        CASE_UNESCAPE('f', '\f');
+        CASE_UNESCAPE('n', '\n');
+        CASE_UNESCAPE('r', '\r');
+        CASE_UNESCAPE('t', '\t');
+        CASE_UNESCAPE('e', '\e');
+        CASE_UNESCAPE('v', '\v');
+#undef CASE_UNESCAPE
+    }
+    return c;
+}
+
+FCITX_EXPORT_API char*
+fcitx_utils_unescape_str_inplace(char *str)
+{
+    char *dest = str;
+    char *src = str;
+    char *pos;
+    size_t len;
+    while ((len = strcspn(src, "\\")), *(pos = src + len)) {
+        if (dest != src && len)
+            memmove(dest, src, len);
+        dest += len;
+        src = pos + 1;
+        *dest = fcitx_utils_unescape_char(*src);
+        dest++;
+        src++;
+    }
+    if (dest != src && len)
+        memmove(dest, src, len);
+    dest[len] = '\0';
+    return str;
+}
+
+FCITX_EXPORT_API char*
+fcitx_utils_set_unescape_str(char *res, const char *str)
+{
+    size_t len = strlen(str) + 1;
+    if (res) {
+        res = realloc(res, len);
+    } else {
+        res = malloc(len);
+    }
+    char *dest = res;
+    const char *src = str;
+    const char *pos;
+    while ((len = strcspn(src, "\\")), *(pos = src + len)) {
+        memcpy(dest, src, len);
+        dest += len;
+        src = pos + 1;
+        *dest = fcitx_utils_unescape_char(*src);
+        dest++;
+        src++;
+    }
+    if (len)
+        memcpy(dest, src, len);
+    dest[len] = '\0';
+    return res;
+}
+
+FCITX_EXPORT_API char
+fcitx_utils_escape_char(char c)
+{
+    switch (c) {
+#define CASE_ESCAPE(to, from) case from: return to
+        CASE_ESCAPE('a', '\a');
+        CASE_ESCAPE('b', '\b');
+        CASE_ESCAPE('f', '\f');
+        CASE_ESCAPE('n', '\n');
+        CASE_ESCAPE('r', '\r');
+        CASE_ESCAPE('t', '\t');
+        CASE_ESCAPE('e', '\e');
+        CASE_ESCAPE('v', '\v');
+#undef CASE_ESCAPE
+    }
+    return c;
+}
+
+FCITX_EXPORT_API char*
+fcitx_utils_set_escape_str_with_set(char *res, const char *str, const char *set)
+{
+    if (!set)
+        set = FCITX_CHAR_NEED_ESCAPE;
+    size_t len = strlen(str) * 2 + 1;
+    if (res) {
+        res = realloc(res, len);
+    } else {
+        res = malloc(len);
+    }
+    char *dest = res;
+    const char *src = str;
+    const char *pos;
+    while ((len = strcspn(src, set)), *(pos = src + len)) {
+        memcpy(dest, src, len);
+        dest += len;
+        *dest = '\\';
+        dest++;
+        *dest = fcitx_utils_escape_char(*pos);
+        dest++;
+        src = pos + 1;
+    }
+    if (len)
+        memcpy(dest, src, len);
+    dest += len;
+    *dest = '\0';
+    res = realloc(res, dest - res + 1);
+    return res;
+}
+
+#ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
+/**
+ * Also define lib function when there is builtin function for
+ * atomic operation in case the function address is needed or the builtin
+ * is not available when compiling other modules.
+ **/
+#define FCITX_UTIL_DEFINE_ATOMIC(name, op, type)                        \
+    FCITX_EXPORT_API type                                               \
+    (fcitx_utils_atomic_##name)(volatile type *atomic, type val)        \
+    {                                                                   \
+        return __sync_fetch_and_##name(atomic, val);                    \
+    }
+#else
+static pthread_mutex_t __fcitx_utils_atomic_lock = PTHREAD_MUTEX_INITIALIZER;
+#define FCITX_UTIL_DEFINE_ATOMIC(name, op, type)                        \
+    FCITX_EXPORT_API type                                               \
+    (fcitx_utils_atomic_##name)(volatile type *atomic, type val)        \
+    {                                                                   \
+        type oldval;                                                    \
+        pthread_mutex_lock(&__fcitx_utils_atomic_lock);                 \
+        oldval = *atomic;                                               \
+        *atomic = oldval op val;                                        \
+        pthread_mutex_unlock(&__fcitx_utils_atomic_lock);               \
+        return oldval;                                                  \
+    }
+#endif
+
+FCITX_UTIL_DEFINE_ATOMIC(add, +, int32_t)
+FCITX_UTIL_DEFINE_ATOMIC(and, &, uint32_t)
+FCITX_UTIL_DEFINE_ATOMIC(or, |, uint32_t)
+FCITX_UTIL_DEFINE_ATOMIC(xor, ^, uint32_t)
+
+#undef FCITX_UTIL_DEFINE_ATOMIC
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

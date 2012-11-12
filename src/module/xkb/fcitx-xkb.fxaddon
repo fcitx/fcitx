@@ -1,0 +1,45 @@
+[FcitxAddon]
+Name=fcitx-xkb
+Prefix=Xkb
+Include0="xkb.h"
+Function0=GetRules
+Function1=GetCurrentLayout
+Function2=LayoutExists
+Function3=GetLayoutOverride
+Function4=SetLayoutOverride
+Function5=SetDefaultLayout
+Function6=
+Function7=
+Function8=
+
+[GetRules]
+Name=get-rules
+Return=FcitxXkbRules*
+
+[GetCurrentLayout]
+Name=get-current-layout
+Arg0=char**
+Arg1=char**
+
+[LayoutExists]
+Name=layout-exists
+Arg0=const char*
+Arg1=const char*
+Arg2=boolean*
+
+[GetLayoutOverride]
+Name=get-layout-override
+Arg0=const char*
+Arg1=char**
+Arg2=char**
+
+[SetLayoutOverride]
+Name=set-layout-override
+Arg0=const char*
+Arg1=const char*
+Arg2=const char*
+
+[SetDefaultLayout]
+Name=set-default-layout
+Arg0=const char*
+Arg1=const char*

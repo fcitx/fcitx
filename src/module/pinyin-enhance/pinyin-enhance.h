@@ -68,6 +68,8 @@ enum {
     PY_IM_SHUANGPIN,
 };
 
+DEFINE_GET_ADDON("fcitx-sunpinyin", SunPinyin)
+
 #ifdef __cplusplus
 extern "C" {
 #endif

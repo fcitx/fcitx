@@ -28,12 +28,14 @@ struct _FcitxCandidateWordList {
     int wordPerPage;
 };
 
-const UT_icd cand_icd = { sizeof(FcitxCandidateWord), NULL, NULL, FcitxCandidateWordFree };
+static const UT_icd cand_icd = {
+    sizeof(FcitxCandidateWord), NULL, NULL, FcitxCandidateWordFree
+};
 
 FCITX_EXPORT_API
 FcitxCandidateWordList* FcitxCandidateWordNewList()
 {
-    FcitxCandidateWordList* candList = fcitx_utils_malloc0(sizeof(FcitxCandidateWordList));
+    FcitxCandidateWordList* candList = fcitx_utils_new(FcitxCandidateWordList);
 
     utarray_init(&candList->candWords, &cand_icd);
     utarray_reserve(&candList->candWords, 128);

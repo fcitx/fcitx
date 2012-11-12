@@ -203,7 +203,7 @@ void LoadSPData(FcitxPinyinState *pystate)
 /*
  * 此处只转换单个双拼，并且不检查错误
  */
-void SP2QP(FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
+void SP2QP(FcitxPinyinConfig* pyconfig, const char *strSP, char *strQP)
 {
     int             iIndex1 = 0, iIndex2 = 0;
     char            strTmp[2];

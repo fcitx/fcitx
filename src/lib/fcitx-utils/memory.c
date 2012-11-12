@@ -39,7 +39,9 @@ struct _FcitxMemoryPool {
 };
 
 static void fcitx_memory_chunk_free(void* c);
-const UT_icd chunk_icd = { sizeof(FcitxMemoryChunk), NULL, NULL, fcitx_memory_chunk_free};
+static const UT_icd chunk_icd = {
+    sizeof(FcitxMemoryChunk), NULL, NULL, fcitx_memory_chunk_free
+};
 
 void fcitx_memory_chunk_free(void* c) {
     FcitxMemoryChunk* chunk = (FcitxMemoryChunk*) c;

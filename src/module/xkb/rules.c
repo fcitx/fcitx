@@ -49,16 +49,27 @@ static void FcitxXkbOptionInfoFree(void* arg);
 static inline FcitxXkbLayoutInfo* FindByName(FcitxXkbRules* rules, const char* name);
 static void MergeRules(FcitxXkbRules* rules, FcitxXkbRules* rulesextra);
 
-static const UT_icd layout_icd = {sizeof(FcitxXkbLayoutInfo), FcitxXkbLayoutInfoInit, FcitxXkbLayoutInfoCopy, FcitxXkbLayoutInfoFree };
-static const UT_icd variant_icd = {sizeof(FcitxXkbVariantInfo), FcitxXkbVariantInfoInit, FcitxXkbVariantInfoCopy, FcitxXkbVariantInfoFree };
-static const UT_icd model_icd = {sizeof(FcitxXkbModelInfo), FcitxXkbModelInfoInit, FcitxXkbModelInfoCopy, FcitxXkbModelInfoFree };
-static const UT_icd option_group_icd = {sizeof(FcitxXkbOptionGroupInfo), FcitxXkbOptionGroupInfoInit, FcitxXkbOptionGroupInfoCopy, FcitxXkbOptionGroupInfoFree };
-static const UT_icd option_icd = {sizeof(FcitxXkbOptionInfo), FcitxXkbOptionInfoInit, FcitxXkbOptionInfoCopy, FcitxXkbOptionInfoFree };
-#define COPY_IF_NOT_NULL(x) ((x)?(strdup(x)):NULL)
-#define utarray_clone(t, f) do { \
-        utarray_new((t), (f)->icd); \
-        utarray_concat((t), (f)); \
-    } while(0)
+static const UT_icd layout_icd = {
+    sizeof(FcitxXkbLayoutInfo), FcitxXkbLayoutInfoInit,
+    FcitxXkbLayoutInfoCopy, FcitxXkbLayoutInfoFree
+};
+static const UT_icd variant_icd = {
+    sizeof(FcitxXkbVariantInfo), FcitxXkbVariantInfoInit,
+    FcitxXkbVariantInfoCopy, FcitxXkbVariantInfoFree
+};
+static const UT_icd model_icd = {
+    sizeof(FcitxXkbModelInfo), FcitxXkbModelInfoInit,
+    FcitxXkbModelInfoCopy, FcitxXkbModelInfoFree
+};
+static const UT_icd option_group_icd = {
+    sizeof(FcitxXkbOptionGroupInfo), FcitxXkbOptionGroupInfoInit,
+    FcitxXkbOptionGroupInfoCopy, FcitxXkbOptionGroupInfoFree
+};
+static const UT_icd option_icd = {
+    sizeof(FcitxXkbOptionInfo), FcitxXkbOptionInfoInit,
+    FcitxXkbOptionInfoCopy, FcitxXkbOptionInfoFree
+};
+#define COPY_IF_NOT_NULL(x) ((x) ? (strdup(x)) : NULL)
 
 boolean StringEndsWith(const char* str, const char* suffix)
 {
@@ -136,9 +147,8 @@ void MergeRules(FcitxXkbRules* rules, FcitxXkbRules* rulesextra)
     utarray_concat(rules->optionGroupInfos, rulesextra->optionGroupInfos);
 
     FcitxXkbLayoutInfo* layoutInfo;
-    UT_icd icd = {sizeof(FcitxXkbLayoutInfo*), 0, 0, 0};
     UT_array toAdd;
-    utarray_init(&toAdd, &icd);
+    utarray_init(&toAdd, fcitx_ptr_icd);
     for (layoutInfo = (FcitxXkbLayoutInfo*) utarray_front(rulesextra->layoutInfos);
          layoutInfo != NULL;
          layoutInfo = (FcitxXkbLayoutInfo*) utarray_next(rulesextra->layoutInfos, layoutInfo))
@@ -449,8 +459,8 @@ void FcitxXkbLayoutInfoCopy(void* dst, const void* src)
     FcitxXkbLayoutInfo* layoutInfoSrc = (FcitxXkbLayoutInfo*) src;
     layoutInfoDst->name = COPY_IF_NOT_NULL(layoutInfoSrc->name);
     layoutInfoDst->description = COPY_IF_NOT_NULL(layoutInfoSrc->description);
-    utarray_clone(layoutInfoDst->languages, layoutInfoSrc->languages);
-    utarray_clone(layoutInfoDst->variantInfos, layoutInfoSrc->variantInfos);
+    layoutInfoDst->languages = utarray_clone(layoutInfoSrc->languages);
+    layoutInfoDst->variantInfos = utarray_clone(layoutInfoSrc->variantInfos);
 }
 
 void FcitxXkbModelInfoCopy(void* dst, const void* src)
@@ -469,7 +479,7 @@ void FcitxXkbOptionGroupInfoCopy(void* dst, const void* src)
     optionGroupInfoDst->name = COPY_IF_NOT_NULL(optionGroupInfoSrc->name);
     optionGroupInfoDst->description = COPY_IF_NOT_NULL(optionGroupInfoSrc->description);
     optionGroupInfoDst->exclusive = optionGroupInfoSrc->exclusive;
-    utarray_clone(optionGroupInfoDst->optionInfos, optionGroupInfoSrc->optionInfos);
+    optionGroupInfoDst->optionInfos = utarray_clone(optionGroupInfoSrc->optionInfos);
 }
 
 void FcitxXkbOptionInfoCopy(void* dst, const void* src)
@@ -486,5 +496,5 @@ void FcitxXkbVariantInfoCopy(void* dst, const void* src)
     FcitxXkbVariantInfo* variantInfoSrc = (FcitxXkbVariantInfo*) src;
     variantInfoDst->name = COPY_IF_NOT_NULL(variantInfoSrc->name);
     variantInfoDst->description = COPY_IF_NOT_NULL(variantInfoSrc->description);
-    utarray_clone(variantInfoDst->languages, variantInfoSrc->languages);
+    variantInfoDst->languages = utarray_clone(variantInfoSrc->languages);
 }

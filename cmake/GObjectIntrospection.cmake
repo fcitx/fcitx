@@ -23,14 +23,14 @@ function(_gir_list_prefix _newlist _list _prefix)
 endfunction()
 
 function(__GIR_GET_UNIQUE_TARGET_NAME _name _unique_name)
-   set(propertyName "_GOBJECT_INTROSPECTION_UNIQUE_COUNTER_${_name}")
-   get_property(currentCounter GLOBAL PROPERTY "${propertyName}")
-   if(NOT currentCounter)
-      set(currentCounter 1)
-   endif()
-   set(${_unique_name} "${_name}_${currentCounter}" PARENT_SCOPE)
-   math(EXPR currentCounter "${currentCounter} + 1")
-   set_property(GLOBAL PROPERTY ${propertyName} ${currentCounter} )
+  set(propertyName "_GOBJECT_INTROSPECTION_UNIQUE_COUNTER_${_name}")
+  get_property(currentCounter GLOBAL PROPERTY "${propertyName}")
+  if(NOT currentCounter)
+    set(currentCounter 1)
+  endif()
+  set("${_unique_name}" "${_name}_${currentCounter}" PARENT_SCOPE)
+  math(EXPR currentCounter "${currentCounter} + 1")
+  set_property(GLOBAL PROPERTY "${propertyName}" "${currentCounter}")
 endfunction()
 
 function(gobject_introspection _FIRST_ARG)
@@ -169,7 +169,7 @@ function(gobject_introspection _FIRST_ARG)
   if(GIR_BUILT_SOURCES)
     set(GIR_REAL_BUILT_SOURCES)
     foreach(ITEM ${GIR_BUILT_SOURCES})
-      get_source_file_property(LOCATION ${ITEM} LOCATION)
+      get_source_file_property(LOCATION "${ITEM}" LOCATION)
       list(APPEND GIR_REAL_BUILT_SOURCES "${LOCATION}")
     endforeach()
   endif()
@@ -179,10 +179,10 @@ function(gobject_introspection _FIRST_ARG)
   ###########################################################################
   set(ENV{CFLAGS} ${GIR_REAL_CFLAGS})
   add_custom_command(
-    COMMAND env LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
-    ${GIR_SCANNER} ${GIR_SCANNER_ARGS}
-    --namespace=${GIR_NAMESPACE}
-    --nsversion=${GIR_NSVERSION}
+    COMMAND env "LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}"
+    "${GIR_SCANNER}" ${GIR_SCANNER_ARGS}
+    "--namespace=${GIR_NAMESPACE}"
+    "--nsversion=${GIR_NSVERSION}"
     ${GIR_REAL_CFLAGS}
     ${GIR_FORMAT}
     ${GIR_REAL_LIBRARY}
@@ -194,14 +194,14 @@ function(gobject_introspection _FIRST_ARG)
     ${GIR_REAL_INCLUDE}
     --no-libtool
     -L${CMAKE_CURRENT_BINARY_DIR}
-    --output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_FILENAME}
+    "--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_FILENAME}"
     ${GIR_PACKAGE_EXPORT}
     ${GIR_SCANNER_FLAGS}
     ${GIR_SOURCES}
     ${GIR_REAL_BUILT_SOURCES}
-    OUTPUT ${GIR_FILENAME}
-    DEPENDS ${GIR_LIBRARY}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT "${GIR_FILENAME}"
+    DEPENDS ${GIR_LIBRARY} "${GIR_SCANNER}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     VERBATIM
     )
 
@@ -209,15 +209,15 @@ function(gobject_introspection _FIRST_ARG)
   string(REPLACE ".gir" ".typelib" GIR_TYPELIB "${GIR_FILENAME}")
 
   add_custom_command(
-    COMMAND ${GIR_COMPILER} ${GIR_COMPILER_ARGS}
-    ${CMAKE_CURRENT_BINARY_DIR}/${GIR_FILENAME}
-    --output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_TYPELIB}
-    OUTPUT ${GIR_TYPELIB}
-    DEPENDS ${GIR_FILENAME}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND "${GIR_COMPILER}" ${GIR_COMPILER_ARGS}
+    "${CMAKE_CURRENT_BINARY_DIR}/${GIR_FILENAME}"
+    "--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_TYPELIB}"
+    OUTPUT "${GIR_TYPELIB}"
+    DEPENDS "${GIR_FILENAME}" "${GIR_COMPILER}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
     )
 
   __gir_get_unique_target_name(gobject_introspection_compile_target
     _gir_compile_target)
-  add_custom_target(${_gir_compile_target} ALL DEPENDS ${GIR_TYPELIB})
+  add_custom_target(${_gir_compile_target} ALL DEPENDS "${GIR_TYPELIB}")
 endfunction()

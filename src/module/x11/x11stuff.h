@@ -20,7 +20,11 @@
 
 #ifndef X11STUFF_H
 #define X11STUFF_H
+
+#ifndef FCITX_DISABLE_X11
 #include <X11/Xlib.h>
+#endif
+
 #include <stdint.h>
 #include <fcitx-utils/utarray.h>
 #include <fcitx-config/fcitx-config.h>
@@ -54,7 +58,9 @@
 #define FCITX_X11_GETDPI 11
 #define FCITX_X11_GETDPI_RETURNTYPE void
 
+#ifndef FCITX_DISABLE_X11
 typedef boolean (*FcitxX11XEventHandler)(void *instance, XEvent *event);
+#endif
 typedef void (*FcitxX11CompositeHandler)(void *instance, boolean enable);
 
 typedef struct _FcitxRect {
