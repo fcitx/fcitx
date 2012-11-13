@@ -95,7 +95,6 @@ private Q_SLOTS:
     void forwardKey(uint keyval, uint state, int type);
     void deleteSurroundingText(int offset, uint nchar);
     void createInputContextFinished(QDBusPendingCallWatcher* watcher);
-    void updateIM();
     void updateCursor();
 #if defined(Q_WS_X11) && defined(ENABLE_X11)
     void x11ProcessKeyEventCallback(QDBusPendingCallWatcher* watcher);
@@ -146,8 +145,8 @@ private:
     QString m_commitPreedit;
     FcitxFormattedPreeditList m_preeditList;
     int m_cursorPos;
-    boolean m_useSurroundingText;
-    boolean m_syncMode;
+    bool m_useSurroundingText;
+    bool m_syncMode;
     QRect m_rect;
     FcitxConnection* m_connection;
 };

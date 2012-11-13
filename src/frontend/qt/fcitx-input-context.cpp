@@ -388,7 +388,6 @@ void QFcitxInputContext::setFocusWidget(QWidget* w)
     } else {
         m_icproxy->FocusOut();
     }
-    QTimer::singleShot(0, this, SLOT(updateIM()));
 }
 
 void QFcitxInputContext::widgetDestroyed(QWidget* w)
@@ -396,7 +395,6 @@ void QFcitxInputContext::widgetDestroyed(QWidget* w)
     if (isValid()) {
         if (w == focusWidget())
             m_icproxy->FocusOut();
-        QTimer::singleShot(0, this, SLOT(updateIM()));
     }
 
     QInputContext::widgetDestroyed(w);
@@ -443,11 +441,10 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
                                           (event->type == XKeyPress) ? FCITX_PRESS_KEY : FCITX_RELEASE_KEY,
                                           event->xkey.time
                                       );
-    if (Q_LIKELY(m_syncMode)) {
+    if (Q_UNLIKELY(m_syncMode)) {
         result.waitForFinished();
 
         if (!m_connection->isConnected() || !result.isFinished() || result.isError() || result.value() <= 0) {
-            QTimer::singleShot(0, this, SLOT(updateIM()));
             return x11FilterEventFallback(event, sym);
         } else {
             update();
@@ -468,7 +465,6 @@ void QFcitxInputContext::x11ProcessKeyEventCallback(QDBusPendingCallWatcher* wat
     QDBusPendingReply< int > result(*watcher);
     bool r = false;
     if (result.isError() || result.value() <= 0) {
-        QTimer::singleShot(0, this, SLOT(updateIM()));
         r = x11FilterEventFallback(pkwatcher->event, pkwatcher->sym);
     } else {
         update();
@@ -584,14 +580,18 @@ void QFcitxInputContext::updateCapacity()
 
 void QFcitxInputContext::commitString(const QString& str)
 {
+    m_cursorPos = 0;
+    m_preeditList.clear();
+    m_commitPreedit.clear();
     QInputMethodEvent event;
     event.setCommitString(str);
     sendEvent(event);
-    update();
 }
 
 void QFcitxInputContext::updateFormattedPreedit(const FcitxFormattedPreeditList& preeditList, int cursorPos)
 {
+    if (cursorPos == m_cursorPos && preeditList == m_preeditList)
+        return;
     m_preeditList = preeditList;
     m_cursorPos = cursorPos;
     QString str, commitStr;
@@ -629,7 +629,6 @@ void QFcitxInputContext::updateFormattedPreedit(const FcitxFormattedPreeditList&
     m_preedit = str;
     m_commitPreedit = commitStr;
     sendEvent(event);
-    update();
 }
 
 void QFcitxInputContext::deleteSurroundingText(int offset, uint nchar)
@@ -637,7 +636,6 @@ void QFcitxInputContext::deleteSurroundingText(int offset, uint nchar)
     QInputMethodEvent event;
     event.setCommitString("", offset, nchar);
     sendEvent(event);
-    update();
 }
 
 void QFcitxInputContext::forwardKey(uint keyval, uint state, int type)
@@ -900,11 +898,6 @@ QWidget* QFcitxInputContext::validFocusWidget() {
     if (widget && !widget->testAttribute(Qt::WA_WState_Created))
         widget = NULL;
     return widget;
-}
-
-void QFcitxInputContext::updateIM()
-{
-    update();
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
