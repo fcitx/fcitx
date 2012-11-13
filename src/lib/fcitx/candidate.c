@@ -243,9 +243,11 @@ boolean FcitxCandidateWordGoPrevPage(FcitxCandidateWordList* candList)
 {
     if (!FcitxCandidateWordPageCount(candList))
         return false;
-    if (FcitxCandidateWordHasPrev(candList))
+    if (FcitxCandidateWordHasPrev(candList)) {
         candList->currentPage -- ;
-    return true;
+        return true;
+    }
+    return false;
 }
 
 FCITX_EXPORT_API
@@ -253,9 +255,11 @@ boolean FcitxCandidateWordGoNextPage(FcitxCandidateWordList* candList)
 {
     if (!FcitxCandidateWordPageCount(candList))
         return false;
-    if (FcitxCandidateWordHasNext(candList))
+    if (FcitxCandidateWordHasNext(candList)) {
         candList->currentPage ++ ;
-    return true;
+        return true;
+    }
+    return false;
 }
 
 FCITX_EXPORT_API
