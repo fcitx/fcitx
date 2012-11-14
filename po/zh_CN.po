@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 01:32-0500\n"
+"POT-Creation-Date: 2012-11-14 17:42-0500\n"
 "PO-Revision-Date: 2012-10-22 19:07-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -21,6 +21,31 @@ msgstr ""
 #: src/im/table/table.c:1385
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
+
+#: tools/gui/lib/editor.cpp:41
+msgid "&Add"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:42
+#, fuzzy
+msgid "&Delete"
+msgstr "删除词组"
+
+#: tools/gui/lib/editor.cpp:47
+msgid "&Export"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:46
+msgid "&Import"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:44
+msgid "&Quit"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:45
+msgid "&Save"
+msgstr ""
 
 #: src/im/keyboard/keyboard.c:425 src/im/keyboard/keyboard.c:442
 msgid "(Unavailable)"
@@ -499,7 +524,7 @@ msgstr "配置文件"
 msgid "Configure"
 msgstr "配置"
 
-#: src/ui/classic/classicui.c:458 src/ui/kimpanel/kimpanel.c:733
+#: src/ui/classic/classicui.c:458 src/ui/kimpanel/kimpanel.c:735
 msgid "Configure Current Input Method"
 msgstr "配置当前输入法"
 
@@ -570,6 +595,10 @@ msgstr "DISPLAY MainWindow"
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
+#: tools/gui/lib/editor.cpp:43
+msgid "De&lete All"
+msgstr ""
+
 #: src/module/spell/fcitx-spell.desc:5
 msgid "Default"
 msgstr "默认"
@@ -598,6 +627,11 @@ msgstr "依赖"
 msgid "Description of Skin"
 msgstr "描述"
 
+#: tools/gui/lib/dialog.ui:14
+msgctxt "Dialog|"
+msgid "Dialog"
+msgstr ""
+
 #: data/table/db.conf.in:3
 msgid "Dianbaoma"
 msgstr "电报码"
@@ -615,7 +649,7 @@ msgstr "禁用拼音符号"
 msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr "禁用插件 %s，依赖 %s 无法满足。"
 
-#: src/ui/kimpanel/kimpanel.c:244 src/ui/kimpanel/kimpanel.c:249
+#: src/ui/kimpanel/kimpanel.c:246 src/ui/kimpanel/kimpanel.c:251
 msgid "Disabled"
 msgstr "禁用"
 
@@ -686,7 +720,7 @@ msgstr "增强 Fcitx 的拼音输入"
 msgid "End Key"
 msgstr "中止键"
 
-#: src/module/xkbdbus/xkbdbus.c:180
+#: src/module/xkbdbus/xkbdbus.c:181
 msgid "English (US)"
 msgstr "英语 (美国)"
 
@@ -753,7 +787,7 @@ msgstr "额外的激活输入法快捷键"
 msgid "Fallback UI Addon"
 msgstr "备选界面附加组件"
 
-#: src/ui/kimpanel/kimpanel.c:365
+#: src/ui/kimpanel/kimpanel.c:367
 msgid "Fcitx"
 msgstr "Fcitx"
 
@@ -838,6 +872,11 @@ msgstr "字体大小"
 #: src/ui/classic/skin.desc:28
 msgid "Font size repect dpi setting"
 msgstr "字体大小遵守dpi设置"
+
+#: tools/gui/lib/editor.ui:14
+msgctxt "Editor|"
+msgid "Form"
+msgstr ""
 
 #: data/addon.desc:19
 msgid "Frontend"
@@ -1068,7 +1107,7 @@ msgstr "输入信息颜色"
 msgid "Input Method"
 msgstr "输入法"
 
-#: src/ui/kimpanel/kimpanel.c:245 src/ui/kimpanel/kimpanel.c:250
+#: src/ui/kimpanel/kimpanel.c:247 src/ui/kimpanel/kimpanel.c:252
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
 
@@ -1267,6 +1306,19 @@ msgstr "Logo图标"
 msgid "MS"
 msgstr "微软"
 
+#: tools/gui/quickphrase-editor/model.cpp:46
+msgid "Macro"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:88 tools/gui/lib/editor.cpp:116
+msgid "Macro table still contains unsaved changes. Do you want to save?"
+msgstr ""
+
+#: tools/gui/lib/dialog.ui:32
+msgctxt "Dialog|"
+msgid "Macro:"
+msgstr ""
+
 #: src/ui/classic/fcitx-classic-ui.desc:48
 msgid "Main Window Hide Mode"
 msgstr "主窗口隐藏模式"
@@ -1408,7 +1460,7 @@ msgstr "无用输入法"
 msgid "No available frontend"
 msgstr "无可用前端"
 
-#: src/ui/kimpanel/kimpanel.c:217 src/ui/kimpanel/kimpanel.c:218
+#: src/ui/kimpanel/kimpanel.c:219 src/ui/kimpanel/kimpanel.c:220
 msgid "No input window"
 msgstr "无输入窗口"
 
@@ -1707,6 +1759,10 @@ msgstr "快速输入"
 msgid "Quickphrase"
 msgstr "快速输入"
 
+#: tools/gui/lib/editor.cpp:87 tools/gui/lib/editor.cpp:115
+msgid "Quit Macro Editor"
+msgstr ""
+
 #: src/im/qw/qw.c:64
 msgid "Quwei"
 msgstr "区位"
@@ -1773,7 +1829,7 @@ msgstr "右边距"
 msgid "Resize Margin Top"
 msgstr "上边距"
 
-#: src/ui/classic/classicui.c:460 src/ui/kimpanel/kimpanel.c:738
+#: src/ui/classic/classicui.c:460 src/ui/kimpanel/kimpanel.c:740
 msgid "Restart"
 msgstr "重新启动"
 
@@ -1847,7 +1903,7 @@ msgstr "选择局部输入法："
 msgid "Select specific input method via keyboard"
 msgstr "通过键盘选择特定的输入法"
 
-#: src/module/clipboard/clipboard.c:346
+#: src/module/clipboard/clipboard.c:348
 msgid "Select to paste"
 msgstr "选择以粘贴"
 
@@ -2157,7 +2213,7 @@ msgstr "切换全角标点"
 msgid "Toggle Half/Full width Character"
 msgstr "切换半/全角字符"
 
-#: src/ui/kimpanel/kimpanel.c:730
+#: src/ui/kimpanel/kimpanel.c:732
 msgid "Toggle Input Method"
 msgstr "切换输入法"
 
@@ -2235,6 +2291,10 @@ msgstr "界面: 打开 %s 失败 %s"
 #: src/module/unicode/fcitx-unicode.desc:1
 msgid "Unicode"
 msgstr "Unicode"
+
+#: tools/gui/lib/editor.cpp:50
+msgid "Unikey Macro Editor"
+msgstr ""
 
 #: src/im/table/table.desc:2
 msgid "Unique Name for Table"
@@ -2356,6 +2416,15 @@ msgstr "虚拟键盘状态"
 #: data/table/wanfeng.conf.in:3
 msgid "Wanfeng"
 msgstr "晚风"
+
+#: tools/gui/quickphrase-editor/model.cpp:48
+msgid "Word"
+msgstr ""
+
+#: tools/gui/lib/dialog.ui:25
+msgctxt "Dialog|"
+msgid "Word:"
+msgstr ""
 
 #: data/table/wbx.conf.in:3
 msgid "Wubi"
