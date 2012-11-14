@@ -175,7 +175,7 @@ void OnException(int signo)
 
     default:
         {
-            if (!instance->initialized) {
+            if (!instance || !instance->initialized) {
                 exit(1);
                 break;
             }
