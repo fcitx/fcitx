@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-14 17:42-0500\n"
-"PO-Revision-Date: 2012-10-22 19:07-0400\n"
-"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
+"PO-Revision-Date: 2012-11-14 18:21-0400\n"
+"Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -24,28 +24,27 @@ msgstr " Ctrl+Delete 删除"
 
 #: tools/gui/lib/editor.cpp:41
 msgid "&Add"
-msgstr ""
+msgstr "添加(&A)"
 
 #: tools/gui/lib/editor.cpp:42
-#, fuzzy
 msgid "&Delete"
-msgstr "删除词组"
+msgstr "删除(&D)"
 
 #: tools/gui/lib/editor.cpp:47
 msgid "&Export"
-msgstr ""
+msgstr "导出(&E)"
 
 #: tools/gui/lib/editor.cpp:46
 msgid "&Import"
-msgstr ""
+msgstr "导入(&I)"
 
 #: tools/gui/lib/editor.cpp:44
 msgid "&Quit"
-msgstr ""
+msgstr "退出(&Q)"
 
 #: tools/gui/lib/editor.cpp:45
 msgid "&Save"
-msgstr ""
+msgstr "保存(&A)"
 
 #: src/im/keyboard/keyboard.c:425 src/im/keyboard/keyboard.c:442
 msgid "(Unavailable)"
@@ -597,7 +596,7 @@ msgstr "DRAW MainWindow"
 
 #: tools/gui/lib/editor.cpp:43
 msgid "De&lete All"
-msgstr ""
+msgstr "删除全部(&l)"
 
 #: src/module/spell/fcitx-spell.desc:5
 msgid "Default"
