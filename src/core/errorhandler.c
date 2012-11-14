@@ -167,6 +167,9 @@ void OnException(int signo)
         break;
     case SIGABRT:
     case SIGSEGV:
+    case SIGBUS:
+    case SIGILL:
+    case SIGFPE:
         exit(1);
         break;
 
