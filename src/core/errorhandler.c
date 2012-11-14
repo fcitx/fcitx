@@ -59,6 +59,9 @@ void SetMyExceptionHandler(void)
     int             signo;
 
     for (signo = SIGHUP; signo < SIGUNUSED; signo++) {
+        if (signo == SIGTSTP || signo == SIGCONT)
+            continue;
+
         if (signo != SIGALRM
             && signo != SIGPIPE
             && signo != SIGUSR2
