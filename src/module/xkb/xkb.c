@@ -593,7 +593,7 @@ static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
         else {
             const char* layout = (const char*) value;
             if (layout) {
-                UT_array* s = fcitx_utils_split_string(layout, ',');
+                s = fcitx_utils_split_string(layout, ',');
                 char** pLayoutString = (char**) utarray_eltptr(s, 0);
                 char** pVariantString = (char**) utarray_eltptr(s, 1);
                 layoutString = (pLayoutString)? *pLayoutString: NULL;
