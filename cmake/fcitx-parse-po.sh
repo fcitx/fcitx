@@ -17,7 +17,7 @@
 filter_src="$(dirname "$(realpath -es $0)")/fcitx-filter-po.sh"
 
 fcitx_quote () {
-    local quoted=${1//\'/\'\\\'\'};
+    local quoted="${1//\'/\'\\\'\'}"
     printf "'%s'" "$quoted"
 }
 
