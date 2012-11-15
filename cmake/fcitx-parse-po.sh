@@ -14,11 +14,6 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-fcitx_quote () {
-    local quoted="${1//\'/\'\\\'\'}"
-    printf "'%s'" "$quoted"
-}
-
 fcitx_str_match() {
     local pattern="$1"
     local string="$2"
