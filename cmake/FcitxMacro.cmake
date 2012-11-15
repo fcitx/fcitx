@@ -1,24 +1,25 @@
 # This file is included by FindFcitx4.cmake, don't include it directly.
-# - Useful macro for fcitx development
+# - Providing Useful cmake functions for fcitx development
 #
-# Usage:
-#   INTLTOOL_MERGE_TRANSLATION([INFILE] [OUTFILE])
-#     merge translation to fcitx config and desktop file
+# Functions for handling source files and building the project:
+#     fcitx_parse_arguments
+#     fcitx_add_addon_full
+#     fcitx_install_addon_desc
+#     fcitx_translate_add_sources
+#     fcitx_translate_add_apply_source
+#     fcitx_translate_set_pot_target
+#     fcitx_translate_add_po_file
+#     _fcitx_add_uninstall_target
+# Functions to extend fcitx's build (mainly translation) system:
+#     _fcitx_translate_add_handler
+#     _fcitx_translate_add_apply_handler
 #
-#   FCITX_ADD_ADDON_CONF_FILE([conffilename])
-#     merge addon .conf.in translation and install it to correct path
-#     you shouldn't put .in in filename, just put foobar.conf
-#
-#   FCITX_ADD_CONFIGDESC_FILE([filename]*)
-#     install configuration description file to correct path
-#
-#   EXTRACT_FCITX_ADDON_CONF_POSTRING()
-#     extract fcitx addon conf translatable string from POFILES.in from
-#     ${CMAKE_CURRENT_BINARY_DIR}, the file need end with ,conf.in
-#
+# Please refer to the descriptions before each functions' definition
+# for usage.
 
 #==============================================================================
-# Copyright 2011 Xuetian Weng
+# Copyright 2011, 2012 Xuetian Weng
+# Copyright 2012 Yichao Yu
 #
 # Distributed under the GPLv2 License
 # see accompanying file COPYRIGHT for details
@@ -34,18 +35,21 @@ find_package(Gettext REQUIRED)
 # cmake versions. (see cmake documentation for usage)
 # It is included to lower the required cmake version.
 
-#=============================================================================
-# Copyright 2010 Alexander Neundorf <neundorf@kde.org>
+# This file incorporates work covered by the following copyright and
+# permission notice:
 #
-# Distributed under the OSI-approved BSD License (the "License");
-# see accompanying file Copyright.txt for details.
+#    =========================================================================
+#     Copyright 2010 Alexander Neundorf <neundorf@kde.org>
 #
-# This software is distributed WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the License for more information.
-#=============================================================================
-# (To distribute this file outside of CMake, substitute the full
-#  License text for the above reference.)
+#     Distributed under the OSI-approved BSD License (the "License");
+#     see accompanying file Copyright.txt for details.
+#
+#     This software is distributed WITHOUT ANY WARRANTY; without even the
+#     implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#     See the License for more information.
+#    =========================================================================
+#     (To distribute this file outside of CMake, substitute the full
+#      License text for the above reference.)
 
 function(fcitx_parse_arguments prefix _optionNames
     _singleArgNames _multiArgNames)
@@ -99,7 +103,6 @@ function(fcitx_parse_arguments prefix _optionNames
         set(insideValues "MULTI")
       endif()
     endif()
-
   endforeach()
 
   # propagate the result variables to the caller:
@@ -112,18 +115,22 @@ endfunction()
 
 set(FCITX_MACRO_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 set(FCITX_CMAKE_HELPER_SCRIPT "${FCITX_MACRO_CMAKE_DIR}/fcitx-cmake-helper.sh"
-  CACHE INTERNAL "fcitx-scan-pot" FORCE)
+  CACHE INTERNAL "fcitx-cmake-helper" FORCE)
 mark_as_advanced(FORCE FCITX_CMAKE_HELPER_SCRIPT)
 set(FCITX_TRANSLATION_MERGE_CONFIG
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-merge-config.sh")
-set(FCITX_TRANSLATION_EXTRACT_CPP
-  "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-cpp.sh")
+set(FCITX_TRANSLATION_EXTRACT_GETTEXT
+  "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-gettext.sh")
 set(FCITX_TRANSLATION_EXTRACT_DESKTOP
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-desktop.sh")
 set(FCITX_TRANSLATION_EXTRACT_CONFDESC
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-confdesc.sh")
 set(FCITX_TRANSLATION_EXTRACT_PO
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-po.sh")
+set(FCITX_TRANSLATION_EXTRACT_QT
+  "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-qt.sh")
+set(FCITX_TRANSLATION_EXTRACT_KDE
+  "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-kde.sh")
 
 # Function to create a unique target in certain namespace
 # Useful when it is hard to determine a unique legal target name
@@ -165,8 +172,12 @@ function(__fcitx_cmake_init)
     set(FCITX_SCANNER_EXECUTABLE
       "${PROJECT_BINARY_DIR}/tools/dev/fcitx-scanner"
       CACHE INTERNAL "fcitx-scanner" FORCE)
+    set(FCITX_PO_PARSER_EXECUTABLE
+      "${PROJECT_BINARY_DIR}/tools/dev/fcitx-po-parser"
+      CACHE INTERNAL "fcitx-po-parser" FORCE)
   else()
     find_program(FCITX_SCANNER_EXECUTABLE fcitx-scanner)
+    find_program(FCITX_PO_PARSER_EXECUTABLE fcitx-po-parser)
   endif()
 endfunction()
 __fcitx_cmake_init()
@@ -446,10 +457,12 @@ function(_fcitx_translate_add_handler script)
     "${full_name}" --add-handler "${script}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
 endfunction()
-_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_CPP}")
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_GETTEXT}")
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_DESKTOP}")
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_CONFDESC}")
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_PO}")
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_QT}")
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_KDE}")
 
 # Add files to apply translation
 # this will generate a rule to generate ${out_file} from ${in_file} by
@@ -490,6 +503,8 @@ function(fcitx_translate_add_apply_source in_file out_file)
         DEPENDS fcitx-parse-pos.target "${in_file}" "${script}"
         "${FCITX_CMAKE_HELPER_SCRIPT}" ${all_po_files}
         WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+      __fcitx_addon_get_unique_name("apply-translation" target_name)
+      add_custom_target("${target_name}" ALL DEPENDS "${out_file}")
       return()
     endif()
   endforeach()
@@ -533,6 +548,13 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   if(pot_target_set)
     message(FATAL_ERROR "Duplicate pot targets.")
   endif()
+
+  set(options)
+  set(one_value_args BUGADDR)
+  set(multi_value_args)
+  fcitx_parse_arguments(FCITX_SET_POT
+    "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
+
   set_property(GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET" 1)
   get_property(translation_cache_base GLOBAL
     PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
@@ -541,10 +563,14 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_NAME" "${target}")
   set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_DOMAIN" "${domain}")
 
+  if(NOT FCITX_SET_POT_BUGADDR)
+    set(FCITX_SET_POT_BUGADDR "fcitx-dev@googlegroups.com")
+  endif()
+
   # make pot will require bash, but this is only a dev time dependency.
   add_custom_target(fcitx-translate-pot.target
     COMMAND bash "${FCITX_CMAKE_HELPER_SCRIPT}"
-    "${translation_cache_base}" "${full_name}" --pot
+    "${translation_cache_base}" "${full_name}" --pot "${FCITX_SET_POT_BUGADDR}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
   add_custom_target("${target}")
   add_dependencies("${target}" fcitx-translate-pot.target)
@@ -570,8 +596,9 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   add_custom_target(fcitx-parse-pos.target
     COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}" "${full_name}" --parse-pos
+    "${FCITX_PO_PARSER_EXECUTABLE}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-    DEPENDS ${all_po_files})
+    DEPENDS "${FCITX_PO_PARSER_EXECUTABLE}" ${all_po_files})
   add_custom_target(fcitx-compile-mo.target ALL
     DEPENDS ${all_mo_files})
 endfunction()
