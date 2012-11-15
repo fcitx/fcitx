@@ -302,7 +302,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
         FcitxInputStateGetOutputString(input)[0] = '\0';
         INPUT_RETURN_VALUE ret = IRV_TO_PROCESS;
         if (!FcitxInputStateGetIsInRemind(input))
-            ret = FcitxCandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
+            ret = FcitxCandidateWordChooseByTotalIndex(FcitxInputStateGetCandidateList(input), 0);
 
         /* if there is nothing to commit */
         if (ret == IRV_TO_PROCESS) {

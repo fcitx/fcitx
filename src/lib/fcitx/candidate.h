@@ -269,6 +269,17 @@ extern "C" {
     INPUT_RETURN_VALUE FcitxCandidateWordChooseByIndex(struct _FcitxCandidateWordList* candList, int index);
 
     /**
+     * do the candidate word selection, will trigger the candidate word callback
+     *
+     * @param candList candidate word list
+     * @param index index of current page
+     * @return INPUT_RETURN_VALUE
+     * 
+     * @since 4.2.7
+     **/
+    INPUT_RETURN_VALUE FcitxCandidateWordChooseByTotalIndex(struct _FcitxCandidateWordList* candList, int index);
+
+    /**
      * Free a candidate word, used by utarray
      *
      * @param arg candidateWord
