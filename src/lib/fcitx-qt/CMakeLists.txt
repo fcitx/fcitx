@@ -1,15 +1,3 @@
-
-include_directories(
-    ${QT_INCLUDE_DIR}
-    ${QT_QTCORE_INCLUDE_DIR}
-    ${QT_QTGUI_INCLUDE_DIR}
-    ${QT_QTDBUS_INCLUDE_DIR}
-    ${X11_INCLUDE_DIRS}
-    ${DBUS_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
 set(fcitx_qt_SOURCES
     fcitxconnection.cpp
     fcitxformattedpreedit.cpp
@@ -29,6 +17,23 @@ set(fcitx_qt_HEADERS
     fcitxconfiguiplugin.h
     fcitxconfiguiwidget.h
     fcitxconfiguifactory.h
+)
+
+fcitx_translate_add_sources(${fcitx_qt_HEADERS} ${fcitx_qt_SOURCES})
+
+if(NOT ENABLE_QT_IM_MODULE)
+  return()
+endif()
+
+include_directories(
+    ${QT_INCLUDE_DIR}
+    ${QT_QTCORE_INCLUDE_DIR}
+    ${QT_QTGUI_INCLUDE_DIR}
+    ${QT_QTDBUS_INCLUDE_DIR}
+    ${X11_INCLUDE_DIRS}
+    ${DBUS_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 QT4_WRAP_CPP(

@@ -19,19 +19,27 @@ action="$1"
 
 shift 1 || exit 1
 
-. "$(dirname ${BASH_SOURCE})/fcitx-write-po.sh"
+. "$(dirname "${BASH_SOURCE}")/fcitx-write-po.sh"
 
 case "${action}" in
     -c)
         in_file="${1}"
-        fcitx_exts_match "${in_file}" po pot && exit 0
+        fcitx_exts_match "${in_file}" qml qs && exit 0
         exit 1
         ;;
     -w)
         out_file="${1}"
         shift || exit 1
         [[ -z "$*" ]] && exit 1
-        fcitx_merge_all_pos "${out_file}" "$@"
+        echo "Extracting po string from qt sources."
+        # need to touch source dir here since lupdate will otherwise include
+        # absolute path (or wrong relative path) in po files afaik.
+        tempfile="$(mktemp --tmpdir=. --suffix=_fcitx_qt_$$.ts)"
+        rm "${tempfile}"
+        lupdate -locations relative -no-obsolete "$@" -ts "${tempfile}"
+        lconvert -of po -o "${out_file}" -if ts -i "${tempfile}" \
+            --drop-translations
+        rm "${tempfile}"
         exit 0
         ;;
 esac

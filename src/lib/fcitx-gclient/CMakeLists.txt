@@ -1,22 +1,3 @@
-_pkgconfig_invoke("glib-2.0" GLIB2 GLIB_GENMARSHAL
-  "" "--variable=glib_genmarshal")
-FIND_PROGRAM(GLIB_GENMARSHAL ${GLIB2_GLIB_GENMARSHAL})
-
-include_directories(${GIO2_INCLUDE_DIRS})
-include_directories(${DBUS_INCLUDE_DIRS})
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-link_directories(${GIO2_LIBRARY_DIRS})
-link_directories(${DBUS_LIBRARY_DIRS})
-
-add_custom_command(OUTPUT marshall.c
-  COMMAND ${GLIB_GENMARSHAL} --body --prefix=fcitx_marshall
-  ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list > marshall.c
-  DEPENDS ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list)
-add_custom_command(OUTPUT marshall.h
-  COMMAND ${GLIB_GENMARSHAL} --header --prefix=fcitx_marshall
-  ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list > marshall.h
-  DEPENDS ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list)
-
 set(FCITX_GCLIENT_SOURCES
   fcitxclient.c
   fcitxinputmethod.c
@@ -41,6 +22,29 @@ set(FCITX_GCLIENT_BUILT_HEADERS
 
 fcitx_translate_add_sources(${FCITX_GCLIENT_SOURCES}
   ${FCITX_GCLIENT_HEADERS})
+
+if(NOT (_ENABLE_DBUS AND ENABLE_GLIB2 AND GIO2_FOUND))
+  return()
+endif()
+
+_pkgconfig_invoke("glib-2.0" GLIB2 GLIB_GENMARSHAL
+  "" "--variable=glib_genmarshal")
+FIND_PROGRAM(GLIB_GENMARSHAL ${GLIB2_GLIB_GENMARSHAL})
+
+include_directories(${GIO2_INCLUDE_DIRS})
+include_directories(${DBUS_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+link_directories(${GIO2_LIBRARY_DIRS})
+link_directories(${DBUS_LIBRARY_DIRS})
+
+add_custom_command(OUTPUT marshall.c
+  COMMAND ${GLIB_GENMARSHAL} --body --prefix=fcitx_marshall
+  ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list > marshall.c
+  DEPENDS ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list)
+add_custom_command(OUTPUT marshall.h
+  COMMAND ${GLIB_GENMARSHAL} --header --prefix=fcitx_marshall
+  ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list > marshall.h
+  DEPENDS ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list)
 
 add_library(fcitx-gclient SHARED ${FCITX_GCLIENT_SOURCES}
   ${FCITX_GCLIENT_BUILT_SOURCES} ${FCITX_GCLIENT_BUILT_HEADERS})

@@ -290,8 +290,7 @@ CharFromPhraseModePre(PinyinEnhance *pyenhance, FcitxKeySym sym,
     if (index >= 0)
         return FcitxCandidateWordChooseByIndex(cand_list, index);
     if (FcitxHotkeyIsHotKey(sym, state, config->hkPrevPage)) {
-        if (FcitxCandidateWordHasPrev(cand_list)) {
-            FcitxCandidateWordGoPrevPage(cand_list);
+        if (FcitxCandidateWordGoPrevPage(cand_list)) {
             CharFromPhraseSyncPreedit(pyenhance, cand_list);
             return IRV_FLAG_UPDATE_INPUT_WINDOW;
         }
@@ -302,8 +301,7 @@ CharFromPhraseModePre(PinyinEnhance *pyenhance, FcitxKeySym sym,
         }
         return IRV_DO_NOTHING;
     } else if (FcitxHotkeyIsHotKey(sym, state, config->hkNextPage)) {
-        if (FcitxCandidateWordHasNext(cand_list)) {
-            FcitxCandidateWordGoNextPage(cand_list);
+        if (FcitxCandidateWordGoNextPage(cand_list)) {
             CharFromPhraseSyncPreedit(pyenhance, cand_list);
             return IRV_FLAG_UPDATE_INPUT_WINDOW;
         }

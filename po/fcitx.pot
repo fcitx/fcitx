@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 22:50-0500\n"
+"Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
+"POT-Creation-Date: 2012-11-14 23:51-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -379,7 +379,7 @@ msgstr ""
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr ""
 
-#: src/module/clipboard/clipboard.c:346
+#: src/module/clipboard/clipboard.c:348
 msgid "Select to paste"
 msgstr ""
 
@@ -447,6 +447,11 @@ msgstr ""
 #: src/module/remote/remote.c:68
 #, c-format
 msgid "Can't open socket %s: %s"
+msgstr ""
+
+#: src/module/unicode/charselectdata.c:482
+msgctxt "KCharSelect section name"
+msgid "Combining Diacritical Marks"
 msgstr ""
 
 #: src/module/unicode/charselectdata.c:491
@@ -661,7 +666,7 @@ msgstr ""
 msgid "Close virtual keyboard"
 msgstr ""
 
-#: src/module/xkbdbus/xkbdbus.c:180
+#: src/module/xkbdbus/xkbdbus.c:181
 msgid "English (US)"
 msgstr ""
 
@@ -682,7 +687,7 @@ msgstr ""
 msgid "Online Help"
 msgstr ""
 
-#: src/ui/classic/classicui.c:458 src/ui/kimpanel/kimpanel.c:733
+#: src/ui/classic/classicui.c:458 src/ui/kimpanel/kimpanel.c:735
 msgid "Configure Current Input Method"
 msgstr ""
 
@@ -690,7 +695,7 @@ msgstr ""
 msgid "Configure"
 msgstr ""
 
-#: src/ui/classic/classicui.c:460 src/ui/kimpanel/kimpanel.c:738
+#: src/ui/classic/classicui.c:460 src/ui/kimpanel/kimpanel.c:740
 msgid "Restart"
 msgstr ""
 
@@ -751,24 +756,72 @@ msgstr ""
 msgid "X error %i on opcode send"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:217 src/ui/kimpanel/kimpanel.c:218
+#: src/ui/kimpanel/kimpanel.c:219 src/ui/kimpanel/kimpanel.c:220
 msgid "No input window"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:244 src/ui/kimpanel/kimpanel.c:249
+#: src/ui/kimpanel/kimpanel.c:246 src/ui/kimpanel/kimpanel.c:251
 msgid "Disabled"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:245 src/ui/kimpanel/kimpanel.c:250
+#: src/ui/kimpanel/kimpanel.c:247 src/ui/kimpanel/kimpanel.c:252
 msgid "Input Method Disabled"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:365
+#: src/ui/kimpanel/kimpanel.c:367
 msgid "Fcitx"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:730
+#: src/ui/kimpanel/kimpanel.c:732
 msgid "Toggle Input Method"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:41
+msgid "&Add"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:42
+msgid "&Delete"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:43
+msgid "De&lete All"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:44
+msgid "&Quit"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:45
+msgid "&Save"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:46
+msgid "&Import"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:47
+msgid "&Export"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:50
+msgid "Unikey Macro Editor"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:87 tools/gui/lib/editor.cpp:115
+msgid "Quit Macro Editor"
+msgstr ""
+
+#: tools/gui/lib/editor.cpp:88 tools/gui/lib/editor.cpp:116
+msgid "Macro table still contains unsaved changes. Do you want to save?"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/model.cpp:46
+msgid "Macro"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/model.cpp:48
+msgid "Word"
 msgstr ""
 
 #: data/fcitx-configtool.desktop.in:2
@@ -2443,4 +2496,32 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:266
 msgid "Key Color On Virutal Keyboard"
+msgstr ""
+
+#. i18n: file: tools/gui/lib/dialog.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, Dialog)
+msgid "Dialog"
+msgstr ""
+
+#. i18n: file: tools/gui/lib/dialog.ui:25
+#. i18n: ectx: property (text), widget (QLabel, label)
+msgid "Word:"
+msgstr ""
+
+#. i18n: file: tools/gui/lib/dialog.ui:32
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+msgid "Macro:"
+msgstr ""
+
+#. i18n: file: tools/gui/lib/editor.ui:14
+#. i18n: ectx: property (windowTitle), widget (QWidget, Editor)
+msgid "Form"
+msgstr ""
+
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
 msgstr ""
