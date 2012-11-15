@@ -1,24 +1,25 @@
 # This file is included by FindFcitx4.cmake, don't include it directly.
-# - Useful macro for fcitx development
+# - Providing Useful cmake functions for fcitx development
 #
-# Usage:
-#   INTLTOOL_MERGE_TRANSLATION([INFILE] [OUTFILE])
-#     merge translation to fcitx config and desktop file
+# Functions for handling source files and building the project:
+#     fcitx_parse_arguments
+#     fcitx_add_addon_full
+#     fcitx_install_addon_desc
+#     fcitx_translate_add_sources
+#     fcitx_translate_add_apply_source
+#     fcitx_translate_set_pot_target
+#     fcitx_translate_add_po_file
+#     _fcitx_add_uninstall_target
+# Functions to extend fcitx's build (mainly translation) system:
+#     _fcitx_translate_add_handler
+#     _fcitx_translate_add_apply_handler
 #
-#   FCITX_ADD_ADDON_CONF_FILE([conffilename])
-#     merge addon .conf.in translation and install it to correct path
-#     you shouldn't put .in in filename, just put foobar.conf
-#
-#   FCITX_ADD_CONFIGDESC_FILE([filename]*)
-#     install configuration description file to correct path
-#
-#   EXTRACT_FCITX_ADDON_CONF_POSTRING()
-#     extract fcitx addon conf translatable string from POFILES.in from
-#     ${CMAKE_CURRENT_BINARY_DIR}, the file need end with ,conf.in
-#
+# Please refer to the descriptions before each functions' definition
+# for usage.
 
 #==============================================================================
-# Copyright 2011 Xuetian Weng
+# Copyright 2011, 2012 Xuetian Weng
+# Copyright 2012 Yichao Yu
 #
 # Distributed under the GPLv2 License
 # see accompanying file COPYRIGHT for details
@@ -34,18 +35,21 @@ find_package(Gettext REQUIRED)
 # cmake versions. (see cmake documentation for usage)
 # It is included to lower the required cmake version.
 
-#=============================================================================
-# Copyright 2010 Alexander Neundorf <neundorf@kde.org>
+# This file incorporates work covered by the following copyright and
+# permission notice:
 #
-# Distributed under the OSI-approved BSD License (the "License");
-# see accompanying file Copyright.txt for details.
+#    =========================================================================
+#     Copyright 2010 Alexander Neundorf <neundorf@kde.org>
 #
-# This software is distributed WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the License for more information.
-#=============================================================================
-# (To distribute this file outside of CMake, substitute the full
-#  License text for the above reference.)
+#     Distributed under the OSI-approved BSD License (the "License");
+#     see accompanying file Copyright.txt for details.
+#
+#     This software is distributed WITHOUT ANY WARRANTY; without even the
+#     implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#     See the License for more information.
+#    =========================================================================
+#     (To distribute this file outside of CMake, substitute the full
+#      License text for the above reference.)
 
 function(fcitx_parse_arguments prefix _optionNames
     _singleArgNames _multiArgNames)
@@ -99,7 +103,6 @@ function(fcitx_parse_arguments prefix _optionNames
         set(insideValues "MULTI")
       endif()
     endif()
-
   endforeach()
 
   # propagate the result variables to the caller:
