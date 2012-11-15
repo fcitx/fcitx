@@ -54,8 +54,9 @@ fcitx_parse_po_file() {
     local prefix="${1}"
     local pofile="${2}"
     local parse_res="${3}"
-    msgattrib -o- --translated --no-fuzzy --no-obsolete --force-po "${pofile}" |
-    msgconv -tutf-8 --force-po |
+    msgattrib -o- --translated --no-fuzzy --no-obsolete --force-po \
+        --no-location --no-wrap "${pofile}" |
+    msgconv -tutf-8 --force-po --no-location --no-wrap |
     msgexec -i- "${filter_src}" "${prefix}" > "${parse_res}"
 }
 
