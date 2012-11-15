@@ -115,7 +115,7 @@ endfunction()
 
 set(FCITX_MACRO_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 set(FCITX_CMAKE_HELPER_SCRIPT "${FCITX_MACRO_CMAKE_DIR}/fcitx-cmake-helper.sh"
-  CACHE INTERNAL "fcitx-scan-pot" FORCE)
+  CACHE INTERNAL "fcitx-cmake-helper" FORCE)
 mark_as_advanced(FORCE FCITX_CMAKE_HELPER_SCRIPT)
 set(FCITX_TRANSLATION_MERGE_CONFIG
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-merge-config.sh")
@@ -172,8 +172,12 @@ function(__fcitx_cmake_init)
     set(FCITX_SCANNER_EXECUTABLE
       "${PROJECT_BINARY_DIR}/tools/dev/fcitx-scanner"
       CACHE INTERNAL "fcitx-scanner" FORCE)
+    set(FCITX_PO_PARSER_EXECUTABLE
+      "${PROJECT_BINARY_DIR}/tools/dev/fcitx-po-parser"
+      CACHE INTERNAL "fcitx-po-parser" FORCE)
   else()
     find_program(FCITX_SCANNER_EXECUTABLE fcitx-scanner)
+    find_program(FCITX_PO_PARSER_EXECUTABLE fcitx-po-parser)
   endif()
 endfunction()
 __fcitx_cmake_init()
@@ -592,8 +596,9 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   add_custom_target(fcitx-parse-pos.target
     COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}" "${full_name}" --parse-pos
+    "${FCITX_PO_PARSER_EXECUTABLE}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-    DEPENDS ${all_po_files})
+    DEPENDS "${FCITX_PO_PARSER_EXECUTABLE}" ${all_po_files})
   add_custom_target(fcitx-compile-mo.target ALL
     DEPENDS ${all_mo_files})
 endfunction()

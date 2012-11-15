@@ -51,7 +51,9 @@ case "${action}" in
         ;;
     --parse-pos)
         # full_name may be invalid
-        fcitx_load_all_pos "${po_cache}" "${parse_cache}"
+        fcitx_po_parser_executable="$1"
+        fcitx_parse_all_pos "${po_cache}" "${parse_cache}" \
+            "${fcitx_po_parser_executable}"
         exit 0
         ;;
     --add-sources)

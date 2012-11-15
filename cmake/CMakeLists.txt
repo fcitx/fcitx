@@ -2,7 +2,6 @@ install(FILES FcitxConfig.cmake FcitxMacro.cmake
   "${CMAKE_CURRENT_BINARY_DIR}/FcitxConfigVersion.cmake"
   DESTINATION "${prefix}/share/cmake/fcitx/")
 install(FILES
-  fcitx-filter-po.sh
   fcitx-merge-config.sh
   fcitx-cmake-helper.sh
   fcitx-extract-gettext.sh
