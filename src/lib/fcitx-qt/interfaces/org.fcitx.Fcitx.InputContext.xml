@@ -35,6 +35,10 @@
       <arg name="cursor" direction="in" type="u"/>
       <arg name="anchor" direction="in" type="u"/>
     </method>
+    <method name="SetSurroundingTextPosition">
+      <arg name="cursor" direction="in" type="u"/>
+      <arg name="anchor" direction="in" type="u"/>
+    </method>
     <method name="DestroyIC">
     </method>
     <method name="ProcessKeyEvent">

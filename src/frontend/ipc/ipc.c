@@ -256,6 +256,10 @@ const char * ic_introspection_xml =
     "      <arg name=\"cursor\" direction=\"in\" type=\"u\"/>\n"
     "      <arg name=\"anchor\" direction=\"in\" type=\"u\"/>\n"
     "    </method>\n"
+    "    <method name=\"SetSurroundingTextPosition\">\n"
+    "      <arg name=\"cursor\" direction=\"in\" type=\"u\"/>\n"
+    "      <arg name=\"anchor\" direction=\"in\" type=\"u\"/>\n"
+    "    </method>\n"
     "    <method name=\"DestroyIC\">\n"
     "    </method>\n"
     "    <method name=\"ProcessKeyEvent\">\n"
@@ -873,6 +877,21 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                         free(ipcic->surroundingText);
                     }
                     ipcic->surroundingText = strdup(text);
+                    ipcic->cursor = cursor;
+                    ipcic->anchor = anchor;
+                    FcitxInstanceNotifyUpdateSurroundingText(ipc->owner, ic);
+                }
+                DBusMessage *reply = dbus_message_new_method_return(msg);
+                dbus_connection_send(connection, reply, NULL);
+                dbus_message_unref(reply);
+            }
+            result = DBUS_HANDLER_RESULT_HANDLED;
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetSurroundingTextPosition")) {
+            uint32_t cursor, anchor;
+            if (dbus_message_get_args(msg, &error,  DBUS_TYPE_UINT32, &cursor, DBUS_TYPE_UINT32, &anchor, DBUS_TYPE_INVALID)) {
+                FcitxIPCIC* ipcic = GetIPCIC(ic);
+                if (cursor != ipcic->cursor || anchor != ipcic->anchor)
+                {
                     ipcic->cursor = cursor;
                     ipcic->anchor = anchor;
                     FcitxInstanceNotifyUpdateSurroundingText(ipc->owner, ic);

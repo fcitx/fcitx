@@ -103,6 +103,10 @@ static const gchar ic_introspection_xml[] =
     "      <arg name=\"cursor\" direction=\"in\" type=\"u\"/>\n"
     "      <arg name=\"anchor\" direction=\"in\" type=\"u\"/>\n"
     "    </method>\n"
+    "    <method name=\"SetSurroundingTextPosition\">\n"
+    "      <arg name=\"cursor\" direction=\"in\" type=\"u\"/>\n"
+    "      <arg name=\"anchor\" direction=\"in\" type=\"u\"/>\n"
+    "    </method>\n"
     "    <method name=\"DestroyIC\">\n"
     "    </method>\n"
     "    <method name=\"ProcessKeyEvent\">\n"
@@ -365,7 +369,7 @@ void fcitx_client_set_cursor_rect(FcitxClient* self, int x, int y, int w, int h)
 /**
  * fcitx_client_set_surrounding_text:
  * @self: A #FcitxClient
- * @text: (transfer none): surroundng text
+ * @text: (transfer none) (allow-none): surroundng text
  * @cursor: cursor position coresponding to text
  * @anchor: anchor position coresponding to text
  **/
@@ -373,7 +377,12 @@ FCITX_EXPORT_API
 void fcitx_client_set_surrounding_text(FcitxClient* self, gchar* text, guint cursor, guint anchor)
 {
     if (self->priv->icproxy) {
-        g_dbus_proxy_call(self->priv->icproxy, "SetSurroundingText", g_variant_new("(suu)", text, cursor, anchor), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+        if (text) {
+            g_dbus_proxy_call(self->priv->icproxy, "SetSurroundingText", g_variant_new("(suu)", text, cursor, anchor), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+        }
+        else {
+            g_dbus_proxy_call(self->priv->icproxy, "SetSurroundingTextPosition", g_variant_new("(uu)", cursor, anchor), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+        }
     }
 }
 

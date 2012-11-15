@@ -149,6 +149,9 @@ private:
     bool m_syncMode;
     QRect m_rect;
     FcitxConnection* m_connection;
+    QString m_lastSurroundingText;
+    int m_lastSurroundingAnchor;
+    int m_lastSurroundingCursor;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_
