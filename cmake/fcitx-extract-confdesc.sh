@@ -42,9 +42,7 @@ EOF
 case "${action}" in
     -c)
         in_file="${1}"
-        if fcitx_str_match "*.desc" "${in_file}"; then
-            exit 0
-        fi
+        fcitx_exts_match "${in_file}" desc && exit 0
         exit 1
         ;;
     -w)

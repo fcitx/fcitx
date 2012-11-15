@@ -62,11 +62,7 @@ EOF
 case "${action}" in
     -c)
         in_file="${1}"
-        if fcitx_str_match "*.conf.in" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.desktop.in" "${in_file}"; then
-            exit 0
-        fi
+        fcitx_exts_match "${in_file}" conf.in desktop.in && exit 0
         exit 1
         ;;
     -w)

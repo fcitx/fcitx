@@ -119,8 +119,8 @@ set(FCITX_CMAKE_HELPER_SCRIPT "${FCITX_MACRO_CMAKE_DIR}/fcitx-cmake-helper.sh"
 mark_as_advanced(FORCE FCITX_CMAKE_HELPER_SCRIPT)
 set(FCITX_TRANSLATION_MERGE_CONFIG
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-merge-config.sh")
-set(FCITX_TRANSLATION_EXTRACT_CPP
-  "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-cpp.sh")
+set(FCITX_TRANSLATION_EXTRACT_GETTEXT
+  "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-gettext.sh")
 set(FCITX_TRANSLATION_EXTRACT_DESKTOP
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-desktop.sh")
 set(FCITX_TRANSLATION_EXTRACT_CONFDESC
@@ -453,7 +453,7 @@ function(_fcitx_translate_add_handler script)
     "${full_name}" --add-handler "${script}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
 endfunction()
-_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_CPP}")
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_GETTEXT}")
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_DESKTOP}")
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_CONFDESC}")
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_PO}")

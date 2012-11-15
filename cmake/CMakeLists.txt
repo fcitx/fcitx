@@ -5,7 +5,7 @@ install(FILES
   fcitx-filter-po.sh
   fcitx-merge-config.sh
   fcitx-cmake-helper.sh
-  fcitx-extract-cpp.sh
+  fcitx-extract-gettext.sh
   fcitx-extract-confdesc.sh
   fcitx-extract-desktop.sh
   fcitx-extract-po.sh

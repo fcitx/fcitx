@@ -24,13 +24,7 @@ shift 1 || exit 1
 case "${action}" in
     -c)
         in_file="${1}"
-        if fcitx_str_match "*.rc" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.kcfg" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.ui" "${in_file}"; then
-            exit 0
-        fi
+        fcitx_exts_match "${in_file}" rc kcfg ui && exit 0
         exit 1
         ;;
     -w)

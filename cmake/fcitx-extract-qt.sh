@@ -24,11 +24,7 @@ shift 1 || exit 1
 case "${action}" in
     -c)
         in_file="${1}"
-        if fcitx_str_match "*.qml" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.qs" "${in_file}"; then
-            exit 0
-        fi
+        fcitx_exts_match "${in_file}" qml qs && exit 0
         exit 1
         ;;
     -w)

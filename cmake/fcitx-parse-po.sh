@@ -34,6 +34,16 @@ fcitx_str_match() {
     esac
 }
 
+fcitx_exts_match() {
+    local in_file="$1"
+    local ext
+    shift
+    for ext in "${@}"; do
+        fcitx_str_match "*.${ext}" "${in_file}" && return 0
+    done
+    return 1
+}
+
 fcitx_msgid_to_varname() {
     local prefix="${1}"
     local msgid="${2}"

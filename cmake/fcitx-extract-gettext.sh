@@ -21,38 +21,14 @@ shift 1 || exit 1
 
 . "$(dirname "${BASH_SOURCE}")/fcitx-write-po.sh"
 
+support_exts=(
+    c h cpp cxx C cc hh H hxx hpp sh bash csh zsh m py java glade php pl lisp
+    el scm cs awk tcl)
+
 case "${action}" in
     -c)
         in_file="${1}"
-        if fcitx_str_match "*.c" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.h" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.cpp" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.cxx" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.C" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.cc" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.hh" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.H" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.hxx" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.hpp" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.sh" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.bash" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.csh" "${in_file}"; then
-            exit 0
-        elif fcitx_str_match "*.zsh" "${in_file}"; then
-            exit 0
-        fi
+        fcitx_exts_match "${in_file}" "${support_exts[@]}" && exit 0
         exit 1
         ;;
     -w)
