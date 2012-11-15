@@ -544,6 +544,13 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   if(pot_target_set)
     message(FATAL_ERROR "Duplicate pot targets.")
   endif()
+
+  set(options)
+  set(one_value_args BUGADDR)
+  set(multi_value_args)
+  fcitx_parse_arguments(FCITX_SET_POT
+    "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
+
   set_property(GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET" 1)
   get_property(translation_cache_base GLOBAL
     PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
@@ -552,10 +559,14 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_NAME" "${target}")
   set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_DOMAIN" "${domain}")
 
+  if(NOT FCITX_SET_POT_BUGADDR)
+    set(FCITX_SET_POT_BUGADDR "fcitx-dev@googlegroups.com")
+  endif()
+
   # make pot will require bash, but this is only a dev time dependency.
   add_custom_target(fcitx-translate-pot.target
     COMMAND bash "${FCITX_CMAKE_HELPER_SCRIPT}"
-    "${translation_cache_base}" "${full_name}" --pot
+    "${translation_cache_base}" "${full_name}" --pot "${FCITX_SET_POT_BUGADDR}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
   add_custom_target("${target}")
   add_dependencies("${target}" fcitx-translate-pot.target)

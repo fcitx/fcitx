@@ -71,7 +71,8 @@ case "${action}" in
         ;;
     --pot)
         . "$(dirname "${BASH_SOURCE}")/fcitx-write-po.sh"
-        fcitx_generate_pot
+        bug_addr="${1}"
+        fcitx_generate_pot "${bug_addr}"
         exit 0
         ;;
     --clean)

@@ -76,6 +76,15 @@ fcitx_record_po_msg() {
     eval "${var_name}=(\"\${${var_name}[@]}\" \"\${in_file}:\${line_num}\")"
 }
 
+fcitx_set_pot_bug_addr() {
+    local pot_file="$1"
+    local bug_addr="$2"
+    local regex='^[[:blank:]]*"Report-Msgid-Bugs-To:.*\\n"[[:blank:]]*$'
+    bug_addr="$(echo "${bug_addr}" | sed -e 's/|/\\|/g')"
+    local fix_res='"Report-Msgid-Bugs-To: '"${bug_addr}"'\\n"'
+    sed -i "${pot_file}" -e "0,/${regex}/s|${regex}|${fix_res}|"
+}
+
 fcitx_fix_po_charset_utf8() {
     local po_file="$1"
     local regex='^[[:blank:]]*"Content-Type:.*; charset=.*\\n"[[:blank:]]*$'
@@ -95,6 +104,7 @@ fcitx_merge_all_pos() {
 }
 
 fcitx_generate_pot() {
+    local bug_addr="${1}"
     file_list=()
     while read file; do
         file_list=("${file_list[@]}"
@@ -135,6 +145,7 @@ EOF
     fi
     echo "Merging sub po files..."
     fcitx_merge_all_pos "${pot_file}" "${po_list[@]}"
+    fcitx_set_pot_bug_addr "${pot_file}" "${bug_addr}"
     while read line; do
         po_lang="${line%% *}"
         po_file="${line#* }"
