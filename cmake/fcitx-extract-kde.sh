@@ -24,9 +24,11 @@ shift 1 || exit 1
 case "${action}" in
     -c)
         in_file="${1}"
-        if fcitx_str_match "*.qml" "${in_file}"; then
+        if fcitx_str_match "*.rc" "${in_file}"; then
             exit 0
-        elif fcitx_str_match "*.qs" "${in_file}"; then
+        elif fcitx_str_match "*.kcfg" "${in_file}"; then
+            exit 0
+        elif fcitx_str_match "*.ui" "${in_file}"; then
             exit 0
         fi
         exit 1
@@ -35,15 +37,22 @@ case "${action}" in
         out_file="${1}"
         shift || exit 1
         [[ -z "$*" ]] && exit 1
-        echo "Extracting po string from qt sources."
+        echo "Extracting po string from kde sources."
         # need to touch source dir here since lupdate will otherwise include
         # absolute path (or wrong relative path) in po files afaik.
-        tempfile="$(mktemp --tmpdir=. --suffix=_fcitx_qt_$$.ts)"
+        tempfile="$(mktemp --suffix=_fcitx_kde_$$.cpp)"
+        {
+            [[ -z "$*" ]] || extractrc "$@"
+            echo 'i18nc("NAME OF TRANSLATORS", "Your names");'
+            echo 'i18nc("EMAIL OF TRANSLATORS", "Your emails");'
+        } > "${tempfile}"
+        xgettext --from-code=UTF-8 -C -kde -ci18n -ki18n:1 -ki18nc:1c,2 \
+            -ki18np:1,2 -ki18ncp:1c,2,3 -ktr2i18n:1 -kI18N_NOOP:1 \
+            -kI18N_NOOP2:1c,2 -kaliasLocale -kki18n:1 -kki18nc:1c,2 \
+            -kki18np:1,2 -kki18ncp:1c,2,3 -c --no-location "${tempfile}" \
+            -o "${out_file}"
         rm "${tempfile}"
-        lupdate -locations relative -no-obsolete "$@" -ts "${tempfile}"
-        lconvert -of po -o "${out_file}" -if ts -i "${tempfile}" \
-            --drop-translations
-        rm "${tempfile}"
+        fcitx_fix_po_charset_utf8 "${out_file}"
         exit 0
         ;;
 esac

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-14 17:42-0500\n"
+"POT-Creation-Date: 2012-11-14 22:32-0500\n"
 "PO-Revision-Date: 2012-11-14 18:21-0400\n"
 "Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -487,6 +487,11 @@ msgstr "码表"
 msgid "Color of Cursor"
 msgstr "光标颜色"
 
+#: src/module/unicode/charselectdata.c:482
+msgctxt "KCharSelect section name"
+msgid "Combining Diacritical Marks"
+msgstr ""
+
 #: data/addon.desc:12
 msgid "Comment"
 msgstr "描述"
@@ -626,8 +631,8 @@ msgstr "依赖"
 msgid "Description of Skin"
 msgstr "描述"
 
-#: tools/gui/lib/dialog.ui:14
-msgctxt "Dialog|"
+#. i18n: file: tools/gui/lib/dialog.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, Dialog)
 msgid "Dialog"
 msgstr ""
 
@@ -872,8 +877,8 @@ msgstr "字体大小"
 msgid "Font size repect dpi setting"
 msgstr "字体大小遵守dpi设置"
 
-#: tools/gui/lib/editor.ui:14
-msgctxt "Editor|"
+#. i18n: file: tools/gui/lib/editor.ui:14
+#. i18n: ectx: property (windowTitle), widget (QWidget, Editor)
 msgid "Form"
 msgstr ""
 
@@ -1313,8 +1318,8 @@ msgstr ""
 msgid "Macro table still contains unsaved changes. Do you want to save?"
 msgstr ""
 
-#: tools/gui/lib/dialog.ui:32
-msgctxt "Dialog|"
+#. i18n: file: tools/gui/lib/dialog.ui:32
+#. i18n: ectx: property (text), widget (QLabel, label_2)
 msgid "Macro:"
 msgstr ""
 
@@ -2420,8 +2425,8 @@ msgstr "晚风"
 msgid "Word"
 msgstr ""
 
-#: tools/gui/lib/dialog.ui:25
-msgctxt "Dialog|"
+#. i18n: file: tools/gui/lib/dialog.ui:25
+#. i18n: ectx: property (text), widget (QLabel, label)
 msgid "Word:"
 msgstr ""
 
@@ -2475,6 +2480,14 @@ msgstr "小鹤"
 #: src/frontend/xim/fcitx-xim.desc:1
 msgid "Xim"
 msgstr "Xim"
+
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"

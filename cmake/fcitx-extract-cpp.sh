@@ -58,12 +58,15 @@ case "${action}" in
     -w)
         out_file="${1}"
         shift || exit 1
+        [[ -z "$*" ]] && exit 1
         echo "Extracting po string from c sources."
-        xgettext -o "${out_file}" --from-code=utf-8 --force-po \
-            --keyword=_ --keyword=N_ --keyword=D_:2 --keyword=i18n \
-            --keyword=gettext --keyword=ngettext:1,2 --keyword=dgettext:2 \
-            --keyword=dcgettext:2 --keyword=dcngettext:2,3 \
-            --keyword=dngettext:2,3 "$@"
+        xgettext -o "${out_file}" --from-code=utf-8 \
+            --force-po --kde -k_ -kN_ -kD_:2 \
+            -kgettext -kngettext:1,2 -kdgettext:2 \
+            -kdcgettext:2 -kdcngettext:2,3  -kdngettext:2,3 \
+            -ki18n:1 -ki18nc:1c,2 -ki18np:1,2 -ki18ncp:1c,2,3 \
+            -ktr2i18n:1 -kI18N_NOOP:1 -kI18N_NOOP2:1c,2 -kaliasLocale \
+            -kki18n:1 -kki18nc:1c,2 -kki18np:1,2 -kki18ncp:1c,2,3 "$@"
         fcitx_fix_po_charset_utf8 "${out_file}"
         exit 0
         ;;

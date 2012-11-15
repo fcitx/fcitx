@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-14 17:42-0500\n"
+"POT-Creation-Date: 2012-11-14 22:32-0500\n"
 "PO-Revision-Date: 2012-07-23 14:12+0000\n"
 "Last-Translator: mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
@@ -491,6 +491,11 @@ msgstr ""
 msgid "Color of Cursor"
 msgstr "カーソルの色"
 
+#: src/module/unicode/charselectdata.c:482
+msgctxt "KCharSelect section name"
+msgid "Combining Diacritical Marks"
+msgstr ""
+
 #: data/addon.desc:12
 msgid "Comment"
 msgstr "コメント"
@@ -630,8 +635,8 @@ msgstr "依存関係"
 msgid "Description of Skin"
 msgstr ""
 
-#: tools/gui/lib/dialog.ui:14
-msgctxt "Dialog|"
+#. i18n: file: tools/gui/lib/dialog.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, Dialog)
 msgid "Dialog"
 msgstr ""
 
@@ -877,8 +882,8 @@ msgstr "メニューのフォントの大きさ"
 msgid "Font size repect dpi setting"
 msgstr ""
 
-#: tools/gui/lib/editor.ui:14
-msgctxt "Editor|"
+#. i18n: file: tools/gui/lib/editor.ui:14
+#. i18n: ectx: property (windowTitle), widget (QWidget, Editor)
 msgid "Form"
 msgstr ""
 
@@ -1325,8 +1330,8 @@ msgstr ""
 msgid "Macro table still contains unsaved changes. Do you want to save?"
 msgstr ""
 
-#: tools/gui/lib/dialog.ui:32
-msgctxt "Dialog|"
+#. i18n: file: tools/gui/lib/dialog.ui:32
+#. i18n: ectx: property (text), widget (QLabel, label_2)
 msgid "Macro:"
 msgstr ""
 
@@ -2446,8 +2451,8 @@ msgstr ""
 msgid "Word"
 msgstr ""
 
-#: tools/gui/lib/dialog.ui:25
-msgctxt "Dialog|"
+#. i18n: file: tools/gui/lib/dialog.ui:25
+#. i18n: ectx: property (text), widget (QLabel, label)
 msgid "Word:"
 msgstr ""
 
@@ -2501,6 +2506,14 @@ msgstr ""
 
 #: src/frontend/xim/fcitx-xim.desc:1
 msgid "Xim"
+msgstr ""
+
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
 msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:8

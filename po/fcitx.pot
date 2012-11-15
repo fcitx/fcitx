@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-14 17:42-0500\n"
+"POT-Creation-Date: 2012-11-14 22:42-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -447,6 +447,11 @@ msgstr ""
 #: src/module/remote/remote.c:68
 #, c-format
 msgid "Can't open socket %s: %s"
+msgstr ""
+
+#: src/module/unicode/charselectdata.c:482
+msgctxt "KCharSelect section name"
+msgid "Combining Diacritical Marks"
 msgstr ""
 
 #: src/module/unicode/charselectdata.c:491
@@ -2493,22 +2498,30 @@ msgstr ""
 msgid "Key Color On Virutal Keyboard"
 msgstr ""
 
-#: tools/gui/lib/dialog.ui:14
-msgctxt "Dialog|"
+#. i18n: file: tools/gui/lib/dialog.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, Dialog)
 msgid "Dialog"
 msgstr ""
 
-#: tools/gui/lib/dialog.ui:25
-msgctxt "Dialog|"
+#. i18n: file: tools/gui/lib/dialog.ui:25
+#. i18n: ectx: property (text), widget (QLabel, label)
 msgid "Word:"
 msgstr ""
 
-#: tools/gui/lib/dialog.ui:32
-msgctxt "Dialog|"
+#. i18n: file: tools/gui/lib/dialog.ui:32
+#. i18n: ectx: property (text), widget (QLabel, label_2)
 msgid "Macro:"
 msgstr ""
 
-#: tools/gui/lib/editor.ui:14
-msgctxt "Editor|"
+#. i18n: file: tools/gui/lib/editor.ui:14
+#. i18n: ectx: property (windowTitle), widget (QWidget, Editor)
 msgid "Form"
+msgstr ""
+
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
 msgstr ""

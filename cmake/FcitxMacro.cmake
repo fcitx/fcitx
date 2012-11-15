@@ -129,6 +129,8 @@ set(FCITX_TRANSLATION_EXTRACT_PO
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-po.sh")
 set(FCITX_TRANSLATION_EXTRACT_QT
   "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-qt.sh")
+set(FCITX_TRANSLATION_EXTRACT_KDE
+  "${FCITX_MACRO_CMAKE_DIR}/fcitx-extract-kde.sh")
 
 # Function to create a unique target in certain namespace
 # Useful when it is hard to determine a unique legal target name
@@ -456,6 +458,7 @@ _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_DESKTOP}")
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_CONFDESC}")
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_PO}")
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_QT}")
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_KDE}")
 
 # Add files to apply translation
 # this will generate a rule to generate ${out_file} from ${in_file} by
@@ -496,6 +499,8 @@ function(fcitx_translate_add_apply_source in_file out_file)
         DEPENDS fcitx-parse-pos.target "${in_file}" "${script}"
         "${FCITX_CMAKE_HELPER_SCRIPT}" ${all_po_files}
         WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+      __fcitx_addon_get_unique_name("apply-translation" target_name)
+      add_custom_target("${target_name}" ALL DEPENDS "${out_file}")
       return()
     endif()
   endforeach()

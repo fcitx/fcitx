@@ -34,6 +34,7 @@ case "${action}" in
     -w)
         out_file="${1}"
         shift || exit 1
+        [[ -z "$*" ]] && exit 1
         fcitx_merge_all_pos "${out_file}" "$@"
         exit 0
         ;;

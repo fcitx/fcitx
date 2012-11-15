@@ -10,6 +10,7 @@ install(FILES
   fcitx-extract-desktop.sh
   fcitx-extract-po.sh
   fcitx-extract-qt.sh
+  fcitx-extract-kde.sh
   DESTINATION "${prefix}/share/cmake/fcitx/"
   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
   GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)

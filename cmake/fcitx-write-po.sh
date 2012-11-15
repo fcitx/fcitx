@@ -118,13 +118,11 @@ EOF
             fi
         done
         file_list=("${file_left[@]}")
-        if [[ -z "${handled_list[*]}" ]]; then
-            continue
-        fi
         let "po_num++"
         po_filename="${po_dir}/subpo_${po_num}.po"
-        "${handler}" -w "${po_filename}" "${handled_list[@]}"
-        po_list=("${po_list[@]}" "${po_filename}")
+        "${handler}" -w "${po_filename}" "${handled_list[@]}" && {
+            po_list=("${po_list[@]}" "${po_filename}")
+        }
     done <<EOF
 $(cat "${handler_cache}")
 EOF
