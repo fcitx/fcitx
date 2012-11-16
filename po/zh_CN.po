@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-11-14 23:51-0500\n"
+"POT-Creation-Date: 2012-11-16 01:17-0500\n"
 "PO-Revision-Date: 2012-11-14 18:21-0400\n"
 "Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -22,27 +22,27 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
-#: tools/gui/lib/editor.cpp:41
+#: tools/gui/lib/editor.cpp:42
 msgid "&Add"
 msgstr "添加(&A)"
 
-#: tools/gui/lib/editor.cpp:42
+#: tools/gui/lib/editor.cpp:43
 msgid "&Delete"
 msgstr "删除(&D)"
 
-#: tools/gui/lib/editor.cpp:47
+#: tools/gui/lib/editor.cpp:48
 msgid "&Export"
 msgstr "导出(&E)"
 
-#: tools/gui/lib/editor.cpp:46
+#: tools/gui/lib/editor.cpp:47
 msgid "&Import"
 msgstr "导入(&I)"
 
-#: tools/gui/lib/editor.cpp:44
+#: tools/gui/lib/editor.cpp:45
 msgid "&Quit"
 msgstr "退出(&Q)"
 
-#: tools/gui/lib/editor.cpp:45
+#: tools/gui/lib/editor.cpp:46
 msgid "&Save"
 msgstr "保存(&A)"
 
@@ -599,7 +599,7 @@ msgstr "DISPLAY MainWindow"
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
-#: tools/gui/lib/editor.cpp:43
+#: tools/gui/lib/editor.cpp:44
 msgid "De&lete All"
 msgstr "删除全部(&l)"
 
@@ -1314,7 +1314,7 @@ msgstr "微软"
 msgid "Macro"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:88 tools/gui/lib/editor.cpp:116
+#: tools/gui/lib/editor.cpp:89 tools/gui/lib/editor.cpp:117
 msgid "Macro table still contains unsaved changes. Do you want to save?"
 msgstr ""
 
@@ -1396,6 +1396,11 @@ msgstr "菜单字体大小"
 #: src/im/pinyin/py.c:2135
 msgid "Migrate the old file path to the new one"
 msgstr "迁移老文件路径到新文件路径"
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
+#, fuzzy
+msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
+msgstr "最小触发单词提示长度"
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
@@ -1592,6 +1597,7 @@ msgstr "拼音"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:27
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:32
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:37
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:42
 msgid "Pinyin Enhance"
 msgstr "拼音增强"
 
@@ -1763,7 +1769,7 @@ msgstr "快速输入"
 msgid "Quickphrase"
 msgstr "快速输入"
 
-#: tools/gui/lib/editor.cpp:87 tools/gui/lib/editor.cpp:115
+#: tools/gui/lib/editor.cpp:88 tools/gui/lib/editor.cpp:116
 msgid "Quit Macro Editor"
 msgstr ""
 
@@ -2296,7 +2302,7 @@ msgstr "界面: 打开 %s 失败 %s"
 msgid "Unicode"
 msgstr "Unicode"
 
-#: tools/gui/lib/editor.cpp:50
+#: tools/gui/lib/editor.cpp:51
 msgid "Unikey Macro Editor"
 msgstr ""
 
