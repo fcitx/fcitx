@@ -168,6 +168,7 @@ function(__fcitx_cmake_init)
     "${full_name}" --clean)
   set_property(GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET" 0)
   set_property(GLOBAL PROPERTY "${property_name}" 1)
+  set_property(GLOBAL PROPERTY "__FCITX_APPLY_TRANLATION_FILE_ADDED" 0)
   if(FCITX_INTERNAL_BUILD)
     set(FCITX_SCANNER_EXECUTABLE
       "${PROJECT_BINARY_DIR}/tools/dev/fcitx-scanner"
@@ -487,9 +488,7 @@ function(fcitx_translate_add_apply_source in_file out_file)
     list(APPEND all_po_files "${po_file}")
   endforeach()
 
-  if(NOT all_po_files)
-    message(WARNING "No po files added.")
-  endif()
+  set_property(GLOBAL PROPERTY "__FCITX_APPLY_TRANLATION_FILE_ADDED" 1)
 
   foreach(script ${scripts})
     execute_process(COMMAND "${FCITX_CMAKE_HELPER_SCRIPT}"
@@ -620,10 +619,16 @@ function(fcitx_translate_add_po_file locale po_file)
     "${full_name}" --add-po "${locale}" "${po_file}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
   get_property(pot_target_set GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET")
+  get_property(trans_files_added GLOBAL
+    PROPERTY "__FCITX_APPLY_TRANLATION_FILE_ADDED")
+  if(trans_files_added)
+    message(WARNING
+      "PO files should be added before any files to apply translation are added.")
+  endif()
   if(NOT pot_target_set)
     return()
   endif()
-  message(WARNING "PO files should be added before the pot target is set.")
+  # message(WARNING "PO files should be added before the pot target is set.")
   get_property(domain GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_DOMAIN")
   set(po_dir "${translation_cache_base}/fcitx_mo/${locale}")
   add_custom_command(OUTPUT "${po_dir}/${domain}.mo"
