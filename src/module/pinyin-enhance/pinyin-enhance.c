@@ -49,6 +49,7 @@ CONFIG_BINDING_REGISTER("Pinyin Enhance", "AllowReplaceFirst",
                         allow_replace_first);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "DisableSpell", disable_spell);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "DisableSym", disable_sym);
+CONFIG_BINDING_REGISTER("Pinyin Enhance", "StrokeThresh", stroke_thresh);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "MaximumHintLength", max_hint_length);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "InputCharFromPhraseString",
                         char_from_phrase_str);

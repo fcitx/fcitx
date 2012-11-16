@@ -40,6 +40,7 @@ typedef struct {
     boolean allow_replace_first;
     boolean disable_spell;
     boolean disable_sym;
+    int stroke_thresh;
     int max_hint_length;
     char *char_from_phrase_str;
     FcitxHotkey char_from_phrase_key[2];

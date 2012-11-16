@@ -46,7 +46,7 @@ PySymLoadDict(PinyinEnhance *pyenhance)
             fclose(fp);
         }
     }
-    if (!pyenhance->stroke_table) {
+    if (!pyenhance->stroke_table && pyenhance->config.stroke_thresh >= 0) {
         fp = FcitxXDGGetFileWithPrefix("py-enhance",
                                        PY_STROKE_FILE, "r", NULL);
         if (fp) {
@@ -124,26 +124,30 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
             PySymInsertCandidateWords(cand_list, &cand_word, words);
         }
     }
-    words = PinyinEnhanceMapGet(pyenhance->stroke_table, sym, sym_l);
-    if (!words) {
-        PyEnhanceMap *map = pyenhance->stroke_table;
-        int len = 0;
-        for (;map;map = py_enhance_map_next(map)) {
-            const char *key = py_enhance_map_key(map);
-            if (strncmp(key, sym, sym_l) == 0) {
-                int new_len = strlen(key);
-                if (!words || new_len < len) {
-                    words = map->words;
-                    if (new_len - len <= 1)
-                        break;
-                    len = new_len;
+    if (pyenhance->config.stroke_thresh >= 0 &&
+        pyenhance->config.stroke_thresh <= sym_l &&
+        !sym[strspn(sym, "hnpsz")]) {
+        words = PinyinEnhanceMapGet(pyenhance->stroke_table, sym, sym_l);
+        if (!words) {
+            PyEnhanceMap *map = pyenhance->stroke_table;
+            int len = 0;
+            for (;map;map = py_enhance_map_next(map)) {
+                const char *key = py_enhance_map_key(map);
+                if (strncmp(key, sym, sym_l) == 0) {
+                    int new_len = strlen(key);
+                    if (!words || new_len < len) {
+                        words = map->words;
+                        if (new_len - len <= 1)
+                            break;
+                        len = new_len;
+                    }
                 }
             }
         }
-    }
-    if (words) {
-        res = true;
-        PySymInsertCandidateWords(cand_list, &cand_word, words);
+        if (words) {
+            res = true;
+            PySymInsertCandidateWords(cand_list, &cand_word, words);
+        }
     }
     if (!res)
         return false;
