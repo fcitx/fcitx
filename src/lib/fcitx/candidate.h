@@ -274,7 +274,7 @@ extern "C" {
      * @param candList candidate word list
      * @param index index of current page
      * @return INPUT_RETURN_VALUE
-     * 
+     *
      * @since 4.2.7
      **/
     INPUT_RETURN_VALUE FcitxCandidateWordChooseByTotalIndex(struct _FcitxCandidateWordList* candList, int index);

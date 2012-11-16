@@ -23,4 +23,3 @@ FcitxInputMethodProxy::FcitxInputMethodProxy(const QString &service, const QStri
 FcitxInputMethodProxy::~FcitxInputMethodProxy()
 {
 }
-
