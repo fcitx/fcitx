@@ -160,8 +160,15 @@ PinyinEnhanceAddCandidateWord(void *arg)
     if (!(im_type = check_im_type(pyenhance)))
         return;
     /* pysym and stroke */
+    /* struct timespec start, end; */
+    /* int t; */
+    /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
     if (PinyinEnhanceSymCandWords(pyenhance, im_type))
         return;
+    /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
+    /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
+    /*     + end.tv_nsec - start.tv_nsec; */
+    /* printf("%s, %d\n", __func__, t); */
     if (!pyenhance->config.disable_spell)
         PinyinEnhanceSpellHint(pyenhance, im_type);
     return;

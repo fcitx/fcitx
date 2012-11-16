@@ -37,6 +37,12 @@ struct _PyEnhanceMap {
     UT_hash_handle hh;
 };
 
+static inline PyEnhanceMap*
+py_enhance_map_next(PyEnhanceMap *map)
+{
+    return (PyEnhanceMap*)map->hh.next;
+}
+
 static inline void*
 py_enhance_map_key(PyEnhanceMap *map)
 {
