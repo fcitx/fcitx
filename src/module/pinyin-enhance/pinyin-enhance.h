@@ -60,6 +60,9 @@ typedef struct {
 
     PyEnhanceMap *sym_table;
     FcitxMemoryPool *sym_pool;
+
+    PyEnhanceMap *stroke_table;
+    FcitxMemoryPool *stroke_pool;
 } PinyinEnhance;
 
 enum {

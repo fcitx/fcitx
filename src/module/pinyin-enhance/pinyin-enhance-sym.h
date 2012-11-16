@@ -28,9 +28,9 @@ extern "C" {
 #endif
 
     boolean PinyinEnhanceSymInit(PinyinEnhance *pyenhance);
-    boolean PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance);
+    boolean PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type);
     void PinyinEnhanceSymDestroy(PinyinEnhance *pyenhance);
-    void PinyinEnhanceReloadDict(PinyinEnhance *pyenhance);
+    void PinyinEnhanceSymReloadDict(PinyinEnhance *pyenhance);
 #ifdef __cplusplus
 }
 #endif

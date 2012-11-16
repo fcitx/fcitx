@@ -30,31 +30,47 @@
 #include "config.h"
 
 #define PY_SYMBOL_FILE  "pySym.mb"
+#define PY_STROKE_FILE  "py_stroke.mb"
 
 static boolean
 PySymLoadDict(PinyinEnhance *pyenhance)
 {
-    FILE *fp = FcitxXDGGetFileWithPrefix("pinyin", PY_SYMBOL_FILE, "r", NULL);
-    if (!fp)
-        return false;
-    PinyinEnhanceMapLoad(&pyenhance->sym_table, pyenhance->sym_pool, fp);
-    fclose(fp);
-    return true;
+    FILE *fp;
+    boolean res = false;
+    if (!pyenhance->config.disable_sym) {
+        fp = FcitxXDGGetFileWithPrefix("pinyin", PY_SYMBOL_FILE, "r", NULL);
+        if (fp) {
+            res = true;
+            PinyinEnhanceMapLoad(&pyenhance->sym_table,
+                                 pyenhance->sym_pool, fp);
+            fclose(fp);
+        }
+    }
+    if (!pyenhance->stroke_table) {
+        fp = FcitxXDGGetFileWithPrefix("py-enhance",
+                                       PY_STROKE_FILE, "r", NULL);
+        if (fp) {
+            res = true;
+            PinyinEnhanceMapLoad(&pyenhance->stroke_table,
+                                 pyenhance->stroke_pool, fp);
+            fclose(fp);
+        }
+    }
+    return res;
 }
 
 boolean
 PinyinEnhanceSymInit(PinyinEnhance *pyenhance)
 {
     pyenhance->sym_table = NULL;
+    pyenhance->stroke_table = NULL;
     pyenhance->sym_pool = fcitx_memory_pool_create();
-    if (pyenhance->config.disable_sym || !pyenhance->sym_pool) {
-        return false;
-    }
+    pyenhance->stroke_pool = fcitx_memory_pool_create();
     return PySymLoadDict(pyenhance);
 }
 
 void
-PinyinEnhanceReloadDict(PinyinEnhance *pyenhance)
+PinyinEnhanceSymReloadDict(PinyinEnhance *pyenhance)
 {
     PinyinEnhanceMapClear(&pyenhance->sym_table, pyenhance->sym_pool);
     if (pyenhance->config.disable_sym)
@@ -72,18 +88,25 @@ PySymGetCandCb(void *arg, FcitxCandidateWord *cand_word)
     return IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
 
-boolean
-PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance)
+static void
+PySymInsertCandidateWords(FcitxCandidateWordList *cand_list,
+                          FcitxCandidateWord *cand_temp,
+                          PyEnhanceMapWord *words)
 {
-    PyEnhanceMap *table = pyenhance->sym_table;
-    if ((!table) || pyenhance->config.disable_sym)
-        return false;
+    for (;words;words = words->next) {
+        cand_temp->strWord = strdup(py_enhance_map_word(words));
+        FcitxCandidateWordInsert(cand_list, cand_temp, 0);
+    }
+}
+
+boolean
+PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
+{
     FcitxInputState *input = FcitxInstanceGetInputState(pyenhance->owner);
     char *sym = FcitxInputStateGetRawInputBuffer(input);
     int sym_l = strlen(sym);
-    PyEnhanceMapWord *words = PinyinEnhanceMapGet(table, sym, sym_l);
-    if (!words)
-        return false;
+    PyEnhanceMapWord *words = NULL;
+    boolean res = false;
     FcitxCandidateWord cand_word = {
         .strWord = NULL,
         .strExtra = NULL,
@@ -94,10 +117,20 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance)
     };
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
     FcitxMessages *client_preedit = FcitxInputStateGetClientPreedit(input);
-    for (;words;words = words->next) {
-        cand_word.strWord = strdup(py_enhance_map_word(words));
-        FcitxCandidateWordInsert(cand_list, &cand_word, 0);
+    if (!pyenhance->config.disable_sym) {
+        words = PinyinEnhanceMapGet(pyenhance->sym_table, sym, sym_l);
+        if (words) {
+            res = true;
+            PySymInsertCandidateWords(cand_list, &cand_word, words);
+        }
     }
+    words = PinyinEnhanceMapGet(pyenhance->stroke_table, sym, sym_l);
+    if (words) {
+        res = true;
+        PySymInsertCandidateWords(cand_list, &cand_word, words);
+    }
+    if (!res)
+        return false;
     FcitxMessagesSetMessageCount(client_preedit, 0);
     FcitxMessagesAddMessageStringsAtLast(client_preedit, MSG_INPUT,
                                          cand_word.strWord);

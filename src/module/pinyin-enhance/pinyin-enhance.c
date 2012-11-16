@@ -154,11 +154,13 @@ PinyinEnhanceAddCandidateWord(void *arg)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     int im_type;
+    /* reset cfp */
     PinyinEnhanceCharFromPhraseCandidate(pyenhance);
     /* check whether the current im is pinyin */
     if (!(im_type = check_im_type(pyenhance)))
         return;
-    if (PinyinEnhanceSymCandWords(pyenhance))
+    /* pysym and stroke */
+    if (PinyinEnhanceSymCandWords(pyenhance, im_type))
         return;
     if (!pyenhance->config.disable_spell)
         PinyinEnhanceSpellHint(pyenhance, im_type);
@@ -177,7 +179,7 @@ PinyinEnhanceReloadConfig(void *arg)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     PinyinEnhanceLoadConfig(&pyenhance->config);
-    PinyinEnhanceReloadDict(pyenhance);
+    PinyinEnhanceSymReloadDict(pyenhance);
 }
 
 char*
