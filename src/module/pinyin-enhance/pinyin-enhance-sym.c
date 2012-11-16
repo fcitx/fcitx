@@ -124,7 +124,8 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
             PySymInsertCandidateWords(cand_list, &cand_word, words);
         }
     }
-    if (pyenhance->config.stroke_thresh >= 0 &&
+    if (im_type == PY_IM_PINYIN &&
+        pyenhance->config.stroke_thresh >= 0 &&
         pyenhance->config.stroke_thresh <= sym_l &&
         !sym[strspn(sym, "hnpsz")]) {
         words = PinyinEnhanceMapGet(pyenhance->stroke_table, sym, sym_l);
