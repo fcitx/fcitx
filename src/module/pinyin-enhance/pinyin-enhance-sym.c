@@ -47,8 +47,13 @@ PySymLoadDict(PinyinEnhance *pyenhance)
         }
     }
     if (!pyenhance->stroke_table && pyenhance->config.stroke_thresh >= 0) {
-        fp = FcitxXDGGetFileWithPrefix("py-enhance",
-                                       PY_STROKE_FILE, "r", NULL);
+        char *path;
+        char *fname;
+        path = fcitx_utils_get_fcitx_path("pkgdatadir");
+        fcitx_utils_alloc_cat_str(fname, path, "/py-enhance/"PY_STROKE_FILE);
+        free(path);
+        fp = fopen(fname, "r");
+        free(fname);
         if (fp) {
             res = true;
             PinyinEnhanceMapLoad(&pyenhance->stroke_table,

@@ -99,7 +99,7 @@ if(_ENABLE_DBUS)
 endif()
 
 set(PY_STROKE_VER 20121116)
-set(PY_STROKE_TGT py_stroke.mb)
+set(PY_STROKE_TGT "${CMAKE_CURRENT_BINARY_DIR}/py_stroke.mb")
 set(PY_STROKE_TAR
   "${CMAKE_CURRENT_SOURCE_DIR}/py_stroke-${PY_STROKE_VER}.tar.gz")
 set(PY_STROKE_URL
