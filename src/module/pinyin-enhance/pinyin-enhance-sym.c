@@ -25,94 +25,11 @@
 
 #include <libintl.h>
 
-#include "fcitx-utils/uthash.h"
 #include "pinyin-enhance-sym.h"
 
 #include "config.h"
 
 #define PY_SYMBOL_FILE  "pySym.mb"
-
-#undef uthash_malloc
-#undef uthash_free
-
-typedef struct _PySymWord PySymWord;
-
-struct _PySymWord {
-    PySymWord *next;
-};
-
-static inline void*
-sym_word(PySymWord *word)
-{
-    return ((void*)word) + sizeof(PySymWord);
-}
-
-struct _PySymTable {
-    PySymWord *words;
-    UT_hash_handle hh;
-};
-
-static inline void*
-table_sym(PySymTable *table)
-{
-    return (void*)table + sizeof(PySymTable);
-}
-
-#define SYM_BLANK " \t\b\r\n"
-
-static void
-PinyinEnhanceAddSym(PinyinEnhance *pyenhance, const char *sym, int sym_l,
-                    const char *word, int word_l)
-{
-    PySymTable *table;
-    PySymWord *py_word;
-    FcitxMemoryPool *pool = pyenhance->sym_pool;
-#define uthash_malloc(sz) fcitx_memory_pool_alloc_align(pool, sz, 1)
-#define uthash_free(ptr)
-    word_l++;
-    py_word = fcitx_memory_pool_alloc_align(pool,
-                                            sizeof(PySymWord) + word_l, 1);
-    memcpy(sym_word(py_word), word, word_l);
-    HASH_FIND_STR(pyenhance->sym_table, sym, table);
-    if (table) {
-        py_word->next = table->words;
-        table->words = py_word;
-    } else {
-        /**
-         * the + 1 here is actually not necessary,
-         * just to make printing easier
-         **/
-        table = fcitx_memory_pool_alloc_align(pool,
-                                              sizeof(PySymTable) + sym_l + 1,
-                                              1);
-        table->words = py_word;
-        py_word->next = NULL;
-        memcpy(table_sym(table), sym, sym_l + 1);
-        HASH_ADD_KEYPTR(hh, pyenhance->sym_table,
-                        table_sym(table), sym_l, table);
-    }
-#undef uthash_malloc
-#undef uthash_free
-}
-
-static PySymWord*
-PinyinEnhanceGetSym(PinyinEnhance *pyenhance, const char *sym)
-{
-    PySymTable *table;
-    HASH_FIND_STR(pyenhance->sym_table, sym, table);
-    if (table) {
-        return table->words;
-    }
-    return NULL;
-}
-
-static void
-PySymClearDict(PinyinEnhance *pyenhance)
-{
-    pyenhance->sym_table = NULL;
-    if (pyenhance->sym_pool)
-        fcitx_memory_pool_clear(pyenhance->sym_pool);
-}
 
 static boolean
 PySymLoadDict(PinyinEnhance *pyenhance)
@@ -120,34 +37,7 @@ PySymLoadDict(PinyinEnhance *pyenhance)
     FILE *fp = FcitxXDGGetFileWithPrefix("pinyin", PY_SYMBOL_FILE, "r", NULL);
     if (!fp)
         return false;
-    char *buff = NULL;
-    char *sym;
-    char *word;
-    int sym_l;
-    int word_l;
-    size_t len;
-    while (getline(&buff, &len, fp) != -1) {
-        /* remove leading spaces */
-        sym = buff + strspn(buff, SYM_BLANK);
-        /* empty line or comment */
-        if (*sym == '\0' || *sym == '#')
-            continue;
-        /* find delimiter */
-        sym_l = strcspn(sym, SYM_BLANK);
-        word = sym + sym_l;
-        *word = '\0';
-        word++;
-        /* find start of word */
-        word = word + strspn(word, SYM_BLANK);
-        word_l = strcspn(word, SYM_BLANK);
-        if (!(word_l && sym_l))
-            continue;
-        word[word_l] = '\0';
-        PinyinEnhanceAddSym(pyenhance, sym, sym_l, word, word_l);
-    }
-
-    if (buff)
-        free(buff);
+    PinyinEnhanceMapLoad(&pyenhance->sym_table, pyenhance->sym_pool, fp);
     fclose(fp);
     return true;
 }
@@ -156,20 +46,17 @@ boolean
 PinyinEnhanceSymInit(PinyinEnhance *pyenhance)
 {
     pyenhance->sym_table = NULL;
-    if (pyenhance->config.disable_sym) {
-        pyenhance->sym_pool = NULL;
+    pyenhance->sym_pool = fcitx_memory_pool_create();
+    if (pyenhance->config.disable_sym || !pyenhance->sym_pool) {
         return false;
     }
-    pyenhance->sym_pool = fcitx_memory_pool_create();
-    if (!pyenhance->sym_pool)
-        return false;
     return PySymLoadDict(pyenhance);
 }
 
 void
 PinyinEnhanceReloadDict(PinyinEnhance *pyenhance)
 {
-    PySymClearDict(pyenhance);
+    PinyinEnhanceMapClear(&pyenhance->sym_table, pyenhance->sym_pool);
     if (pyenhance->config.disable_sym)
         return;
     PySymLoadDict(pyenhance);
@@ -188,12 +75,13 @@ PySymGetCandCb(void *arg, FcitxCandidateWord *cand_word)
 boolean
 PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance)
 {
-    PySymTable *table = pyenhance->sym_table;
+    PyEnhanceMap *table = pyenhance->sym_table;
     if ((!table) || pyenhance->config.disable_sym)
         return false;
     FcitxInputState *input = FcitxInstanceGetInputState(pyenhance->owner);
     char *sym = FcitxInputStateGetRawInputBuffer(input);
-    PySymWord *words = PinyinEnhanceGetSym(pyenhance, sym);
+    int sym_l = strlen(sym);
+    PyEnhanceMapWord *words = PinyinEnhanceMapGet(table, sym, sym_l);
     if (!words)
         return false;
     FcitxCandidateWord cand_word = {
@@ -207,7 +95,7 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance)
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
     FcitxMessages *client_preedit = FcitxInputStateGetClientPreedit(input);
     for (;words;words = words->next) {
-        cand_word.strWord = strdup(sym_word(words));
+        cand_word.strWord = strdup(py_enhance_map_word(words));
         FcitxCandidateWordInsert(cand_list, &cand_word, 0);
     }
     FcitxMessagesSetMessageCount(client_preedit, 0);
@@ -219,7 +107,8 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance)
 void
 PinyinEnhanceSymDestroy(PinyinEnhance *pyenhance)
 {
-    PySymClearDict(pyenhance);
-    if (pyenhance->sym_pool)
+    PinyinEnhanceMapClear(&pyenhance->sym_table, pyenhance->sym_pool);
+    if (fcitx_likely(pyenhance->sym_pool)) {
         fcitx_memory_pool_destroy(pyenhance->sym_pool);
+    }
 }

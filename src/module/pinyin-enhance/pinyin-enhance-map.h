@@ -18,66 +18,43 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef _PINYIN_ENHANCE_H
-#define _PINYIN_ENHANCE_H
+#ifndef _PINYIN_ENHANCE_MAP_H
+#define _PINYIN_ENHANCE_MAP_H
 
-#include <fcitx/fcitx.h>
-#include <fcitx/module.h>
-#include <fcitx/instance.h>
-#include <fcitx/hook.h>
-#include <fcitx-utils/log.h>
-#include <fcitx-utils/memory.h>
-#include <fcitx/candidate.h>
-#include <fcitx-config/xdg.h>
+typedef struct _PyEnhanceMapWord PyEnhanceMapWord;
+struct _PyEnhanceMapWord {
+    PyEnhanceMapWord *next;
+};
+static inline void*
+py_enhance_map_word(PyEnhanceMapWord *word)
+{
+    return ((void*)word) + sizeof(PyEnhanceMapWord);
+}
 
-#include "pinyin-enhance-map.h"
-
-#include "config.h"
-
-typedef struct {
-    FcitxGenericConfig gconfig;
-    boolean short_as_english;
-    boolean allow_replace_first;
-    boolean disable_spell;
-    boolean disable_sym;
-    int max_hint_length;
-    char *char_from_phrase_str;
-    FcitxHotkey char_from_phrase_key[2];
-} PinyinEnhanceConfig;
-
-typedef struct {
-    PinyinEnhanceConfig config;
-    FcitxInstance *owner;
-
-    boolean cfp_active; /* for "char from phrase" */
-    int cfp_cur_word;
-    int cfp_cur_page;
-
-    char *cfp_mode_selected;
-    int cfp_mode_cur;
-    int cfp_mode_count;
-    char ***cfp_mode_lists;
-
-    PyEnhanceMap *sym_table;
-    FcitxMemoryPool *sym_pool;
-} PinyinEnhance;
-
-enum {
-    PY_IM_INVALID = 0,
-    PY_IM_PINYIN,
-    PY_IM_SHUANGPIN,
+typedef struct _PyEnhanceMap PyEnhanceMap;
+struct _PyEnhanceMap {
+    PyEnhanceMapWord *words;
+    UT_hash_handle hh;
 };
 
-DEFINE_GET_ADDON("fcitx-sunpinyin", SunPinyin)
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-    char *PinyinEnhanceGetSelected(PinyinEnhance *pyenhance);
-
-#ifdef __cplusplus
+static inline void*
+py_enhance_map_key(PyEnhanceMap *map)
+{
+    return (void*)map + sizeof(PyEnhanceMap);
 }
-#endif
+void PinyinEnhanceMapAdd(PyEnhanceMap **map, FcitxMemoryPool *pool,
+                         const char *key, int key_l,
+                         const char *word, int word_l);
+PyEnhanceMapWord *PinyinEnhanceMapGet(PyEnhanceMap *map,
+                                      const char *key, int key_l);
+static inline void
+PinyinEnhanceMapClear(PyEnhanceMap **map, FcitxMemoryPool *pool)
+{
+    *map = NULL;
+    if (fcitx_likely(pool)) {
+        fcitx_memory_pool_clear(pool);
+    }
+}
+void PinyinEnhanceMapLoad(PyEnhanceMap **map, FcitxMemoryPool *pool, FILE *fp);
 
-#endif /* _PINYIN_ENHANCE_H */
+#endif /* _PINYIN_ENHANCE_MAP_H */
