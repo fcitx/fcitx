@@ -223,8 +223,7 @@ void QFcitxInputContext::update()
             if (text.length() < SURROUNDING_THRESHOLD) {
                 if (fcitx_utf8_check_string(text.toUtf8().data())) {
                     addCapacity(CAPACITY_SURROUNDING_TEXT);
-                    
-                    
+
                     int cursor = var1.toInt();
                     int anchor;
                     if (var2.isValid())

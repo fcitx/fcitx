@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-11-14 23:51-0500\n"
+"POT-Creation-Date: 2012-11-16 01:22-0500\n"
 "PO-Revision-Date: 2012-07-23 14:12+0000\n"
 "Last-Translator: mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
@@ -23,27 +23,27 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:41
+#: tools/gui/lib/editor.cpp:42
 msgid "&Add"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:42
+#: tools/gui/lib/editor.cpp:43
 msgid "&Delete"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:47
+#: tools/gui/lib/editor.cpp:48
 msgid "&Export"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:46
+#: tools/gui/lib/editor.cpp:47
 msgid "&Import"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:44
+#: tools/gui/lib/editor.cpp:45
 msgid "&Quit"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:45
+#: tools/gui/lib/editor.cpp:46
 msgid "&Save"
 msgstr ""
 
@@ -603,7 +603,7 @@ msgstr ""
 msgid "DRAW MainWindow"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:43
+#: tools/gui/lib/editor.cpp:44
 msgid "De&lete All"
 msgstr ""
 
@@ -1326,7 +1326,7 @@ msgstr ""
 msgid "Macro"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:88 tools/gui/lib/editor.cpp:116
+#: tools/gui/lib/editor.cpp:89 tools/gui/lib/editor.cpp:117
 msgid "Macro table still contains unsaved changes. Do you want to save?"
 msgstr ""
 
@@ -1407,6 +1407,10 @@ msgstr "メニューのフォントの大きさ"
 
 #: src/im/pinyin/py.c:2135
 msgid "Migrate the old file path to the new one"
+msgstr ""
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
+msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
 msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
@@ -1604,6 +1608,7 @@ msgstr ""
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:27
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:32
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:37
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:42
 msgid "Pinyin Enhance"
 msgstr ""
 
@@ -1775,7 +1780,7 @@ msgstr ""
 msgid "Quickphrase"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:87 tools/gui/lib/editor.cpp:115
+#: tools/gui/lib/editor.cpp:88 tools/gui/lib/editor.cpp:116
 msgid "Quit Macro Editor"
 msgstr ""
 
@@ -2104,6 +2109,10 @@ msgstr ""
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr ""
 
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
+msgid "Stroke input trigger length"
+msgstr ""
+
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
 msgstr "モジュールの設定"
@@ -2322,7 +2331,7 @@ msgstr ""
 msgid "Unicode"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:50
+#: tools/gui/lib/editor.cpp:51
 msgid "Unikey Macro Editor"
 msgstr ""
 

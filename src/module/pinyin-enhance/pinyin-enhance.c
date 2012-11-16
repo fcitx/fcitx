@@ -49,6 +49,7 @@ CONFIG_BINDING_REGISTER("Pinyin Enhance", "AllowReplaceFirst",
                         allow_replace_first);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "DisableSpell", disable_spell);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "DisableSym", disable_sym);
+CONFIG_BINDING_REGISTER("Pinyin Enhance", "StrokeThresh", stroke_thresh);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "MaximumHintLength", max_hint_length);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "InputCharFromPhraseString",
                         char_from_phrase_str);
@@ -154,12 +155,21 @@ PinyinEnhanceAddCandidateWord(void *arg)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     int im_type;
+    /* reset cfp */
     PinyinEnhanceCharFromPhraseCandidate(pyenhance);
     /* check whether the current im is pinyin */
     if (!(im_type = check_im_type(pyenhance)))
         return;
-    if (PinyinEnhanceSymCandWords(pyenhance))
+    /* pysym and stroke */
+    /* struct timespec start, end; */
+    /* int t; */
+    /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
+    if (PinyinEnhanceSymCandWords(pyenhance, im_type))
         return;
+    /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
+    /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
+    /*     + end.tv_nsec - start.tv_nsec; */
+    /* printf("%s, %d\n", __func__, t); */
     if (!pyenhance->config.disable_spell)
         PinyinEnhanceSpellHint(pyenhance, im_type);
     return;
@@ -177,7 +187,7 @@ PinyinEnhanceReloadConfig(void *arg)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     PinyinEnhanceLoadConfig(&pyenhance->config);
-    PinyinEnhanceReloadDict(pyenhance);
+    PinyinEnhanceSymReloadDict(pyenhance);
 }
 
 char*

@@ -155,10 +155,13 @@ main(int argc, char **argv)
         .xerror = _xerror_handler,
         .xerror2 = _xerror2_handler
     };
-    po_file_t po_file = po_file_read("-", &handler);
     const char *lang = argv[1];
     if (!lang)
         return 1;
+    const char *fname = argv[2];
+    if (!fname || !*fname)
+        fname = "-";
+    po_file_t po_file = po_file_read(fname, &handler);
 
     /* const char *header = po_file_domain_header(po_file, NULL); */
     po_message_iterator_t msg_iter = po_message_iterator(po_file, NULL);
