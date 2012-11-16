@@ -146,13 +146,23 @@ boolean FcitxXkbSupported(FcitxXkb* xkb, int* xkbOpcode)
     return true;
 }
 
+static void
+FcitxXkbClearVarDefsRec(XkbRF_VarDefsRec *vdp)
+{
+    fcitx_utils_free(vdp->model);
+    fcitx_utils_free(vdp->layout);
+    fcitx_utils_free(vdp->variant);
+    fcitx_utils_free(vdp->options);
+}
 
 static char* FcitxXkbGetRulesName(FcitxXkb* xkb)
 {
     XkbRF_VarDefsRec vd;
     char *tmp = NULL;
 
-    if (XkbRF_GetNamesProp(xkb->dpy, &tmp, &vd) && tmp != NULL) {
+    /* the four strings in vd are either %NULL or strdup'ed */
+    if (XkbRF_GetNamesProp(xkb->dpy, &tmp, &vd)) {
+        FcitxXkbClearVarDefsRec(&vd);
         return tmp;
     }
     return NULL;
@@ -214,41 +224,53 @@ FcitxXkbInitDefaultLayout (FcitxXkb* xkb)
 {
     Display* dpy = xkb->dpy;
     XkbRF_VarDefsRec vd;
-    char *tmp = NULL;
 
-    if (xkb->defaultLayouts) fcitx_utils_free_string_list(xkb->defaultLayouts);
-    if (xkb->defaultModels) fcitx_utils_free_string_list(xkb->defaultModels);
-    if (xkb->defaultOptions) fcitx_utils_free_string_list(xkb->defaultOptions);
-    if (xkb->defaultVariants) fcitx_utils_free_string_list(xkb->defaultVariants);
+    if (xkb->defaultLayouts) {
+        utarray_clear(xkb->defaultLayouts);
+    } else {
+        utarray_new(xkb->defaultLayouts, fcitx_str_icd);
+    }
+    if (xkb->defaultModels) {
+        utarray_clear(xkb->defaultModels);
+    } else {
+        utarray_new(xkb->defaultModels, fcitx_str_icd);
+    }
+    if (xkb->defaultOptions) {
+        utarray_clear(xkb->defaultOptions);
+    } else {
+        utarray_new(xkb->defaultOptions, fcitx_str_icd);
+    }
+    if (xkb->defaultVariants) {
+        utarray_clear(xkb->defaultVariants);
+    } else {
+        utarray_new(xkb->defaultVariants, fcitx_str_icd);
+    }
 
-    if (!XkbRF_GetNamesProp(dpy, &tmp, &vd) || !tmp) {
+    /* XkbRF_GetNamesProp won't fill the second parameter if it is NULL */
+    if (!XkbRF_GetNamesProp(dpy, NULL, &vd)) {
         FcitxLog(WARNING, "Couldn't interpret %s property",
                  _XKB_RF_NAMES_PROP_ATOM);
         return;
-    } else {
-        free(tmp);
     }
-    if (!vd.model || !vd.layout) {
-        FcitxLog (WARNING, "Could not get group layout from X property");
-        return;
+    /* Print warning only, in order to free vd correctly. */
+    if (!vd.model || !vd.layout)
+        FcitxLog(WARNING, "Could not get group layout from X property");
+    if (vd.layout) {
+        fcitx_utils_append_split_string(xkb->defaultLayouts, vd.layout, ",");
+        free(vd.layout);
     }
-    if (vd.layout)
-        xkb->defaultLayouts = fcitx_utils_split_string (vd.layout, ',');
-    else
-        xkb->defaultLayouts = fcitx_utils_new_string_list();
-    if (vd.model)
-        xkb->defaultModels = fcitx_utils_split_string (vd.model, ',');
-    else
-        xkb->defaultModels = fcitx_utils_new_string_list();
-    if (vd.options)
-        xkb->defaultOptions = fcitx_utils_split_string (vd.options, ',');
-    else
-        xkb->defaultOptions = fcitx_utils_new_string_list();
+    if (vd.model) {
+        fcitx_utils_append_split_string(xkb->defaultModels, vd.model, ",");
+        free(vd.model);
+    }
+    if (vd.options) {
+        fcitx_utils_append_split_string(xkb->defaultOptions, vd.options, ",");
+        free(vd.options);
+    }
     if (vd.variant) {
-        xkb->defaultVariants = fcitx_utils_split_string (vd.variant, ',');
+        fcitx_utils_append_split_string(xkb->defaultVariants, vd.variant, ",");
+        free(vd.variant);
     }
-    else
-        xkb->defaultVariants = fcitx_utils_new_string_list();
 }
 
 static Bool
@@ -391,8 +413,11 @@ FcitxXkbUpdateProperties(FcitxXkb* xkb,
 static void
 FcitxXkbGetCurrentLayoutInternal(FcitxXkb *xkb, char **layout, char **variant)
 {
-    char* const * layoutName = (char* const*) utarray_eltptr(xkb->defaultLayouts, FcitxXkbGetCurrentGroup(xkb));
-    char* const * pVariantName = (char* const*) utarray_eltptr(xkb->defaultVariants, FcitxXkbGetCurrentGroup(xkb));
+    int cur_group = FcitxXkbGetCurrentGroup(xkb);
+    char* const *layoutName = (char* const*)utarray_eltptr(xkb->defaultLayouts,
+                                                           cur_group);
+    char* const *pVariantName = (char* const*)utarray_eltptr(
+        xkb->defaultVariants, cur_group);
     if (layoutName)
         *layout = strdup(*layoutName);
     else
@@ -444,15 +469,16 @@ FcitxXkbSetLayout  (FcitxXkb* xkb,
     char *variants_line;
     char *model_line;
 
-    if (xkb->defaultLayouts == NULL) {
+    if (xkb->defaultLayouts == NULL ||
+        utarray_len(xkb->defaultLayouts) == 0) {
         FcitxLog(WARNING, "Your system seems not to support XKB.");
         return False;
     }
 
     if (layouts == NULL)
-        layouts_line = fcitx_utils_join_string_list (xkb->defaultLayouts, ',');
+        layouts_line = fcitx_utils_join_string_list(xkb->defaultLayouts, ',');
     else
-        layouts_line = strdup (layouts);
+        layouts_line = strdup(layouts);
 
     if (variants == NULL)
         variants_line = fcitx_utils_join_string_list(xkb->defaultVariants, ',');
@@ -490,7 +516,8 @@ FcitxXkbGetCurrentGroup (FcitxXkb* xkb)
     Display *dpy = xkb->dpy;
     XkbStateRec state;
 
-    if (xkb->defaultLayouts == NULL) {
+    if (xkb->defaultLayouts == NULL ||
+        utarray_len(xkb->defaultLayouts) == 0) {
         FcitxLog(WARNING, "Your system seems not to support XKB.");
         return 0;
     }
@@ -763,14 +790,10 @@ static void FcitxXkbDestroy(void* arg)
     FcitxXkbRetrieveCloseGroup(xkb);
     XSync(xkb->dpy, False);
     FcitxXkbRulesFree(xkb->rules);
-    fcitx_utils_free_string_list (xkb->defaultVariants);
-    xkb->defaultVariants = NULL;
-    fcitx_utils_free_string_list (xkb->defaultLayouts);
-    xkb->defaultLayouts = NULL;
-    fcitx_utils_free_string_list (xkb->defaultModels);
-    xkb->defaultModels = NULL;
-    fcitx_utils_free_string_list (xkb->defaultOptions);
-    xkb->defaultOptions = NULL;
+    fcitx_utils_free_string_list(xkb->defaultVariants);
+    fcitx_utils_free_string_list(xkb->defaultLayouts);
+    fcitx_utils_free_string_list(xkb->defaultModels);
+    fcitx_utils_free_string_list(xkb->defaultOptions);
     free(xkb);
 }
 
