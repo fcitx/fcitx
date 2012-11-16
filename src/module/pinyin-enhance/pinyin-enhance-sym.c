@@ -47,11 +47,9 @@ PySymLoadDict(PinyinEnhance *pyenhance)
         }
     }
     if (!pyenhance->stroke_table && pyenhance->config.stroke_thresh >= 0) {
-        char *path;
         char *fname;
-        path = fcitx_utils_get_fcitx_path("pkgdatadir");
-        fcitx_utils_alloc_cat_str(fname, path, "/py-enhance/"PY_STROKE_FILE);
-        free(path);
+        fname = fcitx_utils_get_fcitx_path_with_filename(
+            "pkgdatadir", "py-enhance/"PY_STROKE_FILE);
         fp = fopen(fname, "r");
         free(fname);
         if (fp) {
