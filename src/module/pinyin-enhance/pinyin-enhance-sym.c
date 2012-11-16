@@ -32,7 +32,7 @@
 
 #define PY_SYMBOL_FILE  "pySym.mb"
 
-#undef uthash_alloc
+#undef uthash_malloc
 #undef uthash_free
 
 typedef struct _PySymWord PySymWord;
@@ -67,7 +67,7 @@ PinyinEnhanceAddSym(PinyinEnhance *pyenhance, const char *sym, int sym_l,
     PySymTable *table;
     PySymWord *py_word;
     FcitxMemoryPool *pool = pyenhance->sym_pool;
-#define uthash_alloc(sz) fcitx_memory_pool_alloc_align(pool, sz)
+#define uthash_malloc(sz) fcitx_memory_pool_alloc_align(pool, sz, 1)
 #define uthash_free(ptr)
     word_l++;
     py_word = fcitx_memory_pool_alloc_align(pool,
@@ -91,7 +91,7 @@ PinyinEnhanceAddSym(PinyinEnhance *pyenhance, const char *sym, int sym_l,
         HASH_ADD_KEYPTR(hh, pyenhance->sym_table,
                         table_sym(table), sym_l, table);
     }
-#undef uthash_alloc
+#undef uthash_malloc
 #undef uthash_free
 }
 
