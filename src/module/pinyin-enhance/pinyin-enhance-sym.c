@@ -94,11 +94,11 @@ PySymGetCandCb(void *arg, FcitxCandidateWord *cand_word)
 static void
 PySymInsertCandidateWords(FcitxCandidateWordList *cand_list,
                           FcitxCandidateWord *cand_temp,
-                          PyEnhanceMapWord *words)
+                          PyEnhanceMapWord *words, int index)
 {
     for (;words;words = words->next) {
         cand_temp->strWord = strdup(py_enhance_map_word(words));
-        FcitxCandidateWordInsert(cand_list, cand_temp, 0);
+        FcitxCandidateWordInsert(cand_list, cand_temp, index);
     }
 }
 
@@ -124,11 +124,10 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
         words = PinyinEnhanceMapGet(pyenhance->sym_table, sym, sym_l);
         if (words) {
             res = true;
-            PySymInsertCandidateWords(cand_list, &cand_word, words);
+            PySymInsertCandidateWords(cand_list, &cand_word, words, 0);
         }
     }
-    if (im_type == PY_IM_PINYIN &&
-        pyenhance->config.stroke_thresh >= 0 &&
+    if (pyenhance->config.stroke_thresh >= 0 &&
         pyenhance->config.stroke_thresh <= sym_l &&
         !sym[strspn(sym, "hnpsz")]) {
         words = PinyinEnhanceMapGet(pyenhance->stroke_table, sym, sym_l);
@@ -149,8 +148,34 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
             }
         }
         if (words) {
-            res = true;
-            PySymInsertCandidateWords(cand_list, &cand_word, words);
+            int index = -1;
+            /* py_sym inserted */
+            if (res) {
+                index = 1;
+            } else {
+                FcitxCandidateWord *orig_cand;
+                orig_cand = FcitxCandidateWordGetFirst(cand_list);
+                const char *orig_word = orig_cand ? orig_cand->strWord : NULL;
+                int orig_len = orig_word ? fcitx_utf8_strlen(orig_word) : 0;
+                if (im_type == PY_IM_PINYIN) {
+                    index = (orig_len == 1 && (*orig_word & 0x80)) ? 1 : 0;
+                } else if (im_type == PY_IM_SHUANGPIN) {
+                    if (!orig_len || !(*orig_word & 0x80)) {
+                        index = 0;
+                    } else if (sym_l > 4 ||
+                               !FcitxCandidateWordGetByTotalIndex(cand_list,
+                                                                  1)) {
+                        index = 1;
+                    } else {
+                        index = 2;
+                    }
+                }
+            }
+            if (index >= 0) {
+                res = true;
+                PySymInsertCandidateWords(cand_list, &cand_word,
+                                          words, index);
+            }
         }
     }
     if (!res)
