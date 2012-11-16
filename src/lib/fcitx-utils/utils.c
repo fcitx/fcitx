@@ -172,10 +172,10 @@ void fcitx_utils_init_as_daemon()
     signal(SIGCHLD, oldchld);
 }
 
-FCITX_EXPORT_API
-UT_array* fcitx_utils_new_string_list()
+FCITX_EXPORT_API UT_array*
+fcitx_utils_new_string_list()
 {
-    UT_array* array;
+    UT_array *array;
     utarray_new(array, fcitx_str_icd);
     return array;
 }

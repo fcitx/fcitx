@@ -93,7 +93,7 @@ FcitxXkbRules* FcitxXkbReadRules(const char* file)
 
     xmlInitParser();
 
-    FcitxXkbRules* rules = (FcitxXkbRules*) fcitx_utils_malloc0(sizeof(FcitxXkbRules));
+    FcitxXkbRules* rules = fcitx_utils_new(FcitxXkbRules);
     utarray_new(rules->layoutInfos, &layout_icd);
     utarray_new(rules->modelInfos, &model_icd);
     utarray_new(rules->optionGroupInfos, &option_group_icd);
