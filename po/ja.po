@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-11-16 01:17-0500\n"
+"POT-Creation-Date: 2012-11-16 01:22-0500\n"
 "PO-Revision-Date: 2012-07-23 14:12+0000\n"
 "Last-Translator: mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
@@ -2107,6 +2107,10 @@ msgstr ""
 #: src/frontend/xim/xim.c:241
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
+msgstr ""
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
+msgid "Stroke input trigger length"
 msgstr ""
 
 #: data/addon.desc:53

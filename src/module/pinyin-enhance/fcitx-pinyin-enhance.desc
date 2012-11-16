@@ -43,7 +43,9 @@ Description=Disable Pinyin Symbol
 Type=Integer
 DefaultValue=2
 Min=-1
-Description=Minimum input length to trigger stroke input (set to -1 to disable)
+LongDescription=Minimum input length to trigger stroke input (set to -1 to disable)
+Description=Stroke input trigger length
+Advance=True
 
 [DescriptionFile]
 LocaleDomain=fcitx

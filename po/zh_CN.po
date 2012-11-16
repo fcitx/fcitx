@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-11-16 01:17-0500\n"
-"PO-Revision-Date: 2012-11-14 18:21-0400\n"
+"POT-Creation-Date: 2012-11-16 01:22-0500\n"
+"PO-Revision-Date: 2012-11-16 01:23-0500\n"
 "Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -1398,9 +1398,8 @@ msgid "Migrate the old file path to the new one"
 msgstr "迁移老文件路径到新文件路径"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
-#, fuzzy
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
-msgstr "最小触发单词提示长度"
+msgstr "最小触发笔画输入的输入长度(设为-1禁用笔画输入)"
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
@@ -2096,6 +2095,10 @@ msgstr "拼写提示"
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
+msgid "Stroke input trigger length"
+msgstr "笔画输入触发长度"
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"

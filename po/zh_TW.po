@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-11-16 01:17-0500\n"
+"POT-Creation-Date: 2012-11-16 01:22-0500\n"
 "PO-Revision-Date: 2012-10-22 19:07-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -2105,6 +2105,10 @@ msgstr ""
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "啟動 XIM 錯誤。是否有另一個名為 %s 的 XIM 守護程式正在執行？"
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
+msgid "Stroke input trigger length"
+msgstr ""
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
