@@ -23,4 +23,3 @@ FcitxInputContextProxy::FcitxInputContextProxy(const QString &service, const QSt
 FcitxInputContextProxy::~FcitxInputContextProxy()
 {
 }
-

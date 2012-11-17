@@ -1,3 +1,19 @@
+#   Copyright (C) 2012~2012 by Yichao Yu
+#   yyc1992@gmail.com
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 . "$(dirname "${BASH_SOURCE}")/fcitx-parse-po.sh"
 
 fcitx_write_po_header() {
@@ -60,6 +76,15 @@ fcitx_record_po_msg() {
     eval "${var_name}=(\"\${${var_name}[@]}\" \"\${in_file}:\${line_num}\")"
 }
 
+fcitx_set_pot_bug_addr() {
+    local pot_file="$1"
+    local bug_addr="$2"
+    local regex='^[[:blank:]]*"Report-Msgid-Bugs-To:.*\\n"[[:blank:]]*$'
+    bug_addr="$(echo "${bug_addr}" | sed -e 's/|/\\|/g')"
+    local fix_res='"Report-Msgid-Bugs-To: '"${bug_addr}"'\\n"'
+    sed -i "${pot_file}" -e "0,/${regex}/s|${regex}|${fix_res}|"
+}
+
 fcitx_fix_po_charset_utf8() {
     local po_file="$1"
     local regex='^[[:blank:]]*"Content-Type:.*; charset=.*\\n"[[:blank:]]*$'
@@ -79,6 +104,7 @@ fcitx_merge_all_pos() {
 }
 
 fcitx_generate_pot() {
+    local bug_addr="${1}"
     file_list=()
     while read file; do
         file_list=("${file_list[@]}"
@@ -102,13 +128,11 @@ EOF
             fi
         done
         file_list=("${file_left[@]}")
-        if [[ -z "${handled_list[*]}" ]]; then
-            continue
-        fi
         let "po_num++"
         po_filename="${po_dir}/subpo_${po_num}.po"
-        "${handler}" -w "${po_filename}" "${handled_list[@]}"
-        po_list=("${po_list[@]}" "${po_filename}")
+        "${handler}" -w "${po_filename}" "${handled_list[@]}" && {
+            po_list=("${po_list[@]}" "${po_filename}")
+        }
     done <<EOF
 $(cat "${handler_cache}")
 EOF
@@ -121,6 +145,7 @@ EOF
     fi
     echo "Merging sub po files..."
     fcitx_merge_all_pos "${pot_file}" "${po_list[@]}"
+    fcitx_set_pot_bug_addr "${pot_file}" "${bug_addr}"
     while read line; do
         po_lang="${line%% *}"
         po_file="${line#* }"

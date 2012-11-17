@@ -197,6 +197,19 @@ INPUT_RETURN_VALUE FcitxCandidateWordChooseByIndex(FcitxCandidateWordList* candL
 }
 
 FCITX_EXPORT_API
+INPUT_RETURN_VALUE FcitxCandidateWordChooseByTotalIndex(FcitxCandidateWordList* candList, int index)
+{
+    FcitxCandidateWord* candWord = FcitxCandidateWordGetByTotalIndex(candList, index);
+    if (candWord == NULL) {
+        if (FcitxCandidateWordGetListSize(candList) > 0)
+            return IRV_DO_NOTHING;
+        else
+            return IRV_TO_PROCESS;
+    } else
+        return candWord->callback(candWord->owner, candWord);
+}
+
+FCITX_EXPORT_API
 boolean FcitxCandidateWordHasPrev(FcitxCandidateWordList* candList)
 {
     if (candList->currentPage > 0)

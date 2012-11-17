@@ -59,6 +59,9 @@ void SetMyExceptionHandler(void)
     int             signo;
 
     for (signo = SIGHUP; signo < SIGUNUSED; signo++) {
+        if (signo == SIGTSTP || signo == SIGCONT)
+            continue;
+
         if (signo != SIGALRM
             && signo != SIGPIPE
             && signo != SIGUSR2
@@ -167,12 +170,15 @@ void OnException(int signo)
         break;
     case SIGABRT:
     case SIGSEGV:
+    case SIGBUS:
+    case SIGILL:
+    case SIGFPE:
         exit(1);
         break;
 
     default:
         {
-            if (!instance->initialized) {
+            if (!instance || !instance->initialized) {
                 exit(1);
                 break;
             }

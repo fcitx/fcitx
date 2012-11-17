@@ -197,7 +197,7 @@ SpellCustomGetSysDictFile(FcitxSpell *spell, const char *lang)
     char *path;
     char *fname;
     path = fcitx_utils_get_fcitx_path("pkgdatadir");
-    fcitx_utils_alloc_cat_str(fname, path, "/data/", lang, "_dict.fscd");
+    fcitx_utils_alloc_cat_str(fname, path, "/spell/", lang, "_dict.fscd");
     free(path);
     fd = open(fname, O_RDONLY);
     free(fname);

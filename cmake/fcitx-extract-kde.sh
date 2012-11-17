@@ -19,19 +19,34 @@ action="$1"
 
 shift 1 || exit 1
 
-. "$(dirname ${BASH_SOURCE})/fcitx-write-po.sh"
+. "$(dirname "${BASH_SOURCE}")/fcitx-write-po.sh"
 
 case "${action}" in
     -c)
         in_file="${1}"
-        fcitx_exts_match "${in_file}" po pot && exit 0
+        fcitx_exts_match "${in_file}" rc kcfg ui && exit 0
         exit 1
         ;;
     -w)
         out_file="${1}"
         shift || exit 1
         [[ -z "$*" ]] && exit 1
-        fcitx_merge_all_pos "${out_file}" "$@"
+        echo "Extracting po string from kde sources."
+        # need to touch source dir here since lupdate will otherwise include
+        # absolute path (or wrong relative path) in po files afaik.
+        tempfile="$(mktemp --suffix=_fcitx_kde_$$.cpp)"
+        {
+            [[ -z "$*" ]] || extractrc "$@"
+            echo 'i18nc("NAME OF TRANSLATORS", "Your names");'
+            echo 'i18nc("EMAIL OF TRANSLATORS", "Your emails");'
+        } > "${tempfile}"
+        xgettext --from-code=UTF-8 -C -kde -ci18n -ki18n:1 -ki18nc:1c,2 \
+            -ki18np:1,2 -ki18ncp:1c,2,3 -ktr2i18n:1 -kI18N_NOOP:1 \
+            -kI18N_NOOP2:1c,2 -kaliasLocale -kki18n:1 -kki18nc:1c,2 \
+            -kki18np:1,2 -kki18ncp:1c,2,3 -c --no-location "${tempfile}" \
+            -o "${out_file}"
+        rm "${tempfile}"
+        fcitx_fix_po_charset_utf8 "${out_file}"
         exit 0
         ;;
 esac
