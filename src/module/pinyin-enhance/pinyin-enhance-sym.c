@@ -110,6 +110,7 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
     int sym_l = strlen(sym);
     PyEnhanceMapWord *words = NULL;
     boolean res = false;
+    char *preedit_str = NULL;
     FcitxCandidateWord cand_word = {
         .strWord = NULL,
         .strExtra = NULL,
@@ -125,6 +126,7 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
         if (words) {
             res = true;
             PySymInsertCandidateWords(cand_list, &cand_word, words, 0);
+            preedit_str = cand_word.strWord;
         }
     }
     if (pyenhance->config.stroke_thresh >= 0 &&
@@ -175,14 +177,19 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
                 res = true;
                 PySymInsertCandidateWords(cand_list, &cand_word,
                                           words, index);
+                if (index == 0) {
+                    preedit_str = cand_word.strWord;
+                }
             }
         }
     }
     if (!res)
         return false;
-    FcitxMessagesSetMessageCount(client_preedit, 0);
-    FcitxMessagesAddMessageStringsAtLast(client_preedit, MSG_INPUT,
-                                         cand_word.strWord);
+    if (preedit_str) {
+        FcitxMessagesSetMessageCount(client_preedit, 0);
+        FcitxMessagesAddMessageStringsAtLast(client_preedit, MSG_INPUT,
+                                             preedit_str);
+    }
     return true;
 }
 
