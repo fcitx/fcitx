@@ -51,6 +51,7 @@ typedef struct {
     FcitxHotkey     hkTableAdjustOrder[HOT_KEY_COUNT];
     FcitxHotkey     hkTableAddPhrase[HOT_KEY_COUNT];
     FcitxHotkey     hkTableClearFreq[HOT_KEY_COUNT];
+    FcitxHotkey     hkLookupPinyin[HOT_KEY_COUNT];
 } TableConfig;
 
 typedef struct _FcitxTableState {

@@ -18,5 +18,10 @@ Type=Hotkey
 DefaultValue=
 Description=Clear Frequency
 
+[Key/LookupPinyin]
+Type=Hotkey
+DefaultValue=CTRL_ALT_E
+Description=Lookup Pinyin
+
 [DescriptionFile]
 LocaleDomain=fcitx

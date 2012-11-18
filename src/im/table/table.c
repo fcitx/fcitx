@@ -608,7 +608,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 retVal = IRV_TO_PROCESS;
 
             return retVal;
-        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_CTRL_ALT_E) && tbl->pyaddon) {
+        } else if (FcitxHotkeyIsHotKey(sym, state, tbl->config.hkLookupPinyin) && tbl->pyaddon) {
             char            strPY[100];
 
             //如果拼音单字字库没有读入，则读入它
