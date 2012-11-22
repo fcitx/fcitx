@@ -4,15 +4,10 @@ build*/
 !.git*
 .git/
 src/lib/fcitx-utils/keysymdef.h
-data/en_dict*.tar.gz
-data/pinyin.tar.gz
-data/pinyin.tar.gz.md5
-data/table/table.tar.gz
-data/table/table.tar.gz.md5
+*.tar.*
 fcitx.kdev4
 tools/pybase.mb
 tools/pyphrase.mb
-data/desc.po
 *.kate-swp
 *.orig
 tags

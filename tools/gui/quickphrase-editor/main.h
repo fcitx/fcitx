@@ -1,4 +1,3 @@
-
 #include "fcitx-qt/fcitxconfiguiplugin.h"
 
 class QuickPhraseEditorPlugin : public FcitxConfigUIPlugin {

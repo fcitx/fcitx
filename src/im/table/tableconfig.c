@@ -28,6 +28,7 @@ CONFIG_BINDING_REGISTER("Key", "AddPhrase", hkTableAddPhrase)
 CONFIG_BINDING_REGISTER("Key", "DeletePhrase", hkTableDelPhrase)
 CONFIG_BINDING_REGISTER("Key", "AdjustOrder", hkTableAdjustOrder)
 CONFIG_BINDING_REGISTER("Key", "ClearFreq", hkTableClearFreq)
+CONFIG_BINDING_REGISTER("Key", "LookupPinyin", hkLookupPinyin)
 CONFIG_BINDING_END()
 
 CONFIG_BINDING_BEGIN(TableMetaData)

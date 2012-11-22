@@ -8,8 +8,8 @@
  * Do not edit! All changes made to it will be lost.
  */
 
-#ifndef FCITXINPUTCONTEXTPROXY_H_1352487938
-#define FCITXINPUTCONTEXTPROXY_H_1352487938
+#ifndef FCITXINPUTCONTEXTPROXY_H_1353012427
+#define FCITXINPUTCONTEXTPROXY_H_1353012427
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
@@ -120,6 +120,13 @@ public Q_SLOTS: // METHODS
         QList<QVariant> argumentList;
         argumentList << QVariant::fromValue(text) << QVariant::fromValue(cursor) << QVariant::fromValue(anchor);
         return asyncCallWithArgumentList(QLatin1String("SetSurroundingText"), argumentList);
+    }
+
+    inline QDBusPendingReply<> SetSurroundingTextPosition(uint cursor, uint anchor)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(cursor) << QVariant::fromValue(anchor);
+        return asyncCallWithArgumentList(QLatin1String("SetSurroundingTextPosition"), argumentList);
     }
 
 Q_SIGNALS: // SIGNALS

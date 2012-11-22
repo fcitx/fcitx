@@ -33,7 +33,7 @@
 #include "im/keyboard/fcitx-compose-data.h"
 #include "fcitx-input-context.h"
 #include "keyserver_x11.h"
-#include <fcitx-qt/fcitxconnection.h>
+#include "fcitx-qt/fcitxconnection.h"
 
 #if defined(Q_WS_X11)
 #include <QX11Info>
@@ -223,18 +223,32 @@ void QFcitxInputContext::update()
             if (text.length() < SURROUNDING_THRESHOLD) {
                 if (fcitx_utf8_check_string(text.toUtf8().data())) {
                     addCapacity(CAPACITY_SURROUNDING_TEXT);
+
                     int cursor = var1.toInt();
                     int anchor;
                     if (var2.isValid())
                         anchor = var2.toInt();
                     else
                         anchor = cursor;
-                    m_icproxy->SetSurroundingText(text, cursor, anchor);
+                    if (m_lastSurroundingText != text) {
+                        m_lastSurroundingText = text;
+                        m_icproxy->SetSurroundingText(text, cursor, anchor);
+                    }
+                    else {
+                        if (m_lastSurroundingAnchor != anchor &&
+                            m_lastSurroundingCursor != cursor)
+                            m_icproxy->SetSurroundingTextPosition(cursor, anchor);
+                    }
+                    m_lastSurroundingCursor = cursor;
+                    m_lastSurroundingAnchor = anchor;
                     setSurrounding = true;
                 }
             }
         }
         if (!setSurrounding) {
+            m_lastSurroundingAnchor = -1;
+            m_lastSurroundingCursor = -1;
+            m_lastSurroundingText = QString::null;
             removeCapacity(CAPACITY_SURROUNDING_TEXT);
         }
     }

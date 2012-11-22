@@ -30,9 +30,9 @@
 #include <fcitx/candidate.h>
 #include <fcitx-config/xdg.h>
 
-#include "config.h"
+#include "pinyin-enhance-map.h"
 
-typedef struct _PySymTable PySymTable;
+#include "config.h"
 
 typedef struct {
     FcitxGenericConfig gconfig;
@@ -40,6 +40,7 @@ typedef struct {
     boolean allow_replace_first;
     boolean disable_spell;
     boolean disable_sym;
+    int stroke_thresh;
     int max_hint_length;
     char *char_from_phrase_str;
     FcitxHotkey char_from_phrase_key[2];
@@ -58,8 +59,11 @@ typedef struct {
     int cfp_mode_count;
     char ***cfp_mode_lists;
 
-    PySymTable *sym_table;
+    PyEnhanceMap *sym_table;
     FcitxMemoryPool *sym_pool;
+
+    PyEnhanceMap *stroke_table;
+    FcitxMemoryPool *stroke_pool;
 } PinyinEnhance;
 
 enum {

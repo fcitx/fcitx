@@ -33,9 +33,10 @@
 
 namespace fcitx {
 
-ListEditor::ListEditor(fcitx::AbstractItemEditorModel* model, QWidget* parent): FcitxConfigUIWidget(parent)
-    ,m_ui(new Ui::Editor)
-    ,m_model(model)
+ListEditor::ListEditor(fcitx::AbstractItemEditorModel* model, QWidget* parent)
+    : FcitxConfigUIWidget(parent),
+      m_ui(new Ui::Editor),
+      m_model(model)
 {
     m_ui->setupUi(this);
     m_ui->addButton->setText(_("&Add"));
@@ -97,11 +98,11 @@ void ListEditor::aboutToQuit()
 void ListEditor::quitConfirmDone(int result)
 {
     switch(result) {
-        case QMessageBox::Save:
-            saveMacro();
-        case QMessageBox::Discard:
-            qApp->quit();
-            break;
+    case QMessageBox::Save:
+        saveMacro();
+    case QMessageBox::Discard:
+        qApp->quit();
+        break;
     }
 }
 
@@ -155,9 +156,9 @@ void ListEditor::addWord()
 
 void ListEditor::addWordAccepted()
 {
-     const MacroDialog* dialog = qobject_cast< const MacroDialog* >(QObject::sender());
+    const MacroDialog* dialog = qobject_cast< const MacroDialog* >(QObject::sender());
 
-     m_model->addItem(dialog->macro(), dialog->word());
+    m_model->addItem(dialog->macro(), dialog->word());
 }
 
 void ListEditor::load()
@@ -193,8 +194,8 @@ void ListEditor::importMacro()
 
 void ListEditor::importFileSelected()
 {
-     const QFileDialog* dialog = qobject_cast< const QFileDialog* >(QObject::sender());
-     qDebug() << dialog->selectedFiles();
+    const QFileDialog* dialog = qobject_cast< const QFileDialog* >(QObject::sender());
+    qDebug() << dialog->selectedFiles();
 }
 
 void ListEditor::exportMacro()
@@ -209,10 +210,10 @@ void ListEditor::exportMacro()
 
 void ListEditor::exportFileSelected()
 {
-     const QFileDialog* dialog = qobject_cast< const QFileDialog* >(QObject::sender());
-     if (dialog->selectedFiles().length() <= 0)
-         return;
-     QString file = dialog->selectedFiles()[0];
+    const QFileDialog* dialog = qobject_cast< const QFileDialog* >(QObject::sender());
+    if (dialog->selectedFiles().length() <= 0)
+        return;
+    QString file = dialog->selectedFiles()[0];
 }
 
 

@@ -222,7 +222,7 @@ void* RunInstance(void* arg)
         FcitxAddon** pmodule;
         uint8_t signo = 0;
         while (read(instance->fd, &signo, sizeof(char)) > 0) {
-            if (signo == SIGINT || signo == SIGTERM || signo == SIGQUIT)
+            if (signo == SIGINT || signo == SIGTERM || signo == SIGQUIT || signo == SIGXCPU)
                 FcitxInstanceEnd(instance);
             else if (signo == SIGHUP)
                 fcitx_utils_launch_restart();

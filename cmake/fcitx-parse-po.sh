@@ -1,9 +1,18 @@
-filter_src="$(dirname "$(realpath -es $0)")/fcitx-filter-po.sh"
-
-fcitx_quote () {
-    local quoted=${1//\'/\'\\\'\'};
-    printf "'%s'" "$quoted"
-}
+#   Copyright (C) 2012~2012 by Yichao Yu
+#   yyc1992@gmail.com
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 fcitx_str_match() {
     local pattern="$1"
@@ -18,6 +27,16 @@ fcitx_str_match() {
     esac
 }
 
+fcitx_exts_match() {
+    local in_file="$1"
+    local ext
+    shift
+    for ext in "${@}"; do
+        fcitx_str_match "*.${ext}" "${in_file}" && return 0
+    done
+    return 1
+}
+
 fcitx_msgid_to_varname() {
     local prefix="${1}"
     local msgid="${2}"
@@ -25,12 +44,14 @@ fcitx_msgid_to_varname() {
 }
 
 fcitx_parse_po_file() {
-    local prefix="${1}"
+    local po_lang="${1}"
     local pofile="${2}"
     local parse_res="${3}"
-    msgattrib -o- --translated --no-fuzzy --no-obsolete --force-po "${pofile}" |
-    msgconv -tutf-8 --force-po |
-    msgexec -i- "${filter_src}" "${prefix}" > "${parse_res}"
+    local fcitx_po_parser_executable="${4}"
+    msgattrib -o- --translated --no-fuzzy --no-obsolete --force-po \
+        --no-location --no-wrap "${pofile}" |
+    msgconv -tutf-8 --force-po --no-location --no-wrap |
+    "${fcitx_po_parser_executable}" "${po_lang}" > "${parse_res}"
 }
 
 fcitx_find_str() {
@@ -48,9 +69,10 @@ fcitx_lang_to_prefix() {
         -e 's:=:_1:g' -e 's:\+:_2:g' -e 's:/:_3:g' -e 's:\([A-Z]\):_\L\1:g'
 }
 
-fcitx_load_all_pos() {
+fcitx_parse_all_pos() {
     local po_cache="$1"
     local po_parse_cache_dir="$2"
+    local fcitx_po_parser_executable="$3"
     mkdir -p "${po_parse_cache_dir}"
     local po_lang
     local po_file
@@ -66,13 +88,30 @@ fcitx_load_all_pos() {
             ! [ -f "${po_parse_cache_file}" ]; then
             echo "Parsing po file: ${po_file}"
             local unique_fname="${po_parse_cache_file}.$$"
-            fcitx_parse_po_file "${prefix}" "${po_file}" "${unique_fname}"
-            . "${unique_fname}"
+            fcitx_parse_po_file "${po_lang}" "${po_file}" "${unique_fname}" \
+                "${fcitx_po_parser_executable}"
             mv "${unique_fname}" "${po_parse_cache_file}"
             echo "Finished parsing po file: ${po_file}"
-        else
-            . "${po_parse_cache_file}"
         fi
+    done <<EOF
+$(cat "${po_cache}")
+EOF
+}
+
+fcitx_load_all_pos() {
+    local po_cache="$1"
+    local po_parse_cache_dir="$2"
+    local po_lang
+    local po_file
+    local prefix
+    local po_parse_cache_file
+    local line
+    while read line; do
+        po_lang="${line%% *}"
+        po_file="${line#* }"
+        prefix="$(fcitx_lang_to_prefix "${po_lang}")"
+        po_parse_cache_file="${po_parse_cache_dir}/${prefix}.fxpo"
+        . "${po_parse_cache_file}"
         all_po_langs="${all_po_langs} ${po_lang}"
     done <<EOF
 $(cat "${po_cache}")
