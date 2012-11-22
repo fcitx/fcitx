@@ -19,7 +19,7 @@ action="$1"
 
 shift 1 || exit 1
 
-. "$(dirname "${BASH_SOURCE}")/fcitx-write-po.sh"
+. "${_FCITX_MACRO_CMAKE_DIR}/fcitx-write-po.sh"
 
 support_exts=(
     c h cpp cxx C cc hh H hxx hpp sh bash csh zsh m py java glade php pl lisp

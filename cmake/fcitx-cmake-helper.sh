@@ -21,7 +21,7 @@ action="$3"
 
 shift 3 || exit 1
 
-. "$(dirname "$(realpath -es $0)")/fcitx-parse-po.sh"
+. "${_FCITX_MACRO_CMAKE_DIR}/fcitx-parse-po.sh"
 
 src_cache="${cache_base}/sources-cache.txt"
 po_cache="${cache_base}/pos-cache.txt"
@@ -29,7 +29,9 @@ handler_cache="${cache_base}/handlers-cache.txt"
 parse_cache="${cache_base}/parse_po_cache"
 
 add_sources() {
-    realpath -es "$@" >> "${src_cache}" || exit 1
+    for f in "$@"; do
+        echo "$@" || return 1
+    done >> "${src_cache}"
 }
 
 case "${action}" in
@@ -72,7 +74,7 @@ case "${action}" in
         exit 0
         ;;
     --pot)
-        . "$(dirname "${BASH_SOURCE}")/fcitx-write-po.sh"
+        . "${_FCITX_MACRO_CMAKE_DIR}/fcitx-write-po.sh"
         bug_addr="${1}"
         fcitx_generate_pot "${bug_addr}"
         exit 0
