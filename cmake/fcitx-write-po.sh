@@ -14,7 +14,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-. "$(dirname "${BASH_SOURCE}")/fcitx-parse-po.sh"
+. "${_FCITX_MACRO_CMAKE_DIR}/fcitx-parse-po.sh"
 
 fcitx_write_po_header() {
     local out_file="$1"
@@ -107,8 +107,7 @@ fcitx_generate_pot() {
     local bug_addr="${1}"
     file_list=()
     while read file; do
-        file_list=("${file_list[@]}"
-            "$(realpath -es --relative-to="${PWD}" "${file}")")
+        file_list=("${file_list[@]}" "${file}")
     done <<EOF
 $(sort -u "${src_cache}")
 EOF

@@ -23,7 +23,7 @@ out_file="$5"
 
 shift 5 || exit 1
 
-. "$(dirname "$(realpath -es $0)")/fcitx-parse-po.sh"
+. "${_FCITX_MACRO_CMAKE_DIR}/fcitx-parse-po.sh"
 
 merge_config() {
     local in_file="${1}"
