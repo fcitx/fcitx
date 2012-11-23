@@ -8,6 +8,10 @@ fcitx_translate_add_sources(${qtim_fcitx_SRCS}
   fcitx-input-context.h
   )
 
+if(NOT ENABLE_QT)
+  return()
+endif()
+
 if(NOT ENABLE_QT_IM_MODULE)
   return()
 endif()

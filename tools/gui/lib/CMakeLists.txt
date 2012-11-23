@@ -1,8 +1,6 @@
 include_directories(
-  ${QT_QTCORE_INCLUDE_DIR}
-  ${QT_QTGUI_INCLUDE_DIR}
-  ${CMAKE_CURRENT_BINARY_DIR}
-  )
+    ${CMAKE_CURRENT_BINARY_DIR}
+)
 set(EDITOR_LIB_SRCS
   editor.cpp
   dialog.cpp
