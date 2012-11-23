@@ -134,10 +134,10 @@ extern "C" {
         (FcitxModuleFunctionArg){ .args = {ARGV} }))
 
 /** add a function to a addon */
-#define AddFunction(ADDON, Realname)                    \
-    do {                                                \
-        void *temp = (void*)Realname;                   \
-        utarray_push_back(&ADDON->functionList, &temp); \
+#define AddFunction(ADDON, Realname)                                    \
+    do {                                                                \
+        FCITX_DEPRECATED void *(AddonFunction) = (void*)Realname;       \
+        utarray_push_back(&ADDON->functionList, &(AddonFunction));      \
     } while(0)
 
     /**
