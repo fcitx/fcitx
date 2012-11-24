@@ -34,6 +34,21 @@
 
 #include "config.h"
 
+typedef struct _PyEnhanceStrokeTree PyEnhanceStrokeTree;
+typedef struct _PyEnhanceStrokeKey PyEnhanceStrokeKey;
+
+struct _PyEnhanceStrokeKey {
+    PyEnhanceMapWord *words;
+    PyEnhanceStrokeKey *next;
+    int key_l;
+};
+
+struct _PyEnhanceStrokeTree {
+    PyEnhanceMapWord *singles[5];
+    PyEnhanceMapWord *doubles[5][5];
+    PyEnhanceStrokeKey *multiples[5][5][5];
+};
+
 typedef struct {
     FcitxGenericConfig gconfig;
     boolean short_as_english;
@@ -62,8 +77,9 @@ typedef struct {
     PyEnhanceMap *sym_table;
     FcitxMemoryPool *sym_pool;
 
-    PyEnhanceMap *stroke_table;
+    boolean stroke_loaded;
     FcitxMemoryPool *stroke_pool;
+    PyEnhanceStrokeTree stroke_tree;
 } PinyinEnhance;
 
 enum {

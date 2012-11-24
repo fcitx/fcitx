@@ -18,53 +18,24 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef _PINYIN_ENHANCE_MAP_H
-#define _PINYIN_ENHANCE_MAP_H
+#ifndef _PINYIN_ENHANCE_STROKE_H
+#define _PINYIN_ENHANCE_STROKE_H
 
-#define PYENHANCE_MAP_BLANK " \t\b\r\n"
+#include <stdint.h>
+#include "pinyin-enhance.h"
+#include "pinyin-enhance-map.h"
 
-#include "stdint.h"
 
-typedef struct _PyEnhanceMapWord PyEnhanceMapWord;
-struct _PyEnhanceMapWord {
-    PyEnhanceMapWord *next;
-};
-static inline void*
-py_enhance_map_word(const PyEnhanceMapWord *word)
+static inline char *py_enhance_stroke_get_key(const PyEnhanceStrokeKey *key)
 {
-    return ((void*)(intptr_t)word) + sizeof(PyEnhanceMapWord);
+    return ((void*)(intptr_t)key) + sizeof(PyEnhanceStrokeKey);
 }
 
-typedef struct _PyEnhanceMap PyEnhanceMap;
-struct _PyEnhanceMap {
-    PyEnhanceMapWord *words;
-    UT_hash_handle hh;
-};
+void py_enhance_stroke_load_tree(PyEnhanceStrokeTree *tree, FILE *fp,
+                                 FcitxMemoryPool *pool);
+int py_enhance_stroke_get_match_keys(PinyinEnhance *pyenhance,
+                                     const char *key_s, int key_l,
+                                     const PyEnhanceMapWord **word_buff,
+                                     int buff_len);
 
-static inline PyEnhanceMap*
-py_enhance_map_next(PyEnhanceMap *map)
-{
-    return (PyEnhanceMap*)map->hh.next;
-}
-
-static inline void*
-py_enhance_map_key(PyEnhanceMap *map)
-{
-    return (void*)map + sizeof(PyEnhanceMap);
-}
-void PinyinEnhanceMapAdd(PyEnhanceMap **map, FcitxMemoryPool *pool,
-                         const char *key, int key_l,
-                         const char *word, int word_l);
-PyEnhanceMapWord *PinyinEnhanceMapGet(PyEnhanceMap *map,
-                                      const char *key, int key_l);
-static inline void
-PinyinEnhanceMapClear(PyEnhanceMap **map, FcitxMemoryPool *pool)
-{
-    *map = NULL;
-    if (fcitx_likely(pool)) {
-        fcitx_memory_pool_clear(pool);
-    }
-}
-void PinyinEnhanceMapLoad(PyEnhanceMap **map, FcitxMemoryPool *pool, FILE *fp);
-
-#endif /* _PINYIN_ENHANCE_MAP_H */
+#endif

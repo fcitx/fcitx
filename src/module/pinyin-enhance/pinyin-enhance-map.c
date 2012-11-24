@@ -33,8 +33,6 @@
 #undef uthash_malloc
 #undef uthash_free
 
-#define PYENHANCE_MAP_BLANK " \t\b\r\n"
-
 void
 PinyinEnhanceMapAdd(PyEnhanceMap **map, FcitxMemoryPool *pool,
                     const char *key, int key_l, const char *word, int word_l)

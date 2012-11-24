@@ -26,6 +26,7 @@
 #include <libintl.h>
 
 #include "pinyin-enhance-sym.h"
+#include "pinyin-enhance-stroke.h"
 
 #include "config.h"
 
@@ -46,16 +47,24 @@ PySymLoadDict(PinyinEnhance *pyenhance)
             fclose(fp);
         }
     }
-    if (!pyenhance->stroke_table && pyenhance->config.stroke_thresh >= 0) {
+    if (!pyenhance->stroke_loaded && pyenhance->config.stroke_thresh >= 0) {
+        pyenhance->stroke_loaded = true;
+        /* struct timespec start, end; */
+        /* int t; */
         char *fname;
         fname = fcitx_utils_get_fcitx_path_with_filename(
             "pkgdatadir", "py-enhance/"PY_STROKE_FILE);
         fp = fopen(fname, "r");
         free(fname);
         if (fp) {
+            /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
             res = true;
-            PinyinEnhanceMapLoad(&pyenhance->stroke_table,
-                                 pyenhance->stroke_pool, fp);
+            py_enhance_stroke_load_tree(&pyenhance->stroke_tree,
+                                        fp, pyenhance->stroke_pool);
+            /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
+            /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
+            /*     + end.tv_nsec - start.tv_nsec; */
+            /* printf("%s, %d\n", __func__, t); */
             fclose(fp);
         }
     }
@@ -66,7 +75,7 @@ boolean
 PinyinEnhanceSymInit(PinyinEnhance *pyenhance)
 {
     pyenhance->sym_table = NULL;
-    pyenhance->stroke_table = NULL;
+    pyenhance->stroke_loaded = false;
     pyenhance->sym_pool = fcitx_memory_pool_create();
     pyenhance->stroke_pool = fcitx_memory_pool_create();
     return PySymLoadDict(pyenhance);
@@ -94,12 +103,35 @@ PySymGetCandCb(void *arg, FcitxCandidateWord *cand_word)
 static void
 PySymInsertCandidateWords(FcitxCandidateWordList *cand_list,
                           FcitxCandidateWord *cand_temp,
-                          PyEnhanceMapWord *words, int index)
+                          const PyEnhanceMapWord *words, int index)
 {
     for (;words;words = words->next) {
         cand_temp->strWord = strdup(py_enhance_map_word(words));
         FcitxCandidateWordInsert(cand_list, cand_temp, index);
     }
+}
+
+static int
+PinyinEnhanceStrokeInsertIndex(FcitxCandidateWordList *cand_list,
+                               int im_type, int sym_l)
+{
+    FcitxCandidateWord *orig_cand;
+    orig_cand = FcitxCandidateWordGetFirst(cand_list);
+    const char *orig_word = orig_cand ? orig_cand->strWord : NULL;
+    int orig_len = orig_word ? fcitx_utf8_strlen(orig_word) : 0;
+    if (im_type == PY_IM_PINYIN) {
+        return (orig_len == 1 && (*orig_word & 0x80)) ? 1 : 0;
+    } else if (im_type == PY_IM_SHUANGPIN) {
+        if (!orig_len || !(*orig_word & 0x80)) {
+            return 0;
+        } else if (sym_l > 4 ||
+                   !FcitxCandidateWordGetByTotalIndex(cand_list, 1)) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+    return -1;
 }
 
 boolean
@@ -108,6 +140,8 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
     FcitxInputState *input = FcitxInstanceGetInputState(pyenhance->owner);
     char *sym = FcitxInputStateGetRawInputBuffer(input);
     int sym_l = strlen(sym);
+    if (!sym_l)
+        return false;
     PyEnhanceMapWord *words = NULL;
     boolean res = false;
     char *preedit_str = NULL;
@@ -132,51 +166,40 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
     if (pyenhance->config.stroke_thresh >= 0 &&
         pyenhance->config.stroke_thresh <= sym_l &&
         !sym[strspn(sym, "hnpsz")]) {
-        words = PinyinEnhanceMapGet(pyenhance->stroke_table, sym, sym_l);
-        if (!words) {
-            PyEnhanceMap *map = pyenhance->stroke_table;
-            int len = 0;
-            for (;map;map = py_enhance_map_next(map)) {
-                const char *key = py_enhance_map_key(map);
-                if (strncmp(key, sym, sym_l) == 0) {
-                    int new_len = strlen(key);
-                    if (!words || new_len < len) {
-                        words = map->words;
-                        if (new_len - len <= 1)
-                            break;
-                        len = new_len;
-                    }
-                }
-            }
-        }
-        if (words) {
-            int index = -1;
+        /* struct timespec start, end; */
+        /* int t; */
+        /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
+#define PY_STROKE_BUFF_SIZE 5
+        const PyEnhanceMapWord *word_buff[PY_STROKE_BUFF_SIZE];
+        int count = py_enhance_stroke_get_match_keys(
+            pyenhance, sym, sym_l, word_buff, PY_STROKE_BUFF_SIZE);
+        /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
+        /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
+        /*     + end.tv_nsec - start.tv_nsec; */
+        /* printf("%s, %d\n", __func__, t); */
+        if (count) {
+            int index;
             /* py_sym inserted */
             if (res) {
                 index = 1;
             } else {
-                FcitxCandidateWord *orig_cand;
-                orig_cand = FcitxCandidateWordGetFirst(cand_list);
-                const char *orig_word = orig_cand ? orig_cand->strWord : NULL;
-                int orig_len = orig_word ? fcitx_utf8_strlen(orig_word) : 0;
-                if (im_type == PY_IM_PINYIN) {
-                    index = (orig_len == 1 && (*orig_word & 0x80)) ? 1 : 0;
-                } else if (im_type == PY_IM_SHUANGPIN) {
-                    if (!orig_len || !(*orig_word & 0x80)) {
-                        index = 0;
-                    } else if (sym_l > 4 ||
-                               !FcitxCandidateWordGetByTotalIndex(cand_list,
-                                                                  1)) {
-                        index = 1;
-                    } else {
-                        index = 2;
-                    }
-                }
+                index = PinyinEnhanceStrokeInsertIndex(cand_list, im_type,
+                                                       sym_l);
             }
             if (index >= 0) {
                 res = true;
-                PySymInsertCandidateWords(cand_list, &cand_word,
-                                          words, index);
+                FcitxCandidateWordList *new_list;
+                new_list =  FcitxCandidateWordNewList();
+                int i;
+                for (i = 0;i < count;i++) {
+                    PySymInsertCandidateWords(new_list, &cand_word,
+                                              word_buff[i], 0);
+                    int size = FcitxCandidateWordGetListSize(new_list);
+                    if (size > 5)
+                        break;
+                }
+                FcitxCandidateWordMerge(cand_list, new_list, index);
+                FcitxCandidateWordFreeList(new_list);
                 if (index == 0) {
                     preedit_str = cand_word.strWord;
                 }
