@@ -1257,6 +1257,7 @@ void FcitxInstanceSetLocalIMName(FcitxInstance* instance, FcitxInputContext* ic,
         FcitxInstanceUpdateCurrentIM(instance, false);
 }
 
+/* the "force" to this function is used when the list changed and index is not valid */
 boolean FcitxInstanceUpdateCurrentIM(FcitxInstance* instance, boolean force) {
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
     if (!ic && !force)
@@ -1264,7 +1265,8 @@ boolean FcitxInstanceUpdateCurrentIM(FcitxInstance* instance, boolean force) {
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
     int globalIndex = FcitxInstanceGetIMIndexByName(instance, instance->globalIMName);
     boolean forceSwtich = force;
-    /* fix it here */
+    boolean updateGlobal = false;
+    /* global index is not valid, that's why we need to fix it. */
     if (globalIndex == 0) {
         UT_array* ime = &instance->imes;
         FcitxIM* im = (FcitxIM*) utarray_eltptr(ime, 1);
@@ -1272,6 +1274,7 @@ boolean FcitxInstanceUpdateCurrentIM(FcitxInstance* instance, boolean force) {
             fcitx_utils_string_swap(&instance->globalIMName, im->uniqueName);
             globalIndex = 1;
             forceSwtich = true;
+            updateGlobal = true;
         }
     }
     int targetIMIndex = 0;
@@ -1297,7 +1300,7 @@ boolean FcitxInstanceUpdateCurrentIM(FcitxInstance* instance, boolean force) {
     }
 
     if (forceSwtich || targetIMIndex != instance->iIMIndex) {
-        FcitxInstanceSwitchIMInternal(instance, targetIMIndex, skipZero, forceSwtich);
+        FcitxInstanceSwitchIMInternal(instance, targetIMIndex, skipZero, updateGlobal);
         return true;
     }
     else
