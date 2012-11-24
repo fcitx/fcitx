@@ -53,14 +53,14 @@ typedef struct {
     int distance;
 } PyEnhanceStrokeResult;
 
+#define REPLACE_WEIGHT 5
+#define INSERT_WEIGHT 5
+#define REMOVE_WEIGHT 5
+#define END_WEIGHT 1
 static inline int
 py_enhance_stroke_get_distance(const char *word, int word_len,
                                const char *dict, int dict_len)
 {
-#define REPLACE_WEIGHT 3
-#define INSERT_WEIGHT 3
-#define REMOVE_WEIGHT 3
-#define END_WEIGHT 1
     int replace = 0;
     int insert = 0;
     int remove = 0;
@@ -254,7 +254,7 @@ py_enhance_stroke_get_match_keys(PinyinEnhance *pyenhance, const char *key_s,
                     lookup_p->key->key_l);
                 if (distance < 0)
                     continue;
-                distance += lookup_p->diff * 3;
+                distance += lookup_p->diff * REPLACE_WEIGHT;
                 for (j = 0;j < count;j++) {
                     if (distance < res_buff[j].distance) {
                         break;
