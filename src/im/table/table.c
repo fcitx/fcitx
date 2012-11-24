@@ -877,7 +877,9 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords(TableMetaData* table)
     strcpy(FcitxPinyinGetFindString(tbl->owner),
            FcitxInputStateGetRawInputBuffer(input) + 1);
 
-    FcitxPinyinDoInput(tbl->owner, 0, 0);
+    FcitxKeySym dummy1 = FcitxKey_None;
+    unsigned int dummy2 = 0;
+    FcitxPinyinDoInput(tbl->owner, &dummy1, &dummy2);
     FcitxPinyinGetCandwords(tbl->owner);
 
     FcitxInputStateGetRawInputBuffer(input)[0] = table->cPinyin;
