@@ -142,7 +142,7 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
     int sym_l = strlen(sym);
     if (!sym_l)
         return false;
-    PyEnhanceMapWord *words = NULL;
+    const PyEnhanceMapWord *words = NULL;
     boolean res = false;
     char *preedit_str = NULL;
     FcitxCandidateWord cand_word = {
@@ -191,18 +191,21 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
                 FcitxCandidateWordList *new_list;
                 new_list =  FcitxCandidateWordNewList();
                 int i;
+                int size = 0;
                 for (i = 0;i < count;i++) {
-                    PySymInsertCandidateWords(new_list, &cand_word,
-                                              word_buff[i], 0);
-                    int size = FcitxCandidateWordGetListSize(new_list);
-                    if (size > 5)
+                    for (words = word_buff[i];words;words = words->next) {
+                        cand_word.strWord = strdup(py_enhance_map_word(words));
+                        FcitxCandidateWordAppend(new_list, &cand_word);
+                    }
+                    size = FcitxCandidateWordGetListSize(new_list);
+                    if (size > 5) {
                         break;
+                    }
                 }
+                if (index == 0 && size > 0)
+                    preedit_str = FcitxCandidateWordGetFirst(new_list)->strWord;
                 FcitxCandidateWordMerge(cand_list, new_list, index);
                 FcitxCandidateWordFreeList(new_list);
-                if (index == 0) {
-                    preedit_str = cand_word.strWord;
-                }
             }
         }
     }

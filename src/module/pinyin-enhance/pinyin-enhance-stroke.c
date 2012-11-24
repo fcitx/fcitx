@@ -44,13 +44,18 @@ py_enhance_stroke_sym_to_num(char c)
 typedef struct {
     const PyEnhanceStrokeKey *key;
     const char *key_s;
+    int diff;
     int key_l;
 } PyEnhanceStrokeKeyLookup;
 
+typedef struct {
+    const PyEnhanceMapWord *word;
+    int distance;
+} PyEnhanceStrokeResult;
 
-static inline boolean
-py_enhance_stroke_check_match(const char *word, int word_len,
-                              const char *dict, int dict_len)
+static inline int
+py_enhance_stroke_get_distance(const char *word, int word_len,
+                               const char *dict, int dict_len)
 {
 #define REPLACE_WEIGHT 3
 #define INSERT_WEIGHT 3
@@ -62,65 +67,65 @@ py_enhance_stroke_check_match(const char *word, int word_len,
     int diff = 0;
     int maxdiff;
     int maxremove;
-    char cur_word_c;
-    char cur_dict_c;
-    char next_word_c;
-    char next_dict_c;
+    int word_i = 0;
+    int dict_i = 0;
     maxdiff = word_len / 3;
     maxremove = (word_len - 2) / 3;
-    cur_word_c = *(word++);
-    cur_dict_c = *(dict++);
     while ((diff = replace + insert + remove) <= maxdiff &&
            remove <= maxremove) {
-        if (!cur_word_c)
-            return true;
-        next_word_c = *(word++);
-
+        if (!word[word_i]) {
+            return ((replace * REPLACE_WEIGHT + insert * INSERT_WEIGHT
+                     + remove * REMOVE_WEIGHT)
+                    + (dict_len - dict_i) * END_WEIGHT);
+        }
         /* check remove error */
-        if (!cur_dict_c) {
-            if (next_word_c) {
-                return false;
+        if (!dict[dict_i]) {
+            if (dict[dict_i + 1]) {
+                return -1;
             } else {
                 remove++;
-                return diff <= maxdiff && remove <= maxremove;
+                if (diff <= maxdiff && remove <= maxremove) {
+                    return (replace * REPLACE_WEIGHT + insert * INSERT_WEIGHT
+                            + remove * REMOVE_WEIGHT);
+                }
+                return -1;
             }
         }
-        next_dict_c = *(dict++);
-        if (cur_word_c == cur_dict_c) {
-            cur_word_c = next_word_c;
-            cur_dict_c = next_dict_c;
+        if (word[word_i] == dict[dict_i]) {
+            word_i++;
+            dict_i++;
             continue;
         }
-        if (next_word_c == cur_dict_c) {
-            cur_word_c = (*word++);
-            cur_dict_c = next_dict_c;
+        if (word[word_i + 1] == dict[dict_i]) {
+            word_i += 2;
+            dict_i++;
             remove++;
             continue;
         }
 
         /* check insert error */
-        if (cur_word_c == next_dict_c) {
-            cur_word_c = next_word_c;
-            cur_dict_c = *(dict++);
+        if (word[word_i] == dict[dict_i + 1]) {
+            word_i++;
+            dict_i += 2;
             insert++;
             continue;
         }
 
         /* check replace error */
-        if (next_word_c == next_dict_c) {
-            if (next_word_c) {
-                cur_dict_c = *(dict++);
-                cur_word_c = *(word++);
+        if (word[word_i + 1] == dict[dict_i + 1]) {
+            if (word[word_i + 1]) {
+                dict_i += 2;
+                word_i += 2;
             } else {
-                cur_word_c = 0;
-                cur_dict_c = 0;
+                word_i++;
+                dict_i++;
             }
             replace++;
             continue;
         }
         break;
     }
-    return false;
+    return -1;
 }
 
 int
@@ -138,6 +143,8 @@ py_enhance_stroke_get_match_keys(PinyinEnhance *pyenhance, const char *key_s,
     key_buff[key_l] = '\0';
     key_buff[0] -= '1';
     tree = &pyenhance->stroke_tree;
+    if (buff_len > 16)
+        buff_len = 16;
     switch (key_l) {
     case 1: {
         const PyEnhanceMapWord *tmp_word;
@@ -196,31 +203,37 @@ py_enhance_stroke_get_match_keys(PinyinEnhance *pyenhance, const char *key_s,
     key_l -= 3;
     for (i = 0;i < 5;i++) {
         for (j = 0;j < 5;j++) {
-            if (!(key_buff[0] == i || key_buff[1] == j))
+            boolean diff0 = key_buff[0] != i;
+            boolean diff1 = key_buff[1] != j;
+            if (diff0 && diff1)
                 continue;
             for (k = 0;k < 5;k++) {
                 tmp_key = (tree->multiples[i][j][k]);
                 if (!tmp_key)
                     continue;
+                PyEnhanceStrokeKeyLookup *lookup_p = lookup + lookup_c;
                 if (key_buff[2] == k) {
-                    lookup[lookup_c].key = tmp_key;
-                    lookup[lookup_c].key_s = key_s;
-                    lookup[lookup_c].key_l = key_l;
+                    lookup_p->key = tmp_key;
+                    lookup_p->key_s = key_s;
+                    lookup_p->key_l = key_l;
+                    lookup_p->diff = diff0 + diff1;
                     lookup_c++;
                     continue;
                 }
-                if (!(key_buff[0] == i && key_buff[1] == j))
+                if (diff0 || diff1)
                     continue;
-                lookup[lookup_c].key = tmp_key;
-                lookup[lookup_c].key_s = key_s - 1;
-                lookup[lookup_c].key_l = key_l + 1;
+                lookup_p->key = tmp_key;
+                lookup_p->key_s = key_s - 1;
+                lookup_p->key_l = key_l + 1;
+                lookup_p->diff = 1;
                 lookup_c++;
             }
         }
     }
     key_buff[2] += '1';
     int cur_len = key_l * 2 / 3;
-    while (lookup_c > 0) {
+    PyEnhanceStrokeResult res_buff[16];
+    while (lookup_c > 0 && (count < buff_len || cur_len <= key_l + 4)) {
         for (i = 0;i < lookup_c;i++) {
             PyEnhanceStrokeKeyLookup *lookup_p = lookup + i;
             if (!lookup_p->key) {
@@ -235,20 +248,37 @@ py_enhance_stroke_get_match_keys(PinyinEnhance *pyenhance, const char *key_s,
             }
             for (;lookup_p->key && lookup_p->key->key_l == cur_len;
                  lookup_p->key = lookup_p->key->next) {
-                boolean match = py_enhance_stroke_check_match(
-                    lookup[i].key_s, lookup[i].key_l,
-                    py_enhance_stroke_get_key(lookup[i].key),
-                    lookup[i].key->key_l);
-                if (!match)
+                int distance = py_enhance_stroke_get_distance(
+                    lookup_p->key_s, lookup_p->key_l,
+                    py_enhance_stroke_get_key(lookup_p->key),
+                    lookup_p->key->key_l);
+                if (distance < 0)
                     continue;
-                word_buff[count] = lookup_p->key->words;
-                count++;
-                if (count >= buff_len) {
-                    goto out;
+                distance += lookup_p->diff * 3;
+                for (j = 0;j < count;j++) {
+                    if (distance < res_buff[j].distance) {
+                        break;
+                    }
                 }
+                if (count < buff_len) {
+                    count++;
+                } else if (j >= count) {
+                    continue;
+                }
+                PyEnhanceStrokeResult *pos = res_buff + j;
+                int move_size = count - j - 1;
+                if (move_size > 0) {
+                    memmove(pos + 1, pos,
+                            move_size * sizeof(PyEnhanceStrokeResult));
+                }
+                pos->word = lookup_p->key->words;
+                pos->distance = distance;
             }
         }
         cur_len++;
+    }
+    for (j = 0;j < count;j++) {
+        word_buff[j] = res_buff[j].word;
     }
 out:
     free(key_buff);
