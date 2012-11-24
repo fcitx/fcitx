@@ -12,6 +12,10 @@ fcitx_translate_add_sources(
   ${QUICKPHRASE_EDITOR_HDRS}
   ${QUICKPHRASE_EDITOR_SRCS})
 
+if(NOT ENABLE_QT)
+  return()
+endif()
+
 include_directories(
   ${QT_QTCORE_INCLUDE_DIR}
   ${QT_QTGUI_INCLUDE_DIR}

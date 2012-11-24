@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-11-16 01:22-0500\n"
+"POT-Creation-Date: 2012-11-24 03:33-0500\n"
 "PO-Revision-Date: 2012-11-16 01:23-0500\n"
 "Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: src/im/table/table.c:1385
+#: src/im/table/table.c:1391
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
@@ -457,7 +457,7 @@ msgstr "码表文件"
 msgid "Code Table Name"
 msgstr "码表名称"
 
-#: src/im/table/table.c:1381
+#: src/im/table/table.c:1387
 msgid "Code is "
 msgstr "编码为 "
 
@@ -1168,7 +1168,7 @@ msgstr "当目前没有匹配项并且输入长度等于码长时保持当前的
 
 #: src/im/table/fcitx-table.desc:1 src/im/table/fcitx-table.desc:6
 #: src/im/table/fcitx-table.desc:11 src/im/table/fcitx-table.desc:16
-#: src/module/unicode/fcitx-unicode.desc:3
+#: src/im/table/fcitx-table.desc:21 src/module/unicode/fcitx-unicode.desc:3
 msgid "Key"
 msgstr "按键"
 
@@ -1305,6 +1305,11 @@ msgstr "局部选择"
 #: src/ui/classic/skin.desc:73
 msgid "Logo Icon"
 msgstr "Logo图标"
+
+#: src/im/table/fcitx-table.desc:24
+#, fuzzy
+msgid "Lookup Pinyin"
+msgstr "拼音"
 
 #: src/im/pinyin/fcitx-pinyin.desc:5
 msgid "MS"
@@ -1581,7 +1586,7 @@ msgstr "所属附加组件"
 msgid "PerProgram"
 msgstr "按程序"
 
-#: src/im/table/table.c:1377
+#: src/im/table/table.c:1383
 msgid "Phrase is already in Dict "
 msgstr "词组已在码表中"
 
@@ -1796,7 +1801,7 @@ msgstr "右Shift"
 msgid "Register IM"
 msgstr "注册输入法方法"
 
-#: src/im/table/table.c:1269
+#: src/im/table/table.c:1275
 msgid "Remind:"
 msgstr "联想："
 

@@ -21,7 +21,7 @@ set(fcitx_qt_HEADERS
 
 fcitx_translate_add_sources(${fcitx_qt_HEADERS} ${fcitx_qt_SOURCES})
 
-if(NOT ENABLE_QT_IM_MODULE)
+if(NOT (ENABLE_QT_IM_MODULE AND ENABLE_QT))
   return()
 endif()
 

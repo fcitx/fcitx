@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-11-21 21:45-0500\n"
+"POT-Creation-Date: 2012-11-24 03:33-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,19 +140,19 @@ msgstr ""
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:1269
+#: src/im/table/table.c:1275
 msgid "Remind:"
 msgstr ""
 
-#: src/im/table/table.c:1377
+#: src/im/table/table.c:1383
 msgid "Phrase is already in Dict "
 msgstr ""
 
-#: src/im/table/table.c:1381
+#: src/im/table/table.c:1387
 msgid "Code is "
 msgstr ""
 
-#: src/im/table/table.c:1385
+#: src/im/table/table.c:1391
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -1708,7 +1708,7 @@ msgstr ""
 
 #: src/im/table/fcitx-table.desc:1 src/im/table/fcitx-table.desc:6
 #: src/im/table/fcitx-table.desc:11 src/im/table/fcitx-table.desc:16
-#: src/module/unicode/fcitx-unicode.desc:3
+#: src/im/table/fcitx-table.desc:21 src/module/unicode/fcitx-unicode.desc:3
 msgid "Key"
 msgstr ""
 
@@ -1726,6 +1726,10 @@ msgstr ""
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
+msgstr ""
+
+#: src/im/table/fcitx-table.desc:24
+msgid "Lookup Pinyin"
 msgstr ""
 
 #: src/im/table/table.desc:1 src/im/table/table.desc:6

@@ -8,11 +8,7 @@ fcitx_translate_add_sources(${qtim_fcitx_SRCS}
   fcitx-input-context.h
   )
 
-if(NOT ENABLE_QT)
-  return()
-endif()
-
-if(NOT ENABLE_QT_IM_MODULE)
+if(NOT (ENABLE_QT_IM_MODULE AND ENABLE_QT))
   return()
 endif()
 
@@ -45,9 +41,9 @@ add_library(
   ${qtim_fcitx_MOC_SRCS}
   )
 
-set_target_properties( qtim-fcitx PROPERTIES 
+set_target_properties(qtim-fcitx PROPERTIES
   PREFIX ""
-  COMPILE_FLAGS "-fvisibility=hidden" 
+  COMPILE_FLAGS "-fvisibility=hidden"
   LINK_FLAGS "-Wl,--no-undefined")
 
 target_link_libraries(

@@ -11,6 +11,10 @@ fcitx_translate_add_sources(
   ${QT_WRAPPER_SRCS}
   ${QT_WRAPPER_HDRS})
 
+if(NOT ENABLE_QT)
+  return()
+endif()
+
 include_directories(
   ${QT_QTCORE_INCLUDE_DIR}
   ${QT_QTGUI_INCLUDE_DIR}

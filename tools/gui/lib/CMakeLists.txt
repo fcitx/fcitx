@@ -19,11 +19,14 @@ set(EDITOR_LIB_UIS
 fcitx_translate_add_sources(${EDITOR_LIB_HDRS} ${EDITOR_LIB_UIS}
   ${EDITOR_LIB_SRCS})
 
+if(NOT ENABLE_QT)
+  return()
+endif()
+
 qt4_wrap_cpp(EDITOR_LIB_MOCS ${EDITOR_LIB_HDRS})
 qt4_wrap_ui(EDITOR_LIB_SRCS ${EDITOR_LIB_UIS})
 add_library(editor STATIC ${EDITOR_LIB_SRCS} ${EDITOR_LIB_MOCS})
 
-# necessary??
 set_target_properties(editor
   PROPERTIES COMPILE_FLAGS "-fPIC"
   )
