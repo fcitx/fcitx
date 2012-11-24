@@ -18,21 +18,14 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef _PINYIN_ENHANCE_SYM_H
-#define _PINYIN_ENHANCE_SYM_H
+#ifndef _PINYIN_ENHANCE_PY_H
+#define _PINYIN_ENHANCE_PY_H
 
+#include <stdint.h>
 #include "pinyin-enhance-internal.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+char *py_enhance_py_to_str(char *buff, const FcitxPYEnhancePY *py, int *len);
+const FcitxPYEnhancePYList *py_enhance_py_find_py(
+    PinyinEnhance *pyenhance, const char *str);
 
-    boolean PinyinEnhanceSymInit(PinyinEnhance *pyenhance);
-    boolean PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type);
-    void PinyinEnhanceSymDestroy(PinyinEnhance *pyenhance);
-    void PinyinEnhanceSymReloadDict(PinyinEnhance *pyenhance);
-#ifdef __cplusplus
-}
 #endif
-
-#endif /* _PINYIN_ENHANCE_SYM_H */

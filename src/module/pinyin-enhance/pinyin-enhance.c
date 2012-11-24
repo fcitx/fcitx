@@ -24,7 +24,7 @@
 #include <ctype.h>
 
 #include <libintl.h>
-#include "pinyin-enhance.h"
+#include "pinyin-enhance-internal.h"
 #include "pinyin-enhance-spell.h"
 #include "pinyin-enhance-cfp.h"
 #include "pinyin-enhance-sym.h"
@@ -105,6 +105,7 @@ PinyinEnhanceCreate(FcitxInstance *instance)
         return NULL;
     }
 
+    pyenhance->static_pool = fcitx_memory_pool_create();
     PinyinEnhanceSymInit(pyenhance);
 
     FcitxIMEventHook event_hook = {
@@ -180,6 +181,7 @@ PinyinEnhanceDestroy(void *arg)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     PinyinEnhanceSymDestroy(pyenhance);
+    fcitx_memory_pool_destroy(pyenhance->static_pool);
 }
 
 static void

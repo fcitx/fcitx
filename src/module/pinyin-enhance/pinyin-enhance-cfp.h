@@ -21,7 +21,7 @@
 #ifndef _PINYIN_ENHANCE_CFP_H
 #define _PINYIN_ENHANCE_CFP_H
 
-#include "pinyin-enhance.h"
+#include "pinyin-enhance-internal.h"
 
 #ifdef __cplusplus
 extern "C" {

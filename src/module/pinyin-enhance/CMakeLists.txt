@@ -4,7 +4,9 @@ set(FCITX_PYENHANCE_SOURCES
   pinyin-enhance-cfp.c
   pinyin-enhance-map.c
   pinyin-enhance-stroke.c
+  pinyin-enhance-py.c
   pinyin-enhance-sym.c)
 
 fcitx_add_addon_full(pinyin-enhance DESC
+  HEADERS pinyin-enhance.h
   SOURCES ${FCITX_PYENHANCE_SOURCES})

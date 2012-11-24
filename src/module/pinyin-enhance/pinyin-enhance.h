@@ -21,80 +21,33 @@
 #ifndef _PINYIN_ENHANCE_H
 #define _PINYIN_ENHANCE_H
 
-#include <fcitx/fcitx.h>
-#include <fcitx/module.h>
-#include <fcitx/instance.h>
-#include <fcitx/hook.h>
-#include <fcitx-utils/log.h>
-#include <fcitx-utils/memory.h>
-#include <fcitx/candidate.h>
-#include <fcitx-config/xdg.h>
-
-#include "pinyin-enhance-map.h"
-
-#include "config.h"
-
-typedef struct _PyEnhanceStrokeTree PyEnhanceStrokeTree;
-typedef struct _PyEnhanceStrokeKey PyEnhanceStrokeKey;
-
-struct _PyEnhanceStrokeKey {
-    PyEnhanceMapWord *words;
-    PyEnhanceStrokeKey *next;
-    int key_l;
-};
-
-struct _PyEnhanceStrokeTree {
-    PyEnhanceMapWord *singles[5];
-    PyEnhanceMapWord *doubles[5][5];
-    PyEnhanceStrokeKey *multiples[5][5][5];
-};
+#include <stdint.h>
+#include "fcitx-utils/utf8.h"
 
 typedef struct {
-    FcitxGenericConfig gconfig;
-    boolean short_as_english;
-    boolean allow_replace_first;
-    boolean disable_spell;
-    boolean disable_sym;
-    int stroke_thresh;
-    int max_hint_length;
-    char *char_from_phrase_str;
-    FcitxHotkey char_from_phrase_key[2];
-} PinyinEnhanceConfig;
+    UT_hash_handle hh;
+    char word[UTF8_MAX_LENGTH + 1];
+    int8_t count;
+} FcitxPYEnhancePYList;
 
 typedef struct {
-    PinyinEnhanceConfig config;
-    FcitxInstance *owner;
-
-    boolean cfp_active; /* for "char from phrase" */
-    int cfp_cur_word;
-    int cfp_cur_page;
-
-    char *cfp_mode_selected;
-    int cfp_mode_cur;
-    int cfp_mode_count;
-    char ***cfp_mode_lists;
-
-    PyEnhanceMap *sym_table;
-    FcitxMemoryPool *sym_pool;
-
-    boolean stroke_loaded;
-    FcitxMemoryPool *stroke_pool;
-    PyEnhanceStrokeTree stroke_tree;
-} PinyinEnhance;
-
-enum {
-    PY_IM_INVALID = 0,
-    PY_IM_PINYIN,
-    PY_IM_SHUANGPIN,
-};
-
-DEFINE_GET_ADDON("fcitx-sunpinyin", SunPinyin)
+    int8_t konsonant;
+    int8_t vokal;
+    int8_t tone;
+} FcitxPYEnhancePY;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-    char *PinyinEnhanceGetSelected(PinyinEnhance *pyenhance);
+    static inline FcitxPYEnhancePY*
+    pinyin_enhance_pylist_get(const FcitxPYEnhancePYList *pylist, int index)
+    {
+        FcitxPYEnhancePY *py;
+        py = (FcitxPYEnhancePY*)(((void*)(intptr_t)pylist) +
+                                 sizeof(FcitxPYEnhancePYList));
+        return py + index;
+    }
 
 #ifdef __cplusplus
 }

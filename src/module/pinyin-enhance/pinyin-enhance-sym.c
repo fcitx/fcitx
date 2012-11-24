@@ -27,6 +27,7 @@
 
 #include "pinyin-enhance-sym.h"
 #include "pinyin-enhance-stroke.h"
+#include "pinyin-enhance-py.h"
 
 #include "config.h"
 
@@ -60,7 +61,7 @@ PySymLoadDict(PinyinEnhance *pyenhance)
             /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
             res = true;
             py_enhance_stroke_load_tree(&pyenhance->stroke_tree,
-                                        fp, pyenhance->stroke_pool);
+                                        fp, pyenhance->static_pool);
             /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
             /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
             /*     + end.tv_nsec - start.tv_nsec; */
@@ -77,7 +78,6 @@ PinyinEnhanceSymInit(PinyinEnhance *pyenhance)
     pyenhance->sym_table = NULL;
     pyenhance->stroke_loaded = false;
     pyenhance->sym_pool = fcitx_memory_pool_create();
-    pyenhance->stroke_pool = fcitx_memory_pool_create();
     return PySymLoadDict(pyenhance);
 }
 
@@ -132,6 +132,37 @@ PinyinEnhanceStrokeInsertIndex(FcitxCandidateWordList *cand_list,
         }
     }
     return -1;
+}
+
+static char*
+PinyinEnhanceGetAllPinyin(PinyinEnhance *pyenhance, const char *str)
+{
+    const FcitxPYEnhancePYList *py_list;
+    py_list = py_enhance_py_find_py(pyenhance, str);
+    if (!(py_list && py_list->count))
+        return NULL;
+    int i;
+    FcitxPYEnhancePY *py;
+    char buff[64];
+    int alloc_len = 16 * py_list->count + 4;
+    char *res = malloc(alloc_len);
+    int len = 2;
+    memcpy(res, " (", 2);
+    for (i = 0;i < py_list->count;i++) {
+        py = pinyin_enhance_pylist_get(py_list, i);
+        int py_len = 0;
+        py_enhance_py_to_str(buff, py, &py_len);
+        if (len + py_len + 2 >= alloc_len) {
+            alloc_len = len + py_len + 3;
+            res = realloc(res, alloc_len);
+        }
+        memcpy(res + len, buff, py_len);
+        len += py_len;
+        memcpy(res + len, ", ", 2);
+        len += 2;
+    }
+    memcpy(res + len - 2, ")", 2);
+    return res;
 }
 
 boolean
@@ -194,7 +225,10 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
                 int size = 0;
                 for (i = 0;i < count;i++) {
                     for (words = word_buff[i];words;words = words->next) {
-                        cand_word.strWord = strdup(py_enhance_map_word(words));
+                        const char *str_word = py_enhance_map_word(words);
+                        cand_word.strWord = strdup(str_word);
+                        cand_word.strExtra = PinyinEnhanceGetAllPinyin(
+                            pyenhance, str_word);
                         FcitxCandidateWordAppend(new_list, &cand_word);
                     }
                     size = FcitxCandidateWordGetListSize(new_list);
@@ -202,8 +236,9 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
                         break;
                     }
                 }
-                if (index == 0 && size > 0)
+                if (index == 0 && size > 0) {
                     preedit_str = FcitxCandidateWordGetFirst(new_list)->strWord;
+                }
                 FcitxCandidateWordMerge(cand_list, new_list, index);
                 FcitxCandidateWordFreeList(new_list);
             }
@@ -222,7 +257,6 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
 void
 PinyinEnhanceSymDestroy(PinyinEnhance *pyenhance)
 {
-    PinyinEnhanceMapClear(&pyenhance->sym_table, pyenhance->sym_pool);
     if (fcitx_likely(pyenhance->sym_pool)) {
         fcitx_memory_pool_destroy(pyenhance->sym_pool);
     }

@@ -21,7 +21,6 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx-utils/memory.h"
 #include "pinyin-enhance-stroke.h"
-#include "pinyin-enhance.h"
 
 static inline char
 py_enhance_stroke_sym_to_num(char c)

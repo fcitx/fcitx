@@ -22,7 +22,7 @@
 #define _PINYIN_ENHANCE_STROKE_H
 
 #include <stdint.h>
-#include "pinyin-enhance.h"
+#include "pinyin-enhance-internal.h"
 #include "pinyin-enhance-map.h"
 
 
