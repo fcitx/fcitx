@@ -97,7 +97,7 @@ if(_ENABLE_DBUS)
   install(FILES daemon.conf DESTINATION share/fcitx/dbus/)
 endif()
 
-set(PY_STROKE_VER 20121116)
+set(PY_STROKE_VER 20121124)
 set(PY_STROKE_TGT "${CMAKE_CURRENT_BINARY_DIR}/py_stroke.mb")
 set(PY_STROKE_TAR
   "${CMAKE_CURRENT_SOURCE_DIR}/py_stroke-${PY_STROKE_VER}.tar.gz")
@@ -110,6 +110,20 @@ add_custom_command(
   COMMAND "${TAR}" xzmvf "${PY_STROKE_TAR}")
 add_custom_target(py_stroke_data_tgt ALL DEPENDS "${PY_STROKE_TGT}")
 install(FILES "${PY_STROKE_TGT}" DESTINATION "${pkgdatadir}/py-enhance")
+
+set(PY_TABLE_VER 20121124)
+set(PY_TABLE_TGT "${CMAKE_CURRENT_BINARY_DIR}/py_table.mb")
+set(PY_TABLE_TAR
+  "${CMAKE_CURRENT_SOURCE_DIR}/py_table-${PY_TABLE_VER}.tar.gz")
+set(PY_TABLE_URL
+  "https://github.com/downloads/fcitx/fcitx/py_table-${PY_TABLE_VER}.tar.gz")
+add_custom_command(
+  OUTPUT "${PY_TABLE_TGT}"
+  COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/download.sh" "${WGET}"
+  "${PY_TABLE_URL}" "${PY_TABLE_TAR}"
+  COMMAND "${TAR}" xzmvf "${PY_TABLE_TAR}")
+add_custom_target(py_table_data_tgt ALL DEPENDS "${PY_TABLE_TGT}")
+install(FILES "${PY_TABLE_TGT}" DESTINATION "${pkgdatadir}/py-enhance")
 
 set(SPELL_EN_DICT_VER 20121020)
 set(SPELL_EN_DICT "${CMAKE_CURRENT_BINARY_DIR}/en_dict.fscd")
