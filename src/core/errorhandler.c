@@ -73,11 +73,11 @@ void SetMyExceptionHandler(void)
     }
 }
 
-inline void BufferReset(MinimalBuffer* buffer) {
+static inline void BufferReset(MinimalBuffer* buffer) {
     buffer->offset = 0;
 }
 
-inline void BufferAppendUInt64(MinimalBuffer* buffer, uint64_t number, int radix) {
+static inline void BufferAppendUInt64(MinimalBuffer* buffer, uint64_t number, int radix) {
     int i = 0;
     while (buffer->offset + i < MINIMAL_BUFFER_SIZE) {
         const int tmp = number % radix;
