@@ -49,7 +49,7 @@ struct _IMSelector {
     FcitxHotkey globalKey[2];
     FcitxHotkey clearLocalKey[2];
     FcitxHotkey selectorKey[2][SELECTOR_COUNT][2];
-    SelectorHandle handle[SELECTOR_COUNT][2];
+    SelectorHandle handle[2][SELECTOR_COUNT];
     boolean triggered;
     boolean global;
     FcitxInstance* owner;
