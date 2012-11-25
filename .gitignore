@@ -13,3 +13,4 @@ tools/pyphrase.mb
 tags
 astyle.sh
 cscope.*
+*.part

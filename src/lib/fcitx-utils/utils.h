@@ -681,7 +681,7 @@ extern "C" {
                                                  const char *str, size_t len);
 #ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
 #define FCITX_UTIL_DECLARE_ATOMIC(name, type)                           \
-    type fcitx_utils_atomic_##name(volatile type *atomic, type val);    \
+    type (fcitx_utils_atomic_##name)(volatile type *atomic, type val);  \
     static inline type                                                  \
     __fcitx_utils_atomic_##name(volatile type *atomic, type val)        \
     {                                                                   \
@@ -689,11 +689,11 @@ extern "C" {
     }
 #else
 #define FCITX_UTIL_DECLARE_ATOMIC(name, type)                           \
-    type fcitx_utils_atomic_##name(volatile type *atomic, type val);    \
+    type (fcitx_utils_atomic_##name)(volatile type *atomic, type val);  \
     static inline type                                                  \
     __fcitx_utils_atomic_##name(volatile type *atomic, type val)        \
     {                                                                   \
-        return __fcitx_utils_atomic_##name(atomic, val);                \
+        return (fcitx_utils_atomic_##name)(atomic, val);                \
     }
 #endif
 
