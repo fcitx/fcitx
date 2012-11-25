@@ -647,15 +647,12 @@ FcitxXkbSaveCloseGroup(FcitxXkb *xkb)
     char *tmpvariant;
     FcitxXkbGetCurrentLayoutInternal(xkb, &tmplayout, &tmpvariant);
     if (!tmplayout) {
-        if (tmpvariant)
-            free(tmpvariant);
+        fcitx_utils_free(tmpvariant);
         return;
     }
-    if (xkb->closeLayout)
-        free(xkb->closeLayout);
+    fcitx_utils_free(xkb->closeLayout);
+    fcitx_utils_free(xkb->closeVariant);
     xkb->closeLayout = tmplayout;
-    if (xkb->closeVariant)
-        free(xkb->closeVariant);
     xkb->closeVariant = tmpvariant;
 }
 
@@ -679,7 +676,7 @@ static void* FcitxXkbCreate(FcitxInstance* instance)
         char* rulesPath = FcitxXkbFindXkbRulesFile(xkb);
         xkb->rules = FcitxXkbReadRules(rulesPath);
         free(rulesPath);
-        
+
         xkb->defaultLayouts = fcitx_utils_new_string_list();
         xkb->defaultModels = fcitx_utils_new_string_list();
         xkb->defaultOptions = fcitx_utils_new_string_list();
@@ -779,6 +776,8 @@ static void FcitxXkbDestroy(void* arg)
     fcitx_utils_free_string_list(xkb->defaultLayouts);
     fcitx_utils_free_string_list(xkb->defaultModels);
     fcitx_utils_free_string_list(xkb->defaultOptions);
+    fcitx_utils_free(xkb->closeLayout);
+    fcitx_utils_free(xkb->closeVariant);
     free(xkb);
 }
 

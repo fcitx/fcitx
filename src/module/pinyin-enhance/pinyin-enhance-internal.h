@@ -81,7 +81,7 @@ typedef struct {
     boolean stroke_loaded;
     PyEnhanceStrokeTree stroke_tree;
 
-    FcitxPYEnhancePYList *py_table;
+    UT_array py_list;
 
     FcitxMemoryPool *static_pool;
 } PinyinEnhance;

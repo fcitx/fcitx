@@ -25,7 +25,6 @@
 #include "fcitx-utils/utf8.h"
 
 typedef struct {
-    UT_hash_handle hh;
     char word[UTF8_MAX_LENGTH + 1];
     int8_t count;
 } FcitxPYEnhancePYList;

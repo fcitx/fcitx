@@ -208,6 +208,7 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
         /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
         /*     + end.tv_nsec - start.tv_nsec; */
         /* printf("%s, %d\n", __func__, t); */
+        /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
         if (count) {
             int index;
             /* py_sym inserted */
@@ -243,6 +244,10 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
                 FcitxCandidateWordFreeList(new_list);
             }
         }
+        /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
+        /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
+        /*     + end.tv_nsec - start.tv_nsec; */
+        /* printf("%s, %d\n", __func__, t); */
     }
     if (!res)
         return false;

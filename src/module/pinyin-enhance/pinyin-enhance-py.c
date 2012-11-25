@@ -22,9 +22,6 @@
 #include "fcitx-utils/memory.h"
 #include "pinyin-enhance-py.h"
 
-#undef uthash_malloc
-#undef uthash_free
-
 typedef struct {
     const char *const str;
     const int len;
@@ -358,8 +355,10 @@ py_enhance_py_to_str(char *buff, const FcitxPYEnhancePY *py, int *len)
 static void
 py_enhance_load_py(PinyinEnhance *pyenhance)
 {
-    if (pyenhance->py_table)
+    UT_array *array = &pyenhance->py_list;
+    if (array->icd)
         return;
+    utarray_init(array, fcitx_ptr_icd);
     FILE *fp;
     char *fname;
     fname = fcitx_utils_get_fcitx_path_with_filename(
@@ -368,8 +367,6 @@ py_enhance_load_py(PinyinEnhance *pyenhance)
     free(fname);
     if (fp) {
         FcitxMemoryPool *pool = pyenhance->static_pool;
-#define uthash_malloc(sz) fcitx_memory_pool_alloc_align(pool, sz, 1)
-#define uthash_free(ptr)
         char buff[UTF8_MAX_LENGTH + 1];
         int buff_size = 33;
         int8_t *list_buff = malloc(buff_size);
@@ -400,8 +397,9 @@ py_enhance_load_py(PinyinEnhance *pyenhance)
             res = fread(list_buff, min_size, 1, fp);
             if (!res)
                 break;
-            py_list = uthash_malloc(sizeof(FcitxPYEnhancePYList) +
-                                    sizeof(FcitxPYEnhancePY) * count);
+            py_list = fcitx_memory_pool_alloc_align(
+                pool, (sizeof(FcitxPYEnhancePYList) +
+                       sizeof(FcitxPYEnhancePY) * count), 1);
             memcpy(py_list->word, buff, word_l);
             py_list->word[word_l] = '\0';
             py_list->count = count;
@@ -412,22 +410,48 @@ py_enhance_load_py(PinyinEnhance *pyenhance)
                 py->vokal = tmp[1];
                 py->tone = tmp[2];
             }
-            HASH_ADD_KEYPTR(hh, pyenhance->py_table,
-                            py_list->word, word_l, py_list);
+            for (i = utarray_len(array) - 1;i >= 0;i--) {
+                FcitxPYEnhancePYList *ele;
+                ele = *(FcitxPYEnhancePYList**)_utarray_eltptr(array, i);
+                if (strcmp(ele->word, py_list->word) < 0) {
+                    break;
+                }
+            }
+            utarray_insert(array, &py_list, i + 1);
         }
         free(list_buff);
         fclose(fp);
     }
-#undef uthash_malloc
-#undef uthash_free
+}
+
+static int
+compare_func(const void *p1, const void *p2)
+{
+    const char *str1 = p1;
+    const char *const *str2 = p2;
+    return strcmp(str1, *str2);
 }
 
 const FcitxPYEnhancePYList*
 py_enhance_py_find_py(PinyinEnhance *pyenhance, const char *str)
 {
     py_enhance_load_py(pyenhance);
-    FcitxPYEnhancePYList *py_list;
-    int str_l = strlen(str);
-    HASH_FIND(hh, pyenhance->py_table, str, str_l, py_list);
-    return py_list;
+    if (!utarray_len(&pyenhance->py_list))
+        return NULL;
+    FcitxPYEnhancePYList **py_list;
+    py_list = bsearch(str, _utarray_eltptr(&pyenhance->py_list, 0),
+                      utarray_len(&pyenhance->py_list),
+                      sizeof(FcitxPYEnhancePYList*),
+                      (int (*)(const void*, const void*))compare_func);
+    if (py_list)
+        return *py_list;
+    return NULL;
+}
+
+void
+py_enhance_py_destroy(PinyinEnhance *pyenhance)
+{
+    if (pyenhance->py_list.icd) {
+        utarray_done(&pyenhance->py_list);
+    }
 }
