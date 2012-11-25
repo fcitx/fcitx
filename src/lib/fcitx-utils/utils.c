@@ -865,7 +865,7 @@ fcitx_utils_set_escape_str_with_set(char *res, const char *str, const char *set)
     return res;
 }
 
-#ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
+#ifdef __FCITX_ATOMIC_USE_SYNC_FETCH
 /**
  * Also define lib function when there is builtin function for
  * atomic operation in case the function address is needed or the builtin
