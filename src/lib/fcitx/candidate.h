@@ -423,6 +423,22 @@ extern "C" {
     int FcitxCandidateWordGetListSize(struct _FcitxCandidateWordList* candList);
 
     /**
+     * check this have been goto prev page or not
+     *
+     * @param candList candidate word list
+     * @return boolean
+     */
+    boolean FcitxCandidateWordGetHasGoneToPrevPage(FcitxCandidateWordList* candList);
+
+    /**
+     * check this have been goto next page or not
+     *
+     * @param candList candidate word list
+     * @return boolean
+     */
+    boolean FcitxCandidateWordGetHasGoneToNextPage(FcitxCandidateWordList* candList);
+
+    /**
      * get first candidate word
      *
      * @param candList candidate word list

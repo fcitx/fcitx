@@ -26,6 +26,8 @@ struct _FcitxCandidateWordList {
     unsigned int candiateModifier;
     int currentPage;
     int wordPerPage;
+    boolean hasGonePrevPage;
+    boolean hasGoneNextPage;
 };
 
 static const UT_icd cand_icd = {
@@ -140,6 +142,8 @@ void FcitxCandidateWordReset(FcitxCandidateWordList* candList)
 {
     utarray_clear(&candList->candWords);
     candList->currentPage = 0;
+    candList->hasGonePrevPage = false;
+    candList->hasGoneNextPage = false;
 }
 
 FCITX_EXPORT_API
@@ -258,6 +262,7 @@ boolean FcitxCandidateWordGoPrevPage(FcitxCandidateWordList* candList)
         return false;
     if (FcitxCandidateWordHasPrev(candList)) {
         candList->currentPage -- ;
+        candList->hasGonePrevPage = true;
         return true;
     }
     return false;
@@ -270,6 +275,7 @@ boolean FcitxCandidateWordGoNextPage(FcitxCandidateWordList* candList)
         return false;
     if (FcitxCandidateWordHasNext(candList)) {
         candList->currentPage ++ ;
+        candList->hasGoneNextPage = true;
         return true;
     }
     return false;
@@ -345,6 +351,16 @@ FCITX_EXPORT_API
 int FcitxCandidateWordGetListSize(FcitxCandidateWordList* candList)
 {
     return utarray_len(&candList->candWords);
+}
+
+FCITX_EXPORT_API
+boolean FcitxCandidateWordGetHasGoneToPrevPage(FcitxCandidateWordList* candList) {
+    return candList->hasGonePrevPage;
+}
+
+FCITX_EXPORT_API
+boolean FcitxCandidateWordGetHasGoneToNextPage(FcitxCandidateWordList* candList) {
+    return candList->hasGoneNextPage;
 }
 
 FCITX_EXPORT_API

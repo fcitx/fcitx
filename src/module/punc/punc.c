@@ -255,10 +255,10 @@ void ResetPuncWhichStatus(void* arg)
 
 boolean PuncPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
 {
+    FcitxPuncState* puncState = (FcitxPuncState*) arg;
     if (!FcitxHotkeyIsHotKeySimple(sym, state))
         return false;
 
-    FcitxPuncState* puncState = (FcitxPuncState*) arg;
     if (!FcitxHotkeyIsHotKeyDigit(sym, state) && !IsHotKeyPunc(sym, state))
         puncState->bLastIsNumber = false;
 
@@ -277,6 +277,31 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
 
     if (*retVal != IRV_TO_PROCESS)
         return false;
+
+    FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
+    if (FcitxCandidateWordPageCount(candList) != 0 && FcitxCandidateWordGetHasGoneToNextPage(candList) ) {
+        const FcitxHotkey* hkPrevPage = FcitxInstanceGetContextHotkey(instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
+        if (hkPrevPage == NULL)
+            hkPrevPage = config->hkPrevPage;
+
+        if (FcitxHotkeyIsHotKey(sym, state, hkPrevPage)) {
+            return false;
+        }
+    }
+
+    /*
+     * comparing with upper case, if paging is occupied,
+     * punc will not let next page pass
+     */
+    if (FcitxCandidateWordPageCount(candList) != 0) {
+        const FcitxHotkey* hkNextPage = FcitxInstanceGetContextHotkey(instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
+        if (hkNextPage == NULL)
+            hkNextPage = config->hkNextPage;
+
+        if (FcitxHotkeyIsHotKey(sym, state, hkNextPage)) {
+            return false;
+        }
+    }
 
     FcitxKeySym origsym = sym;
     sym = FcitxHotkeyPadToMain(sym);
