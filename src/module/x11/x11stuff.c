@@ -679,7 +679,7 @@ void X11InitScreen(FcitxX11* x11priv)
 #endif // HAVE_XINERAMA
 }
 
-inline
+static inline
 boolean RectIntersects(FcitxRect rt1, FcitxRect rt2)
 {
     int l1 = rt1.x1;
@@ -719,13 +719,13 @@ boolean RectIntersects(FcitxRect rt1, FcitxRect rt2)
     return true;
 }
 
-inline
+static inline
 int RectWidth(FcitxRect r)
 {
     return r.x2 - r.x1 + 1;
 }
 
-inline
+static inline
 int RectHeight(FcitxRect r)
 {
     return r.y2 - r.y1 + 1;

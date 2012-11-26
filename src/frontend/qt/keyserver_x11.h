@@ -143,7 +143,7 @@ static const TransKey g_rgQtToSymX[] = {
 
 #include <qstring.h>
 
-inline int map_sym_to_qt(uint keySym)
+static inline int map_sym_to_qt(uint keySym)
 {
     if (keySym < 0x1000) {
         if (keySym >= 'a' && keySym <= 'z')

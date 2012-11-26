@@ -134,37 +134,37 @@ void SaveTableIM(void *arg)
         SaveTableDict(table);
 }
 
-inline char* TableMetaDataGetName(TableMetaData* table)
+static inline char* TableMetaDataGetName(TableMetaData* table)
 {
     return (strlen(table->uniqueName) == 0) ?
         table->strIconName : table->uniqueName;
 }
 
-inline void TableMetaDataInsert(TableMetaData** tableSet, TableMetaData* table)
+static inline void TableMetaDataInsert(TableMetaData** tableSet, TableMetaData* table)
 {
     char* name = TableMetaDataGetName(table);
     HASH_ADD_KEYPTR(hh, *tableSet, name, strlen(name), table);
 }
 
-inline TableMetaData* TableMetaDataFind(TableMetaData* table, const char* name)
+static inline TableMetaData* TableMetaDataFind(TableMetaData* table, const char* name)
 {
     TableMetaData* result = NULL;
     HASH_FIND_STR(table, name, result);
     return result;
 }
 
-inline void TableMetaDataUnlink(TableMetaData** tableSet, TableMetaData* table)
+static inline void TableMetaDataUnlink(TableMetaData** tableSet, TableMetaData* table)
 {
     HASH_DEL(*tableSet, table);
 }
 
-inline void TableMetaDataRemove(TableMetaData** tableSet, TableMetaData* table)
+static inline void TableMetaDataRemove(TableMetaData** tableSet, TableMetaData* table)
 {
     HASH_DEL(*tableSet, table);
     TableMetaDataFree(table);
 }
 
-inline void TableMetaDataRegister(FcitxTableState* tbl, TableMetaData* table)
+static inline void TableMetaDataRegister(FcitxTableState* tbl, TableMetaData* table)
 {
     table->status = TABLE_REGISTERED;
     FcitxInstanceRegisterIM(
@@ -186,7 +186,7 @@ inline void TableMetaDataRegister(FcitxTableState* tbl, TableMetaData* table)
     );
 }
 
-inline char* TableConfigStealTableName(FcitxConfigFile* cfile)
+static inline char* TableConfigStealTableName(FcitxConfigFile* cfile)
 {
     FcitxConfigOption* option = FcitxConfigFileGetOption(cfile, "CodeTable",
                                                          "UniqueName");

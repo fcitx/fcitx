@@ -2542,7 +2542,7 @@ static const uint16_t validChar[] =
 0x30f3
 };
 
-inline
+static inline
 boolean IsValidSym(FcitxKeySym keysym, unsigned int state) {
     if (state != 0)
         return false;
@@ -2564,7 +2564,7 @@ boolean IsValidSym(FcitxKeySym keysym, unsigned int state) {
     return false;
 }
 
-inline
+static inline
 boolean IsValidChar(uint32_t c) {
     if (c == 0 || c == INVALID_COMPOSE_RESULT)
         return false;
