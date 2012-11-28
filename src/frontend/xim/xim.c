@@ -112,7 +112,11 @@ static XIMEncoding zhEncodings[] = {
     NULL
 };
 
-char strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
+#define LOCALES_STRING "aa,af,am,an,ar,as,ast,az,be,ber,bg,bn,bo,br,bs,byn,C,ca,crh,cs,csb,cy,da,de,dz,el,en,es,et,eu,fa,fi,fil,fo,fr,fur,fy,ga,gd,gez,gl,gu,gv,ha,he,hi,hne,hr,hsb,ht,hu,hy,id,ig,ik,is,it,iu,iw,ja,ka,kk,kl,km,kn,ko,ks,ku,kw,ky,lg,li,lo,lt,lv,mai,mg,mi,mk,ml,mn,mr,ms,mt,nan,nb,nds,ne,nl,nn,no,nr,nso,oc,om,or,pa,pa,pap,pl,pt,ro,ru,rw,sa,sc,sd,se,shs,si,sid,sk,sl,so,sq,sr,ss,st,sv,ta,te,tg,th,ti,tig,tk,tl,tn,tr,ts,tt,ug,uk,ur,uz,ve,vi,wa,wo,xh,yi,yo,zh,zu"
+
+#define LOCALES_BUFSIZE 1024
+
+char strLocale[LOCALES_BUFSIZE + 1] = LOCALES_STRING;
 
 void* XimCreate(FcitxInstance* instance, int frontendid)
 {
@@ -220,8 +224,10 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     }
     if (p) {
         if (!strcasestr(strLocale, p)) {
-            strcat(strLocale, ",");
-            strcat(strLocale, p);
+            if (strlen(strLocale) + strlen(p) + 1 < LOCALES_BUFSIZE) {
+                strcat(strLocale, ",");
+                strcat(strLocale, p);
+            }
         }
     }
 
