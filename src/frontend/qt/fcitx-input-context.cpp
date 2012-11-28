@@ -567,8 +567,8 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     if (!keywidget || !keywidget->testAttribute(Qt::WA_WState_Created))
         return false;
 
-    if (keywidget != focusWidget())
-        return false;
+    //if (keywidget != focusWidget())
+    //    return false;
 
     if (keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
         addCapacity(CAPACITY_PASSWORD);
