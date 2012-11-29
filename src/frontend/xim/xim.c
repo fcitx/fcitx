@@ -112,7 +112,7 @@ static XIMEncoding zhEncodings[] = {
     NULL
 };
 
-#define LOCALES_STRING "aa,af,am,an,ar,as,ast,az,be,ber,bg,bn,bo,br,bs,byn,C,ca,crh,cs,csb,cy,da,de,dz,el,en,es,et,eu,fa,fi,fil,fo,fr,fur,fy,ga,gd,gez,gl,gu,gv,ha,he,hi,hne,hr,hsb,ht,hu,hy,id,ig,ik,is,it,iu,iw,ja,ka,kk,kl,km,kn,ko,ks,ku,kw,ky,lg,li,lo,lt,lv,mai,mg,mi,mk,ml,mn,mr,ms,mt,nan,nb,nds,ne,nl,nn,no,nr,nso,oc,om,or,pa,pa,pap,pl,pt,ro,ru,rw,sa,sc,sd,se,shs,si,sid,sk,sl,so,sq,sr,ss,st,sv,ta,te,tg,th,ti,tig,tk,tl,tn,tr,ts,tt,ug,uk,ur,uz,ve,vi,wa,wo,xh,yi,yo,zh,zu"
+#define LOCALES_STRING "aa,af,am,an,ar,as,ast,az,be,bem,ber,bg,bho,bn,bo,br,brx,bs,byn,C,ca,crh,cs,csb,cv,cy,da,de,dv,dz,el,en,es,et,eu,fa,ff,fi,fil,fo,fr,fur,fy,ga,gd,gez,gl,gu,gv,ha,he,hi,hne,hr,hsb,ht,hu,hy,id,ig,ik,is,it,iu,iw,ja,ka,kk,kl,km,kn,ko,kok,ks,ku,kw,ky,lb,lg,li,lij,lo,lt,lv,mai,mg,mhr,mi,mk,ml,mn,mr,ms,mt,my,nan,nb,nds,ne,nl,nn,nr,nso,oc,om,or,os,pa,pap,pl,ps,pt,ro,ru,rw,sa,sc,sd,se,shs,si,sid,sk,sl,so,sq,sr,ss,st,sv,sw,ta,te,tg,th,ti,tig,tk,tl,tn,tr,ts,tt,ug,uk,unm,ur,uz,ve,vi,wa,wae,wal,wo,xh,yi,yo,yue,zh,zu"
 
 #define LOCALES_BUFSIZE 1024
 
