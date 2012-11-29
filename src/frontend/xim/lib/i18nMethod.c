@@ -433,7 +433,7 @@ static int SetXi18nSelectionOwner(Xi18n i18n_core)
     int i;
     int found;
     int forse = False;
-    char buf[256];
+    char buf[2048];
 
     (void)sprintf(buf, "@server=%s", i18n_core->address.im_name);
     if ((atom = XInternAtom(dpy, buf, False)) == 0)
@@ -520,7 +520,7 @@ static int DeleteXi18nAtom(Xi18n i18n_core)
     Atom atom;
     int i, ret;
     int found;
-    char buf[256];
+    char buf[2048];
 
     (void)sprintf(buf, "@server=%s", i18n_core->address.im_name);
     if ((atom = XInternAtom(dpy, buf, False)) == 0)
@@ -622,7 +622,7 @@ static void ReturnSelectionNotify(Xi18n i18n_core, XSelectionRequestEvent *ev)
 {
     XEvent event;
     Display *dpy = i18n_core->address.dpy;
-    char buf[256];
+    char buf[2048];
 
     event.type = SelectionNotify;
     event.xselection.requestor = ev->requestor;
