@@ -405,7 +405,7 @@ static int SetXi18nSelectionOwner(Xi18n i18n_core)
     int found;
     int forse = False;
 
-    fcitx_utils_local_cat_str(buf, 256, "@server=", i18n_core->address.im_name);
+    fcitx_utils_local_cat_str(buf, 2048, "@server=", i18n_core->address.im_name);
     if ((atom = XInternAtom(dpy, buf, False)) == 0)
         return False;
     i18n_core->address.selection = atom;
@@ -491,7 +491,7 @@ static int DeleteXi18nAtom(Xi18n i18n_core)
     int i, ret;
     int found;
 
-    fcitx_utils_local_cat_str(buf, 256, "@server=", i18n_core->address.im_name);
+    fcitx_utils_local_cat_str(buf, 2048, "@server=", i18n_core->address.im_name);
     if ((atom = XInternAtom(dpy, buf, False)) == 0)
         return False;
     i18n_core->address.selection = atom;
@@ -598,7 +598,7 @@ static void ReturnSelectionNotify(Xi18n i18n_core, XSelectionRequestEvent *ev)
     event.xselection.target = ev->target;
     event.xselection.time = ev->time;
     event.xselection.property = ev->property;
-    char buf[256];
+    char buf[2048];
     if (ev->target == i18n_core->address.Localename) {
         const char *tmp_strlist[] = {"@locale=", i18n_core->address.im_locale};
         fcitx_utils_cat_str_simple_with_len(buf, sizeof(buf), 2, tmp_strlist);
