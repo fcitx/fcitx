@@ -51,6 +51,10 @@ _xerror2_handler(int severity, po_message_t message1, const char *filename1,
         exit(1);
     }
 }
+static const struct po_xerror_handler handler = {
+    .xerror = _xerror_handler,
+    .xerror2 = _xerror2_handler
+};
 
 static inline void
 encode_char(char *out, char c)
@@ -86,10 +90,6 @@ lang_to_prefix(const char *lang, char **out)
 static void
 parse_po(const char *lang, const char *fname)
 {
-    struct po_xerror_handler handler = {
-        .xerror = _xerror_handler,
-        .xerror2 = _xerror2_handler
-    };
     po_file_t po_file = po_file_read(fname, &handler);
     po_message_iterator_t msg_iter = po_message_iterator(po_file, NULL);
     po_message_t msg;
@@ -122,6 +122,26 @@ parse_po(const char *lang, const char *fname)
 
     fcitx_utils_free(buff);
     po_message_iterator_free(msg_iter);
+    po_file_free(po_file);
+}
+
+static void
+fix_header(const char *header, const char *fname)
+{
+    po_file_t po_file = po_file_read(fname, &handler);
+    po_message_iterator_t msg_iter = po_message_iterator(po_file, NULL);
+    po_message_t msg;
+
+    while ((msg = po_next_message(msg_iter))) {
+        const char *msg_id = po_message_msgid(msg);
+        int fuzzy = po_message_is_fuzzy(msg);
+        if (*msg_id || !fuzzy)
+            continue;
+        po_message_set_msgstr(msg, header);
+    }
+
+    po_message_iterator_free(msg_iter);
+    po_file_write(po_file, "-", &handler);
     po_file_free(po_file);
 }
 
@@ -207,6 +227,14 @@ main(int argc, char **argv)
         encode_stdin();
     } else if (strcmp(action, "--decode") == 0) {
         decode_stdin();
+    } else if (strcmp(action, "--fix-header") == 0) {
+        const char *header = argv[2];
+        if (!header)
+            return 1;
+        const char *fname = argv[3];
+        if (!fname || !*fname)
+            fname = "-";
+        fix_header(header, fname);
     }
     return 0;
 }

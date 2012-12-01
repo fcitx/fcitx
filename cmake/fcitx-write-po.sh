@@ -16,9 +16,21 @@
 
 . "${_FCITX_MACRO_CMAKE_DIR}/fcitx-parse-po.sh"
 
+fcitx_pot_header="Project-Id-Version: PACKAGE VERSION
+Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com
+POT-Creation-Date: $(date +'%Y-%m-%d %H:%M%z')
+PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE
+Last-Translator: FULL NAME <EMAIL@ADDRESS>
+Language-Team: LANGUAGE <LL@li.org>
+Language: LANG
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+"
+
 fcitx_write_po_header() {
     local out_file="$1"
-    cat > "${out_file}"  <<EOF
+    cat > "${out_file}" <<EOF
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
@@ -29,13 +41,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-11-17 11:48+0800\n"
+"POT-Creation-Date: $(date +'%Y-%m-%d %H:%M%z')\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: LANG\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 EOF
 }
@@ -99,7 +111,9 @@ fcitx_merge_all_pos() {
     if [[ -z "${po_list[*]}" ]]; then
         fcitx_write_po_header "${pot_file}"
     else
-        msgcat -o "${pot_file}" --use-first --to-code=utf-8 "${po_list[@]}"
+        msgcat -o- --to-code=utf-8 "${po_list[@]}" | \
+            "${_FCITX_PO_PARSER_EXECUTABLE}" \
+            --fix-header "${fcitx_pot_header}" > "${pot_file}"
     fi
 }
 
