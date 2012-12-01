@@ -49,11 +49,25 @@ typedef struct _FcitxXimFrontend {
     XIMFeedback *feedback;
     int feedback_len;
     Window xim_window;
-    // FcitxAddon* x11addon;
     UT_array* queue;
 } FcitxXimFrontend;
 
 CONFIG_BINDING_DECLARE(FcitxXimFrontend)
+/*
+ * `C' and `no' are additional one which cannot be obtained from modern
+ * locale.gen. `no' is obsolete, but we keep it here for compatible reason.
+ */
+#define LOCALES_STRING \
+    "aa,af,am,an,ar,as,ast,az,be,bem,ber,bg,bho,bn,bo,br,brx,bs,byn," \
+    "C,ca,crh,cs,csb,cv,cy,da,de,dv,dz,el,en,es,et,eu,fa,ff,fi,fil,fo," \
+    "fr,fur,fy,ga,gd,gez,gl,gu,gv,ha,he,hi,hne,hr,hsb,ht,hu,hy,id,ig," \
+    "ik,is,it,iu,iw,ja,ka,kk,kl,km,kn,ko,kok,ks,ku,kw,ky,lb,lg,li,lij," \
+    "lo,lt,lv,mag,mai,mg,mhr,mi,mk,ml,mn,mr,ms,mt,my,nan,nb,nds,ne,nl," \
+    "nn,no,nr,nso,oc,om,or,os,pa,pap,pl,ps,pt,ro,ru,rw,sa,sc,sd,se,shs," \
+    "si,sid,sk,sl,so,sq,sr,ss,st,sv,sw,ta,te,tg,th,ti,tig,tk,tl,tn,tr," \
+    "ts,tt,ug,uk,unm,ur,uz,ve,vi,wa,wae,wal,wo,xh,yi,yo,yue,zh,zu"
+
+#define LOCALES_BUFSIZE (sizeof(LOCALES_STRING) + 32)
 
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
