@@ -34,6 +34,22 @@ add_sources() {
     done >> "${src_cache}"
 }
 
+download() {
+    local wget="$1"
+    local url="$2"
+    local output="$3"
+    "${wget}" -c -T 10 -O "${output}.part" "${url}" || return 1
+    mv "${output}.part" "${output}"
+}
+
+get_md5sum() {
+    local file
+    local res
+    file="$1"
+    res=$("${FCITX_HELPER_CMAKE_CMD}" -E md5sum "${file}")
+    echo -n "${res%% *}"
+}
+
 case "${action}" in
     --check-apply-handler)
         # full_name may be invalid
@@ -93,6 +109,32 @@ case "${action}" in
 $(cat install_manifest.txt)
 EOF
         exit 0
+        ;;
+    --download)
+        wget="$1"
+        url="$2"
+        output="$3"
+        md5sum="$4"
+        if [ -f "${output}" ]; then
+            touch "${output}"
+            if [ -z "${md5sum}" ]; then
+                exit 0
+            fi
+            realmd5="$(get_md5sum "${output}")"
+            if [ "${md5sum}" = "${realmd5}" ]; then
+                exit 0
+            fi
+            rm -f "${output}"
+        fi
+        download "${wget}" "${url}" "${output}" || exit 1
+        if [ -z "${md5sum}" ]; then
+            exit 0
+        fi
+        realmd5="$(get_md5sum "${output}")"
+        if [ "${md5sum}" = "${realmd5}" ]; then
+            exit 0
+        fi
+        exit 1
         ;;
     *)
         exit 1
