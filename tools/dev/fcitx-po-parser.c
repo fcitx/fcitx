@@ -51,122 +51,50 @@ _xerror2_handler(int severity, po_message_t message1, const char *filename1,
         exit(1);
     }
 }
+static const struct po_xerror_handler handler = {
+    .xerror = _xerror_handler,
+    .xerror2 = _xerror2_handler
+};
 
-static int
-str_base64_write(unsigned char *out, unsigned char c,
-                 boolean escape, boolean escape_cap)
+static inline void
+encode_char(char *out, char c)
 {
-    c &= 63;
-    if (c < 26) {
-        if (escape_cap) {
-            out[0] = '_';
-            out[1] = 'a' + c;
-            return 2;
-        } else {
-            out[0] = 'A' + c;
-            return 1;
-        }
-    } else if (c < 52) {
-        out[0] = 'a' + c - 26;
-        return 1;
-    } else if (c < 62) {
-        out[0] = '0' + c - 52;
-        return 1;
-    } else if (c < 63) {
-        if (escape) {
-            out[0] = '_';
-            out[1] = '2';
-            return 2;
-        } else {
-            out[0] = '+';
-            return 1;
-        }
-    } else {
-        if (escape) {
-            out[0] = '_';
-            out[1] = '3';
-            return 2;
-        } else {
-            out[0] = '/';
-            return 1;
-        }
-    }
-}
-
-static int
-str_base64_write_end(unsigned char *out, boolean escape)
-{
-    if (escape) {
-        out[0] = '_';
-        out[1] = '1';
-        return 2;
-    } else {
-        out[0] = '=';
-        return 1;
-    }
-}
-
-static int
-str_base64_escape(const char *in, char *out, boolean escape,
-                  boolean escape_cap)
-{
-    unsigned char left = 0;
-    int left_bits = 0;
-    const unsigned char *uin = (const unsigned char*)in;
     unsigned char *uout = (unsigned char*)out;
-    unsigned char res;
-    for (;*uin;uin++) {
-        res = left << (6 - left_bits) | *uin >> (2 + left_bits);
-        uout += str_base64_write(uout, res, escape, escape_cap);
-        left = *uin;
-        left_bits += 2;
-        if (left_bits == 6) {
-            left_bits = 0;
-            uout += str_base64_write(uout, left, escape, escape_cap);
-        }
+    unsigned char uc = (unsigned char)c;
+    uout[0] = 'a' + (uc & 0x0f);
+    uout[1] = 'a' + (uc >> 4);
+}
+
+static void
+encode_string(const char *in, char *out, size_t l)
+{
+    size_t i;
+    for (i = 0;i < l;i++) {
+        encode_char(out + i * 2, in[i]);
     }
-    if (left_bits) {
-        res = left << (6 - left_bits);
-        uout += str_base64_write(uout, res, escape, escape_cap);
-        uout += str_base64_write_end(uout, escape);
-        if (left_bits <= 2) {
-            uout += str_base64_write_end(uout, escape);
-        }
-    }
-    uout[0] = '\0';
-    return (char*)uout - out;
+    out[l * 2] = '\0';
 }
 
 static int
 lang_to_prefix(const char *lang, char **out)
 {
     int lang_len = strlen(lang);
-    char *res = malloc(lang_len * 3 + 4);
+    char *res = malloc(lang_len * 2 + 4);
     *out = res;
-    int len = str_base64_escape(lang, res, true, true);
+    int len = lang_len * 2;
+    encode_string(lang, res, lang_len);
     strcpy(res + len, "___");
     return len + 3;
 }
 
-int
-main(int argc, char **argv)
+static void
+parse_po(const char *lang, const char *fname)
 {
-    struct po_xerror_handler handler = {
-        .xerror = _xerror_handler,
-        .xerror2 = _xerror2_handler
-    };
-    const char *lang = argv[1];
-    if (!lang)
-        return 1;
-    const char *fname = argv[2];
-    if (!fname || !*fname)
-        fname = "-";
     po_file_t po_file = po_file_read(fname, &handler);
-
-    /* const char *header = po_file_domain_header(po_file, NULL); */
     po_message_iterator_t msg_iter = po_message_iterator(po_file, NULL);
     po_message_t msg;
     char *buff = NULL;
+    size_t buff_len = 0;
     int prefix_len = lang_to_prefix(lang, &buff);
 
     while ((msg = po_next_message(msg_iter))) {
@@ -178,16 +106,135 @@ main(int argc, char **argv)
             continue;
         int id_len = strlen(msg_id);
         int str_len = strlen(msg_str);
-        buff = realloc(buff, (id_len + str_len) * 3 + prefix_len + 2);
+        int len = (id_len + str_len) * 2 + prefix_len + 2;
+        if (len > buff_len) {
+            buff_len = len;
+            buff = realloc(buff, buff_len);
+        }
         char *p = buff + prefix_len;
-        p += str_base64_escape(msg_id, p, true, false);
+        encode_string(msg_id, p, id_len);
+        p += id_len * 2;
         p[0] = '=';
-        str_base64_escape(msg_str, p + 1, false, false);
-        printf("%s\n", buff);
+        encode_string(msg_str, p + 1, str_len);
+        fwrite(buff, 1, len - 1, stdout);
+        fwrite("\n", 1, 1, stdout);
     }
 
     fcitx_utils_free(buff);
     po_message_iterator_free(msg_iter);
     po_file_free(po_file);
+}
+
+static void
+fix_header(const char *header, const char *fname)
+{
+    po_file_t po_file = po_file_read(fname, &handler);
+    po_message_iterator_t msg_iter = po_message_iterator(po_file, NULL);
+    po_message_t msg;
+
+    while ((msg = po_next_message(msg_iter))) {
+        const char *msg_id = po_message_msgid(msg);
+        int fuzzy = po_message_is_fuzzy(msg);
+        if (*msg_id || !fuzzy)
+            continue;
+        po_message_set_msgstr(msg, header);
+    }
+
+    po_message_iterator_free(msg_iter);
+    po_file_write(po_file, "-", &handler);
+    po_file_free(po_file);
+}
+
+static void
+encode_stdin()
+{
+#define ENCODE_BUF_SIZE (1024)
+    char in_buff[ENCODE_BUF_SIZE];
+    char out_buff[ENCODE_BUF_SIZE * 2];
+    size_t len;
+    while ((len = fread(in_buff, 1, ENCODE_BUF_SIZE, stdin))) {
+        encode_string(in_buff, out_buff, len);
+        fwrite(out_buff, 2, len, stdout);
+    }
+}
+
+static inline int
+check_char(char c)
+{
+    return c >= 'a' && c < 'a' + 0x10;
+}
+
+static inline size_t
+check_buff(char *buff, size_t len)
+{
+    size_t i;
+    for (i = 0;i < len;i++) {
+        if (check_char(buff[i]))
+            continue;
+        len--;
+        if (len <= i)
+            continue;
+        memmove(buff + i, buff + i + 1, len - i);
+        i--;
+    }
+    return len;
+}
+
+static inline char
+hex_to_char(const char c[2])
+{
+    return (c[0] - 'a') + ((c[1] - 'a') << 4);
+}
+
+static inline void
+decode_stdin()
+{
+#define DECODE_BUF_SIZE (1024)
+    char out_buff[DECODE_BUF_SIZE];
+    char in_buff[DECODE_BUF_SIZE * 2];
+    size_t len;
+    size_t left = 0;
+    size_t count = 0;
+    size_t i;
+    while ((len = fread(in_buff + left, 1, DECODE_BUF_SIZE * 2, stdin))) {
+        len = check_buff(in_buff, len + left);
+        count = len / 2;
+        for (i = 0;i < count;i++) {
+            out_buff[i] = hex_to_char(in_buff + i * 2);
+        }
+        fwrite(out_buff, count, 1, stdout);
+        if ((left = len % 2)) {
+            in_buff[0] = in_buff[len - 1];
+        }
+    }
+}
+
+int
+main(int argc, char **argv)
+{
+    if (argc <= 1)
+        return 1;
+    const char *action = argv[1];
+    if (strcmp(action, "--parse-po") == 0) {
+        const char *lang = argv[2];
+        if (!lang)
+            return 1;
+        const char *fname = argv[3];
+        if (!fname || !*fname)
+            fname = "-";
+        parse_po(lang, fname);
+    } else if (strcmp(action, "--encode") == 0) {
+        encode_stdin();
+    } else if (strcmp(action, "--decode") == 0) {
+        decode_stdin();
+    } else if (strcmp(action, "--fix-header") == 0) {
+        const char *header = argv[2];
+        if (!header)
+            return 1;
+        const char *fname = argv[3];
+        if (!fname || !*fname)
+            fname = "-";
+        fix_header(header, fname);
+    }
     return 0;
 }

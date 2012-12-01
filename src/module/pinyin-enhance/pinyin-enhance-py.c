@@ -329,11 +329,11 @@ py_enhance_get_konsonant(int8_t index, int *len)
 }
 
 char*
-py_enhance_py_to_str(char *buff, const FcitxPYEnhancePY *py, int *len)
+py_enhance_py_to_str(char *buff, const int8_t *py, int *len)
 {
-    int8_t k_i = py->konsonant - 1;
-    int8_t v_i = py->vokal - 1;
-    int8_t tone = py->tone;
+    int8_t k_i = py[0] - 1;
+    int8_t v_i = py[1] - 1;
+    int8_t tone = py[2];
     int k_l = 0;
     int v_l = 0;
     const char *k_s = py_enhance_get_konsonant(k_i, &k_l);
@@ -373,47 +373,49 @@ py_enhance_load_py(PinyinEnhance *pyenhance)
         size_t res;
         int8_t word_l;
         int8_t count;
-        int8_t min_size;
-        FcitxPYEnhancePYList *py_list;
+        int8_t py_size;
         int i;
-        FcitxPYEnhancePY *py;
+        int8_t *py_list;
+        int8_t *tmp;
+        /**
+         * Format:
+         * int8_t word_l;
+         * char word[word_l];
+         * int8_t count;
+         * int8_t py[count][3];
+         **/
         while (true) {
             res = fread(&word_l, 1, 1, fp);
             if (!res || word_l < 0 || word_l > UTF8_MAX_LENGTH)
                 break;
-            res = fread(buff, word_l, 1, fp);
+            res = fread(buff, word_l + 1, 1, fp);
             if (!res)
                 break;
-            res = fread(&count, 1, 1, fp);
-            if (!res || count < 0)
+            count = buff[word_l];
+            if (count < 0)
                 break;
             if (count == 0)
                 continue;
-            min_size = count * 3;
-            if (buff_size < min_size) {
-                buff_size = min_size;
+            py_size = count * 3;
+            if (buff_size < py_size) {
+                buff_size = py_size;
                 list_buff = realloc(list_buff, buff_size);
             }
-            res = fread(list_buff, min_size, 1, fp);
+            res = fread(list_buff, py_size, 1, fp);
             if (!res)
                 break;
-            py_list = fcitx_memory_pool_alloc_align(
-                pool, (sizeof(FcitxPYEnhancePYList) +
-                       sizeof(FcitxPYEnhancePY) * count), 1);
-            memcpy(py_list->word, buff, word_l);
-            py_list->word[word_l] = '\0';
-            py_list->count = count;
-            for (i = 0;i < count;i++) {
-                py = pinyin_enhance_pylist_get(py_list, i);
-                int8_t *tmp = list_buff + i * 3;
-                py->konsonant = tmp[0];
-                py->vokal = tmp[1];
-                py->tone = tmp[2];
-            }
+            py_list = fcitx_memory_pool_alloc(pool, word_l + py_size + 3);
+            py_list[0] = word_l + 1;
+            py_list++;
+            memcpy(py_list, buff, word_l);
+            tmp = py_list + word_l;
+            *tmp = '\0';
+            tmp++;
+            *tmp = count;
+            memcpy(tmp + 1, list_buff, py_size);
             for (i = utarray_len(array) - 1;i >= 0;i--) {
-                FcitxPYEnhancePYList *ele;
-                ele = *(FcitxPYEnhancePYList**)_utarray_eltptr(array, i);
-                if (strcmp(ele->word, py_list->word) < 0) {
+                if (strcmp(*(char**)_utarray_eltptr(array, i),
+                           (char*)py_list) < 0) {
                     break;
                 }
             }
@@ -432,20 +434,20 @@ compare_func(const void *p1, const void *p2)
     return strcmp(str1, *str2);
 }
 
-const FcitxPYEnhancePYList*
+const int8_t*
 py_enhance_py_find_py(PinyinEnhance *pyenhance, const char *str)
 {
     py_enhance_load_py(pyenhance);
     if (!utarray_len(&pyenhance->py_list))
         return NULL;
-    FcitxPYEnhancePYList **py_list;
+    int8_t **py_list;
     py_list = bsearch(str, _utarray_eltptr(&pyenhance->py_list, 0),
-                      utarray_len(&pyenhance->py_list),
-                      sizeof(FcitxPYEnhancePYList*),
+                      utarray_len(&pyenhance->py_list), sizeof(int8_t*),
                       (int (*)(const void*, const void*))compare_func);
-    if (py_list)
-        return *py_list;
-    return NULL;
+    if (!py_list)
+        return NULL;
+    int8_t *res = *py_list;
+    return res + *(res - 1);
 }
 
 void

@@ -22,30 +22,15 @@
 #define _PINYIN_ENHANCE_H
 
 #include <stdint.h>
-#include "fcitx-utils/utf8.h"
-
-typedef struct {
-    char word[UTF8_MAX_LENGTH + 1];
-    int8_t count;
-} FcitxPYEnhancePYList;
-
-typedef struct {
-    int8_t konsonant;
-    int8_t vokal;
-    int8_t tone;
-} FcitxPYEnhancePY;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-    static inline FcitxPYEnhancePY*
-    pinyin_enhance_pylist_get(const FcitxPYEnhancePYList *pylist, int index)
+    static inline const int8_t*
+    pinyin_enhance_pylist_get(const int8_t *count, int index)
     {
-        FcitxPYEnhancePY *py;
-        py = (FcitxPYEnhancePY*)(((void*)(intptr_t)pylist) +
-                                 sizeof(FcitxPYEnhancePYList));
-        return py + index;
+        return count + index * 3 + 1;
     }
 
 #ifdef __cplusplus

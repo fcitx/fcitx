@@ -29,9 +29,11 @@ endforeach()
 add_custom_target(table_conf ALL DEPENDS ${INSTALL_TABLE_CONF} )
 add_custom_target(table_data ALL DEPENDS ${TABLE_DATA})
 
+fcitx_download(table-data-download "${TABLE_URL}" "${TABLE_TAR}"
+  MD5SUM acb0b112423474ab2c1a22cee590d636)
 add_custom_command(OUTPUT ${TABLEORG_DATA}
-  COMMAND ${PROJECT_SOURCE_DIR}/data/download.sh "${WGET}" "${TABLE_URL}" "${TABLE_TAR}"
-  COMMAND ${TAR} xzmvf ${TABLE_TAR})
+  DEPENDS table-data-download "${TABLE_TAR}"
+  COMMAND "${TAR}" xzmvf "${TABLE_TAR}")
 
 foreach(tblname ${TABLE_NAME})
   add_custom_command(OUTPUT ${tblname}.mb

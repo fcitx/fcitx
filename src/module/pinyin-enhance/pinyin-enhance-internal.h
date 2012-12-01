@@ -93,15 +93,7 @@ enum {
 };
 
 DEFINE_GET_ADDON("fcitx-sunpinyin", SunPinyin)
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-    char *PinyinEnhanceGetSelected(PinyinEnhance *pyenhance);
-
-#ifdef __cplusplus
-}
-#endif
+DEFINE_GET_ADDON("fcitx-pinyin-enhance", PinyinEnhance)
+char *PinyinEnhanceGetSelected(PinyinEnhance *pyenhance);
 
 #endif /* _PINYIN_ENHANCE_H */

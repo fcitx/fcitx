@@ -34,6 +34,21 @@ add_sources() {
     done >> "${src_cache}"
 }
 
+download() {
+    local url="$1"
+    local output="$2"
+    wget -c -T 10 -O "${output}.part" "${url}" || return 1
+    mv "${output}.part" "${output}"
+}
+
+get_md5sum() {
+    local file
+    local res
+    file="$1"
+    res=$("${FCITX_HELPER_CMAKE_CMD}" -E md5sum "${file}")
+    echo -n "${res%% *}"
+}
+
 case "${action}" in
     --check-apply-handler)
         # full_name may be invalid
@@ -53,9 +68,7 @@ case "${action}" in
         ;;
     --parse-pos)
         # full_name may be invalid
-        fcitx_po_parser_executable="$1"
-        fcitx_parse_all_pos "${po_cache}" "${parse_cache}" \
-            "${fcitx_po_parser_executable}"
+        fcitx_parse_all_pos "${po_cache}" "${parse_cache}"
         exit 0
         ;;
     --add-sources)
@@ -95,6 +108,44 @@ case "${action}" in
 $(cat install_manifest.txt)
 EOF
         exit 0
+        ;;
+    --download)
+        url="$1"
+        output="$2"
+        md5sum="$3"
+        if [ -f "${output}" ]; then
+            touch "${output}"
+            if [ -z "${md5sum}" ]; then
+                exit 0
+            fi
+            realmd5="$(get_md5sum "${output}")"
+            if [ "${md5sum}" = "${realmd5}" ]; then
+                exit 0
+            fi
+            rm -f "${output}"
+        fi
+        download "${url}" "${output}" || exit 1
+        if [ -z "${md5sum}" ]; then
+            exit 0
+        fi
+        realmd5="$(get_md5sum "${output}")"
+        if [ "${md5sum}" = "${realmd5}" ]; then
+            exit 0
+        fi
+        exit 1
+        ;;
+    --check-md5sum)
+        file="$1"
+        md5sum="$2"
+        remove="$3"
+        realmd5="$(get_md5sum "${file}")"
+        if [ "${md5sum}" = "${realmd5}" ]; then
+            exit 0
+        fi
+        if [ ! -z "${remove}" ]; then
+            rm -f "${file}"
+        fi
+        exit 1
         ;;
     *)
         exit 1

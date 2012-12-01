@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-11-24 03:33-0500\n"
+"POT-Creation-Date: 2010-11-17 11:48+0800\n"
 "PO-Revision-Date: 2012-10-22 19:07-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: src/im/table/table.c:1391
+#: src/im/table/table.c:1387
 msgid " Ctrl+Delete To Delete"
 msgstr " 用 Ctrl+Delete 刪除"
 
@@ -52,7 +52,7 @@ msgstr ""
 msgid "(Unavailable)"
 msgstr "(不可用)"
 
-#: src/lib/fcitx/ime.c:1584
+#: src/lib/fcitx/ime.c:1587
 msgid "/min  Time Used: "
 msgstr "/分 經過時間："
 
@@ -335,7 +335,7 @@ msgstr ""
 msgid "Can't Create imWindow"
 msgstr "無法建立輸入法視窗"
 
-#: src/module/punc/punc.c:393
+#: src/module/punc/punc.c:418
 msgid "Can't open punc file."
 msgstr "無法開啟標點符號檔案"
 
@@ -444,6 +444,13 @@ msgid "Clear local input method"
 msgstr ""
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:3
+#: src/module/clipboard/fcitx-clipboard.desc:1
+#: src/module/clipboard/fcitx-clipboard.desc:6
+#: src/module/clipboard/fcitx-clipboard.desc:13
+#: src/module/clipboard/fcitx-clipboard.desc:22
+#: src/module/clipboard/fcitx-clipboard.desc:27
+#: src/module/clipboard/fcitx-clipboard.desc:34
+#: src/module/clipboard/fcitx-clipboard.desc:44
 msgid "Clipboard"
 msgstr ""
 
@@ -459,7 +466,7 @@ msgstr "碼表檔案"
 msgid "Code Table Name"
 msgstr "碼表名稱"
 
-#: src/im/table/table.c:1387
+#: src/im/table/table.c:1383
 msgid "Code is "
 msgstr "編碼為 "
 
@@ -656,6 +663,7 @@ msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr ""
 
 #: src/ui/kimpanel/kimpanel.c:246 src/ui/kimpanel/kimpanel.c:251
+#: data/config.desc:26
 msgid "Disabled"
 msgstr "停用"
 
@@ -793,7 +801,8 @@ msgstr ""
 msgid "Fallback UI Addon"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:367
+#: src/ui/kimpanel/kimpanel.c:367 data/fcitx-autostart.desktop.in:2
+#: data/fcitx.desktop.in:2
 msgid "Fcitx"
 msgstr "Fcitx"
 
@@ -906,7 +915,7 @@ msgstr "前端：開啟 %s 失敗 %s"
 msgid "Full width Character"
 msgstr ""
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:548
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:573
 msgid "Full width punct"
 msgstr ""
 
@@ -1110,7 +1119,8 @@ msgstr ""
 msgid "Input Message Color"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1490
+#: src/lib/fcitx/ime.c:1493 data/fcitx-autostart.desktop.in:3
+#: data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "輸入法"
 
@@ -1122,7 +1132,7 @@ msgstr "停用輸入法"
 msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1581
+#: src/lib/fcitx/ime.c:1584
 msgid "Input Speed: "
 msgstr "輸入速度："
 
@@ -1182,6 +1192,12 @@ msgstr ""
 #: src/im/keyboard/keyboard.c:349 src/im/keyboard/keyboard.c:375
 #: src/im/keyboard/keyboard.c:423 src/im/keyboard/keyboard.c:436
 #: src/im/keyboard/keyboard.c:461 src/im/keyboard/keyboard.c:467
+#: src/im/keyboard/fcitx-keyboard.desc:1 src/im/keyboard/fcitx-keyboard.desc:6
+#: src/im/keyboard/fcitx-keyboard.desc:16
+#: src/im/keyboard/fcitx-keyboard.desc:21
+#: src/im/keyboard/fcitx-keyboard.desc:27
+#: src/im/keyboard/fcitx-keyboard.desc:36
+#: src/im/keyboard/fcitx-keyboard.desc:41
 msgid "Keyboard"
 msgstr "鍵盤"
 
@@ -1225,7 +1241,7 @@ msgstr "這個碼表的語言代碼"
 msgid "Latin"
 msgstr ""
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:548
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:573
 msgid "Latin punct"
 msgstr ""
 
@@ -1589,11 +1605,24 @@ msgstr "所屬附加元件"
 msgid "PerProgram"
 msgstr "按程式"
 
-#: src/im/table/table.c:1383
+#: src/im/table/table.c:1379
 msgid "Phrase is already in Dict "
 msgstr "字詞已在碼表中"
 
-#: src/im/pinyin/py.c:104
+#: src/im/pinyin/py.c:104 src/im/pinyin/fcitx-pinyin.conf.in:3
+#: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
+#: src/im/pinyin/fcitx-pinyin.desc:15 src/im/pinyin/fcitx-pinyin.desc:20
+#: src/im/pinyin/fcitx-pinyin.desc:25 src/im/pinyin/fcitx-pinyin.desc:30
+#: src/im/pinyin/fcitx-pinyin.desc:35 src/im/pinyin/fcitx-pinyin.desc:40
+#: src/im/pinyin/fcitx-pinyin.desc:45 src/im/pinyin/fcitx-pinyin.desc:50
+#: src/im/pinyin/fcitx-pinyin.desc:55 src/im/pinyin/fcitx-pinyin.desc:64
+#: src/im/pinyin/fcitx-pinyin.desc:73 src/im/pinyin/fcitx-pinyin.desc:82
+#: src/im/pinyin/fcitx-pinyin.desc:87 src/im/pinyin/fcitx-pinyin.desc:92
+#: src/im/pinyin/fcitx-pinyin.desc:97 src/im/pinyin/fcitx-pinyin.desc:102
+#: src/im/pinyin/fcitx-pinyin.desc:107 src/im/pinyin/fcitx-pinyin.desc:112
+#: src/im/pinyin/fcitx-pinyin.desc:117 src/im/pinyin/fcitx-pinyin.desc:122
+#: src/im/pinyin/fcitx-pinyin.desc:127 src/im/pinyin/fcitx-pinyin.desc:132
+#: src/im/pinyin/fcitx-pinyin.desc:137 src/im/pinyin/fcitx-pinyin.desc:142
 msgid "Pinyin"
 msgstr "拼音"
 
@@ -1787,7 +1816,7 @@ msgstr "快速字詞"
 msgid "Quit Macro Editor"
 msgstr ""
 
-#: src/im/qw/qw.c:64
+#: src/im/qw/qw.c:64 src/im/qw/fcitx-qw.conf.in:3 src/im/qw/qw.conf.in:3
 msgid "Quwei"
 msgstr "區位"
 
@@ -1811,7 +1840,7 @@ msgstr "右Shift"
 msgid "Register IM"
 msgstr "註冊輸入法方法"
 
-#: src/im/table/table.c:1275
+#: src/im/table/table.c:1271
 msgid "Remind:"
 msgstr "聯想："
 
@@ -2002,7 +2031,7 @@ msgstr "顯示版本"
 msgid "Shuang Pin Schema"
 msgstr "預設雙拼方案"
 
-#: src/im/pinyin/py.c:120
+#: src/im/pinyin/py.c:120 src/im/pinyin/shuangpin.conf.in:3
 msgid "Shuangpin"
 msgstr "雙拼"
 
@@ -2014,7 +2043,7 @@ msgstr "Fcitx 簡單的拼音支援"
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr "繁簡轉換"
 
-#: src/ui/classic/skin.c:927
+#: src/ui/classic/skin.c:927 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "皮膚"
 
@@ -2106,7 +2135,7 @@ msgstr ""
 msgid "Spell Hint"
 msgstr ""
 
-#: src/frontend/xim/xim.c:241
+#: src/frontend/xim/xim.c:242
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "啟動 XIM 錯誤。是否有另一個名為 %s 的 XIM 守護程式正在執行？"
@@ -2189,6 +2218,7 @@ msgid "Switching Virtual Keyboard"
 msgstr "切換虛擬鍵盤"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:9
+#: src/im/table/table.desc:111
 msgid "Symbol"
 msgstr "符號"
 
@@ -2235,7 +2265,7 @@ msgstr ""
 msgid "Tip Message Color"
 msgstr ""
 
-#: src/module/punc/punc.c:149 src/module/punc/punc.c:549
+#: src/module/punc/punc.c:149 src/module/punc/punc.c:574
 msgid "Toggle Full Width Punctuation"
 msgstr ""
 
@@ -2524,11 +2554,11 @@ msgstr "中文之星"
 msgid "Ziguang"
 msgstr "紫光"
 
-#: data/table/zrm.conf.in:3
+#: data/table/zrm.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:4
 msgid "Ziranma"
 msgstr "自然碼"
 
-#: src/lib/fcitx/ime.c:1587
+#: src/lib/fcitx/ime.c:1590
 msgid "min Num of Characters: "
 msgstr "分 字元數："
 

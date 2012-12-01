@@ -154,6 +154,7 @@ function(__fcitx_cmake_init)
     return()
   endif()
   get_property(FCITX_INTERNAL_BUILD GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD")
+  find_program(FCITX_HELPER_WGET wget)
   add_custom_target(fcitx-modules.target ALL)
   add_custom_target(fcitx-scan-addons.target)
   add_dependencies(fcitx-modules.target fcitx-scan-addons.target)
@@ -163,13 +164,6 @@ function(__fcitx_cmake_init)
     "${translation_cache_base}")
   get_property(full_name GLOBAL
     PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
-  execute_process(COMMAND env "_FCITX_MACRO_CMAKE_DIR=${FCITX_MACRO_CMAKE_DIR}"
-    "${FCITX_CMAKE_HELPER_SCRIPT}"
-    "${translation_cache_base}"
-    "${full_name}" --clean)
-  set_property(GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET" 0)
-  set_property(GLOBAL PROPERTY "${property_name}" 1)
-  set_property(GLOBAL PROPERTY "__FCITX_APPLY_TRANLATION_FILE_ADDED" 0)
   if(FCITX_INTERNAL_BUILD)
     set(FCITX_SCANNER_EXECUTABLE
       "${PROJECT_BINARY_DIR}/tools/dev/fcitx-scanner"
@@ -181,6 +175,18 @@ function(__fcitx_cmake_init)
     find_program(FCITX_SCANNER_EXECUTABLE fcitx-scanner)
     find_program(FCITX_PO_PARSER_EXECUTABLE fcitx-po-parser)
   endif()
+  set(__FCITX_CMAKE_HELPER_EXPORT
+    "_FCITX_MACRO_CMAKE_DIR=${FCITX_MACRO_CMAKE_DIR}"
+    "_FCITX_PO_PARSER_EXECUTABLE=${FCITX_PO_PARSER_EXECUTABLE}"
+    "FCITX_HELPER_CMAKE_CMD=${CMAKE_COMMAND}"
+    CACHE INTERNAL "fcitx cmake helper export" FORCE)
+  execute_process(COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
+    "${FCITX_CMAKE_HELPER_SCRIPT}"
+    "${translation_cache_base}"
+    "${full_name}" --clean)
+  set_property(GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET" 0)
+  set_property(GLOBAL PROPERTY "${property_name}" 1)
+  set_property(GLOBAL PROPERTY "__FCITX_APPLY_TRANLATION_FILE_ADDED" 0)
 endfunction()
 __fcitx_cmake_init()
 
@@ -373,7 +379,7 @@ function(__fcitx_link_addon_headers)
     get_filename_component(basename "${fullsrc}" NAME)
     set(link_target "${CMAKE_CURRENT_BINARY_DIR}/${basename}")
     if(NOT EXISTS "${link_target}")
-      execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+      execute_process(COMMAND "${CMAKE_COMMAND}" -E create_symlink
         "${fullsrc}" "${link_target}")
     endif()
   endforeach()
@@ -416,8 +422,7 @@ function(__fcitx_translate_add_sources_internal)
     PROPERTY "__FCITX_TRANSLATION_TARGET_NAME")
   foreach(source ${ARGN})
     file(RELATIVE_PATH source "${PROJECT_SOURCE_DIR}" "${source}")
-    execute_process(COMMAND env
-      "_FCITX_MACRO_CMAKE_DIR=${FCITX_MACRO_CMAKE_DIR}"
+    execute_process(COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
       "${FCITX_CMAKE_HELPER_SCRIPT}"
       "${translation_cache_base}"
       "${full_name}" --add-sources "${source}"
@@ -460,7 +465,7 @@ function(_fcitx_translate_add_handler script)
     PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
   get_property(full_name GLOBAL
     PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
-  execute_process(COMMAND env "_FCITX_MACRO_CMAKE_DIR=${FCITX_MACRO_CMAKE_DIR}"
+  execute_process(COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
     "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}"
     "${full_name}" --add-handler "${script}"
@@ -499,14 +504,13 @@ function(fcitx_translate_add_apply_source in_file out_file)
   set_property(GLOBAL PROPERTY "__FCITX_APPLY_TRANLATION_FILE_ADDED" 1)
 
   foreach(script ${scripts})
-    execute_process(COMMAND env
-      "_FCITX_MACRO_CMAKE_DIR=${FCITX_MACRO_CMAKE_DIR}"
+    execute_process(COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
       "${FCITX_CMAKE_HELPER_SCRIPT}"
       "${translation_cache_base}" "${full_name}" --check-apply-handler
       "${script}" "${in_file}" "${out_file}" RESULT_VARIABLE result)
     if(NOT result)
       add_custom_command(OUTPUT "${out_file}"
-        COMMAND env "_FCITX_MACRO_CMAKE_DIR=${FCITX_MACRO_CMAKE_DIR}"
+        COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
         "${FCITX_CMAKE_HELPER_SCRIPT}"
         "${translation_cache_base}" "." --apply-po-merge
         "${script}" "${in_file}" "${out_file}"
@@ -579,7 +583,7 @@ function(fcitx_translate_set_pot_target target domain pot_file)
 
   # make pot will require bash, but this is only a dev time dependency.
   add_custom_target(fcitx-translate-pot.target
-    COMMAND env "_FCITX_MACRO_CMAKE_DIR=${FCITX_MACRO_CMAKE_DIR}"
+    COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
     bash "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}" "${full_name}" --pot "${FCITX_SET_POT_BUGADDR}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
@@ -605,10 +609,9 @@ function(fcitx_translate_set_pot_target target domain pot_file)
     list(APPEND all_po_files "${po_file}")
   endforeach()
   add_custom_target(fcitx-parse-pos.target
-    COMMAND env "_FCITX_MACRO_CMAKE_DIR=${FCITX_MACRO_CMAKE_DIR}"
+    COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
     "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}" "${full_name}" --parse-pos
-    "${FCITX_PO_PARSER_EXECUTABLE}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
     DEPENDS "${FCITX_PO_PARSER_EXECUTABLE}" ${all_po_files})
   add_custom_target(fcitx-compile-mo.target ALL
@@ -627,7 +630,7 @@ function(fcitx_translate_add_po_file locale po_file)
     PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
   set_property(GLOBAL APPEND PROPERTY "FCITX_TRANSLATION_PO_FILES"
     "${locale} ${po_file}")
-  execute_process(COMMAND env "_FCITX_MACRO_CMAKE_DIR=${FCITX_MACRO_CMAKE_DIR}"
+  execute_process(COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
     "${FCITX_CMAKE_HELPER_SCRIPT}"
     "${translation_cache_base}"
     "${full_name}" --add-po "${locale}" "${po_file}"
@@ -659,9 +662,40 @@ endfunction()
 # Add a uninstall target to the project
 function(_fcitx_add_uninstall_target)
   add_custom_target(uninstall
-    COMMAND env "_FCITX_MACRO_CMAKE_DIR=${FCITX_MACRO_CMAKE_DIR}"
+    COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
     "${FCITX_CMAKE_HELPER_SCRIPT}" "." "." --uninstall
     WORKING_DIRECTORY "${PROJECT_BINARY_DIR}")
+endfunction()
+
+function(fcitx_download tgt_name url output)
+  set(options)
+  set(one_value_args MD5SUM)
+  set(multi_value_args)
+  fcitx_parse_arguments(FCITX_DOWNLOAD
+    "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
+  get_property(translation_cache_base GLOBAL
+    PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
+  if(FCITX_DOWNLOAD_MD5SUM)
+    add_custom_command(OUTPUT "${output}"
+      COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
+      "${FCITX_CMAKE_HELPER_SCRIPT}" "${translation_cache_base}" "."
+      --download "${url}" "${output}" "${FCITX_DOWNLOAD_MD5SUM}"
+      DEPENDS "${FCITX_HELPER_WGET}"
+      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+    add_custom_target("${tgt_name}" ALL DEPENDS "${output}"
+      COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
+      "${FCITX_CMAKE_HELPER_SCRIPT}" "${translation_cache_base}" "."
+      --check-md5sum "${output}" "${FCITX_DOWNLOAD_MD5SUM}" 1
+      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+  else()
+    add_custom_command(OUTPUT "${output}"
+      COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
+      "${FCITX_CMAKE_HELPER_SCRIPT}" "${translation_cache_base}" "."
+      --download "${url}" "${output}"
+      DEPENDS "${FCITX_HELPER_WGET}"
+      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+    add_custom_target("${tgt_name}" ALL DEPENDS "${output}")
+  endif()
 endfunction()
 
 

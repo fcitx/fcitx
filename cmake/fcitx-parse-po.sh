@@ -40,39 +40,36 @@ fcitx_exts_match() {
 fcitx_msgid_to_varname() {
     local prefix="${1}"
     local msgid="${2}"
-    echo -n "${prefix}___$(echo -n "${msgid}" | base64 -w0 | sed -e 's:=:_1:g' -e 's:\+:_2:g' -e 's:/:_3:g')"
+    echo -n "${prefix}___"
+    echo -n "${msgid}" | "${_FCITX_PO_PARSER_EXECUTABLE}" --encode
 }
 
 fcitx_parse_po_file() {
     local po_lang="${1}"
     local pofile="${2}"
     local parse_res="${3}"
-    local fcitx_po_parser_executable="${4}"
-    msgattrib -o- --translated --no-fuzzy --no-obsolete --force-po \
-        --no-location --no-wrap "${pofile}" |
-    msgconv -tutf-8 --force-po --no-location --no-wrap |
-    "${fcitx_po_parser_executable}" "${po_lang}" > "${parse_res}"
+    "${_FCITX_PO_PARSER_EXECUTABLE}" --parse-po "${po_lang}" \
+        "${pofile}" > "${parse_res}"
 }
 
 fcitx_find_str() {
     local prefix="${1}"
     local msgid="${2}"
     local varname="$(fcitx_msgid_to_varname "${prefix}" "${msgid}")"
-    eval "echo -n \"\${${varname}}\"" | base64 -d
+    eval "echo -n \"\${${varname}}\"" | \
+        "${_FCITX_PO_PARSER_EXECUTABLE}" --decode
 }
 
 all_po_langs=''
 
 fcitx_lang_to_prefix() {
     local lang="${1}"
-    echo -n "${lang}" | base64 -w0 | sed -e 's:_:_0:g' \
-        -e 's:=:_1:g' -e 's:\+:_2:g' -e 's:/:_3:g' -e 's:\([A-Z]\):_\L\1:g'
+    echo -n "${lang}" | "${_FCITX_PO_PARSER_EXECUTABLE}" --encode
 }
 
 fcitx_parse_all_pos() {
     local po_cache="$1"
     local po_parse_cache_dir="$2"
-    local fcitx_po_parser_executable="$3"
     mkdir -p "${po_parse_cache_dir}"
     local po_lang
     local po_file
@@ -88,8 +85,7 @@ fcitx_parse_all_pos() {
             ! [ -f "${po_parse_cache_file}" ]; then
             echo "Parsing po file: ${po_file}"
             local unique_fname="${po_parse_cache_file}.$$"
-            fcitx_parse_po_file "${po_lang}" "${po_file}" "${unique_fname}" \
-                "${fcitx_po_parser_executable}"
+            fcitx_parse_po_file "${po_lang}" "${po_file}" "${unique_fname}"
             mv "${unique_fname}" "${po_parse_cache_file}"
             echo "Finished parsing po file: ${po_file}"
         fi

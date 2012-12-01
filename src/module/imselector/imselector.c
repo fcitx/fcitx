@@ -57,8 +57,8 @@ struct _IMSelector {
 
 static void* IMSelectorCreate(FcitxInstance* instance);
 static boolean IMSelectorPreFilter(void* arg, FcitxKeySym sym,
-                                    unsigned int state,
-                                    INPUT_RETURN_VALUE *retval
+                                   unsigned int state,
+                                   INPUT_RETURN_VALUE *retval
                                    );
 static  void IMSelectorReset(void* arg);
 static  void IMSelectorReload(void* arg);
@@ -205,9 +205,9 @@ boolean IMSelectorPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPU
             *retval = FcitxCandidateWordChooseByIndex(candList, iKey);
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
         *retval = IRV_CLEAN;
-    } else {
-        *retval = IRV_DO_NOTHING;
     }
+    if (!*retval)
+        *retval = IRV_DO_NOTHING;
     return true;
 }
 

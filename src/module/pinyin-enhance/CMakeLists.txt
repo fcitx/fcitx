@@ -7,6 +7,6 @@ set(FCITX_PYENHANCE_SOURCES
   pinyin-enhance-py.c
   pinyin-enhance-sym.c)
 
-fcitx_add_addon_full(pinyin-enhance DESC
+fcitx_add_addon_full(pinyin-enhance DESC SCAN
   HEADERS pinyin-enhance.h
   SOURCES ${FCITX_PYENHANCE_SOURCES})

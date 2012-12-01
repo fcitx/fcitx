@@ -55,6 +55,7 @@ typedef struct {
 #define REPLACE_WEIGHT 5
 #define INSERT_WEIGHT 5
 #define REMOVE_WEIGHT 5
+#define EXCHANGE_WEIGHT 5
 #define END_WEIGHT 1
 static inline int
 py_enhance_stroke_get_distance(const char *word, int word_len,
@@ -63,6 +64,7 @@ py_enhance_stroke_get_distance(const char *word, int word_len,
     int replace = 0;
     int insert = 0;
     int remove = 0;
+    int exchange = 0;
     int diff = 0;
     int maxdiff;
     int maxremove;
@@ -70,56 +72,55 @@ py_enhance_stroke_get_distance(const char *word, int word_len,
     int dict_i = 0;
     maxdiff = word_len / 3;
     maxremove = (word_len - 2) / 3;
-    while ((diff = replace + insert + remove) <= maxdiff &&
+    while ((diff = replace + insert + remove + exchange) <= maxdiff &&
            remove <= maxremove) {
-        if (!word[word_i]) {
+        if (word_i >= word_len) {
             return ((replace * REPLACE_WEIGHT + insert * INSERT_WEIGHT
-                     + remove * REMOVE_WEIGHT)
+                     + remove * REMOVE_WEIGHT + exchange * EXCHANGE_WEIGHT)
                     + (dict_len - dict_i) * END_WEIGHT);
         }
-        /* check remove error */
-        if (!dict[dict_i]) {
-            if (dict[dict_i + 1]) {
+        if (dict_i >= dict_len) {
+            if (word_i + 1 < word_len)
                 return -1;
-            } else {
-                remove++;
-                if (diff <= maxdiff && remove <= maxremove) {
-                    return (replace * REPLACE_WEIGHT + insert * INSERT_WEIGHT
-                            + remove * REMOVE_WEIGHT);
-                }
-                return -1;
+            remove++;
+            if (diff + 1 <= maxdiff && remove <= maxremove) {
+                return (replace * REPLACE_WEIGHT + insert * INSERT_WEIGHT
+                        + remove * REMOVE_WEIGHT + exchange * EXCHANGE_WEIGHT);
             }
+            return -1;
         }
         if (word[word_i] == dict[dict_i]) {
             word_i++;
             dict_i++;
             continue;
         }
+        if (word_i + 1 >= word_len && dict_i + 1 >= dict_len) {
+            replace++;
+            word_i++;
+            dict_i++;
+            continue;
+        }
+        if (word[word_i + 1] == dict[dict_i + 1]) {
+            replace++;
+            dict_i += 2;
+            word_i += 2;
+            continue;
+        }
         if (word[word_i + 1] == dict[dict_i]) {
             word_i += 2;
+            if (word[word_i] == dict[dict_i + 1]) {
+                dict_i += 2;
+                exchange++;
+                continue;
+            }
             dict_i++;
             remove++;
             continue;
         }
-
-        /* check insert error */
         if (word[word_i] == dict[dict_i + 1]) {
             word_i++;
             dict_i += 2;
             insert++;
-            continue;
-        }
-
-        /* check replace error */
-        if (word[word_i + 1] == dict[dict_i + 1]) {
-            if (word[word_i + 1]) {
-                dict_i += 2;
-                word_i += 2;
-            } else {
-                word_i++;
-                dict_i++;
-            }
-            replace++;
             continue;
         }
         break;

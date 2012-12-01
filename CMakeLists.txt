@@ -95,7 +95,6 @@ if (ENABLE_QT)
 find_package(Qt4 4.5 COMPONENTS QtCore QtGui QtDBus REQUIRED)
 endif (ENABLE_QT)
 
-FIND_PROGRAM(WGET wget)
 FIND_PROGRAM(TAR tar)
 
 if(ENABLE_X11)

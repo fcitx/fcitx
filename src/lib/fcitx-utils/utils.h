@@ -679,7 +679,19 @@ extern "C" {
     UT_array *fcitx_utils_string_list_append_no_copy(UT_array *list, char *str);
     UT_array *fcitx_utils_string_list_append_len(UT_array *list,
                                                  const char *str, size_t len);
+
 #ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
+#define __FCITX_ATOMIC_USE_SYNC_FETCH
+#elif defined __has_builtin
+#if __has_builtin(__sync_fetch_and_add) &&      \
+    __has_builtin(__sync_fetch_and_and) &&      \
+    __has_builtin(__sync_fetch_and_xor) &&      \
+    __has_builtin(__sync_fetch_and_or)
+#define __FCITX_ATOMIC_USE_SYNC_FETCH
+#endif
+#endif
+
+#ifdef __FCITX_ATOMIC_USE_SYNC_FETCH
 #define FCITX_UTIL_DECLARE_ATOMIC(name, type)                           \
     type (fcitx_utils_atomic_##name)(volatile type *atomic, type val);  \
     static inline type                                                  \

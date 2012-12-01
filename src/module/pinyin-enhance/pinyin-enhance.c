@@ -28,6 +28,7 @@
 #include "pinyin-enhance-spell.h"
 #include "pinyin-enhance-cfp.h"
 #include "pinyin-enhance-sym.h"
+#include "pinyin-enhance-py.h"
 
 #define LOGLEVEL DEBUG
 
@@ -95,6 +96,22 @@ check_im_type(PinyinEnhance *pyenhance)
 }
 
 static void*
+PinyinEnhancePyToString(void *self, FcitxModuleFunctionArg args)
+{
+    char *buff = args.args[0];
+    const int8_t *py = args.args[1];
+    int *len = args.args[2];
+    return (void*)(intptr_t)py_enhance_py_to_str(buff, py, len);
+}
+
+static void*
+PinyinEnhanceFindPy(void *self, FcitxModuleFunctionArg args)
+{
+    const char *str = args.args[0];
+    return (void*)(intptr_t)py_enhance_py_find_py(self, str);
+}
+
+static void*
 PinyinEnhanceCreate(FcitxInstance *instance)
 {
     PinyinEnhance *pyenhance = fcitx_utils_new(PinyinEnhance);
@@ -104,6 +121,7 @@ PinyinEnhanceCreate(FcitxInstance *instance)
         free(pyenhance);
         return NULL;
     }
+    FcitxAddon *addon = FcitxPinyinEnhanceGetAddon(instance);
 
     pyenhance->static_pool = fcitx_memory_pool_create();
     PinyinEnhanceSymInit(pyenhance);
@@ -123,6 +141,9 @@ PinyinEnhanceCreate(FcitxInstance *instance)
     FcitxInstanceRegisterPostInputFilter(pyenhance->owner, key_hook);
     key_hook.func = PinyinEnhancePreInput;
     FcitxInstanceRegisterPreInputFilter(pyenhance->owner, key_hook);
+
+    FcitxModuleAddFunction(addon, PinyinEnhanceFindPy);
+    FcitxModuleAddFunction(addon, PinyinEnhancePyToString);
 
     return pyenhance;
 }

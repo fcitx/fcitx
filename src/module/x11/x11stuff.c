@@ -93,10 +93,10 @@ DEFINE_GET_AND_INVOKE_FUNC(Xim, ConsumeQueue, 0)
 void* X11Create(FcitxInstance* instance)
 {
     FcitxX11 *x11priv = fcitx_utils_new(FcitxX11);
-    FcitxAddon *x11addon = FcitxX11GetAddon(instance);
     x11priv->dpy = XOpenDisplay(NULL);
     if (x11priv->dpy == NULL)
         return NULL;
+    FcitxAddon *x11addon = FcitxX11GetAddon(instance);
 
     x11priv->owner = instance;
     x11priv->iScreen = DefaultScreen(x11priv->dpy);

@@ -41,6 +41,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "Xi18n.h"
 #include "XimFunc.h"
 #include "fcitx-utils/utils.h"
+#include "../xim.h"
 
 extern Xi18nClient *_Xi18nFindClient(Xi18n, CARD16);
 
@@ -405,7 +406,8 @@ static int SetXi18nSelectionOwner(Xi18n i18n_core)
     int found;
     int forse = False;
 
-    fcitx_utils_local_cat_str(buf, 2048, "@server=", i18n_core->address.im_name);
+    fcitx_utils_local_cat_str(buf, 2048, "@server=",
+                              i18n_core->address.im_name);
     if ((atom = XInternAtom(dpy, buf, False)) == 0)
         return False;
     i18n_core->address.selection = atom;
@@ -491,7 +493,8 @@ static int DeleteXi18nAtom(Xi18n i18n_core)
     int i, ret;
     int found;
 
-    fcitx_utils_local_cat_str(buf, 2048, "@server=", i18n_core->address.im_name);
+    fcitx_utils_local_cat_str(buf, 2048, "@server=",
+                              i18n_core->address.im_name);
     if ((atom = XInternAtom(dpy, buf, False)) == 0)
         return False;
     i18n_core->address.selection = atom;
@@ -598,7 +601,7 @@ static void ReturnSelectionNotify(Xi18n i18n_core, XSelectionRequestEvent *ev)
     event.xselection.target = ev->target;
     event.xselection.time = ev->time;
     event.xselection.property = ev->property;
-    char buf[2048];
+    char buf[LOCALES_BUFSIZE + 32];
     if (ev->target == i18n_core->address.Localename) {
         const char *tmp_strlist[] = {"@locale=", i18n_core->address.im_locale};
         fcitx_utils_cat_str_simple_with_len(buf, sizeof(buf), 2, tmp_strlist);
