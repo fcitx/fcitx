@@ -66,7 +66,7 @@ add_custom_target(pinyin_data ALL DEPENDS ${PY_DATA})
 
 fcitx_download(py-data-download "${PY_URL}" "${PY_TAR}"
   MD5SUM 34dcb1b5209c28baa4e87f6a2773bfd0)
-add_custom_command(OUTPUT "${PY_ORGDATA}" DEPENDS py-data-download
+add_custom_command(OUTPUT "${PY_ORGDATA}" DEPENDS py-data-download "${PY_TAR}"
   COMMAND "${TAR}" xzmvf "${PY_TAR}")
 set(CREATE_PYMB_BIN "${PROJECT_BINARY_DIR}/tools/cli/createPYMB")
 add_custom_command(OUTPUT ${PY_DATA}
@@ -105,7 +105,8 @@ set(PY_STROKE_URL
   "https://github.com/downloads/fcitx/fcitx/py_stroke-${PY_STROKE_VER}.tar.gz")
 fcitx_download(py-stroke-download "${PY_STROKE_URL}" "${PY_STROKE_TAR}"
   MD5SUM 2559d025c5bbb50fa450a02429f92762)
-add_custom_command(OUTPUT "${PY_STROKE_TGT}" DEPENDS py-stroke-download
+add_custom_command(OUTPUT "${PY_STROKE_TGT}"
+  DEPENDS py-stroke-download "${PY_STROKE_TAR}"
   COMMAND "${TAR}" xzmvf "${PY_STROKE_TAR}")
 add_custom_target(py_stroke_data_tgt ALL DEPENDS "${PY_STROKE_TGT}")
 install(FILES "${PY_STROKE_TGT}" DESTINATION "${pkgdatadir}/py-enhance")
@@ -118,7 +119,8 @@ set(PY_TABLE_URL
   "https://github.com/downloads/fcitx/fcitx/py_table-${PY_TABLE_VER}.tar.gz")
 fcitx_download(py-table-download "${PY_TABLE_URL}" "${PY_TABLE_TAR}"
   MD5SUM a72e275fe1916d67d01a2f038ca5d920)
-add_custom_command(OUTPUT "${PY_TABLE_TGT}" DEPENDS py-table-download
+add_custom_command(OUTPUT "${PY_TABLE_TGT}"
+  DEPENDS py-table-download "${PY_TABLE_TAR}"
   COMMAND "${TAR}" xzmvf "${PY_TABLE_TAR}")
 add_custom_target(py_table_data_tgt ALL DEPENDS "${PY_TABLE_TGT}")
 install(FILES "${PY_TABLE_TGT}" DESTINATION "${pkgdatadir}/py-enhance")
@@ -133,7 +135,8 @@ set(SPELL_EN_DICT_URL
 
 fcitx_download(spell-en-download "${SPELL_EN_DICT_URL}" "${SPELL_EN_DICT_TAR}"
   MD5SUM 8315f85331e0545c256a46e0cb00f10f)
-add_custom_command(OUTPUT "${SPELL_EN_DICT_SRC}" DEPENDS spell-en-download
+add_custom_command(OUTPUT "${SPELL_EN_DICT_SRC}"
+  DEPENDS spell-en-download "${SPELL_EN_DICT_TAR}"
   COMMAND "${TAR}" xzmvf "${SPELL_EN_DICT_TAR}")
 
 set(COMP_SPELL_DICT
