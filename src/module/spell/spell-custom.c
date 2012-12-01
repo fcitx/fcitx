@@ -136,16 +136,14 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict, const char *word,
 
         /* check remove error */
         if (!cur_dict_c) {
-            if (next_word_c) {
+            if (next_word_c)
                 return -1;
-            } else {
-                remove++;
-                if (diff <= maxdiff && remove <= maxremove) {
-                    return (replace * REPLACE_WEIGHT + insert * INSERT_WEIGHT
-                            + remove * REMOVE_WEIGHT);
-                }
-                return -1;
+            remove++;
+            if (diff <= maxdiff && remove <= maxremove) {
+                return (replace * REPLACE_WEIGHT + insert * INSERT_WEIGHT
+                        + remove * REMOVE_WEIGHT);
             }
+            return -1;
         }
         dict = fcitx_utf8_get_char(dict, &next_dict_c);
         if (cur_word_c == cur_dict_c ||
