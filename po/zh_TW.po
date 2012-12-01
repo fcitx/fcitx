@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-11-24 03:33-0500\n"
+"POT-Creation-Date: 2012-12-01 11:17-0500\n"
 "PO-Revision-Date: 2012-10-22 19:07-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: src/im/table/table.c:1391
+#: src/im/table/table.c:1387
 msgid " Ctrl+Delete To Delete"
 msgstr " 用 Ctrl+Delete 刪除"
 
@@ -52,7 +52,7 @@ msgstr ""
 msgid "(Unavailable)"
 msgstr "(不可用)"
 
-#: src/lib/fcitx/ime.c:1584
+#: src/lib/fcitx/ime.c:1587
 msgid "/min  Time Used: "
 msgstr "/分 經過時間："
 
@@ -335,7 +335,7 @@ msgstr ""
 msgid "Can't Create imWindow"
 msgstr "無法建立輸入法視窗"
 
-#: src/module/punc/punc.c:393
+#: src/module/punc/punc.c:418
 msgid "Can't open punc file."
 msgstr "無法開啟標點符號檔案"
 
@@ -459,7 +459,7 @@ msgstr "碼表檔案"
 msgid "Code Table Name"
 msgstr "碼表名稱"
 
-#: src/im/table/table.c:1387
+#: src/im/table/table.c:1383
 msgid "Code is "
 msgstr "編碼為 "
 
@@ -906,7 +906,7 @@ msgstr "前端：開啟 %s 失敗 %s"
 msgid "Full width Character"
 msgstr ""
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:548
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:573
 msgid "Full width punct"
 msgstr ""
 
@@ -1110,7 +1110,7 @@ msgstr ""
 msgid "Input Message Color"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1490
+#: src/lib/fcitx/ime.c:1493
 msgid "Input Method"
 msgstr "輸入法"
 
@@ -1122,7 +1122,7 @@ msgstr "停用輸入法"
 msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1581
+#: src/lib/fcitx/ime.c:1584
 msgid "Input Speed: "
 msgstr "輸入速度："
 
@@ -1225,7 +1225,7 @@ msgstr "這個碼表的語言代碼"
 msgid "Latin"
 msgstr ""
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:548
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:573
 msgid "Latin punct"
 msgstr ""
 
@@ -1589,7 +1589,7 @@ msgstr "所屬附加元件"
 msgid "PerProgram"
 msgstr "按程式"
 
-#: src/im/table/table.c:1383
+#: src/im/table/table.c:1379
 msgid "Phrase is already in Dict "
 msgstr "字詞已在碼表中"
 
@@ -1811,7 +1811,7 @@ msgstr "右Shift"
 msgid "Register IM"
 msgstr "註冊輸入法方法"
 
-#: src/im/table/table.c:1275
+#: src/im/table/table.c:1271
 msgid "Remind:"
 msgstr "聯想："
 
@@ -2106,7 +2106,7 @@ msgstr ""
 msgid "Spell Hint"
 msgstr ""
 
-#: src/frontend/xim/xim.c:241
+#: src/frontend/xim/xim.c:242
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "啟動 XIM 錯誤。是否有另一個名為 %s 的 XIM 守護程式正在執行？"
@@ -2235,7 +2235,7 @@ msgstr ""
 msgid "Tip Message Color"
 msgstr ""
 
-#: src/module/punc/punc.c:149 src/module/punc/punc.c:549
+#: src/module/punc/punc.c:149 src/module/punc/punc.c:574
 msgid "Toggle Full Width Punctuation"
 msgstr ""
 
@@ -2528,7 +2528,7 @@ msgstr "紫光"
 msgid "Ziranma"
 msgstr "自然碼"
 
-#: src/lib/fcitx/ime.c:1587
+#: src/lib/fcitx/ime.c:1590
 msgid "min Num of Characters: "
 msgstr "分 字元數："
 

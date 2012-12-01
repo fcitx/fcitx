@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-11-24 03:33-0500\n"
+"POT-Creation-Date: 2012-12-01 11:17-0500\n"
 "PO-Revision-Date: 2012-07-23 14:12+0000\n"
 "Last-Translator: mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: src/im/table/table.c:1391
+#: src/im/table/table.c:1387
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -51,7 +51,7 @@ msgstr ""
 msgid "(Unavailable)"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1584
+#: src/lib/fcitx/ime.c:1587
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -336,7 +336,7 @@ msgstr "%sスキンをロードできません、デフォールトスキンに�
 msgid "Can't Create imWindow"
 msgstr ""
 
-#: src/module/punc/punc.c:393
+#: src/module/punc/punc.c:418
 msgid "Can't open punc file."
 msgstr ""
 
@@ -461,7 +461,7 @@ msgstr ""
 msgid "Code Table Name"
 msgstr ""
 
-#: src/im/table/table.c:1387
+#: src/im/table/table.c:1383
 msgid "Code is "
 msgstr ""
 
@@ -910,7 +910,7 @@ msgstr ""
 msgid "Full width Character"
 msgstr "全角文字を使用"
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:548
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:573
 #, fuzzy
 msgid "Full width punct"
 msgstr "全角文字を使用"
@@ -1118,7 +1118,7 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1490
+#: src/lib/fcitx/ime.c:1493
 msgid "Input Method"
 msgstr ""
 
@@ -1130,7 +1130,7 @@ msgstr ""
 msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1581
+#: src/lib/fcitx/ime.c:1584
 msgid "Input Speed: "
 msgstr ""
 
@@ -1234,7 +1234,7 @@ msgstr ""
 msgid "Latin"
 msgstr ""
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:548
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:573
 msgid "Latin punct"
 msgstr ""
 
@@ -1597,7 +1597,7 @@ msgstr ""
 msgid "PerProgram"
 msgstr ""
 
-#: src/im/table/table.c:1383
+#: src/im/table/table.c:1379
 msgid "Phrase is already in Dict "
 msgstr ""
 
@@ -1812,7 +1812,7 @@ msgstr "右Shift"
 msgid "Register IM"
 msgstr ""
 
-#: src/im/table/table.c:1275
+#: src/im/table/table.c:1271
 msgid "Remind:"
 msgstr ""
 
@@ -2108,7 +2108,7 @@ msgstr ""
 msgid "Spell Hint"
 msgstr ""
 
-#: src/frontend/xim/xim.c:241
+#: src/frontend/xim/xim.c:242
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr ""
@@ -2243,7 +2243,7 @@ msgstr ""
 msgid "Tip Message Color"
 msgstr ""
 
-#: src/module/punc/punc.c:149 src/module/punc/punc.c:549
+#: src/module/punc/punc.c:149 src/module/punc/punc.c:574
 msgid "Toggle Full Width Punctuation"
 msgstr ""
 
@@ -2541,7 +2541,7 @@ msgstr ""
 msgid "Ziranma"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1587
+#: src/lib/fcitx/ime.c:1590
 msgid "min Num of Characters: "
 msgstr ""
 
