@@ -35,10 +35,9 @@ add_sources() {
 }
 
 download() {
-    local wget="$1"
-    local url="$2"
-    local output="$3"
-    "${wget}" -c -T 10 -O "${output}.part" "${url}" || return 1
+    local url="$1"
+    local output="$2"
+    wget -c -T 10 -O "${output}.part" "${url}" || return 1
     mv "${output}.part" "${output}"
 }
 
@@ -111,10 +110,9 @@ EOF
         exit 0
         ;;
     --download)
-        wget="$1"
-        url="$2"
-        output="$3"
-        md5sum="$4"
+        url="$1"
+        output="$2"
+        md5sum="$3"
         if [ -f "${output}" ]; then
             touch "${output}"
             if [ -z "${md5sum}" ]; then
@@ -126,13 +124,26 @@ EOF
             fi
             rm -f "${output}"
         fi
-        download "${wget}" "${url}" "${output}" || exit 1
+        download "${url}" "${output}" || exit 1
         if [ -z "${md5sum}" ]; then
             exit 0
         fi
         realmd5="$(get_md5sum "${output}")"
         if [ "${md5sum}" = "${realmd5}" ]; then
             exit 0
+        fi
+        exit 1
+        ;;
+    --check-md5sum)
+        file="$1"
+        md5sum="$2"
+        remove="$3"
+        realmd5="$(get_md5sum "${file}")"
+        if [ "${md5sum}" = "${realmd5}" ]; then
+            exit 0
+        fi
+        if [ ! -z "${remove}" ]; then
+            rm -f "${file}"
         fi
         exit 1
         ;;

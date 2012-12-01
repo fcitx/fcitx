@@ -675,14 +675,27 @@ function(fcitx_download tgt_name url output)
     "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
   get_property(translation_cache_base GLOBAL
     PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
-  add_custom_command(OUTPUT "${output}"
-    COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-    "${FCITX_CMAKE_HELPER_SCRIPT}"
-    "${translation_cache_base}" "." --download "${FCITX_HELPER_WGET}"
-    "${url}" "${output}" "${FCITX_DOWNLOAD_MD5SUM}"
-    DEPENDS "${FCITX_HELPER_WGET}"
-    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
-  add_custom_target("${tgt_name}" ALL DEPENDS "${output}")
+  if(FCITX_DOWNLOAD_MD5SUM)
+    add_custom_command(OUTPUT "${output}"
+      COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
+      "${FCITX_CMAKE_HELPER_SCRIPT}" "${translation_cache_base}" "."
+      --download "${url}" "${output}" "${FCITX_DOWNLOAD_MD5SUM}"
+      DEPENDS "${FCITX_HELPER_WGET}"
+      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+    add_custom_target("${tgt_name}" ALL DEPENDS "${output}"
+      COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
+      "${FCITX_CMAKE_HELPER_SCRIPT}" "${translation_cache_base}" "."
+      --check-md5sum "${output}" "${FCITX_DOWNLOAD_MD5SUM}" 1
+      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+  else()
+    add_custom_command(OUTPUT "${output}"
+      COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
+      "${FCITX_CMAKE_HELPER_SCRIPT}" "${translation_cache_base}" "."
+      --download "${url}" "${output}"
+      DEPENDS "${FCITX_HELPER_WGET}"
+      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+    add_custom_target("${tgt_name}" ALL DEPENDS "${output}")
+  endif()
 endfunction()
 
 
