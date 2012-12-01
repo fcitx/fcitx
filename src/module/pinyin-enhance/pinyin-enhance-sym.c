@@ -142,7 +142,7 @@ PinyinEnhanceGetAllPinyin(PinyinEnhance *pyenhance, const char *str)
     if (!(py_list && *py_list))
         return NULL;
     int i;
-    int8_t *py;
+    const int8_t *py;
     char buff[64];
     int alloc_len = 16 * *py_list + 4;
     char *res = malloc(alloc_len);

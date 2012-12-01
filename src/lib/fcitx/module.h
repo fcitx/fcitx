@@ -73,7 +73,7 @@ extern "C" {
          **/
         void* args[10];
     } FcitxModuleFunctionArg;
-    typedef void *(*FcitxModuleFunction)(void *arg, FcitxModuleFunctionArg);
+    typedef void *(*FcitxModuleFunction)(void *self, FcitxModuleFunctionArg);
 
     /**
      * load all modules

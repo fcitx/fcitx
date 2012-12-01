@@ -1,0 +1,25 @@
+[FcitxAddon]
+Name=fcitx-pinyin-enhance
+Prefix=PinyinEnhance
+Include0="pinyin-enhance.h"
+Function0=FindPy
+Function1=PyToString
+Function2=
+Function3=
+Function4=
+Function5=
+Function6=
+Function7=
+Function8=
+
+[FindPy]
+Name=find-py
+Return=const int8_t*
+Arg0=const char*
+
+[PyToString]
+Name=py-to-string
+Return=char*
+Arg0=char*
+Arg1=const int8_t*
+Arg2=int*
