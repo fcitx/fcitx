@@ -104,7 +104,7 @@ set(PY_STROKE_TAR
 set(PY_STROKE_URL
   "https://github.com/downloads/fcitx/fcitx/py_stroke-${PY_STROKE_VER}.tar.gz")
 fcitx_download(py-stroke-download "${PY_STROKE_URL}" "${PY_STROKE_TAR}"
-  MD5SUM 421f8dc052c715f5344fff54db3e5f03)
+  MD5SUM 2559d025c5bbb50fa450a02429f92762)
 add_custom_command(OUTPUT "${PY_STROKE_TGT}" DEPENDS py-stroke-download
   COMMAND "${TAR}" xzmvf "${PY_STROKE_TAR}")
 add_custom_target(py_stroke_data_tgt ALL DEPENDS "${PY_STROKE_TGT}")
