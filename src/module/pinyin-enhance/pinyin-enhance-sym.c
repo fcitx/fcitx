@@ -137,23 +137,23 @@ PinyinEnhanceStrokeInsertIndex(FcitxCandidateWordList *cand_list,
 static char*
 PinyinEnhanceGetAllPinyin(PinyinEnhance *pyenhance, const char *str)
 {
-    const FcitxPYEnhancePYList *py_list;
+    const int8_t *py_list;
     py_list = py_enhance_py_find_py(pyenhance, str);
-    if (!(py_list && py_list->count))
+    if (!(py_list && *py_list))
         return NULL;
     int i;
-    FcitxPYEnhancePY *py;
+    int8_t *py;
     char buff[64];
-    int alloc_len = 16 * py_list->count + 4;
+    int alloc_len = 16 * *py_list + 4;
     char *res = malloc(alloc_len);
     int len = 2;
     memcpy(res, " (", 2);
-    for (i = 0;i < py_list->count;i++) {
+    for (i = 0;i < *py_list;i++) {
         py = pinyin_enhance_pylist_get(py_list, i);
         int py_len = 0;
         py_enhance_py_to_str(buff, py, &py_len);
-        if (len + py_len + 2 >= alloc_len) {
-            alloc_len = len + py_len + 3;
+        if (len + py_len + 4 >= alloc_len) {
+            alloc_len = len + py_len + 5;
             res = realloc(res, alloc_len);
         }
         memcpy(res + len, buff, py_len);
