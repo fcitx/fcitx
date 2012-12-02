@@ -51,21 +51,35 @@ download_curl() {
 download_cmake() {
     local url="$1"
     local output="$2"
-    tmpdir="${FCITX_CMAKE_CACHE_BASE}/cmake_download"
-    cmake -E make_directory "${tmpdir}"
-    fname="$(mktemp "${tmpdir}/tmp.XXXXXX")" || return 1
-    {
+    __print_cmake_download_cmd() {
         echo "file(DOWNLOAD \"${url}\" \"${output}\" TIMEOUT 10 STATUS result)"
         echo 'list(GET result 0 code)'
         echo 'if(code)'
         echo '  list(GET result 1 message)'
         echo '  message(FATAL_ERROR "${message}")'
         echo 'endif()'
-    } > "${fname}"
-    cmake -P "${fname}"
-    res=$?
-    rm "${fname}"
-    return $res
+    }
+    local stdin_file=''
+    local f
+    for f in /dev/stdin /dev/fd/0 /proc/self/fd/0; do
+        if [ -e "$f" ]; then
+            stdin_file="$f"
+            break
+        fi
+    done
+    if [[ -z "${stdin_file}" ]]; then
+        tmpdir="${FCITX_CMAKE_CACHE_BASE}/cmake_download"
+        cmake -E make_directory "${tmpdir}"
+        fname="$(mktemp "${tmpdir}/tmp.XXXXXX")" || return 1
+        __print_cmake_download_cmd > "${fname}"
+        cmake -P "${fname}"
+        res=$?
+        rm "${fname}"
+        return $res
+    else
+        __print_cmake_download_cmd | cmake -P "${stdin_file}" || return 1
+        return $?
+    fi
 }
 
 download() {
@@ -77,7 +91,10 @@ download() {
     elif type curl >/dev/null 2>&1; then
         download_curl "${url}" "${output}"
         return $?
-    elif type mktemp >/dev/null 2>&1; then
+    elif type mktemp >/dev/null 2>&1 ||
+        [ -e /dev/stdin ] ||
+        [ -e /dev/fd/0 ] ||
+        [ -e /proc/self/fd/0 ]; then
         download_cmake "${url}" "${output}"
         return $?
     fi
