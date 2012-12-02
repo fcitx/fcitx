@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-11-17 11:48+0800\n"
+"POT-Creation-Date: 2012-12-01 22:31-0500\n"
 "PO-Revision-Date: 2012-10-22 19:07-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -1956,7 +1956,7 @@ msgstr ""
 msgid "Select specific input method via keyboard"
 msgstr "透過鍵盤選擇特定的輸入法"
 
-#: src/module/clipboard/clipboard.c:348
+#: src/module/clipboard/clipboard.c:350
 msgid "Select to paste"
 msgstr ""
 

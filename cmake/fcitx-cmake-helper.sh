@@ -15,11 +15,11 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-cache_base="$1"
-pot_file="$2"
-action="$3"
+cache_base="${FCITX_CMAKE_CACHE_BASE}"
+pot_file="${_FCITX_TRANSLATION_TARGET_FILE}"
+action="$1"
 
-shift 3 || exit 1
+shift || exit 1
 
 . "${_FCITX_MACRO_CMAKE_DIR}/fcitx-parse-po.sh"
 

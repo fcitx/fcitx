@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-01 12:01-0500\n"
+"POT-Creation-Date: 2012-12-01 22:57-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -399,7 +399,7 @@ msgstr ""
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr ""
 
-#: src/module/clipboard/clipboard.c:348
+#: src/module/clipboard/clipboard.c:350
 msgid "Select to paste"
 msgstr ""
 
