@@ -226,7 +226,7 @@ ClipboardPreHook(void *arg, FcitxKeySym sym, unsigned int state,
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
         *ret_val = IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
     }
-    if (!*ret_val)
+    if (*ret_val == IRV_TO_PROCESS)
         *ret_val = IRV_DO_NOTHING;
     return true;
 }
