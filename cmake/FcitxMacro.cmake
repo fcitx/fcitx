@@ -154,7 +154,6 @@ function(__fcitx_cmake_init)
     return()
   endif()
   get_property(FCITX_INTERNAL_BUILD GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD")
-  find_program(FCITX_HELPER_WGET wget)
   add_custom_target(fcitx-modules.target ALL)
   add_custom_target(fcitx-scan-addons.target)
   add_custom_target(fcitx-extract-traslation.dependency)
@@ -653,25 +652,21 @@ function(fcitx_download tgt_name url output)
     "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
   get_filename_component(output "${output}" ABSOLUTE)
   if(FCITX_DOWNLOAD_MD5SUM)
-    add_custom_command(OUTPUT "${output}"
+    add_custom_target("${tgt_name}" ALL
       COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
       "${FCITX_CMAKE_HELPER_SCRIPT}"
       --download "${url}" "${output}" "${FCITX_DOWNLOAD_MD5SUM}"
-      DEPENDS "${FCITX_HELPER_WGET}"
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
-    add_custom_target("${tgt_name}" ALL DEPENDS "${output}"
       COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
       "${FCITX_CMAKE_HELPER_SCRIPT}"
       --check-md5sum "${output}" "${FCITX_DOWNLOAD_MD5SUM}" 1
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
   else()
-    add_custom_command(OUTPUT "${output}"
+    add_custom_target("${tgt_name}" ALL
       COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
       "${FCITX_CMAKE_HELPER_SCRIPT}" --download "${url}" "${output}"
-      DEPENDS "${FCITX_HELPER_WGET}"
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
-    add_custom_target("${tgt_name}" ALL DEPENDS "${output}")
   endif()
+  add_custom_command(OUTPUT "${output}" DEPENDS "${tgt_name}")
 endfunction()
 
 

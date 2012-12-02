@@ -85,21 +85,27 @@ download_cmake() {
 download() {
     local url="$1"
     local output="$2"
+    local res=1
     if type wget >/dev/null 2>&1; then
         download_wget "${url}" "${output}"
-        return $?
+        res=$?
     elif type curl >/dev/null 2>&1; then
         download_curl "${url}" "${output}"
-        return $?
+        res=$?
     elif type mktemp >/dev/null 2>&1 ||
         [ -e /dev/stdin ] ||
         [ -e /dev/fd/0 ] ||
         [ -e /proc/self/fd/0 ]; then
         download_cmake "${url}" "${output}"
-        return $?
+        res=$?
+    else
+        echo "Cannot find a command to download." >&2
+        return 1
     fi
-    echo "Cannot find a command to download." >&2
-    return 1
+    if [ $res = 0 ]; then
+        "${FCITX_HELPER_CMAKE_CMD}" -E touch_nocreate "${output}"
+    fi
+    return $res
 }
 
 get_md5sum() {
@@ -175,7 +181,6 @@ EOF
         output="$2"
         md5sum="$3"
         if [ -f "${output}" ]; then
-            touch "${output}"
             if [ -z "${md5sum}" ]; then
                 exit 0
             fi
