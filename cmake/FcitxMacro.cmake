@@ -651,25 +651,25 @@ function(fcitx_download tgt_name url output)
   set(multi_value_args)
   fcitx_parse_arguments(FCITX_DOWNLOAD
     "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
+  get_filename_component(output "${output}" ABSOLUTE)
   if(FCITX_DOWNLOAD_MD5SUM)
     add_custom_command(OUTPUT "${output}"
       COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
       "${FCITX_CMAKE_HELPER_SCRIPT}"
       --download "${url}" "${output}" "${FCITX_DOWNLOAD_MD5SUM}"
       DEPENDS "${FCITX_HELPER_WGET}"
-      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
     add_custom_target("${tgt_name}" ALL DEPENDS "${output}"
       COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
       "${FCITX_CMAKE_HELPER_SCRIPT}"
       --check-md5sum "${output}" "${FCITX_DOWNLOAD_MD5SUM}" 1
-      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
   else()
     add_custom_command(OUTPUT "${output}"
       COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-      "${FCITX_CMAKE_HELPER_SCRIPT}"
-      --download "${url}" "${output}"
+      "${FCITX_CMAKE_HELPER_SCRIPT}" --download "${url}" "${output}"
       DEPENDS "${FCITX_HELPER_WGET}"
-      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
     add_custom_target("${tgt_name}" ALL DEPENDS "${output}")
   endif()
 endfunction()
@@ -748,8 +748,7 @@ MACRO(EXTRACT_FCITX_ADDON_CONF_POSTRING)
         OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/tmp/${_EXTRAFILENAME}.h"
         COMMAND ${INTLTOOL_EXTRACT} --srcdir=${PROJECT_BINARY_DIR}
         --local --type=gettext/ini ${EXTRACTFILE}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        )
+        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
       list(APPEND TEMPHEADER
         "${CMAKE_CURRENT_BINARY_DIR}/tmp/${_EXTRAFILENAME}.h")
     endif()

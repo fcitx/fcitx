@@ -34,11 +34,55 @@ add_sources() {
     done >> "${src_cache}"
 }
 
-download() {
+download_wget() {
     local url="$1"
     local output="$2"
     wget -c -T 10 -O "${output}.part" "${url}" || return 1
     mv "${output}.part" "${output}"
+}
+
+download_curl() {
+    local url="$1"
+    local output="$2"
+    curl -C - -L -m 10 -o "${output}.part" "${url}" || return 1
+    mv "${output}.part" "${output}"
+}
+
+download_cmake() {
+    local url="$1"
+    local output="$2"
+    tmpdir="${FCITX_CMAKE_CACHE_BASE}/cmake_download"
+    cmake -E make_directory "${tmpdir}"
+    fname="$(mktemp "${tmpdir}/tmp.XXXXXX")" || return 1
+    {
+        echo "file(DOWNLOAD \"${url}\" \"${output}\" TIMEOUT 10 STATUS result)"
+        echo 'list(GET result 0 code)'
+        echo 'if(code)'
+        echo '  list(GET result 1 message)'
+        echo '  message(FATAL_ERROR "${message}")'
+        echo 'endif()'
+    } > "${fname}"
+    cmake -P "${fname}"
+    res=$?
+    rm "${fname}"
+    return $res
+}
+
+download() {
+    local url="$1"
+    local output="$2"
+    if type wget >/dev/null 2>&1; then
+        download_wget "${url}" "${output}"
+        return $?
+    elif type curl >/dev/null 2>&1; then
+        download_curl "${url}" "${output}"
+        return $?
+    elif type mktemp >/dev/null 2>&1; then
+        download_cmake "${url}" "${output}"
+        return $?
+    fi
+    echo "Cannot find a command to download." >&2
+    return 1
 }
 
 get_md5sum() {
