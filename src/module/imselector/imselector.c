@@ -206,7 +206,7 @@ boolean IMSelectorPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPU
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
         *retval = IRV_CLEAN;
     }
-    if (!*retval)
+    if (*retval == IRV_TO_PROCESS)
         *retval = IRV_DO_NOTHING;
     return true;
 }
