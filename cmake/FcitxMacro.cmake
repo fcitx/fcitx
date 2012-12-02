@@ -10,6 +10,7 @@
 #     fcitx_translate_set_pot_target
 #     fcitx_translate_add_po_file
 #     _fcitx_add_uninstall_target
+#     fcitx_download
 # Functions to extend fcitx's build (mainly translation) system:
 #     _fcitx_translate_add_handler
 #     _fcitx_translate_add_apply_handler
@@ -644,6 +645,10 @@ function(_fcitx_add_uninstall_target)
     WORKING_DIRECTORY "${PROJECT_BINARY_DIR}")
 endfunction()
 
+# Download a file
+# The file will not be download if the target file already exist. An optional
+# md5sum can be provided in which case the md5sum of the target file will
+# be checked against this value and redownload/abort if the check failed.
 function(fcitx_download tgt_name url output)
   set(options)
   set(one_value_args MD5SUM)
@@ -666,6 +671,19 @@ function(fcitx_download tgt_name url output)
       "${FCITX_CMAKE_HELPER_SCRIPT}" --download "${url}" "${output}"
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
   endif()
+  # This is the rule to create the target file, it is depending of the target
+  # that does the real download so any files/targets that is depending on this
+  # file will be run after the download finished.
+  #
+  # Since this rule doesn't have any command or file dependencies, cmake
+  # won't notice any change in the rule and therefore it won't remove the
+  # target file (and therefore triggers an unwilling redownload) if the real
+  # rule (which is in the target defined above) has changed.
+  #
+  # This behavior is designed to be friendly for a build from cache with all
+  # necessary files already downloaded so that a change in the
+  # build options/url/checksum will not cause cmake to remove the target file
+  # if it has already be updated correctly.
   add_custom_command(OUTPUT "${output}" DEPENDS "${tgt_name}")
 endfunction()
 
