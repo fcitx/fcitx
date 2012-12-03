@@ -610,10 +610,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 
             return retVal;
         } else if (FcitxHotkeyIsHotKey(sym, state, tbl->config.hkLookupPinyin) && tbl->pyaddon) {
-            char strPY[100];
-
-            //如果拼音单字字库没有读入，则读入它
-            FcitxPinyinLoadBaseDict(tbl->owner);
+            char strPY[128];
 
             //如果刚刚输入的是个词组，刚不查拼音
             if (fcitx_utf8_strlen(output_str) != 1)
@@ -632,7 +629,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 && *py_list) {
                 int8_t i;
                 int offset = 0;
-                for (i = 0;i < *py_list && offset + 10 < sizeof(strPY);i++) {
+                for (i = 0;i < *py_list && offset + 16 < sizeof(strPY);i++) {
                     int len;
                     const int8_t *py;
                     if (i > 0) {
@@ -645,6 +642,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                     offset += len;
                 }
             } else {
+                FcitxPinyinLoadBaseDict(tbl->owner);
                 FcitxPinyinGetPyByHZ(tbl->owner, output_str, strPY);
             }
             FcitxMessagesAddMessageStringsAtLast(
