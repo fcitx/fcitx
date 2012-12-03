@@ -68,17 +68,18 @@ _fcitx_get_address ()
     return address;
 }
 
-void usage()
+void usage(FILE* fp)
 {
-    printf("Usage: fcitx-remote [OPTION]\n"
-           "\t-c\t\tinactivate input method\n"
-           "\t-o\t\tactivate input method\n"
-           "\t-r\t\treload fcitx config\n"
-           "\t-t,-T\t\tswitch Active/Inactive\n"
-           "\t-e\t\tAsk fcitx to exit\n"
-           "\t-a\t\tprint fcitx's dbus address\n"
-           "\t[no option]\tdisplay fcitx state, %d for close, %d for inactive, %d for acitve\n"
-           "\t-h\t\tdisplay this help and exit\n",
+    fprintf(fp, "Usage: fcitx-remote [OPTION]\n"
+            "\t-c\t\tinactivate input method\n"
+            "\t-o\t\tactivate input method\n"
+            "\t-r\t\treload fcitx config\n"
+            "\t-t,-T\t\tswitch Active/Inactive\n"
+            "\t-e\t\tAsk fcitx to exit\n"
+            "\t-a\t\tprint fcitx's dbus address\n"
+            "\t-m [imname]\tprint corresponding addon name for im\n"
+            "\t[no option]\tdisplay fcitx state, %d for close, %d for inactive, %d for acitve\n"
+            "\t-h\t\tdisplay this help and exit\n",
            IS_CLOSED, IS_INACTIVE, IS_ACTIVE);
 }
 
@@ -88,19 +89,21 @@ enum {
     FCITX_DBUS_RELOAD_CONFIG,
     FCITX_DBUS_EXIT,
     FCITX_DBUS_TOGGLE,
-    FCITX_DBUS_GET_CURRENT_STATE
+    FCITX_DBUS_GET_CURRENT_STATE,
+    FCITX_DBUS_GET_IM_ADDON
 };
 
 int main (int argc, char* argv[])
 {
-    char* servicename = NULL;
+    char *servicename = NULL;
     char *address = NULL;
     DBusMessage* message = NULL;
     DBusConnection* conn = NULL;
     int c;
     int ret = 1;
     int messageType = FCITX_DBUS_GET_CURRENT_STATE;
-    while ((c = getopt(argc, argv, "chortTea")) != -1) {
+    char *imname = NULL;
+    while ((c = getopt(argc, argv, "chortTeam:")) != -1) {
         switch (c) {
         case 'o':
             messageType = FCITX_DBUS_ACTIVATE;
@@ -123,6 +126,11 @@ int main (int argc, char* argv[])
             messageType = FCITX_DBUS_EXIT;
             break;
 
+        case 'm':
+            messageType = FCITX_DBUS_GET_IM_ADDON;
+            imname = strdup(optarg);
+            break;
+
         case 'a':
             address = _fcitx_get_address();
             if (address) {
@@ -134,9 +142,11 @@ int main (int argc, char* argv[])
             break;
 
         case 'h':
-        default:
-            usage();
+            usage(stdout);
             return 0;
+        default:
+            usage(stderr);
+            return 1;
             break;
         }
     }
@@ -154,6 +164,7 @@ int main (int argc, char* argv[])
         CASE(EXIT, Exit);
         CASE(TOGGLE, ToggleIM);
         CASE(GET_CURRENT_STATE, GetCurrentState);
+        CASE(GET_IM_ADDON, GetIMAddon);
 
         default:
             goto some_error;
@@ -194,6 +205,21 @@ int main (int argc, char* argv[])
         } else {
             fprintf(stderr, "Not get reply\n");
         }
+    }
+    else if (messageType == FCITX_DBUS_GET_IM_ADDON) {
+        do {
+            if (!fcitx_utf8_check_string(imname))
+                break;
+            dbus_message_append_args(message, DBUS_TYPE_STRING, &imname, DBUS_TYPE_INVALID);
+            DBusMessage* reply = dbus_connection_send_with_reply_and_block(conn, message, 1000, NULL);
+            char *result = NULL;
+            if (reply && dbus_message_get_args(reply, NULL, DBUS_TYPE_STRING, &result, DBUS_TYPE_INVALID)) {
+                printf("%s\n", result);
+                ret = 0;
+            } else {
+                fprintf(stderr, "Not get reply\n");
+            }
+        } while(0);
     } else {
         dbus_connection_send(conn, message, NULL);
         dbus_connection_flush(conn);
@@ -207,5 +233,6 @@ some_error:
         dbus_connection_unref(conn);
     fcitx_utils_free(address);
     fcitx_utils_free(servicename);
+    fcitx_utils_free(imname);
     return ret;
 }

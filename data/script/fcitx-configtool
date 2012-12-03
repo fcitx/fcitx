@@ -92,8 +92,9 @@ run_gtk3() {
 
 run_xdg() {
     if command="$(which xdg-open 2>/dev/null)"; then
-        if [ x"$1" != x ]; then
-            exec "$command" "$HOME/.config/fcitx/conf/$1.config"
+        detect_im_addon $1
+        if [ x"$filename" != x ]; then
+            exec $command "$HOME/.config/fcitx/conf/$filename.config"
         else
             exec "$command" "$HOME/.config/fcitx/config"
         fi
@@ -106,11 +107,29 @@ _which_cmdline() {
     echo "$cmd $*"
 }
 
+detect_im_addon() {
+    filename=$1
+    addonname=
+    if [ x"$filename" != x ]; then
+        addonname=$(fcitx-remote -m $1 2>/dev/null)
+        if [ "$?" != "0" ]; then
+            filename=
+        elif [ x"$addonname" != x ]; then
+            filename=$addonname
+        fi
+    fi
+
+    if [ ! -f "$HOME/.config/fcitx/conf/$filename.config" ]; then
+        filename=
+    fi
+}
+
 run_editor() {
     if command="$(_which_cmdline ${EDITOR} 2>/dev/null)" ||
         command="$(_which_cmdline ${VISUAL} 2>/dev/null)"; then
-        if [ x"$1" != x ]; then
-            exec $command "$HOME/.config/fcitx/conf/$1.config"
+        detect_im_addon $1
+        if [ x"$filename" != x ]; then
+            exec $command "$HOME/.config/fcitx/conf/$filename.config"
         else
             exec $command "$HOME/.config/fcitx/config"
         fi
@@ -132,6 +151,7 @@ detectDE
 case "$DE" in
     kde)
         order="kde gtk3 gtk xdg editor"
+        order="xdg kde gtk3 gtk xdg editor"
         ;;
     *)
         order="gtk3 gtk kde xdg editor"

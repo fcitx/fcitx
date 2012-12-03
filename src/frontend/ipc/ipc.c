@@ -662,6 +662,14 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             dbus_connection_send(connection, reply, NULL);
             dbus_message_unref(reply);
         }
+        else {
+            DBusMessage* reply = dbus_message_new_error_printf(msg,
+                                                               DBUS_ERROR_UNKNOWN_METHOD,
+                                                               "No such method with signature (%s)",
+                                                               dbus_message_get_signature(msg));
+            dbus_connection_send(connection, reply, NULL);
+            dbus_message_unref(reply);
+        }
         dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetCurrentUI")) {
@@ -1233,7 +1241,7 @@ void FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMessa
     dbus_error_init(&error);
     char *interface;
     char *property;
-    DBusMessage* reply = dbus_message_new_method_return(message);
+    DBusMessage* reply = NULL;
     if (dbus_message_get_args(message, &error,
                               DBUS_TYPE_STRING, &interface,
                               DBUS_TYPE_STRING, &property,
@@ -1245,15 +1253,24 @@ void FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMessa
                 break;
             index ++;
         }
-        DBusMessageIter args, variant;
-        dbus_message_iter_init_append(reply, &args);
-        dbus_message_iter_open_container(&args, DBUS_TYPE_VARIANT, propertTable[index].type, &variant);
-        if (propertTable[index].getfunc)
-            propertTable[index].getfunc(ipc, &variant);
-        dbus_message_iter_close_container(&args, &variant);
+
+        if (propertTable[index].interface) {
+            DBusMessageIter args, variant;
+            reply = dbus_message_new_method_return(message);
+            dbus_message_iter_init_append(reply, &args);
+            dbus_message_iter_open_container(&args, DBUS_TYPE_VARIANT, propertTable[index].type, &variant);
+            if (propertTable[index].getfunc)
+                propertTable[index].getfunc(ipc, &variant);
+            dbus_message_iter_close_container(&args, &variant);
+        }
+        else {
+            reply = dbus_message_new_error_printf(message, DBUS_ERROR_UNKNOWN_PROPERTY, "No such property ('%s.%s')", interface, property);
+        }
     }
-    dbus_connection_send(conn, reply, NULL);
-    dbus_message_unref(reply);
+    if (reply) {
+        dbus_connection_send(conn, reply, NULL);
+        dbus_message_unref(reply);
+    }
 }
 
 void FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMessage* message)
@@ -1262,7 +1279,7 @@ void FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMessa
     dbus_error_init(&error);
     char *interface;
     char *property;
-    DBusMessage* reply = dbus_message_new_method_return(message);
+    DBusMessage* reply = NULL;
 
     DBusMessageIter args, variant;
     dbus_message_iter_init(message, &args);
@@ -1289,10 +1306,15 @@ void FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMessa
             break;
         index ++;
     }
-    if (propertTable[index].setfunc)
+    if (propertTable[index].setfunc) {
         propertTable[index].setfunc(ipc, &variant);
+        reply = dbus_message_new_method_return(message);
+    }
 
 dbus_property_set_end:
+    if (!reply)
+        reply = dbus_message_new_error_printf(message, DBUS_ERROR_UNKNOWN_PROPERTY, "No such property ('%s.%s')", interface, property);
+
     dbus_connection_send(conn, reply, NULL);
     dbus_message_unref(reply);
 }
