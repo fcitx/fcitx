@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #   Copyright (C) 2012~2012 by Yichao Yu
 #   yyc1992@gmail.com
 #
@@ -34,7 +34,7 @@ case "${action}" in
         echo "Extracting po string from qt sources."
         # need to touch source dir here since lupdate will otherwise include
         # absolute path (or wrong relative path) in po files afaik.
-        tempfile="$(mktemp --tmpdir=. --suffix=_fcitx_qt_$$.ts)"
+        tempfile="$(mktemp tmp.XXXXXXXX_fcitx_qt_$$.ts)"
         rm "${tempfile}"
         lupdate -locations relative -no-obsolete "$@" -ts "${tempfile}"
         lconvert -of po -o "${out_file}" -if ts -i "${tempfile}" \

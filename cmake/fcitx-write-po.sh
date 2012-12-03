@@ -16,9 +16,9 @@
 
 . "${_FCITX_MACRO_CMAKE_DIR}/fcitx-parse-po.sh"
 
-fcitx_pot_header="Project-Id-Version: PACKAGE VERSION
-Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com
-POT-Creation-Date: $(date +'%Y-%m-%d %H:%M%z')
+__fcitx_pot_header_format='Project-Id-Version: PACKAGE VERSION
+Report-Msgid-Bugs-To: %s
+POT-Creation-Date: %s
 PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE
 Last-Translator: FULL NAME <EMAIL@ADDRESS>
 Language-Team: LANGUAGE <LL@li.org>
@@ -26,30 +26,35 @@ Language: LANG
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-"
-
-fcitx_write_po_header() {
-    local out_file="$1"
-    cat > "${out_file}" <<EOF
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+'
+__fcitx_pot_header_quote_format='# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'\''S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: $(date +'%Y-%m-%d %H:%M%z')\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: LANG\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-EOF
+"Project-Id-Version: PACKAGE VERSION\\n"
+"Report-Msgid-Bugs-To: %s\\n"
+"POT-Creation-Date: %s\\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n"
+"Language-Team: LANGUAGE <LL@li.org>\\n"
+"Language: LANG\\n"
+"MIME-Version: 1.0\\n"
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+'
+
+fcitx_write_po_header() {
+    local out_file="$1"
+    local bug_addr="$2"
+    if [ -z "${bug_addr}" ]; then
+        bug_addr='EMAIL@ADDRESS'
+    fi
+    printf "${__fcitx_pot_header_quote_format}" \
+        "${bug_addr}" "$(date +'%Y-%m-%d %H:%M%z')" > "${out_file}"
 }
 
 all_msg_id=()
@@ -65,9 +70,8 @@ fcitx_write_all_po() {
         for place in "${places[@]}"; do
             echo "#: ${place}"
         done
-        echo -n 'msgid "'
-        echo -n "${msgid}" | sed -e 's/"/\\"/g'
-        echo '"'
+        msgid=${msgid//\"/\\\"}
+        echo 'msgid "'"${msgid}"'"'
         echo 'msgstr ""'
     done >> "${out_file}"
 }
@@ -88,32 +92,34 @@ fcitx_record_po_msg() {
     eval "${var_name}=(\"\${${var_name}[@]}\" \"\${in_file}:\${line_num}\")"
 }
 
-fcitx_set_pot_bug_addr() {
-    local pot_file="$1"
-    local bug_addr="$2"
-    local regex='^[[:blank:]]*"Report-Msgid-Bugs-To:.*\\n"[[:blank:]]*$'
-    bug_addr="$(echo "${bug_addr}" | sed -e 's/|/\\|/g')"
-    local fix_res='"Report-Msgid-Bugs-To: '"${bug_addr}"'\\n"'
-    sed -i "${pot_file}" -e "0,/${regex}/s|${regex}|${fix_res}|"
-}
-
-fcitx_fix_po_charset_utf8() {
-    local po_file="$1"
-    local regex='^[[:blank:]]*"Content-Type:.*; charset=.*\\n"[[:blank:]]*$'
-    local fix_res='"Content-Type: text/plain; charset=utf-8\\n"'
-    sed -i "${po_file}" -e "0,/${regex}/s|${regex}|${fix_res}|"
+fcitx_po_set_header() {
+    local header="$1"
+    local po_file="$2"
+    local content
+    content=$("${_FCITX_PO_PARSER_EXECUTABLE}" \
+        --fix-header "${header}" "${po_file}")
+    printf '%s\n' "${content}" > "${po_file}"
 }
 
 fcitx_merge_all_pos() {
-    local pot_file="$1"
-    shift
+    local bug_addr="$1"
+    local pot_file="$2"
+    shift 2
     local po_list=("$@")
+    local header
+    local p_file
     if [[ -z "${po_list[*]}" ]]; then
-        fcitx_write_po_header "${pot_file}"
+        fcitx_write_po_header "${pot_file}" "${bug_addr}"
     else
+        header=$(printf "${__fcitx_pot_header_format}" \
+            "${bug_addr}" "$(date +'%Y-%m-%d %H:%M%z')")
+        header="${header}"$'\n'
+        for p_file in "${po_list[@]}"; do
+            fcitx_po_set_header "${header}" "${p_file}"
+        done
         msgcat -o- --to-code=utf-8 "${po_list[@]}" | \
             "${_FCITX_PO_PARSER_EXECUTABLE}" \
-            --fix-header "${fcitx_pot_header}" > "${pot_file}"
+            --fix-header "${header}" > "${pot_file}"
     fi
 }
 
@@ -157,8 +163,7 @@ EOF
         done
     fi
     echo "Merging sub po files..."
-    fcitx_merge_all_pos "${pot_file}" "${po_list[@]}"
-    fcitx_set_pot_bug_addr "${pot_file}" "${bug_addr}"
+    fcitx_merge_all_pos "${bug_addr}" "${pot_file}" "${po_list[@]}"
     while read line; do
         po_lang="${line%% *}"
         po_file="${line#* }"

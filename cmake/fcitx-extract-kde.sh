@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #   Copyright (C) 2012~2012 by Yichao Yu
 #   yyc1992@gmail.com
 #
@@ -34,7 +34,7 @@ case "${action}" in
         echo "Extracting po string from kde sources."
         # need to touch source dir here since lupdate will otherwise include
         # absolute path (or wrong relative path) in po files afaik.
-        tempfile="$(mktemp --suffix=_fcitx_kde_$$.cpp)"
+        tempfile="$(mktemp tmp.XXXXXXXX_fcitx_kde_$$.cpp)"
         {
             [[ -z "$*" ]] || extractrc "$@"
             echo 'i18nc("NAME OF TRANSLATORS", "Your names");'
@@ -46,7 +46,6 @@ case "${action}" in
             -kki18np:1,2 -kki18ncp:1c,2,3 -c --no-location "${tempfile}" \
             -o "${out_file}"
         rm "${tempfile}"
-        fcitx_fix_po_charset_utf8 "${out_file}"
         exit 0
         ;;
 esac

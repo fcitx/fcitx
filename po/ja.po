@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-01 22:31-0500\n"
+"POT-Creation-Date: 2012-12-02 22:31-0500\n"
 "PO-Revision-Date: 2012-07-23 14:12+0000\n"
 "Last-Translator: mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: src/im/table/table.c:1387
+#: src/im/table/table.c:1405
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -372,7 +372,7 @@ msgstr ""
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: src/im/table/table.c:632
+#: src/im/table/table.c:650
 msgid "Cannot found Pinyin"
 msgstr ""
 
@@ -395,15 +395,15 @@ msgstr ""
 msgid "Choose key modifier"
 msgstr ""
 
-#: src/im/table/table.c:697
+#: src/im/table/table.c:715
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:689
+#: src/im/table/table.c:707
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:705
+#: src/im/table/table.c:723
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
@@ -468,7 +468,7 @@ msgstr ""
 msgid "Code Table Name"
 msgstr ""
 
-#: src/im/table/table.c:1383
+#: src/im/table/table.c:1401
 msgid "Code is "
 msgstr ""
 
@@ -1255,7 +1255,7 @@ msgstr ""
 msgid "Latin punct"
 msgstr ""
 
-#: src/im/table/table.c:600
+#: src/im/table/table.c:601
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1614,7 +1614,7 @@ msgstr ""
 msgid "PerProgram"
 msgstr ""
 
-#: src/im/table/table.c:1379
+#: src/im/table/table.c:1397
 msgid "Phrase is already in Dict "
 msgstr ""
 
@@ -1654,7 +1654,7 @@ msgstr ""
 msgid "Pinyin Key"
 msgstr ""
 
-#: src/im/table/table.c:628
+#: src/im/table/table.c:626
 msgid "Pinyin: "
 msgstr ""
 
@@ -1842,7 +1842,7 @@ msgstr "右Shift"
 msgid "Register IM"
 msgstr ""
 
-#: src/im/table/table.c:1271
+#: src/im/table/table.c:1289
 msgid "Remind:"
 msgstr ""
 

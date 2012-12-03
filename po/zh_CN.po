@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-01 22:31-0500\n"
+"POT-Creation-Date: 2012-12-02 22:31-0500\n"
 "PO-Revision-Date: 2012-11-16 01:23-0500\n"
 "Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: src/im/table/table.c:1387
+#: src/im/table/table.c:1405
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
@@ -369,7 +369,7 @@ msgstr "无法保存拼音索引: %s"
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
 
-#: src/im/table/table.c:632
+#: src/im/table/table.c:650
 msgid "Cannot found Pinyin"
 msgstr "无法找到拼音"
 
@@ -392,15 +392,15 @@ msgstr "选择第二第三候选词"
 msgid "Choose key modifier"
 msgstr "选词修饰键"
 
-#: src/im/table/table.c:697
+#: src/im/table/table.c:715
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr "选择要删除的词组，按Escape 取消"
 
-#: src/im/table/table.c:689
+#: src/im/table/table.c:707
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "选择放在前面的词组，按Escape 取消"
 
-#: src/im/table/table.c:705
+#: src/im/table/table.c:723
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "选择要清理输入频率的词组，按Escape 取消"
 
@@ -464,7 +464,7 @@ msgstr "码表文件"
 msgid "Code Table Name"
 msgstr "码表名称"
 
-#: src/im/table/table.c:1383
+#: src/im/table/table.c:1401
 msgid "Code is "
 msgstr "编码为 "
 
@@ -1242,7 +1242,7 @@ msgstr "拉丁字母"
 msgid "Latin punct"
 msgstr "英文标点"
 
-#: src/im/table/table.c:600
+#: src/im/table/table.c:601
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1602,7 +1602,7 @@ msgstr "所属附加组件"
 msgid "PerProgram"
 msgstr "按程序"
 
-#: src/im/table/table.c:1379
+#: src/im/table/table.c:1397
 msgid "Phrase is already in Dict "
 msgstr "词组已在码表中"
 
@@ -1642,7 +1642,7 @@ msgstr "拼音索引的Magic Number不匹配"
 msgid "Pinyin Key"
 msgstr "拼音键"
 
-#: src/im/table/table.c:628
+#: src/im/table/table.c:626
 msgid "Pinyin: "
 msgstr "拼音："
 
@@ -1830,7 +1830,7 @@ msgstr "右Shift"
 msgid "Register IM"
 msgstr "注册输入法方法"
 
-#: src/im/table/table.c:1271
+#: src/im/table/table.c:1289
 msgid "Remind:"
 msgstr "联想："
 
