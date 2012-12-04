@@ -42,6 +42,7 @@
 #include "fcitx-utils/utils.h"
 #include "im/pinyin/fcitx-pinyin.h"
 #include "module/punc/fcitx-punc.h"
+#include "module/pinyin-enhance/fcitx-pinyin-enhance.h"
 
 #define MAX_TABLE_INPUT 50
 
@@ -609,10 +610,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 
             return retVal;
         } else if (FcitxHotkeyIsHotKey(sym, state, tbl->config.hkLookupPinyin) && tbl->pyaddon) {
-            char            strPY[100];
-
-            //如果拼音单字字库没有读入，则读入它
-            FcitxPinyinLoadBaseDict(tbl->owner);
+            char strPY[128];
 
             //如果刚刚输入的是个词组，刚不查拼音
             if (fcitx_utf8_strlen(output_str) != 1)
@@ -626,7 +624,27 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 
             FcitxMessagesAddMessageStringsAtLast(
                 FcitxInputStateGetAuxDown(input), MSG_CODE, _("Pinyin: "));
-            FcitxPinyinGetPyByHZ(tbl->owner, output_str, strPY);
+            const int8_t *py_list;
+            if ((py_list = FcitxPinyinEnhanceFindPy(tbl->owner, output_str))
+                && *py_list) {
+                int8_t i;
+                int offset = 0;
+                for (i = 0;i < *py_list && offset + 16 < sizeof(strPY);i++) {
+                    int len;
+                    const int8_t *py;
+                    if (i > 0) {
+                        memcpy(strPY + offset, ", ", 2);
+                        offset += 2;
+                    }
+                    py = pinyin_enhance_pylist_get(py_list, i);
+                    FcitxPinyinEnhancePyToString(tbl->owner, strPY + offset,
+                                                 py, &len);
+                    offset += len;
+                }
+            } else {
+                FcitxPinyinLoadBaseDict(tbl->owner);
+                FcitxPinyinGetPyByHZ(tbl->owner, output_str, strPY);
+            }
             FcitxMessagesAddMessageStringsAtLast(
                 FcitxInputStateGetAuxDown(input), MSG_TIPS,
                 (strPY[0]) ? strPY : _("Cannot found Pinyin"));

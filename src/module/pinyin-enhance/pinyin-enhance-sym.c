@@ -111,27 +111,42 @@ PySymInsertCandidateWords(FcitxCandidateWordList *cand_list,
     }
 }
 
+static inline boolean
+_str_is_single_char(const char *str)
+{
+    const char prob[2] = {str[0]};
+    return !str[strspn(str, prob)];
+}
+
 static int
 PinyinEnhanceStrokeInsertIndex(FcitxCandidateWordList *cand_list,
-                               int im_type, int sym_l)
+                               int im_type, const char *sym, int sym_l)
 {
     FcitxCandidateWord *orig_cand;
     orig_cand = FcitxCandidateWordGetFirst(cand_list);
     const char *orig_word = orig_cand ? orig_cand->strWord : NULL;
     int orig_len = orig_word ? fcitx_utf8_strlen(orig_word) : 0;
+    if (!orig_len || !(*orig_word & 0x80))
+        return 0;
     if (im_type == PY_IM_PINYIN) {
-        return (orig_len == 1 && (*orig_word & 0x80)) ? 1 : 0;
-    } else if (im_type == PY_IM_SHUANGPIN) {
-        if (!orig_len || !(*orig_word & 0x80)) {
-            return 0;
-        } else if (sym_l > 4 ||
-                   !FcitxCandidateWordGetByTotalIndex(cand_list, 1)) {
+        if (orig_len <= 2)
             return 1;
-        } else {
-            return 2;
+        if (_str_is_single_char(sym)) {
+            if (orig_len > 4)
+                return 1;
+            goto return_2;
         }
+        return 0;
+    } else if (im_type == PY_IM_SHUANGPIN) {
+        if (sym_l > 4)
+            return 1;
+        goto return_2;
     }
     return -1;
+return_2:
+    if (FcitxCandidateWordGetByTotalIndex(cand_list, 1))
+        return 2;
+    return 1;
 }
 
 static char*
@@ -169,7 +184,7 @@ boolean
 PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
 {
     FcitxInputState *input = FcitxInstanceGetInputState(pyenhance->owner);
-    char *sym = FcitxInputStateGetRawInputBuffer(input);
+    const char *sym = FcitxInputStateGetRawInputBuffer(input);
     int sym_l = strlen(sym);
     if (!sym_l)
         return false;
@@ -216,7 +231,7 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
                 index = 1;
             } else {
                 index = PinyinEnhanceStrokeInsertIndex(cand_list, im_type,
-                                                       sym_l);
+                                                       sym, sym_l);
             }
             if (index >= 0) {
                 res = true;

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #   Copyright (C) 2012~2012 by Yichao Yu
 #   yyc1992@gmail.com
 #
@@ -31,7 +31,7 @@ case "${action}" in
         out_file="${1}"
         shift || exit 1
         [[ -z "$*" ]] && exit 1
-        fcitx_merge_all_pos "${out_file}" "$@"
+        fcitx_merge_all_pos "EMAIL@ADDRESS" "${out_file}" "$@"
         exit 0
         ;;
 esac

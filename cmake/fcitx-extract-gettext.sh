@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #   Copyright (C) 2012~2012 by Yichao Yu
 #   yyc1992@gmail.com
 #
@@ -43,7 +43,6 @@ case "${action}" in
             -ki18n:1 -ki18nc:1c,2 -ki18np:1,2 -ki18ncp:1c,2,3 \
             -ktr2i18n:1 -kI18N_NOOP:1 -kI18N_NOOP2:1c,2 -kaliasLocale \
             -kki18n:1 -kki18nc:1c,2 -kki18np:1,2 -kki18ncp:1c,2,3 "$@"
-        fcitx_fix_po_charset_utf8 "${out_file}"
         exit 0
         ;;
 esac

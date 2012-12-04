@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-01 12:01-0500\n"
+"POT-Creation-Date: 2012-12-03 14:10-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -133,45 +133,45 @@ msgstr ""
 msgid "Quwei"
 msgstr ""
 
-#: src/im/table/table.c:600
+#: src/im/table/table.c:601
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:628
+#: src/im/table/table.c:626
 msgid "Pinyin: "
 msgstr ""
 
-#: src/im/table/table.c:632
+#: src/im/table/table.c:650
 msgid "Cannot found Pinyin"
 msgstr ""
 
-#: src/im/table/table.c:689
+#: src/im/table/table.c:707
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:697
+#: src/im/table/table.c:715
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:705
+#: src/im/table/table.c:723
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:1271
+#: src/im/table/table.c:1289
 msgid "Remind:"
 msgstr ""
 
-#: src/im/table/table.c:1379
+#: src/im/table/table.c:1397
 msgid "Phrase is already in Dict "
 msgstr ""
 
-#: src/im/table/table.c:1383
+#: src/im/table/table.c:1401
 msgid "Code is "
 msgstr ""
 
-#: src/im/table/table.c:1387
+#: src/im/table/table.c:1405
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -399,7 +399,7 @@ msgstr ""
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr ""
 
-#: src/module/clipboard/clipboard.c:348
+#: src/module/clipboard/clipboard.c:350
 msgid "Select to paste"
 msgstr ""
 

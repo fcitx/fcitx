@@ -10,6 +10,7 @@
 #     fcitx_translate_set_pot_target
 #     fcitx_translate_add_po_file
 #     _fcitx_add_uninstall_target
+#     fcitx_download
 # Functions to extend fcitx's build (mainly translation) system:
 #     _fcitx_translate_add_handler
 #     _fcitx_translate_add_apply_handler
@@ -154,16 +155,14 @@ function(__fcitx_cmake_init)
     return()
   endif()
   get_property(FCITX_INTERNAL_BUILD GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD")
-  find_program(FCITX_HELPER_WGET wget)
   add_custom_target(fcitx-modules.target ALL)
   add_custom_target(fcitx-scan-addons.target)
+  add_custom_target(fcitx-extract-traslation.dependency)
   add_dependencies(fcitx-modules.target fcitx-scan-addons.target)
-  set(translation_cache_base "${PROJECT_BINARY_DIR}/fcitx_po_cache")
-  file(MAKE_DIRECTORY "${translation_cache_base}")
-  set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_CACHE_BASE"
-    "${translation_cache_base}")
-  get_property(full_name GLOBAL
-    PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
+  set(fcitx_cmake_cache_base "${PROJECT_BINARY_DIR}/fcitx_cmake_cache")
+  file(MAKE_DIRECTORY "${fcitx_cmake_cache_base}")
+  set_property(GLOBAL PROPERTY "__FCITX_CMAKE_CACHE_BASE"
+    "${fcitx_cmake_cache_base}")
   if(FCITX_INTERNAL_BUILD)
     set(FCITX_SCANNER_EXECUTABLE
       "${PROJECT_BINARY_DIR}/tools/dev/fcitx-scanner"
@@ -179,11 +178,10 @@ function(__fcitx_cmake_init)
     "_FCITX_MACRO_CMAKE_DIR=${FCITX_MACRO_CMAKE_DIR}"
     "_FCITX_PO_PARSER_EXECUTABLE=${FCITX_PO_PARSER_EXECUTABLE}"
     "FCITX_HELPER_CMAKE_CMD=${CMAKE_COMMAND}"
+    "FCITX_CMAKE_CACHE_BASE=${fcitx_cmake_cache_base}"
     CACHE INTERNAL "fcitx cmake helper export" FORCE)
   execute_process(COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-    "${FCITX_CMAKE_HELPER_SCRIPT}"
-    "${translation_cache_base}"
-    "${full_name}" --clean)
+    "${FCITX_CMAKE_HELPER_SCRIPT}" --clean)
   set_property(GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET" 0)
   set_property(GLOBAL PROPERTY "${property_name}" 1)
   set_property(GLOBAL PROPERTY "__FCITX_APPLY_TRANLATION_FILE_ADDED" 0)
@@ -414,18 +412,10 @@ function(__fcitx_translate_add_sources_internal)
   if(NOT ARGN)
     return()
   endif()
-  get_property(translation_cache_base GLOBAL
-    PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
-  get_property(full_name GLOBAL
-    PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
-  get_property(target GLOBAL
-    PROPERTY "__FCITX_TRANSLATION_TARGET_NAME")
   foreach(source ${ARGN})
     file(RELATIVE_PATH source "${PROJECT_SOURCE_DIR}" "${source}")
     execute_process(COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-      "${FCITX_CMAKE_HELPER_SCRIPT}"
-      "${translation_cache_base}"
-      "${full_name}" --add-sources "${source}"
+      "${FCITX_CMAKE_HELPER_SCRIPT}" --add-sources "${source}"
       WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
   endforeach()
 endfunction()
@@ -461,14 +451,11 @@ endfunction()
 # should extract po strings from the given source files and write the result
 # to the po file.
 function(_fcitx_translate_add_handler script)
-  get_property(translation_cache_base GLOBAL
-    PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
-  get_property(full_name GLOBAL
-    PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
+  __fcitx_addon_get_unique_name(translation-handler target)
+  add_custom_target("${target}" DEPENDS "${script}")
+  add_dependencies(fcitx-extract-traslation.dependency "${target}")
   execute_process(COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-    "${FCITX_CMAKE_HELPER_SCRIPT}"
-    "${translation_cache_base}"
-    "${full_name}" --add-handler "${script}"
+    "${FCITX_CMAKE_HELPER_SCRIPT}" --add-handler "${script}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
 endfunction()
 _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_GETTEXT}")
@@ -488,10 +475,6 @@ function(fcitx_translate_add_apply_source in_file out_file)
     PROPERTY FCITX_TRANSLATION_APPLY_HANDLERS)
   get_filename_component(in_file "${in_file}" ABSOLUTE)
   get_filename_component(out_file "${out_file}" ABSOLUTE)
-  get_property(translation_cache_base GLOBAL
-    PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
-  get_property(full_name GLOBAL
-    PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
   get_property(po_lang_files GLOBAL PROPERTY "FCITX_TRANSLATION_PO_FILES")
   get_property(pot_target_set GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET")
   set(all_po_files)
@@ -505,14 +488,12 @@ function(fcitx_translate_add_apply_source in_file out_file)
 
   foreach(script ${scripts})
     execute_process(COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-      "${FCITX_CMAKE_HELPER_SCRIPT}"
-      "${translation_cache_base}" "${full_name}" --check-apply-handler
+      "${FCITX_CMAKE_HELPER_SCRIPT}" --check-apply-handler
       "${script}" "${in_file}" "${out_file}" RESULT_VARIABLE result)
     if(NOT result)
       add_custom_command(OUTPUT "${out_file}"
         COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-        "${FCITX_CMAKE_HELPER_SCRIPT}"
-        "${translation_cache_base}" "." --apply-po-merge
+        "${FCITX_CMAKE_HELPER_SCRIPT}" --apply-po-merge
         "${script}" "${in_file}" "${out_file}"
         DEPENDS fcitx-parse-pos.target "${in_file}" "${script}"
         "${FCITX_CMAKE_HELPER_SCRIPT}" ${all_po_files}
@@ -570,12 +551,14 @@ function(fcitx_translate_set_pot_target target domain pot_file)
     "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
 
   set_property(GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET" 1)
-  get_property(translation_cache_base GLOBAL
-    PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
+  get_property(fcitx_cmake_cache_base GLOBAL
+    PROPERTY "__FCITX_CMAKE_CACHE_BASE")
   get_filename_component(full_name "${pot_file}" ABSOLUTE)
-  set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_FILE" "${full_name}")
-  set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_NAME" "${target}")
   set_property(GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_DOMAIN" "${domain}")
+  set(__FCITX_CMAKE_HELPER_EXPORT
+    ${__FCITX_CMAKE_HELPER_EXPORT}
+    "_FCITX_TRANSLATION_TARGET_FILE=${full_name}"
+    CACHE INTERNAL "fcitx cmake helper export" FORCE)
 
   if(NOT FCITX_SET_POT_BUGADDR)
     set(FCITX_SET_POT_BUGADDR "fcitx-dev@googlegroups.com")
@@ -584,8 +567,8 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   # make pot will require bash, but this is only a dev time dependency.
   add_custom_target(fcitx-translate-pot.target
     COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-    bash "${FCITX_CMAKE_HELPER_SCRIPT}"
-    "${translation_cache_base}" "${full_name}" --pot "${FCITX_SET_POT_BUGADDR}"
+    bash "${FCITX_CMAKE_HELPER_SCRIPT}" --pot "${FCITX_SET_POT_BUGADDR}"
+    DEPENDS "${FCITX_PO_PARSER_EXECUTABLE}" fcitx-extract-traslation.dependency
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
   add_custom_target("${target}")
   add_dependencies("${target}" fcitx-translate-pot.target)
@@ -597,7 +580,7 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   foreach(po_lang_file ${po_lang_files})
     string(REGEX REPLACE "^[^ ]* " "" po_file "${po_lang_file}")
     string(REGEX REPLACE " .*$" "" po_lang "${po_lang_file}")
-    set(po_dir "${translation_cache_base}/mo/${po_lang}")
+    set(po_dir "${fcitx_cmake_cache_base}/mo/${po_lang}")
     add_custom_command(OUTPUT "${po_dir}/${domain}.mo"
       COMMAND mkdir -p "${po_dir}"
       COMMAND "${GETTEXT_MSGFMT_EXECUTABLE}"
@@ -610,8 +593,7 @@ function(fcitx_translate_set_pot_target target domain pot_file)
   endforeach()
   add_custom_target(fcitx-parse-pos.target
     COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-    "${FCITX_CMAKE_HELPER_SCRIPT}"
-    "${translation_cache_base}" "${full_name}" --parse-pos
+    "${FCITX_CMAKE_HELPER_SCRIPT}" --parse-pos
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
     DEPENDS "${FCITX_PO_PARSER_EXECUTABLE}" ${all_po_files})
   add_custom_target(fcitx-compile-mo.target ALL
@@ -624,16 +606,12 @@ endfunction()
 # any problem for one-time build.)
 function(fcitx_translate_add_po_file locale po_file)
   get_filename_component(po_file "${po_file}" ABSOLUTE)
-  get_property(translation_cache_base GLOBAL
-    PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
-  get_property(full_name GLOBAL
-    PROPERTY "__FCITX_TRANSLATION_TARGET_FILE")
+  get_property(fcitx_cmake_cache_base GLOBAL
+    PROPERTY "__FCITX_CMAKE_CACHE_BASE")
   set_property(GLOBAL APPEND PROPERTY "FCITX_TRANSLATION_PO_FILES"
     "${locale} ${po_file}")
   execute_process(COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-    "${FCITX_CMAKE_HELPER_SCRIPT}"
-    "${translation_cache_base}"
-    "${full_name}" --add-po "${locale}" "${po_file}"
+    "${FCITX_CMAKE_HELPER_SCRIPT}" --add-po "${locale}" "${po_file}"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
   get_property(pot_target_set GLOBAL PROPERTY "FCITX_TRANSLATION_TARGET_SET")
   get_property(trans_files_added GLOBAL
@@ -647,7 +625,7 @@ function(fcitx_translate_add_po_file locale po_file)
   endif()
   # message(WARNING "PO files should be added before the pot target is set.")
   get_property(domain GLOBAL PROPERTY "__FCITX_TRANSLATION_TARGET_DOMAIN")
-  set(po_dir "${translation_cache_base}/fcitx_mo/${locale}")
+  set(po_dir "${fcitx_cmake_cache_base}/fcitx_mo/${locale}")
   add_custom_command(OUTPUT "${po_dir}/${domain}.mo"
     COMMAND mkdir -p "${po_dir}"
     COMMAND "${GETTEXT_MSGFMT_EXECUTABLE}"
@@ -663,39 +641,50 @@ endfunction()
 function(_fcitx_add_uninstall_target)
   add_custom_target(uninstall
     COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-    "${FCITX_CMAKE_HELPER_SCRIPT}" "." "." --uninstall
+    "${FCITX_CMAKE_HELPER_SCRIPT}" --uninstall
     WORKING_DIRECTORY "${PROJECT_BINARY_DIR}")
 endfunction()
 
+# Download a file
+# The file will not be download if the target file already exist. An optional
+# md5sum can be provided in which case the md5sum of the target file will
+# be checked against this value and redownload/abort if the check failed.
 function(fcitx_download tgt_name url output)
   set(options)
   set(one_value_args MD5SUM)
   set(multi_value_args)
   fcitx_parse_arguments(FCITX_DOWNLOAD
     "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
-  get_property(translation_cache_base GLOBAL
-    PROPERTY "__FCITX_TRANSLATION_CACHE_BASE")
+  get_filename_component(output "${output}" ABSOLUTE)
   if(FCITX_DOWNLOAD_MD5SUM)
-    add_custom_command(OUTPUT "${output}"
+    add_custom_target("${tgt_name}" ALL
       COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-      "${FCITX_CMAKE_HELPER_SCRIPT}" "${translation_cache_base}" "."
+      "${FCITX_CMAKE_HELPER_SCRIPT}"
       --download "${url}" "${output}" "${FCITX_DOWNLOAD_MD5SUM}"
-      DEPENDS "${FCITX_HELPER_WGET}"
-      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
-    add_custom_target("${tgt_name}" ALL DEPENDS "${output}"
       COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-      "${FCITX_CMAKE_HELPER_SCRIPT}" "${translation_cache_base}" "."
+      "${FCITX_CMAKE_HELPER_SCRIPT}"
       --check-md5sum "${output}" "${FCITX_DOWNLOAD_MD5SUM}" 1
-      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
   else()
-    add_custom_command(OUTPUT "${output}"
+    add_custom_target("${tgt_name}" ALL
       COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-      "${FCITX_CMAKE_HELPER_SCRIPT}" "${translation_cache_base}" "."
-      --download "${url}" "${output}"
-      DEPENDS "${FCITX_HELPER_WGET}"
-      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
-    add_custom_target("${tgt_name}" ALL DEPENDS "${output}")
+      "${FCITX_CMAKE_HELPER_SCRIPT}" --download "${url}" "${output}"
+      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
   endif()
+  # This is the rule to create the target file, it is depending of the target
+  # that does the real download so any files/targets that is depending on this
+  # file will be run after the download finished.
+  #
+  # Since this rule doesn't have any command or file dependencies, cmake
+  # won't notice any change in the rule and therefore it won't remove the
+  # target file (and therefore triggers an unwilling redownload) if the real
+  # rule (which is in the target defined above) has changed.
+  #
+  # This behavior is designed to be friendly for a build from cache with all
+  # necessary files already downloaded so that a change in the
+  # build options/url/checksum will not cause cmake to remove the target file
+  # if it has already be updated correctly.
+  add_custom_command(OUTPUT "${output}" DEPENDS "${tgt_name}")
 endfunction()
 
 
@@ -772,8 +761,7 @@ MACRO(EXTRACT_FCITX_ADDON_CONF_POSTRING)
         OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/tmp/${_EXTRAFILENAME}.h"
         COMMAND ${INTLTOOL_EXTRACT} --srcdir=${PROJECT_BINARY_DIR}
         --local --type=gettext/ini ${EXTRACTFILE}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        )
+        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
       list(APPEND TEMPHEADER
         "${CMAKE_CURRENT_BINARY_DIR}/tmp/${_EXTRAFILENAME}.h")
     endif()
