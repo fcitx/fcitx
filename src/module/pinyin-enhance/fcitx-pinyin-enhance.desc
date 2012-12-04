@@ -47,5 +47,14 @@ LongDescription=Minimum input length to trigger stroke input (set to -1 to disab
 Description=Stroke input trigger length
 Advance=True
 
+[Pinyin Enhance/StrokeLimit]
+Type=Integer
+DefaultValue=3
+Min=0
+Max=10
+Description=Maximum results from stroke input.
+LongDescription=This is only a soft limit, the actually number of candidate words may be larger than this when multiple characters have the same order of strokes.
+Advance=True
+
 [DescriptionFile]
 LocaleDomain=fcitx
