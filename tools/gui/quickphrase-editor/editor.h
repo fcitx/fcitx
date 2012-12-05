@@ -17,30 +17,42 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "ui_dialog.h"
-#include "dialog.h"
+#include <QMainWindow>
+#include "fcitx-qt/fcitxqtconfiguiwidget.h"
+#include "model.h"
+
+class QAbstractItemModel;
+class CMacroTable;
+namespace Ui {
+class Editor;
+}
 
 namespace fcitx {
-MacroDialog::MacroDialog(QWidget* parent): QDialog(parent),
-    m_ui(new Ui::Dialog)
-{
-    m_ui->setupUi(this);
-}
 
-MacroDialog::~MacroDialog()
-{
-    delete m_ui;
-}
+class ListEditor : public FcitxQtConfigUIWidget {
+    Q_OBJECT
+public:
+    explicit ListEditor(QuickPhraseModel* model, QWidget* parent = 0);
+    virtual ~ListEditor();
 
-QString MacroDialog::macro() const
-{
-    return m_ui->macroLineEdit->text();
-}
+    virtual void load();
+    virtual void save();
+    virtual QString title();
 
-QString MacroDialog::word() const
-{
-    return m_ui->wordLineEdit->text();
-}
-
-
+private slots:
+    void addWord();
+    void deleteWord();
+    void deleteAllWord();
+    void itemFocusChanged();
+    void addWordAccepted();
+    void importData();
+    void exportData();
+    void importFileSelected();
+    void exportFileSelected();
+private:
+    void load(const QString& file);
+    void save(const QString& file);
+    Ui::Editor* m_ui;
+    QuickPhraseModel* m_model;
+};
 }

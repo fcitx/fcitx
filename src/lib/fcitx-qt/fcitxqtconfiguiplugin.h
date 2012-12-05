@@ -17,14 +17,34 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include "fcitxconfiguiplugin.h"
+#ifndef FCITXCONFIGPLUGIN_H
+#define FCITXCONFIGPLUGIN_H
 
-FcitxConfigUIPlugin::FcitxConfigUIPlugin(QObject* parent): QObject(parent)
+#include "fcitxqt_export.h"
+#include <QtCore/QString>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
+
+class FcitxQtConfigUIWidget;
+struct FCITX_QT_EXPORT_API FcitxQtConfigUIFactoryInterface
 {
+    virtual QString name() = 0;
+    virtual FcitxQtConfigUIWidget *create( const QString &key ) = 0;
+    virtual QStringList files() = 0;
+    virtual QString domain() = 0;
 
-}
+};
 
-FcitxConfigUIPlugin::~FcitxConfigUIPlugin()
-{
+#define FcitxQtConfigUIFactoryInterface_iid "org.fcitx.Fcitx.FcitxQtConfigUIFactoryInterface"
+Q_DECLARE_INTERFACE(FcitxQtConfigUIFactoryInterface, FcitxQtConfigUIFactoryInterface_iid)
 
-}
+class FCITX_QT_EXPORT_API FcitxQtConfigUIPlugin : public QObject, public FcitxQtConfigUIFactoryInterface {
+    Q_OBJECT
+    Q_INTERFACES(FcitxQtConfigUIFactoryInterface)
+public:
+    explicit FcitxQtConfigUIPlugin(QObject* parent = 0);
+    virtual ~FcitxQtConfigUIPlugin();
+};
+
+
+#endif // FCITXCONFIGPLUGIN_H

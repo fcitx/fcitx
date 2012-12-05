@@ -25,13 +25,16 @@ class Dialog;
 }
 
 namespace fcitx {
-class MacroDialog : public QDialog {
+class EditorDialog : public QDialog {
     Q_OBJECT
 public:
-    explicit MacroDialog(QWidget* parent = 0);
-    virtual ~MacroDialog();
-    QString macro() const;
-    QString word() const;
+    explicit EditorDialog(QWidget* parent = 0);
+    virtual ~EditorDialog();
+
+    QString key() const;
+    QString value() const;
+    void setValue(const QString& s);
+    void setKey(const QString& s);
 
 private:
     Ui::Dialog* m_ui;

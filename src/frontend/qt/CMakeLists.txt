@@ -1,11 +1,11 @@
 set(qtim_fcitx_SRCS
-  fcitx-plugin.cpp
-  fcitx-input-context.cpp
+  qfcitxinputcontextplugin.cpp
+  qfcitxinputcontext.cpp
   )
 
 fcitx_translate_add_sources(${qtim_fcitx_SRCS}
   keyserver_x11.h
-  fcitx-input-context.h
+  qfcitxinputcontext.h
   )
 
 if(NOT (ENABLE_QT_IM_MODULE AND ENABLE_QT))
@@ -27,7 +27,7 @@ if(ENABLE_X11)
 endif()
 
 set(qtim_fcitx_MOC_HDRS
-  fcitx-input-context.h
+  qfcitxinputcontext.h
   )
 
 QT4_AUTOMOC(${qtim_fcitx_SRCS})

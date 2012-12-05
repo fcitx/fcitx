@@ -1,10 +1,10 @@
 set(QT_WRAPPER_SRCS
   main.cpp
-  fcitxconfiguiwrapperapp.cpp
+  wrapperapp.cpp
   mainwindow.cpp
   )
 set(QT_WRAPPER_HDRS
-  fcitxconfiguiwrapperapp.h
+  wrapperapp.h
   mainwindow.h
   )
 fcitx_translate_add_sources(
@@ -21,6 +21,7 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   )
 
+qt4_wrap_ui(QT_WRAPPER_SRCS mainwindow.ui)
 qt4_wrap_cpp(QT_WRAPPER_MOCS ${QT_WRAPPER_HDRS})
 add_executable(fcitx-qt-gui-wrapper ${QT_WRAPPER_SRCS} ${QT_WRAPPER_MOCS})
 target_link_libraries(fcitx-qt-gui-wrapper

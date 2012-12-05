@@ -1,11 +1,12 @@
-#include "fcitx-qt/fcitxconfiguiplugin.h"
+#include "fcitx-qt/fcitxqtconfiguiplugin.h"
 
-class QuickPhraseEditorPlugin : public FcitxConfigUIPlugin {
+class QuickPhraseEditorPlugin : public FcitxQtConfigUIPlugin {
     Q_OBJECT
-    Q_INTERFACES (FcitxConfigUIFactoryInterface)
+    Q_INTERFACES (FcitxQtConfigUIFactoryInterface)
 public:
     explicit QuickPhraseEditorPlugin(QObject* parent = 0);
     virtual QString name();
     virtual QStringList files();
-    virtual FcitxConfigUIWidget* create(const QString& key);
+    virtual QString domain();
+    virtual FcitxQtConfigUIWidget* create(const QString& key);
 };

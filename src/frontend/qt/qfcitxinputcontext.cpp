@@ -28,12 +28,14 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx/frontend.h"
 #include "fcitx-config/hotkey.h"
+#include "fcitx-qt/fcitxqtconnection.h"
+
 #include "module/dbus/dbusstuff.h"
 #include "frontend/ipc/ipc.h"
+
 #include "im/keyboard/fcitx-compose-data.h"
-#include "fcitx-input-context.h"
+#include "qfcitxinputcontext.h"
 #include "keyserver_x11.h"
-#include "fcitx-qt/fcitxconnection.h"
 
 #if defined(Q_WS_X11)
 #include <QX11Info>
@@ -124,9 +126,9 @@ QFcitxInputContext::QFcitxInputContext()
       m_cursorPos(0),
       m_useSurroundingText(false),
       m_syncMode(true),
-      m_connection(new FcitxConnection(this))
+      m_connection(new FcitxQtConnection(this))
 {
-    FcitxFormattedPreedit::registerMetaType();
+    FcitxQtFormattedPreedit::registerMetaType();
 
     memset(m_compose_buffer, 0, sizeof(uint) * (FCITX_MAX_COMPOSE_LEN + 1));
     connect(m_connection, SIGNAL(connected()), this, SLOT(createInputContext()));
@@ -518,7 +520,7 @@ void QFcitxInputContext::createInputContext()
         delete m_improxy;
         m_improxy = NULL;
     }
-    m_improxy = new FcitxInputMethodProxy(m_connection->serviceName(), QLatin1String(FCITX_IM_DBUS_PATH), *m_connection->connection(), this);
+    m_improxy = new FcitxQtInputMethodProxy(m_connection->serviceName(), QLatin1String(FCITX_IM_DBUS_PATH), *m_connection->connection(), this);
 
     if (!m_improxy->isValid())
         return;
@@ -548,10 +550,10 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
             delete m_icproxy;
             m_icproxy = NULL;
         }
-        m_icproxy = new FcitxInputContextProxy(m_connection->serviceName(), m_path, *m_connection->connection(), this);
+        m_icproxy = new FcitxQtInputContextProxy(m_connection->serviceName(), m_path, *m_connection->connection(), this);
         connect(m_icproxy, SIGNAL(CommitString(QString)), this, SLOT(commitString(QString)));
         connect(m_icproxy, SIGNAL(ForwardKey(uint, uint, int)), this, SLOT(forwardKey(uint, uint, int)));
-        connect(m_icproxy, SIGNAL(UpdateFormattedPreedit(FcitxFormattedPreeditList,int)), this, SLOT(updateFormattedPreedit(FcitxFormattedPreeditList,int)));
+        connect(m_icproxy, SIGNAL(UpdateFormattedPreedit(FcitxQtFormattedPreeditList,int)), this, SLOT(updateFormattedPreedit(FcitxQtFormattedPreeditList,int)));
         connect(m_icproxy, SIGNAL(DeleteSurroundingText(int,uint)), this, SLOT(deleteSurroundingText(int,uint)));
 
         if (m_icproxy->isValid() && focusWidget() != NULL)
@@ -602,7 +604,7 @@ void QFcitxInputContext::commitString(const QString& str)
     sendEvent(event);
 }
 
-void QFcitxInputContext::updateFormattedPreedit(const FcitxFormattedPreeditList& preeditList, int cursorPos)
+void QFcitxInputContext::updateFormattedPreedit(const FcitxQtFormattedPreeditList& preeditList, int cursorPos)
 {
     if (cursorPos == m_cursorPos && preeditList == m_preeditList)
         return;
@@ -611,7 +613,7 @@ void QFcitxInputContext::updateFormattedPreedit(const FcitxFormattedPreeditList&
     QString str, commitStr;
     int pos = 0;
     QList<QAttribute> attrList;
-    Q_FOREACH(const FcitxFormattedPreedit& preedit, preeditList)
+    Q_FOREACH(const FcitxQtFormattedPreedit& preedit, preeditList)
     {
         str += preedit.string();
         if (!(preedit.format() & MSG_DONOT_COMMIT_WHEN_UNFOCUS))

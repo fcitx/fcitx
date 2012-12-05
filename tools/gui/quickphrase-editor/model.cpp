@@ -18,34 +18,40 @@
  ***************************************************************************/
 
 #include <QApplication>
-#include <QThread>
+#include <QtConcurrentRun>
+#include <QFile>
+#include <QFutureWatcher>
+#include <qtemporaryfile.h>
 
 #include "model.h"
-#include "parser.h"
 #include "common.h"
 #include "editor.h"
+#include <fcitx-config/xdg.h>
 
 namespace fcitx {
 
 typedef QPair<QString, QString> ItemType;
 
-QuickPhraseModel::QuickPhraseModel(QObject* parent): AbstractItemEditorModel(parent)
-    ,m_parser(new Parser)
+QuickPhraseModel::QuickPhraseModel(QObject* parent): QAbstractTableModel(parent)
 {
 }
 
 QuickPhraseModel::~QuickPhraseModel()
 {
+}
 
+bool QuickPhraseModel::needSave()
+{
+    return m_needSave;
 }
 
 QVariant QuickPhraseModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         if (section == 0)
-            return _("Macro");
+            return _("Keyword");
         else if (section == 1)
-            return _("Word");
+            return _("Phrase");
     }
     return QVariant();
 }
@@ -63,7 +69,7 @@ int QuickPhraseModel::columnCount(const QModelIndex& parent) const
 QVariant QuickPhraseModel::data(const QModelIndex& index, int role) const
 {
     do {
-        if (role == Qt::DisplayRole && index.row() < m_list.count()) {
+        if ((role == Qt::DisplayRole || role == Qt::EditRole) && index.row() < m_list.count()) {
             if (index.column() == 0) {
                 return m_list[index.row()].first;
             } else if (index.column() == 1) {
@@ -76,11 +82,8 @@ QVariant QuickPhraseModel::data(const QModelIndex& index, int role) const
 
 void QuickPhraseModel::addItem(const QString& macro, const QString& word)
 {
-    if (m_keyset.contains(macro))
-        return;
     beginInsertRows(QModelIndex(), m_list.size(), m_list.size());
     m_list.append(QPair<QString, QString>(macro, word));
-    m_keyset.insert(macro);
     endInsertRows();
     setNeedSave(true);
 }
@@ -93,7 +96,6 @@ void QuickPhraseModel::deleteItem(int row)
     QString key = item.first;
     beginRemoveRows(QModelIndex(), row, row);
     m_list.removeAt(row);
-    m_keyset.remove(key);
     endRemoveRows();
     setNeedSave(true);
 }
@@ -104,42 +106,133 @@ void QuickPhraseModel::deleteAllItem()
         setNeedSave(true);
     beginResetModel();
     m_list.clear();
-    m_keyset.clear();
     endResetModel();
 }
 
-void QuickPhraseModel::load()
+Qt::ItemFlags QuickPhraseModel::flags(const QModelIndex& index) const
 {
-    QThread* thread = new QThread;
-    m_parser->moveToThread(thread);
-    connect(thread, SIGNAL(started()), m_parser, SLOT(run()));
-    thread->start();
-    connect(m_parser, SIGNAL(finished()), thread, SLOT(quit()));
-    connect(thread, SIGNAL(finished()), this, SLOT(loadFinished()));
-    //delete thread only when thread has really finished
-    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-    connect(thread, SIGNAL(terminated()), thread, SLOT(deleteLater()));
+    if (!index.isValid())
+        return 0;
+
+    return Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
+
+bool QuickPhraseModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+    if (role != Qt::EditRole)
+        return false;
+
+    if (index.column() == 0) {
+        m_list[index.row()].first = value.toString();
+
+        emit dataChanged(index, index);
+        setNeedSave(true);
+        return true;
+    } else if (index.column() == 1) {
+        m_list[index.row()].second = value.toString();
+
+        emit dataChanged(index, index);
+        setNeedSave(true);
+        return true;
+    } else
+        return false;
+}
+
+void QuickPhraseModel::load(const QString& file, bool append)
+{
+    beginResetModel();
+    if (!append) {
+        m_list.clear();
+        setNeedSave(false);
+    }
+    else
+        setNeedSave(true);
+    QFutureWatcher< void >* futureWatcher = new QFutureWatcher< void >(this);
+    futureWatcher->setFuture(QtConcurrent::run<void>(this, &QuickPhraseModel::parse, file));
+    connect(futureWatcher, SIGNAL(finished()), this, SLOT(loadFinished()));
+    connect(futureWatcher, SIGNAL(finished()), futureWatcher, SLOT(deleteLater()));
+}
+
+void QuickPhraseModel::parse(const QString& filename) {
+    FILE* fp = FcitxXDGGetFileWithPrefix("", filename.toLocal8Bit().constData(), "r", NULL);
+    if (!fp)
+        return;
+
+    QFile file;
+    if (!file.open(fp, QFile::ReadOnly)) {
+        fclose(fp);
+        return;
+    }
+    QByteArray line;
+    while (!(line = file.readLine()).isNull()) {
+        QString s = QString::fromUtf8(line);
+        s = s.simplified();
+        if (s.isEmpty())
+            continue;
+        QString key = s.section(" ", 0, 0, QString::SectionSkipEmpty);
+        QString value = s.section(" ", 1, -1, QString::SectionSkipEmpty);
+        if (key.isEmpty() || value.isEmpty())
+            continue;
+        m_list.append(QPair<QString, QString>(key, value));
+    }
+
+    file.close();
+    fclose(fp);
 }
 
 void QuickPhraseModel::loadFinished()
 {
-    m_parser->moveToThread(QThread::currentThread());
-    m_list.clear();
-    m_keyset.clear();
-    beginResetModel();
-    m_list = m_parser->m_list;
-    m_keyset = m_parser->m_keyset;
     endResetModel();
 }
 
-void QuickPhraseModel::save()
+void QuickPhraseModel::save(const QString& file)
 {
+    QFutureWatcher< bool >* futureWatcher = new QFutureWatcher< bool >(this);
+    futureWatcher->setFuture(QtConcurrent::run<bool>(this, &QuickPhraseModel::saveData, file));
+    connect(futureWatcher, SIGNAL(finished()), this, SLOT(saveFinished()));
+    connect(futureWatcher, SIGNAL(finished()), futureWatcher, SLOT(deleteLater()));
+}
+
+bool QuickPhraseModel::saveData(const QString& file)
+{
+    char* name = NULL;
+    FcitxXDGGetFileWithPrefix("", file.toLocal8Bit().constData(), NULL, &name);
+    QString fileName = QString::fromLocal8Bit(name);
+    QTemporaryFile tempFile(fileName);
+    free(name);
+    if (!tempFile.open())
+        return false;
+
+    for (int i = 0; i < m_list.size(); i ++) {
+        tempFile.write(m_list[i].first.toUtf8());
+        tempFile.write("\t");
+        tempFile.write(m_list[i].second.toUtf8());
+        tempFile.write("\n");
+    }
+
+    tempFile.setAutoRemove(false);
+    QFile::remove(fileName);
+    if (!tempFile.rename(fileName))
+        tempFile.remove();
+
+    return true;
 }
 
 void QuickPhraseModel::saveFinished()
 {
-    setNeedSave(false);
+    QFutureWatcher< bool >* watcher = static_cast<QFutureWatcher<bool>*>( sender());
+    QFuture< bool > future = watcher->future();
+    if (future.result()) {
+        setNeedSave(false);
+    }
 }
 
+void QuickPhraseModel::setNeedSave(bool needSave)
+{
+    if (m_needSave != needSave) {
+        m_needSave = needSave;
+        emit needSaveChanged(m_needSave);
+    }
+}
 
 }

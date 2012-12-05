@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-02 22:31-0500\n"
-"PO-Revision-Date: 2012-11-16 01:23-0500\n"
-"Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
+"POT-Creation-Date: 2012-12-04 21:45-0500\n"
+"PO-Revision-Date: 2012-12-04 21:59-0500\n"
+"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -22,29 +22,21 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
-#: tools/gui/lib/editor.cpp:42
+#: tools/gui/quickphrase-editor/editor.cpp:42
 msgid "&Add"
 msgstr "添加(&A)"
 
-#: tools/gui/lib/editor.cpp:43
+#: tools/gui/quickphrase-editor/editor.cpp:43
 msgid "&Delete"
 msgstr "删除(&D)"
 
-#: tools/gui/lib/editor.cpp:48
+#: tools/gui/quickphrase-editor/editor.cpp:46
 msgid "&Export"
 msgstr "导出(&E)"
 
-#: tools/gui/lib/editor.cpp:47
+#: tools/gui/quickphrase-editor/editor.cpp:45
 msgid "&Import"
 msgstr "导入(&I)"
-
-#: tools/gui/lib/editor.cpp:45
-msgid "&Quit"
-msgstr "退出(&Q)"
-
-#: tools/gui/lib/editor.cpp:46
-msgid "&Save"
-msgstr "保存(&A)"
 
 #: src/im/keyboard/keyboard.c:425 src/im/keyboard/keyboard.c:442
 msgid "(Unavailable)"
@@ -58,23 +50,23 @@ msgstr "/分  经过时间: "
 msgid "0 for commit immediately, -1 for keep all words"
 msgstr "0 代表立即提交, -1 代表保留全部已选单词."
 
-#: src/module/unicode/charselectdata.c:592
+#: src/module/unicode/charselectdata.c:251
 msgid "<Low Surrogate>"
 msgstr "<低半代理区>"
 
-#: src/module/unicode/charselectdata.c:588
+#: src/module/unicode/charselectdata.c:247
 msgid "<Non Private Use High Surrogate>"
 msgstr "<非专用高半代理区>"
 
-#: src/module/unicode/charselectdata.c:590
+#: src/module/unicode/charselectdata.c:249
 msgid "<Private Use High Surrogate>"
 msgstr "<专用高半代理区>"
 
-#: src/module/unicode/charselectdata.c:594
+#: src/module/unicode/charselectdata.c:253
 msgid "<Private Use>"
 msgstr "<专用区>"
 
-#: src/module/unicode/charselectdata.c:622
+#: src/module/unicode/charselectdata.c:281
 msgid "<not assigned>"
 msgstr "<未指派>"
 
@@ -494,11 +486,6 @@ msgstr "码表"
 msgid "Color of Cursor"
 msgstr "光标颜色"
 
-#: src/module/unicode/charselectdata.c:482
-msgctxt "KCharSelect section name"
-msgid "Combining Diacritical Marks"
-msgstr ""
-
 #: data/addon.desc:12
 msgid "Comment"
 msgstr "描述"
@@ -606,7 +593,7 @@ msgstr "DISPLAY MainWindow"
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
-#: tools/gui/lib/editor.cpp:44
+#: tools/gui/quickphrase-editor/editor.cpp:44
 msgid "De&lete All"
 msgstr "删除全部(&l)"
 
@@ -637,11 +624,6 @@ msgstr "依赖"
 #: src/ui/classic/skin.desc:15
 msgid "Description of Skin"
 msgstr "描述"
-
-#. i18n: file: tools/gui/lib/dialog.ui:14
-#. i18n: ectx: property (windowTitle), widget (QDialog, Dialog)
-msgid "Dialog"
-msgstr ""
 
 #: data/table/db.conf.in:3
 msgid "Dianbaoma"
@@ -719,10 +701,6 @@ msgstr "启用输入法间切换"
 #: data/addon.desc:27
 msgid "Enabled"
 msgstr "启用"
-
-#: src/module/chttrans/fcitx-chttrans.desc:12
-msgid "Enabled in input"
-msgstr "输入中启用"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
 msgid "Enchance pinyin input in Fcitx"
@@ -885,11 +863,6 @@ msgstr "字体大小"
 #: src/ui/classic/skin.desc:28
 msgid "Font size repect dpi setting"
 msgstr "字体大小遵守dpi设置"
-
-#. i18n: file: tools/gui/lib/editor.ui:14
-#. i18n: ectx: property (windowTitle), widget (QWidget, Editor)
-msgid "Form"
-msgstr ""
 
 #: data/addon.desc:19
 msgid "Frontend"
@@ -1206,6 +1179,14 @@ msgstr "键盘布局"
 msgid "Keyboard Layout to be used"
 msgstr "键盘布局"
 
+#: tools/gui/quickphrase-editor/model.cpp:50
+msgid "Keyword"
+msgstr "关键字"
+
+#: tools/gui/quickphrase-editor/dialog.cpp:29
+msgid "Keyword:"
+msgstr "关键字："
+
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:3
 msgid "Kimpanel"
 msgstr "Kimpanel"
@@ -1251,26 +1232,6 @@ msgstr "按左/右选择单字，按回车确认，按Escape 取消"
 #: src/module/clipboard/fcitx-clipboard.desc:11
 msgid "Length of Clipboard History to Save"
 msgstr "剪切板历史长度"
-
-#: src/module/unicode/charselectdata.c:529
-msgid "Letter, Lowercase"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:530
-msgid "Letter, Modifier"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:531
-msgid "Letter, Other"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:532
-msgid "Letter, Titlecase"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:533
-msgid "Letter, Uppercase"
-msgstr ""
 
 #: data/addon.desc:31
 msgid "Library"
@@ -1323,26 +1284,12 @@ msgid "Logo Icon"
 msgstr "Logo图标"
 
 #: src/im/table/fcitx-table.desc:24
-#, fuzzy
 msgid "Lookup Pinyin"
-msgstr "拼音"
+msgstr "反查拼音"
 
 #: src/im/pinyin/fcitx-pinyin.desc:5
 msgid "MS"
 msgstr "微软"
-
-#: tools/gui/quickphrase-editor/model.cpp:46
-msgid "Macro"
-msgstr ""
-
-#: tools/gui/lib/editor.cpp:89 tools/gui/lib/editor.cpp:117
-msgid "Macro table still contains unsaved changes. Do you want to save?"
-msgstr ""
-
-#. i18n: file: tools/gui/lib/dialog.ui:32
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-msgid "Macro:"
-msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:48
 msgid "Main Window Hide Mode"
@@ -1355,18 +1302,6 @@ msgstr "主窗口X位置"
 #: src/ui/classic/fcitx-classic-ui.desc:8
 msgid "Main Window Position Y"
 msgstr "主窗口Y位置"
-
-#: src/module/unicode/charselectdata.c:535
-msgid "Mark, Enclosing"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:536
-msgid "Mark, Non-Spacing"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:534
-msgid "Mark, Spacing Combining"
-msgstr ""
 
 #: src/im/table/table.desc:73
 msgid "Matching Key"
@@ -1504,11 +1439,7 @@ msgstr "无联想"
 #: src/lib/fcitx-utils/desktop-parse.c:509
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:491
-msgid "Non-printable"
-msgstr ""
+msgstr "非注释不属于任何组 @ %d %s"
 
 #: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:130
 #: src/module/autoeng/fcitx-autoeng.desc:6
@@ -1525,18 +1456,6 @@ msgstr "无操作"
 #: src/module/vk/vk.c:57
 msgid "Number"
 msgstr "数字"
-
-#: src/module/unicode/charselectdata.c:537
-msgid "Number, Decimal Digit"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:538
-msgid "Number, Letter"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:539
-msgid "Number, Other"
-msgstr ""
 
 #: src/ui/classic/classicui.c:395
 msgid "Online Help"
@@ -1564,26 +1483,6 @@ msgstr "码表顺序"
 msgid "Other Color"
 msgstr "其他颜色"
 
-#: src/module/unicode/charselectdata.c:524
-msgid "Other, Control"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:525
-msgid "Other, Format"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:526
-msgid "Other, Not Assigned"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:527
-msgid "Other, Private Use"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:528
-msgid "Other, Surrogate"
-msgstr ""
-
 #: data/config.desc:151 data/config.desc:157 data/config.desc:167
 #: data/config.desc:173 data/config.desc:179 data/config.desc:186
 #: data/config.desc:192
@@ -1602,9 +1501,17 @@ msgstr "所属附加组件"
 msgid "PerProgram"
 msgstr "按程序"
 
+#: tools/gui/quickphrase-editor/model.cpp:52
+msgid "Phrase"
+msgstr "词组"
+
 #: src/im/table/table.c:1397
 msgid "Phrase is already in Dict "
 msgstr "词组已在码表中"
+
+#: tools/gui/quickphrase-editor/dialog.cpp:30
+msgid "Phrase:"
+msgstr "词组："
 
 #: src/im/pinyin/py.c:104 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -1754,34 +1661,6 @@ msgstr "标点转换支持"
 msgid "Punctuation Support"
 msgstr "标点支持"
 
-#: src/module/unicode/charselectdata.c:542
-msgid "Punctuation, Close"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:540
-msgid "Punctuation, Connector"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:541
-msgid "Punctuation, Dash"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:543
-msgid "Punctuation, Final Quote"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:544
-msgid "Punctuation, Initial Quote"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:546
-msgid "Punctuation, Open"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:545
-msgid "Punctuation, Other"
-msgstr ""
-
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
 msgstr "快速输入列表"
@@ -1801,10 +1680,6 @@ msgstr "快速输入"
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:3
 msgid "Quickphrase"
 msgstr "快速输入"
-
-#: tools/gui/lib/editor.cpp:88 tools/gui/lib/editor.cpp:116
-msgid "Quit Macro Editor"
-msgstr ""
 
 #: src/im/qw/qw.c:64 src/im/qw/fcitx-qw.conf.in:3 src/im/qw/qw.conf.in:3
 msgid "Quwei"
@@ -1880,7 +1755,7 @@ msgstr "重新启动"
 msgid ""
 "Roughly the same length with this number of english letters, the actual "
 "length depends on the font and the content"
-msgstr ""
+msgstr "大致长度和英文字母相同，实际长度取决于字体和内容"
 
 #: src/im/pinyin/fcitx-pinyin.desc:71
 msgid "Rule of Candidate Phrase Order"
@@ -1965,18 +1840,6 @@ msgstr "发送原始输入按键"
 #: data/config.desc:177
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr "切换到非激活模式时当前输入的原始文本上屏"
-
-#: src/module/unicode/charselectdata.c:551
-msgid "Separator, Line"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:552
-msgid "Separator, Paragraph"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:553
-msgid "Separator, Space"
-msgstr ""
 
 #: data/config.desc:140
 msgid "Share State Among Window"
@@ -2216,22 +2079,6 @@ msgstr "符号"
 msgid "Symbol File"
 msgstr "符号文件"
 
-#: src/module/unicode/charselectdata.c:547
-msgid "Symbol, Currency"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:549
-msgid "Symbol, Math"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:548
-msgid "Symbol, Modifier"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:550
-msgid "Symbol, Other"
-msgstr ""
-
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
 msgid "Table"
 msgstr "码表"
@@ -2277,7 +2124,7 @@ msgstr "切换简繁转换"
 msgid "Toggle Virtual Keyboard"
 msgstr "切换虚拟键盘"
 
-#: src/module/chttrans/fcitx-chttrans.desc:17
+#: src/module/chttrans/fcitx-chttrans.desc:12
 msgid "Toggle for enable or disable"
 msgstr "切换来禁用或启用"
 
@@ -2295,7 +2142,6 @@ msgstr "简繁转换引擎"
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
-#: src/module/chttrans/fcitx-chttrans.desc:14
 msgid "TraditionalChinese"
 msgstr "繁体中文"
 
@@ -2340,10 +2186,6 @@ msgstr "界面: 打开 %s 失败 %s"
 msgid "Unicode"
 msgstr "Unicode"
 
-#: tools/gui/lib/editor.cpp:51
-msgid "Unikey Macro Editor"
-msgstr ""
-
 #: src/im/table/table.desc:2
 msgid "Unique Name for Table"
 msgstr "码表的唯一名称"
@@ -2351,10 +2193,6 @@ msgstr "码表的唯一名称"
 #: data/inputmethod.desc:3
 msgid "UniqueName"
 msgstr "唯一名称"
-
-#: src/module/unicode/charselectdata.c:554
-msgid "Unknown"
-msgstr ""
 
 #: src/lib/fcitx-config/fcitx-config.c:396
 #, c-format
@@ -2465,15 +2303,6 @@ msgstr "虚拟键盘状态"
 msgid "Wanfeng"
 msgstr "晚风"
 
-#: tools/gui/quickphrase-editor/model.cpp:48
-msgid "Word"
-msgstr ""
-
-#. i18n: file: tools/gui/lib/dialog.ui:25
-#. i18n: ectx: property (text), widget (QLabel, label)
-msgid "Word:"
-msgstr ""
-
 #: data/table/wbx.conf.in:3
 msgid "Wubi"
 msgstr "五笔字型"
@@ -2525,14 +2354,6 @@ msgstr "小鹤"
 msgid "Xim"
 msgstr "Xim"
 
-msgctxt "EMAIL OF TRANSLATORS"
-msgid "Your emails"
-msgstr ""
-
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr ""
-
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"
 msgstr "中文之星"
@@ -2574,6 +2395,12 @@ msgstr "当前字体为: %s"
 #~ msgid "%s"
 #~ msgstr "%s"
 
+#~ msgid "&Quit"
+#~ msgstr "退出(&Q)"
+
+#~ msgid "&Save"
+#~ msgstr "保存(&A)"
+
 #~ msgid "About Fcitx"
 #~ msgstr "关于Fcitx"
 
@@ -2589,6 +2416,9 @@ msgstr "当前字体为: %s"
 #~ msgid "Close"
 #~ msgstr "关闭"
 
+#~ msgid "Close editor"
+#~ msgstr "关闭编辑器"
+
 #~ msgid "Connection Error (%s)"
 #~ msgstr "连接错误 (%s)"
 
@@ -2603,6 +2433,9 @@ msgstr "当前字体为: %s"
 
 #~ msgid "Enable word hint if available"
 #~ msgstr "如果可用则使用单词提示"
+
+#~ msgid "Enabled in input"
+#~ msgstr "输入中启用"
 
 #, fuzzy
 #~ msgid "Enum11=Disabled"

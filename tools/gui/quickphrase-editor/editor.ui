@@ -10,9 +10,6 @@
     <height>389</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="QTableView" name="macroTableView"/>
@@ -81,40 +78,6 @@
        </property>
        <property name="icon">
         <iconset theme="document-export">
-         <normaloff/>
-        </iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Line" name="line_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="saveButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset theme="document-save">
-         <normaloff/>
-        </iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="exitButton">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset theme="application-exit">
          <normaloff/>
         </iconset>
        </property>

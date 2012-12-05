@@ -17,30 +17,45 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITX_CONFIG_UI_FACTORY_H
-#define FCITX_CONFIG_UI_FACTORY_H
+#ifndef FCITXCONNECTION_H
+#define FCITXCONNECTION_H
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QStringList>
 
 #include "fcitxqt_export.h"
-#include "fcitxconfiguiwidget.h"
-#include "fcitxconfiguiplugin.h"
 
-class FcitxConfigUIFactoryPrivate;
-class FCITX_QT_EXPORT_API FcitxConfigUIFactory : public QObject
-{
+#include <QtCore/QObject>
+#include <QtDBus/QDBusConnection>
+
+class QDBusConnection;
+
+class FcitxQtConnectionPrivate;
+
+
+class FCITX_QT_EXPORT_API FcitxQtConnection : public QObject {
     Q_OBJECT
+    Q_PROPERTY(bool autoReconnect READ autoReconnect WRITE setAutoReconnect)
+    Q_PROPERTY(bool connected READ isConnected)
+    Q_PROPERTY(QDBusConnection* connection READ connection)
+    Q_PROPERTY(QString serviceName READ serviceName)
 public:
-    explicit FcitxConfigUIFactory(QObject* parent = 0);
-    virtual ~FcitxConfigUIFactory();
-    FcitxConfigUIWidget* create(const QString& file);
+    explicit FcitxQtConnection(QObject* parent = 0);
+    virtual ~FcitxQtConnection();
+    void startConnection();
+    void endConnection();
+    void setAutoReconnect(bool a);
+    bool autoReconnect();
+
+    QDBusConnection* connection();
+    const QString& serviceName();
+    bool isConnected();
+
+Q_SIGNALS:
+    void connected();
+    void disconnected();
+
 private:
-    FcitxConfigUIFactoryPrivate* d_ptr;
-    QMap<QString, FcitxConfigUIFactoryInterface*> plugins;
-    Q_DECLARE_PRIVATE(FcitxConfigUIFactory);
-    void scan();
+    FcitxQtConnectionPrivate * const d_ptr;
+    Q_DECLARE_PRIVATE(FcitxQtConnection);
 };
 
-#endif // FCITX_CONFIG_UI_FACTORY_H
+#endif // FCITXCONNECTION_H

@@ -28,13 +28,13 @@
 #include "common.h"
 #include "editor.h"
 #include "dialog.h"
-#include "abstractmodel.h"
+#include "model.h"
 #include "ui_editor.h"
 
 namespace fcitx {
 
-ListEditor::ListEditor(fcitx::AbstractItemEditorModel* model, QWidget* parent)
-    : FcitxConfigUIWidget(parent),
+ListEditor::ListEditor(fcitx::QuickPhraseModel* model, QWidget* parent)
+    : FcitxQtConfigUIWidget(parent),
       m_ui(new Ui::Editor),
       m_model(model)
 {
@@ -42,91 +42,56 @@ ListEditor::ListEditor(fcitx::AbstractItemEditorModel* model, QWidget* parent)
     m_ui->addButton->setText(_("&Add"));
     m_ui->deleteButton->setText(_("&Delete"));
     m_ui->clearButton->setText(_("De&lete All"));
-    m_ui->exitButton->setText(_("&Quit"));
-    m_ui->saveButton->setText(_("&Save"));
     m_ui->importButton->setText(_("&Import"));
-    m_ui->exportButton->setText(_("&Export"));
+    m_ui->exportButton->setText(_("E&xport"));
     m_ui->macroTableView->setSelectionMode(QAbstractItemView::SingleSelection);
     m_ui->macroTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    setWindowTitle(_("Unikey Macro Editor"));
+    m_ui->macroTableView->setEditTriggers(QAbstractItemView::DoubleClicked);
 
     connect(m_ui->addButton, SIGNAL(clicked(bool)), this, SLOT(addWord()));
     connect(m_ui->deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteWord()));
     connect(m_ui->clearButton, SIGNAL(clicked(bool)), this, SLOT(deleteAllWord()));
-    connect(m_ui->importButton, SIGNAL(clicked(bool)), this, SLOT(importMacro()));
-    connect(m_ui->exportButton, SIGNAL(clicked(bool)), this, SLOT(exportMacro()));
-    connect(m_ui->exitButton, SIGNAL(clicked(bool)), this, SLOT(aboutToQuit()));
-    connect(m_ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(saveMacro()));
+    connect(m_ui->importButton, SIGNAL(clicked(bool)), this, SLOT(importData()));
+    connect(m_ui->exportButton, SIGNAL(clicked(bool)), this, SLOT(exportData()));
 
+    m_ui->macroTableView->horizontalHeader()->setStretchLastSection(true);
+    m_ui->macroTableView->verticalHeader()->setVisible(false);
+    m_ui->macroTableView->setModel(m_model);
+    connect(m_ui->macroTableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(itemFocusChanged()));
+    connect(m_model, SIGNAL(needSaveChanged(bool)), this, SIGNAL(changed(bool)));
     load();
     itemFocusChanged();
 }
 
+void ListEditor::load()
+{
+    m_model->load("data/QuickPhrase.mb", false);
+}
+
 void ListEditor::load(const QString& file)
 {
+    m_model->load(file.isEmpty() ? "data/QuickPhrase.mb" : file, true);
+}
 
+void ListEditor::save(const QString& file)
+{
+    m_model->save(file.isEmpty() ? "data/QuickPhrase.mb" : file);
 }
 
 void ListEditor::save()
 {
-
+    m_model->save("data/QuickPhrase.mb");
 }
 
+QString ListEditor::title()
+{
+    return _("Quick Phrase Editor");
+}
 
 ListEditor::~ListEditor()
 {
     delete m_ui;
 }
-
-void ListEditor::aboutToQuit()
-{
-    if (!m_model->needSave())
-        qApp->quit();
-    else {
-        QMessageBox* dialog = new QMessageBox(this);
-        dialog->setIcon(QMessageBox::Warning);
-        dialog->setWindowTitle(_("Quit Macro Editor"));
-        dialog->setText(_("Macro table still contains unsaved changes. Do you want to save?"));
-        dialog->setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        dialog->setDefaultButton(QMessageBox::Save);
-        dialog->setAttribute(Qt::WA_DeleteOnClose, true);
-        dialog->open();
-        connect(dialog, SIGNAL(finished(int)), this, SLOT(quitConfirmDone(int)));
-    }
-}
-
-void ListEditor::quitConfirmDone(int result)
-{
-    switch(result) {
-    case QMessageBox::Save:
-        saveMacro();
-    case QMessageBox::Discard:
-        qApp->quit();
-        break;
-    }
-}
-
-void ListEditor::closeEvent(QCloseEvent* event)
-{
-    if (m_model->needSave()) {
-        event->ignore();
-
-        QMessageBox* dialog = new QMessageBox(this);
-        dialog->setIcon(QMessageBox::Warning);
-        dialog->setWindowTitle(_("Quit Macro Editor"));
-        dialog->setText(_("Macro table still contains unsaved changes. Do you want to save?"));
-        dialog->setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        dialog->setDefaultButton(QMessageBox::Save);
-        dialog->setAttribute(Qt::WA_DeleteOnClose, true);
-        dialog->open();
-        connect(dialog, SIGNAL(finished(int)), this, SLOT(quitConfirmDone(int)));
-    }
-    else {
-        event->accept();
-        qApp->quit();
-    }
-}
-
 
 void ListEditor::itemFocusChanged()
 {
@@ -141,6 +106,7 @@ void ListEditor::deleteWord()
     m_model->deleteItem(row);
 }
 
+
 void ListEditor::deleteAllWord()
 {
     m_model->deleteAllItem();
@@ -148,7 +114,7 @@ void ListEditor::deleteAllWord()
 
 void ListEditor::addWord()
 {
-    MacroDialog* dialog = new MacroDialog(this);
+    EditorDialog* dialog = new EditorDialog(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     dialog->open();
     connect(dialog, SIGNAL(accepted()), this, SLOT(addWordAccepted()));
@@ -156,33 +122,15 @@ void ListEditor::addWord()
 
 void ListEditor::addWordAccepted()
 {
-    const MacroDialog* dialog = qobject_cast< const MacroDialog* >(QObject::sender());
+    const EditorDialog* dialog = qobject_cast< const EditorDialog* >(QObject::sender());
 
-    m_model->addItem(dialog->macro(), dialog->word());
+    m_model->addItem(dialog->key(), dialog->value());
+    QModelIndex last = m_model->index(m_model->rowCount() - 1, 0);
+    m_ui->macroTableView->setCurrentIndex(last);
+    m_ui->macroTableView->scrollTo(last);
 }
 
-void ListEditor::load()
-{
-    m_ui->macroTableView->horizontalHeader()->setStretchLastSection(true);
-    m_ui->macroTableView->verticalHeader()->setVisible(false);
-    m_ui->macroTableView->setModel(m_model);
-    connect(m_ui->macroTableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(itemFocusChanged()));
-    connect(m_model, SIGNAL(needSaveChanged(bool)), this, SLOT(needSaveChanged(bool)));
-    m_model->load();
-}
-
-void ListEditor::needSaveChanged(bool needSave)
-{
-    m_ui->saveButton->setEnabled(needSave);
-}
-
-
-void ListEditor::saveMacro()
-{
-    m_model->save();
-}
-
-void ListEditor::importMacro()
+void ListEditor::importData()
 {
     QFileDialog* dialog = new QFileDialog(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -192,20 +140,24 @@ void ListEditor::importMacro()
     connect(dialog, SIGNAL(accepted()), this, SLOT(importFileSelected()));
 }
 
+void ListEditor::exportData()
+{
+    QFileDialog* dialog = new QFileDialog(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose, true);
+    dialog->setAcceptMode(QFileDialog::AcceptSave);
+    dialog->open();
+    connect(dialog, SIGNAL(accepted()), this, SLOT(exportFileSelected()));
+}
+
+
 void ListEditor::importFileSelected()
 {
     const QFileDialog* dialog = qobject_cast< const QFileDialog* >(QObject::sender());
     qDebug() << dialog->selectedFiles();
-}
-
-void ListEditor::exportMacro()
-{
-    QFileDialog* dialog = new QFileDialog(this);
-    dialog->setAttribute(Qt::WA_DeleteOnClose, true);
-    dialog->setDirectory("macro");
-    dialog->setAcceptMode(QFileDialog::AcceptSave);
-    dialog->open();
-    connect(dialog, SIGNAL(accepted()), this, SLOT(exportFileSelected()));
+    if (dialog->selectedFiles().length() <= 0)
+        return;
+    QString file = dialog->selectedFiles()[0];
+    load(file);
 }
 
 void ListEditor::exportFileSelected()
@@ -214,6 +166,7 @@ void ListEditor::exportFileSelected()
     if (dialog->selectedFiles().length() <= 0)
         return;
     QString file = dialog->selectedFiles()[0];
+    save(file);
 }
 
 

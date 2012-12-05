@@ -162,7 +162,8 @@ extern "C"
     void FcitxXDGMakeDirUser(const char* prefix);
 
     /**
-     * free xdg path return by FcitxXDGGetPath
+     * free xdg path return by FcitxXDGGetPath, FcitxXDGGetLibPath, FcitxXDGGetPathUserWithPrefix,
+     * and FcitxXDGGetPathWithPrefix
      *
      * @param path path array
      * @return void
@@ -170,7 +171,15 @@ extern "C"
     void FcitxXDGFreePath(char **path);
 
     /**
-     * Get All files under directory with a suffix
+     * Get All files under directory with a suffix, the path usually be
+     * ~/.config/fcitx/path/prefix*suffix and
+     * [prefix]/share/fcitx/path/prefix*suffix
+     *
+     * It will only return the file name in form of path/prefix*suffix,
+     * since for file in fcitx, if user file and system file both exists,
+     * user file will override system file. This will make life easier when
+     * you want to load a bunch of sub-configuration, and want to have a
+     * unique set of file names.
      *
      * @param path xdg subpath
      * @param prefix filename prefix

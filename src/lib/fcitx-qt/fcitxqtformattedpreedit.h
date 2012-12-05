@@ -17,9 +17,35 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include "fcitxconfiguiwidget.h"
+#ifndef FCITX_FORMATTED_PREEDIT_H
+#define FCITX_FORMATTED_PREEDIT_H
 
-FcitxConfigUIWidget::FcitxConfigUIWidget(QWidget* parent): QWidget(parent)
-{
+#include <fcitx/fcitx.h>
 
-}
+#include <QtCore/QMetaType>
+#include <QtDBus/QDBusArgument>
+
+class FCITX_EXPORT_API FcitxQtFormattedPreedit {
+public:
+    const QString& string() const;
+    qint32 format() const;
+    void setString(const QString& str);
+    void setFormat(qint32 format);
+
+    static void registerMetaType();
+
+    bool operator ==(const FcitxQtFormattedPreedit& preedit) const;
+private:
+    QString m_string;
+    qint32 m_format;
+};
+
+typedef QList<FcitxQtFormattedPreedit> FcitxQtFormattedPreeditList;
+
+QDBusArgument& operator<<(QDBusArgument& argument, const FcitxQtFormattedPreedit& im);
+const QDBusArgument& operator>>(const QDBusArgument& argument, FcitxQtFormattedPreedit& im);
+
+Q_DECLARE_METATYPE(FcitxQtFormattedPreedit)
+Q_DECLARE_METATYPE(FcitxQtFormattedPreeditList)
+
+#endif

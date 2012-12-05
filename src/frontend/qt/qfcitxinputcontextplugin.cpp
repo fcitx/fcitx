@@ -19,10 +19,10 @@
 
 #include <QInputContextPlugin>
 #include <QDBusConnection>
-#include "fcitx-input-context.h"
+#include "qfcitxinputcontext.h"
 
 /* The class Definition */
-class FcitxPlugin: public QInputContextPlugin
+class QFcitxInputContextPlugin: public QInputContextPlugin
 {
 
 private:
@@ -33,9 +33,9 @@ private:
 
 public:
 
-    FcitxPlugin(QObject *parent = 0);
+    QFcitxInputContextPlugin(QObject *parent = 0);
 
-    ~FcitxPlugin();
+    ~QFcitxInputContextPlugin();
 
     QStringList keys() const;
 
@@ -52,21 +52,21 @@ private:
 
 
 /* Implementations */
-QStringList FcitxPlugin::fcitx_languages;
+QStringList QFcitxInputContextPlugin::fcitx_languages;
 
 
-FcitxPlugin::FcitxPlugin(QObject *parent)
+QFcitxInputContextPlugin::QFcitxInputContextPlugin(QObject *parent)
     : QInputContextPlugin(parent)
 {
 }
 
 
-FcitxPlugin::~FcitxPlugin()
+QFcitxInputContextPlugin::~QFcitxInputContextPlugin()
 {
 }
 
 QStringList
-FcitxPlugin::keys() const
+QFcitxInputContextPlugin::keys() const
 {
     QStringList identifiers;
     identifiers.push_back(FCITX_IDENTIFIER_NAME);
@@ -75,7 +75,7 @@ FcitxPlugin::keys() const
 
 
 QStringList
-FcitxPlugin::languages(const QString & key)
+QFcitxInputContextPlugin::languages(const QString & key)
 {
     if (key.toLower() != FCITX_IDENTIFIER_NAME) {
         return QStringList();
@@ -91,7 +91,7 @@ FcitxPlugin::languages(const QString & key)
 
 
 QString
-FcitxPlugin::description(const QString &key)
+QFcitxInputContextPlugin::description(const QString &key)
 {
     if (key.toLower() != FCITX_IDENTIFIER_NAME) {
         return QString("");
@@ -102,7 +102,7 @@ FcitxPlugin::description(const QString &key)
 
 
 QInputContext *
-FcitxPlugin::create(const QString &key)
+QFcitxInputContextPlugin::create(const QString &key)
 {
     if (key.toLower() != FCITX_IDENTIFIER_NAME) {
         return NULL;
@@ -112,11 +112,11 @@ FcitxPlugin::create(const QString &key)
 }
 
 
-QString FcitxPlugin::displayName(const QString &key)
+QString QFcitxInputContextPlugin::displayName(const QString &key)
 {
     return key;
 }
 
-Q_EXPORT_PLUGIN2(FcitxPlugin, FcitxPlugin)
+Q_EXPORT_PLUGIN2(QFcitxInputContextPlugin, QFcitxInputContextPlugin)
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

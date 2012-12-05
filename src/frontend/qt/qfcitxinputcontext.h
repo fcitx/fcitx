@@ -29,8 +29,8 @@
 #include <QApplication>
 #include <QWeakPointer>
 
-#include "fcitx-qt/fcitxinputcontextproxy.h"
-#include "fcitx-qt/fcitxinputmethodproxy.h"
+#include "fcitx-qt/fcitxqtinputcontextproxy.h"
+#include "fcitx-qt/fcitxqtinputmethodproxy.h"
 #include "fcitx-config/hotkey.h"
 #include "fcitx/ime.h"
 
@@ -38,7 +38,7 @@
 #include <X11/Xlib.h>
 #include "fcitx/frontend.h"
 
-class FcitxConnection;
+class FcitxQtConnection;
 
 class ProcessKeyWatcher : public QDBusPendingCallWatcher
 {
@@ -91,7 +91,7 @@ private Q_SLOTS:
     void createInputContext();
     void cleanUp();
     void commitString(const QString& str);
-    void updateFormattedPreedit(const FcitxFormattedPreeditList& preeditList, int cursorPos);
+    void updateFormattedPreedit(const FcitxQtFormattedPreeditList& preeditList, int cursorPos);
     void forwardKey(uint keyval, uint state, int type);
     void deleteSurroundingText(int offset, uint nchar);
     void createInputContextFinished(QDBusPendingCallWatcher* watcher);
@@ -133,8 +133,8 @@ private:
     void updateCapacity();
     void commitPreedit();
 
-    FcitxInputMethodProxy* m_improxy;
-    FcitxInputContextProxy* m_icproxy;
+    FcitxQtInputMethodProxy* m_improxy;
+    FcitxQtInputContextProxy* m_icproxy;
     QFlags<FcitxCapacityFlags> m_capacity;
     int m_id;
     QString m_path;
@@ -143,12 +143,12 @@ private:
     int m_n_compose;
     QString m_preedit;
     QString m_commitPreedit;
-    FcitxFormattedPreeditList m_preeditList;
+    FcitxQtFormattedPreeditList m_preeditList;
     int m_cursorPos;
     bool m_useSurroundingText;
     bool m_syncMode;
     QRect m_rect;
-    FcitxConnection* m_connection;
+    FcitxQtConnection* m_connection;
     QString m_lastSurroundingText;
     int m_lastSurroundingAnchor;
     int m_lastSurroundingCursor;

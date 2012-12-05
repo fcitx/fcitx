@@ -25,12 +25,12 @@
 #include "editor.h"
 #include "model.h"
 
-QuickPhraseEditorPlugin::QuickPhraseEditorPlugin(QObject* parent): FcitxConfigUIPlugin(parent)
+QuickPhraseEditorPlugin::QuickPhraseEditorPlugin(QObject* parent): FcitxQtConfigUIPlugin(parent)
 {
 
 }
 
-FcitxConfigUIWidget* QuickPhraseEditorPlugin::create(const QString& key)
+FcitxQtConfigUIWidget* QuickPhraseEditorPlugin::create(const QString& key)
 {
     return new fcitx::ListEditor(new fcitx::QuickPhraseModel);
 }
@@ -44,5 +44,11 @@ QString QuickPhraseEditorPlugin::name()
 {
     return "quickphrase-editor";
 }
+
+QString QuickPhraseEditorPlugin::domain()
+{
+    return "fcitx";
+}
+
 
 Q_EXPORT_PLUGIN2 (fcitx_quickphrase_editor, QuickPhraseEditorPlugin)

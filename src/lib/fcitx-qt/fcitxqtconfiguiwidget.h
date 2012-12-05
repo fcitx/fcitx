@@ -17,33 +17,21 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITXCONFIGPLUGIN_H
-#define FCITXCONFIGPLUGIN_H
-
+#ifndef FCITXCONFIGUIWIDGET_H
+#define FCITXCONFIGUIWIDGET_H
 #include "fcitxqt_export.h"
-#include <QtCore/QString>
-#include <QtCore/QObject>
-#include <QtCore/QStringList>
+#include <QWidget>
 
-class FcitxConfigUIWidget;
-struct FCITX_QT_EXPORT_API FcitxConfigUIFactoryInterface
-{
-    virtual QString name() = 0;
-    virtual FcitxConfigUIWidget *create( const QString &key ) = 0;
-    virtual QStringList files() = 0;
-
-};
-
-#define FcitxConfigUIFactoryInterface_iid "org.fcitx.Fcitx.FcitxConfigUIFactoryInterface"
-Q_DECLARE_INTERFACE(FcitxConfigUIFactoryInterface, FcitxConfigUIFactoryInterface_iid)
-
-class FCITX_QT_EXPORT_API FcitxConfigUIPlugin : public QObject, public FcitxConfigUIFactoryInterface {
+class FCITX_QT_EXPORT_API FcitxQtConfigUIWidget : public QWidget {
     Q_OBJECT
-    Q_INTERFACES(FcitxConfigUIFactoryInterface)
 public:
-    explicit FcitxConfigUIPlugin(QObject* parent = 0);
-    virtual ~FcitxConfigUIPlugin();
+    explicit FcitxQtConfigUIWidget(QWidget* parent = 0);
+
+    virtual void load() = 0;
+    virtual void save() = 0;
+    virtual QString title() = 0;
+signals:
+    void changed(bool changed);
 };
 
-
-#endif // FCITXCONFIGPLUGIN_H
+#endif // FCITXCONFIGUIWIDGET_H

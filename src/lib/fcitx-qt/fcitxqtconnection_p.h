@@ -17,45 +17,52 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITXCONNECTION_H
-#define FCITXCONNECTION_H
+#ifndef FCITXCONNECTION_P_H
+#define FCITXCONNECTION_P_H
 
-
-#include "fcitxqt_export.h"
-
-#include <QtCore/QObject>
-#include <QtDBus/QDBusConnection>
+#include "fcitxqtconnection.h"
+#include <QWeakPointer>
+#include <QFileSystemWatcher>
 
 class QDBusConnection;
+class QDBusServiceWatcher;
 
-class FcitxConnectionPrivate;
-
-
-class FCITX_QT_EXPORT_API FcitxConnection : public QObject {
+class FcitxQtConnectionPrivate : public QObject {
     Q_OBJECT
-    Q_PROPERTY(bool autoReconnect READ autoReconnect WRITE setAutoReconnect)
-    Q_PROPERTY(bool connected READ isConnected)
-    Q_PROPERTY(QDBusConnection* connection READ connection)
-    Q_PROPERTY(QString serviceName READ serviceName)
 public:
-    explicit FcitxConnection(QObject* parent = 0);
-    virtual ~FcitxConnection();
-    void startConnection();
-    void endConnection();
-    void setAutoReconnect(bool a);
-    bool autoReconnect();
+    FcitxQtConnectionPrivate(FcitxQtConnection* conn);
+    virtual ~FcitxQtConnectionPrivate();
+    FcitxQtConnection * const q_ptr;
+    Q_DECLARE_PUBLIC(FcitxQtConnection);
 
-    QDBusConnection* connection();
-    const QString& serviceName();
-    bool isConnected();
-
-Q_SIGNALS:
-    void connected();
-    void disconnected();
+private Q_SLOTS:
+    void imChanged(const QString& service, const QString& oldowner, const QString& newowner);
+    void dbusDisconnected();
+    void cleanUp();
+    void newServiceAppear();
+    void socketFileChanged();
 
 private:
-    FcitxConnectionPrivate * const d_ptr;
-    Q_DECLARE_PRIVATE(FcitxConnection);
+    bool isConnected();
+
+    static QByteArray localMachineId();
+    const QString& socketFile();
+    void createConnection();
+    QString address();
+    int displayNumber();
+    void initialize();
+    void finalize();
+
+    int m_displayNumber;
+    QString m_serviceName;
+    QDBusConnection* m_connection;
+    QDBusServiceWatcher* m_serviceWatcher;
+    QWeakPointer<QFileSystemWatcher> m_watcher;
+    QString m_socketFile;
+    bool m_autoReconnect;
+    bool m_connectedOnce;
+    bool m_initialized;
 };
 
-#endif // FCITXCONNECTION_H
+
+#endif // FCITXCONNECTION_P_H

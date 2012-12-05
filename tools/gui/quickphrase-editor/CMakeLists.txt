@@ -1,12 +1,14 @@
 set(QUICKPHRASE_EDITOR_SRCS
   main.cpp
   model.cpp
-  parser.cpp
+  editor.cpp
+  dialog.cpp
   )
 set(QUICKPHRASE_EDITOR_HDRS
   main.h
   model.h
-  parser.h
+  editor.h
+  dialog.h
   )
 fcitx_translate_add_sources(
   ${QUICKPHRASE_EDITOR_HDRS}
@@ -21,10 +23,14 @@ include_directories(
   ${QT_QTGUI_INCLUDE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
   )
-
+qt4_wrap_ui(QUICKPHRASE_EDITOR_SRCS dialog.ui editor.ui)
 qt4_wrap_cpp(QUICKPHRASE_EDITOR_MOCS ${QUICKPHRASE_EDITOR_HDRS})
 add_library(fcitx-quickphrase-editor
   MODULE ${QUICKPHRASE_EDITOR_SRCS} ${QUICKPHRASE_EDITOR_MOCS})
+
+set_target_properties(fcitx-quickphrase-editor PROPERTIES
+                      LINK_FLAGS "-Wl,--no-undefined"
+)
 target_link_libraries(fcitx-quickphrase-editor
   debug ${QT_QTCORE_LIBRARY_DEBUG}
   debug ${QT_QTDBUS_LIBRARY_DEBUG}
@@ -34,7 +40,7 @@ target_link_libraries(fcitx-quickphrase-editor
   optimized ${QT_QTGUI_LIBRARY_RELEASE}
   fcitx-utils
   fcitx-config
-  editor
+  fcitx-qt
   )
 
 install(TARGETS fcitx-quickphrase-editor DESTINATION ${libdir}/fcitx/qt)

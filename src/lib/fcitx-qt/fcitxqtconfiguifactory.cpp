@@ -17,31 +17,35 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include "fcitxconfiguifactory.h"
-#include "fcitxconfiguiplugin.h"
+#include "fcitxqtconfiguifactory.h"
+#include "fcitxqtconfiguiplugin.h"
 #include <fcitx-config/xdg.h>
 #include <fcitx-utils/utils.h>
 #include <QDir>
 #include <QDebug>
 #include <QLibrary>
 #include <QPluginLoader>
+#include <libintl.h>
 
-FcitxConfigUIFactory::FcitxConfigUIFactory(QObject* parent): QObject(parent)
+FcitxQtConfigUIFactory::FcitxQtConfigUIFactory(QObject* parent): QObject(parent)
 {
     scan();
 }
 
-FcitxConfigUIFactory::~FcitxConfigUIFactory()
+FcitxQtConfigUIFactory::~FcitxQtConfigUIFactory()
 {
 
 }
 
-FcitxConfigUIWidget* FcitxConfigUIFactory::create(const QString& file)
+FcitxQtConfigUIWidget* FcitxQtConfigUIFactory::create(const QString& file)
 {
+    char* localepath = fcitx_utils_get_fcitx_path("localedir");
+    bindtextdomain(plugins[file]->domain().toUtf8().data(), localepath);
+    free(localepath);
     return plugins[file]->create(file);
 }
 
-void FcitxConfigUIFactory::scan()
+void FcitxQtConfigUIFactory::scan()
 {
     QStringList dirs;
     // check plugin files
@@ -84,7 +88,7 @@ void FcitxConfigUIFactory::scan()
             QPluginLoader* loader = new QPluginLoader (filePath, this);
             qDebug() << loader->load();
             qDebug() << loader->errorString();
-            FcitxConfigUIFactoryInterface* plugin = qobject_cast< FcitxConfigUIFactoryInterface* > (loader->instance());
+            FcitxQtConfigUIFactoryInterface* plugin = qobject_cast< FcitxQtConfigUIFactoryInterface* > (loader->instance());
             if (plugin) {
                 QStringList list = plugin->files();
                 foreach(const QString& s, list) {

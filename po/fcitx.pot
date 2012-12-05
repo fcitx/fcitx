@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-03 14:10-0500\n"
+"POT-Creation-Date: 2012-12-04 21:57-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -469,156 +469,23 @@ msgstr ""
 msgid "Can't open socket %s: %s"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:482
-msgctxt "KCharSelect section name"
-msgid "Combining Diacritical Marks"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:491
-msgid "Non-printable"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:524
-msgid "Other, Control"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:525
-msgid "Other, Format"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:526
-msgid "Other, Not Assigned"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:527
-msgid "Other, Private Use"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:528
-msgid "Other, Surrogate"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:529
-msgid "Letter, Lowercase"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:530
-msgid "Letter, Modifier"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:531
-msgid "Letter, Other"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:532
-msgid "Letter, Titlecase"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:533
-msgid "Letter, Uppercase"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:534
-msgid "Mark, Spacing Combining"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:535
-msgid "Mark, Enclosing"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:536
-msgid "Mark, Non-Spacing"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:537
-msgid "Number, Decimal Digit"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:538
-msgid "Number, Letter"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:539
-msgid "Number, Other"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:540
-msgid "Punctuation, Connector"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:541
-msgid "Punctuation, Dash"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:542
-msgid "Punctuation, Close"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:543
-msgid "Punctuation, Final Quote"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:544
-msgid "Punctuation, Initial Quote"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:545
-msgid "Punctuation, Other"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:546
-msgid "Punctuation, Open"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:547
-msgid "Symbol, Currency"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:548
-msgid "Symbol, Modifier"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:549
-msgid "Symbol, Math"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:550
-msgid "Symbol, Other"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:551
-msgid "Separator, Line"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:552
-msgid "Separator, Paragraph"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:553
-msgid "Separator, Space"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:554
-msgid "Unknown"
-msgstr ""
-
-#: src/module/unicode/charselectdata.c:588
+#: src/module/unicode/charselectdata.c:247
 msgid "<Non Private Use High Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:590
+#: src/module/unicode/charselectdata.c:249
 msgid "<Private Use High Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:592
+#: src/module/unicode/charselectdata.c:251
 msgid "<Low Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:594
+#: src/module/unicode/charselectdata.c:253
 msgid "<Private Use>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:622
+#: src/module/unicode/charselectdata.c:281
 msgid "<not assigned>"
 msgstr ""
 
@@ -798,52 +665,40 @@ msgstr ""
 msgid "Toggle Input Method"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:42
+#: tools/gui/quickphrase-editor/dialog.cpp:29
+msgid "Keyword:"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/dialog.cpp:30
+msgid "Phrase:"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:42
 msgid "&Add"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:43
+#: tools/gui/quickphrase-editor/editor.cpp:43
 msgid "&Delete"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:44
+#: tools/gui/quickphrase-editor/editor.cpp:44
 msgid "De&lete All"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:45
-msgid "&Quit"
-msgstr ""
-
-#: tools/gui/lib/editor.cpp:46
-msgid "&Save"
-msgstr ""
-
-#: tools/gui/lib/editor.cpp:47
+#: tools/gui/quickphrase-editor/editor.cpp:45
 msgid "&Import"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:48
+#: tools/gui/quickphrase-editor/editor.cpp:46
 msgid "&Export"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:51
-msgid "Unikey Macro Editor"
+#: tools/gui/quickphrase-editor/model.cpp:50
+msgid "Keyword"
 msgstr ""
 
-#: tools/gui/lib/editor.cpp:88 tools/gui/lib/editor.cpp:116
-msgid "Quit Macro Editor"
-msgstr ""
-
-#: tools/gui/lib/editor.cpp:89 tools/gui/lib/editor.cpp:117
-msgid "Macro table still contains unsaved changes. Do you want to save?"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/model.cpp:46
-msgid "Macro"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/model.cpp:48
-msgid "Word"
+#: tools/gui/quickphrase-editor/model.cpp:52
+msgid "Phrase"
 msgstr ""
 
 #: data/fcitx-configtool.desktop.in:2
@@ -1961,7 +1816,6 @@ msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
-#: src/module/chttrans/fcitx-chttrans.desc:14
 msgid "TraditionalChinese"
 msgstr ""
 
@@ -1978,10 +1832,6 @@ msgid "Traditional Chinese Translate Engine"
 msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:12
-msgid "Enabled in input"
-msgstr ""
-
-#: src/module/chttrans/fcitx-chttrans.desc:17
 msgid "Toggle for enable or disable"
 msgstr ""
 
@@ -2539,32 +2389,4 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:266
 msgid "Key Color On Virutal Keyboard"
-msgstr ""
-
-#. i18n: file: tools/gui/lib/dialog.ui:14
-#. i18n: ectx: property (windowTitle), widget (QDialog, Dialog)
-msgid "Dialog"
-msgstr ""
-
-#. i18n: file: tools/gui/lib/dialog.ui:25
-#. i18n: ectx: property (text), widget (QLabel, label)
-msgid "Word:"
-msgstr ""
-
-#. i18n: file: tools/gui/lib/dialog.ui:32
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-msgid "Macro:"
-msgstr ""
-
-#. i18n: file: tools/gui/lib/editor.ui:14
-#. i18n: ectx: property (windowTitle), widget (QWidget, Editor)
-msgid "Form"
-msgstr ""
-
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr ""
-
-msgctxt "EMAIL OF TRANSLATORS"
-msgid "Your emails"
 msgstr ""

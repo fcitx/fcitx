@@ -1,13 +1,13 @@
 #include <QCoreApplication>
 #include <QDebug>
-#include "fcitxconnection.h"
+#include "fcitxqtconnection.h"
 
 class TestQConnectionApp : public QCoreApplication
 {
     Q_OBJECT
 public:
     TestQConnectionApp(int& argc, char** argv) : QCoreApplication(argc, argv) {
-        conn = new FcitxConnection(this);
+        conn = new FcitxQtConnection(this);
 
         connect(conn, SIGNAL(fcitxConnected()), SLOT(connected()));
         connect(conn, SIGNAL(fcitxDisconnected()), SLOT(disconnected()));
@@ -16,7 +16,7 @@ public:
     }
 
 private:
-    FcitxConnection* conn;
+    FcitxQtConnection* conn;
 public slots:
     void connected() {
         qDebug() << "connected";

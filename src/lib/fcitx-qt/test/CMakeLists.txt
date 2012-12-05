@@ -17,5 +17,4 @@ target_link_libraries(testqconnection
     fcitx-utils
     fcitx-config
     fcitx-qt
-    editor
     )

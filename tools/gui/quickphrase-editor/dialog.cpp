@@ -17,46 +17,43 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <QMainWindow>
-#include <fcitx-qt/fcitxconfiguiwidget.h>
-
-class QAbstractItemModel;
-class CMacroTable;
-namespace Ui {
-class Editor;
-}
+#include "common.h"
+#include "ui_dialog.h"
+#include "dialog.h"
 
 namespace fcitx {
+EditorDialog::EditorDialog(QWidget* parent): QDialog(parent),
+    m_ui(new Ui::Dialog)
+{
+    m_ui->setupUi(this);
+    m_ui->keyLabel->setText(_("Keyword:"));
+    m_ui->valueLabel->setText(_("Phrase:"));
+}
 
-class AbstractItemEditorModel;
+EditorDialog::~EditorDialog()
+{
+    delete m_ui;
+}
 
-class ListEditor : public FcitxConfigUIWidget {
-    Q_OBJECT
-public:
-    explicit ListEditor(AbstractItemEditorModel* model, QWidget* parent = 0);
-    virtual ~ListEditor();
+void EditorDialog::setKey(const QString& s)
+{
+    m_ui->keyLineEdit->setText(s);
+}
 
-    virtual void load(const QString& file);
-    virtual void save();
-protected:
-    virtual void closeEvent(QCloseEvent* event );
-private slots:
-    void addWord();
-    void deleteWord();
-    void deleteAllWord();
-    void itemFocusChanged();
-    void aboutToQuit();
-    void saveMacro();
-    void load();
-    void addWordAccepted();
-    void importMacro();
-    void exportMacro();
-    void importFileSelected();
-    void exportFileSelected();
-    void needSaveChanged(bool needSave);
-    void quitConfirmDone(int result);
-private:
-    Ui::Editor* m_ui;
-    AbstractItemEditorModel* m_model;
-};
+void EditorDialog::setValue(const QString& s)
+{
+    m_ui->valueLineEdit->setText(s);
+}
+
+QString EditorDialog::key() const
+{
+    return m_ui->keyLineEdit->text();
+}
+
+QString EditorDialog::value() const
+{
+    return m_ui->valueLineEdit->text();
+}
+
+
 }

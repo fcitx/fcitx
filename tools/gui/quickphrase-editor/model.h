@@ -17,38 +17,49 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <QAbstractItemModel>
+#ifndef _MODEL_H_
+#define _MODEL_H_
+
+#include <QAbstractTableModel>
 #include <QSet>
-#include "abstractmodel.h"
 
 class QFile;
 namespace fcitx {
 
-class Parser;
-class QuickPhraseModel : public AbstractItemEditorModel {
+class QuickPhraseModel : public QAbstractTableModel {
     Q_OBJECT
 public:
     explicit QuickPhraseModel(QObject* parent = 0);
     virtual ~QuickPhraseModel();
 
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual void load();
+    virtual void load(const QString& file, bool append);
     virtual void addItem(const QString& macro, const QString& word);
     virtual void deleteItem(int row);
     virtual void deleteAllItem();
-    virtual void save();
+    virtual void save(const QString& file);
+    bool needSave();
+
+signals:
+    void needSaveChanged(bool m_needSave);
 
 private slots:
     void loadFinished();
     void saveFinished();
 
 private:
-    QSet<QString> m_keyset;
+    void parse(const QString& file);
+    bool saveData(const QString& file);
+    void setNeedSave(bool needSave);
+    bool m_needSave;
     QList<QPair< QString, QString > >m_list;
-    Parser* m_parser;
 };
 
 }
+
+#endif

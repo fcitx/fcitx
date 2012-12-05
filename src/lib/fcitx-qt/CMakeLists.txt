@@ -1,22 +1,22 @@
 set(fcitx_qt_SOURCES
-    fcitxconnection.cpp
-    fcitxformattedpreedit.cpp
-    fcitxinputcontextproxy.cpp
-    fcitxinputmethodproxy.cpp
-    fcitxconfiguiplugin.cpp
-    fcitxconfiguiwidget.cpp
-    fcitxconfiguifactory.cpp
+    fcitxqtconnection.cpp
+    fcitxqtformattedpreedit.cpp
+    fcitxqtinputcontextproxy.cpp
+    fcitxqtinputmethodproxy.cpp
+    fcitxqtconfiguiplugin.cpp
+    fcitxqtconfiguiwidget.cpp
+    fcitxqtconfiguifactory.cpp
     )
 
 set(fcitx_qt_HEADERS
-    fcitxconnection.h
+    fcitxqtconnection.h
     fcitxqt_export.h
-    fcitxformattedpreedit.h
-    fcitxinputcontextproxy.h
-    fcitxinputmethodproxy.h
-    fcitxconfiguiplugin.h
-    fcitxconfiguiwidget.h
-    fcitxconfiguifactory.h
+    fcitxqtformattedpreedit.h
+    fcitxqtinputcontextproxy.h
+    fcitxqtinputmethodproxy.h
+    fcitxqtconfiguiplugin.h
+    fcitxqtconfiguiwidget.h
+    fcitxqtconfiguifactory.h
 )
 
 fcitx_translate_add_sources(${fcitx_qt_HEADERS} ${fcitx_qt_SOURCES})
@@ -38,14 +38,14 @@ include_directories(
 
 QT4_WRAP_CPP(
     fcitx_qt_MOC_SRCS
-    fcitxconnection.h
-    fcitxconnection_p.h
-    fcitxformattedpreedit.h
-    fcitxinputcontextproxy.h
-    fcitxinputmethodproxy.h
-    fcitxconfiguiplugin.h
-    fcitxconfiguiwidget.h
-    fcitxconfiguifactory.h
+    fcitxqtconnection.h
+    fcitxqtconnection_p.h
+    fcitxqtformattedpreedit.h
+    fcitxqtinputcontextproxy.h
+    fcitxqtinputmethodproxy.h
+    fcitxqtconfiguiplugin.h
+    fcitxqtconfiguiwidget.h
+    fcitxqtconfiguifactory.h
 )
 
 if (ENABLE_X11)
