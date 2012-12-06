@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-04 21:45-0500\n"
-"PO-Revision-Date: 2012-12-04 21:59-0500\n"
+"POT-Creation-Date: 2012-12-06 18:14-0500\n"
+"PO-Revision-Date: 2012-12-06 18:14-0500\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -26,17 +26,25 @@ msgstr " Ctrl+Delete 删除"
 msgid "&Add"
 msgstr "添加(&A)"
 
+#: tools/gui/wrapper/mainwindow.cpp:39
+msgid "&Close"
+msgstr "关闭(&C)"
+
 #: tools/gui/quickphrase-editor/editor.cpp:43
 msgid "&Delete"
 msgstr "删除(&D)"
 
-#: tools/gui/quickphrase-editor/editor.cpp:46
-msgid "&Export"
-msgstr "导出(&E)"
-
 #: tools/gui/quickphrase-editor/editor.cpp:45
 msgid "&Import"
 msgstr "导入(&I)"
+
+#: tools/gui/wrapper/mainwindow.cpp:38
+msgid "&Reset"
+msgstr "重置(&R)"
+
+#: tools/gui/wrapper/mainwindow.cpp:37
+msgid "&Save"
+msgstr "保存(&S)"
 
 #: src/im/keyboard/keyboard.c:425 src/im/keyboard/keyboard.c:442
 msgid "(Unavailable)"
@@ -690,6 +698,10 @@ msgstr "组名重复，和之前的组合并: %s :行 %d"
 msgid "Duplicate option, overwrite: line %d"
 msgstr "重复的配置项，覆盖: 行%d"
 
+#: tools/gui/quickphrase-editor/editor.cpp:46
+msgid "E&xport"
+msgstr "导出(&X)"
+
 #: src/im/table/table.desc:141
 msgid "Enable"
 msgstr "启用"
@@ -710,7 +722,7 @@ msgstr "增强 Fcitx 的拼音输入"
 msgid "End Key"
 msgstr "中止键"
 
-#: src/module/xkbdbus/xkbdbus.c:181
+#: src/module/xkbdbus/xkbdbus.c:185
 msgid "English (US)"
 msgstr "英语 (美国)"
 
@@ -1179,7 +1191,7 @@ msgstr "键盘布局"
 msgid "Keyboard Layout to be used"
 msgstr "键盘布局"
 
-#: tools/gui/quickphrase-editor/model.cpp:50
+#: tools/gui/quickphrase-editor/model.cpp:52
 msgid "Keyword"
 msgstr "关键字"
 
@@ -1501,7 +1513,7 @@ msgstr "所属附加组件"
 msgid "PerProgram"
 msgstr "按程序"
 
-#: tools/gui/quickphrase-editor/model.cpp:52
+#: tools/gui/quickphrase-editor/model.cpp:54
 msgid "Phrase"
 msgstr "词组"
 
@@ -1661,6 +1673,10 @@ msgstr "标点转换支持"
 msgid "Punctuation Support"
 msgstr "标点支持"
 
+#: tools/gui/quickphrase-editor/editor.cpp:88
+msgid "Quick Phrase Editor"
+msgstr "快速输入编辑器"
+
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
 msgstr "快速输入列表"
@@ -1801,7 +1817,7 @@ msgstr "保存配置及输入历史"
 msgid "Scroll between Input Method"
 msgstr "输入法切换键"
 
-#: src/module/unicode/unicode.c:225
+#: src/module/unicode/unicode.c:229
 msgid "Search unicode"
 msgstr "搜索 unicode"
 
@@ -2395,11 +2411,11 @@ msgstr "当前字体为: %s"
 #~ msgid "%s"
 #~ msgstr "%s"
 
+#~ msgid "&Cancel"
+#~ msgstr "取消(&C)"
+
 #~ msgid "&Quit"
 #~ msgstr "退出(&Q)"
-
-#~ msgid "&Save"
-#~ msgstr "保存(&A)"
 
 #~ msgid "About Fcitx"
 #~ msgstr "关于Fcitx"
@@ -2412,9 +2428,6 @@ msgstr "当前字体为: %s"
 
 #~ msgid "Chinese Mode Icon"
 #~ msgstr "中文模式图标"
-
-#~ msgid "Close"
-#~ msgstr "关闭"
 
 #~ msgid "Close editor"
 #~ msgstr "关闭编辑器"

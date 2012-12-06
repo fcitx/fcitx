@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-04 21:45-0500\n"
+"POT-Creation-Date: 2012-12-06 18:14-0500\n"
 "PO-Revision-Date: 2012-10-22 19:07-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -28,16 +28,24 @@ msgstr " 用 Ctrl+Delete 刪除"
 msgid "&Add"
 msgstr ""
 
+#: tools/gui/wrapper/mainwindow.cpp:39
+msgid "&Close"
+msgstr ""
+
 #: tools/gui/quickphrase-editor/editor.cpp:43
 msgid "&Delete"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:46
-msgid "&Export"
-msgstr ""
-
 #: tools/gui/quickphrase-editor/editor.cpp:45
 msgid "&Import"
+msgstr ""
+
+#: tools/gui/wrapper/mainwindow.cpp:38
+msgid "&Reset"
+msgstr ""
+
+#: tools/gui/wrapper/mainwindow.cpp:37
+msgid "&Save"
 msgstr ""
 
 #: src/im/keyboard/keyboard.c:425 src/im/keyboard/keyboard.c:442
@@ -692,6 +700,10 @@ msgstr ""
 msgid "Duplicate option, overwrite: line %d"
 msgstr ""
 
+#: tools/gui/quickphrase-editor/editor.cpp:46
+msgid "E&xport"
+msgstr ""
+
 #: src/im/table/table.desc:141
 msgid "Enable"
 msgstr "啟用"
@@ -712,7 +724,7 @@ msgstr ""
 msgid "End Key"
 msgstr "中止鍵"
 
-#: src/module/xkbdbus/xkbdbus.c:181
+#: src/module/xkbdbus/xkbdbus.c:185
 msgid "English (US)"
 msgstr ""
 
@@ -1182,7 +1194,7 @@ msgstr ""
 msgid "Keyboard Layout to be used"
 msgstr "鍵盤配置"
 
-#: tools/gui/quickphrase-editor/model.cpp:50
+#: tools/gui/quickphrase-editor/model.cpp:52
 msgid "Keyword"
 msgstr ""
 
@@ -1505,7 +1517,7 @@ msgstr "所屬附加元件"
 msgid "PerProgram"
 msgstr "按程式"
 
-#: tools/gui/quickphrase-editor/model.cpp:52
+#: tools/gui/quickphrase-editor/model.cpp:54
 #, fuzzy
 msgid "Phrase"
 msgstr "自動字詞"
@@ -1667,6 +1679,11 @@ msgstr "標點符號轉換支援"
 msgid "Punctuation Support"
 msgstr "標點支援"
 
+#: tools/gui/quickphrase-editor/editor.cpp:88
+#, fuzzy
+msgid "Quick Phrase Editor"
+msgstr "快速字詞清單"
+
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
 msgstr "快速字詞清單"
@@ -1807,7 +1824,7 @@ msgstr "保存所有設定及輸入歷史"
 msgid "Scroll between Input Method"
 msgstr ""
 
-#: src/module/unicode/unicode.c:225
+#: src/module/unicode/unicode.c:229
 msgid "Search unicode"
 msgstr ""
 

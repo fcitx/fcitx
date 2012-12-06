@@ -17,6 +17,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef FCITX_TOOLS_GUI_DIALOG_H
+#define FCITX_TOOLS_GUI_DIALOG_H
+
 #include <QDialog>
 
 class CMacroTable;
@@ -40,3 +43,6 @@ private:
     Ui::Dialog* m_ui;
 };
 }
+
+
+#endif // FCITX_TOOLS_GUI_

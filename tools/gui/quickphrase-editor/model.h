@@ -17,8 +17,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _MODEL_H_
-#define _MODEL_H_
+#ifndef FCITX_TOOLS_GUI_MODEL_H_
+#define FCITX_TOOLS_GUI_MODEL_H_
 
 #include <QAbstractTableModel>
 #include <QSet>
@@ -62,4 +62,4 @@ private:
 
 }
 
-#endif
+#endif // FCITX_TOOLS_GUI_MODEL_H_

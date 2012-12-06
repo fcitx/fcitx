@@ -17,11 +17,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FCITX_UNIKEY_COMMON_H
-#define _FCITX_UNIKEY_COMMON_H
+#ifndef _FCITX_TOOL_GUI_COMMON_H
+#define _FCITX_TOOL_GUI_COMMON_H
 
 #include <libintl.h>
 
 #define _(x) QString::fromUtf8(gettext(x))
 
-#endif // _FCITX_UNIKEY_COMMON_H
+#endif // _FCITX_TOOL_GUI_COMMON_H

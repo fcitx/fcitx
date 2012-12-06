@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-04 21:57-0500\n"
+"POT-Creation-Date: 2012-12-06 18:14-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -489,7 +489,7 @@ msgstr ""
 msgid "<not assigned>"
 msgstr ""
 
-#: src/module/unicode/unicode.c:225
+#: src/module/unicode/unicode.c:229
 msgid "Search unicode"
 msgstr ""
 
@@ -553,7 +553,7 @@ msgstr ""
 msgid "Close virtual keyboard"
 msgstr ""
 
-#: src/module/xkbdbus/xkbdbus.c:181
+#: src/module/xkbdbus/xkbdbus.c:185
 msgid "English (US)"
 msgstr ""
 
@@ -690,15 +690,31 @@ msgid "&Import"
 msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:46
-msgid "&Export"
+msgid "E&xport"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/model.cpp:50
-msgid "Keyword"
+#: tools/gui/quickphrase-editor/editor.cpp:88
+msgid "Quick Phrase Editor"
 msgstr ""
 
 #: tools/gui/quickphrase-editor/model.cpp:52
+msgid "Keyword"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/model.cpp:54
 msgid "Phrase"
+msgstr ""
+
+#: tools/gui/wrapper/mainwindow.cpp:37
+msgid "&Save"
+msgstr ""
+
+#: tools/gui/wrapper/mainwindow.cpp:38
+msgid "&Reset"
+msgstr ""
+
+#: tools/gui/wrapper/mainwindow.cpp:39
+msgid "&Close"
 msgstr ""
 
 #: data/fcitx-configtool.desktop.in:2

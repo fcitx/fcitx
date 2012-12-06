@@ -18,6 +18,3 @@ install(FILES
   fcitx-write-po.sh
   DESTINATION "${prefix}/share/cmake/fcitx/"
   PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
-install(FILES FcitxQtConfig.cmake
-  "${CMAKE_CURRENT_BINARY_DIR}/FcitxQtConfigVersion.cmake"
-  DESTINATION "${prefix}/share/cmake/fcitx/")

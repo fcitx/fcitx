@@ -8,8 +8,8 @@
  * Do not edit! All changes made to it will be lost.
  */
 
-#ifndef FCITXQTINPUTMETHODPROXY_H_1354825761
-#define FCITXQTINPUTMETHODPROXY_H_1354825761
+#ifndef FCITXQTINPUTMETHODPROXY_H_1354834547
+#define FCITXQTINPUTMETHODPROXY_H_1354834547
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
@@ -63,6 +63,79 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QLatin1String("ConfigureAddon"), argumentList);
     }
 
+    inline QDBusPendingReply<> ConfigureIM(const QString &im)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(im);
+        return asyncCallWithArgumentList(QLatin1String("ConfigureIM"), argumentList);
+    }
+
+    inline QDBusPendingReply<int, uint, uint, uint, uint> CreateIC()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QLatin1String("CreateIC"), argumentList);
+    }
+    inline QDBusReply<int> CreateIC(uint &keyval1, uint &state1, uint &keyval2, uint &state2)
+    {
+        QList<QVariant> argumentList;
+        QDBusMessage reply = callWithArgumentList(QDBus::Block, QLatin1String("CreateIC"), argumentList);
+        if (reply.type() == QDBusMessage::ReplyMessage && reply.arguments().count() == 5) {
+            keyval1 = qdbus_cast<uint>(reply.arguments().at(1));
+            state1 = qdbus_cast<uint>(reply.arguments().at(2));
+            keyval2 = qdbus_cast<uint>(reply.arguments().at(3));
+            state2 = qdbus_cast<uint>(reply.arguments().at(4));
+        }
+        return reply;
+    }
+
+    inline QDBusPendingReply<int, bool, uint, uint, uint, uint> CreateICv2(const QString &appname)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(appname);
+        return asyncCallWithArgumentList(QLatin1String("CreateICv2"), argumentList);
+    }
+    inline QDBusReply<int> CreateICv2(const QString &appname, bool &enable, uint &keyval1, uint &state1, uint &keyval2, uint &state2)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(appname);
+        QDBusMessage reply = callWithArgumentList(QDBus::Block, QLatin1String("CreateICv2"), argumentList);
+        if (reply.type() == QDBusMessage::ReplyMessage && reply.arguments().count() == 6) {
+            enable = qdbus_cast<bool>(reply.arguments().at(1));
+            keyval1 = qdbus_cast<uint>(reply.arguments().at(2));
+            state1 = qdbus_cast<uint>(reply.arguments().at(3));
+            keyval2 = qdbus_cast<uint>(reply.arguments().at(4));
+            state2 = qdbus_cast<uint>(reply.arguments().at(5));
+        }
+        return reply;
+    }
+
+    inline QDBusPendingReply<int, bool, uint, uint, uint, uint> CreateICv3(const QString &appname, int pid)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(appname) << QVariant::fromValue(pid);
+        return asyncCallWithArgumentList(QLatin1String("CreateICv3"), argumentList);
+    }
+    inline QDBusReply<int> CreateICv3(const QString &appname, int pid, bool &enable, uint &keyval1, uint &state1, uint &keyval2, uint &state2)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(appname) << QVariant::fromValue(pid);
+        QDBusMessage reply = callWithArgumentList(QDBus::Block, QLatin1String("CreateICv3"), argumentList);
+        if (reply.type() == QDBusMessage::ReplyMessage && reply.arguments().count() == 6) {
+            enable = qdbus_cast<bool>(reply.arguments().at(1));
+            keyval1 = qdbus_cast<uint>(reply.arguments().at(2));
+            state1 = qdbus_cast<uint>(reply.arguments().at(3));
+            keyval2 = qdbus_cast<uint>(reply.arguments().at(4));
+            state2 = qdbus_cast<uint>(reply.arguments().at(5));
+        }
+        return reply;
+    }
+
+    inline QDBusPendingReply<> Exit()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QLatin1String("Exit"), argumentList);
+    }
+
     inline QDBusPendingReply<QString> GetCurrentIM()
     {
         QList<QVariant> argumentList;
@@ -92,6 +165,13 @@ public Q_SLOTS: // METHODS
     {
         QList<QVariant> argumentList;
         return asyncCallWithArgumentList(QLatin1String("InactivateIM"), argumentList);
+    }
+
+    inline QDBusPendingReply<> ReloadAddonConfig(const QString &addon)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(addon);
+        return asyncCallWithArgumentList(QLatin1String("ReloadAddonConfig"), argumentList);
     }
 
     inline QDBusPendingReply<> ReloadConfig()

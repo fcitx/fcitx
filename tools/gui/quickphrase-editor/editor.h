@@ -17,6 +17,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef FCITX_TOOLS_GUI_EDITOR_H
+#define FCITX_TOOLS_GUI_EDITOR_H
+
 #include <QMainWindow>
 #include "fcitx-qt/fcitxqtconfiguiwidget.h"
 #include "model.h"
@@ -56,3 +59,5 @@ private:
     QuickPhraseModel* m_model;
 };
 }
+
+#endif // FCITX_TOOLS_GUI_EDITOR_H
