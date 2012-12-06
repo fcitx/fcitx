@@ -17,13 +17,13 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITXCONFIGPLUGIN_H
-#define FCITXCONFIGPLUGIN_H
+#ifndef FCITXQTCONFIGPLUGIN_H
+#define FCITXQTCONFIGPLUGIN_H
 
 #include "fcitxqt_export.h"
-#include <QtCore/QString>
-#include <QtCore/QObject>
-#include <QtCore/QStringList>
+#include <QString>
+#include <QObject>
+#include <QStringList>
 
 class FcitxQtConfigUIWidget;
 struct FCITX_QT_EXPORT_API FcitxQtConfigUIFactoryInterface

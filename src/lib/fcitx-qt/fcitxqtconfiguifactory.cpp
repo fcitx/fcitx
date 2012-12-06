@@ -19,6 +19,7 @@
 
 #include "fcitxqtconfiguifactory.h"
 #include "fcitxqtconfiguiplugin.h"
+#include "fcitxqtconfiguifactory_p.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/utils.h"
 #include <QDir>
@@ -27,9 +28,20 @@
 #include <QPluginLoader>
 #include <libintl.h>
 
-FcitxQtConfigUIFactory::FcitxQtConfigUIFactory(QObject* parent): QObject(parent)
+FcitxQtConfigUIFactoryPrivate::FcitxQtConfigUIFactoryPrivate(FcitxQtConfigUIFactory* factory) : QObject(factory)
+    ,q_ptr(factory)
 {
-    scan();
+}
+
+FcitxQtConfigUIFactoryPrivate::~FcitxQtConfigUIFactoryPrivate()
+{
+}
+
+FcitxQtConfigUIFactory::FcitxQtConfigUIFactory(QObject* parent): QObject(parent)
+    ,d_ptr(new FcitxQtConfigUIFactoryPrivate(this))
+{
+    Q_D(FcitxQtConfigUIFactory);
+    d->scan();
 }
 
 FcitxQtConfigUIFactory::~FcitxQtConfigUIFactory()
@@ -39,13 +51,14 @@ FcitxQtConfigUIFactory::~FcitxQtConfigUIFactory()
 
 FcitxQtConfigUIWidget* FcitxQtConfigUIFactory::create(const QString& file)
 {
+    Q_D(FcitxQtConfigUIFactory);
     char* localepath = fcitx_utils_get_fcitx_path("localedir");
-    bindtextdomain(plugins[file]->domain().toUtf8().data(), localepath);
+    bindtextdomain(d->plugins[file]->domain().toUtf8().data(), localepath);
     free(localepath);
-    return plugins[file]->create(file);
+    return d->plugins[file]->create(file);
 }
 
-void FcitxQtConfigUIFactory::scan()
+void FcitxQtConfigUIFactoryPrivate::scan()
 {
     QStringList dirs;
     // check plugin files

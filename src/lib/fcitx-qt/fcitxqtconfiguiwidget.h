@@ -17,8 +17,8 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITXCONFIGUIWIDGET_H
-#define FCITXCONFIGUIWIDGET_H
+#ifndef FCITXQTCONFIGUIWIDGET_H
+#define FCITXQTCONFIGUIWIDGET_H
 #include "fcitxqt_export.h"
 #include <QWidget>
 

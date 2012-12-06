@@ -17,12 +17,12 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITXCONNECTION_P_H
-#define FCITXCONNECTION_P_H
+#ifndef FCITXQTCONNECTION_P_H
+#define FCITXQTCONNECTION_P_H
 
 #include "fcitxqtconnection.h"
-#include <QWeakPointer>
-#include <QFileSystemWatcher>
+#include <QtCore/QWeakPointer>
+#include <QtCore/QFileSystemWatcher>
 
 class QDBusConnection;
 class QDBusServiceWatcher;

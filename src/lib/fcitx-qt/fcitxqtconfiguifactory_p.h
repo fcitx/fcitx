@@ -17,28 +17,23 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITX_QT_CONFIG_UI_FACTORY_H
-#define FCITX_QT_CONFIG_UI_FACTORY_H
+#ifndef FCITXQTCONFIGUIFACTORY_P_H
+#define FCITXQTCONFIGUIFACTORY_P_H
 
-#include <QtCore/QObject>
-#include <QMap>
-#include <QStringList>
+#include <QObject>
+#include "fcitxqtconfiguifactory.h"
 
-#include "fcitxqt_export.h"
-#include "fcitxqtconfiguiwidget.h"
-#include "fcitxqtconfiguiplugin.h"
-
-class FcitxQtConfigUIFactoryPrivate;
-class FCITX_QT_EXPORT_API FcitxQtConfigUIFactory : public QObject
-{
+class FcitxQtConfigUIFactoryPrivate : public QObject {
     Q_OBJECT
 public:
-    explicit FcitxQtConfigUIFactory(QObject* parent = 0);
-    virtual ~FcitxQtConfigUIFactory();
-    FcitxQtConfigUIWidget* create(const QString& file);
+    FcitxQtConfigUIFactoryPrivate(FcitxQtConfigUIFactory* conn);
+    virtual ~FcitxQtConfigUIFactoryPrivate();
+    FcitxQtConfigUIFactory * const q_ptr;
+    Q_DECLARE_PUBLIC(FcitxQtConfigUIFactory);
+
 private:
-    FcitxQtConfigUIFactoryPrivate* d_ptr;
-    Q_DECLARE_PRIVATE(FcitxQtConfigUIFactory);
+    void scan();
+    QMap<QString, FcitxQtConfigUIFactoryInterface*> plugins;
 };
 
-#endif // FCITX_CONFIG_UI_FACTORY_H
+#endif // FCITXQTCONFIGUIFACTORY_P_H

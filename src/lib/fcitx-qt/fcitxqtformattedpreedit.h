@@ -17,8 +17,8 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITX_FORMATTED_PREEDIT_H
-#define FCITX_FORMATTED_PREEDIT_H
+#ifndef FCITX_QT_FORMATTED_PREEDIT_H
+#define FCITX_QT_FORMATTED_PREEDIT_H
 
 #include "fcitxqt_export.h"
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2011~2011 by CSSlayer                                   *
+ *   Copyright (C) 2011~2012 by CSSlayer                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,16 +17,15 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITX_IM_H
-#define FCITX_IM_H
+#ifndef FCITX_QT_INPUT_METHOD_ITEM_H
+#define FCITX_QT_INPUT_METHOD_ITEM_H
 
 #include "fcitxqt_export.h"
 
 // Qt
-#include <QString>
-#include <QMetaType>
-#include <QDebug>
-#include <QDBusArgument>
+#include <QtCore/QString>
+#include <QtCore/QMetaType>
+#include <QtDBus/QDBusArgument>
 
 class FCITX_QT_EXPORT_API FcitxQtInputMethodItem
 {

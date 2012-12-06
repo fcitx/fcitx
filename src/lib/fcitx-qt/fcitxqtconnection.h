@@ -17,14 +17,12 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITXCONNECTION_H
-#define FCITXCONNECTION_H
-
+#ifndef FCITXQTCONNECTION_H
+#define FCITXQTCONNECTION_H
 
 #include "fcitxqt_export.h"
 
 #include <QtCore/QObject>
-#include <QtDBus/QDBusConnection>
 
 class QDBusConnection;
 

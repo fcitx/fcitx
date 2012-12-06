@@ -46,6 +46,7 @@ QT4_WRAP_CPP(
     fcitx_qt_MOC_SRCS
     ${fcitx_qt_HEADERS}
     fcitxqtconnection_p.h
+    fcitxqtconfiguifactory_p.h
 )
 
 if (ENABLE_X11)
