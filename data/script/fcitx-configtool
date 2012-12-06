@@ -151,7 +151,6 @@ detectDE
 case "$DE" in
     kde)
         order="kde gtk3 gtk xdg editor"
-        order="xdg kde gtk3 gtk xdg editor"
         ;;
     *)
         order="gtk3 gtk kde xdg editor"
