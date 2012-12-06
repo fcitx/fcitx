@@ -19,8 +19,8 @@
 
 #include "fcitxqtconfiguifactory.h"
 #include "fcitxqtconfiguiplugin.h"
-#include <fcitx-config/xdg.h>
-#include <fcitx-utils/utils.h>
+#include "fcitx-config/xdg.h"
+#include "fcitx-utils/utils.h"
 #include <QDir>
 #include <QDebug>
 #include <QLibrary>

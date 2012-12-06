@@ -3,6 +3,7 @@ set(FCITX_GCLIENT_SOURCES
   fcitxinputmethod.c
   fcitxkbd.c
   fcitxconnection.c
+  #fcitxdbusproxy.c
   )
 
 set(FCITX_GCLIENT_BUILT_SOURCES
@@ -13,6 +14,7 @@ set(FCITX_GCLIENT_HEADERS
   fcitxclient.h
   fcitxinputmethod.h
   fcitxkbd.h
+  #fcitxdbusproxy.h
   fcitxconnection.h
   )
 

@@ -114,9 +114,13 @@ boolean UnicodePreFilter(void* arg, FcitxKeySym sym, unsigned int state,
         if (FcitxHotkeyIsHotKey(sym, state, hkPrevPage)) {
             if (FcitxCandidateWordGoPrevPage(candList))
                 retVal = IRV_DISPLAY_MESSAGE;
+            else
+                retVal = IRV_DO_NOTHING;
         } else if (FcitxHotkeyIsHotKey(sym, state, hkNextPage)) {
             if (FcitxCandidateWordGoNextPage(candList))
                 retVal = IRV_DISPLAY_MESSAGE;
+            else
+                retVal = IRV_DO_NOTHING;
         } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)) {
             size_t len = strlen(uni->buffer);
             if (len > 0)

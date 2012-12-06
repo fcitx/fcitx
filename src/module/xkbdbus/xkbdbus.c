@@ -83,18 +83,22 @@ void* FcitxXkbDBusCreate(FcitxInstance* instance)
     xkbdbus->owner = instance;
     do {
         DBusConnection *conn = FcitxDBusGetConnection(instance);
-        if (conn == NULL) {
+        DBusConnection *privconn = FcitxDBusGetPrivConnection(instance);
+        if (conn == NULL && privconn == NULL) {
             FcitxLog(ERROR, "DBus Not initialized");
             break;
         }
 
         DBusObjectPathVTable fcitxIPCVTable = {NULL, &FcitxXkbDBusEventHandler, NULL, NULL, NULL, NULL };
 
-        if (!dbus_connection_register_object_path(conn,  FCITX_XKB_PATH,
-                &fcitxIPCVTable, xkbdbus)) {
-            FcitxLog(ERROR, "No memory");
-            break;
+        if (conn) {
+            dbus_connection_register_object_path(conn, FCITX_XKB_PATH, &fcitxIPCVTable, xkbdbus);
         }
+
+        if (privconn) {
+            dbus_connection_register_object_path(privconn, FCITX_XKB_PATH, &fcitxIPCVTable, xkbdbus);
+        }
+
         FcitxXkbRules *rules = FcitxXkbGetRules(instance);
 
         if (!rules)

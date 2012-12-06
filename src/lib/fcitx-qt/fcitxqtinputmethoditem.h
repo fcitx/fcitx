@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by CSSlayer                                   *
+ *   Copyright (C) 2011~2011 by CSSlayer                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,35 +17,49 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITX_FORMATTED_PREEDIT_H
-#define FCITX_FORMATTED_PREEDIT_H
+#ifndef FCITX_IM_H
+#define FCITX_IM_H
 
 #include "fcitxqt_export.h"
 
-#include <QtCore/QMetaType>
-#include <QtDBus/QDBusArgument>
+// Qt
+#include <QString>
+#include <QMetaType>
+#include <QDebug>
+#include <QDBusArgument>
 
-class FCITX_QT_EXPORT_API FcitxQtFormattedPreedit {
+class FCITX_QT_EXPORT_API FcitxQtInputMethodItem
+{
 public:
-    const QString& string() const;
-    qint32 format() const;
-    void setString(const QString& str);
-    void setFormat(qint32 format);
+    const QString& name() const;
+    const QString& uniqueName() const;
+    const QString& langCode() const;
+    bool enabled() const;
 
+    void setName(const QString& name);
+    void setUniqueName(const QString& name);
+    void setLangCode(const QString& name);
+    void setEnabled(bool name);
     static void registerMetaType();
 
-    bool operator ==(const FcitxQtFormattedPreedit& preedit) const;
+    inline bool operator < (const FcitxQtInputMethodItem& im) const {
+        if (m_enabled == true && im.m_enabled == false)
+            return true;
+        return false;
+    }
 private:
-    QString m_string;
-    qint32 m_format;
+    QString m_name;
+    QString m_uniqueName;
+    QString m_langCode;
+    bool m_enabled;
 };
 
-typedef QList<FcitxQtFormattedPreedit> FcitxQtFormattedPreeditList;
+typedef QList<FcitxQtInputMethodItem> FcitxQtInputMethodItemList;
 
-QDBusArgument& operator<<(QDBusArgument& argument, const FcitxQtFormattedPreedit& im);
-const QDBusArgument& operator>>(const QDBusArgument& argument, FcitxQtFormattedPreedit& im);
+QDBusArgument& operator<<(QDBusArgument& argument, const FcitxQtInputMethodItem& im);
+const QDBusArgument& operator>>(const QDBusArgument& argument, FcitxQtInputMethodItem& im);
 
-Q_DECLARE_METATYPE(FcitxQtFormattedPreedit)
-Q_DECLARE_METATYPE(FcitxQtFormattedPreeditList)
+Q_DECLARE_METATYPE(FcitxQtInputMethodItem)
+Q_DECLARE_METATYPE(FcitxQtInputMethodItemList)
 
 #endif

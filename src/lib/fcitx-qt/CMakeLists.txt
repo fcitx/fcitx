@@ -6,6 +6,9 @@ set(fcitx_qt_SOURCES
     fcitxqtconfiguiplugin.cpp
     fcitxqtconfiguiwidget.cpp
     fcitxqtconfiguifactory.cpp
+    fcitxqtkeyboardlayout.cpp
+    fcitxqtkeyboardproxy.cpp
+    fcitxqtinputmethoditem.cpp
     )
 
 set(fcitx_qt_HEADERS
@@ -17,6 +20,9 @@ set(fcitx_qt_HEADERS
     fcitxqtconfiguiplugin.h
     fcitxqtconfiguiwidget.h
     fcitxqtconfiguifactory.h
+    fcitxqtkeyboardlayout.h
+    fcitxqtkeyboardproxy.h
+    fcitxqtinputmethoditem.h
 )
 
 fcitx_translate_add_sources(${fcitx_qt_HEADERS} ${fcitx_qt_SOURCES})
@@ -38,14 +44,8 @@ include_directories(
 
 QT4_WRAP_CPP(
     fcitx_qt_MOC_SRCS
-    fcitxqtconnection.h
+    ${fcitx_qt_HEADERS}
     fcitxqtconnection_p.h
-    fcitxqtformattedpreedit.h
-    fcitxqtinputcontextproxy.h
-    fcitxqtinputmethodproxy.h
-    fcitxqtconfiguiplugin.h
-    fcitxqtconfiguiwidget.h
-    fcitxqtconfiguifactory.h
 )
 
 if (ENABLE_X11)
@@ -78,6 +78,10 @@ if (ENABLE_X11)
 endif (ENABLE_X11)
 
 install(TARGETS fcitx-qt LIBRARY DESTINATION "${libdir}")
+
+configure_file(fcitx-qt.pc.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-qt.pc)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-qt.pc
+  DESTINATION "${pkgconfdir}")
 
 install(FILES ${fcitx_qt_HEADERS} DESTINATION "${includedir}/fcitx-qt")
 
