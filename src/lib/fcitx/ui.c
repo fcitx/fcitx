@@ -639,9 +639,29 @@ void FcitxUIOnInputUnFocus(struct _FcitxInstance* instance)
 FCITX_EXPORT_API
 void FcitxUICommitPreedit(FcitxInstance* instance)
 {
-    if (instance->CurrentIC
-        && !instance->config->bDontCommitPreeditWhenUnfocus
+    if (!instance->CurrentIC)
+        return;
+
+    boolean callOnClose = false;
+    boolean doServerSideCommit = false;
+    if (!instance->config->bDontCommitPreeditWhenUnfocus
         && !(instance->CurrentIC->contextCaps & CAPACITY_CLIENT_UNFOCUS_COMMIT)) {
+        callOnClose = true;
+        doServerSideCommit = true;
+    }
+
+    if (instance->CurrentIC->contextCaps & CAPACITY_CLIENT_UNFOCUS_COMMIT) {
+        callOnClose = true;
+    }
+
+    if (callOnClose) {
+        FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
+        if (im && im->OnClose) {
+            im->OnClose(im->klass, CET_LostFocus);
+        }
+    }
+
+    if (doServerSideCommit) {
         FcitxInputState* input = FcitxInstanceGetInputState(instance);
         FcitxMessages* clientPreedit = FcitxInputStateGetClientPreedit(input);
 
@@ -654,6 +674,7 @@ void FcitxUICommitPreedit(FcitxInstance* instance)
         }
         FcitxMessagesSetMessageCount(clientPreedit, 0);
     }
+
 }
 
 FCITX_EXPORT_API

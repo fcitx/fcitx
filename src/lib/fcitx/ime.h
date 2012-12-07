@@ -150,6 +150,39 @@ extern "C" {
         void  (*padding5)(void *arg); /**< padding */
     } FcitxIMClass2;
 
+    typedef enum _FcitxIMCloseEventType {
+        /**
+         * when user press inactivate key, default behavior is commit raw preedit.
+         * If you want to OVERRIDE this behavior, be sure to implement this function.
+         *
+         * controlled by [Output/SendTextWhenSwitchEng], when this value is true, OnClose is
+         * called.
+         *
+         * And no matter in which case, Reset will be called after that.
+         */
+        CET_ChangeByInactivate,
+        /**
+         * when using lost focus
+         * this might be variance case to case. the default behavior is to commit
+         * the preedit, and resetIM.
+         *
+         * Controlled by [Output/DontCommitPreeditWhenUnfocus], this option will not
+         * work for application switch doesn't support async commit.
+         *
+         * So OnClose is called when preedit IS committed (not like CET_ChangeByInactivate,
+         * this behavior cannot be overrided), it give im a chance to choose remember this
+         * word or not.
+         *
+         * Input method need to notice, that the commit is already DONE, do not to extra commit.
+         */
+        CET_LostFocus,
+        /**
+         * when user switch to a different input method by hand
+         * such as ctrl+shift by default, or by ui,
+         * not implemented yet, default behavior is reset IM.
+         */
+        CET_ChangeByUser,
+    } FcitxIMCloseEventType;
 
     typedef boolean(*FcitxIMInit)(void *arg); /**< FcitxIMInit */
     typedef void (*FcitxIMResetIM)(void *arg); /**< FcitxIMResetIM */
@@ -160,6 +193,7 @@ extern "C" {
     typedef void (*FcitxIMReloadConfig)(void *arg); /**< FcitxIMReloadConfig */
     typedef INPUT_RETURN_VALUE (*FcitxIMKeyBlocker)(void* arg, FcitxKeySym, unsigned int); /**< FcitxIMKeyBlocker */
     typedef void (*FcitxIMUpdateSurroundingText)(void* arg); /**< FcitxIMKeyBlocker */
+    typedef void (*FcitxIMOnClose)(void* arg, FcitxIMCloseEventType);
 
     /**
      * a more fexible interface for input method
@@ -176,8 +210,9 @@ extern "C" {
         FcitxIMReloadConfig ReloadConfig; /**< reload configuration */
         FcitxIMKeyBlocker KeyBlocker; /**< block unused key */
         FcitxIMUpdateSurroundingText UpdateSurroundingText; /**< surrounding text update trigger */
-        FcitxIMDoInput DoReleaseInput;
-        void* padding[63]; /**< padding */
+        FcitxIMDoInput DoReleaseInput; /**< process key release event */
+        FcitxIMOnClose OnClose; /**< process when im being switched away */
+        void* padding[62]; /**< padding */
     } FcitxIMIFace;
 
     /**
@@ -257,6 +292,8 @@ extern "C" {
         FcitxIMUpdateSurroundingText UpdateSurroundingText; /**< called when surrounding text updated */
 
         FcitxIMDoInput DoReleaseInput;
+
+        FcitxIMOnClose OnClose;
 
         void* padding[8]; /**< padding */
     } FcitxIM;

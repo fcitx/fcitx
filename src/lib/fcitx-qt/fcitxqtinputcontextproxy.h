@@ -8,8 +8,8 @@
  * Do not edit! All changes made to it will be lost.
  */
 
-#ifndef FCITXQTINPUTCONTEXTPROXY_H_1354741545
-#define FCITXQTINPUTCONTEXTPROXY_H_1354741545
+#ifndef FCITXQTINPUTCONTEXTPROXY_H_1354921637
+#define FCITXQTINPUTCONTEXTPROXY_H_1354921637
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
@@ -42,12 +42,6 @@ public Q_SLOTS: // METHODS
     {
         QList<QVariant> argumentList;
         return asyncCallWithArgumentList(QLatin1String("CloseIC"), argumentList);
-    }
-
-    inline QDBusPendingReply<> CommitPreedit()
-    {
-        QList<QVariant> argumentList;
-        return asyncCallWithArgumentList(QLatin1String("CommitPreedit"), argumentList);
     }
 
     inline QDBusPendingReply<> DestroyIC()

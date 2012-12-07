@@ -93,7 +93,6 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
 static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
-static void IPCICCommitPreedit(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICSetCursorRect(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int x, int y, int w, int h);
 static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, const uint32_t originsym, const uint32_t keycode, const uint32_t originstate, uint32_t t, FcitxKeyEventType type);
 static boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
@@ -828,12 +827,6 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
             dbus_connection_send(connection, reply, NULL);
             dbus_message_unref(reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
-        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "CommitPreedit")) {
-            IPCICCommitPreedit(ipc, ic);
-            DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
-            result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "MouseEvent")) {
             DBusMessage *reply = dbus_message_new_method_return(msg);
             dbus_connection_send(connection, reply, NULL);
@@ -1033,18 +1026,6 @@ static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 {
     FcitxInputContext* currentic = FcitxInstanceGetCurrentIC(ipc->owner);
     if (ic && ic == currentic) {
-        FcitxUICloseInputWindow(ipc->owner);
-        FcitxInstanceResetInput(ipc->owner);
-    }
-
-    return;
-}
-
-static void IPCICCommitPreedit(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
-{
-    FcitxInputContext* currentic = FcitxInstanceGetCurrentIC(ipc->owner);
-    if (ic && ic == currentic) {
-        FcitxUICommitPreedit(ipc->owner);
         FcitxUICloseInputWindow(ipc->owner);
         FcitxInstanceResetInput(ipc->owner);
     }

@@ -429,6 +429,7 @@ void FcitxInstanceRegisterIMv2(FcitxInstance *instance,
     entry->KeyBlocker = iface.KeyBlocker;
     entry->UpdateSurroundingText = iface.UpdateSurroundingText;
     entry->DoReleaseInput = iface.DoReleaseInput;
+    entry->OnClose = iface.OnClose;
     entry->klass = imclass;
     entry->iPriority = priority;
     if (langCode)
@@ -602,10 +603,15 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                     }
                 } else if ((FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey])) && input->keyReleased == KR_SWITCH && !fc->bDoubleSwitchKey) {
                     retVal = IRV_DONOT_PROCESS;
-                    if (fc->bSendTextWhenSwitchEng) {
-                        if (input->iCodeInputCount != 0) {
-                            strcpy(FcitxInputStateGetOutputString(input), FcitxInputStateGetRawInputBuffer(input));
-                            retVal = IRV_ENG;
+                    if (currentIM && currentIM->OnClose) {
+                        currentIM->OnClose(currentIM->klass, CET_ChangeByInactivate);
+                    }
+                    else {
+                        if (fc->bSendTextWhenSwitchEng) {
+                            if (input->iCodeInputCount != 0) {
+                                strcpy(FcitxInputStateGetOutputString(input), FcitxInputStateGetRawInputBuffer(input));
+                                retVal = IRV_ENG;
+                            }
                         }
                     }
                     input->keyReleased = KR_OTHER;

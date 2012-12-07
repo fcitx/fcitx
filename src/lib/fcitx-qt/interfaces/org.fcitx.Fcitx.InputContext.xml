@@ -12,8 +12,6 @@
     </method>
     <method name="Reset">
     </method>
-    <method name="CommitPreedit">
-    </method>
     <method name="MouseEvent">
       <arg name="x" direction="in" type="i" />
     </method>
