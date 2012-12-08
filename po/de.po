@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-07 23:38-0500\n"
-"PO-Revision-Date: 2012-12-05 08:28+0000\n"
-"Last-Translator: mar well <marwell.1980@freenet.de>\n"
+"POT-Creation-Date: 2012-12-08 11:29-0500\n"
+"PO-Revision-Date: 2012-12-08 14:06+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/fcitx/"
 "language/de_DE/)\n"
 "Language: de\n"
@@ -114,9 +114,8 @@ msgid "Action after press enter"
 msgstr "Verhalten ENTER Taste"
 
 #: data/config.desc:33
-#, fuzzy
 msgid "Activate input method"
-msgstr "Keine verfügbare Eingabemethode"
+msgstr ""
 
 #: data/config.desc:147
 msgid "Active"
@@ -162,7 +161,6 @@ msgstr ""
 msgid "Add current input buffer to user dictionary"
 msgstr ""
 
-# unknown
 #: data/addon.desc:1 data/addon.desc:5 data/addon.desc:10 data/addon.desc:15
 #: data/addon.desc:24 data/addon.desc:29 data/addon.desc:33 data/addon.desc:40
 #: data/addon.desc:45 data/addon.desc:50 data/addon.desc:55 data/addon.desc:64
@@ -231,7 +229,6 @@ msgstr ""
 msgid "Alternative Trigger Key for QuickPhrase"
 msgstr ""
 
-# unknown
 #: data/config.desc:198 data/config.desc:204 data/config.desc:210
 #: data/config.desc:216 data/config.desc:222 data/config.desc:228
 #: data/config.desc:234
@@ -268,9 +265,8 @@ msgstr ""
 #: src/module/autoeng/fcitx-autoeng.desc:17
 #: src/module/autoeng/fcitx-autoeng.desc:26
 #: src/module/autoeng/fcitx-autoeng.desc:34
-#, fuzzy
 msgid "Auto English"
-msgstr "Auto Englisch"
+msgstr ""
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:3
 msgid "Auto English Mode"
@@ -293,9 +289,8 @@ msgid "Auto Phrase Phrase"
 msgstr ""
 
 #: src/im/table/table.desc:43
-#, fuzzy
 msgid "Auto Send Candidate Word"
-msgstr "Regel Darstellung vorgeschlagener Zeichen"
+msgstr ""
 
 #: src/lib/fcitx-config/fcitx-config.c:1170
 #: src/lib/fcitx-config/fcitx-config.c:1179
@@ -419,7 +414,6 @@ msgstr "CLASSIC (Fcitx Benutzeroberfläche)"
 msgid "Classic User Interface with Skin support"
 msgstr "CLASSIC mit Unterstützung von Skins"
 
-# unknown
 #: src/ui/classic/fcitx-classic-ui.desc:1
 #: src/ui/classic/fcitx-classic-ui.desc:7
 #: src/ui/classic/fcitx-classic-ui.desc:13
@@ -442,14 +436,12 @@ msgid "Clear Frequency"
 msgstr ""
 
 #: src/module/imselector/fcitx-imselector.desc:14
-#, fuzzy
 msgid "Clear local Input Method"
-msgstr "Keine verfügbare Eingabemethode"
+msgstr ""
 
 #: src/module/imselector/imselector.c:327
-#, fuzzy
 msgid "Clear local input method"
-msgstr "Keine verfügbare Eingabemethode"
+msgstr ""
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:3
 #: src/module/clipboard/fcitx-clipboard.desc:1
@@ -478,7 +470,6 @@ msgstr ""
 msgid "Code is "
 msgstr ""
 
-# unknown
 #: src/im/table/table.desc:1 src/im/table/table.desc:6
 #: src/im/table/table.desc:10 src/im/table/table.desc:14
 #: src/im/table/table.desc:18 src/im/table/table.desc:27
@@ -559,15 +550,12 @@ msgid "Convert Simplified Chinese To Traditional Chinese"
 msgstr "Konvertieren Kurz- zu Langzeichen"
 
 #: src/module/chttrans/chttrans.c:97 src/module/chttrans/chttrans.c:128
-#, fuzzy
 msgid "Convert to Simplified Chinese"
-msgstr "Konvertieren Kurz- zu Langzeichen"
+msgstr ""
 
-# unknown
 #: src/module/chttrans/chttrans.c:97 src/module/chttrans/chttrans.c:128
-#, fuzzy
 msgid "Convert to Traditional Chinese"
-msgstr "Chinesisch Langform"
+msgstr ""
 
 #: src/ui/classic/skin.desc:103 src/ui/classic/skin.desc:111
 #: src/ui/classic/skin.desc:195 src/ui/classic/skin.desc:203
@@ -636,9 +624,8 @@ msgid "Default Spell Hint Backends Order"
 msgstr ""
 
 #: src/im/table/fcitx-table.desc:9
-#, fuzzy
 msgid "Delete Phrase"
-msgstr "Kurzbefehl Löschen benutzerdefinierter Phrasen"
+msgstr ""
 
 #: data/addon.desc:43
 msgid "Dependency"
@@ -821,18 +808,16 @@ msgid "Fcitx Config Tool"
 msgstr "Fcitx Konfigurationswerkzeug"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
-#, fuzzy
 msgid "Fcitx DBus Frontend"
-msgstr "Frontend für XIM"
+msgstr ""
 
 #: data/fcitx-configtool.desktop.in:3
 msgid "Fcitx GUI Config Tool"
 msgstr "Fcitx Benutzeroberfläche Konfigurationswerkzeug"
 
 #: src/module/lua/fcitx-lua.conf.in:3
-#, fuzzy
 msgid "Fcitx Lua Support"
-msgstr "Unterstützung Interpunktion"
+msgstr ""
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:3
 msgid "Fcitx Skin Installer"
@@ -873,9 +858,8 @@ msgid "Fix misstype gn/ng"
 msgstr "Autokorrektur gn/ng"
 
 #: src/im/pinyin/fcitx-pinyin.desc:145
-#, fuzzy
 msgid "Fix misstype v/u"
-msgstr "Autokorrektur gn/ng"
+msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:18
 msgid "Fix preedit cursor at head"
@@ -890,9 +874,8 @@ msgid "Font Locale to display"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:16
-#, fuzzy
 msgid "Font Size"
-msgstr "Schriftgröße Menu"
+msgstr ""
 
 #: src/ui/classic/skin.desc:28
 msgid "Font size repect dpi setting"
@@ -917,19 +900,16 @@ msgstr "Schnittstelle: Öffnen von %s fehlgeschlagen %s"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
-#, fuzzy
 msgid "Full width Character"
-msgstr "Vollbreite Zeichen"
+msgstr ""
 
 #: src/module/punc/punc.c:148 src/module/punc/punc.c:573
-#, fuzzy
 msgid "Full width punct"
-msgstr "Vollbreite Zeichen"
+msgstr ""
 
 #: src/module/vk/vk.c:52
-#, fuzzy
 msgid "Fullwidth"
-msgstr "Vollbreite Zeichen"
+msgstr ""
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:3
 msgid "Fullwidth Character"
@@ -1009,9 +989,8 @@ msgstr ""
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
-#, fuzzy
 msgid "Half width Character"
-msgstr "Vollbreite Zeichen"
+msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:46
 msgid "Hide"
@@ -1021,7 +1000,6 @@ msgstr ""
 msgid "Hiragana"
 msgstr ""
 
-# unknown
 #: data/config.desc:1 data/config.desc:6 data/config.desc:12
 #: data/config.desc:30 data/config.desc:36 data/config.desc:42
 #: data/config.desc:47 data/config.desc:53 data/config.desc:63
@@ -1062,7 +1040,6 @@ msgstr "Eingabemethode: Defekte Eingabemethode %s"
 msgid "IM: open %s fail %s"
 msgstr "Eingabemethode: Öffnen von %s fehlgeschlagen %s"
 
-# unknown
 #: src/module/imselector/fcitx-imselector.desc:1
 #: src/module/imselector/fcitx-imselector.desc:6
 #: src/module/imselector/fcitx-imselector.desc:11
@@ -1078,9 +1055,8 @@ msgid "IconName"
 msgstr "Name des Icons"
 
 #: src/module/xkb/fcitx-xkb.desc:9
-#, fuzzy
 msgid "Ignore Input Method Layout Request"
-msgstr "Argument für das IM-Register"
+msgstr ""
 
 #: src/im/table/table.desc:191
 msgid "Ignore Punctuation"
@@ -1091,9 +1067,8 @@ msgid "Ignore blank selections"
 msgstr ""
 
 #: data/config.desc:39
-#, fuzzy
 msgid "Inactivate Input Method"
-msgstr "Keine verfügbare Eingabemethode"
+msgstr ""
 
 #: data/config.desc:146
 msgid "Inactive"
@@ -1152,7 +1127,6 @@ msgstr "Eingabegeschwindigkeit"
 msgid "Input method selector"
 msgstr ""
 
-# unknown
 #: data/addon.desc:18 data/inputmethod.desc:1 data/inputmethod.desc:5
 #: data/inputmethod.desc:9 data/inputmethod.desc:13 data/inputmethod.desc:17
 #: data/inputmethod.desc:21
@@ -1173,9 +1147,9 @@ msgid "Invalid Entry: line %d missing '='"
 msgstr "Ungültiger Eintrag: In Linie %d fehlt \"=\""
 
 #: src/lib/fcitx-utils/desktop-parse.c:515
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid entry line @ line %d %s"
-msgstr "Ungültiger Eintrag: In Linie %d fehlt \"=\""
+msgstr ""
 
 #: src/lib/fcitx-utils/desktop-parse.c:473
 #, c-format
@@ -1202,7 +1176,6 @@ msgstr ""
 msgid "Key Color On Virutal Keyboard"
 msgstr "Icon für Virtuelle Tastatur"
 
-# unknown
 #: src/im/keyboard/keyboard.c:349 src/im/keyboard/keyboard.c:375
 #: src/im/keyboard/keyboard.c:423 src/im/keyboard/keyboard.c:436
 #: src/im/keyboard/keyboard.c:461 src/im/keyboard/keyboard.c:467
@@ -1212,9 +1185,8 @@ msgstr "Icon für Virtuelle Tastatur"
 #: src/im/keyboard/fcitx-keyboard.desc:27
 #: src/im/keyboard/fcitx-keyboard.desc:36
 #: src/im/keyboard/fcitx-keyboard.desc:41
-#, fuzzy
 msgid "Keyboard"
-msgstr "Oberfläche Tastatur"
+msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.conf.in:3
 msgid "Keyboard Layout"
@@ -1329,11 +1301,9 @@ msgstr ""
 msgid "Logo Icon"
 msgstr ""
 
-# unknown
 #: src/im/table/fcitx-table.desc:24
-#, fuzzy
 msgid "Lookup Pinyin"
-msgstr "Pinyin"
+msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:5
 msgid "MS"
@@ -1477,9 +1447,8 @@ msgid "No input window"
 msgstr ""
 
 #: src/module/imselector/imselector.c:316
-#, fuzzy
 msgid "No local input method"
-msgstr "Keine verfügbare Eingabemethode"
+msgstr ""
 
 #: src/lib/fcitx/instance.c:184 src/lib/fcitx/instance.c:430
 msgid "No remind"
@@ -1532,7 +1501,6 @@ msgstr ""
 msgid "Other Color"
 msgstr ""
 
-# unknown
 #: data/config.desc:151 data/config.desc:157 data/config.desc:167
 #: data/config.desc:173 data/config.desc:179 data/config.desc:186
 #: data/config.desc:192
@@ -1563,7 +1531,6 @@ msgstr ""
 msgid "Phrase:"
 msgstr ""
 
-# unknown
 #: src/im/pinyin/py.c:104 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
 #: src/im/pinyin/fcitx-pinyin.desc:15 src/im/pinyin/fcitx-pinyin.desc:20
@@ -1581,7 +1548,6 @@ msgstr ""
 msgid "Pinyin"
 msgstr "Pinyin"
 
-# unknown
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:1
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:7
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:13
@@ -1590,9 +1556,8 @@ msgstr "Pinyin"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:32
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:37
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:42
-#, fuzzy
 msgid "Pinyin Enhance"
-msgstr "Pinyin"
+msgstr ""
 
 #: src/im/pinyin/py.c:423
 msgid "Pinyin Index Magic Number Doesn't match"
@@ -1675,13 +1640,11 @@ msgstr "Priorität"
 msgid "Priority of addon"
 msgstr ""
 
-# unknown
 #: data/profile.desc:1 data/profile.desc:6 data/profile.desc:11
 #: data/profile.desc:16 data/profile.desc:21 data/profile.desc:26
 msgid "Profile"
 msgstr "Profil"
 
-# unknown
 #: data/config.desc:127 data/config.desc:133 data/config.desc:142
 msgid "Program"
 msgstr "Programm"
@@ -1730,7 +1693,6 @@ msgstr ""
 msgid "Quick Phrase: "
 msgstr ""
 
-# unknown
 #: src/module/quickphrase/fcitx-quickphrase.desc:1
 #: src/module/quickphrase/fcitx-quickphrase.desc:10
 #: src/module/quickphrase/fcitx-quickphrase.desc:15
@@ -1860,9 +1822,8 @@ msgid "Saving All Config and Input History"
 msgstr ""
 
 #: data/config.desc:61
-#, fuzzy
 msgid "Scroll between Input Method"
-msgstr "Keine verfügbare Eingabemethode"
+msgstr ""
 
 #: src/module/unicode/unicode.c:229
 msgid "Search unicode"
@@ -1975,7 +1936,6 @@ msgstr ""
 msgid "Skin Version"
 msgstr ""
 
-# unknown
 #: src/ui/classic/skin.desc:17 src/ui/classic/skin.desc:21
 #: src/ui/classic/skin.desc:26 src/ui/classic/skin.desc:31
 #: src/ui/classic/skin.desc:35 src/ui/classic/skin.desc:39
@@ -1985,13 +1945,11 @@ msgstr ""
 msgid "SkinFont"
 msgstr "Oberfläche Font"
 
-# unknown
 #: src/ui/classic/skin.desc:1 src/ui/classic/skin.desc:5
 #: src/ui/classic/skin.desc:9 src/ui/classic/skin.desc:13
 msgid "SkinInfo"
 msgstr "Oberfläche Info"
 
-# unknown
 #: src/ui/classic/skin.desc:135 src/ui/classic/skin.desc:139
 #: src/ui/classic/skin.desc:143 src/ui/classic/skin.desc:147
 #: src/ui/classic/skin.desc:151 src/ui/classic/skin.desc:155
@@ -2003,12 +1961,10 @@ msgstr "Oberfläche Info"
 msgid "SkinInputBar"
 msgstr "Oberfläche Eingabefeld"
 
-# unknown
 #: src/ui/classic/skin.desc:259 src/ui/classic/skin.desc:264
 msgid "SkinKeyboard"
 msgstr "Oberfläche Tastatur"
 
-# unknown
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
 #: src/ui/classic/skin.desc:83 src/ui/classic/skin.desc:87
@@ -2019,7 +1975,6 @@ msgstr "Oberfläche Tastatur"
 msgid "SkinMainBar"
 msgstr "Oberfläche Hauptfenster"
 
-# unknown
 #: src/ui/classic/skin.desc:215 src/ui/classic/skin.desc:219
 #: src/ui/classic/skin.desc:223 src/ui/classic/skin.desc:227
 #: src/ui/classic/skin.desc:231 src/ui/classic/skin.desc:235
@@ -2028,7 +1983,6 @@ msgstr "Oberfläche Hauptfenster"
 msgid "SkinMenu"
 msgstr "Oberfläche Menu"
 
-# unknown
 #: src/ui/classic/skin.desc:207 src/ui/classic/skin.desc:211
 msgid "SkinTrayIcon"
 msgstr "Oberfläche Trayicons"
@@ -2170,20 +2124,17 @@ msgid "Tip Message Color"
 msgstr ""
 
 #: src/module/punc/punc.c:149 src/module/punc/punc.c:574
-#, fuzzy
 msgid "Toggle Full Width Punctuation"
-msgstr "Verwende Vollbreite Form der Punktuation"
+msgstr ""
 
 #: src/module/fullwidthchar/fullwidthchar.c:115
 #: src/module/fullwidthchar/fullwidthchar.c:192
-#, fuzzy
 msgid "Toggle Half/Full width Character"
-msgstr "Verwende Vollbreite Form der Zeichen"
+msgstr ""
 
 #: src/ui/kimpanel/kimpanel.c:732
-#, fuzzy
 msgid "Toggle Input Method"
-msgstr "Eingabemethode"
+msgstr ""
 
 #: src/lib/fcitx/instance.c:185 src/lib/fcitx/instance.c:431
 msgid "Toggle Remind"
@@ -2194,9 +2145,8 @@ msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr ""
 
 #: src/module/vk/vk.c:154
-#, fuzzy
 msgid "Toggle Virtual Keyboard"
-msgstr "Virtuelle Tastatur"
+msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:12
 msgid "Toggle for enable or disable"
@@ -2214,7 +2164,6 @@ msgstr ""
 msgid "Traditional Chinese Translate Engine"
 msgstr ""
 
-# unknown
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
 msgid "TraditionalChinese"
@@ -2225,9 +2174,8 @@ msgid "Treating abbreviated Pinyin as English"
 msgstr ""
 
 #: data/config.desc:4
-#, fuzzy
 msgid "Trigger Input Method"
-msgstr "Eingabemethode"
+msgstr ""
 
 #: src/module/clipboard/fcitx-clipboard.desc:25
 msgid "Trigger Key for Clipboard History List"
@@ -2388,12 +2336,10 @@ msgstr "Wubi"
 msgid "WubiPinyin"
 msgstr "Wubi Pinyin"
 
-# unknown
 #: src/module/xkb/fcitx-xkb.desc:1 src/module/xkb/fcitx-xkb.desc:6
 #: src/module/xkb/fcitx-xkb.desc:11 src/module/xkb/fcitx-xkb.desc:16
-#, fuzzy
 msgid "X Keyboard"
-msgstr "Oberfläche Tastatur"
+msgstr ""
 
 #: src/module/xkb/fcitx-xkb.conf.in:3 src/module/xkb/fcitx-xkb.conf.in:4
 msgid "X Keyboard Integration"
@@ -2429,7 +2375,6 @@ msgstr "Fehler XMODIFIERS"
 msgid "XiaoHe"
 msgstr ""
 
-# unknown
 #: src/frontend/xim/fcitx-xim.desc:1
 msgid "Xim"
 msgstr "Xim"

@@ -1,22 +1,24 @@
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Weng Xuetian <wengxt@gmail.com>, 2010, 2011, 2012.
+# Christopher Meng <cickumqt@gmail.com>, 2012.
+# marguerite su <i@marguerite.su>, 2012.
+# Weng Xuetian <wengxt@gmail.com>, 2010-2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-07 23:03-0500\n"
-"PO-Revision-Date: 2012-12-06 18:14-0500\n"
-"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
-"Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
+"POT-Creation-Date: 2012-12-08 11:29-0500\n"
+"PO-Revision-Date: 2012-12-08 14:07+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: src/im/table/table.c:1405
 msgid " Ctrl+Delete To Delete"
@@ -2407,152 +2409,3 @@ msgstr "xmodmap 命令"
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
-
-#~ msgid "%s"
-#~ msgstr "%s"
-
-#~ msgid "&Cancel"
-#~ msgstr "取消(&C)"
-
-#~ msgid "&Quit"
-#~ msgstr "退出(&Q)"
-
-#~ msgid "About Fcitx"
-#~ msgstr "关于Fcitx"
-
-#~ msgid "Add Watch Function Error"
-#~ msgstr "增加监听函数错误"
-
-#~ msgid "Auto Send Candidate Word if no match in Code Table"
-#~ msgstr "空码自动上屏"
-
-#~ msgid "Chinese Mode Icon"
-#~ msgstr "中文模式图标"
-
-#~ msgid "Close editor"
-#~ msgstr "关闭编辑器"
-
-#~ msgid "Connection Error (%s)"
-#~ msgstr "连接错误 (%s)"
-
-#~ msgid "Current is %s"
-#~ msgstr "当前为: %s"
-
-#~ msgid ""
-#~ "Do not show input window if there is only one candidate (Hide when only "
-#~ "preedit string must be selected)"
-#~ msgstr ""
-#~ "只有一个候选词时不显示输入窗口（只有预编辑字符串时不显示窗口必须选中）"
-
-#~ msgid "Enable word hint if available"
-#~ msgstr "如果可用则使用单词提示"
-
-#~ msgid "Enabled in input"
-#~ msgstr "输入中启用"
-
-#, fuzzy
-#~ msgid "Enum11=Disabled"
-#~ msgstr "禁用"
-
-#~ msgid "FCITX -- Get Signal No.: %d"
-#~ msgstr "Fcitx接收到信号: %d"
-
-#~ msgid "Full Width Character"
-#~ msgstr "全角字符"
-
-#~ msgid "Hotkey of Going Next Page"
-#~ msgstr "快捷键: 后一页"
-
-#~ msgid "Hotkey of Going Prev Page"
-#~ msgstr "快捷键: 前一页"
-
-#~ msgid ""
-#~ "If you use login manager like gdm or kdm, put those lines in your ~/."
-#~ "xprofile."
-#~ msgstr ""
-#~ "如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
-
-#~ msgid "If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc."
-#~ msgstr "如果您使用 ~/.xinitrc 和 startx，请将这些行加入到 ~/.xinitrc 中。"
-
-#~ msgid "It's the first time Fcitx Start."
-#~ msgstr "这是 Fcitx 首次启动"
-
-#~ msgid "Keyboard - %s"
-#~ msgstr "键盘 - %s"
-
-#~ msgid "Keyboard - %s - %s"
-#~ msgstr "键盘 - %s - %s"
-
-#~ msgid "Keyboard - Latin"
-#~ msgstr "键盘 - 拉丁字母"
-
-#~ msgid "Keyboard Input Method"
-#~ msgstr "键盘输入法"
-
-#~ msgid "Left-down position of Input"
-#~ msgstr "输入文字左下角"
-
-#~ msgid "Left-down position of Output"
-#~ msgstr "输出文字左下角"
-
-#~ msgid "Load Table Config File:%s"
-#~ msgstr "加载码表文件: %s"
-
-#~ msgid "Load Table Dict from %s"
-#~ msgstr "加载码表%s"
-
-#~ msgid "Name Error (%s)"
-#~ msgstr "名称错误 (%s)"
-
-#~ msgid "OpenCC error"
-#~ msgstr "OpenCC 错误"
-
-#~ msgid "OpenCC initialization error"
-#~ msgstr "OpenCC 初始化失败"
-
-#~ msgid "Or (Depends on you install im module or not)"
-#~ msgstr "或者（取决于您是否安装了im module）"
-
-#~ msgid ""
-#~ "Or You may need to set environment varibles below to make fcitx work "
-#~ "correctly."
-#~ msgstr "或者你需要设置以下环境变量从而让Fcitx正常工作。"
-
-#~ msgid "Please check your environment varibles."
-#~ msgstr "请检查你的环境变量的设置"
-
-#, fuzzy
-#~ msgid "Private Name Error (%s)"
-#~ msgstr "名称错误 (%s)"
-
-#, fuzzy
-#~ msgid "Restart (%s)"
-#~ msgstr "重新启动"
-
-#~ msgid "Show Point After Index"
-#~ msgstr "序号后加点"
-
-#~ msgid "Simp/Trad Chinese Conversion"
-#~ msgstr "简繁中文转换"
-
-#~ msgid "Switching Active and Inactive Mode"
-#~ msgstr "切换激活/非激活状态"
-
-#~ msgid "Table Config %s is %s"
-#~ msgstr "Table Config %s is %s"
-
-#~ msgid "Traditional Chinese Translate"
-#~ msgstr "简繁转换"
-
-#~ msgid "Unable to create process"
-#~ msgstr "无法创建进程"
-
-#~ msgid "Use first input method as inactive state"
-#~ msgstr "使用第一个输入法作为非激活状态"
-
-#~ msgid "Use presage to predict if possible."
-#~ msgstr "如果可以则使用 presage 增强单词提示功能"
-
-#~ msgid "You can use tools provided by your distribution."
-#~ msgstr "您可以使用您发行版提供的工具。"
