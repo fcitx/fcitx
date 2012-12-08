@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-06 18:14-0500\n"
+"POT-Creation-Date: 2012-12-07 23:03-0500\n"
 "PO-Revision-Date: 2012-07-23 14:12+0000\n"
 "Last-Translator: mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
@@ -52,7 +52,7 @@ msgstr ""
 msgid "(Unavailable)"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1587
+#: src/lib/fcitx/ime.c:1593
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -1113,7 +1113,7 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1493 data/fcitx-autostart.desktop.in:3
+#: src/lib/fcitx/ime.c:1499 data/fcitx-autostart.desktop.in:3
 #: data/fcitx.desktop.in:3
 #, fuzzy
 msgid "Input Method"
@@ -1127,7 +1127,7 @@ msgstr ""
 msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1584
+#: src/lib/fcitx/ime.c:1590
 msgid "Input Speed: "
 msgstr ""
 
@@ -1442,7 +1442,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:507
+#: src/lib/fcitx/ime.c:508
 msgid "No available Input Method"
 msgstr ""
 
@@ -2412,7 +2412,7 @@ msgstr ""
 msgid "Ziranma"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1590
+#: src/lib/fcitx/ime.c:1596
 msgid "min Num of Characters: "
 msgstr ""
 

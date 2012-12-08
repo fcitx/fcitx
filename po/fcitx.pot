@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-06 18:14-0500\n"
+"POT-Creation-Date: 2012-12-07 23:03-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -298,24 +298,24 @@ msgstr ""
 msgid "IM: bad im %s"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:507
+#: src/lib/fcitx/ime.c:508
 msgid "No available Input Method"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1493 data/fcitx-autostart.desktop.in:3
+#: src/lib/fcitx/ime.c:1499 data/fcitx-autostart.desktop.in:3
 #: data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1584
+#: src/lib/fcitx/ime.c:1590
 msgid "Input Speed: "
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1587
+#: src/lib/fcitx/ime.c:1593
 msgid "/min  Time Used: "
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1590
+#: src/lib/fcitx/ime.c:1596
 msgid "min Num of Characters: "
 msgstr ""
 
