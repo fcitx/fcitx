@@ -34,6 +34,9 @@ target_link_libraries(testobjpool fcitx-utils)
 add_executable(testhandlertable testhandlertable.c)
 target_link_libraries(testhandlertable fcitx-utils)
 
+add_executable(testhotkey testhotkey.c)
+target_link_libraries(testhotkey fcitx-config)
+
 add_executable(testpinyin
     ../src/im/pinyin/pyParser.c
     ../src/im/pinyin/pyMapTable.c
@@ -85,3 +88,6 @@ add_test(NAME testunicode
 
 add_test(NAME testdbuslaunch
          COMMAND testdbuslaunch)
+
+add_test(NAME testhotkey
+         COMMAND testhotkey)

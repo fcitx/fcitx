@@ -580,6 +580,7 @@ boolean FcitxHotkeyIsHotKeyModifierCombine(FcitxKeySym sym, unsigned int state)
 FCITX_EXPORT_API
 void FcitxHotkeyGetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsigned int* outs)
 {
+    /* key state != 0 */
     if (iKeyState) {
         if (iKeyState != FcitxKeyState_Shift && FcitxHotkeyIsHotKeyLAZ(keysym, 0))
             keysym = keysym + FcitxKey_A - FcitxKey_a;
@@ -587,11 +588,18 @@ void FcitxHotkeyGetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* 
          * alt shift 1 shoud be alt + !
          * shift+s should be S
          */
-        if ((iKeyState & FcitxKeyState_Shift)
-            && (((FcitxHotkeyIsHotKeySimple(keysym, 0) || FcitxKeySymToUnicode(keysym) != 0)
-                 && keysym != FcitxKey_space && keysym != FcitxKey_Return)
-                || (keysym >= FcitxKey_KP_0 && keysym <= FcitxKey_KP_9)))
-            iKeyState &= ~FcitxKeyState_Shift;
+
+        if (FcitxHotkeyIsHotKeyLAZ(keysym, 0) || FcitxHotkeyIsHotKeyUAZ(keysym, 0)) {
+            if (iKeyState == FcitxKeyState_Shift)
+                iKeyState &= ~FcitxKeyState_Shift;
+        }
+        else {
+            if ((iKeyState & FcitxKeyState_Shift)
+                && (((FcitxHotkeyIsHotKeySimple(keysym, 0) || FcitxKeySymToUnicode(keysym) != 0)
+                    && keysym != FcitxKey_space && keysym != FcitxKey_Return)
+                    || (keysym >= FcitxKey_KP_0 && keysym <= FcitxKey_KP_9)))
+                iKeyState &= ~FcitxKeyState_Shift;
+        }
     }
 
     if (keysym == FcitxKey_ISO_Left_Tab)
