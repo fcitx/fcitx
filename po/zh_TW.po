@@ -1,26 +1,24 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-#   <alisha.4m@gmail.com>, 2012.
 # Alisha <alisha.4m@gmail.com>, 2012.
-#   <hiunnhue108@ymail.com>, 2012.
 # Weng Xuetian <wengxt@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-07 23:03-0500\n"
-"PO-Revision-Date: 2012-12-06 16:33+0000\n"
-"Last-Translator: Hiunn_Hue <hiunnhue108@ymail.com>\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
-"language/zh_TW/)\n"
+"POT-Creation-Date: 2012-12-07 23:38-0500\n"
+"PO-Revision-Date: 2012-12-07 23:37-0500\n"
+"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
+"Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"language/zh_TW/)\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: src/im/table/table.c:1405
 msgid " Ctrl+Delete To Delete"
@@ -52,7 +50,7 @@ msgstr ""
 
 #: src/im/keyboard/keyboard.c:425 src/im/keyboard/keyboard.c:442
 msgid "(Unavailable)"
-msgstr ""
+msgstr "(不可用)"
 
 #: src/lib/fcitx/ime.c:1593
 msgid "/min  Time Used: "
@@ -93,9 +91,8 @@ msgid "ABC"
 msgstr "智能ABC"
 
 #: data/config.desc:25
-#, fuzzy
 msgid "ALT Both"
-msgstr "兩側 Ctrl"
+msgstr "兩側 Alt"
 
 #: data/config.desc:19
 msgid "ALT_L_SHIFT"
@@ -118,9 +115,8 @@ msgid "Action after press enter"
 msgstr "按下 enter 鍵後動作"
 
 #: data/config.desc:33
-#, fuzzy
 msgid "Activate input method"
-msgstr "無可用輸入法"
+msgstr ""
 
 #: data/config.desc:147
 msgid "Active"
@@ -155,9 +151,8 @@ msgid "Add Lua script support to Fcitx"
 msgstr ""
 
 #: src/im/table/fcitx-table.desc:4
-#, fuzzy
 msgid "Add Phrase"
-msgstr "自動字詞"
+msgstr ""
 
 #: src/module/unicode/fcitx-unicode.conf.in:4
 msgid "Add Unicode Typing Support"
@@ -167,7 +162,6 @@ msgstr ""
 msgid "Add current input buffer to user dictionary"
 msgstr ""
 
-# unknown
 #: data/addon.desc:1 data/addon.desc:5 data/addon.desc:10 data/addon.desc:15
 #: data/addon.desc:24 data/addon.desc:29 data/addon.desc:33 data/addon.desc:40
 #: data/addon.desc:45 data/addon.desc:50 data/addon.desc:55 data/addon.desc:64
@@ -221,9 +215,8 @@ msgstr ""
 #: src/module/autoeng/fcitx-autoeng.desc:7
 #: src/module/clipboard/fcitx-clipboard.desc:40
 #: src/module/quickphrase/fcitx-quickphrase.desc:21
-#, fuzzy
 msgid "Alt"
-msgstr "所有"
+msgstr "Alt"
 
 #: src/im/table/table.desc:166
 msgid "Alternative Next Page Key"
@@ -234,11 +227,9 @@ msgid "Alternative Prev Page Key"
 msgstr "替代上一頁快捷鍵"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:13
-#, fuzzy
 msgid "Alternative Trigger Key for QuickPhrase"
-msgstr "快速字詞觸發鍵"
+msgstr "額外快速字詞觸發鍵"
 
-# unknown
 #: data/config.desc:198 data/config.desc:204 data/config.desc:210
 #: data/config.desc:216 data/config.desc:222 data/config.desc:228
 #: data/config.desc:234
@@ -274,7 +265,6 @@ msgstr ""
 #: src/module/autoeng/fcitx-autoeng.desc:17
 #: src/module/autoeng/fcitx-autoeng.desc:26
 #: src/module/autoeng/fcitx-autoeng.desc:34
-#, fuzzy
 msgid "Auto English"
 msgstr "自動英文模式"
 
@@ -299,9 +289,8 @@ msgid "Auto Phrase Phrase"
 msgstr "字詞參與自動造詞"
 
 #: src/im/table/table.desc:43
-#, fuzzy
 msgid "Auto Send Candidate Word"
-msgstr "選擇第二及第三候選詞"
+msgstr ""
 
 #: src/lib/fcitx-config/fcitx-config.c:1170
 #: src/lib/fcitx-config/fcitx-config.c:1179
@@ -396,7 +385,7 @@ msgstr "選擇鍵"
 
 #: data/config.desc:112
 msgid "Choose Second and Third Candidate Word"
-msgstr "選擇第二及第三候選詞"
+msgstr "選擇第二第三候選詞"
 
 #: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:126
 #: src/module/autoeng/fcitx-autoeng.desc:2
@@ -414,9 +403,8 @@ msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "選擇放在前面的字詞，Escape 鍵取消"
 
 #: src/im/table/table.c:723
-#, fuzzy
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
-msgstr "選擇放在前面的字詞，Escape 鍵取消"
+msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
@@ -424,9 +412,8 @@ msgstr "經典介面"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
-msgstr "支援佈景的經典介面"
+msgstr "支援皮膚的經典介面"
 
-# unknown
 #: src/ui/classic/fcitx-classic-ui.desc:1
 #: src/ui/classic/fcitx-classic-ui.desc:7
 #: src/ui/classic/fcitx-classic-ui.desc:13
@@ -449,14 +436,12 @@ msgid "Clear Frequency"
 msgstr ""
 
 #: src/module/imselector/fcitx-imselector.desc:14
-#, fuzzy
 msgid "Clear local Input Method"
-msgstr "無可用輸入法"
+msgstr "清空局部輸入法"
 
 #: src/module/imselector/imselector.c:327
-#, fuzzy
 msgid "Clear local input method"
-msgstr "無可用輸入法"
+msgstr ""
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:3
 #: src/module/clipboard/fcitx-clipboard.desc:1
@@ -485,7 +470,6 @@ msgstr "碼表名稱"
 msgid "Code is "
 msgstr "編碼為 "
 
-# unknown
 #: src/im/table/table.desc:1 src/im/table/table.desc:6
 #: src/im/table/table.desc:10 src/im/table/table.desc:14
 #: src/im/table/table.desc:18 src/im/table/table.desc:27
@@ -518,7 +502,7 @@ msgstr "描述"
 
 #: data/config.desc:162
 msgid "Commit"
-msgstr "送出字串"
+msgstr "提交輸入"
 
 #: src/im/table/table.desc:176
 msgid "Commit and pass when invalid key of this table pressed"
@@ -550,7 +534,7 @@ msgstr "設定"
 
 #: src/ui/classic/classicui.c:458 src/ui/kimpanel/kimpanel.c:735
 msgid "Configure Current Input Method"
-msgstr "設定目前輸入法"
+msgstr ""
 
 #: src/lib/fcitx-config/fcitx-config.c:884
 #, c-format
@@ -566,15 +550,12 @@ msgid "Convert Simplified Chinese To Traditional Chinese"
 msgstr "轉換簡體中文為正體中文"
 
 #: src/module/chttrans/chttrans.c:97 src/module/chttrans/chttrans.c:128
-#, fuzzy
 msgid "Convert to Simplified Chinese"
-msgstr "轉換簡體中文為正體中文"
+msgstr ""
 
-# unknown
 #: src/module/chttrans/chttrans.c:97 src/module/chttrans/chttrans.c:128
-#, fuzzy
 msgid "Convert to Traditional Chinese"
-msgstr "正體中文"
+msgstr ""
 
 #: src/ui/classic/skin.desc:103 src/ui/classic/skin.desc:111
 #: src/ui/classic/skin.desc:195 src/ui/classic/skin.desc:203
@@ -587,7 +568,7 @@ msgstr "複製"
 #: src/module/clipboard/fcitx-clipboard.desc:41
 #: src/module/quickphrase/fcitx-quickphrase.desc:22
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: data/profile.desc:22
 msgid "Current Enabled Input Method List"
@@ -598,9 +579,9 @@ msgid "Current Input Method Name"
 msgstr "目前輸入法名稱"
 
 #: src/module/imselector/imselector.c:310
-#, fuzzy, c-format
+#, c-format
 msgid "Current local input method is %s"
-msgstr "目前啟用的輸入法清單"
+msgstr ""
 
 #: data/addon.desc:37
 msgid "DBus"
@@ -643,9 +624,8 @@ msgid "Default Spell Hint Backends Order"
 msgstr ""
 
 #: src/im/table/fcitx-table.desc:9
-#, fuzzy
 msgid "Delete Phrase"
-msgstr "自動字詞"
+msgstr ""
 
 #: data/addon.desc:43
 msgid "Dependency"
@@ -653,7 +633,7 @@ msgstr "相依性"
 
 #: src/ui/classic/skin.desc:15
 msgid "Description of Skin"
-msgstr "佈景說明"
+msgstr ""
 
 #: data/table/db.conf.in:3
 msgid "Dianbaoma"
@@ -664,9 +644,8 @@ msgid "Disable Paging in Remind Mode"
 msgstr "聯想模式停用翻頁"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
-#, fuzzy
 msgid "Disable Pinyin Symbol"
-msgstr "聯想模式停用翻頁"
+msgstr "禁用拼音特殊符號"
 
 #: src/lib/fcitx/addon.c:273
 #, c-format
@@ -680,16 +659,15 @@ msgstr "停用"
 
 #: data/config.desc:195
 msgid "Do not commit preedit text when unfocus a window"
-msgstr "視窗失去焦點時，不要送出預編輯文字"
+msgstr "未聚焦視窗時，不要提交預編輯文字"
 
 #: data/addon.desc:77
 msgid "Do not show in GUI"
 msgstr ""
 
 #: data/config.desc:237
-#, fuzzy
 msgid "Do not show input window if there is only one candidate and preedit"
-msgstr "只有預編輯字串時不顯示輸入視窗"
+msgstr ""
 
 #: data/config.desc:231
 msgid "Do not show input window if there is only preedit string"
@@ -827,22 +805,20 @@ msgid "Fcitx Config Tool"
 msgstr "Fcitx 設定工具"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
-#, fuzzy
 msgid "Fcitx DBus Frontend"
-msgstr "Fcitx XIM 前端"
+msgstr ""
 
 #: data/fcitx-configtool.desktop.in:3
 msgid "Fcitx GUI Config Tool"
 msgstr "Fcitx GUI 設定工具"
 
 #: src/module/lua/fcitx-lua.conf.in:3
-#, fuzzy
 msgid "Fcitx Lua Support"
-msgstr "標點支援"
+msgstr ""
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:3
 msgid "Fcitx Skin Installer"
-msgstr "Fcitx 佈景安裝程式"
+msgstr ""
 
 #: src/module/spell/fcitx-spell.conf.in:4
 msgid "Fcitx Spelling Hint/Completion Support"
@@ -895,9 +871,8 @@ msgid "Font Locale to display"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:16
-#, fuzzy
 msgid "Font Size"
-msgstr "選單字體尺寸"
+msgstr "字型大小"
 
 #: src/ui/classic/skin.desc:28
 msgid "Font size repect dpi setting"
@@ -922,19 +897,16 @@ msgstr "前端：開啟 %s 失敗 %s"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
-#, fuzzy
 msgid "Full width Character"
-msgstr "全形字元"
+msgstr ""
 
 #: src/module/punc/punc.c:148 src/module/punc/punc.c:573
-#, fuzzy
 msgid "Full width punct"
-msgstr "全形字元"
+msgstr ""
 
 #: src/module/vk/vk.c:52
-#, fuzzy
 msgid "Fullwidth"
-msgstr "全形字元"
+msgstr ""
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:3
 msgid "Fullwidth Character"
@@ -946,7 +918,7 @@ msgstr "模糊 an 和 ang"
 
 #: src/im/pinyin/fcitx-pinyin.desc:115
 msgid "Fuzzy c and ch"
-msgstr "模糊 c 和 ch"
+msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:90
 msgid "Fuzzy en and eng"
@@ -970,7 +942,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:105
 msgid "Fuzzy ou and u"
-msgstr "模糊 ou 和 u"
+msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:130
 msgid "Fuzzy s and sh"
@@ -978,7 +950,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:110
 msgid "Fuzzy uan and uang"
-msgstr "模糊 uan 和 uang"
+msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:135
 msgid "Fuzzy z and zh"
@@ -992,7 +964,6 @@ msgstr "提示詞庫中字詞"
 msgid "Global Input Method SelectKey"
 msgstr "全域輸入法選擇鍵"
 
-# unknown
 #: src/module/imselector/fcitx-imselector.desc:16
 #: src/module/imselector/fcitx-imselector.desc:21
 #: src/module/imselector/fcitx-imselector.desc:26
@@ -1002,9 +973,8 @@ msgstr "全域輸入法選擇鍵"
 #: src/module/imselector/fcitx-imselector.desc:46
 #: src/module/imselector/fcitx-imselector.desc:51
 #: src/module/imselector/fcitx-imselector.desc:56
-#, fuzzy
 msgid "GlobalSelector"
-msgstr "輸入法選擇器"
+msgstr "全局選擇"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:7
 msgid "Grave"
@@ -1016,9 +986,8 @@ msgstr ""
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
-#, fuzzy
 msgid "Half width Character"
-msgstr "全形字元"
+msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:46
 msgid "Hide"
@@ -1028,7 +997,6 @@ msgstr "隱藏"
 msgid "Hiragana"
 msgstr ""
 
-# unknown
 #: data/config.desc:1 data/config.desc:6 data/config.desc:12
 #: data/config.desc:30 data/config.desc:36 data/config.desc:42
 #: data/config.desc:47 data/config.desc:53 data/config.desc:63
@@ -1069,7 +1037,6 @@ msgstr ""
 msgid "IM: open %s fail %s"
 msgstr "輸入法：開啟 %s 失敗 %s"
 
-# unknown
 #: src/module/imselector/fcitx-imselector.desc:1
 #: src/module/imselector/fcitx-imselector.desc:6
 #: src/module/imselector/fcitx-imselector.desc:11
@@ -1085,9 +1052,8 @@ msgid "IconName"
 msgstr "圖示名稱"
 
 #: src/module/xkb/fcitx-xkb.desc:9
-#, fuzzy
 msgid "Ignore Input Method Layout Request"
-msgstr "目前輸入法名稱"
+msgstr ""
 
 #: src/im/table/table.desc:191
 msgid "Ignore Punctuation"
@@ -1099,9 +1065,8 @@ msgid "Ignore blank selections"
 msgstr "忽略標點"
 
 #: data/config.desc:39
-#, fuzzy
 msgid "Inactivate Input Method"
-msgstr "無可用輸入法"
+msgstr ""
 
 #: data/config.desc:146
 msgid "Inactive"
@@ -1133,7 +1098,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:19
 msgid "Input Font Size"
-msgstr "輸入字體尺寸"
+msgstr ""
 
 #: src/ui/classic/skin.desc:37
 msgid "Input Message Color"
@@ -1160,7 +1125,6 @@ msgstr "輸入速度："
 msgid "Input method selector"
 msgstr "輸入法選擇器"
 
-# unknown
 #: data/addon.desc:18 data/inputmethod.desc:1 data/inputmethod.desc:5
 #: data/inputmethod.desc:9 data/inputmethod.desc:13 data/inputmethod.desc:17
 #: data/inputmethod.desc:21
@@ -1203,9 +1167,8 @@ msgstr ""
 #: src/im/table/fcitx-table.desc:1 src/im/table/fcitx-table.desc:6
 #: src/im/table/fcitx-table.desc:11 src/im/table/fcitx-table.desc:16
 #: src/im/table/fcitx-table.desc:21 src/module/unicode/fcitx-unicode.desc:3
-#, fuzzy
 msgid "Key"
-msgstr "中止鍵"
+msgstr ""
 
 #: src/ui/classic/skin.desc:266
 msgid "Key Color On Virutal Keyboard"
@@ -1220,14 +1183,12 @@ msgstr ""
 #: src/im/keyboard/fcitx-keyboard.desc:27
 #: src/im/keyboard/fcitx-keyboard.desc:36
 #: src/im/keyboard/fcitx-keyboard.desc:41
-#, fuzzy
 msgid "Keyboard"
-msgstr "虛擬鍵盤"
+msgstr "鍵盤"
 
 #: src/im/keyboard/fcitx-keyboard.conf.in:3
-#, fuzzy
 msgid "Keyboard Layout"
-msgstr "鍵盤配置"
+msgstr ""
 
 #: src/im/table/table.desc:151
 msgid "Keyboard Layout to be used"
@@ -1251,7 +1212,7 @@ msgstr "Fcitx 的 Kimpanel 支援"
 
 #: data/config.desc:23
 msgid "L_ALT"
-msgstr ""
+msgstr "左 Alt"
 
 #: data/config.desc:18
 msgid "L_CTRL"
@@ -1321,7 +1282,6 @@ msgstr "載入碼表字典"
 msgid "Local Input Method SelectKey"
 msgstr "局部輸入法選擇鍵"
 
-# unknown
 #: src/module/imselector/fcitx-imselector.desc:61
 #: src/module/imselector/fcitx-imselector.desc:66
 #: src/module/imselector/fcitx-imselector.desc:71
@@ -1331,15 +1291,13 @@ msgstr "局部輸入法選擇鍵"
 #: src/module/imselector/fcitx-imselector.desc:91
 #: src/module/imselector/fcitx-imselector.desc:96
 #: src/module/imselector/fcitx-imselector.desc:101
-#, fuzzy
 msgid "LocalSelector"
-msgstr "輸入法選擇器"
+msgstr "局部選擇"
 
 #: src/ui/classic/skin.desc:73
 msgid "Logo Icon"
 msgstr ""
 
-# unknown
 #: src/im/table/fcitx-table.desc:24
 #, fuzzy
 msgid "Lookup Pinyin"
@@ -1405,7 +1363,7 @@ msgstr "選單字型"
 
 #: src/ui/classic/skin.desc:23
 msgid "Menu Font Size"
-msgstr "選單字體尺寸"
+msgstr ""
 
 #: src/im/pinyin/py.c:2135
 msgid "Migrate the old file path to the new one"
@@ -1487,14 +1445,12 @@ msgid "No input window"
 msgstr "沒有輸入視窗"
 
 #: src/module/imselector/imselector.c:316
-#, fuzzy
 msgid "No local input method"
-msgstr "無可用輸入法"
+msgstr ""
 
 #: src/lib/fcitx/instance.c:184 src/lib/fcitx/instance.c:430
-#, fuzzy
 msgid "No remind"
-msgstr "聯想："
+msgstr ""
 
 #: src/lib/fcitx-utils/desktop-parse.c:509
 #, c-format
@@ -1507,7 +1463,7 @@ msgstr ""
 #: src/module/quickphrase/fcitx-quickphrase.desc:5
 #: src/module/quickphrase/fcitx-quickphrase.desc:20
 msgid "None"
-msgstr ""
+msgstr "無"
 
 #: data/config.desc:160
 msgid "Nothing"
@@ -1543,7 +1499,6 @@ msgstr "碼表順序"
 msgid "Other Color"
 msgstr ""
 
-# unknown
 #: data/config.desc:151 data/config.desc:157 data/config.desc:167
 #: data/config.desc:173 data/config.desc:179 data/config.desc:186
 #: data/config.desc:192
@@ -1574,9 +1529,8 @@ msgstr "字詞已在碼表中"
 #: tools/gui/quickphrase-editor/dialog.cpp:30
 #, fuzzy
 msgid "Phrase:"
-msgstr "快速字詞："
+msgstr "自動字詞"
 
-# unknown
 #: src/im/pinyin/py.c:104 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
 #: src/im/pinyin/fcitx-pinyin.desc:15 src/im/pinyin/fcitx-pinyin.desc:20
@@ -1602,9 +1556,8 @@ msgstr "拼音"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:32
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:37
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:42
-#, fuzzy
 msgid "Pinyin Enhance"
-msgstr "拼音鍵"
+msgstr "拼音增強"
 
 #: src/im/pinyin/py.c:423
 msgid "Pinyin Index Magic Number Doesn't match"
@@ -1685,13 +1638,11 @@ msgstr "優先權"
 msgid "Priority of addon"
 msgstr "附加元件優先權"
 
-# unknown
 #: data/profile.desc:1 data/profile.desc:6 data/profile.desc:11
 #: data/profile.desc:16 data/profile.desc:21 data/profile.desc:26
 msgid "Profile"
 msgstr "設定檔"
 
-# unknown
 #: data/config.desc:127 data/config.desc:133 data/config.desc:142
 msgid "Program"
 msgstr "程式"
@@ -1741,7 +1692,6 @@ msgstr "快速字詞清單"
 msgid "Quick Phrase: "
 msgstr "快速字詞："
 
-# unknown
 #: src/module/quickphrase/fcitx-quickphrase.desc:1
 #: src/module/quickphrase/fcitx-quickphrase.desc:10
 #: src/module/quickphrase/fcitx-quickphrase.desc:15
@@ -1764,7 +1714,7 @@ msgstr "Fcitx 的區位輸入法"
 
 #: data/config.desc:24
 msgid "R_ALT"
-msgstr ""
+msgstr "右 Alt"
 
 #: data/config.desc:15
 msgid "R_CTRL"
@@ -1871,9 +1821,8 @@ msgid "Saving All Config and Input History"
 msgstr "保存所有設定及輸入歷史"
 
 #: data/config.desc:61
-#, fuzzy
 msgid "Scroll between Input Method"
-msgstr "無可用輸入法"
+msgstr ""
 
 #: src/module/unicode/unicode.c:229
 msgid "Search unicode"
@@ -1884,14 +1833,12 @@ msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx 真正啟動前延遲的秒數"
 
 #: src/module/imselector/imselector.c:304
-#, fuzzy
 msgid "Select global input method: "
-msgstr "透過鍵盤選擇特定的輸入法"
+msgstr ""
 
 #: src/module/imselector/imselector.c:305
-#, fuzzy
 msgid "Select local input method: "
-msgstr "透過鍵盤選擇特定的輸入法"
+msgstr ""
 
 #: src/module/imselector/fcitx-imselector.conf.in:4
 msgid "Select specific input method via keyboard"
@@ -1974,21 +1921,20 @@ msgstr "繁簡轉換"
 
 #: src/ui/classic/skin.c:927 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
-msgstr "佈景"
+msgstr "皮膚"
 
 #: src/ui/classic/skin.desc:11
 msgid "Skin Author"
-msgstr "佈景作者"
+msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:58 src/ui/classic/skin.desc:3
 msgid "Skin Name"
-msgstr "佈景名稱"
+msgstr "皮膚名稱"
 
 #: src/ui/classic/skin.desc:7
 msgid "Skin Version"
-msgstr "佈景版本"
+msgstr ""
 
-# unknown
 #: src/ui/classic/skin.desc:17 src/ui/classic/skin.desc:21
 #: src/ui/classic/skin.desc:26 src/ui/classic/skin.desc:31
 #: src/ui/classic/skin.desc:35 src/ui/classic/skin.desc:39
@@ -1998,13 +1944,11 @@ msgstr "佈景版本"
 msgid "SkinFont"
 msgstr ""
 
-# unknown
 #: src/ui/classic/skin.desc:1 src/ui/classic/skin.desc:5
 #: src/ui/classic/skin.desc:9 src/ui/classic/skin.desc:13
 msgid "SkinInfo"
 msgstr ""
 
-# unknown
 #: src/ui/classic/skin.desc:135 src/ui/classic/skin.desc:139
 #: src/ui/classic/skin.desc:143 src/ui/classic/skin.desc:147
 #: src/ui/classic/skin.desc:151 src/ui/classic/skin.desc:155
@@ -2016,12 +1960,10 @@ msgstr ""
 msgid "SkinInputBar"
 msgstr ""
 
-# unknown
 #: src/ui/classic/skin.desc:259 src/ui/classic/skin.desc:264
 msgid "SkinKeyboard"
 msgstr ""
 
-# unknown
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
 #: src/ui/classic/skin.desc:83 src/ui/classic/skin.desc:87
@@ -2032,7 +1974,6 @@ msgstr ""
 msgid "SkinMainBar"
 msgstr ""
 
-# unknown
 #: src/ui/classic/skin.desc:215 src/ui/classic/skin.desc:219
 #: src/ui/classic/skin.desc:223 src/ui/classic/skin.desc:227
 #: src/ui/classic/skin.desc:231 src/ui/classic/skin.desc:235
@@ -2041,7 +1982,6 @@ msgstr ""
 msgid "SkinMenu"
 msgstr ""
 
-# unknown
 #: src/ui/classic/skin.desc:207 src/ui/classic/skin.desc:211
 msgid "SkinTrayIcon"
 msgstr ""
@@ -2099,48 +2039,47 @@ msgstr "切換全形標點符號"
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
 msgid "Switch to the Eighth Input Method"
-msgstr ""
+msgstr "切換至第8個輸入法"
 
 #: src/module/imselector/fcitx-imselector.desc:39
 #: src/module/imselector/fcitx-imselector.desc:84
 msgid "Switch to the Fifth Input Method"
-msgstr ""
+msgstr "切換至第5個輸入法"
 
 #: src/module/imselector/fcitx-imselector.desc:19
 #: src/module/imselector/fcitx-imselector.desc:64
 msgid "Switch to the First Input Method"
-msgstr ""
+msgstr "切換至第1個輸入法"
 
 #: src/module/imselector/fcitx-imselector.desc:34
 #: src/module/imselector/fcitx-imselector.desc:79
-#, fuzzy
 msgid "Switch to the Fourth Input Method"
-msgstr "設定目前輸入法"
+msgstr "切換至第4個輸入法"
 
 #: src/module/imselector/fcitx-imselector.desc:59
 #: src/module/imselector/fcitx-imselector.desc:104
 msgid "Switch to the Ninth Input Method"
-msgstr ""
+msgstr "切換至第9個輸入法"
 
 #: src/module/imselector/fcitx-imselector.desc:24
 #: src/module/imselector/fcitx-imselector.desc:69
 msgid "Switch to the Second Input Method"
-msgstr ""
+msgstr "切換至第2個輸入法"
 
 #: src/module/imselector/fcitx-imselector.desc:49
 #: src/module/imselector/fcitx-imselector.desc:94
 msgid "Switch to the Seventh Input Method"
-msgstr ""
+msgstr "切換至第7個輸入法"
 
 #: src/module/imselector/fcitx-imselector.desc:44
 #: src/module/imselector/fcitx-imselector.desc:89
 msgid "Switch to the Sixth Input Method"
-msgstr ""
+msgstr "切換至第6個輸入法"
 
 #: src/module/imselector/fcitx-imselector.desc:29
 #: src/module/imselector/fcitx-imselector.desc:74
 msgid "Switch to the Third Input Method"
-msgstr ""
+msgstr "切換至第3個輸入法"
 
 #: data/config.desc:90
 msgid "Switching Full Width Character Mode"
@@ -2176,43 +2115,37 @@ msgid "Table Input Method for Fcitx"
 msgstr "Fcitx 的碼表輸入法"
 
 #: src/module/vk/vk.c:61
-#, fuzzy
 msgid "Table Symbol"
-msgstr "符號"
+msgstr ""
 
 #: src/ui/classic/skin.desc:33
 msgid "Tip Message Color"
 msgstr ""
 
 #: src/module/punc/punc.c:149 src/module/punc/punc.c:574
-#, fuzzy
 msgid "Toggle Full Width Punctuation"
-msgstr "使用全形標點符號"
+msgstr ""
 
 #: src/module/fullwidthchar/fullwidthchar.c:115
 #: src/module/fullwidthchar/fullwidthchar.c:192
-#, fuzzy
 msgid "Toggle Half/Full width Character"
-msgstr "使用全形字元"
+msgstr ""
 
 #: src/ui/kimpanel/kimpanel.c:732
-#, fuzzy
 msgid "Toggle Input Method"
-msgstr "輸入法"
+msgstr ""
 
 #: src/lib/fcitx/instance.c:185 src/lib/fcitx/instance.c:431
-#, fuzzy
 msgid "Toggle Remind"
-msgstr "聯想："
+msgstr ""
 
 #: src/module/chttrans/chttrans.c:98 src/module/chttrans/chttrans.c:129
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr ""
 
 #: src/module/vk/vk.c:154
-#, fuzzy
 msgid "Toggle Virtual Keyboard"
-msgstr "虛擬鍵盤"
+msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:12
 msgid "Toggle for enable or disable"
@@ -2230,7 +2163,6 @@ msgstr "自動英文條目過長"
 msgid "Traditional Chinese Translate Engine"
 msgstr "繁簡轉換引擎"
 
-# unknown
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
 msgid "TraditionalChinese"
@@ -2241,9 +2173,8 @@ msgid "Treating abbreviated Pinyin as English"
 msgstr ""
 
 #: data/config.desc:4
-#, fuzzy
 msgid "Trigger Input Method"
-msgstr "輸入法"
+msgstr ""
 
 #: src/module/clipboard/fcitx-clipboard.desc:25
 msgid "Trigger Key for Clipboard History List"
@@ -2308,9 +2239,8 @@ msgid "Use Full Width Character"
 msgstr "使用全形字元"
 
 #: src/im/keyboard/fcitx-keyboard.conf.in:4
-#, fuzzy
 msgid "Use Keyboard Layout as Input Method"
-msgstr "鍵盤配置"
+msgstr ""
 
 #: src/im/table/table.desc:68
 msgid "Use Matching Key"
@@ -2334,7 +2264,7 @@ msgstr "使用系統匣圖示"
 
 #: src/im/pinyin/fcitx-pinyin.desc:23
 msgid "Use V to trigger quickphrase"
-msgstr ""
+msgstr "使用 V 來觸發快速字詞"
 
 #: data/profile.desc:7
 msgid "Use Wide Punctuation"
@@ -2349,9 +2279,8 @@ msgid "Use extra trigger key only after using it to inactivate"
 msgstr ""
 
 #: src/lib/fcitx/instance.c:184 src/lib/fcitx/instance.c:430
-#, fuzzy
 msgid "Use remind"
-msgstr "使用拼音"
+msgstr ""
 
 #: src/module/remote/fcitx-remote-module.conf.in:4
 msgid "Used by fcitx-remote to change Fcitx state from console"
@@ -2407,9 +2336,8 @@ msgstr "五筆拼音"
 
 #: src/module/xkb/fcitx-xkb.desc:1 src/module/xkb/fcitx-xkb.desc:6
 #: src/module/xkb/fcitx-xkb.desc:11 src/module/xkb/fcitx-xkb.desc:16
-#, fuzzy
 msgid "X Keyboard"
-msgstr "虛擬鍵盤"
+msgstr ""
 
 #: src/module/xkb/fcitx-xkb.conf.in:3 src/module/xkb/fcitx-xkb.conf.in:4
 msgid "X Keyboard Integration"
@@ -2445,7 +2373,6 @@ msgstr "XMODIFIERS 錯誤。"
 msgid "XiaoHe"
 msgstr ""
 
-# unknown
 #: src/frontend/xim/fcitx-xim.desc:1
 msgid "Xim"
 msgstr "Xim"
@@ -2488,5 +2415,70 @@ msgstr ""
 msgid "your current font is: %s"
 msgstr ""
 
+#~ msgid "Add Watch Function Error"
+#~ msgstr "增加監聽函數錯誤"
+
+#~ msgid "Connection Error (%s)"
+#~ msgstr "連接錯誤（%s）"
+
 #~ msgid "Enabled in input"
 #~ msgstr "輸入中啟用"
+
+#~ msgid "FCITX -- Get Signal No.: %d"
+#~ msgstr "Fcitx 接收到信號：%d"
+
+#~ msgid "Load Table Dict from %s"
+#~ msgstr "從 %s 載入碼表字典"
+
+#~ msgid "Name Error (%s)"
+#~ msgstr "名稱錯誤（%s）"
+
+#~ msgid "OpenCC error"
+#~ msgstr "OpenCC 錯誤"
+
+#~ msgid "OpenCC initialization error"
+#~ msgstr "OpenCC 初始化錯誤"
+
+#, fuzzy
+#~ msgid "Private Name Error (%s)"
+#~ msgstr "名稱錯誤（%s）"
+
+#, fuzzy
+#~ msgid "Punctuation, Close"
+#~ msgstr "標點支援"
+
+#, fuzzy
+#~ msgid "Punctuation, Connector"
+#~ msgstr "標點符號轉換支援"
+
+#, fuzzy
+#~ msgid "Punctuation, Dash"
+#~ msgstr "標點支援"
+
+#, fuzzy
+#~ msgid "Punctuation, Final Quote"
+#~ msgstr "標點支援"
+
+#, fuzzy
+#~ msgid "Punctuation, Initial Quote"
+#~ msgstr "標點支援"
+
+#, fuzzy
+#~ msgid "Punctuation, Open"
+#~ msgstr "標點支援"
+
+#, fuzzy
+#~ msgid "Punctuation, Other"
+#~ msgstr "標點支援"
+
+#, fuzzy
+#~ msgid "Symbol, Math"
+#~ msgstr "符號"
+
+#, fuzzy
+#~ msgid "Symbol, Modifier"
+#~ msgstr "符號檔案"
+
+#, fuzzy
+#~ msgid "Symbol, Other"
+#~ msgstr "符號檔案"
