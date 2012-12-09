@@ -497,10 +497,14 @@ check_modules() {
         fi
     done
     increase_cur_level 1
-    write_order_list 'Enabled addons:'
-    write_quote_cmd print_array "${enabled_addon[@]}"
-    write_order_list 'Disabled addons:'
-    write_quote_cmd print_array "${disabled_addon[@]}"
+    write_order_list "Found ${#enabled_addon[@]} enabled addons:"
+    [ "${#enabled_addon[@]}" = 0 ] || {
+        write_quote_cmd print_array "${enabled_addon[@]}"
+    }
+    write_order_list "Found ${#disabled_addon[@]} disabled addons:"
+    [ "${#disabled_addon[@]}" = 0 ] || {
+        write_quote_cmd print_array "${disabled_addon[@]}"
+    }
     increase_cur_level -1
 }
 
@@ -528,8 +532,10 @@ check_input_methods() {
             write_error "Invalid item ${im} in im list."
         fi
     done
-    write_order_list 'Enabled input methods:'
-    write_quote_cmd print_array "${enabled_im[@]}"
+    write_order_list "Found ${#enabled_im[@]} enabled input methods:"
+    [ "${#enabled_im[@]}" = 0 ] || {
+        write_quote_cmd print_array "${enabled_im[@]}"
+    }
     write_order_list 'Default input methods:'
     case "${#enabled_im[@]}" in
         0)
