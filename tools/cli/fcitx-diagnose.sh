@@ -26,8 +26,16 @@ add_and_check_file() {
 }
 
 replace_reset() {
+    local line
+    local IFS='\n'
     if [ ! -z "$1" ]; then
-        sed -e 's/'$'\e''\[0m/'$'\e''\['"$1"'m/g'
+        while read line; do
+            echo "${line}" | sed -e 's/'$'\e''\[0m/'$'\e''\['"$1"'m/g'
+        done
+        [ -z "${line}" ] || {
+            echo -n \
+                "$(echo "${line}" | sed -e 's/'$'\e''\[0m/'$'\e''\['"$1"'m/g')"
+        }
     else
         cat
     fi
