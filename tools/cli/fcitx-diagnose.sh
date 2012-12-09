@@ -25,6 +25,16 @@ add_and_check_file() {
     return 0
 }
 
+replace_reset() {
+    sed -e 's/'$'\e''\[0m/'$'\e''\['"$1"'m/g'
+}
+
+code_inline() {
+    print_tty_ctrl '01;36'
+    echo -n '`'"$1"'`' | replace_reset '01;36'
+    print_tty_ctrl '0'
+}
+
 print_tty_ctrl() {
     ((__istty)) || return
     echo -ne '\e['"${1}"'m'
@@ -102,7 +112,7 @@ EOF
 
 write_error() {
     print_tty_ctrl '01;31'
-    write_paragraph "**${1}**" "${@:2}"
+    write_paragraph "**${1}**" "${@:2}" | replace_reset '01;31'
     print_tty_ctrl '0'
 }
 
@@ -112,7 +122,7 @@ write_quote_str() {
     __need_blank_line=0
     echo
     print_tty_ctrl '01;35'
-    write_paragraph "${str}"
+    write_paragraph "${str}" | replace_reset '01;35'
     print_tty_ctrl '0'
     echo
     __need_blank_line=0
@@ -130,7 +140,7 @@ write_title() {
     prefix="${prefix::$level}"
     ((__need_blank_line)) && echo
     print_tty_ctrl '01;34'
-    echo "${prefix} ${title}"
+    echo "${prefix} ${title}" | replace_reset '01;34'
     print_tty_ctrl '0'
     __need_blank_line=0
     set_cur_level -1
@@ -146,7 +156,7 @@ write_order_list() {
     index="${index}.   "
     increase_cur_level -1
     print_tty_ctrl '01;32'
-    write_paragraph "${str}" "${index::4}" '    '
+    write_paragraph "${str}" "${index::4}" '    ' | replace_reset '01;32'
     print_tty_ctrl '0'
     increase_cur_level 1
 }
@@ -155,7 +165,7 @@ write_order_list() {
 #     local str="$1"
 #     increase_cur_level -1
 #     print_tty_ctrl '01;32'
-#     write_paragraph "${str}" '*   ' '    '
+#     write_paragraph "${str}" '*   ' '    ' | replace_reset '01;32'
 #     print_tty_ctrl '0'
 #     increase_cur_level 1
 # }
@@ -183,28 +193,28 @@ check_istty
 
 check_system() {
     write_title 1 "System Info."
-    write_order_list '`uname -a`:'
+    write_order_list "$(code_inline 'uname -a'):"
     write_quote_cmd uname -a
     if type lsb_release &> /dev/null; then
-        write_order_list '`lsb_release -a`:'
+        write_order_list "$(code_inline 'lsb_release -a'):"
         write_quote_cmd lsb_release -a
-        write_order_list '`lsb_release -d`:'
+        write_order_list "$(code_inline 'lsb_release -d'):"
         write_quote_cmd lsb_release -d
     else
-        write_order_list '`lsb_release`:'
-        write_paragraph '`lsb_release` not found.'
+        write_order_list "$(code_inline lsb_release):"
+        write_paragraph "$(code_inline 'lsb_release') not found."
     fi
-    write_order_list '`/etc/lsb-release`:'
+    write_order_list "$(code_inline /etc/lsb-release):"
     if [ -f /etc/lsb-release ]; then
         write_quote_cmd cat /etc/lsb-release
     else
-        write_paragraph '`/etc/lsb-release` not found.'
+        write_paragraph "$(code_inline /etc/lsb-release) not found."
     fi
-    write_order_list '`/etc/os-release`:'
+    write_order_list "$(code_inline /etc/os-release):"
     if [ -f /etc/os-release ]; then
         write_quote_cmd cat /etc/os-release
     else
-        write_paragraph '`/etc/os-release` not found.'
+        write_paragraph "$(code_inline /etc/os-release) not found."
     fi
 }
 
@@ -215,7 +225,7 @@ check_fcitx() {
         write_error "Cannot find fcitx executable!"
         exit 1
     else
-        write_paragraph 'Found fcitx at `'"${fcitx_exe}"'`.'
+        write_paragraph "Found fcitx at $(code_inline "${fcitx_exe}")."
     fi
     write_order_list 'version:'
     version=$(fcitx -v 2> /dev/null | \
@@ -259,12 +269,13 @@ EOF
 check_xim() {
     write_title 2 "Xim."
     xim_name=fcitx
-    write_order_list '`${XMODIFIERS}`:'
+    write_order_list "$(code_inline '${XMODIFIERS}'):"
     if [ -z "${XMODIFIERS}" ]; then
         write_error "Please set environment variable XMODIFIERS to fcitx."
         __need_blank_line=0
     elif [ "${XMODIFIERS}" = '@im=fcitx' ]; then
-        write_paragraph "Environment variable XMODIFIERS is set to '@im=fcitx' correctly."
+        write_paragraph \
+            "Environment variable XMODIFIERS is set to '@im=fcitx' correctly."
         __need_blank_line=0
     else
         write_error "Environment variable XMODIFIERS is '${XMODIFIERS}' instead of '@im=fcitx'."
@@ -299,11 +310,12 @@ check_xim() {
 _check_toolkit_env() {
     local env_name="$1"
     local name="$2"
-    write_order_list '`${'"${env_name}"'}`:'
+    write_order_list "$(code_inline '${'"${env_name}"'}'):"
     if [ -z "${!env_name}" ]; then
         write_error "Please set environment variable ${env_name} to 'fcitx' if you want to use immodule in ${name} programs."
     elif [ "${!env_name}" = 'fcitx' ]; then
-        write_paragraph "Environment variable ${env_name} is set to 'fcitx' correctly."
+        write_paragraph \
+            "Environment variable ${env_name} is set to 'fcitx' correctly."
     else
         write_error "Environment variable ${env_name} is '${!env_name}' instead of 'fcitx'."
         __need_blank_line=0
@@ -328,13 +340,15 @@ check_qt() {
             if [[ ${file} =~ (im-fcitx|inputmethods) ]]; then
                 __need_blank_line=0
                 add_and_check_file qt "${file}" && {
-                    write_paragraph 'Found fcitx qt im module: `'"${file}"'`'
+                    write_paragraph \
+                        "Found fcitx qt im module: $(code_inline "${file}")."
                 }
                 qtimmodule_found=1
             else
                 __need_blank_line=0
                 add_and_check_file qt "${file}" && {
-                    write_paragraph 'Found unknown fcitx qt module: `'"${file}"'`'
+                    write_paragraph \
+                        "Found unknown fcitx qt module: $(code_inline "${file}")."
                 }
             fi
         done
@@ -378,7 +392,8 @@ check_gtk_immodule() {
     local f
     for f in "${_query_immodule[@]}"; do
         add_and_check_file "gtk_immodule_${version}" "${f}" && {
-            write_paragraph "Found gtk-query-immodules for gtk ${version} at "'`'"${f}"'`.'
+            write_paragraph \
+                "Found gtk-query-immodules for gtk ${version} at $(code_inline "${f}")."
             if fcitx_gtk=$("$f" | grep fcitx); then
                 module_found=1
                 __need_blank_line=0
@@ -406,11 +421,12 @@ check_gtk_immodule_cache() {
             add_and_check_file "gtk_immodule_cache_${version}" "${file}" || {
                 continue
             }
-            write_paragraph "Found immodules cache for gtk ${version} "'`'"${file}"'`.'
+            write_paragraph \
+                "Found immodules cache for gtk ${version} $(code_inline "${file}")."
             if fcitx_gtk=$(grep fcitx "${file}"); then
                 cache_found=1
                 __need_blank_line=0
-                write_paragraph 'Found fcitx in cache file `'"${file}"'`:'
+                write_paragraph "Found fcitx in cache file $(code_inline "${file}"):"
                 write_quote_str "${fcitx_gtk}"
             fi
         done
@@ -478,10 +494,12 @@ check_modules() {
     local disabled_addon=()
     local name
     local enable
-    write_paragraph 'Found fcitx addon config directory: `'"${addon_conf_dir}"'`.'
+    write_paragraph \
+        "Found fcitx addon config directory: $(code_inline "${addon_conf_dir}")."
+    write_order_list 'Addon List:'
     for file in "${addon_conf_dir}"/*.conf; do
         if ! name=$(get_from_config_file "${file}" Name); then
-            write_error 'Invalid addon config file `'"${file}"'`.'
+            write_error "Invalid addon config file $(code_inline "${file}")."
             continue
         fi
         enable=$(get_from_config_file "${file}" Enabled)
