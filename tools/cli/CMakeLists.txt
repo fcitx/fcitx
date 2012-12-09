@@ -59,6 +59,9 @@ target_link_libraries(scel2org ${LIBICONV_LIBRARIES})
 
 install(TARGETS createPYMB readPYBase readPYMB mb2org mb2txt
   txt2mb scel2org DESTINATION "${bindir}")
+install(FILES fcitx-diagnose.sh DESTINATION "${bindir}" RENAME fcitx-diagnose
+  PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+  GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 if(NOT _ENABLE_DBUS)
   add_executable(fcitx-remote fcitx-remote.c)

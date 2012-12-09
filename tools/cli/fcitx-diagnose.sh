@@ -522,14 +522,15 @@ check_input_methods() {
     local name
     local enable
     for im in "${imlist[@]}"; do
-        name="${im%:*}"
-        enable="$(echo "${im##*:}" | sed -e 's/.*/\L&/g')"
-        if [ "$enable" = true ]; then
-            enabled_im=("${enabled_im[@]}" "${name}")
-        elif [ "$enable" = false ]; then
-            disabled_im=("${disabled_im[@]}" "${name}")
-        else
+        [[ $im =~ ^([^:]+):(True|False)$ ]] || {
             write_error "Invalid item ${im} in im list."
+            continue
+        }
+        name="${BASH_REMATCH[1]}"
+        if [ "${BASH_REMATCH[2]}" = True ]; then
+            enabled_im=("${enabled_im[@]}" "${name}")
+        else
+            disabled_im=("${disabled_im[@]}" "${name}")
         fi
     done
     write_order_list "Found ${#enabled_im[@]} enabled input methods:"
