@@ -58,6 +58,14 @@ print_array() {
     done
 }
 
+print_link() {
+    local text="$1"
+    local url="$2"
+    print_tty_ctrl '01;33'
+    echo -n "[$text]($url)" | replace_reset '01;33'
+    print_tty_ctrl '0'
+}
+
 __current_level=0
 __list_indexes=(0)
 __need_blank_line=0
@@ -231,11 +239,17 @@ check_system() {
     fi
 }
 
+beginner_guide_link() {
+    print_link "Beginner's Guide" "http://fcitx-im.org/wiki/Beginner%27s_Guide"
+}
+
 check_fcitx() {
     write_title 1 "Fcitx State."
     write_order_list 'executable:'
     if ! fcitx_exe="$(which fcitx 2> /dev/null)"; then
         write_error "Cannot find fcitx executable!"
+        __need_blank_line=0
+        write_error "Please check $(beginner_guide_link) for how to install fcitx."
         exit 1
     else
         write_paragraph "Found fcitx at $(code_inline "${fcitx_exe}")."
@@ -257,7 +271,8 @@ ${psoutput}
 EOF
     if ! ((${#process[@]})); then
         write_error "Fcitx is not running."
-        # TODO: link to autostart?
+        __need_blank_line=0
+        write_error "Please check the Configure link of your distribution in $(beginner_guide_link) for how to setup fcitx to start automatically."
         return 1
     fi
     local pcount="${#process[@]}"
@@ -279,24 +294,38 @@ EOF
     fi
 }
 
+set_env_link() {
+    local env_name="$1"
+    local value="$2"
+    write_error "Please set environment variable ${env_name} to '${value}' using the tool your distribution provides or add $(code_inline "export ${env_name}=${value}") to your $(code_inline '~/.xprofile'). See $(print_link "Input Method Related Environment Variables: ${env_name}" "http://fcitx-im.org/wiki/Input_method_related_environment_variables#${env_name}")."
+}
+
+gnome_36_link() {
+    write_error "If you are using $(code_inline 'gnome>=3.6'), you may want to uninstall $(code_inline 'ibus') or remove $(code_inline 'ibus-daemon') to be able to use any input method other than $(code_inline 'ibus'). See $(print_link "Note for GNOME Later than 3.6" "http://fcitx-im.org/wiki/Note_for_GNOME_Later_than_3.6") for more detail as well as alternative solutions."
+}
+
 check_xim() {
     write_title 2 "Xim."
     xim_name=fcitx
     write_order_list "$(code_inline '${XMODIFIERS}'):"
     if [ -z "${XMODIFIERS}" ]; then
-        write_error "Please set environment variable XMODIFIERS to fcitx."
+        set_env_link XMODIFIERS '@im=fcitx'
         __need_blank_line=0
     elif [ "${XMODIFIERS}" = '@im=fcitx' ]; then
         write_paragraph \
             "Environment variable XMODIFIERS is set to '@im=fcitx' correctly."
         __need_blank_line=0
     else
-        write_error "Environment variable XMODIFIERS is '${XMODIFIERS}' instead of '@im=fcitx'."
-        if [[ ${XMODIFIERS} =~ @im=([-_0-9a-zA-Z]*) ]]; then
+        write_error "Environment variable XMODIFIERS is '${XMODIFIERS}' instead of '@im=fcitx'. Please check if you have exported it incorrectly in any of your init files."
+        if [[ ${XMODIFIERS} =~ @im=([-_0-9a-zA-Z]+) ]]; then
             xim_name="${BASH_REMATCH[1]}"
         else
             __need_blank_line=0
             write_error "Cannot interpret XMODIFIERS: ${XMODIFIERS}."
+        fi
+        if [ "${xim_name}" = "ibus" ]; then
+            __need_blank_line=0
+            gnome_36_link
         fi
     fi
     write_paragraph "Xim Server Name from Environment variable is ${xim_name}."
@@ -320,12 +349,16 @@ check_xim() {
     fi
 }
 
+no_xim_link() {
+    write_error "To see some application specific problems you may have when using xim, check $(print_link "Hall of Shame for Linux IME Support" "http://fcitx-im.org/wiki/Hall_of_Shame_for_Linux_IME_Support"). Other more general problems of using XIM including application freezing. See also $(print_link "here" "http://fcitx-im.org/wiki/XIM")."
+}
+
 _check_toolkit_env() {
     local env_name="$1"
     local name="$2"
     write_order_list "$(code_inline '${'"${env_name}"'}'):"
     if [ -z "${!env_name}" ]; then
-        write_error "Please set environment variable ${env_name} to 'fcitx' if you want to use immodule in ${name} programs."
+        set_env_link "${env_name}" 'fcitx'
     elif [ "${!env_name}" = 'fcitx' ]; then
         write_paragraph \
             "Environment variable ${env_name} is set to 'fcitx' correctly."
@@ -334,9 +367,15 @@ _check_toolkit_env() {
         __need_blank_line=0
         if [ "${!env_name}" = 'xim' ]; then
             write_error "You are using xim in ${name} programs."
+            no_xim_link
         else
             write_error "You may have trouble using fcitx in ${name} programs."
+            if [ "${!env_name}" = "ibus" ] && [ "${name}" = 'qt' ]; then
+                __need_blank_line=0
+                gnome_36_link
+            fi
         fi
+        set_env_link "${env_name}" 'fcitx'
     fi
 }
 
