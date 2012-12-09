@@ -26,7 +26,11 @@ add_and_check_file() {
 }
 
 replace_reset() {
-    sed -e 's/'$'\e''\[0m/'$'\e''\['"$1"'m/g'
+    if [ ! -z "$1" ]; then
+        sed -e 's/'$'\e''\[0m/'$'\e''\['"$1"'m/g'
+    else
+        cat
+    fi
 }
 
 code_inline() {
@@ -87,33 +91,36 @@ write_paragraph() {
     local str="$1"
     local p1="$2"
     local p2="$3"
+    local code="$4"
     local prefix="$(repeat_str "${__current_level}" "    ")"
     local line
     local i=0
     local whole_prefix
     ((__need_blank_line)) && echo
-    while read line; do
-        ((i == 0)) && {
-            whole_prefix="${prefix}${p1}"
-        } || {
-            whole_prefix="${prefix}${p2}"
-        }
-        ((i++))
-        [ -z "${line}" ] && {
-            echo
-        } || {
-            echo "${whole_prefix}${line}"
-        }
-    done <<EOF
+    [ -z "${code}" ] || print_tty_ctrl "${code}"
+    {
+        while read line; do
+            ((i == 0)) && {
+                whole_prefix="${prefix}${p1}"
+            } || {
+                whole_prefix="${prefix}${p2}"
+            }
+            ((i++))
+            [ -z "${line}" ] && {
+                echo
+            } || {
+                echo "${whole_prefix}${line}"
+            }
+        done | replace_reset "${code}"
+    } <<EOF
 ${str}
 EOF
+    [ -z "${code}" ] || print_tty_ctrl "0"
     __need_blank_line=1
 }
 
 write_error() {
-    print_tty_ctrl '01;31'
-    write_paragraph "**${1}**" "${@:2}" | replace_reset '01;31'
-    print_tty_ctrl '0'
+    write_paragraph "**${1}**" "${2}" "${3}" '01;31'
 }
 
 write_quote_str() {
@@ -121,9 +128,7 @@ write_quote_str() {
     increase_cur_level 1
     __need_blank_line=0
     echo
-    print_tty_ctrl '01;35'
-    write_paragraph "${str}" | replace_reset '01;35'
-    print_tty_ctrl '0'
+    write_paragraph "${str}" '' '' '01;35'
     echo
     __need_blank_line=0
     increase_cur_level -1
@@ -155,18 +160,14 @@ write_order_list() {
     ((${#index} > 2)) && index="${index: -2}"
     index="${index}.   "
     increase_cur_level -1
-    print_tty_ctrl '01;32'
-    write_paragraph "${str}" "${index::4}" '    ' | replace_reset '01;32'
-    print_tty_ctrl '0'
+    write_paragraph "${str}" "${index::4}" '    ' '01;32'
     increase_cur_level 1
 }
 
 # write_list() {
 #     local str="$1"
 #     increase_cur_level -1
-#     print_tty_ctrl '01;32'
-#     write_paragraph "${str}" '*   ' '    ' | replace_reset '01;32'
-#     print_tty_ctrl '0'
+#     write_paragraph "${str}" '*   ' '    ' '01;32'
 #     increase_cur_level 1
 # }
 
