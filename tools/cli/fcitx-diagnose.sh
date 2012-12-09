@@ -340,6 +340,7 @@ check_qt() {
         done
     done
     if [ -z "${qtimmodule_found}" ]; then
+        __need_blank_line=0
         write_error "Cannot find fcitx input method module for qt."
     fi
 }
@@ -405,7 +406,7 @@ check_gtk_immodule_cache() {
             add_and_check_file "gtk_immodule_cache_${version}" "${file}" || {
                 continue
             }
-            write_paragraph "Found immodules for gtk ${version} ${file}."
+            write_paragraph "Found immodules cache for gtk ${version} ${file}."
             if fcitx_gtk=$(grep fcitx "${file}"); then
                 cache_found=1
                 __need_blank_line=0
@@ -459,7 +460,7 @@ get_from_config_file() {
     local file="$1"
     local key="$2"
     local value
-    value=$(sed "$file" -ne "s=^${key}\=\(.*\)=\1=gp" 2> /dev/null)
+    value=$(sed -ne "s=^${key}\=\(.*\)=\1=gp" "$file" 2> /dev/null)
     [ -z "$value" ] && return 1
     echo "${value}"
     return 0
