@@ -2374,7 +2374,7 @@ msgstr "X11 未初始化"
 
 #: src/frontend/xim/xim.c:158
 msgid "XMODIFIERS Error."
-msgstr "XMODIFIERS Error."
+msgstr "XMODIFIERS 错误."
 
 #: src/im/pinyin/fcitx-pinyin.desc:10
 msgid "XiaoHe"

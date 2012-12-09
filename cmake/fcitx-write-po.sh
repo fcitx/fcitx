@@ -123,45 +123,84 @@ fcitx_merge_all_pos() {
     fi
 }
 
+fcitx_filter_array() {
+    local IFS=$'\n'
+    eval "$1"'=($(for ele in "${'"$1"'[@]}"; do echo "${ele}"; done | "${@:2}"))'
+}
+
 fcitx_generate_pot() {
     local bug_addr="${1}"
-    file_list=()
-    while read file; do
-        file_list=("${file_list[@]}" "${file}")
+    local type_list=()
+    while read line; do
+        type="${line%% *}"
+        file="${line#* }"
+        type_list=("${type_list[@]}" "${type}")
+        eval '__ex_file_'"${type}"'=("${__ex_file_'"${type}"'[@]}" "${file}")'
     done <<EOF
-$(sort -u "${src_cache}")
+$(cat "${src_cache}")
 EOF
     po_dir="${cache_base}/sub_pos"
     mkdir -p "${po_dir}"
-    po_list=()
-    po_num=0
-    echo "Classifying Files to be translated..."
-    while read handler; do
-        file_left=()
-        handled_list=()
-        for file in "${file_list[@]}"; do
-            if "${handler}" -c "${file}" &> /dev/null; then
-                handled_list=("${handled_list[@]}" "${file}")
-            else
-                file_left=("${file_left[@]}" "${file}")
-            fi
-        done
-        file_list=("${file_left[@]}")
-        let "po_num++"
-        po_filename="${po_dir}/subpo_${po_num}.po"
-        "${handler}" -w "${po_filename}" "${handled_list[@]}" && {
-            po_list=("${po_list[@]}" "${po_filename}")
-        }
+    fcitx_filter_array type_list sort -u
+    for type in "${type_list[@]}"; do
+        fcitx_filter_array "__ex_file_${type}" sort -u
+    done
+    local handler_list=()
+    while read line; do
+        type="${line%% *}"
+        handler="${line#* }"
+        handler_list=("${handler_list[@]}" "${handler}")
+        eval __ex_handler_"${type}"='${handler}'
     done <<EOF
 $(cat "${handler_cache}")
 EOF
 
-    if ! [[ -z "${file_list[*]}" ]]; then
-        echo "Warning: Following files are added but not handled."
-        for extra_file in "${file_list[@]}"; do
-            echo $'\t'"${extra_file}"
-        done
-    fi
+    # Do not sort handler. The order these handlers are added should
+    # be more stable than the path name of them.
+    fcitx_filter_array handler_list uniq
+    po_list=()
+    po_num=0
+    for type in "${type_list[@]}"; do
+        eval 'file_list=("${__ex_file_'"${type}"'[@]}")'
+        if [ "${type}" = "generic" ]; then
+            echo "Classifying Files to be translated..."
+            for handler in "${handler_list[@]}"; do
+                file_left=()
+                handled_list=()
+                for file in "${file_list[@]}"; do
+                    if "${handler}" -c "${file}" &> /dev/null; then
+                        handled_list=("${handled_list[@]}" "${file}")
+                    else
+                        file_left=("${file_left[@]}" "${file}")
+                    fi
+                done
+                file_list=("${file_left[@]}")
+                ((po_num++))
+                po_filename="${po_dir}/subpo_${po_num}.po"
+                "${handler}" -w "${po_filename}" "${handled_list[@]}" && {
+                    po_list=("${po_list[@]}" "${po_filename}")
+                }
+            done
+            if ! [[ -z "${file_list[*]}" ]]; then
+                echo "Warning: Following files are added but not handled."
+                for extra_file in "${file_list[@]}"; do
+                    echo $'\t'"${extra_file}"
+                done
+            fi
+        else
+            echo "Extracting strings from ${type} files."
+            eval handler='"${__ex_handler_'"${type}"'}"'
+            [ -z "${handler}" ] && {
+                echo "Cannot find handler for type ${type}." >&2
+                continue
+            }
+            ((po_num++))
+            po_filename="${po_dir}/subpo_${po_num}.po"
+            "${handler}" -w "${po_filename}" "${file_list[@]}" && {
+                po_list=("${po_list[@]}" "${po_filename}")
+            }
+        fi
+    done
     echo "Merging sub po files..."
     fcitx_merge_all_pos "${bug_addr}" "${pot_file}" "${po_list[@]}"
     while read line; do
