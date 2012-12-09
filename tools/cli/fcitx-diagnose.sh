@@ -194,7 +194,11 @@ check_istty
 check_system() {
     write_title 1 "System Info."
     write_order_list "$(code_inline 'uname -a'):"
-    write_quote_cmd uname -a
+    if type uname &> /dev/null; then
+        write_quote_cmd uname -a
+    else
+        write_error "$(code_inline 'uname') not found."
+    fi
     if type lsb_release &> /dev/null; then
         write_order_list "$(code_inline 'lsb_release -a'):"
         write_quote_cmd lsb_release -a
@@ -573,6 +577,29 @@ check_input_methods() {
     esac
 }
 
+check_log() {
+    write_order_list "$(code_inline 'date')."
+    if type date &> /dev/null; then
+        write_quote_cmd date
+    else
+        write_error "$(code_inline 'date') not found."
+    fi
+    write_order_list "$(code_inline '~/.config/fcitx/log/')."
+    [ -d ~/.config/fcitx/log/ ] || {
+        write_paragraph "$(code_inline '~/.config/fcitx/log/') not found."
+        return
+    }
+    write_quote_cmd ls -AlF ~/.config/fcitx/log/
+    write_order_list "$(code_inline '~/.config/fcitx/log/crash.log')."
+    if [ -f ~/.config/fcitx/log/crash.log ]; then
+        write_quote_cmd cat ~/.config/fcitx/log/crash.log
+    else
+        write_paragraph "$(code_inline '~/.config/fcitx/log/crash.log') not found."
+    fi
+}
+
 write_title 1 "Configuration."
 check_modules
 check_input_methods
+write_title 1 "Log."
+check_log
