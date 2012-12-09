@@ -215,7 +215,7 @@ check_fcitx() {
         write_error "Cannot find fcitx executable!"
         exit 1
     else
-        write_paragraph "Found fcitx at ${fcitx_exe}."
+        write_paragraph 'Found fcitx at `'"${fcitx_exe}"'`.'
     fi
     write_order_list 'version:'
     version=$(fcitx -v 2> /dev/null | \
@@ -328,13 +328,13 @@ check_qt() {
             if [[ ${file} =~ (im-fcitx|inputmethods) ]]; then
                 __need_blank_line=0
                 add_and_check_file qt "${file}" && {
-                    write_paragraph "Found fcitx qt im module: ${file}"
+                    write_paragraph 'Found fcitx qt im module: `'"${file}"'`'
                 }
                 qtimmodule_found=1
             else
                 __need_blank_line=0
                 add_and_check_file qt "${file}" && {
-                    write_paragraph "Found unknown fcitx qt module: ${file}"
+                    write_paragraph 'Found unknown fcitx qt module: `'"${file}"'`'
                 }
             fi
         done
@@ -378,7 +378,7 @@ check_gtk_immodule() {
     local f
     for f in "${_query_immodule[@]}"; do
         add_and_check_file "gtk_immodule_${version}" "${f}" && {
-            write_paragraph "Found gtk-query-immodules for gtk ${version} at ${f}."
+            write_paragraph "Found gtk-query-immodules for gtk ${version} at "'`'"${f}"'`.'
             if fcitx_gtk=$("$f" | grep fcitx); then
                 module_found=1
                 __need_blank_line=0
@@ -406,11 +406,11 @@ check_gtk_immodule_cache() {
             add_and_check_file "gtk_immodule_cache_${version}" "${file}" || {
                 continue
             }
-            write_paragraph "Found immodules cache for gtk ${version} ${file}."
+            write_paragraph "Found immodules cache for gtk ${version} "'`'"${file}"'`.'
             if fcitx_gtk=$(grep fcitx "${file}"); then
                 cache_found=1
                 __need_blank_line=0
-                write_paragraph "Found fcitx in cache file ${file}:"
+                write_paragraph 'Found fcitx in cache file `'"${file}"'`:'
                 write_quote_str "${fcitx_gtk}"
             fi
         done
@@ -478,10 +478,10 @@ check_modules() {
     local disabled_addon=()
     local name
     local enable
-    write_paragraph "Found fcitx addon config directory: ${addon_conf_dir}."
+    write_paragraph 'Found fcitx addon config directory: `'"${addon_conf_dir}"'`.'
     for file in "${addon_conf_dir}"/*.conf; do
         if ! name=$(get_from_config_file "${file}" Name); then
-            write_error "Invalid addon config file ${file}."
+            write_error 'Invalid addon config file `'"${file}"'`.'
             continue
         fi
         enable=$(get_from_config_file "${file}" Enabled)
