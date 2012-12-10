@@ -1,18 +1,11 @@
 #!/usr/bin/env bash
 
-# TODO print url.
-
 shopt -s extglob nullglob globstar
 
-__istty=0
 
-check_istty() {
-    [ -t 1 ] && {
-        __istty=1
-    } || {
-        __istty=0
-    }
-}
+#############################
+# utility
+#############################
 
 add_and_check_file() {
     local prefix="$1"
@@ -23,6 +16,86 @@ add_and_check_file() {
     [ ! -z "${!varname}" ] && return 1
     eval "${varname}=1"
     return 0
+}
+
+print_array() {
+    for ele in "$@"; do
+        echo "${ele}"
+    done
+}
+
+repeat_str() {
+    local i
+    local n="$1"
+    local str="$2"
+    local res=""
+    for ((i = 0;i < n;i++)); do
+        res="${res}${str}"
+    done
+    echo "${res}"
+}
+
+find_in_path() {
+    local w="$1"
+    local IFS=':'
+    local p
+    local f
+    local fs
+    for p in ${PATH}; do
+        eval 'fs=("${p}/"'"${w}"')'
+        for f in "${fs[@]}"; do
+            echo "$f"
+        done
+    done
+}
+
+run_grep_fcitx() {
+    "$@" | grep fcitx
+}
+
+get_config_dir() {
+    local conf_option="$1"
+    local default_name="$2"
+    for path in "$(fcitx4-config "--${conf_option}" 2> /dev/null)" \
+        "/usr/share/fcitx/${default_name}" \
+        "/usr/local/share/fcitx/${default_name}"; do
+        [ ! -z "${path}" ] && [ -d "${path}" ] && {
+            echo "${path}"
+            return 0
+        }
+    done
+    return 1
+}
+
+get_from_config_file() {
+    local file="$1"
+    local key="$2"
+    local value
+    value=$(sed -ne "s=^${key}\=\(.*\)=\1=gp" "$file" 2> /dev/null)
+    [ -z "$value" ] && return 1
+    echo "${value}"
+    return 0
+}
+
+
+#############################
+# print
+#############################
+
+# tty and color
+__istty=0
+
+check_istty() {
+    [ -t 1 ] && {
+        __istty=1
+    } || {
+        __istty=0
+    }
+}
+
+print_tty_ctrl() {
+    ((__istty)) || return
+    echo -ne '\e['"${1}"'m'
 }
 
 replace_reset() {
@@ -41,21 +114,11 @@ replace_reset() {
     fi
 }
 
+# print inline
 code_inline() {
     print_tty_ctrl '01;36'
     echo -n '`'"$1"'`' | replace_reset '01;36'
     print_tty_ctrl '0'
-}
-
-print_tty_ctrl() {
-    ((__istty)) || return
-    echo -ne '\e['"${1}"'m'
-}
-
-print_array() {
-    for ele in "$@"; do
-        echo "${ele}"
-    done
 }
 
 print_link() {
@@ -66,9 +129,9 @@ print_link() {
     print_tty_ctrl '0'
 }
 
+# indent levels and list index counters
 __current_level=0
 __list_indexes=(0)
-__need_blank_line=0
 
 set_cur_level() {
     local level="$1"
@@ -92,16 +155,8 @@ increase_cur_level() {
     set_cur_level "$level"
 }
 
-repeat_str() {
-    local i
-    local n="$1"
-    local str="$2"
-    local res=""
-    for ((i = 0;i < n;i++)); do
-        res="${res}${str}"
-    done
-    echo "${res}"
-}
+# print blocks
+__need_blank_line=0
 
 write_paragraph() {
     local str="$1"
@@ -187,8 +242,35 @@ write_order_list() {
 #     increase_cur_level 1
 # }
 
-ldpaths=()
 
+#############################
+# print tips and links
+#############################
+
+beginner_guide_link() {
+    print_link "Beginner's Guide" "http://fcitx-im.org/wiki/Beginner%27s_Guide"
+}
+
+set_env_link() {
+    local env_name="$1"
+    local value="$2"
+    write_error "Please set environment variable ${env_name} to '${value}' using the tool your distribution provides or add $(code_inline "export ${env_name}=${value}") to your $(code_inline '~/.xprofile'). See $(print_link "Input Method Related Environment Variables: ${env_name}" "http://fcitx-im.org/wiki/Input_method_related_environment_variables#${env_name}")."
+}
+
+gnome_36_link() {
+    write_error "If you are using $(code_inline 'gnome>=3.6'), you may want to uninstall $(code_inline 'ibus') or remove $(code_inline 'ibus-daemon') to be able to use any input method other than $(code_inline 'ibus'). See $(print_link "Note for GNOME Later than 3.6" "http://fcitx-im.org/wiki/Note_for_GNOME_Later_than_3.6") for more detail as well as alternative solutions."
+}
+
+no_xim_link() {
+    write_error "To see some application specific problems you may have when using xim, check $(print_link "Hall of Shame for Linux IME Support" "http://fcitx-im.org/wiki/Hall_of_Shame_for_Linux_IME_Support"). Other more general problems of using XIM including application freezing. See also $(print_link "here" "http://fcitx-im.org/wiki/XIM")."
+}
+
+
+#############################
+# system info
+#############################
+
+ldpaths=()
 init_ld_paths() {
     local IFS=$'\n'
     local _ldpaths=($(ldconfig -p 2> /dev/null | grep '=>' | \
@@ -203,10 +285,7 @@ init_ld_paths() {
         }
     done
 }
-
 init_ld_paths
-[ -z "$1" ] || exec > "$1"
-check_istty
 
 check_system() {
     write_title 1 "System Info."
@@ -237,10 +316,6 @@ check_system() {
     else
         write_paragraph "$(code_inline /etc/os-release) not found."
     fi
-}
-
-beginner_guide_link() {
-    print_link "Beginner's Guide" "http://fcitx-im.org/wiki/Beginner%27s_Guide"
 }
 
 check_fcitx() {
@@ -294,15 +369,10 @@ EOF
     fi
 }
 
-set_env_link() {
-    local env_name="$1"
-    local value="$2"
-    write_error "Please set environment variable ${env_name} to '${value}' using the tool your distribution provides or add $(code_inline "export ${env_name}=${value}") to your $(code_inline '~/.xprofile'). See $(print_link "Input Method Related Environment Variables: ${env_name}" "http://fcitx-im.org/wiki/Input_method_related_environment_variables#${env_name}")."
-}
 
-gnome_36_link() {
-    write_error "If you are using $(code_inline 'gnome>=3.6'), you may want to uninstall $(code_inline 'ibus') or remove $(code_inline 'ibus-daemon') to be able to use any input method other than $(code_inline 'ibus'). See $(print_link "Note for GNOME Later than 3.6" "http://fcitx-im.org/wiki/Note_for_GNOME_Later_than_3.6") for more detail as well as alternative solutions."
-}
+#############################
+# front end
+#############################
 
 check_xim() {
     write_title 2 "Xim."
@@ -347,10 +417,6 @@ check_xim() {
             write_error "Cannot find xim_server."
         fi
     fi
-}
-
-no_xim_link() {
-    write_error "To see some application specific problems you may have when using xim, check $(print_link "Hall of Shame for Linux IME Support" "http://fcitx-im.org/wiki/Hall_of_Shame_for_Linux_IME_Support"). Other more general problems of using XIM including application freezing. See also $(print_link "here" "http://fcitx-im.org/wiki/XIM")."
 }
 
 _check_toolkit_env() {
@@ -409,24 +475,6 @@ check_qt() {
         __need_blank_line=0
         write_error "Cannot find fcitx input method module for qt."
     fi
-}
-
-find_in_path() {
-    local w="$1"
-    local IFS=':'
-    local p
-    local f
-    local fs
-    for p in ${PATH}; do
-        eval 'fs=("${p}/"'"${w}"')'
-        for f in "${fs[@]}"; do
-            echo "$f"
-        done
-    done
-}
-
-run_grep_fcitx() {
-    "$@" | grep fcitx
 }
 
 check_gtk_immodule() {
@@ -503,36 +551,10 @@ check_gtk() {
     increase_cur_level -1
 }
 
-check_system
-check_fcitx
-write_title 1 "Frontends setup."
-check_xim
-check_qt
-check_gtk
 
-get_config_dir() {
-    local conf_option="$1"
-    local default_name="$2"
-    for path in "$(fcitx4-config "--${conf_option}" 2> /dev/null)" \
-        "/usr/share/fcitx/${default_name}" \
-        "/usr/local/share/fcitx/${default_name}"; do
-        [ ! -z "${path}" ] && [ -d "${path}" ] && {
-            echo "${path}"
-            return 0
-        }
-    done
-    return 1
-}
-
-get_from_config_file() {
-    local file="$1"
-    local key="$2"
-    local value
-    value=$(sed -ne "s=^${key}\=\(.*\)=\1=gp" "$file" 2> /dev/null)
-    [ -z "$value" ] && return 1
-    echo "${value}"
-    return 0
-}
+#############################
+# fcitx modules
+#############################
 
 check_modules() {
     local addon_conf_dir
@@ -625,6 +647,11 @@ check_input_methods() {
     esac
 }
 
+
+#############################
+# log
+#############################
+
 check_log() {
     write_order_list "$(code_inline 'date')."
     if type date &> /dev/null; then
@@ -646,8 +673,45 @@ check_log() {
     fi
 }
 
-write_title 1 "Configuration."
-check_modules
-check_input_methods
-write_title 1 "Log."
-check_log
+
+#############################
+# cmd line
+#############################
+
+_check_frontend=1
+_check_modules=1
+_check_log=1
+[ -z "$1" ] || exec > "$1"
+
+
+#############################
+# init output
+#############################
+
+check_istty
+
+
+#############################
+# run
+#############################
+
+check_system
+check_fcitx
+
+((_check_frontend)) && {
+    write_title 1 "Frontends setup."
+    check_xim
+    check_qt
+    check_gtk
+}
+
+((_check_modules)) && {
+    write_title 1 "Configuration."
+    check_modules
+    check_input_methods
+}
+
+((_check_log)) && {
+    write_title 1 "Log."
+    check_log
+}
