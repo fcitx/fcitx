@@ -211,14 +211,17 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
     }
     if (pyenhance->config.stroke_thresh >= 0 &&
         pyenhance->config.stroke_thresh <= sym_l &&
+        pyenhance->config.stroke_limit > 0 &&
         !sym[strspn(sym, "hnpsz")]) {
+        if (fcitx_unlikely(pyenhance->config.stroke_limit > 10))
+            pyenhance->config.stroke_limit = 10;
+        const int limit = pyenhance->config.stroke_limit;
         /* struct timespec start, end; */
         /* int t; */
         /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
-#define PY_STROKE_BUFF_SIZE 5
-        const PyEnhanceMapWord *word_buff[PY_STROKE_BUFF_SIZE];
+        const PyEnhanceMapWord *word_buff[10];
         int count = py_enhance_stroke_get_match_keys(
-            pyenhance, sym, sym_l, word_buff, PY_STROKE_BUFF_SIZE);
+            pyenhance, sym, sym_l, word_buff, limit);
         /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
         /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
         /*     + end.tv_nsec - start.tv_nsec; */
@@ -248,7 +251,7 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
                         FcitxCandidateWordAppend(new_list, &cand_word);
                     }
                     size = FcitxCandidateWordGetListSize(new_list);
-                    if (size > 5) {
+                    if (size >= limit) {
                         break;
                     }
                 }

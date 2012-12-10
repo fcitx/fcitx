@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-08 11:29-0500\n"
+"POT-Creation-Date: 2012-12-08 21:00-0500\n"
 "PO-Revision-Date: 2012-12-08 14:06+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/fcitx/"
@@ -1355,6 +1355,10 @@ msgstr ""
 msgid "Maximum length of spell hint list for Quick Phrase"
 msgstr ""
 
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
+msgid "Maximum results from stroke input."
+msgstr ""
+
 #: src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
 msgstr ""
@@ -1556,6 +1560,7 @@ msgstr "Pinyin"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:32
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:37
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:42
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:50
 msgid "Pinyin Enhance"
 msgstr ""
 
@@ -2117,6 +2122,12 @@ msgstr "Table Einggabemethode für Fcitx"
 
 #: src/module/vk/vk.c:61
 msgid "Table Symbol"
+msgstr ""
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
+msgid ""
+"This is only a soft limit, the actually number of candidate words may be "
+"larger than this when multiple characters have the same order of strokes."
 msgstr ""
 
 #: src/ui/classic/skin.desc:33

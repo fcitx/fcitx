@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-08 11:29-0500\n"
+"POT-Creation-Date: 2012-12-08 21:00-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1980,6 +1980,7 @@ msgstr ""
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:32
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:37
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:42
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:50
 msgid "Pinyin Enhance"
 msgstr ""
 
@@ -2023,6 +2024,16 @@ msgstr ""
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
+msgstr ""
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
+msgid "Maximum results from stroke input."
+msgstr ""
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
+msgid ""
+"This is only a soft limit, the actually number of candidate words may be "
+"larger than this when multiple characters have the same order of strokes."
 msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:1

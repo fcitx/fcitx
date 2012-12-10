@@ -28,10 +28,11 @@ po_cache="${cache_base}/pos-cache.txt"
 handler_cache="${cache_base}/handlers-cache.txt"
 parse_cache="${cache_base}/parse_po_cache"
 
-add_sources() {
-    for f in "$@"; do
-        echo "$@" || return 1
-    done >> "${src_cache}"
+add_source() {
+    local file="$1"
+    local type="$2"
+    [ -z "${type}" ] && type="generic"
+    echo "${type} ${file}" >> "${src_cache}"
 }
 
 download_wget() {
@@ -138,8 +139,8 @@ case "${action}" in
         fcitx_parse_all_pos "${po_cache}" "${parse_cache}"
         exit 0
         ;;
-    --add-sources)
-        add_sources "$@" || {
+    --add-source)
+        add_source "$@" || {
             rm -f "${src_cache}"
             exit 1
         }
@@ -150,7 +151,11 @@ case "${action}" in
         exit 0
         ;;
     --add-handler)
-        echo "${1}" >> "${handler_cache}"
+        handler="${1}"
+        shift || return 1
+        for t in generic $@; do
+            echo "${t} ${handler}" >> "${handler_cache}"
+        done
         exit 0
         ;;
     --pot)

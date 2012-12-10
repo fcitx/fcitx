@@ -408,24 +408,75 @@ function(__fcitx_addon_config_file target conf_file dest_dir)
   install(FILES "${TGT_FILE}" DESTINATION "${dest_dir}")
 endfunction()
 
+function(fcitx_translate_set_extract_type type)
+  if(type STREQUAL "")
+    set(type "generic")
+  endif()
+  foreach(file ${ARGN})
+    get_filename_component(file "${file}" ABSOLUTE)
+    set_source_files_properties("${file}" PROPERTIES
+      "__FCITX_TRANSLATE_EXTRACT_TYPE" "${type}")
+  endforeach()
+endfunction()
+
+function(_fcitx_translate_get_extract_type var file)
+  get_filename_component(file "${file}" ABSOLUTE)
+  get_source_file_property(type "${file}" "__FCITX_TRANSLATE_EXTRACT_TYPE")
+  if(NOT type)
+    set(type)
+  endif()
+  set("${var}" "${type}" PARENT_SCOPE)
+endfunction()
+
+function(fcitx_translate_set_ignore)
+  foreach(file ${ARGN})
+    get_filename_component(file "${file}" ABSOLUTE)
+    set_source_files_properties("${file}" PROPERTIES
+      "__FCITX_TRANSLATE_EXTRACT_IGNORE" 1)
+  endforeach()
+endfunction()
+
+function(_fcitx_translate_get_ignore var file)
+  get_filename_component(file "${file}" ABSOLUTE)
+  get_source_file_property(ignore "${file}" "__FCITX_TRANSLATE_EXTRACT_IGNORE")
+  set("${var}" "${ignore}" PARENT_SCOPE)
+endfunction()
+
 function(__fcitx_translate_add_sources_internal)
   if(NOT ARGN)
     return()
   endif()
   foreach(source ${ARGN})
+    _fcitx_translate_get_extract_type(type "${source}")
+    _fcitx_translate_get_ignore(ignore "${source}")
+    if(ignore)
+      continue()
+    endif()
     file(RELATIVE_PATH source "${PROJECT_SOURCE_DIR}" "${source}")
     execute_process(COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-      "${FCITX_CMAKE_HELPER_SCRIPT}" --add-sources "${source}"
+      "${FCITX_CMAKE_HELPER_SCRIPT}" --add-source "${source}" "${type}"
       WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
   endforeach()
 endfunction()
 
 # Add files to be translated
 function(fcitx_translate_add_sources)
-  set(sources ${ARGN})
+  set(options)
+  set(one_value_args EXTRACT_TYPE)
+  set(multi_value_args)
+  fcitx_parse_arguments(FCITX_ADD_SOURCES
+    "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
+  set(sources ${FCITX_ADD_SOURCES_UNPARSED_ARGUMENTS})
   set(new_sources)
   foreach(source ${sources})
     get_filename_component(full_name "${source}" ABSOLUTE)
+    if(FCITX_ADD_SOURCES_EXTRACT_TYPE)
+      fcitx_translate_get_extract_type(type "${full_name}")
+      if(NOT type)
+        fcitx_translate_set_extract_type(
+          "${FCITX_ADD_SOURCES_EXTRACT_TYPE}" "${full_name}")
+      endif()
+    endif()
     list(APPEND new_sources "${full_name}")
   endforeach()
   set_property(GLOBAL APPEND PROPERTY "FCITX_TRANSLATION_SOURCES"
@@ -455,15 +506,15 @@ function(_fcitx_translate_add_handler script)
   add_custom_target("${target}" DEPENDS "${script}")
   add_dependencies(fcitx-extract-traslation.dependency "${target}")
   execute_process(COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
-    "${FCITX_CMAKE_HELPER_SCRIPT}" --add-handler "${script}"
+    "${FCITX_CMAKE_HELPER_SCRIPT}" --add-handler "${script}" ${ARGN}
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
 endfunction()
-_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_GETTEXT}")
-_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_DESKTOP}")
-_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_CONFDESC}")
-_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_PO}")
-_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_QT}")
-_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_KDE}")
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_GETTEXT}" gettext)
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_DESKTOP}" desktop)
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_CONFDESC}" confdesc)
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_PO}" po)
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_QT}" qt)
+_fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_KDE}" kde)
 
 # Add files to apply translation
 # this will generate a rule to generate ${out_file} from ${in_file} by
