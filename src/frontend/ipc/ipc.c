@@ -1128,7 +1128,6 @@ void IPCDeleteSurroundingText(void* arg, FcitxInputContext* ic, int offset, unsi
     if (ipcic->surroundingText) {
         int cursor_pos = ipcic->cursor + offset;
         size_t len = fcitx_utf8_strlen (ipcic->surroundingText);
-        FcitxLog(INFO, "before:%s %d %d", ipcic->surroundingText, ipcic->cursor, ipcic->anchor);
         if (cursor_pos >= 0 && len - cursor_pos >= size) {
             /*
              * the original size must be larger, so we can do in-place copy here
@@ -1147,7 +1146,6 @@ void IPCDeleteSurroundingText(void* arg, FcitxInputContext* ic, int offset, unsi
             ipcic->cursor = 0;
         }
         ipcic->anchor = ipcic->cursor;
-        FcitxLog(INFO, "after:%s %d %d", ipcic->surroundingText, ipcic->cursor, ipcic->anchor);
     }
 
 
