@@ -406,6 +406,7 @@ void FcitxInstanceDeleteSurroundingText(FcitxInstance* instance, FcitxInputConte
     FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
     if (pfrontend == NULL)
         return;
+
     FcitxFrontend* frontend = (*pfrontend)->frontend;
     if (frontend->DeleteSurroundingText) {
         frontend->DeleteSurroundingText((*pfrontend)->addonInstance, ic, offset, size);

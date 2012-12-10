@@ -237,7 +237,7 @@ void QFcitxInputContext::update()
                         m_icproxy->SetSurroundingText(text, cursor, anchor);
                     }
                     else {
-                        if (m_lastSurroundingAnchor != anchor &&
+                        if (m_lastSurroundingAnchor != anchor ||
                             m_lastSurroundingCursor != cursor)
                             m_icproxy->SetSurroundingTextPosition(cursor, anchor);
                     }

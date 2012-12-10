@@ -874,9 +874,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 FcitxIPCIC* ipcic = GetIPCIC(ic);
                 if (!ipcic->surroundingText || strcmp(ipcic->surroundingText, text) != 0 || cursor != ipcic->cursor || anchor != ipcic->anchor)
                 {
-                    if (ipcic->surroundingText) {
-                        free(ipcic->surroundingText);
-                    }
+                    fcitx_utils_free(ipcic->surroundingText);
                     ipcic->surroundingText = strdup(text);
                     ipcic->cursor = cursor;
                     ipcic->anchor = anchor;
@@ -1119,6 +1117,40 @@ void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
 void IPCDeleteSurroundingText(void* arg, FcitxInputContext* ic, int offset, unsigned int size)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+    FcitxIPCIC* ipcic = GetIPCIC(ic);
+
+    /*
+     * do the real deletion here, and client might update it, but input method itself
+     * would expect a up to date value after this call.
+     *
+     * Make their life easier.
+     */
+    if (ipcic->surroundingText) {
+        int cursor_pos = ipcic->cursor + offset;
+        size_t len = fcitx_utf8_strlen (ipcic->surroundingText);
+        FcitxLog(INFO, "before:%s %d %d", ipcic->surroundingText, ipcic->cursor, ipcic->anchor);
+        if (cursor_pos >= 0 && len - cursor_pos >= size) {
+            /*
+             * the original size must be larger, so we can do in-place copy here
+             * without alloc new string
+             */
+            char* start = fcitx_utf8_get_nth_char(ipcic->surroundingText, cursor_pos);
+            char* end = fcitx_utf8_get_nth_char(start, size);
+
+            int copylen = strlen(end);
+
+            memmove (start, end, sizeof(char) * copylen);
+            start[copylen] = 0;
+            ipcic->cursor = cursor_pos;
+        } else {
+            ipcic->surroundingText[0] = '\0';
+            ipcic->cursor = 0;
+        }
+        ipcic->anchor = ipcic->cursor;
+        FcitxLog(INFO, "after:%s %d %d", ipcic->surroundingText, ipcic->cursor, ipcic->anchor);
+    }
+
+
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
                        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
                        "DeleteSurroundingText"); // name of the signal
