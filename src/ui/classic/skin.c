@@ -597,7 +597,7 @@ void DrawImage(cairo_t *c, cairo_surface_t * png, int x, int y, MouseE mouse)
     cairo_restore(c);
 }
 
-void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, FcitxMessages * msgup, FcitxMessages *msgdown , unsigned int * iheight, unsigned int *iwidth)
+void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, boolean vertical, int iCursorPos, FcitxMessages * msgup, FcitxMessages *msgdown , unsigned int * iheight, unsigned int *iwidth)
 {
     int i;
     char *strUp[MAX_MESSAGE_COUNT];
@@ -684,7 +684,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
         else
             strDown[i] = FcitxMessagesGetMessageString(msgdown, i);
 
-        if (inputWindow->owner->bVerticalList) { /* vertical */
+        if (vertical) { /* vertical */
             if (FcitxMessagesGetMessageType(msgdown, i) == MSG_INDEX) {
                 if (currentX > outputWidth)
                     outputWidth = currentX;
@@ -704,7 +704,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
         }
         posDownY[i] = offsetY + outputHeight;
     }
-    if (inputWindow->owner->bVerticalList && currentX > outputWidth)
+    if (vertical && currentX > outputWidth)
         outputWidth = currentX;
 
     newHeight = offsetY + outputHeight + sc->skinInputBar.marginBottom + (FcitxMessagesGetMessageCount(msgdown) || !sc->skinFont.respectDPI ? fontHeight : 0);
@@ -715,7 +715,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
     /* round to ROUND_SIZE in order to decrease resize */
     newWidth = (newWidth / ROUND_SIZE) * ROUND_SIZE + ROUND_SIZE;
 
-    if (inputWindow->owner->bVerticalList) { /* vertical */
+    if (vertical) { /* vertical */
         newWidth = (newWidth < INPUT_BAR_VMIN_WIDTH) ? INPUT_BAR_VMIN_WIDTH : newWidth;
     } else {
         newWidth = (newWidth < INPUT_BAR_HMIN_WIDTH) ? INPUT_BAR_HMIN_WIDTH : newWidth;

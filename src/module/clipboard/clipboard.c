@@ -324,6 +324,7 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
         .owner = clipboard
     };
     FcitxInstanceCleanInputWindow(instance);
+    FcitxCandidateWordSetLayoutHint(cand_list, CLH_Vertical);
     FcitxCandidateWordSetPageSize(cand_list, gconfig->iMaxCandWord);
     FcitxCandidateWordSetChooseAndModifier(
         cand_list, DIGIT_STR_CHOOSE, cmodifiers[config->choose_modifier]);

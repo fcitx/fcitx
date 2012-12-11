@@ -45,6 +45,21 @@ extern "C" {
     struct _FcitxCandidateWord;
     struct _FcitxCandidateWordList;
 
+    /**
+     * a hint to let the candidate list to show with specific layout
+     *
+     * it's only a soft hint for UI, it depends on UI implement it or not
+     *
+     * and it will be automatically reset to CLH_NotSet when Reset Candidate List
+     *
+     * @since 4.2.7
+     */
+    typedef enum _FcitxCandidateLayoutHint {
+        CLH_NotSet,
+        CLH_Vertical,
+        CLH_Horizontal
+    } FcitxCandidateLayoutHint;
+
     /** fcitx candidate workd list */
     typedef struct _FcitxCandidateWordList FcitxCandidateWordList;
 
@@ -467,6 +482,27 @@ extern "C" {
      **/
     int FcitxCandidateWordCheckChooseKey(FcitxCandidateWordList *candList,
                                          FcitxKeySym sym, unsigned int state);
+
+    /**
+     * Set Candidate word layout hint
+     *
+     * @param candList candidate words
+     * @param hint layout hint
+     * @return void
+     *
+     * @since 4.2.7
+     */
+    void FcitxCandidateWordSetLayoutHint(FcitxCandidateWordList* candList, FcitxCandidateLayoutHint hint);
+
+    /**
+     * Get Candidate word layout hint
+     *
+     * @param candList candidate words
+     * @return layout hint
+     *
+     * @since 4.2.7
+     */
+    FcitxCandidateLayoutHint FcitxCandidateWordGetLayoutHint(FcitxCandidateWordList* candList);
 
 /** convinient string for candidate word */
 #define DIGIT_STR_CHOOSE "1234567890"

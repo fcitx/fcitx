@@ -175,7 +175,7 @@ typedef struct _FcitxSkin {
 FcitxConfigFileDesc* GetSkinDesc();
 int LoadSkinConfig(FcitxSkin* sc, char** skinType);
 void DrawImage(cairo_t* c, cairo_surface_t* png, int x, int y, MouseE mouse);
-void DrawInputBar(FcitxSkin* sc, struct _InputWindow* inputWindow, int cursorPos, struct _FcitxMessages * msgup, struct _FcitxMessages *msgdown , unsigned int * iheight, unsigned int *iwidth);
+void DrawInputBar(FcitxSkin* sc, struct _InputWindow* inputWindow, boolean vertical, int iCursorPos, FcitxMessages* msgup, FcitxMessages* msgdown, unsigned int* iheight, unsigned int* iwidth);
 SkinImage* LoadImage(FcitxSkin* sc, const char* name, int fallback);
 SkinImage* LoadImageWithText(struct _FcitxClassicUI *classicui, FcitxSkin* sc, const char* name, const char* text, int w, int h, boolean active);
 void LoadInputMessage(FcitxSkin* sc, struct _InputWindow* inputWindow, const char* font);

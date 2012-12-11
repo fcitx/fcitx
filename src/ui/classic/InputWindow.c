@@ -30,6 +30,7 @@
 #include "fcitx/frontend.h"
 #include "fcitx/configfile.h"
 #include "fcitx/instance.h"
+#include "fcitx/candidate.h"
 #include "fcitx-utils/utils.h"
 
 #include "InputWindow.h"
@@ -166,7 +167,17 @@ void DrawInputWindow(InputWindow* inputWindow)
 {
     int lastW = inputWindow->iInputWindowWidth, lastH = inputWindow->iInputWindowHeight;
     int cursorPos = FcitxUINewMessageToOldStyleMessage(inputWindow->owner->owner, inputWindow->msgUp, inputWindow->msgDown);
-    DrawInputBar(inputWindow->skin, inputWindow, cursorPos, inputWindow->msgUp, inputWindow->msgDown, &inputWindow->iInputWindowHeight , &inputWindow->iInputWindowWidth);
+    FcitxInputState* input = FcitxInstanceGetInputState(inputWindow->owner->owner);
+    FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
+    FcitxCandidateLayoutHint layout = FcitxCandidateWordGetLayoutHint(candList);
+
+    boolean vertical = inputWindow->owner->bVerticalList;
+    if (layout == CLH_Vertical)
+        vertical = true;
+    else if (layout == CLH_Horizontal)
+        vertical = false;
+
+    DrawInputBar(inputWindow->skin, inputWindow, vertical, cursorPos, inputWindow->msgUp, inputWindow->msgDown, &inputWindow->iInputWindowHeight , &inputWindow->iInputWindowWidth);
 
     /* Resize Window will produce Expose Event, so there is no need to draw right now */
     if (lastW != inputWindow->iInputWindowWidth || lastH != inputWindow->iInputWindowHeight) {

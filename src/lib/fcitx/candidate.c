@@ -28,6 +28,7 @@ struct _FcitxCandidateWordList {
     int wordPerPage;
     boolean hasGonePrevPage;
     boolean hasGoneNextPage;
+    FcitxCandidateLayoutHint layoutHint;
 };
 
 static const UT_icd cand_icd = {
@@ -42,6 +43,7 @@ FcitxCandidateWordList* FcitxCandidateWordNewList()
     utarray_init(&candList->candWords, &cand_icd);
     utarray_reserve(&candList->candWords, 128);
     candList->wordPerPage = 5; /* anyway put a default value for safety */
+    candList->layoutHint = CLH_NotSet;
     strncpy(candList->strChoose, DIGIT_STR_CHOOSE, MAX_CAND_WORD);
 
     return candList;
@@ -144,6 +146,7 @@ void FcitxCandidateWordReset(FcitxCandidateWordList* candList)
     candList->currentPage = 0;
     candList->hasGonePrevPage = false;
     candList->hasGoneNextPage = false;
+    candList->layoutHint = CLH_NotSet;
 }
 
 FCITX_EXPORT_API
@@ -384,5 +387,18 @@ FcitxCandidateWordCheckChooseKey(FcitxCandidateWordList *candList,
                                                 candList->strChoose,
                                                 candList->candiateModifier);
 }
+
+FCITX_EXPORT_API
+FcitxCandidateLayoutHint FcitxCandidateWordGetLayoutHint(FcitxCandidateWordList* candList)
+{
+    return candList->layoutHint;
+}
+
+FCITX_EXPORT_API
+void FcitxCandidateWordSetLayoutHint(FcitxCandidateWordList* candList, FcitxCandidateLayoutHint hint)
+{
+    candList->layoutHint = hint;
+}
+
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
