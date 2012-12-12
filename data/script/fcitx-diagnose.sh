@@ -12,7 +12,7 @@ add_and_check_file() {
     local file="$2"
     local inode
     inode="$(stat -L --printf='%i' "${file}" 2> /dev/null)" || return 0
-    local varname="${prefix}_${inode}"
+    local varname="___add_and_check_file_${prefix}_${inode}"
     [ ! -z "${!varname}" ] && return 1
     eval "${varname}=1"
     return 0
@@ -280,7 +280,7 @@ init_ld_paths() {
     local path
     ldpaths=()
     for path in "${_ldpaths[@]}"; do
-        [ -d "${path}" ] && add_and_check_file qt "${path}" && {
+        [ -d "${path}" ] && add_and_check_file ldpath "${path}" && {
             ldpaths=("${ldpaths[@]}" "${path}")
         }
     done
@@ -454,7 +454,7 @@ check_qt() {
     for path in "${ldpaths[@]}"; do
         # the {/*,} here is for lib/$ARCH/ when output of ldconfig
         # failed to include it
-        for file in "${path}"{/*,}/qt/**/*fcitx*.so; do
+        for file in "${path}"{/*,}/qt{,4}/**/*fcitx*.so; do
             if [[ ${file} =~ (im-fcitx|inputmethods) ]]; then
                 __need_blank_line=0
                 add_and_check_file qt "${file}" && {
@@ -516,7 +516,7 @@ check_gtk_immodule_cache() {
     for path in /etc "${ldpaths[@]}"; do
         # the {/*,} here is for lib/$ARCH/ when output of ldconfig
         # failed to include it
-        for file in "${path}"{/*,}/gtk-${version}.0{/**,}/*immodules*; do
+        for file in "${path}"{/*,}/gtk{-${version}{.0,},}{/**,}/*immodules*; do
             [ -f "${file}" ] || continue
             add_and_check_file "gtk_immodule_cache_${version}" "${file}" || {
                 continue

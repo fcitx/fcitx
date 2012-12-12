@@ -15,6 +15,6 @@ Function8=
 [Launch]
 Name=launch
 Return=boolean
-Arg0=int*
-Arg1=boolean*
-Arg2=boolean*
+Arg0=const int*
+Arg1=const boolean*
+Arg2=const boolean*

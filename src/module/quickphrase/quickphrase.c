@@ -202,9 +202,9 @@ void * QuickPhraseCreate(FcitxInstance *instance)
 
 void* QuickPhraseLaunch(void* arg, FcitxModuleFunctionArg args)
 {
-    int* key = args.args[0];
-    boolean* useDup = args.args[1];
-    boolean* append = args.args[2];
+    const int* key = args.args[0];
+    const boolean* useDup = args.args[1];
+    const boolean* append = args.args[2];
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     qpstate->curTriggerKey[0].sym = *key;
     qpstate->useDupKeyInput = *useDup;
