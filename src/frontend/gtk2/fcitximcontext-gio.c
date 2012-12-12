@@ -58,10 +58,13 @@ struct _FcitxIMContext {
     guint32 time;
     gboolean use_preedit;
     gboolean is_inpreedit;
-    char* preedit_string;
+    gchar* preedit_string;
+    gchar* surrounding_text;
     int cursor_pos;
     FcitxCapacityFlags capacity;
     PangoAttrList* attrlist;
+    gint last_cursor_pos;
+    gint last_anchor_pos;
 };
 
 struct _FcitxIMContextClass {
@@ -362,6 +365,8 @@ fcitx_im_context_init(FcitxIMContext *context)
     context->area.height = 0;
     context->use_preedit = TRUE;
     context->cursor_pos = 0;
+    context->last_anchor_pos = -1;
+    context->last_cursor_pos = -1;
     context->preedit_string = NULL;
     context->attrlist = NULL;
     context->capacity = CAPACITY_SURROUNDING_TEXT;
@@ -439,10 +444,11 @@ fcitx_im_context_finalize(GObject *obj)
         context->slave = NULL;
     }
 
-    if (context->preedit_string) {
-        g_free(context->preedit_string);
-        context->preedit_string = NULL;
-    }
+    g_free(context->preedit_string);
+    context->preedit_string = NULL;
+
+    g_free(context->surrounding_text);
+    context->surrounding_text = NULL;
 
     if (context->attrlist) {
         pango_attr_list_unref(context->attrlist);
@@ -927,11 +933,25 @@ fcitx_im_context_set_surrounding (GtkIMContext *context,
         guint anchor_pos = get_selection_anchor_point (fcitxcontext,
                            cursor_pos,
                            utf8_len);
-        fcitx_client_set_surrounding_text (fcitxcontext->client,
-                                           p,
-                                           cursor_pos,
-                                           anchor_pos);
-        g_free (p);
+        if (g_strcmp0(fcitxcontext->surrounding_text, p) == 0) {
+            g_free(p);
+            p = NULL;
+        }
+        else {
+            g_free(fcitxcontext->surrounding_text);
+            fcitxcontext->surrounding_text = p;
+        }
+
+        if (p
+            || fcitxcontext->last_cursor_pos != cursor_pos
+            || fcitxcontext->last_anchor_pos != anchor_pos) {
+            fcitxcontext->last_cursor_pos = cursor_pos;
+            fcitxcontext->last_anchor_pos = anchor_pos;
+            fcitx_client_set_surrounding_text (fcitxcontext->client,
+                                               p,
+                                               cursor_pos,
+                                               anchor_pos);
+        }
     }
     gtk_im_context_set_surrounding (fcitxcontext->slave,
                                     text,
