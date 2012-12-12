@@ -119,7 +119,16 @@ fcitx_merge_all_pos() {
         done
         msgcat -o- --to-code=utf-8 "${po_list[@]}" | \
             "${_FCITX_PO_PARSER_EXECUTABLE}" \
-            --fix-header "${header}" > "${pot_file}"
+            --fix-header "${header}" | {
+            cat <<EOF
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+EOF
+            sed -e '/^# /d' -e '/^#$/d'
+        } > "${pot_file}"
     fi
 }
 
