@@ -175,6 +175,7 @@ INPUT_RETURN_VALUE UnicodeGetCandWords(UnicodeModule* uni)
     FcitxInputStateSetCursorPos(input, strlen(uni->buffer));
 
     FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
+    FcitxCandidateWordSetLayoutHint(candList, CLH_Vertical);
 
     UT_array* result = CharSelectDataFind(uni->charselectdata, uni->buffer);
     utarray_foreach(c, result, uint16_t) {
