@@ -124,6 +124,7 @@ typedef struct _FcitxKimpanelUI {
     int lastUpdateW;
     int lastUpdateH;
     int lastCursor;
+    boolean hasSetLookupTable;
 } FcitxKimpanelUI;
 
 static void* KimpanelCreate(FcitxInstance* instance);
@@ -149,6 +150,13 @@ static void KimUpdateSpotLocation(FcitxKimpanelUI* kimpanel, int x, int y);
 static void KimSetSpotRect(FcitxKimpanelUI* kimpanel, int x, int y, int w, int h);
 static void KimShowLookupTable(FcitxKimpanelUI* kimpanel, boolean toShow);
 static void KimUpdateLookupTable(FcitxKimpanelUI* kimpanel, char *labels[], int nLabel, char *texts[], int nText, boolean has_prev, boolean has_next);
+static void KimSetLookupTable(FcitxKimpanelUI* kimpanel,
+                              char *labels[], int nLabel,
+                              char *texts[], int nText,
+                              boolean has_prev,
+                              boolean has_next,
+                              int cursor,
+                              int layout);
 static void KimUpdatePreeditText(FcitxKimpanelUI* kimpanel, char *text);
 static void KimUpdateAux(FcitxKimpanelUI* kimpanel, char *text);
 static void KimUpdatePreeditCaret(FcitxKimpanelUI* kimpanel, int position);
@@ -520,11 +528,16 @@ void KimpanelShowInputWindow(void* arg)
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
     FcitxInstance* instance = kimpanel->owner;
     FcitxInputState* input = FcitxInstanceGetInputState(instance);
+    FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
     kimpanel->iCursorPos = FcitxUINewMessageToOldStyleMessage(instance, kimpanel->messageUp, kimpanel->messageDown);
     FcitxMessages* messageDown = kimpanel->messageDown;
     FcitxMessages* messageUp = kimpanel->messageUp;
     FcitxLog(DEBUG, "KimpanelShowInputWindow");
     KimpanelMoveInputWindow(kimpanel);
+
+    boolean hasPrev = FcitxCandidateWordHasPrev(candList);
+    boolean hasNext = FcitxCandidateWordHasNext(candList);
+    FcitxCandidateLayoutHint layout = FcitxCandidateWordGetLayoutHint(candList);
 
     int n = FcitxMessagesGetMessageCount(messageDown);
     int nLabels = 0;
@@ -582,13 +595,10 @@ void KimpanelShowInputWindow(void* arg)
         if (nTexts == 0) {
             KimShowLookupTable(kimpanel, false);
         } else {
-            KimUpdateLookupTable(kimpanel,
-                                 label,
-                                 nLabels,
-                                 text,
-                                 nTexts,
-                                 FcitxCandidateWordHasPrev(FcitxInputStateGetCandidateList(input)),
-                                 FcitxCandidateWordHasNext(FcitxInputStateGetCandidateList(input)));
+            if (kimpanel->hasSetLookupTable)
+                KimSetLookupTable(kimpanel, label, nLabels, text, nTexts, hasPrev, hasNext, pos, layout);
+            else
+                KimUpdateLookupTable(kimpanel, label, nLabels, text, nTexts, hasPrev, hasNext);
             KimShowLookupTable(kimpanel, true);
         }
         for (i = 0; i < nTexts; i++)
@@ -596,16 +606,15 @@ void KimpanelShowInputWindow(void* arg)
         for (i = 0; i < nLabels; i++)
             free(label[i]);
     } else {
-        KimUpdateLookupTable(kimpanel,
-                             NULL,
-                             0,
-                             NULL,
-                             0,
-                             FcitxCandidateWordHasPrev(FcitxInputStateGetCandidateList(input)),
-                             FcitxCandidateWordHasNext(FcitxInputStateGetCandidateList(input)));
+        if (kimpanel->hasSetLookupTable)
+            KimSetLookupTable(kimpanel, NULL, 0, NULL, 0, hasNext, hasNext, pos, layout);
+        else
+            KimUpdateLookupTable(kimpanel, NULL, 0, NULL, 0, hasPrev, hasNext);
         KimShowLookupTable(kimpanel, false);
     }
-    KimUpdateLookupTableCursor(kimpanel, pos);
+
+    if (!kimpanel->hasSetLookupTable)
+        KimUpdateLookupTableCursor(kimpanel, pos);
 
     n = FcitxMessagesGetMessageCount(messageUp);
     char aux[MESSAGE_MAX_LENGTH] = "";
@@ -836,6 +845,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         kimpanel->version = 2;
         KimpanelReset(kimpanel);
         KimpanelRegisterAllStatus(kimpanel);
+        KimpanelIntrospect(kimpanel);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "Exit")) {
         FcitxLog(DEBUG, "Exit");
@@ -1298,6 +1308,82 @@ void KimUpdateLookupTable(FcitxKimpanelUI* kimpanel, char *labels[], int nLabel,
 
 }
 
+void KimSetLookupTable(FcitxKimpanelUI* kimpanel,
+                       char *labels[], int nLabel,
+                       char *texts[], int nText,
+                       boolean has_prev,
+                       boolean has_next,
+                       int cursor,
+                       int layout
+                      )
+{
+    int i;
+    dbus_uint32_t serial = 0; // unique number to associate replies with requests
+    DBusMessage* msg;
+    DBusMessageIter args;
+
+    // create a signal and check for errors
+    msg = dbus_message_new_method_call("org.kde.impanel",
+                                       "/org/kde/impanel",
+                                       "org.kde.impanel2",
+                                       "SetLookupTable"); // name of the signal
+    if (NULL == msg) {
+        FcitxLog(DEBUG, "Message Null");
+        return;
+    }
+    for (i = 0; i < nLabel; i++) {
+        if (!fcitx_utf8_check_string(labels[i]))
+            return;
+    }
+    for (i = 0; i < nText; i++) {
+        if (!fcitx_utf8_check_string(texts[i]))
+            return;
+    }
+    DBusMessageIter subLabel;
+    DBusMessageIter subText;
+    DBusMessageIter subAttrs;
+    // append arguments onto signal
+    dbus_message_iter_init_append(msg, &args);
+    dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "s", &subLabel);
+    for (i = 0; i < nLabel; i++) {
+        if (!dbus_message_iter_append_basic(&subLabel, DBUS_TYPE_STRING, &labels[i])) {
+            FcitxLog(DEBUG, "Out Of Memory!");
+        }
+    }
+    dbus_message_iter_close_container(&args, &subLabel);
+
+    dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "s", &subText);
+    for (i = 0; i < nText; i++) {
+        if (!dbus_message_iter_append_basic(&subText, DBUS_TYPE_STRING, &texts[i])) {
+            FcitxLog(DEBUG, "Out Of Memory!");
+        }
+    }
+    dbus_message_iter_close_container(&args, &subText);
+
+    char *attr = "";
+    dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "s", &subAttrs);
+    for (i = 0; i < nLabel; i++) {
+        if (!dbus_message_iter_append_basic(&subAttrs, DBUS_TYPE_STRING, &attr)) {
+            FcitxLog(DEBUG, "Out Of Memory!");
+        }
+    }
+    dbus_message_iter_close_container(&args, &subAttrs);
+
+    dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, &has_prev);
+    dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, &has_next);
+    dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &cursor);
+    dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &layout);
+
+    // send the message and flush the connection
+    if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
+        FcitxLog(DEBUG, "Out Of Memory!");
+    }
+
+    // free the message
+    dbus_message_unref(msg);
+
+}
+
 void KimUpdatePreeditCaret(FcitxKimpanelUI* kimpanel, int position)
 {
 
@@ -1603,8 +1689,11 @@ void KimpanelIntrospectCallback(DBusPendingCall* call, void* data)
         DBusError error;
         dbus_error_init(&error);
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &s , DBUS_TYPE_INVALID)) {
-            if (strstr(s, "org.kde.impanel2"))
+            if (strstr(s, "org.kde.impanel2")) {
                 kimpanel->version = 2;
+                if (strstr(s, "SetLookupTable"))
+                    kimpanel->hasSetLookupTable = true;
+            }
         }
         dbus_message_unref(msg);
         dbus_error_free(&error);
@@ -1619,6 +1708,7 @@ void KimpanelSuspend(void* arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
     kimpanel->version = 1;
+    kimpanel->hasSetLookupTable = false;
 }
 
 
