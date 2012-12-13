@@ -50,6 +50,10 @@ public:
         sym = s;
     }
 
+    ~ProcessKeyWatcher() {
+        free(event);
+    }
+
 public slots:
     void processEvent() {
         qApp->x11ProcessEvent(event);
