@@ -771,6 +771,7 @@ fcitx_utils_cat_str(char *out, size_t n, const char **str_list,
     }
     *out = '\0';
 }
+
 FCITX_EXPORT_API void
 fcitx_utils_cat_str_with_len(char *out, size_t len, size_t n,
                              const char **str_list, const size_t *size_list)
