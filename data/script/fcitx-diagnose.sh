@@ -318,6 +318,29 @@ check_system() {
     fi
 }
 
+check_env() {
+    write_title 1 "Environment."
+    write_order_list "DISPLAY:"
+    write_quote_str "DISPLAY='${DISPLAY}'"
+    write_order_list "Keyboard Layout:"
+    if type setxkbmap &> /dev/null; then
+        write_quote_cmd setxkbmap -print "${DISPLAY}"
+    else
+        write_paragraph "$(code_inline 'setxkbmap') not found."
+    fi
+    write_order_list "Locale:"
+    if type locale &> /dev/null; then
+        increase_cur_level 1
+        write_order_list "Current locale:"
+        write_quote_cmd locale
+        write_order_list "All locale:"
+        write_quote_cmd locale -a
+        increase_cur_level -1
+    else
+        write_paragraph "$(code_inline 'locale') not found."
+    fi
+}
+
 check_fcitx() {
     write_title 1 "Fcitx State."
     write_order_list 'executable:'
@@ -696,6 +719,7 @@ check_istty
 #############################
 
 check_system
+check_env
 check_fcitx
 
 ((_check_frontend)) && {
