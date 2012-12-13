@@ -100,7 +100,7 @@ print_tty_ctrl() {
 
 replace_reset() {
     local line
-    local IFS='\n'
+    local IFS=$'\n'
     if [ ! -z "$1" ]; then
         while read line; do
             echo "${line}" | sed -e 's/'$'\e''\[0m/'$'\e''\['"$1"'m/g'
@@ -167,6 +167,7 @@ write_paragraph() {
     local line
     local i=0
     local whole_prefix
+    local IFS=$'\n'
     ((__need_blank_line)) && echo
     [ -z "${code}" ] || print_tty_ctrl "${code}"
     {
@@ -342,6 +343,7 @@ check_env() {
 }
 
 check_fcitx() {
+    local IFS=$'\n'
     write_title 1 "Fcitx State."
     write_order_list 'executable:'
     if ! fcitx_exe="$(which fcitx 2> /dev/null)"; then
