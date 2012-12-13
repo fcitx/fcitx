@@ -486,10 +486,8 @@ void QFcitxInputContext::x11ProcessKeyEventCallback(QDBusPendingCallWatcher* wat
         update();
         r = true;
     }
-    if (r) {
-        free(pkwatcher->event);
+    if (r)
         delete pkwatcher;
-    }
     else {
         pkwatcher->event->xkey.state |= FcitxKeyState_IgnoredMask;
         QTimer::singleShot(0, pkwatcher, SLOT(processEvent()));

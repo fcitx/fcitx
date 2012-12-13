@@ -50,10 +50,14 @@ public:
         sym = s;
     }
 
+    virtual ~ProcessKeyWatcher() {
+        free(event);
+    }
+
 public slots:
     void processEvent() {
         qApp->x11ProcessEvent(event);
-        this->deleteLater();
+        deleteLater();
     }
 public:
     XEvent* event;
