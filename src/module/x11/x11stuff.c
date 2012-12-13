@@ -341,12 +341,11 @@ void* X11RemoveEventHandler(void* arg, FcitxModuleFunctionArg args)
     FcitxX11* x11priv = (FcitxX11*)arg;
     FcitxXEventHandler* handler;
     int i = 0;
-    for (i = 0 ;
-            i < utarray_len(&x11priv->handlers);
-            i ++) {
-        handler = (FcitxXEventHandler*) utarray_eltptr(&x11priv->handlers, i);
-        if (handler->instance == args.args[0])
+    for (i = 0;i < utarray_len(&x11priv->handlers);i ++) {
+        handler = (FcitxXEventHandler*)utarray_eltptr(&x11priv->handlers, i);
+        if (handler->instance == args.args[0]) {
             break;
+        }
     }
     utarray_erase(&x11priv->handlers, i, 1);
     return NULL;

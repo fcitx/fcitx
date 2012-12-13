@@ -6,7 +6,9 @@ Include1="fcitx/candidate.h"
 Function0=CallCommand
 Function1=
 Function2=
+Self.Type=LuaModule*
 
+# TODO
 [CallCommand]
 Name=call-command
 Arg0=const char*

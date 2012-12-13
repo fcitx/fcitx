@@ -2146,14 +2146,13 @@ void* PYGetFindStringWrapper(void * arg, FcitxModuleFunctionArg args)
     return pystate->strFindString;
 
 }
+
 void* PYResetWrapper(void * arg, FcitxModuleFunctionArg args)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
 
     pystate->bSP = false;
-    pystate->strPYAuto[0] = '\0';
     ResetPYStatus(pystate);
-
     return NULL;
 }
 

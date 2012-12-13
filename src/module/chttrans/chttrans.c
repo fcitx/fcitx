@@ -500,5 +500,4 @@ void ChttransLanguageChanged(void* arg, const void* value)
     FcitxUISetStatusVisable(transState->owner, "chttrans", visible);
 }
 
-
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -10,13 +10,16 @@ Function3=
 Function4=
 Function5=
 Function6=
+Self.Type=FcitxChttrans*
 
 [S2T]
 Name=s2t
 Return=char*
 Arg0=const char*
+Res.WrapFunc=ConvertGBKSimple2Tradition
 
 [T2S]
 Name=t2s
 Return=char*
 Arg0=const char*
+Res.WrapFunc=ConvertGBKTradition2Simple

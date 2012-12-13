@@ -23,28 +23,34 @@ Function16=
 Function17=
 Function18=
 Function19=
+Self.Type=FcitxX11*
 
 [GetDisplay]
 Name=get-display
 Return=Display*
 CacheResult=True
 EnableWrapper=@ENABLE_X11@
+Res.Exp=$<->dpy
 
+# TODO
 [AddXEventHandler]
 Name=add-xevent-handler
 Arg0=FcitxX11XEventHandler
 Arg1=void*
 EnableWrapper=@ENABLE_X11@
 
+# TODO
 [RemoveXEventHandler]
 Name=remove-xevent-handler
 Arg0=void*
 
+# TODO
 [FindARGBVisual]
 Name=find-argb-visual
 Return=Visual*
 EnableWrapper=@ENABLE_X11@
 
+# TODO
 [InitWindowAttribute]
 Name=init-window-attribute
 Arg0=Visual**
@@ -54,6 +60,7 @@ Arg3=unsigned long*
 Arg4=int*
 EnableWrapper=@ENABLE_X11@
 
+# TODO
 [SetWindowProp]
 Name=set-window-prop
 Arg0=const Window*
@@ -61,11 +68,13 @@ Arg1=const FcitxXWindowType*
 Arg2=char*
 EnableWrapper=@ENABLE_X11@
 
+# TODO
 [GetScreenSize]
 Name=get-screen-size
 Arg0=int*
 Arg1=int*
 
+# TODO
 [MouseClick]
 Name=mouse-click
 Arg0=const Window*
@@ -74,11 +83,13 @@ Arg2=int*
 Arg3=boolean*
 EnableWrapper=@ENABLE_X11@
 
+# TODO
 [AddCompositeHandler]
 Name=add-composite-handler
 Arg0=FcitxX11CompositeHandler
 Arg1=void*
 
+# TODO
 [GetScreenGeometry]
 Name=get-screen-geometry
 Arg0=const int*
@@ -87,7 +98,9 @@ Arg2=FcitxRect*
 
 [ProcessRemainEvent]
 Name=process-remain-event
+Res.WrapFunc=X11ProcessEventRealInternal
 
+# TODO
 [GetDPI]
 Name=get-dpi
 Arg0=int*
@@ -101,16 +114,23 @@ Arg1=void*
 Arg2=X11SelectionNotifyCallback
 Arg3=void*
 Arg4=FcitxDestroyNotify
+Res.WrapFunc=X11SelectionNotifyRegister
+Res.Deref=$@ + 1
+Res.DerefType=int
 
 [RemoveSelectNotify]
 Name=remove-select-notify
 Arg0=int
+Arg0.Deref=$0 - 1
+Arg0.DerefType=int
+Res.WrapFunc=X11SelectionNotifyRemove
 
 [DefaultEventWindow]
 Name=default-event-window
 Return=Window
 CacheResult=True
 EnableWrapper=@ENABLE_X11@
+Res.Exp=$<->eventWindow
 
 [RequestConvertSelect]
 Name=request-convert-select
@@ -121,6 +141,9 @@ Arg2=void*
 Arg3=X11ConvertSelectionCallback
 Arg4=void*
 Arg5=FcitxDestroyNotify
+Res.WrapFunc=X11RequestConvertSelection
+Res.Deref=$@ + 1
+Res.DerefType=int
 
 [FCITX_DISABLE_X11]
 Undefine=@ENABLE_X11@

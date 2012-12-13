@@ -422,8 +422,7 @@ FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args)
     const char *before_str = args.args[0];
     const char *current_str = args.args[1];
     const char *after_str = args.args[2];
-    /* from GPOINTER_TO_UINT */
-    unsigned int len_limit = (unsigned int)(unsigned long)args.args[3];
+    unsigned int len_limit = (unsigned int)(intptr_t)args.args[3];
     const char *lang = args.args[4];
     const char *providers = args.args[5];
     return SpellGetSpellHintWords(spell, before_str, current_str, after_str,
@@ -448,7 +447,7 @@ FcitxSpellAddPersonal(void *arg, FcitxModuleFunctionArg args)
     FcitxSpell *spell = (FcitxSpell*)arg;
     const char *new_word = args.args[0];
     const char *lang = args.args[1];
-    return (void*)(unsigned long)SpellAddPersonal(spell, new_word, lang);
+    return (void*)(intptr_t)SpellAddPersonal(spell, new_word, lang);
 }
 
 static void*

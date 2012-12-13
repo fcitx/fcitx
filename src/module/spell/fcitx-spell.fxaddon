@@ -11,6 +11,7 @@ Function5=
 Function6=
 Function7=
 Function8=
+Self.Type=FcitxSpell*
 
 [HintWords]
 Name=hint-words
@@ -21,19 +22,23 @@ Arg2=const char*
 Arg3=unsigned int
 Arg4=const char*
 Arg5=const char*
+Res.WrapFunc=SpellGetSpellHintWords
 
 [AddPersonal]
 Name=add-personal
 Return=boolean
 Arg0=const char*
 Arg1=const char*
+Res.WrapFunc=SpellAddPersonal
 
+# TODO
 [DictAvailable]
 Name=dict-available
 Return=boolean
 Arg0=const char*
 Arg1=const char*
 
+# TODO
 [GetCandWords]
 Name=get-cand-words
 Return=FcitxCandidateWordList*
@@ -46,6 +51,7 @@ Arg5=const char*
 Arg6=FcitxSpellGetCandWordCb
 Arg7=void*
 
+# TODO
 [CandWordGetCommit]
 Name=cand-word-get-commit
 Return=const char*
