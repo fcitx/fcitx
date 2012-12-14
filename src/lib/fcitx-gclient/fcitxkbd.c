@@ -90,40 +90,6 @@ fcitx_kbd_init(FcitxKbd *im)
     g_dbus_proxy_set_interface_info(G_DBUS_PROXY(im), _fcitx_kbd_get_interface_info());
 }
 
-
-static void
-_gtk_font_chooser_dialog_set_property (GObject *object,
-                                      guint prop_id,
-                                      const GValue *value,
-                                      GParamSpec *pspec)
-{
-    G_GNUC_UNUSED FcitxKbd *im = FCITX_KBD(object);
-
-  switch (prop_id)
-    {
-    default:
-      //g_object_set_property (object, pspec->name, value);
-      break;
-    }
-}
-
-
-static void
-_gtk_font_chooser_dialog_get_property (GObject *object,
-                                      guint prop_id,
-                                      GValue *value,
-                                      GParamSpec *pspec)
-{
-    G_GNUC_UNUSED FcitxKbd *im = FCITX_KBD(object);
-
-  switch (prop_id)
-    {
-    default:
-      //G_OBJECT_CLASS(fcitx_kbd_parent_class)->get_property (object, pspec->name, value);
-      break;
-    }
-}
-
 static void
 fcitx_kbd_class_init(FcitxKbdClass *klass)
 {
@@ -131,17 +97,7 @@ fcitx_kbd_class_init(FcitxKbdClass *klass)
 
     gobject_class = G_OBJECT_CLASS(klass);
     gobject_class->finalize = fcitx_kbd_finalize;
-    gobject_class->set_property = _gtk_font_chooser_dialog_set_property;
-    gobject_class->get_property = _gtk_font_chooser_dialog_get_property;
 
-    g_object_class_install_property(gobject_class,
-        1,
-                                    g_param_spec_string("p",
-                                            "connection",
-                                            "connection",
-                                            "/keyboard",
-                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
-    g_object_class_override_property(gobject_class, 1, "g-object-path");
 }
 
 /**
@@ -174,6 +130,7 @@ fcitx_kbd_new(GBusType             bus_type,
                                    "g-flags", flags,
                                    "g-name", name,
                                    "g-bus-type", bus_type,
+                                   "g-object-path", "/keyboard",
                                    "g-interface-name", "org.fcitx.Fcitx.Keyboard",
                                    NULL);
 
