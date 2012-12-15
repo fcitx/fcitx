@@ -691,10 +691,12 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     FcitxInputStateSetRawInputBufferSize(input, bufferlen);
     FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetClientPreedit(input),
                                          MSG_INPUT, keyboard->buffer);
-    FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetPreedit(input),
-                                         MSG_INPUT, keyboard->buffer);
     FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);
-    FcitxInputStateSetCursorPos(input, keyboard->cursorPos);
+    if (!FcitxInstanceICSupportPreedit(instance, FcitxInstanceGetCurrentIC(instance))) {
+        FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetPreedit(input),
+                                             MSG_INPUT, keyboard->buffer);
+        FcitxInputStateSetCursorPos(input, keyboard->cursorPos);
+    }
 
     if (bufferlen < keyboard->config.minimumHintLength)
         return IRV_DISPLAY_CANDWORDS;
