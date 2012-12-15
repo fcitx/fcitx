@@ -367,12 +367,10 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
             puncState->cLastIsAutoConvert = 0;
             *retVal = IRV_DO_NOTHING;
             return true;
-        } else if (FcitxHotkeyIsHotKeySimple(sym, state)) {
-            if (FcitxHotkeyIsHotKeyDigit(sym, state))
-                puncState->bLastIsNumber = true;
-            else {
-                puncState->bLastIsNumber = false;
-            }
+        } else if (FcitxHotkeyIsHotKeyDigit(sym, state)) {
+            puncState->bLastIsNumber = true;
+        } else {
+            puncState->bLastIsNumber = false;
         }
     }
     puncState->cLastIsAutoConvert = 0;
