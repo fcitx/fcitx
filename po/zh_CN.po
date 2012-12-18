@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-17 20:33-0500\n"
-"PO-Revision-Date: 2012-12-08 14:07+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2012-12-17 20:42-0500\n"
+"PO-Revision-Date: 2012-12-17 20:43-0500\n"
+"Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -63,7 +63,7 @@ msgstr "(不可用)"
 
 #: data/script/fcitx-diagnose.sh:311
 msgid "/Beginner%27s_Guide"
-msgstr ""
+msgstr "/Beginner%27s_Guide/zh-cn"
 
 #: data/script/fcitx-diagnose.sh:344
 msgid "/Hall_of_Shame_for_Linux_IME_Support"
@@ -345,7 +345,7 @@ msgstr "背景图片"
 
 #: data/script/fcitx-diagnose.sh:310
 msgid "Beginner's Guide"
-msgstr ""
+msgstr "入门指南"
 
 #: data/table/qxm.conf.in:3
 msgid "Bingchan"
@@ -2695,8 +2695,8 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:789
 msgid ""
-"Your first(default) input method is ${1} instead of a keyboard input method. "
-"You may have trouble deactivate fcitx."
+"Your first (default) input method is ${1} instead of a keyboard input "
+"method. You may have trouble deactivate fcitx."
 msgstr ""
 "您的第一个 (默认) 输入法是 ${1} 而不是一个键盘输入法. 您可能无法禁用 fcitx 输"
 "入法."

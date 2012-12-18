@@ -786,7 +786,7 @@ check_input_methods() {
                     "${enabled_im[0]}"
             else
                 write_error_eval \
-                    "$(_ 'Your first(default) input method is ${1} instead of a keyboard input method. You may have trouble deactivate fcitx.')" \
+                    "$(_ 'Your first (default) input method is ${1} instead of a keyboard input method. You may have trouble deactivate fcitx.')" \
                     "${enabled_im[0]}"
             fi
             ;;

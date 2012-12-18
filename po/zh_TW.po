@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-17 20:33-0500\n"
+"POT-Creation-Date: 2012-12-17 20:42-0500\n"
 "PO-Revision-Date: 2012-12-08 16:14+0000\n"
 "Last-Translator: Alisha <alisha.4m@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
@@ -2695,8 +2695,8 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:789
 msgid ""
-"Your first(default) input method is ${1} instead of a keyboard input method. "
-"You may have trouble deactivate fcitx."
+"Your first (default) input method is ${1} instead of a keyboard input "
+"method. You may have trouble deactivate fcitx."
 msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:8
