@@ -408,7 +408,7 @@ check_env() {
     write_quote_str "DISPLAY='${DISPLAY}'"
     write_order_list "$(_ "Keyboard Layout:")"
     if type setxkbmap &> /dev/null; then
-        write_quote_cmd setxkbmap -print "${DISPLAY}"
+        write_quote_cmd setxkbmap -print
     else
         write_paragraph "$(print_not_found 'setxkbmap')"
     fi
