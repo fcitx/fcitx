@@ -259,7 +259,7 @@ write_quote_str() {
 }
 
 write_quote_cmd() {
-    write_quote_str "$("$@")"
+    write_quote_str "$("$@" 2>&1)"
 }
 
 write_title() {
