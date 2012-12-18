@@ -82,6 +82,7 @@ typedef struct {
 typedef struct {
     const char *name;
     FcitxDesktopGroup *grp;
+    const char *name_id;
     const char *type;
     const char *err_ret;
     boolean cache;
@@ -101,11 +102,27 @@ typedef struct {
     const char *deref_type;
 } FcitxAddonArgDesc;
 
-typedef void (*FxScannerListLoader)(UT_array *array, const char *value);
+typedef struct {
+    char *buff;
+    size_t len;
+} FcitxAddonBuff;
+
+typedef boolean (*FxScannerListLoader)(
+    UT_array *array, const char *value, FcitxAddonBuff *buff,
+    size_t prefix_l, void *data);
 
 /**
  * utility functions
  **/
+
+static inline void
+fxaddon_buff_realloc(FcitxAddonBuff *buff, size_t len)
+{
+    if (fcitx_unlikely(buff->len < len)) {
+        buff->len = len;
+        buff->buff = realloc(buff->buff, len);
+    }
+}
 
 static inline size_t
 _write_len(FILE *fp, const char *str, size_t len)
@@ -196,20 +213,21 @@ fxscanner_std_type(const char *type)
     return type;
 }
 
-static void
-fxscanner_load_entry_list(UT_array *ret, FcitxDesktopGroup *grp,
+static boolean
+fxscanner_load_entry_list(UT_array *ary, FcitxDesktopGroup *grp,
                           const char *prefix, boolean stop_at_empty,
-                          FxScannerListLoader loader)
+                          FxScannerListLoader loader, void *data)
 {
     size_t prefix_len = strlen(prefix);
-    char *buff = malloc(prefix_len + FCITX_INT_LEN + 1);
-    memcpy(buff, prefix, prefix_len);
-    char *num_start = buff + prefix_len;
+    FcitxAddonBuff buff = {0};
     int i;
     FcitxDesktopEntry *tmp_ety;
+    boolean res = true;
     for (i = 0;;i++) {
-        sprintf(num_start, "%d", i);
-        tmp_ety = fcitx_desktop_group_find_entry(grp, buff);
+        fxaddon_buff_realloc(&buff, prefix_len + FCITX_INT_LEN + 1);
+        memcpy(buff.buff, prefix, prefix_len);
+        sprintf(buff.buff + prefix_len, "%d", i);
+        tmp_ety = fcitx_desktop_group_find_entry(grp, buff.buff);
         if (!tmp_ety)
             break;
         if (!(tmp_ety->value && *tmp_ety->value)) {
@@ -220,13 +238,22 @@ fxscanner_load_entry_list(UT_array *ret, FcitxDesktopGroup *grp,
             }
         }
         if (loader) {
-            loader(ret, tmp_ety->value);
+            if (!loader(ary, tmp_ety->value, &buff, prefix_len, data)) {
+                res = false;
+                break;
+            }
         } else {
-            utarray_push_back(ret, &tmp_ety->value);
+            utarray_push_back(ary, &tmp_ety->value);
         }
     }
-    free(buff);
+    free(buff.buff);
+    return res;
 }
+
+#define fxscanner_load_entry_list(ary, grp, prefix, stop, args...) \
+    _fxscanner_load_entry_list(ary, grp, prefix, stop, ##args, NULL, NULL)
+#define _fxscanner_load_entry_list(ary, grp, prefix, stop, loader, data, ...) \
+    (fxscanner_load_entry_list)(ary, grp, prefix, stop, loader, data)
 
 static void
 fxscanner_name_to_macro(char *name)
@@ -265,6 +292,42 @@ fxscanner_macro_get_define(FcitxDesktopGroup *grp)
     if (value)
         return !fxscanner_value_get_boolean(value, false);
     return true;
+}
+
+#define fxaddon_load_string(tgt, grp, name)     \
+    tgt = fxscanner_group_get_value(grp, name);
+
+static boolean
+fxscanner_load_func_arg(FcitxAddonFuncDesc *func_desc,
+                        char *buff, int prefix_len)
+{
+    return true;
+}
+
+static boolean
+fxscanner_load_function(FcitxAddonDesc *desc, const char *name)
+{
+    FcitxAddonFuncDesc func_desc = { 0 };
+    FcitxDesktopGroup *grp;
+    func_desc.name = name;
+    grp = fcitx_desktop_file_find_group(&desc->dfile, name);
+    if (!grp)
+        return false;
+    func_desc.grp = grp;
+    fxaddon_load_string(func_desc.name_id, grp, "Name");
+    if (!func_desc.name_id)
+        return false;
+    func_desc.type = fxscanner_function_get_return(grp);
+    fxaddon_load_string(func_desc.err_ret, grp, "ErrorReturn");
+    func_desc.cache = fxscanner_group_get_boolean(grp, "CacheResult", false);
+    func_desc.enable_wrapper = fxscanner_group_get_boolean(
+        grp, "EnableWrapper", true);
+    fxaddon_load_string(func_desc.inline_code, grp, "Inline.Code");
+    fxaddon_load_string(func_desc.res_deref, grp, "Res.Deref");
+    fxaddon_load_string(func_desc.res_dereftype, grp, "Res.DerefType");
+    fxaddon_load_string(func_desc.res_exp, grp, "Res.Exp");
+    fxaddon_load_string(func_desc.res_wrapfunc, grp, "Res.WrapFunc");
+    fxaddon_load_string(func_desc.is_static, grp, "Static");
 }
 
 /**
@@ -338,7 +401,7 @@ fxscanner_write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
         return;
     UT_array args;
     utarray_init(&args, fcitx_ptr_icd);
-    fxscanner_load_entry_list(&args, grp, "Arg", true, NULL);
+    fxscanner_load_entry_list(&args, grp, "Arg", true);
     const char *type = fxscanner_function_get_return(grp);
     const char *err_ret = fxscanner_group_get_value(grp, "ErrorReturn");
     boolean cache = fxscanner_group_get_boolean(grp, "CacheResult", false);
@@ -457,16 +520,15 @@ fxscanner_scan_addon(FILE *ifp, FILE *ofp)
     addon_desc.prefix = tmp_ety->value;
     UT_array macros;
     utarray_init(&macros, fcitx_ptr_icd);
-    fxscanner_load_entry_list(&macros, addon_desc.addon_grp, "Macro",
-                              false, NULL);
+    fxscanner_load_entry_list(&macros, addon_desc.addon_grp, "Macro", false);
     UT_array includes;
     utarray_init(&includes, fcitx_ptr_icd);
-    fxscanner_load_entry_list(&includes, addon_desc.addon_grp, "Include",
-                              false, NULL);
+    fxscanner_load_entry_list(&includes, addon_desc.addon_grp,
+                              "Include", false);
     UT_array functions;
     utarray_init(&functions, fcitx_ptr_icd);
-    fxscanner_load_entry_list(&functions, addon_desc.addon_grp, "Function",
-                              true, NULL);
+    fxscanner_load_entry_list(&functions, addon_desc.addon_grp,
+                              "Function", true);
     fxscanner_write_header(ofp);
     addon_desc.name_len = strlen(addon_desc.name);
     buff = fcitx_utils_set_str_with_len(buff, addon_desc.name,
