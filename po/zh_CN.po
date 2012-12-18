@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-17 20:06-0500\n"
+"POT-Creation-Date: 2012-12-17 20:33-0500\n"
 "PO-Revision-Date: 2012-12-08 14:07+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
@@ -849,7 +849,7 @@ msgstr "环境."
 msgid "Erbi"
 msgstr "二笔"
 
-#: src/ui/classic/fcitx-skin-installer.sh:69
+#: src/ui/classic/fcitx-skin-installer.sh:79
 #, sh-format
 msgid ""
 "Error: $HOME or $XDG_CONFIG_HOME is not set, cannot determine the install "
@@ -860,15 +860,15 @@ msgstr "错误：$HOME 或 $XDG_CONFIG_HOME 未设置，无法确定安装路径
 msgid "Error: Load fontconfig failed"
 msgstr "错误: fontconfig加载失败"
 
-#: src/ui/classic/fcitx-skin-installer.sh:78
+#: src/ui/classic/fcitx-skin-installer.sh:88
 msgid "Error: skin failed to install"
 msgstr "错误：皮肤安装失败"
 
-#: src/ui/classic/fcitx-skin-installer.sh:56
+#: src/ui/classic/fcitx-skin-installer.sh:66
 msgid "Error: skin file doesn't contain skin config."
 msgstr "错误：皮肤文件不包含皮肤配置"
 
-#: src/ui/classic/fcitx-skin-installer.sh:48
+#: src/ui/classic/fcitx-skin-installer.sh:58
 msgid "Error: skin file should only contain one directory."
 msgstr "错误：皮肤文件应只包括一个目录"
 
@@ -2273,7 +2273,7 @@ msgstr "笔画输入触发长度"
 msgid "Sub Configuration for Module"
 msgstr "子配置"
 
-#: src/ui/classic/fcitx-skin-installer.sh:81
+#: src/ui/classic/fcitx-skin-installer.sh:91
 msgid "Successfully Installed skin"
 msgstr "成功安装皮肤"
 
@@ -2689,13 +2689,17 @@ msgstr "您可能会在 ${1} 程序中使用 fcitx 时遇到问题."
 msgid ""
 "You only have one input method enabled, please add a keyboard input method "
 "as the first one and your main input method as the second one."
-msgstr "您仅仅启用了一个输入法, 请将一个键盘输入法设为第一个并将您的主要输入法设为第二个."
+msgstr ""
+"您仅仅启用了一个输入法, 请将一个键盘输入法设为第一个并将您的主要输入法设为第"
+"二个."
 
 #: data/script/fcitx-diagnose.sh:789
 msgid ""
 "Your first(default) input method is ${1} instead of a keyboard input method. "
 "You may have trouble deactivate fcitx."
-msgstr "您的第一个 (默认) 输入法是 ${1} 而不是一个键盘输入法. 您可能无法禁用 fcitx 输入法."
+msgstr ""
+"您的第一个 (默认) 输入法是 ${1} 而不是一个键盘输入法. 您可能无法禁用 fcitx 输"
+"入法."
 
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"

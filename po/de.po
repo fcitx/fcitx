@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-17 20:06-0500\n"
+"POT-Creation-Date: 2012-12-17 20:33-0500\n"
 "PO-Revision-Date: 2012-12-08 14:06+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/fcitx/"
@@ -852,7 +852,7 @@ msgstr ""
 msgid "Erbi"
 msgstr "Erbi 二笔"
 
-#: src/ui/classic/fcitx-skin-installer.sh:69
+#: src/ui/classic/fcitx-skin-installer.sh:79
 #, sh-format
 msgid ""
 "Error: $HOME or $XDG_CONFIG_HOME is not set, cannot determine the install "
@@ -865,15 +865,15 @@ msgstr ""
 msgid "Error: Load fontconfig failed"
 msgstr ""
 
-#: src/ui/classic/fcitx-skin-installer.sh:78
+#: src/ui/classic/fcitx-skin-installer.sh:88
 msgid "Error: skin failed to install"
 msgstr "Fehler: Skin konnte nicht installiert werden"
 
-#: src/ui/classic/fcitx-skin-installer.sh:56
+#: src/ui/classic/fcitx-skin-installer.sh:66
 msgid "Error: skin file doesn't contain skin config."
 msgstr "Fahler: Skin enthält keine Konfigurationsdatei"
 
-#: src/ui/classic/fcitx-skin-installer.sh:48
+#: src/ui/classic/fcitx-skin-installer.sh:58
 msgid "Error: skin file should only contain one directory."
 msgstr "Fehler: Skin Datei sollte nur ein Verzeichnis enthalten"
 
@@ -2280,7 +2280,7 @@ msgstr ""
 msgid "Sub Configuration for Module"
 msgstr ""
 
-#: src/ui/classic/fcitx-skin-installer.sh:81
+#: src/ui/classic/fcitx-skin-installer.sh:91
 msgid "Successfully Installed skin"
 msgstr "Skin erfolgreich installiert"
 

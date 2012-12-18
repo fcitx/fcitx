@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-17 20:06-0500\n"
+"POT-Creation-Date: 2012-12-17 20:33-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -911,26 +911,26 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: src/ui/classic/fcitx-skin-installer.sh:48
+#: src/ui/classic/fcitx-skin-installer.sh:58
 msgid "Error: skin file should only contain one directory."
 msgstr ""
 
-#: src/ui/classic/fcitx-skin-installer.sh:56
+#: src/ui/classic/fcitx-skin-installer.sh:66
 msgid "Error: skin file doesn't contain skin config."
 msgstr ""
 
-#: src/ui/classic/fcitx-skin-installer.sh:69
+#: src/ui/classic/fcitx-skin-installer.sh:79
 #, sh-format
 msgid ""
 "Error: $HOME or $XDG_CONFIG_HOME is not set, cannot determine the install "
 "path"
 msgstr ""
 
-#: src/ui/classic/fcitx-skin-installer.sh:78
+#: src/ui/classic/fcitx-skin-installer.sh:88
 msgid "Error: skin failed to install"
 msgstr ""
 
-#: src/ui/classic/fcitx-skin-installer.sh:81
+#: src/ui/classic/fcitx-skin-installer.sh:91
 msgid "Successfully Installed skin"
 msgstr ""
 
