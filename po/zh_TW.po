@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-08 11:29-0500\n"
+"POT-Creation-Date: 2012-12-17 20:06-0500\n"
 "PO-Revision-Date: 2012-12-08 16:14+0000\n"
 "Last-Translator: Alisha <alisha.4m@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
@@ -25,6 +25,14 @@ msgstr ""
 #: src/im/table/table.c:1405
 msgid " Ctrl+Delete To Delete"
 msgstr " 用 Ctrl+Delete 刪除"
+
+#: data/script/fcitx-diagnose.sh:173
+msgid "${1} not found."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:474
+msgid "${1} works properly."
+msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:42
 msgid "&Add"
@@ -53,6 +61,26 @@ msgstr "儲存 (&S)"
 #: src/im/keyboard/keyboard.c:425 src/im/keyboard/keyboard.c:442
 msgid "(Unavailable)"
 msgstr "(不可用)"
+
+#: data/script/fcitx-diagnose.sh:311
+msgid "/Beginner%27s_Guide"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:344
+msgid "/Hall_of_Shame_for_Linux_IME_Support"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:322
+msgid "/Input_method_related_environment_variables"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:331
+msgid "/Note_for_GNOME_Later_than_3.6"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:348
+msgid "/XIM"
+msgstr ""
 
 #: src/lib/fcitx/ime.c:1593
 msgid "/min  Time Used: "
@@ -176,6 +204,15 @@ msgstr "附加元件"
 msgid "Addon Config %s is %s"
 msgstr ""
 
+#: data/script/fcitx-diagnose.sh:698
+msgid "Addon Config Dir:"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:709
+#, fuzzy
+msgid "Addon List:"
+msgstr "附加元件"
+
 #: src/im/table/fcitx-table.desc:14 src/im/table/table.desc:19
 msgid "Adjust Order"
 msgstr "輸入順序"
@@ -198,6 +235,10 @@ msgstr "不調整"
 #: data/config.desc:138
 msgid "All"
 msgstr "所有"
+
+#: data/script/fcitx-diagnose.sh:420
+msgid "All locale:"
+msgstr ""
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:11
 msgid ""
@@ -304,6 +345,10 @@ msgstr ""
 msgid "Background Image"
 msgstr ""
 
+#: data/script/fcitx-diagnose.sh:310
+msgid "Beginner's Guide"
+msgstr ""
+
 #: data/table/qxm.conf.in:3
 msgid "Bingchan"
 msgstr "冰蟾全息"
@@ -337,7 +382,7 @@ msgstr ""
 msgid "Can't Create imWindow"
 msgstr "無法建立輸入法視窗"
 
-#: src/module/punc/punc.c:418
+#: src/module/punc/punc.c:416
 msgid "Can't open punc file."
 msgstr "無法開啟標點符號檔案"
 
@@ -373,8 +418,44 @@ msgstr ""
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
+#: data/script/fcitx-diagnose.sh:472
+msgid "Cannot connect to fcitx correctly."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:700
+msgid "Cannot find fcitx addon config directory."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:433
+msgid "Cannot find fcitx executable!"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:670
+msgid "Cannot find fcitx im module for gtk ${1} in cache."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:638
+msgid "Cannot find fcitx im module for gtk ${1}."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:603
+msgid "Cannot find fcitx input method module for qt."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:541
+msgid "Cannot find xim_server on root window."
+msgstr ""
+
 #: src/im/table/table.c:650
 msgid "Cannot found Pinyin"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:515
+msgid "Cannot interpret XMODIFIERS: ${1}."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:748
+msgid "Cannot read im list from fcitx profile."
 msgstr ""
 
 #: data/addon.desc:22
@@ -530,11 +611,16 @@ msgstr "選擇候選詞時加入額外空格"
 msgid "ConfigFile"
 msgstr "設定檔"
 
+#: data/script/fcitx-diagnose.sh:856
+#, fuzzy
+msgid "Configuration."
+msgstr "設定"
+
 #: src/ui/classic/classicui.c:459
 msgid "Configure"
 msgstr "設定"
 
-#: src/ui/classic/classicui.c:458 src/ui/kimpanel/kimpanel.c:735
+#: src/ui/classic/classicui.c:458 src/ui/kimpanel/kimpanel.c:744
 msgid "Configure Current Input Method"
 msgstr "設定目前輸入法"
 
@@ -585,6 +671,10 @@ msgstr "目前輸入法名稱"
 msgid "Current local input method is %s"
 msgstr "目前輸入法為 %s"
 
+#: data/script/fcitx-diagnose.sh:418
+msgid "Current locale:"
+msgstr ""
+
 #: data/addon.desc:37
 msgid "DBus"
 msgstr "DBus"
@@ -593,7 +683,7 @@ msgstr "DBus"
 msgid "DBus Support"
 msgstr "DBus 支援"
 
-#: src/ui/classic/InputWindow.c:161
+#: src/ui/classic/InputWindow.c:162
 msgid "DISPLAY InputWindow"
 msgstr "DISPLAY InputWindow"
 
@@ -625,6 +715,11 @@ msgstr "預設雙拼方案"
 msgid "Default Spell Hint Backends Order"
 msgstr ""
 
+#: data/script/fcitx-diagnose.sh:774
+#, fuzzy
+msgid "Default input methods:"
+msgstr "預設輸入法狀態"
+
 #: src/im/table/fcitx-table.desc:9
 msgid "Delete Phrase"
 msgstr "刪除字詞"
@@ -654,7 +749,7 @@ msgstr "禁用拼音特殊符號"
 msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:246 src/ui/kimpanel/kimpanel.c:251
+#: src/ui/kimpanel/kimpanel.c:254 src/ui/kimpanel/kimpanel.c:259
 #: data/config.desc:26
 msgid "Disabled"
 msgstr "停用"
@@ -746,6 +841,14 @@ msgstr ""
 msgid "Enum option number must larger than 0"
 msgstr ""
 
+#: data/script/fcitx-diagnose.sh:489
+msgid "Environment variable ${1} is set to '${2}' correctly."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:406
+msgid "Environment."
+msgstr ""
+
 #: data/table/erbi.conf.in:3
 msgid "Erbi"
 msgstr "二筆"
@@ -793,10 +896,14 @@ msgstr "額外的啟用輸入法快捷鍵"
 msgid "Fallback UI Addon"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:367 data/fcitx-autostart.desktop.in:2
+#: src/ui/kimpanel/kimpanel.c:375 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
 msgstr "Fcitx"
+
+#: data/script/fcitx-diagnose.sh:697
+msgid "Fcitx Addons:"
+msgstr ""
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:4
 msgid "Fcitx Clipboard access"
@@ -826,6 +933,11 @@ msgstr "Fcitx 佈景安裝程式"
 msgid "Fcitx Spelling Hint/Completion Support"
 msgstr "Fcitx 的拼寫提示與補全支援"
 
+#: data/script/fcitx-diagnose.sh:430
+#, fuzzy
+msgid "Fcitx State."
+msgstr "Fcitx 佈景安裝程式"
+
 #: src/module/unicode/fcitx-unicode.conf.in:3
 msgid "Fcitx Unicode Typing Support"
 msgstr "Fcitx 的 Unicode 輸入支援"
@@ -833,6 +945,15 @@ msgstr "Fcitx 的 Unicode 輸入支援"
 #: src/frontend/xim/fcitx-xim.conf.in:3
 msgid "Fcitx XIM Frontend"
 msgstr "Fcitx XIM 前端"
+
+#: data/script/fcitx-diagnose.sh:457
+msgid "Fcitx is not running."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:444
+#, sh-format
+msgid "Fcitx version: ${version}"
+msgstr ""
 
 #: src/ui/classic/skin.desc:109 src/ui/classic/skin.desc:201
 #: src/ui/classic/skin.desc:253
@@ -880,6 +1001,59 @@ msgstr "字型大小"
 msgid "Font size repect dpi setting"
 msgstr ""
 
+#: data/script/fcitx-diagnose.sh:735
+msgid "Found ${1} disabled addons:"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:730
+msgid "Found ${1} enabled addons:"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:769
+#, fuzzy
+msgid "Found ${1} enabled input methods:"
+msgstr "目前啟用的輸入法清單"
+
+#: data/script/fcitx-diagnose.sh:466
+msgid "Found ${1} fcitx process:"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:464
+msgid "Found ${1} fcitx processes:"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:707
+msgid "Found fcitx addon config directory: ${1}."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:439
+msgid "Found fcitx at ${1}."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:630
+msgid "Found fcitx im modules for gtk ${1}."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:662
+msgid "Found fcitx in cache file ${1}:"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:587
+msgid "Found fcitx qt im module: ${1}."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:625
+msgid "Found gtk-query-immodules for gtk ${1} at ${2}."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:657
+msgid "Found immodules cache for gtk ${1} ${2}."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:595
+msgid "Found unknown fcitx qt module: ${1}."
+msgstr ""
+
 #: data/addon.desc:19
 msgid "Frontend"
 msgstr "前端"
@@ -888,21 +1062,26 @@ msgstr "前端"
 msgid "Frontend Used by IM Modules"
 msgstr "輸入法模組使用的前端"
 
-#: src/lib/fcitx/frontend.c:537
+#: src/lib/fcitx/frontend.c:538
 msgid "Frontend: bad frontend"
 msgstr "前端：有問題的前端"
 
-#: src/lib/fcitx/frontend.c:525
+#: src/lib/fcitx/frontend.c:526
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr "前端：開啟 %s 失敗 %s"
+
+#: data/script/fcitx-diagnose.sh:849
+#, fuzzy
+msgid "Frontends setup."
+msgstr "前端"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
 msgid "Full width Character"
 msgstr "全形字元"
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:573
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:571
 msgid "Full width punct"
 msgstr "全形標點符號"
 
@@ -986,10 +1165,22 @@ msgstr "反引號"
 msgid "Greek"
 msgstr "希臘字母"
 
+#: data/script/fcitx-diagnose.sh:683
+msgid "Gtk IM module cache:"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:678
+msgid "Gtk IM module files:"
+msgstr ""
+
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
 msgid "Half width Character"
 msgstr "半形字元"
+
+#: data/script/fcitx-diagnose.sh:343
+msgid "Hall of Shame for Linux IME Support"
+msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:46
 msgid "Hide"
@@ -1053,6 +1244,13 @@ msgstr "圖示名稱"
 msgid "IconName"
 msgstr "圖示名稱"
 
+#: data/script/fcitx-diagnose.sh:333
+msgid ""
+"If you are using ${1}, you may want to uninstall ${2} or remove ${3} to be "
+"able to use any input method other than ${2}. See ${link} for more detail as "
+"well as alternative solutions."
+msgstr ""
+
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Ignore Input Method Layout Request"
 msgstr ""
@@ -1110,13 +1308,22 @@ msgstr ""
 msgid "Input Method"
 msgstr "輸入法"
 
-#: src/ui/kimpanel/kimpanel.c:247 src/ui/kimpanel/kimpanel.c:252
+#: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:260
 msgid "Input Method Disabled"
 msgstr "停用輸入法"
 
 #: data/config.desc:213
 msgid "Input Method Hint will be only shown when state is active"
 msgstr "輸入法提示只在啟用狀態顯示"
+
+#: data/script/fcitx-diagnose.sh:321
+msgid "Input Method Related Environment Variables: "
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:744
+#, fuzzy
+msgid "Input Methods:"
+msgstr "輸入法"
 
 #: src/lib/fcitx/ime.c:1590
 msgid "Input Speed: "
@@ -1145,6 +1352,10 @@ msgstr "輸入間隔"
 msgid "Invalid Entry: line %d missing '='"
 msgstr ""
 
+#: data/script/fcitx-diagnose.sh:713
+msgid "Invalid addon config file ${1}."
+msgstr ""
+
 #: src/lib/fcitx-utils/desktop-parse.c:515
 #, c-format
 msgid "Invalid entry line @ line %d %s"
@@ -1153,6 +1364,10 @@ msgstr ""
 #: src/lib/fcitx-utils/desktop-parse.c:473
 #, c-format
 msgid "Invalid group name line @ line %d %s"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:758
+msgid "Invalid item ${1} in im list."
 msgstr ""
 
 #: src/module/vk/vk.c:60
@@ -1195,6 +1410,11 @@ msgstr "鍵盤配置"
 msgid "Keyboard Layout to be used"
 msgstr "鍵盤配置"
 
+#: data/script/fcitx-diagnose.sh:409
+#, fuzzy
+msgid "Keyboard Layout:"
+msgstr "鍵盤配置"
+
 #: tools/gui/quickphrase-editor/model.cpp:52
 msgid "Keyword"
 msgstr "關鍵字"
@@ -1235,7 +1455,7 @@ msgstr "這個碼表的語言代碼"
 msgid "Latin"
 msgstr "拉丁字母"
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:573
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:571
 msgid "Latin punct"
 msgstr "英文標點符號"
 
@@ -1294,6 +1514,15 @@ msgstr "局部輸入法選擇鍵"
 #: src/module/imselector/fcitx-imselector.desc:101
 msgid "LocalSelector"
 msgstr "局部選擇"
+
+#: data/script/fcitx-diagnose.sh:415
+#, fuzzy
+msgid "Locale:"
+msgstr "局部選擇"
+
+#: data/script/fcitx-diagnose.sh:862
+msgid "Log."
+msgstr ""
 
 #: src/ui/classic/skin.desc:73
 msgid "Logo Icon"
@@ -1440,11 +1669,11 @@ msgstr "否"
 msgid "No available Input Method"
 msgstr "無可用輸入法"
 
-#: src/lib/fcitx/frontend.c:560
+#: src/lib/fcitx/frontend.c:561
 msgid "No available frontend"
 msgstr "無可用前端"
 
-#: src/ui/kimpanel/kimpanel.c:219 src/ui/kimpanel/kimpanel.c:220
+#: src/ui/kimpanel/kimpanel.c:227 src/ui/kimpanel/kimpanel.c:228
 msgid "No input window"
 msgstr "沒有輸入視窗"
 
@@ -1468,6 +1697,10 @@ msgstr ""
 #: src/module/quickphrase/fcitx-quickphrase.desc:20
 msgid "None"
 msgstr "無"
+
+#: data/script/fcitx-diagnose.sh:330
+msgid "Note for GNOME Later than 3.6"
+msgstr ""
 
 #: data/config.desc:160
 msgid "Nothing"
@@ -1578,9 +1811,25 @@ msgstr "拼音："
 msgid "PinyinJiaJia"
 msgstr "拼音加加"
 
+#: data/script/fcitx-diagnose.sh:435
+msgid "Please check ${1} for how to install fcitx."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:459
+msgid ""
+"Please check the Configure link of your distribution in ${1} for how to "
+"setup fcitx autostart."
+msgstr ""
+
 #: src/frontend/xim/xim.c:162
 msgid "Please set XMODIFIERS."
 msgstr "請設定環境變數 XMOIFIERS。"
+
+#: data/script/fcitx-diagnose.sh:318
+msgid ""
+"Please set environment variable ${env_name} to '${value}' using the tool "
+"your distribution provides or add ${1} to your ${2}. See ${link}."
+msgstr ""
 
 #: src/ui/classic/skin.desc:165
 msgid "Position or offset of LookupTable"
@@ -1682,6 +1931,10 @@ msgstr "標點符號轉換支援"
 msgid "Punctuation Support"
 msgstr "標點支援"
 
+#: data/script/fcitx-diagnose.sh:578
+msgid "Qt IM module files:"
+msgstr ""
+
 #: tools/gui/quickphrase-editor/editor.cpp:88
 msgid "Quick Phrase Editor"
 msgstr "快速輸入編輯器"
@@ -1772,7 +2025,7 @@ msgstr ""
 msgid "Resize Margin Top"
 msgstr ""
 
-#: src/ui/classic/classicui.c:460 src/ui/kimpanel/kimpanel.c:740
+#: src/ui/classic/classicui.c:460 src/ui/kimpanel/kimpanel.c:749
 msgid "Restart"
 msgstr "重新啟動"
 
@@ -1826,7 +2079,7 @@ msgstr "保存所有設定及輸入歷史"
 msgid "Scroll between Input Method"
 msgstr "輸入法切換鍵"
 
-#: src/module/unicode/unicode.c:229
+#: src/module/unicode/unicode.c:230
 msgid "Search unicode"
 msgstr "搜尋 unicode"
 
@@ -1846,7 +2099,7 @@ msgstr "選擇局部輸入法："
 msgid "Select specific input method via keyboard"
 msgstr "透過鍵盤選擇特定的輸入法"
 
-#: src/module/clipboard/clipboard.c:350
+#: src/module/clipboard/clipboard.c:351
 msgid "Select to paste"
 msgstr "選擇以貼上"
 
@@ -2104,6 +2357,10 @@ msgstr "符號"
 msgid "Symbol File"
 msgstr "符號檔案"
 
+#: data/script/fcitx-diagnose.sh:375
+msgid "System Info."
+msgstr ""
+
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
 msgid "Table"
 msgstr "碼表"
@@ -2130,7 +2387,15 @@ msgstr ""
 msgid "Tip Message Color"
 msgstr ""
 
-#: src/module/punc/punc.c:149 src/module/punc/punc.c:574
+#: data/script/fcitx-diagnose.sh:340
+#, sh-format
+msgid ""
+"To see some application specific problems you may have when using xim, check "
+"${link1}. For other more general problems of using XIM including application "
+"freezing, see ${link2}."
+msgstr ""
+
+#: src/module/punc/punc.c:149 src/module/punc/punc.c:572
 msgid "Toggle Full Width Punctuation"
 msgstr "切換全形標點符號"
 
@@ -2139,7 +2404,7 @@ msgstr "切換全形標點符號"
 msgid "Toggle Half/Full width Character"
 msgstr "切換全形半形字元"
 
-#: src/ui/kimpanel/kimpanel.c:732
+#: src/ui/kimpanel/kimpanel.c:741
 msgid "Toggle Input Method"
 msgstr "切換輸入法"
 
@@ -2373,6 +2638,10 @@ msgstr "給其他附加元件使用的 X11 工具"
 msgid "X11 not initialized"
 msgstr "X11 無法初始化"
 
+#: data/script/fcitx-diagnose.sh:525
+msgid "XIM_SERVERS on root window:"
+msgstr ""
+
 #: src/frontend/xim/xim.c:158
 msgid "XMODIFIERS Error."
 msgstr "XMODIFIERS 錯誤。"
@@ -2385,6 +2654,51 @@ msgstr "小鶴"
 msgid "Xim"
 msgstr "Xim"
 
+#: data/script/fcitx-diagnose.sh:523
+msgid "Xim Server Name from Environment variable is ${1}."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:535
+msgid ""
+"Xim server's name is the same with that set in the environment variable."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:537
+msgid ""
+"Xim server's name: '${1}' is different from that set in the environment "
+"variable: '${2}'."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:558
+msgid "You are using xim in ${1} programs."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:777
+msgid "You don't have any input methods enabled."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:785
+msgid ""
+"You have a keyboard input method '${1}' correctly added as your default "
+"input method."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:563
+msgid "You may have trouble using fcitx in ${1} programs."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:780
+msgid ""
+"You only have one input method enabled, please add a keyboard input method "
+"as the first one and your main input method as the second one."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:789
+msgid ""
+"Your first(default) input method is ${1} instead of a keyboard input method. "
+"You may have trouble deactivate fcitx."
+msgstr ""
+
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"
 msgstr "中文之星"
@@ -2396,6 +2710,14 @@ msgstr "紫光"
 #: data/table/zrm.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:4
 msgid "Ziranma"
 msgstr "自然碼"
+
+#: data/script/fcitx-diagnose.sh:431
+msgid "executable:"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:347
+msgid "here"
+msgstr ""
 
 #: src/lib/fcitx/ime.c:1596
 msgid "min Num of Characters: "
@@ -2410,9 +2732,18 @@ msgstr ""
 msgid "no valid font."
 msgstr ""
 
+#: data/script/fcitx-diagnose.sh:445
+msgid "process:"
+msgstr ""
+
 #: src/lib/fcitx/instance.c:406
 msgid "pthread mutex init failed"
 msgstr ""
+
+#: data/script/fcitx-diagnose.sh:441
+#, fuzzy
+msgid "version:"
+msgstr "顯示版本"
 
 #: src/module/xkb/fcitx-xkb.desc:14
 msgid "xmodmap command"
@@ -2422,3 +2753,7 @@ msgstr ""
 #, c-format
 msgid "your current font is: %s"
 msgstr ""
+
+#, fuzzy
+#~ msgid "remote:"
+#~ msgstr "遠端操作"
