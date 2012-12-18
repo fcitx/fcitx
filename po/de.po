@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-17 20:42-0500\n"
+"POT-Creation-Date: 2012-12-17 23:44-0500\n"
 "PO-Revision-Date: 2012-12-08 14:06+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/fcitx/"
@@ -840,8 +840,14 @@ msgstr ""
 msgid "Enum option number must larger than 0"
 msgstr ""
 
+#: data/script/fcitx-diagnose.sh:495
+msgid ""
+"Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
+"you have exported it incorrectly in any of your init files."
+msgstr ""
+
 #: data/script/fcitx-diagnose.sh:489
-msgid "Environment variable ${1} is set to '${2}' correctly."
+msgid "Environment variable ${1} is set to \"${2}\" correctly."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:406
@@ -1826,7 +1832,7 @@ msgstr "Bitte XMODIFIERS einstellen"
 
 #: data/script/fcitx-diagnose.sh:318
 msgid ""
-"Please set environment variable ${env_name} to '${value}' using the tool "
+"Please set environment variable ${env_name} to \"${value}\" using the tool "
 "your distribution provides or add ${1} to your ${2}. See ${link}."
 msgstr ""
 
@@ -2661,14 +2667,13 @@ msgid "Xim Server Name from Environment variable is ${1}."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:535
-msgid ""
-"Xim server's name is the same with that set in the environment variable."
+msgid "Xim server name is the same with that set in the environment variable."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:537
 msgid ""
-"Xim server's name: '${1}' is different from that set in the environment "
-"variable: '${2}'."
+"Xim server name: \"${1}\" is different from that set in the environment "
+"variable: \"${2}\"."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:558
@@ -2681,7 +2686,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:785
 msgid ""
-"You have a keyboard input method '${1}' correctly added as your default "
+"You have a keyboard input method \"${1}\" correctly added as your default "
 "input method."
 msgstr ""
 

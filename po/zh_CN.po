@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-17 20:42-0500\n"
-"PO-Revision-Date: 2012-12-17 20:43-0500\n"
+"POT-Creation-Date: 2012-12-17 23:44-0500\n"
+"PO-Revision-Date: 2012-12-17 23:45-0500\n"
 "Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -837,9 +837,15 @@ msgstr "枚举选项重复"
 msgid "Enum option number must larger than 0"
 msgstr "枚举选项个数需要大于0"
 
+#: data/script/fcitx-diagnose.sh:495
+msgid ""
+"Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
+"you have exported it incorrectly in any of your init files."
+msgstr "环境变量 ${1} 的值被设为了 \"${2}\" 而不是 \"${3}\". 请检查您是否在某个初始化文件中错误的设置了它的值."
+
 #: data/script/fcitx-diagnose.sh:489
-msgid "Environment variable ${1} is set to '${2}' correctly."
-msgstr "环境变量 ${1} 已经正确地设为了 '${2}'."
+msgid "Environment variable ${1} is set to \"${2}\" correctly."
+msgstr "环境变量 ${1} 已经正确地设为了 \"${2}\"."
 
 #: data/script/fcitx-diagnose.sh:406
 msgid "Environment."
@@ -1819,10 +1825,10 @@ msgstr "请设置环境变量XMODIFIERS"
 
 #: data/script/fcitx-diagnose.sh:318
 msgid ""
-"Please set environment variable ${env_name} to '${value}' using the tool "
+"Please set environment variable ${env_name} to \"${value}\" using the tool "
 "your distribution provides or add ${1} to your ${2}. See ${link}."
 msgstr ""
-"请使用您发行版提供的工具将环境变量 ${env_name} 设为 '${value}' 或者将 ${1} 添"
+"请使用您发行版提供的工具将环境变量 ${env_name} 设为 \"${value}\" 或者将 ${1} 添"
 "加到您的 ${2} 中. 参见 ${link}."
 
 #: src/ui/classic/skin.desc:165
@@ -2657,15 +2663,14 @@ msgid "Xim Server Name from Environment variable is ${1}."
 msgstr "从环境变量中获取的 Xim 服务名称为 ${1}."
 
 #: data/script/fcitx-diagnose.sh:535
-msgid ""
-"Xim server's name is the same with that set in the environment variable."
+msgid "Xim server name is the same with that set in the environment variable."
 msgstr "Xim 服务的名称与环境变量中设置的相同."
 
 #: data/script/fcitx-diagnose.sh:537
 msgid ""
-"Xim server's name: '${1}' is different from that set in the environment "
-"variable: '${2}'."
-msgstr "Xim 服务名称: '${1}' 与环境变量中设置的值 '${2}' 不同."
+"Xim server name: \"${1}\" is different from that set in the environment "
+"variable: \"${2}\"."
+msgstr "Xim 服务名称: \"${1}\" 与环境变量中设置的值 \"${2}\" 不同."
 
 #: data/script/fcitx-diagnose.sh:558
 msgid "You are using xim in ${1} programs."
@@ -2677,9 +2682,9 @@ msgstr "您没有任何启用的输入法."
 
 #: data/script/fcitx-diagnose.sh:785
 msgid ""
-"You have a keyboard input method '${1}' correctly added as your default "
+"You have a keyboard input method \"${1}\" correctly added as your default "
 "input method."
-msgstr "您已经正确的将一个键盘输入法 '${1}' 设为默认."
+msgstr "您已经正确的将一个键盘输入法 \"${1}\" 设为默认."
 
 #: data/script/fcitx-diagnose.sh:563
 msgid "You may have trouble using fcitx in ${1} programs."

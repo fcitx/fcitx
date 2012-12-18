@@ -315,7 +315,7 @@ set_env_link() {
     local env_name="$1"
     local value="$2"
     local fmt
-    fmt=$(_ "Please set environment variable \${env_name} to '\${value}' using the tool your distribution provides or add \${1} to your \${2}. See \${link}.")
+    fmt=$(_ 'Please set environment variable ${env_name} to "${value}" using the tool your distribution provides or add ${1} to your ${2}. See ${link}.')
     local link
     link=$(print_link \
         "$(_ "Input Method Related Environment Variables: ")${env_name}" \
@@ -330,14 +330,14 @@ gnome_36_link() {
         "$(_ "Note for GNOME Later than 3.6")" \
         "${wiki_url}$(_ "/Note_for_GNOME_Later_than_3.6")")
     local fmt
-    fmt=$(_ "If you are using \${1}, you may want to uninstall \${2} or remove \${3} to be able to use any input method other than \${2}. See \${link} for more detail as well as alternative solutions.")
+    fmt=$(_ 'If you are using ${1}, you may want to uninstall ${2} or remove ${3} to be able to use any input method other than ${2}. See ${link} for more detail as well as alternative solutions.')
     write_error_eval "${fmt}" "$(code_inline 'gnome>=3.6')" \
         "$(code_inline 'ibus')" "$(code_inline 'ibus-daemon')"
 }
 
 no_xim_link() {
     local fmt
-    fmt=$(_ "To see some application specific problems you may have when using xim, check \${link1}. For other more general problems of using XIM including application freezing, see \${link2}.")
+    fmt=$(_ 'To see some application specific problems you may have when using xim, check ${link1}. For other more general problems of using XIM including application freezing, see ${link2}.')
     local link1
     link1=$(print_link \
         "$(_ "Hall of Shame for Linux IME Support")" \
@@ -486,13 +486,13 @@ EOF
 
 _env_correct() {
     write_eval \
-        "$(_ "Environment variable \${1} is set to '\${2}' correctly.")" \
+        "$(_ 'Environment variable ${1} is set to "${2}" correctly.')" \
         "$1" "$2"
 }
 
 _env_incorrect() {
     write_error_eval \
-        "Environment variable \${1} is '\${2}' instead of '\${3}'. Please check if you have exported it incorrectly in any of your init files." \
+        "$(_ 'Environment variable ${1} is "${2}" instead of "${3}". Please check if you have exported it incorrectly in any of your init files.')" \
         "$1" "$3" "$2"
 }
 
@@ -532,9 +532,9 @@ check_xim() {
         if [[ ${xprop} =~ ^${atom_name}\ @server=(.*)$ ]]; then
             xim_server_name="${BASH_REMATCH[1]}"
             if [ "${xim_server_name}" = "${xim_name}" ]; then
-                write_paragraph "$(_ "Xim server's name is the same with that set in the environment variable.")"
+                write_paragraph "$(_ "Xim server name is the same with that set in the environment variable.")"
             else
-                write_error_eval "$(_ "Xim server's name: '\${1}' is different from that set in the environment variable: '\${2}'.")" \
+                write_error_eval "$(_ 'Xim server name: "${1}" is different from that set in the environment variable: "${2}".')" \
                     "${xim_server_name}" "${xim_name}"
             fi
         else
@@ -782,7 +782,7 @@ check_input_methods() {
         *)
             if [[ ${enabled_im[0]} =~ ^fcitx-keyboard- ]]; then
                 write_eval \
-                    "$(_ "You have a keyboard input method '\${1}' correctly added as your default input method.")" \
+                    "$(_ 'You have a keyboard input method "${1}" correctly added as your default input method.')" \
                     "${enabled_im[0]}"
             else
                 write_error_eval \
