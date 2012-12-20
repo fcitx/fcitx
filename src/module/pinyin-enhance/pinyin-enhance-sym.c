@@ -60,8 +60,7 @@ PySymLoadDict(PinyinEnhance *pyenhance)
         if (fp) {
             /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
             res = true;
-            py_enhance_stroke_load_tree(&pyenhance->stroke_tree,
-                                        fp, pyenhance->static_pool);
+            py_enhance_stroke_load_tree(&pyenhance->stroke_tree, fp);
             /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
             /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
             /*     + end.tv_nsec - start.tv_nsec; */
@@ -219,7 +218,7 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
         /* struct timespec start, end; */
         /* int t; */
         /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
-        const PyEnhanceMapWord *word_buff[10];
+        PyEnhanceStrokeWord *word_buff[10];
         int count = py_enhance_stroke_get_match_keys(
             pyenhance, sym, sym_l, word_buff, limit);
         /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
@@ -242,9 +241,12 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance, int im_type)
                 new_list =  FcitxCandidateWordNewList();
                 int i;
                 int size = 0;
+                const PyEnhanceStrokeWord *words;
                 for (i = 0;i < count;i++) {
-                    for (words = word_buff[i];words;words = words->next) {
-                        const char *str_word = py_enhance_map_word(words);
+                    for (words = word_buff[i];words;
+                         py_enhance_stroke_word_tonext(&pyenhance->stroke_tree,
+                                                       &words)) {
+                        const char *str_word = words->word;
                         cand_word.strWord = strdup(str_word);
                         cand_word.strExtra = PinyinEnhanceGetAllPinyin(
                             pyenhance, str_word);

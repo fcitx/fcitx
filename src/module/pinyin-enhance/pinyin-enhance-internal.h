@@ -35,20 +35,69 @@
 
 #include "config.h"
 
-typedef struct _PyEnhanceStrokeTree PyEnhanceStrokeTree;
-typedef struct _PyEnhanceStrokeKey PyEnhanceStrokeKey;
+typedef struct {
+    uint32_t len;
+    uint32_t alloc;
+    void *data;
+} PyEnhanceBuff;
 
-struct _PyEnhanceStrokeKey {
-    PyEnhanceMapWord *words;
-    PyEnhanceStrokeKey *next;
-    int key_l;
-};
+static inline uint32_t
+py_enhance_align(uint32_t len, uint32_t align)
+{
+    uint32_t left;
+    if ((left = len % align))
+        return len + align - left;
+    return len;
+}
 
-struct _PyEnhanceStrokeTree {
-    PyEnhanceMapWord *singles[5];
-    PyEnhanceMapWord *doubles[5][5];
-    PyEnhanceStrokeKey *multiples[5][5][5];
-};
+#define PY_ENHANCE_BUFF_PAGE (8 * 1024)
+#define PY_ENHANCE_BUFF_ALIGH (sizeof(int) >= 4 ? sizeof(int) : 4)
+
+static inline void
+_py_enhance_buff_resize(PyEnhanceBuff *buff, uint32_t len)
+{
+    len = py_enhance_align(len, PY_ENHANCE_BUFF_PAGE);
+    buff->data = realloc(buff->data, len);
+    buff->alloc = len;
+}
+
+static inline void
+py_enhance_buff_reserve(PyEnhanceBuff *buff, uint32_t len)
+{
+    len += buff->len;
+    if (len <= buff->alloc)
+        return;
+    _py_enhance_buff_resize(buff, len);
+}
+
+static inline uint32_t
+py_enhance_buff_alloc(PyEnhanceBuff *buff, uint32_t len)
+{
+    uint32_t res = py_enhance_align(buff->len, PY_ENHANCE_BUFF_ALIGH);
+    buff->len = res + len;
+    if (fcitx_unlikely(buff->len > buff->alloc)) {
+        _py_enhance_buff_resize(buff, buff->len);
+    }
+    return res;
+}
+
+static inline void
+py_enhance_buff_shrink(PyEnhanceBuff *buff)
+{
+    _py_enhance_buff_resize(buff, buff->len);
+}
+
+static inline void
+py_enhance_buff_free(PyEnhanceBuff *buff)
+{
+    fcitx_utils_free(buff->data);
+}
+
+typedef struct {
+    uint32_t table[5 + 5 * 5 + 5 * 5 * 5];
+    PyEnhanceBuff keys;
+    PyEnhanceBuff words;
+} PyEnhanceStrokeTree;
 
 typedef struct {
     FcitxGenericConfig gconfig;

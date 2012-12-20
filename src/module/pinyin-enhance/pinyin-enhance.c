@@ -203,6 +203,8 @@ PinyinEnhanceDestroy(void *arg)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     PinyinEnhanceSymDestroy(pyenhance);
+    py_enhance_buff_free(&pyenhance->stroke_tree.keys);
+    py_enhance_buff_free(&pyenhance->stroke_tree.words);
     fcitx_memory_pool_destroy(pyenhance->static_pool);
 }
 
