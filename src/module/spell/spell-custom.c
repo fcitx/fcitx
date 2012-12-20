@@ -233,10 +233,10 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     word_len = fcitx_utf8_strlen(real_word);
     for (i = 0;i < dict->words_count;i++) {
         int dist;
-        if ((dist = SpellCustomGetDistance(dict, real_word,
-                                           dict->words[i], word_len)) >= 0) {
+        if ((dist = SpellCustomGetDistance(
+                 dict, real_word, dict->map + dict->words[i], word_len)) >= 0) {
             int j = num;
-            clist[j].word = dict->words[i];
+            clist[j].word = dict->map + dict->words[i];
             clist[j].dist = dist;
             if (num < len_limit)
                 num++;

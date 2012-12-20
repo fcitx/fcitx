@@ -265,18 +265,18 @@ SpellCustomInitDict(FcitxSpell *spell, SpellCustomDict *dict, const char *lang)
         return false;
 
     lcount = load_le32(dict->map);
-    dict->words = malloc(lcount * sizeof(char*));
+    dict->words = malloc(lcount * sizeof(uint32_t));
     /* well, not likely though. */
-    if (!dict->words)
+    if (fcitx_unlikely(!dict->words))
         return false;
 
-    /* save words pointers. */
+    /* save words offset's. */
     for (i = sizeof(uint32_t), j = 0;i < map_len && j < lcount;i += 1) {
         i += sizeof(uint16_t);
         int l = strlen(dict->map + i);
         if (!l)
             continue;
-        dict->words[j++] = dict->map + i;
+        dict->words[j++] = i;
         i += l;
     }
     dict->words_count = j;
@@ -297,9 +297,7 @@ SpellCustomNewDict(FcitxSpell *spell, const char *lang)
 void
 SpellCustomFreeDict(FcitxSpell *spell, SpellCustomDict *dict)
 {
-    if (dict->map)
-        free(dict->map);
-    if (dict->words)
-        free(dict->words);
+    fcitx_utils_free(dict->map);
+    fcitx_utils_free(dict->words);
     free(dict);
 }
