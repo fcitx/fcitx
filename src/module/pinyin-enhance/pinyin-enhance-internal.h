@@ -94,6 +94,16 @@ py_enhance_buff_free(PyEnhanceBuff *buff)
 }
 
 typedef struct {
+    const char *const str;
+    const int len;
+} PyEnhanceStrLen;
+
+/**
+ * s must be a string literal.
+ **/
+#define PY_STR_LEN(s) {.str = s, .len = sizeof(s) - 1}
+
+typedef struct {
     uint32_t table[5 + 5 * 5 + 5 * 5 * 5];
     PyEnhanceBuff keys;
     PyEnhanceBuff words;

@@ -70,5 +70,10 @@ int py_enhance_stroke_get_match_keys(PinyinEnhance *pyenhance,
                                      const char *key_s, int key_l,
                                      PyEnhanceStrokeWord **word_buff,
                                      int buff_len);
+uint8_t *py_enhance_stroke_find_stroke(
+    PinyinEnhance *pyenhance, const char *str,
+    uint8_t *stroke, unsigned int *len);
+char *py_enhance_stroke_get_str(const uint8_t *stroke, unsigned int s_l,
+                                char *str, unsigned int *len);
 
 #endif

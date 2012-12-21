@@ -22,13 +22,6 @@
 #include "fcitx-utils/memory.h"
 #include "pinyin-enhance-py.h"
 
-typedef struct {
-    const char *const str;
-    const int len;
-} PyEnhanceStrLen;
-
-#define PY_STR_LEN(s) {.str = s, .len = sizeof(s) - 1}
-
 static const char*
 py_enhance_get_vokal(int8_t index, int8_t tone, int *len)
 {
