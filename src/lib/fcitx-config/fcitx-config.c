@@ -1186,13 +1186,16 @@ boolean FcitxConfigSaveConfigFileFp(FILE* fp, FcitxGenericConfig *config, FcitxC
 
             if (!option) {
                 if (optiondesc->rawDefaultValue)
-                    fprintf(fp, "%s=%s\n", optiondesc->optionName,
+                    fprintf(fp, "#%s=%s\n", optiondesc->optionName,
                             optiondesc->rawDefaultValue);
                 else
                     FcitxLog(FATAL, _("no default option for %s/%s"),
                              groupdesc->groupName, optiondesc->optionName);
             } else {
                 FcitxConfigSyncValue(config, group, option, Value2Raw);
+                /* comment out the default value, for future automatical change */
+                if (optiondesc->rawDefaultValue && strcmp(option->rawValue, optiondesc->rawDefaultValue) == 0)
+                    fprintf(fp, "#");
                 fprintf(fp, "%s=%s\n", option->optionName, option->rawValue);
                 HASH_FOREACH(subkey, option->subkey, FcitxConfigOptionSubkey) {
                     fprintf(fp, "%s[%s]=%s\n", option->optionName, subkey->subkeyName, subkey->rawValue);
