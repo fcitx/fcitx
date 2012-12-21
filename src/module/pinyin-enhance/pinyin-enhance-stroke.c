@@ -107,13 +107,12 @@ static inline uint32_t
 py_enhance_stroke_alloc_key(PyEnhanceStrokeTree *tree, const char *key_s,
                             uint8_t key_l, PyEnhanceStrokeKey **key_p)
 {
-    uint32_t size = PY_ENHANCE_STROKE_KEY_REAL_SIZE + key_l + 1;
+    uint32_t size = PY_ENHANCE_STROKE_KEY_REAL_SIZE + key_l;
     uint32_t id = py_enhance_buff_alloc(&tree->keys, size);
     PyEnhanceStrokeKey *key = _py_enhance_stroke_id_to_key(tree, id);
     key->key_l = key_l;
     if (key_l)
         memcpy(key->key, key_s, key_l);
-    key->key[key_l] = '\0';
     *key_p = key;
     return id;
 }
@@ -127,6 +126,7 @@ py_enhance_stroke_alloc_word(PyEnhanceStrokeTree *tree, const char *word_s,
     PyEnhanceStrokeWord *word = _py_enhance_stroke_id_to_word(tree, id);
     memcpy(word->word, word_s, word_l);
     word->word[word_l] = '\0';
+    *word_p = word;
     return id;
 }
 
@@ -296,7 +296,7 @@ py_enhance_stroke_get_match_keys(
              * skip if there the prefix has no keys or the shortest key in the
              * series is longer than 3 (i.e. > 0 after the prefix is removed.)
              **/
-            if (!tmp_key || tmp_key->key[0])
+            if (!tmp_key || tmp_key->key_l)
                 continue;
             word_buff[count] = py_enhance_stroke_id_to_word(tree,
                                                             tmp_key->words);
@@ -382,7 +382,7 @@ py_enhance_stroke_get_match_keys(
                     continue;
                 distance += lookup_p->diff * REPLACE_WEIGHT;
                 /**
-                 * insert in the ordered list.
+                 * insert in the ordered result array.
                  **/
                 for (j = 0;j < count;j++) {
                     if (distance < res_buff[j].distance) {
@@ -414,12 +414,22 @@ out:
     return count;
 }
 
+/**
+ * Add keys to the Singly-linked lists and add words to the array as well as
+ * recording the key_id in the word added.
+ **/
 static void
 py_enhance_stroke_add_word(PyEnhanceStrokeTree *tree,
                            const char *key_s, int key_l,
                            const char *word_s, int word_l)
 {
     uint32_t key_id;
+    /**
+     * for key_l = 1, 2
+     *     key_id = offset_in_table * 2 + 1   (key_id % 4 = 1, 3)
+     * otherwise
+     *     key_id = offset_in_words_buffer + 2   (key_id % 4 = 2)
+     **/
     switch (key_l) {
     case 1:
         key_id = py_enhance_single_offset(key_s[0] - '1') * 2 + 1;
@@ -439,8 +449,9 @@ py_enhance_stroke_add_word(PyEnhanceStrokeTree *tree,
         key_s += 3;
         key_l -= 3;
         /**
-         * since all the words are ordered, which means res <= 0,
-         * the loop is actually not doing anything.
+         * since all the words are ordered, which means res <= 0, the loop
+         * is actually not doing anything, it is here only to make the logic
+         * complete (and in case the data is incorrectly ordered).
          **/
         for (;;key_p = &key->next, key_id = *key_p) {
             key = py_enhance_stroke_id_to_key(tree, key_id);
@@ -483,8 +494,19 @@ static void
 py_enhance_stroke_load_finish(PyEnhanceStrokeTree *tree)
 {
     unsigned int words_l = tree->words.len / sizeof(PyEnhanceStrokeWord);
+    /**
+     * sort the word array so that we can use bsearch to find a word later.
+     * half of loading time of the stroke table is spent here.
+     **/
+    /* struct timespec start, end; */
+    /* int t; */
+    /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
     qsort(tree->words.data, words_l, sizeof(PyEnhanceStrokeWord),
           (int (*)(const void*, const void*))strcmp);
+    /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
+    /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
+    /*     + end.tv_nsec - start.tv_nsec; */
+    /* printf("%s, %d\n", __func__, t); */
     unsigned int i;
     uint32_t *words;
     uint32_t size = py_enhance_align(sizeof(PyEnhanceStrokeWord),
@@ -509,11 +531,17 @@ py_enhance_stroke_load_tree(PyEnhanceStrokeTree *tree, FILE *fp)
     int word_l;
     size_t len;
     memset(tree, 0, sizeof(PyEnhanceStrokeTree));
+    /**
+     * init each entry to the key_id (single and double)
+     * or other odd numbers (multiple).
+     **/
     unsigned int i;
     for (i = 0;i < sizeof(tree->table) / sizeof(uint32_t);i++)
         tree->table[i] = i * 2 + 1;
-    // TODO
-    py_enhance_buff_reserve(&tree->keys, 1024 * 1024);
+    /**
+     * reserve some space before loading to avoid repeating realloc
+     **/
+    py_enhance_buff_reserve(&tree->keys, 1024 * 1024 / 2 * 3);
     py_enhance_buff_reserve(&tree->words, 1024 * 1024);
     while (getline(&buff, &len, fp) != -1) {
         /* remove leading spaces */
@@ -523,7 +551,7 @@ py_enhance_stroke_load_tree(PyEnhanceStrokeTree *tree, FILE *fp)
             continue;
         /* find delimiter */
         key_l = strspn(key, "12345");
-        if (!key_l)
+        if (fcitx_unlikely(key_l == 0 || key_l > 0xff))
             continue;
         word = key + key_l;
         word_l = strspn(word, PYENHANCE_MAP_BLANK);
@@ -532,7 +560,7 @@ py_enhance_stroke_load_tree(PyEnhanceStrokeTree *tree, FILE *fp)
         *word = '\0';
         word += word_l;
         word_l = strcspn(word, PYENHANCE_MAP_BLANK);
-        if (!word_l)
+        if (fcitx_unlikely(word_l == 0 || word_l > UTF8_MAX_LENGTH))
             continue;
         word[word_l] = '\0';
         word_l++;
