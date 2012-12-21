@@ -81,6 +81,17 @@ py_enhance_buff_alloc(PyEnhanceBuff *buff, uint32_t len)
     return res;
 }
 
+static inline uint32_t
+py_enhance_buff_alloc_noalign(PyEnhanceBuff *buff, uint32_t len)
+{
+    uint32_t res = buff->len;
+    buff->len = res + len;
+    if (fcitx_unlikely(buff->len > buff->alloc)) {
+        _py_enhance_buff_resize(buff, buff->len);
+    }
+    return res;
+}
+
 static inline void
 py_enhance_buff_shrink(PyEnhanceBuff *buff)
 {
@@ -141,9 +152,8 @@ typedef struct {
     boolean stroke_loaded;
     PyEnhanceStrokeTree stroke_tree;
 
-    UT_array py_list;
-
-    FcitxMemoryPool *static_pool;
+    PyEnhanceBuff py_list;
+    PyEnhanceBuff py_table;
 } PinyinEnhance;
 
 enum {
