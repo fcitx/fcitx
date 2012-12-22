@@ -102,7 +102,7 @@ set(PY_STROKE_TGT "${CMAKE_CURRENT_BINARY_DIR}/py_stroke.mb")
 set(PY_STROKE_TAR
   "${CMAKE_CURRENT_SOURCE_DIR}/py_stroke-${PY_STROKE_VER}.tar.gz")
 set(PY_STROKE_URL
-  "https://github.com/downloads/fcitx/fcitx/py_stroke-${PY_STROKE_VER}.tar.gz")
+  "http://fcitx.googlecode.com/files/py_stroke-${PY_STROKE_VER}.tar.gz")
 fcitx_download(py-stroke-download "${PY_STROKE_URL}" "${PY_STROKE_TAR}"
   MD5SUM 2559d025c5bbb50fa450a02429f92762)
 add_custom_command(OUTPUT "${PY_STROKE_TGT}"
@@ -116,7 +116,7 @@ set(PY_TABLE_TGT "${CMAKE_CURRENT_BINARY_DIR}/py_table.mb")
 set(PY_TABLE_TAR
   "${CMAKE_CURRENT_SOURCE_DIR}/py_table-${PY_TABLE_VER}.tar.gz")
 set(PY_TABLE_URL
-  "https://github.com/downloads/fcitx/fcitx/py_table-${PY_TABLE_VER}.tar.gz")
+  "http://fcitx.googlecode.com/files/py_table-${PY_TABLE_VER}.tar.gz")
 fcitx_download(py-table-download "${PY_TABLE_URL}" "${PY_TABLE_TAR}"
   MD5SUM a72e275fe1916d67d01a2f038ca5d920)
 add_custom_command(OUTPUT "${PY_TABLE_TGT}"
@@ -131,7 +131,7 @@ set(SPELL_EN_DICT_SRC "${CMAKE_CURRENT_BINARY_DIR}/en_dict.txt")
 set(SPELL_EN_DICT_TAR
   "${CMAKE_CURRENT_SOURCE_DIR}/en_dict-${SPELL_EN_DICT_VER}.tar.gz")
 set(SPELL_EN_DICT_URL
-  "https://github.com/downloads/fcitx/fcitx/en_dict-${SPELL_EN_DICT_VER}.tar.gz")
+  "http://fcitx.googlecode.com/files/en_dict-${SPELL_EN_DICT_VER}.tar.gz")
 
 fcitx_download(spell-en-download "${SPELL_EN_DICT_URL}" "${SPELL_EN_DICT_TAR}"
   MD5SUM 8315f85331e0545c256a46e0cb00f10f)
