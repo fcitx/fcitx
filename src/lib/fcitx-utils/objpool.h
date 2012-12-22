@@ -56,6 +56,7 @@ extern "C" {
 /* 0 is a valid id, instead, -1 is not */
 #define FCITX_OBJECT_POOL_INVALID_ID (-1)
 #define FCITX_OBJECT_POOL_ALLOCED_ID (-2)
+#define FCITX_OBJ_POOL_INIT_SIZE (4)
 
     typedef struct _FcitxObjPool FcitxObjPool;
 
@@ -80,15 +81,22 @@ extern "C" {
      * @since 4.2.7
      */
     void fcitx_obj_pool_init(FcitxObjPool *pool, size_t size);
+    void fcitx_obj_pool_init_with_prealloc(FcitxObjPool *pool, size_t size,
+                                           size_t prealloc);
+#define fcitx_obj_pool_init(p, s)                                       \
+    fcitx_obj_pool_init_with_prealloc(p, s, FCITX_OBJ_POOL_INIT_SIZE)
 
-   /**
+    /**
      * create an object pool, with same object size
      *
      * @param size size of object
      * @return newly created pool
      * @since 4.2.7
      **/
-    FcitxObjPool* fcitx_obj_pool_new(size_t size);
+    FcitxObjPool *fcitx_obj_pool_new(size_t size);
+    FcitxObjPool *fcitx_obj_pool_new_with_prealloc(size_t size, size_t prealloc);
+#define fcitx_obj_pool_new(s)                                           \
+    fcitx_obj_pool_new_with_prealloc(s, FCITX_OBJ_POOL_INIT_SIZE)
 
    /**
      * allocate an id from pool

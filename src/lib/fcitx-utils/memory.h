@@ -72,7 +72,13 @@ void* fcitx_memory_pool_alloc(FcitxMemoryPool* pool, size_t size);
 #define fcitx_memory_pool_alloc(pool, size)             \
     fcitx_memory_pool_alloc_align(pool, size, 0)
 
-void* fcitx_memory_pool_alloc_align(FcitxMemoryPool* pool, size_t size, int align);
+void *fcitx_memory_pool_alloc_align(FcitxMemoryPool* pool,
+                                    size_t size, int align);
+#define fcitx_memory_pool_alloc_align(pool, size, args...)      \
+    _fcitx_memory_pool_alloc_align(pool, size, ##args, 1)
+#define _fcitx_memory_pool_alloc_align(pool, size, align, ...)  \
+    (fcitx_memory_pool_alloc_align)(pool, size, align)
+
 /**
  * free memory pool and free all the memory inside the pool
  *
