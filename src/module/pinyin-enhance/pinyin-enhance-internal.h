@@ -26,6 +26,7 @@
 #include <fcitx/instance.h>
 #include <fcitx/hook.h>
 #include <fcitx-utils/log.h>
+#include <fcitx-utils/utils.h>
 #include <fcitx-utils/memory.h>
 #include <fcitx/candidate.h>
 #include <fcitx-config/xdg.h>
@@ -41,22 +42,13 @@ typedef struct {
     void *data;
 } PyEnhanceBuff;
 
-static inline uint32_t
-py_enhance_align(uint32_t len, uint32_t align)
-{
-    uint32_t left;
-    if ((left = len % align))
-        return len + align - left;
-    return len;
-}
-
 #define PY_ENHANCE_BUFF_PAGE (8 * 1024)
 #define PY_ENHANCE_BUFF_ALIGH (sizeof(int) >= 4 ? sizeof(int) : 4)
 
 static inline void
 _py_enhance_buff_resize(PyEnhanceBuff *buff, uint32_t len)
 {
-    len = py_enhance_align(len, PY_ENHANCE_BUFF_PAGE);
+    len = fcitx_utils_align_to(len, PY_ENHANCE_BUFF_PAGE);
     buff->data = realloc(buff->data, len);
     buff->alloc = len;
 }
@@ -73,7 +65,7 @@ py_enhance_buff_reserve(PyEnhanceBuff *buff, uint32_t len)
 static inline uint32_t
 py_enhance_buff_alloc(PyEnhanceBuff *buff, uint32_t len)
 {
-    uint32_t res = py_enhance_align(buff->len, PY_ENHANCE_BUFF_ALIGH);
+    uint32_t res = fcitx_utils_align_to(buff->len, PY_ENHANCE_BUFF_ALIGH);
     buff->len = res + len;
     if (fcitx_unlikely(buff->len > buff->alloc)) {
         _py_enhance_buff_resize(buff, buff->len);

@@ -63,11 +63,7 @@ FcitxMemoryPool* fcitx_memory_pool_create()
 static inline void*
 memory_align_ptr(void *p)
 {
-    intptr_t res = (intptr_t)p;
-    int left;
-    if ((left = res % sizeof(int)))
-        return p + sizeof(int) - left;
-    return p;
+    return (void*)fcitx_utils_align_to((uintptr_t)p, sizeof(int));
 }
 
 FCITX_EXPORT_API

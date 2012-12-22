@@ -493,8 +493,8 @@ _py_enhance_stroke_key_get_words(PyEnhanceStrokeTree *tree, uint32_t key_id)
 }
 
 #define PY_ENHANCE_STROKE_WORD_ALIGN_SIZE               \
-    py_enhance_align(sizeof(PyEnhanceStrokeWord),       \
-                     PY_ENHANCE_BUFF_ALIGH)
+    fcitx_utils_align_to(sizeof(PyEnhanceStrokeWord),   \
+                         PY_ENHANCE_BUFF_ALIGH)
 static void
 py_enhance_stroke_load_finish(PyEnhanceStrokeTree *tree)
 {

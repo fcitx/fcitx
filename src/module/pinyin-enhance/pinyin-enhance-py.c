@@ -365,8 +365,8 @@ py_enhance_py_alloc_py(PyEnhanceBuff *buff, const char *word, int8_t word_l,
     return res + 1;
 }
 
-#define PY_ENHANCE_UINT32_ALIGN_SIZE                            \
-    py_enhance_align(sizeof(uint32_t), PY_ENHANCE_BUFF_ALIGH)
+#define PY_ENHANCE_UINT32_ALIGN_SIZE                                    \
+    fcitx_utils_align_to(sizeof(uint32_t), PY_ENHANCE_BUFF_ALIGH)
 
 static inline void
 py_enhance_add_word_p(PyEnhanceBuff *py_table, PyEnhanceBuff *array,
