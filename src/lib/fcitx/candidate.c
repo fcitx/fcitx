@@ -29,6 +29,12 @@ struct _FcitxCandidateWordList {
     boolean hasGonePrevPage;
     boolean hasGoneNextPage;
     FcitxCandidateLayoutHint layoutHint;
+    boolean hasPrev;
+    boolean hasNext;
+    FcitxPaging paging;
+    void* overrideArg;
+    FcitxDestroyNotify overrideDestroyNotify;
+    boolean override;
 };
 
 static const UT_icd cand_icd = {
@@ -143,6 +149,16 @@ FCITX_EXPORT_API
 void FcitxCandidateWordReset(FcitxCandidateWordList* candList)
 {
     utarray_clear(&candList->candWords);
+    if (candList->override) {
+        candList->override = false;
+        candList->hasPrev = false;
+        candList->hasNext = false;
+        candList->paging = NULL;
+        if (candList->overrideDestroyNotify)
+            candList->overrideDestroyNotify(candList->overrideArg);
+        candList->overrideArg = NULL;
+        candList->overrideDestroyNotify = NULL;
+    }
     candList->currentPage = 0;
     candList->hasGonePrevPage = false;
     candList->hasGoneNextPage = false;
@@ -219,6 +235,9 @@ INPUT_RETURN_VALUE FcitxCandidateWordChooseByTotalIndex(FcitxCandidateWordList* 
 FCITX_EXPORT_API
 boolean FcitxCandidateWordHasPrev(FcitxCandidateWordList* candList)
 {
+    if (candList->override)
+        return candList->hasPrev;
+
     if (candList->currentPage > 0)
         return true;
     else
@@ -228,6 +247,9 @@ boolean FcitxCandidateWordHasPrev(FcitxCandidateWordList* candList)
 FCITX_EXPORT_API
 boolean FcitxCandidateWordHasNext(FcitxCandidateWordList* candList)
 {
+    if (candList->override)
+        return candList->hasNext;
+
     if (candList->currentPage + 1 < FcitxCandidateWordPageCount(candList))
         return true;
     else
@@ -261,6 +283,10 @@ void FcitxCandidateWordAppend(FcitxCandidateWordList* candList, FcitxCandidateWo
 FCITX_EXPORT_API
 boolean FcitxCandidateWordGoPrevPage(FcitxCandidateWordList* candList)
 {
+    if (candList->override && candList->paging) {
+        return candList->paging(candList->overrideArg, true);
+    }
+
     if (!FcitxCandidateWordPageCount(candList))
         return false;
     if (FcitxCandidateWordHasPrev(candList)) {
@@ -274,6 +300,10 @@ boolean FcitxCandidateWordGoPrevPage(FcitxCandidateWordList* candList)
 FCITX_EXPORT_API
 boolean FcitxCandidateWordGoNextPage(FcitxCandidateWordList* candList)
 {
+    if (candList->override && candList->paging) {
+        return candList->paging(candList->overrideArg, false);
+    }
+
     if (!FcitxCandidateWordPageCount(candList))
         return false;
     if (FcitxCandidateWordHasNext(candList)) {
@@ -398,6 +428,21 @@ FCITX_EXPORT_API
 void FcitxCandidateWordSetLayoutHint(FcitxCandidateWordList* candList, FcitxCandidateLayoutHint hint)
 {
     candList->layoutHint = hint;
+}
+
+FCITX_EXPORT_API
+void FcitxCandidateWordSetOverridePaging(FcitxCandidateWordList* candList, boolean hasPrev, boolean hasNext, FcitxPaging paging, void* arg, FcitxDestroyNotify destroyNotify)
+{
+    if (candList->override && candList->overrideDestroyNotify) {
+        candList->overrideDestroyNotify(candList->overrideArg);
+    }
+
+    candList->override = true;
+    candList->hasPrev = hasPrev;
+    candList->hasNext = hasNext;
+    candList->paging = paging;
+    candList->overrideArg = arg;
+    candList->overrideDestroyNotify = destroyNotify;
 }
 
 

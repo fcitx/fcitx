@@ -504,6 +504,28 @@ extern "C" {
      */
     FcitxCandidateLayoutHint FcitxCandidateWordGetLayoutHint(FcitxCandidateWordList* candList);
 
+    typedef boolean (*FcitxPaging)(void* arg, boolean prev);
+
+    /**
+     * override default paging
+     *
+     * @param candList candidate words
+     * @param hasPrev has prev page
+     * @param hasNext has next page
+     * @param paging callback
+     * @param arg arg
+     * @param destroyNotify destroyNotify
+     * @return void
+     **/
+    void FcitxCandidateWordSetOverridePaging(FcitxCandidateWordList* candList,
+                                             boolean hasPrev,
+                                             boolean hasNext,
+                                             FcitxPaging paging,
+                                             void* arg,
+                                             FcitxDestroyNotify destroyNotify
+                                            );
+
+
 /** convinient string for candidate word */
 #define DIGIT_STR_CHOOSE "1234567890"
 
