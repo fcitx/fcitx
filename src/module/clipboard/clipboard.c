@@ -197,7 +197,7 @@ ClipboardPreHook(void *arg, FcitxKeySym sym, unsigned int state,
         return false;
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
-    FcitxGlobalConfig* fc = FcitxInstanceGetGlobalConfig(instance);
+    FcitxGlobalConfig *fc = FcitxInstanceGetGlobalConfig(instance);
     *ret_val = IRV_TO_PROCESS;
 
     const FcitxHotkey *prev = FcitxInstanceGetContextHotkey(

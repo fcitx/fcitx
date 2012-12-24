@@ -255,6 +255,17 @@ extern "C" {
     FcitxCandidateWord* FcitxCandidateWordGetCurrentWindowNext(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
 
     /**
+     * get prev word of current page, useful when you want to iteration over current candidate words
+     *
+     * @param candList candidate word list
+     * @param candWord current cand word
+     * @return FcitxCandidateWord* prev cand word
+     *
+     * @since 4.2.7
+     **/
+    FcitxCandidateWord* FcitxCandidateWordGetCurrentWindowPrev(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
+
+    /**
      * get candidate word by total index
      *
      * @param candList candidate word list
@@ -265,6 +276,17 @@ extern "C" {
      **/
     FcitxCandidateWord* FcitxCandidateWordGetByTotalIndex(struct _FcitxCandidateWordList* candList, int index);
 
+    /**
+     * get the index of the candidate word
+     *
+     * @param candList candidate word list
+     * @param FcitxCandidateWord*
+     * @return index index of word
+     *
+     * @since 4.2.7
+     **/
+    int FcitxCandidateWordGetIndex(FcitxCandidateWordList *candList,
+                                   FcitxCandidateWord *word);
     /**
      * get candidate word by index within current page
      *
@@ -459,7 +481,17 @@ extern "C" {
      * @param candList candidate word list
      * @return FcitxCandidateWord*
      **/
-    FcitxCandidateWord* FcitxCandidateWordGetFirst(struct _FcitxCandidateWordList* candList);
+    FcitxCandidateWord *FcitxCandidateWordGetFirst(FcitxCandidateWordList *candList);
+
+    /**
+     * get last candidate word
+     *
+     * @param candList candidate word list
+     * @return FcitxCandidateWord*
+     *
+     * @since 4.2.7
+     **/
+    FcitxCandidateWord *FcitxCandidateWordGetLast(FcitxCandidateWordList *candList);
 
     /**
      * get next candidate word, useful when want to iterate over whole list

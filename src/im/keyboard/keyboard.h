@@ -49,6 +49,8 @@ typedef struct _FcitxKeyboardConfig {
     int minimumHintLength;
     int maximumHintLength;
     ChooseModifier chooseModifier;
+    FcitxHotkey prevWord[2];
+    FcitxHotkey nextWord[2];
 } FcitxKeyboardConfig;
 
 typedef struct _FcitxKeyboard {
@@ -67,6 +69,7 @@ typedef struct _FcitxKeyboard {
     int lastLength;
     int dataSlot;
     int enUSRegistered;
+    int cur_focus;
 } FcitxKeyboard;
 
 typedef struct _FcitxKeyboardLayout {
