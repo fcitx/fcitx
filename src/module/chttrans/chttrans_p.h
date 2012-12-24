@@ -5,6 +5,7 @@
 #include "fcitx-config/hotkey.h"
 #include "fcitx-utils/utf8.h"
 #include "fcitx/instance.h"
+#include "fcitx-utils/stringmap.h"
 
 typedef struct _simple2trad_t {
     int wc;
@@ -21,11 +22,12 @@ typedef enum _ChttransEngine {
 
 typedef struct _FcitxChttrans {
     FcitxGenericConfig gconfig;
-    boolean enabled;
     ChttransEngine engine;
     FcitxHotkey hkToggle[2];
     simple2trad_t* s2t_table;
     simple2trad_t* t2s_table;
+    FcitxStringMap* enableIM;
+    char* strEnableForIM;
     void* ods2t;
     void* odt2s;
     FcitxInstance* owner;

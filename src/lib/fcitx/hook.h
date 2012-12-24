@@ -197,6 +197,14 @@ extern "C" {
      * @return void
      **/
     void FcitxInstanceRegisterInputUnFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
+    /**
+     * register im changed hook
+     *
+     * @param instance fcitx instance
+     * @param hook new hook
+     * @return void
+     **/
+    void FcitxInstanceRegisterIMChangedHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
 
     /**
      * register update candidate word hook

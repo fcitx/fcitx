@@ -1026,6 +1026,7 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
     }
 
     FcitxInstanceResetInput(instance);
+    FcitxInstanceProcessIMChangedHook(instance);
 }
 
 /**

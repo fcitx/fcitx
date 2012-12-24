@@ -1,9 +1,10 @@
 #include <assert.h>
 #include "fcitx-utils/utils.h"
+#include "fcitx-utils/stringmap.h"
 
 #define TEST_STR "a,b,c,d"
 
-int main()
+void test_string()
 {
     const char *test = TEST_STR;
 
@@ -53,6 +54,48 @@ int main()
     assert(strcmp(orig, escape) == 0);
     free(escape);
     free(back);
+}
 
+void test_string_hash_set()
+{
+
+    FcitxStringHashSet* sset = fcitx_utils_string_hash_set_parse("a,b,c,d", ',');
+    assert(HASH_COUNT(sset) == 4);
+    assert(fcitx_utils_string_hash_set_contains(sset, "c"));
+    assert(!fcitx_utils_string_hash_set_contains(sset, "e"));
+    fcitx_util_string_hash_set_remove(sset, "c");
+    assert(!fcitx_utils_string_hash_set_contains(sset, "c"));
+    fcitx_utils_string_hash_set_insert(sset, "e");
+    assert(fcitx_utils_string_hash_set_contains(sset, "e"));
+
+    /* uthash guarantee order, so we can sure about this */
+    char* joined = fcitx_utils_string_hash_set_join(sset, ',');
+    assert(strcmp(joined, "a,b,d,e") == 0);
+
+    free(joined);
+
+    fcitx_utils_free_string_hash_set(sset);
+}
+
+void test_string_map()
+{
+    FcitxStringMap* map = fcitx_string_map_new("a:true,b:false", ',');
+    assert(fcitx_string_map_get(map, "a", false));
+    assert(!fcitx_string_map_get(map, "b", false));
+    assert(fcitx_string_map_get(map, "c", true));
+    fcitx_string_map_set(map, "c", false);
+    assert(!fcitx_string_map_get(map, "c", true));
+    char* joined = fcitx_string_map_to_string(map, '\n');
+    assert(strcmp(joined, "a:true\nb:false\nc:false") == 0);
+    free(joined);
+
+    fcitx_string_map_free(map);
+}
+
+int main()
+{
+    test_string();
+    test_string_hash_set();
+    test_string_map();
     return 0;
 }

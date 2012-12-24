@@ -11,5 +11,11 @@ Type=Hotkey
 DefaultValue=CTRL_SHIFT_F
 Description=Toggle for enable or disable
 
+[TraditionalChinese/EnabledForIM]
+Type=String
+DefaultValue=
+Description=Enabled state for im
+Advance=True
+
 [DescriptionFile]
 LocaleDomain=fcitx

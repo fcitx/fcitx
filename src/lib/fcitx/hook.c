@@ -84,6 +84,7 @@ DEFINE_HOOK(TriggerOnHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(TriggerOffHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(InputFocusHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(InputUnFocusHook, FcitxIMEventHook, eventhook);
+DEFINE_HOOK(IMChangedHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(UpdateCandidateWordHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(UpdateIMListHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(ICStateChangedHook, FcitxICEventHook, ichook);
@@ -204,6 +205,16 @@ void FcitxInstanceProcessInputFocusHook(FcitxInstance* instance)
 void FcitxInstanceProcessInputUnFocusHook(FcitxInstance* instance)
 {
     HookStack* stack = GetInputUnFocusHook(instance);
+    stack = stack->next;
+    while (stack) {
+        stack->eventhook.func(stack->eventhook.arg);
+        stack = stack->next;
+    }
+}
+
+void FcitxInstanceProcessIMChangedHook(FcitxInstance* instance)
+{
+    HookStack* stack = GetIMChangedHook(instance);
     stack = stack->next;
     while (stack) {
         stack->eventhook.func(stack->eventhook.arg);

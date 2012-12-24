@@ -34,6 +34,7 @@
 #include "fcitx/instance.h"
 #include "fcitx/context.h"
 #include "fcitx-utils/utils.h"
+#include "fcitx-utils/stringmap.h"
 #include "chttrans.h"
 #include "chttrans_p.h"
 #ifdef ENABLE_OPENCC
@@ -44,6 +45,7 @@
 
 static void* ChttransCreate(FcitxInstance* instance);
 static char* ChttransOutputFilter(void* arg, const char* strin);
+static void ChttransIMChanged(void* arg);
 static void ReloadChttrans(void* arg);
 static char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char* strHZ);
 static char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ);
@@ -57,10 +59,14 @@ static void ToggleChttransState(void*);
 static void* ChttransS2T(void* arg, FcitxModuleFunctionArg args);
 static void* ChttransT2S(void* arg, FcitxModuleFunctionArg args);
 
+static void ChttransEnabledForIMFilter(FcitxGenericConfig* config, FcitxConfigGroup *group,
+                        FcitxConfigOption *option, void* value,
+                        FcitxConfigSync sync, void* arg);
+
 CONFIG_BINDING_BEGIN(FcitxChttrans)
 CONFIG_BINDING_REGISTER("TraditionalChinese", "TransEngine", engine)
-CONFIG_BINDING_REGISTER("TraditionalChinese", "Enabled", enabled)
 CONFIG_BINDING_REGISTER("TraditionalChinese", "Hotkey", hkToggle)
+CONFIG_BINDING_REGISTER_WITH_FILTER("TraditionalChinese", "EnabledForIM", strEnableForIM, ChttransEnabledForIMFilter);
 CONFIG_BINDING_END()
 
 FCITX_DEFINE_PLUGIN(fcitx_chttrans, module, FcitxModule) = {
@@ -71,12 +77,41 @@ FCITX_DEFINE_PLUGIN(fcitx_chttrans, module, FcitxModule) = {
     ReloadChttrans
 };
 
+static boolean ChttransEnabled(FcitxChttrans* chttrans) {
+    boolean result = false;
+    FcitxIM* im = FcitxInstanceGetCurrentIM(chttrans->owner);
+    if (im) {
+        boolean defaultValue = false;
+        if (strcmp(im->langCode, "zh_TW") == 0 || strcmp(im->langCode, "en_HK") == 0 || strcmp(im->langCode, "zh_HK") == 0) {
+            defaultValue = true;
+        }
+        result = fcitx_string_map_get(chttrans->enableIM, im->uniqueName, defaultValue);
+    }
+    return result;
+}
+
+void ChttransEnabledForIMFilter(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)
+{
+    FcitxChttrans* chttrans = (FcitxChttrans*) config;
+    char** enableForIM = (char**) value;
+    if (sync == Value2Raw) {
+        fcitx_utils_free(*enableForIM);
+        *enableForIM = fcitx_string_map_to_string(chttrans->enableIM, ',');
+    } else if (sync == Raw2Value) {
+        if (*enableForIM) {
+            fcitx_string_map_from_string(chttrans->enableIM, *enableForIM, ',');
+        }
+    }
+}
+
 void* ChttransCreate(FcitxInstance* instance)
 {
     FcitxChttrans* transState = fcitx_utils_malloc0(sizeof(FcitxChttrans));
     FcitxAddon* transAddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_CHTTRANS_NAME);
     transState->owner = instance;
+    transState->enableIM = fcitx_string_map_new(NULL, '\0');
     if (!LoadChttransConfig(transState)) {
+        fcitx_string_map_free(transState->enableIM);
         free(transState);
         return NULL;
     }
@@ -90,11 +125,16 @@ void* ChttransCreate(FcitxInstance* instance)
     shk.arg = transState;
     shk.func = ChttransOutputFilter;
 
+    FcitxIMEventHook imhk;
+    imhk.arg = transState;
+    imhk.func = ChttransIMChanged;
+
     FcitxInstanceRegisterHotkeyFilter(instance, hk);
     FcitxInstanceRegisterOutputFilter(instance, shk);
     FcitxInstanceRegisterCommitFilter(instance, shk);
+    FcitxInstanceRegisterIMChangedHook(instance, imhk);
     FcitxUIRegisterStatus(instance, transState, "chttrans",
-                          transState->enabled ? _("Convert to Traditional Chinese") :  _("Convert to Simplified Chinese"),
+                          ChttransEnabled(transState) ? _("Convert to Traditional Chinese") :  _("Convert to Simplified Chinese"),
                           _("Toggle Simp/Trad Chinese Conversion"),
                           ToggleChttransState,
                           GetChttransEnabled);
@@ -123,9 +163,14 @@ INPUT_RETURN_VALUE HotkeyToggleChttransState(void* arg)
 void ToggleChttransState(void* arg)
 {
     FcitxChttrans* transState = (FcitxChttrans*) arg;
-    transState->enabled = !transState->enabled;
+    FcitxIM* im = FcitxInstanceGetCurrentIM(transState->owner);
+    if (!im)
+        return;
+    boolean enabled = !ChttransEnabled(transState);
+
+    fcitx_string_map_set(transState->enableIM, im->uniqueName, enabled);
     FcitxUISetStatusString(transState->owner, "chttrans",
-                           transState->enabled ? _("Convert to Traditional Chinese") :  _("Convert to Simplified Chinese"),
+                           enabled ? _("Convert to Traditional Chinese") :  _("Convert to Simplified Chinese"),
                           _("Toggle Simp/Trad Chinese Conversion"));
     FcitxUIUpdateInputWindow(transState->owner);
     SaveChttransConfig(transState);
@@ -134,7 +179,7 @@ void ToggleChttransState(void* arg)
 boolean GetChttransEnabled(void* arg)
 {
     FcitxChttrans* transState = (FcitxChttrans*) arg;
-    return transState->enabled;
+    return ChttransEnabled(transState);
 }
 
 char* ChttransOutputFilter(void* arg, const char *strin)
@@ -146,7 +191,7 @@ char* ChttransOutputFilter(void* arg, const char *strin)
     if (!im || strncmp(im->langCode, "zh", 2) != 0 || strlen(im->langCode) == 2)
         return NULL;
 
-    if (transState->enabled) {
+    if (ChttransEnabled(transState)) {
         if (strcmp(im->langCode, "zh_HK") == 0 ||
             strcmp(im->langCode, "zh_TW") == 0) {
             return NULL;
@@ -161,6 +206,15 @@ char* ChttransOutputFilter(void* arg, const char *strin)
         }
     }
     return NULL;
+}
+
+void ChttransIMChanged(void* arg)
+{
+    FcitxChttrans* transState = (FcitxChttrans*) arg;
+    FcitxIM* im = FcitxInstanceGetCurrentIM(transState->owner);
+    if (!im)
+        return;
+    FcitxUIRefreshStatus(transState->owner, "chttrans");
 }
 
 void* ChttransS2T(void* arg, FcitxModuleFunctionArg args)
@@ -392,27 +446,15 @@ boolean LoadChttransConfig(FcitxChttrans* transState)
     fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config", "r", &file);
     FcitxLog(DEBUG, "Load Config File %s", file);
     free(file);
-    boolean newconfig = false;
     if (!fp) {
         if (errno == ENOENT)
             SaveChttransConfig(transState);
-        newconfig = true;
     }
 
     FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc);
 
     FcitxChttransConfigBind(transState, cfile, configDesc);
     FcitxConfigBindSync((FcitxGenericConfig*)transState);
-
-    if (newconfig) {
-        char *p = fcitx_utils_get_current_langcode();
-        /* also check en_HK for default setting */
-        if (strcmp(p, "zh_TW") == 0 || strcmp(p, "en_HK") == 0 || strcmp(p, "zh_HK") == 0) {
-            transState->enabled = true;
-            SaveChttransConfig(transState);
-        }
-        free(p);
-    }
 
     if (fp)
         fclose(fp);

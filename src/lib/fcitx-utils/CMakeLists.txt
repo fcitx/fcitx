@@ -8,6 +8,7 @@ set(FCITX_UTILS_SOURCES
   handler-table.c
   objpool.c
   desktop-parse.c
+  stringmap.c
   )
 
 set(FCITX_UTILS_HEADERS
@@ -23,6 +24,7 @@ set(FCITX_UTILS_HEADERS
   handler-table.h
   objpool.h
   desktop-parse.h
+  stringmap.h
   )
 
 fcitx_translate_add_sources(${FCITX_UTILS_SOURCES} ${FCITX_UTILS_HEADERS})

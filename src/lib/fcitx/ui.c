@@ -402,6 +402,25 @@ FcitxUIComplexStatus *FcitxUIGetComplexStatusByName(FcitxInstance* instance, con
 }
 
 FCITX_EXPORT_API
+void FcitxUIRefreshStatus(FcitxInstance* instance, const char* name)
+{
+    FcitxUIStatus *status = FcitxUIGetStatusByName(instance, name);
+
+    if (status != NULL) {
+        if (UI_FUNC_IS_VALID(UpdateStatus))
+            instance->ui->ui->UpdateStatus(instance->ui->addonInstance , status);
+    }
+    else {
+        FcitxUIComplexStatus *compstatus = FcitxUIGetComplexStatusByName(instance, name);
+        if (!compstatus)
+            return;
+
+        if (UI_FUNC_IS_VALID(UpdateComplexStatus))
+            instance->ui->ui->UpdateComplexStatus(instance->ui->addonInstance , compstatus);
+    }
+}
+
+FCITX_EXPORT_API
 void FcitxUIUpdateStatus(FcitxInstance* instance, const char* name)
 {
     FcitxLog(DEBUG, "Update Status for %s", name);

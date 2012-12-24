@@ -607,6 +607,14 @@ extern "C" {
      **/
     void FcitxUICloseInputWindow(struct _FcitxInstance* instance);
     /**
+     * refresh a status info, since it changed outside the toggle function
+     *
+     * @param instance fcitx instance
+     * @param name status name
+     * @return void
+     **/
+    void FcitxUIRefreshStatus(struct _FcitxInstance* instance, const char* name);
+    /**
      * toggle a user interface status
      *
      * @param instance fcitx instance
