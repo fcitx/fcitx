@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-25 08:47-0500\n"
+"POT-Creation-Date: 2012-12-25 12:07-0500\n"
 "PO-Revision-Date: 2012-12-08 16:14+0000\n"
 "Last-Translator: Alisha <alisha.4m@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
@@ -534,6 +534,8 @@ msgstr "清空局部輸入法"
 #: src/module/clipboard/fcitx-clipboard.desc:27
 #: src/module/clipboard/fcitx-clipboard.desc:34
 #: src/module/clipboard/fcitx-clipboard.desc:44
+#: src/module/clipboard/fcitx-clipboard.desc:50
+#: src/module/clipboard/fcitx-clipboard.desc:55
 msgid "Clipboard"
 msgstr "剪貼簿"
 
@@ -1665,6 +1667,7 @@ msgid "Native"
 msgstr "原生"
 
 #: src/im/keyboard/fcitx-keyboard.desc:29
+#: src/module/clipboard/fcitx-clipboard.desc:58
 #: src/module/quickphrase/fcitx-quickphrase.desc:48
 #, fuzzy
 msgid "Next Candidate Word"
@@ -1901,6 +1904,7 @@ msgid "Prev Page Icon"
 msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.desc:24
+#: src/module/clipboard/fcitx-clipboard.desc:53
 #: src/module/quickphrase/fcitx-quickphrase.desc:43
 #, fuzzy
 msgid "Previous Candidate Word"
@@ -2125,7 +2129,7 @@ msgstr "選擇局部輸入法："
 msgid "Select specific input method via keyboard"
 msgstr "透過鍵盤選擇特定的輸入法"
 
-#: src/module/clipboard/clipboard.c:351
+#: src/module/clipboard/clipboard.c:447
 msgid "Select to paste"
 msgstr "選擇以貼上"
 

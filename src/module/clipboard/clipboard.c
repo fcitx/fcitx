@@ -187,6 +187,66 @@ ClipboardCommitCallback(void *arg, FcitxCandidateWord *cand_word)
     return IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
 
+static inline const FcitxHotkey*
+_prev_page_key(FcitxInstance *instance, FcitxGlobalConfig *fc)
+{
+    const FcitxHotkey *prev = FcitxInstanceGetContextHotkey(
+        instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
+    if (!prev)
+        return fc->hkPrevPage;
+    return prev;
+}
+
+static inline const FcitxHotkey*
+_next_page_key(FcitxInstance *instance, FcitxGlobalConfig *fc)
+{
+    const FcitxHotkey *next = FcitxInstanceGetContextHotkey(
+        instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
+    if (!next)
+        return fc->hkNextPage;
+    return next;
+}
+
+static inline boolean
+_check_and_clear_cand_word(FcitxCandidateWord *cand_word)
+{
+    if ((cand_word->wordType & MSG_REGULAR_MASK) == MSG_CANDIATE_CURSOR) {
+        cand_word->wordType = MSG_OTHER;
+        return true;
+    }
+    return false;
+}
+
+static FcitxCandidateWord*
+ClipboardClearCurrentFocus(FcitxClipboard *clipboard)
+{
+    FcitxInstance *instance = clipboard->owner;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
+    FcitxCandidateWord *res = NULL;
+    FcitxCandidateWord *cand_word;
+    for (cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
+         cand_word;cand_word = FcitxCandidateWordGetCurrentWindowNext(
+             cand_list, cand_word)) {
+        if (_check_and_clear_cand_word(cand_word)) {
+            res = cand_word;
+        }
+    }
+    cand_word = FcitxCandidateWordGetByTotalIndex(cand_list,
+                                                  clipboard->cur_focus);
+    _check_and_clear_cand_word(cand_word);
+    if (!res)
+        return FcitxCandidateWordGetCurrentWindow(cand_list);
+    return res;
+}
+
+static inline void
+_set_cand_word_focus(FcitxCandidateWord *cand_word)
+{
+    cand_word->wordType = (cand_word->wordType & ~MSG_REGULAR_MASK) |
+        MSG_CANDIATE_CURSOR;
+}
+
 static boolean
 ClipboardPreHook(void *arg, FcitxKeySym sym, unsigned int state,
                  INPUT_RETURN_VALUE *ret_val)
@@ -199,35 +259,71 @@ ClipboardPreHook(void *arg, FcitxKeySym sym, unsigned int state,
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
     FcitxGlobalConfig *fc = FcitxInstanceGetGlobalConfig(instance);
     *ret_val = IRV_TO_PROCESS;
-
-    const FcitxHotkey *prev = FcitxInstanceGetContextHotkey(
-        instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
-    if (prev == NULL)
-        prev = fc->hkPrevPage;
-
     int key;
-    const FcitxHotkey *next = FcitxInstanceGetContextHotkey(
-        instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
-    if (next == NULL)
-        next = fc->hkNextPage;
 
-    if (FcitxHotkeyIsHotKey(sym, state, prev)) {
-        if (FcitxCandidateWordGoPrevPage(cand_list))
-            *ret_val = IRV_DISPLAY_MESSAGE;
-    } else if (FcitxHotkeyIsHotKey(sym, state, next)) {
-        if (FcitxCandidateWordGoNextPage(cand_list))
-            *ret_val = IRV_DISPLAY_MESSAGE;
+    FcitxCandidateWord *cand_word;
+    if (FcitxHotkeyIsHotKey(sym, state, clipboard->config.next_word)) {
+        cand_word = ClipboardClearCurrentFocus(clipboard);
+        cand_word = FcitxCandidateWordGetNext(cand_list, cand_word);
+        if (!cand_word) {
+            FcitxCandidateWordSetPage(cand_list, 0);
+            cand_word = FcitxCandidateWordGetFirst(cand_list);
+        } else {
+            FcitxCandidateWordSetFocus(
+                cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state, clipboard->config.prev_word)) {
+        cand_word = ClipboardClearCurrentFocus(clipboard);
+        cand_word = FcitxCandidateWordGetPrev(cand_list, cand_word);
+        if (!cand_word) {
+            FcitxCandidateWordSetPage(
+                cand_list, FcitxCandidateWordPageCount(cand_list) - 1);
+            cand_word = FcitxCandidateWordGetLast(cand_list);
+        } else {
+            FcitxCandidateWordSetFocus(
+                cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state, _prev_page_key(instance, fc))) {
+        cand_word = ClipboardClearCurrentFocus(clipboard);
+        if (!FcitxCandidateWordGoPrevPage(cand_list)) {
+            _set_cand_word_focus(cand_word);
+            *ret_val = IRV_DO_NOTHING;
+            return true;
+        }
+        cand_word = FcitxCandidateWordGetCurrentWindow(cand_list) +
+            FcitxCandidateWordGetCurrentWindowSize(cand_list) - 1;
+    } else if (FcitxHotkeyIsHotKey(sym, state, _next_page_key(instance, fc))) {
+        cand_word = ClipboardClearCurrentFocus(clipboard);
+        if (!FcitxCandidateWordGoNextPage(cand_list)) {
+            _set_cand_word_focus(cand_word);
+            *ret_val = IRV_DO_NOTHING;
+            return true;
+        }
+        cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
     } else if ((key = FcitxCandidateWordCheckChooseKey(cand_list,
                                                        sym, state)) >= 0) {
         *ret_val = FcitxCandidateWordChooseByIndex(cand_list, key);
+        return true;
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
-        if (FcitxCandidateWordPageCount(cand_list) != 0)
+        cand_word = FcitxCandidateWordGetByTotalIndex(cand_list,
+                                                      clipboard->cur_focus);
+        if (!(cand_word && _check_and_clear_cand_word(cand_word))) {
             *ret_val = FcitxCandidateWordChooseByIndex(cand_list, 0);
+        }
+        *ret_val = FcitxCandidateWordChooseByTotalIndex(cand_list,
+                                                        clipboard->cur_focus);
+        return true;
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
         *ret_val = IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
-    }
-    if (*ret_val == IRV_TO_PROCESS)
+        return true;
+    } else {
         *ret_val = IRV_DO_NOTHING;
+        return true;
+    }
+
+    _set_cand_word_focus(cand_word);
+    clipboard->cur_focus = FcitxCandidateWordGetIndex(cand_list, cand_word);
+    *ret_val = IRV_FLAG_UPDATE_INPUT_WINDOW;
     return true;
 }
 
@@ -314,6 +410,7 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
     if (!FcitxHotkeyIsHotKey(sym, state, config->trigger_key))
         return false;
     clipboard->active = true;
+    clipboard->cur_focus = 0;
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
     FcitxGlobalConfig *gconfig = FcitxInstanceGetGlobalConfig(instance);
     int i;
@@ -365,6 +462,7 @@ ClipboardReset(void *arg)
 {
     FcitxClipboard *clipboard = arg;
     clipboard->active = false;
+    clipboard->cur_focus = 0;
 }
 
 static void*

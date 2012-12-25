@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-25 08:47-0500\n"
+"POT-Creation-Date: 2012-12-25 12:07-0500\n"
 "PO-Revision-Date: 2012-12-17 23:45-0500\n"
 "Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
@@ -532,6 +532,8 @@ msgstr "清除局部输入法"
 #: src/module/clipboard/fcitx-clipboard.desc:27
 #: src/module/clipboard/fcitx-clipboard.desc:34
 #: src/module/clipboard/fcitx-clipboard.desc:44
+#: src/module/clipboard/fcitx-clipboard.desc:50
+#: src/module/clipboard/fcitx-clipboard.desc:55
 msgid "Clipboard"
 msgstr "剪贴板"
 
@@ -1659,6 +1661,7 @@ msgid "Native"
 msgstr "原生"
 
 #: src/im/keyboard/fcitx-keyboard.desc:29
+#: src/module/clipboard/fcitx-clipboard.desc:58
 #: src/module/quickphrase/fcitx-quickphrase.desc:48
 msgid "Next Candidate Word"
 msgstr "下一个候选词"
@@ -1896,6 +1899,7 @@ msgid "Prev Page Icon"
 msgstr "上一页图标"
 
 #: src/im/keyboard/fcitx-keyboard.desc:24
+#: src/module/clipboard/fcitx-clipboard.desc:53
 #: src/module/quickphrase/fcitx-quickphrase.desc:43
 msgid "Previous Candidate Word"
 msgstr "上一个候选词"
@@ -2119,7 +2123,7 @@ msgstr "选择局部输入法："
 msgid "Select specific input method via keyboard"
 msgstr "通过键盘选择特定的输入法"
 
-#: src/module/clipboard/clipboard.c:351
+#: src/module/clipboard/clipboard.c:447
 msgid "Select to paste"
 msgstr "选择以粘贴"
 

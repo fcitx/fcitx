@@ -46,6 +46,8 @@ typedef struct {
     ClipboardChooseModifier choose_modifier;
     boolean use_primary;
     boolean ignore_blank;
+    FcitxHotkey next_word[2];
+    FcitxHotkey prev_word[2];
 } FcitxClipboardConfig;
 
 typedef struct {
@@ -66,6 +68,7 @@ typedef struct {
     unsigned int x11_primary_notify_id;
     unsigned int x11_clipboard_notify_id;
 // #endif
+    int cur_focus;
 } FcitxClipboard;
 
 void ClipboardSetPrimary(FcitxClipboard *clipboard,

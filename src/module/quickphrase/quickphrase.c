@@ -535,7 +535,6 @@ _set_cand_word_focus(FcitxCandidateWord *cand_word)
         MSG_CANDIATE_CURSOR;
 }
 
-
 static INPUT_RETURN_VALUE
 QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
 {
