@@ -438,6 +438,13 @@ FcitxCandidateWord* FcitxCandidateWordGetNext(FcitxCandidateWordList* candList, 
     return (FcitxCandidateWord*) utarray_next(&candList->candWords, candWord);
 }
 
+FCITX_EXPORT_API FcitxCandidateWord*
+FcitxCandidateWordGetPrev(FcitxCandidateWordList *candList,
+                          FcitxCandidateWord *candWord)
+{
+    return utarray_prev(&candList->candWords, candWord);
+}
+
 FCITX_EXPORT_API
 int
 FcitxCandidateWordCheckChooseKey(FcitxCandidateWordList *candList,

@@ -37,5 +37,15 @@ Description=Maximum hint length
 LongDescription=Maximum length of spell hint list for Quick Phrase
 Advance=True
 
+[QuickPhrase/PrevWord]
+Type=Hotkey
+DefaultValue=SHIFT_TAB
+Description=Previous Candidate Word
+
+[QuickPhrase/NextWord]
+Type=Hotkey
+DefaultValue=TAB
+Description=Next Candidate Word
+
 [DescriptionFile]
 LocaleDomain=fcitx

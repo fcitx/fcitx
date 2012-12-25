@@ -500,7 +500,18 @@ extern "C" {
      * @param candWord current candidate word
      * @return FcitxCandidateWord*
      **/
-    FcitxCandidateWord* FcitxCandidateWordGetNext(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
+    FcitxCandidateWord* FcitxCandidateWordGetNext(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
+
+    /**
+     * get previous candidate word
+     *
+     * @param candList candidate word list
+     * @param candWord current candidate word
+     * @return FcitxCandidateWord*
+     *
+     * @since 4.2.7
+     **/
+    FcitxCandidateWord *FcitxCandidateWordGetPrev(FcitxCandidateWordList *candList, FcitxCandidateWord *candWord);
 
     /**
      * check is choose key or not, if so, return the choose index

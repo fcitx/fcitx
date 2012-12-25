@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-17 23:44-0500\n"
+"POT-Creation-Date: 2012-12-25 08:47-0500\n"
 "PO-Revision-Date: 2012-12-17 23:45-0500\n"
 "Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
@@ -81,7 +81,7 @@ msgstr ""
 msgid "/XIM"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1593
+#: src/lib/fcitx/ime.c:1594
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -109,7 +109,7 @@ msgstr "<专用区>"
 msgid "<not assigned>"
 msgstr "<未指派>"
 
-#: src/im/keyboard/fcitx-keyboard.desc:33
+#: src/im/keyboard/fcitx-keyboard.desc:43
 msgid ""
 "A different value from the global one may be useful when using horizontal "
 "candidate list"
@@ -187,7 +187,7 @@ msgstr "添加词组"
 msgid "Add Unicode Typing Support"
 msgstr "添加 Unicode 输入支持"
 
-#: src/im/keyboard/fcitx-keyboard.desc:44
+#: src/im/keyboard/fcitx-keyboard.desc:54
 msgid "Add current input buffer to user dictionary"
 msgstr "当前输入内容加入用户词典"
 
@@ -634,11 +634,11 @@ msgstr "方便地输入英文或用户定义的码表"
 msgid "Convert Simplified Chinese To Traditional Chinese"
 msgstr "简体中文转换为繁体中文"
 
-#: src/module/chttrans/chttrans.c:97 src/module/chttrans/chttrans.c:128
+#: src/module/chttrans/chttrans.c:137 src/module/chttrans/chttrans.c:173
 msgid "Convert to Simplified Chinese"
 msgstr "转换为简体中文"
 
-#: src/module/chttrans/chttrans.c:97 src/module/chttrans/chttrans.c:128
+#: src/module/chttrans/chttrans.c:137 src/module/chttrans/chttrans.c:173
 msgid "Convert to Traditional Chinese"
 msgstr "转换为繁体中文"
 
@@ -809,6 +809,10 @@ msgstr "启用输入法间切换"
 msgid "Enabled"
 msgstr "启用"
 
+#: src/module/chttrans/fcitx-chttrans.desc:17
+msgid "Enabled state for im"
+msgstr ""
+
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
 msgid "Enchance pinyin input in Fcitx"
 msgstr "增强 Fcitx 的拼音输入"
@@ -841,7 +845,9 @@ msgstr "枚举选项个数需要大于0"
 msgid ""
 "Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
 "you have exported it incorrectly in any of your init files."
-msgstr "环境变量 ${1} 的值被设为了 \"${2}\" 而不是 \"${3}\". 请检查您是否在某个初始化文件中错误的设置了它的值."
+msgstr ""
+"环境变量 ${1} 的值被设为了 \"${2}\" 而不是 \"${3}\". 请检查您是否在某个初始化"
+"文件中错误的设置了它的值."
 
 #: data/script/fcitx-diagnose.sh:489
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
@@ -1304,7 +1310,7 @@ msgstr "输入字体大小"
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-#: src/lib/fcitx/ime.c:1499 data/fcitx-autostart.desktop.in:3
+#: src/lib/fcitx/ime.c:1500 data/fcitx-autostart.desktop.in:3
 #: data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "输入法"
@@ -1325,7 +1331,7 @@ msgstr "输入法相关的环境变量: "
 msgid "Input Methods:"
 msgstr "输入法:"
 
-#: src/lib/fcitx/ime.c:1590
+#: src/lib/fcitx/ime.c:1591
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -1396,9 +1402,11 @@ msgstr "软键盘按键文字颜色"
 #: src/im/keyboard/fcitx-keyboard.desc:1 src/im/keyboard/fcitx-keyboard.desc:6
 #: src/im/keyboard/fcitx-keyboard.desc:16
 #: src/im/keyboard/fcitx-keyboard.desc:21
-#: src/im/keyboard/fcitx-keyboard.desc:27
-#: src/im/keyboard/fcitx-keyboard.desc:36
-#: src/im/keyboard/fcitx-keyboard.desc:41
+#: src/im/keyboard/fcitx-keyboard.desc:26
+#: src/im/keyboard/fcitx-keyboard.desc:31
+#: src/im/keyboard/fcitx-keyboard.desc:37
+#: src/im/keyboard/fcitx-keyboard.desc:46
+#: src/im/keyboard/fcitx-keyboard.desc:51
 msgid "Keyboard"
 msgstr "键盘"
 
@@ -1564,7 +1572,7 @@ msgstr "拼写提示候选词最大个数"
 msgid "Maximum length of each candidate word"
 msgstr "每个候选词最大长度"
 
-#: src/im/keyboard/fcitx-keyboard.desc:32
+#: src/im/keyboard/fcitx-keyboard.desc:42
 msgid "Maximum length of spell hint list"
 msgstr "拼写提示候选词最大个数"
 
@@ -1604,7 +1612,7 @@ msgstr "迁移老文件路径到新文件路径"
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
 msgstr "最小触发笔画输入的输入长度(设为-1禁用笔画输入)"
 
-#: src/im/keyboard/fcitx-keyboard.desc:25
+#: src/im/keyboard/fcitx-keyboard.desc:35
 msgid "Minimum length to trigger word hint"
 msgstr "最小触发单词提示长度"
 
@@ -1649,6 +1657,11 @@ msgstr "显示于用户界面中的名称"
 #: src/module/chttrans/fcitx-chttrans.desc:4
 msgid "Native"
 msgstr "原生"
+
+#: src/im/keyboard/fcitx-keyboard.desc:29
+#: src/module/quickphrase/fcitx-quickphrase.desc:48
+msgid "Next Candidate Word"
+msgstr "下一个候选词"
 
 #: data/config.desc:107
 msgid "Next Page"
@@ -1828,8 +1841,8 @@ msgid ""
 "Please set environment variable ${env_name} to \"${value}\" using the tool "
 "your distribution provides or add ${1} to your ${2}. See ${link}."
 msgstr ""
-"请使用您发行版提供的工具将环境变量 ${env_name} 设为 \"${value}\" 或者将 ${1} 添"
-"加到您的 ${2} 中. 参见 ${link}."
+"请使用您发行版提供的工具将环境变量 ${env_name} 设为 \"${value}\" 或者将 ${1} "
+"添加到您的 ${2} 中. 参见 ${link}."
 
 #: src/ui/classic/skin.desc:165
 msgid "Position or offset of LookupTable"
@@ -1857,7 +1870,7 @@ msgstr "按下 1 删除常用字表中的 %s (ESC 取消)"
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
 
-#: src/module/autoeng/AutoEng.c:582 src/module/quickphrase/quickphrase.c:413
+#: src/module/autoeng/AutoEng.c:582 src/module/quickphrase/quickphrase.c:418
 msgid "Press Enter to input text"
 msgstr "按下回车输入文本"
 
@@ -1881,6 +1894,11 @@ msgstr "上一页"
 #: src/ui/classic/skin.desc:185
 msgid "Prev Page Icon"
 msgstr "上一页图标"
+
+#: src/im/keyboard/fcitx-keyboard.desc:24
+#: src/module/quickphrase/fcitx-quickphrase.desc:43
+msgid "Previous Candidate Word"
+msgstr "上一个候选词"
 
 #: data/inputmethod.desc:15
 msgid "Priority"
@@ -1943,7 +1961,7 @@ msgstr "快速输入编辑器"
 msgid "Quick Phrase List"
 msgstr "快速输入列表"
 
-#: src/module/quickphrase/quickphrase.c:335
+#: src/module/quickphrase/quickphrase.c:340
 msgid "Quick Phrase: "
 msgstr "快速输入: "
 
@@ -1952,6 +1970,8 @@ msgstr "快速输入: "
 #: src/module/quickphrase/fcitx-quickphrase.desc:15
 #: src/module/quickphrase/fcitx-quickphrase.desc:25
 #: src/module/quickphrase/fcitx-quickphrase.desc:31
+#: src/module/quickphrase/fcitx-quickphrase.desc:40
+#: src/module/quickphrase/fcitx-quickphrase.desc:45
 msgid "QuickPhrase"
 msgstr "快速输入"
 
@@ -2245,7 +2265,7 @@ msgstr "皮肤托盘图标设置"
 msgid "Space Line Color"
 msgstr "分隔线颜色"
 
-#: src/module/quickphrase/quickphrase.c:245
+#: src/module/quickphrase/quickphrase.c:250
 #, c-format
 msgid "Space for %s Enter for %s"
 msgstr "空格输入 %s 回车输入 %s"
@@ -2416,7 +2436,7 @@ msgstr "切换输入法"
 msgid "Toggle Remind"
 msgstr "切换联想"
 
-#: src/module/chttrans/chttrans.c:98 src/module/chttrans/chttrans.c:129
+#: src/module/chttrans/chttrans.c:138 src/module/chttrans/chttrans.c:174
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "切换简繁转换"
 
@@ -2442,6 +2462,7 @@ msgstr "简繁转换引擎"
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
+#: src/module/chttrans/fcitx-chttrans.desc:14
 msgid "TraditionalChinese"
 msgstr "繁体中文"
 
@@ -2547,7 +2568,7 @@ msgstr "使用 V 来触发快速输入"
 msgid "Use Wide Punctuation"
 msgstr "使用全角标点"
 
-#: src/im/keyboard/fcitx-keyboard.desc:39
+#: src/im/keyboard/fcitx-keyboard.desc:49
 msgid "Use enter to commit the existing string"
 msgstr "使用回车确认已输入字符串"
 
@@ -2726,7 +2747,7 @@ msgstr "可执行文件:"
 msgid "here"
 msgstr "这里"
 
-#: src/lib/fcitx/ime.c:1596
+#: src/lib/fcitx/ime.c:1597
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 

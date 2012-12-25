@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-17 23:44-0500\n"
+"POT-Creation-Date: 2012-12-25 08:47-0500\n"
 "PO-Revision-Date: 2012-12-08 14:06+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/fcitx/"
@@ -79,7 +79,7 @@ msgstr ""
 msgid "/XIM"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1593
+#: src/lib/fcitx/ime.c:1594
 msgid "/min  Time Used: "
 msgstr "/min Verwendete Zeit:"
 
@@ -107,7 +107,7 @@ msgstr ""
 msgid "<not assigned>"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:33
+#: src/im/keyboard/fcitx-keyboard.desc:43
 msgid ""
 "A different value from the global one may be useful when using horizontal "
 "candidate list"
@@ -185,7 +185,7 @@ msgstr ""
 msgid "Add Unicode Typing Support"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:44
+#: src/im/keyboard/fcitx-keyboard.desc:54
 msgid "Add current input buffer to user dictionary"
 msgstr ""
 
@@ -635,11 +635,11 @@ msgstr ""
 msgid "Convert Simplified Chinese To Traditional Chinese"
 msgstr "Konvertieren Kurz- zu Langzeichen"
 
-#: src/module/chttrans/chttrans.c:97 src/module/chttrans/chttrans.c:128
+#: src/module/chttrans/chttrans.c:137 src/module/chttrans/chttrans.c:173
 msgid "Convert to Simplified Chinese"
 msgstr ""
 
-#: src/module/chttrans/chttrans.c:97 src/module/chttrans/chttrans.c:128
+#: src/module/chttrans/chttrans.c:137 src/module/chttrans/chttrans.c:173
 msgid "Convert to Traditional Chinese"
 msgstr ""
 
@@ -810,6 +810,10 @@ msgstr ""
 
 #: data/addon.desc:27
 msgid "Enabled"
+msgstr ""
+
+#: src/module/chttrans/fcitx-chttrans.desc:17
+msgid "Enabled state for im"
 msgstr ""
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
@@ -1308,7 +1312,7 @@ msgstr "Schriftgröße Eingabe"
 msgid "Input Message Color"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1499 data/fcitx-autostart.desktop.in:3
+#: src/lib/fcitx/ime.c:1500 data/fcitx-autostart.desktop.in:3
 #: data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Eingabemethode"
@@ -1330,7 +1334,7 @@ msgstr ""
 msgid "Input Methods:"
 msgstr "Eingabemethode"
 
-#: src/lib/fcitx/ime.c:1590
+#: src/lib/fcitx/ime.c:1591
 msgid "Input Speed: "
 msgstr "Eingabegeschwindigkeit"
 
@@ -1402,9 +1406,11 @@ msgstr "Icon für Virtuelle Tastatur"
 #: src/im/keyboard/fcitx-keyboard.desc:1 src/im/keyboard/fcitx-keyboard.desc:6
 #: src/im/keyboard/fcitx-keyboard.desc:16
 #: src/im/keyboard/fcitx-keyboard.desc:21
-#: src/im/keyboard/fcitx-keyboard.desc:27
-#: src/im/keyboard/fcitx-keyboard.desc:36
-#: src/im/keyboard/fcitx-keyboard.desc:41
+#: src/im/keyboard/fcitx-keyboard.desc:26
+#: src/im/keyboard/fcitx-keyboard.desc:31
+#: src/im/keyboard/fcitx-keyboard.desc:37
+#: src/im/keyboard/fcitx-keyboard.desc:46
+#: src/im/keyboard/fcitx-keyboard.desc:51
 msgid "Keyboard"
 msgstr ""
 
@@ -1571,7 +1577,7 @@ msgstr ""
 msgid "Maximum length of each candidate word"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:32
+#: src/im/keyboard/fcitx-keyboard.desc:42
 msgid "Maximum length of spell hint list"
 msgstr ""
 
@@ -1611,7 +1617,7 @@ msgstr ""
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:25
+#: src/im/keyboard/fcitx-keyboard.desc:35
 msgid "Minimum length to trigger word hint"
 msgstr ""
 
@@ -1656,6 +1662,12 @@ msgstr ""
 #: src/module/chttrans/fcitx-chttrans.desc:4
 msgid "Native"
 msgstr ""
+
+#: src/im/keyboard/fcitx-keyboard.desc:29
+#: src/module/quickphrase/fcitx-quickphrase.desc:48
+#, fuzzy
+msgid "Next Candidate Word"
+msgstr "Anzahl Zeichenvorschläge"
 
 #: data/config.desc:107
 msgid "Next Page"
@@ -1863,7 +1875,7 @@ msgstr ""
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/module/autoeng/AutoEng.c:582 src/module/quickphrase/quickphrase.c:413
+#: src/module/autoeng/AutoEng.c:582 src/module/quickphrase/quickphrase.c:418
 msgid "Press Enter to input text"
 msgstr ""
 
@@ -1888,6 +1900,12 @@ msgstr ""
 #: src/ui/classic/skin.desc:185
 msgid "Prev Page Icon"
 msgstr "Icon für vorherige Seite Kandidaten"
+
+#: src/im/keyboard/fcitx-keyboard.desc:24
+#: src/module/quickphrase/fcitx-quickphrase.desc:43
+#, fuzzy
+msgid "Previous Candidate Word"
+msgstr "Farbe erster Kandidat"
 
 #: data/inputmethod.desc:15
 msgid "Priority"
@@ -1950,7 +1968,7 @@ msgstr ""
 msgid "Quick Phrase List"
 msgstr ""
 
-#: src/module/quickphrase/quickphrase.c:335
+#: src/module/quickphrase/quickphrase.c:340
 msgid "Quick Phrase: "
 msgstr ""
 
@@ -1959,6 +1977,8 @@ msgstr ""
 #: src/module/quickphrase/fcitx-quickphrase.desc:15
 #: src/module/quickphrase/fcitx-quickphrase.desc:25
 #: src/module/quickphrase/fcitx-quickphrase.desc:31
+#: src/module/quickphrase/fcitx-quickphrase.desc:40
+#: src/module/quickphrase/fcitx-quickphrase.desc:45
 msgid "QuickPhrase"
 msgstr ""
 
@@ -2252,7 +2272,7 @@ msgstr "Oberfläche Trayicons"
 msgid "Space Line Color"
 msgstr ""
 
-#: src/module/quickphrase/quickphrase.c:245
+#: src/module/quickphrase/quickphrase.c:250
 #, c-format
 msgid "Space for %s Enter for %s"
 msgstr ""
@@ -2419,7 +2439,7 @@ msgstr ""
 msgid "Toggle Remind"
 msgstr ""
 
-#: src/module/chttrans/chttrans.c:98 src/module/chttrans/chttrans.c:129
+#: src/module/chttrans/chttrans.c:138 src/module/chttrans/chttrans.c:174
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr ""
 
@@ -2445,6 +2465,7 @@ msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
+#: src/module/chttrans/fcitx-chttrans.desc:14
 msgid "TraditionalChinese"
 msgstr "Chinesisch Langform"
 
@@ -2550,7 +2571,7 @@ msgstr ""
 msgid "Use Wide Punctuation"
 msgstr "Verwende Vollbreite Form der Punktuation"
 
-#: src/im/keyboard/fcitx-keyboard.desc:39
+#: src/im/keyboard/fcitx-keyboard.desc:49
 msgid "Use enter to commit the existing string"
 msgstr ""
 
@@ -2726,7 +2747,7 @@ msgstr ""
 msgid "here"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1596
+#: src/lib/fcitx/ime.c:1597
 msgid "min Num of Characters: "
 msgstr "min Anzahl Zeichen:"
 

@@ -598,20 +598,24 @@ FcitxKeyboardHandleFocus(FcitxKeyboard *keyboard, FcitxKeySym sym,
     FcitxGlobalConfig *fc = FcitxInstanceGetGlobalConfig(instance);
     if (FcitxHotkeyIsHotKey(sym, state, keyboard->config.nextWord)) {
         cand_word = FcitxKeyboardClearCurrentFocus(keyboard);
-        cand_word = FcitxCandidateWordGetCurrentWindowNext(
-            cand_list, cand_word);
+        cand_word = FcitxCandidateWordGetNext(cand_list, cand_word);
         if (!cand_word) {
             FcitxCandidateWordSetPage(cand_list, 0);
             cand_word = FcitxCandidateWordGetFirst(cand_list);
+        } else {
+            FcitxCandidateWordSetFocus(
+                cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
         }
     } else if (FcitxHotkeyIsHotKey(sym, state, keyboard->config.prevWord)) {
         cand_word = FcitxKeyboardClearCurrentFocus(keyboard);
-        cand_word = FcitxCandidateWordGetCurrentWindowPrev(
-            cand_list, cand_word);
+        cand_word = FcitxCandidateWordGetPrev(cand_list, cand_word);
         if (!cand_word) {
             FcitxCandidateWordSetPage(
                 cand_list, FcitxCandidateWordPageCount(cand_list) - 1);
             cand_word = FcitxCandidateWordGetLast(cand_list);
+        } else {
+            FcitxCandidateWordSetFocus(
+                cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
         }
     } else if (FcitxHotkeyIsHotKey(sym, state, _prev_page_key(instance, fc))) {
         cand_word = FcitxKeyboardClearCurrentFocus(keyboard);
@@ -627,12 +631,11 @@ FcitxKeyboardHandleFocus(FcitxKeyboard *keyboard, FcitxKeySym sym,
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
         cand_word = FcitxCandidateWordGetByTotalIndex(cand_list,
                                                       keyboard->cur_focus);
-        if (_check_and_clear_cand_word(cand_word)) {
-            return FcitxCandidateWordChooseByTotalIndex(cand_list,
-                                                        keyboard->cur_focus);
-        } else {
+        if (!(cand_word && _check_and_clear_cand_word(cand_word))) {
             return FcitxCandidateWordChooseByIndex(cand_list, 0);
         }
+        return FcitxCandidateWordChooseByTotalIndex(cand_list,
+                                                    keyboard->cur_focus);
     } else {
         return IRV_TO_PROCESS;
     }
