@@ -37,5 +37,15 @@ DefaultValue=True
 Description=Add Extra space when selecting a candidate word
 Advance=True
 
+[Auto English/PrevWord]
+Type=Hotkey
+DefaultValue=SHIFT_TAB
+Description=Previous Candidate Word
+
+[Auto English/NextWord]
+Type=Hotkey
+DefaultValue=TAB
+Description=Next Candidate Word
+
 [DescriptionFile]
 LocaleDomain=fcitx

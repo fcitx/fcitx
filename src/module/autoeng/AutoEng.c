@@ -57,10 +57,12 @@ typedef struct {
     int maxHintLength;
     boolean selectAddSpace;
     int maxKeep;
+    FcitxHotkey prev_word[2];
+    FcitxHotkey next_word[2];
 } FcitxAutoEngConfig;
 
 typedef struct _FcitxAutoEngState {
-    UT_array* autoEng;
+    UT_array *autoEng;
     char *buf;
     int index;
     size_t buff_size;
@@ -85,6 +87,8 @@ CONFIG_BINDING_REGISTER("Auto English", "DisableSpell", disableSpell);
 CONFIG_BINDING_REGISTER("Auto English", "MaximumHintLength", maxHintLength);
 CONFIG_BINDING_REGISTER("Auto English", "MaximumKeep", maxKeep);
 CONFIG_BINDING_REGISTER("Auto English", "SelectAddSpace", selectAddSpace);
+CONFIG_BINDING_REGISTER("Auto English", "NextWord", next_word);
+CONFIG_BINDING_REGISTER("Auto English", "PrevWord", prev_word);
 CONFIG_BINDING_END();
 
 /**
@@ -296,16 +300,130 @@ void *AutoEngCreate(FcitxInstance *instance)
     return autoEngState;
 }
 
+static inline const FcitxHotkey*
+_prev_page_key(FcitxInstance *instance, FcitxGlobalConfig *fc)
+{
+    const FcitxHotkey *prev = FcitxInstanceGetContextHotkey(
+        instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
+    if (!prev)
+        return fc->hkPrevPage;
+    return prev;
+}
+
+static inline const FcitxHotkey*
+_next_page_key(FcitxInstance *instance, FcitxGlobalConfig *fc)
+{
+    const FcitxHotkey *next = FcitxInstanceGetContextHotkey(
+        instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
+    if (!next)
+        return fc->hkNextPage;
+    return next;
+}
+
+static inline boolean
+_check_and_clear_cand_word(FcitxCandidateWord *cand_word)
+{
+    if ((cand_word->wordType & MSG_REGULAR_MASK) == MSG_CANDIATE_CURSOR) {
+        cand_word->wordType = MSG_OTHER;
+        return true;
+    }
+    return false;
+}
+
+static FcitxCandidateWord*
+_clear_current_focus(FcitxInstance *instance)
+{
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
+    FcitxCandidateWord *res = NULL;
+    FcitxCandidateWord *cand_word;
+    for (cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
+         cand_word;cand_word = FcitxCandidateWordGetCurrentWindowNext(
+             cand_list, cand_word)) {
+        if (_check_and_clear_cand_word(cand_word)) {
+            res = cand_word;
+        }
+    }
+    if (!res)
+        return FcitxCandidateWordGetCurrentWindow(cand_list);
+    return res;
+}
+
+static inline void
+_set_cand_word_focus(FcitxCandidateWord *cand_word)
+{
+    cand_word->wordType = (cand_word->wordType & ~MSG_REGULAR_MASK) |
+        MSG_CANDIATE_CURSOR;
+}
+
 static INPUT_RETURN_VALUE
 AutoEngCheckSelect(FcitxAutoEngState *autoEngState,
                    FcitxKeySym sym, unsigned int state)
 {
-    FcitxCandidateWordList *candList = FcitxInputStateGetCandidateList(
+    FcitxInstance *instance = autoEngState->owner;
+    FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(
         FcitxInstanceGetInputState(autoEngState->owner));
-    int iKey = FcitxCandidateWordCheckChooseKey(candList, sym, state);
-    if (iKey >= 0)
-        return FcitxCandidateWordChooseByIndex(candList, iKey);
-    return 0;
+    if (!FcitxCandidateWordGetListSize(cand_list))
+        return IRV_TO_PROCESS;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    FcitxGlobalConfig *fc = FcitxInstanceGetGlobalConfig(instance);
+    FcitxAutoEngConfig *config = &autoEngState->config;
+    int key;
+    FcitxCandidateWord *cand_word;
+    if (FcitxHotkeyIsHotKey(sym, state, config->next_word)) {
+        cand_word = _clear_current_focus(instance);
+        cand_word = FcitxCandidateWordGetNext(cand_list, cand_word);
+        if (!cand_word) {
+            FcitxCandidateWordSetPage(cand_list, 0);
+            cand_word = FcitxCandidateWordGetFirst(cand_list);
+        } else {
+            FcitxCandidateWordSetFocus(
+                cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state, config->prev_word)) {
+        cand_word = _clear_current_focus(instance);
+        cand_word = FcitxCandidateWordGetPrev(cand_list, cand_word);
+        if (!cand_word) {
+            FcitxCandidateWordSetPage(
+                cand_list, FcitxCandidateWordPageCount(cand_list) - 1);
+            cand_word = FcitxCandidateWordGetLast(cand_list);
+        } else {
+            FcitxCandidateWordSetFocus(
+                cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state, _prev_page_key(instance, fc))) {
+        cand_word = _clear_current_focus(instance);
+        if (!FcitxCandidateWordGoPrevPage(cand_list)) {
+            _set_cand_word_focus(cand_word);
+            return IRV_TO_PROCESS;
+        }
+        cand_word = FcitxCandidateWordGetCurrentWindow(cand_list) +
+            FcitxCandidateWordGetCurrentWindowSize(cand_list) - 1;
+    } else if (FcitxHotkeyIsHotKey(sym, state, _next_page_key(instance, fc))) {
+        cand_word = _clear_current_focus(instance);
+        if (!FcitxCandidateWordGoNextPage(cand_list)) {
+            _set_cand_word_focus(cand_word);
+            return IRV_TO_PROCESS;
+        }
+        cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
+    } else if ((key = FcitxCandidateWordCheckChooseKey(cand_list,
+                                                       sym, state)) >= 0) {
+        return FcitxCandidateWordChooseByIndex(cand_list, key);
+    } else {
+        return IRV_TO_PROCESS;
+    }
+    _set_cand_word_focus(cand_word);
+    AutoEngSetBuff(autoEngState, cand_word->strWord, '\0');
+    FcitxMessages *client_preedit = FcitxInputStateGetClientPreedit(input);
+    FcitxMessages *preedit = FcitxInputStateGetPreedit(input);
+    FcitxMessagesSetMessageCount(client_preedit, 0);
+    FcitxMessagesAddMessageStringsAtLast(client_preedit, MSG_INPUT,
+                                         autoEngState->buf);
+    FcitxMessagesSetMessageCount(preedit, 0);
+    FcitxMessagesAddMessageStringsAtLast(preedit, MSG_INPUT,
+                                         autoEngState->buf);
+    FcitxInputStateSetClientCursorPos(input, autoEngState->index);
+    return IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
 
 static void
@@ -329,46 +447,45 @@ static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
         return false;
 
     FcitxKeySym keymain = FcitxHotkeyPadToMain(sym);
-    if (autoEngState->active) {
-        if ((*retval = AutoEngCheckSelect(autoEngState, sym, state))) {
-            return true;
-        } else if (FcitxHotkeyIsHotKeySimple(keymain, state)) {
-            *retval = AutoEngPushKey(autoEngState, keymain);
-        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)) {
-            AutoEngSetBuffLen(autoEngState, --autoEngState->index);
-            if (autoEngState->index == 0) {
-                ResetAutoEng(autoEngState);
-                *retval = IRV_CLEAN;
-            } else {
+    if (!autoEngState->active) {
+        if (FcitxHotkeyIsHotKeySimple(sym, state)) {
+            AutoEngSetBuff(autoEngState,
+                           FcitxInputStateGetRawInputBuffer(input), keymain);
+            if (SwitchToEng(autoEngState, autoEngState->buf)) {
                 *retval = IRV_DISPLAY_MESSAGE;
+                FcitxInputStateSetShowCursor(input, false);
+                autoEngState->active = true;
+                ShowAutoEngMessage(autoEngState, retval);
+                return true;
             }
-        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
-            AutoEngCommit(autoEngState);
-            ResetAutoEng(autoEngState);
-            *retval = IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
-        } else if (FcitxHotkeyIsHotkeyCursorMove(sym, state)) {
-            *retval = IRV_DO_NOTHING;
-            return true;
-        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
-            *retval = IRV_CLEAN;
-            return true;
         }
-        ShowAutoEngMessage(autoEngState, retval);
+        return false;
+    }
+    if ((*retval = AutoEngCheckSelect(autoEngState, sym, state))) {
+        return true;
+    } else if (FcitxHotkeyIsHotKeySimple(keymain, state)) {
+        *retval = AutoEngPushKey(autoEngState, keymain);
+    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)) {
+        AutoEngSetBuffLen(autoEngState, --autoEngState->index);
+        if (autoEngState->index == 0) {
+            ResetAutoEng(autoEngState);
+            *retval = IRV_CLEAN;
+        } else {
+            *retval = IRV_DISPLAY_MESSAGE;
+        }
+    } else if (FcitxHotkeyIsHotkeyCursorMove(sym, state)) {
+        *retval = IRV_DO_NOTHING;
+        return true;
+    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
+        AutoEngCommit(autoEngState);
+        ResetAutoEng(autoEngState);
+        *retval = IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
+    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
+        *retval = IRV_CLEAN;
         return true;
     }
-    if (FcitxHotkeyIsHotKeySimple(sym, state)) {
-        AutoEngSetBuff(autoEngState, FcitxInputStateGetRawInputBuffer(input),
-                       keymain);
-
-        if (SwitchToEng(autoEngState, autoEngState->buf)) {
-            *retval = IRV_DISPLAY_MESSAGE;
-            FcitxInputStateSetShowCursor(input, false);
-            autoEngState->active = true;
-            ShowAutoEngMessage(autoEngState, retval);
-            return true;
-        }
-    }
-    return false;
+    ShowAutoEngMessage(autoEngState, retval);
+    return true;
 }
 
 boolean PostInputProcessAutoEng(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)

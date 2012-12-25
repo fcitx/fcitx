@@ -68,7 +68,6 @@ typedef struct {
     unsigned int x11_primary_notify_id;
     unsigned int x11_clipboard_notify_id;
 // #endif
-    int cur_focus;
 } FcitxClipboard;
 
 void ClipboardSetPrimary(FcitxClipboard *clipboard,

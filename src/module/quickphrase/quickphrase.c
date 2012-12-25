@@ -84,7 +84,6 @@ typedef struct {
     FcitxHotkey curTriggerKey[2];
     boolean useDupKeyInput;
     boolean append;
-    int cur_focus;
 } QuickPhraseState;
 
 typedef struct {
@@ -471,7 +470,6 @@ void QuickPhraseReset(void* arg)
     qpstate->buffer[0] = '\0';
     qpstate->useDupKeyInput = false;
     qpstate->append = false;
-    qpstate->cur_focus = 0;
     memset(qpstate->curTriggerKey, 0, sizeof(FcitxHotkey) * 2);
 }
 
@@ -506,9 +504,8 @@ _check_and_clear_cand_word(FcitxCandidateWord *cand_word)
 }
 
 static FcitxCandidateWord*
-QuickPhraseClearCurrentFocus(QuickPhraseState *qpstate)
+_clear_current_focus(FcitxInstance *instance)
 {
-    FcitxInstance *instance = qpstate->owner;
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
     FcitxCandidateWord *res = NULL;
@@ -520,9 +517,6 @@ QuickPhraseClearCurrentFocus(QuickPhraseState *qpstate)
             res = cand_word;
         }
     }
-    cand_word = FcitxCandidateWordGetByTotalIndex(cand_list,
-                                                  qpstate->cur_focus);
-    _check_and_clear_cand_word(cand_word);
     if (!res)
         return FcitxCandidateWordGetCurrentWindow(cand_list);
     return res;
@@ -548,7 +542,7 @@ QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
         return IRV_TO_PROCESS;
     FcitxCandidateWord *cand_word;
     if (FcitxHotkeyIsHotKey(sym, state, qpstate->config.nextWord)) {
-        cand_word = QuickPhraseClearCurrentFocus(qpstate);
+        cand_word = _clear_current_focus(instance);
         cand_word = FcitxCandidateWordGetNext(cand_list, cand_word);
         if (!cand_word) {
             FcitxCandidateWordSetPage(cand_list, 0);
@@ -558,7 +552,7 @@ QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
                 cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
         }
     } else if (FcitxHotkeyIsHotKey(sym, state, qpstate->config.prevWord)) {
-        cand_word = QuickPhraseClearCurrentFocus(qpstate);
+        cand_word = _clear_current_focus(instance);
         cand_word = FcitxCandidateWordGetPrev(cand_list, cand_word);
         if (!cand_word) {
             FcitxCandidateWordSetPage(
@@ -569,7 +563,7 @@ QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
                 cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
         }
     } else if (FcitxHotkeyIsHotKey(sym, state, _prev_page_key(instance, fc))) {
-        cand_word = QuickPhraseClearCurrentFocus(qpstate);
+        cand_word = _clear_current_focus(instance);
         if (!FcitxCandidateWordGoPrevPage(cand_list)) {
             _set_cand_word_focus(cand_word);
             return IRV_TO_PROCESS;
@@ -577,7 +571,7 @@ QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
         cand_word = FcitxCandidateWordGetCurrentWindow(cand_list) +
             FcitxCandidateWordGetCurrentWindowSize(cand_list) - 1;
     } else if (FcitxHotkeyIsHotKey(sym, state, _next_page_key(instance, fc))) {
-        cand_word = QuickPhraseClearCurrentFocus(qpstate);
+        cand_word = _clear_current_focus(instance);
         if (!FcitxCandidateWordGoNextPage(cand_list)) {
             _set_cand_word_focus(cand_word);
             return IRV_TO_PROCESS;
@@ -587,19 +581,14 @@ QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
                                                         state)) >= 0) {
         return FcitxCandidateWordChooseByIndex(cand_list, iKey);
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
-        cand_word = FcitxCandidateWordGetByTotalIndex(cand_list,
-                                                      qpstate->cur_focus);
-        if (!(cand_word && _check_and_clear_cand_word(cand_word))) {
-            return FcitxCandidateWordChooseByIndex(cand_list, 0);
-        }
-        return FcitxCandidateWordChooseByTotalIndex(cand_list,
-                                                    qpstate->cur_focus);
+        cand_word = _clear_current_focus(instance);
+        return FcitxCandidateWordChooseByTotalIndex(
+            cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
     } else {
         return IRV_TO_PROCESS;
     }
 
     _set_cand_word_focus(cand_word);
-    qpstate->cur_focus = FcitxCandidateWordGetIndex(cand_list, cand_word);
     return IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
 
@@ -650,7 +639,6 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
     int iLastQuickPhrase;
     int iFirstQuickPhrase;
     FcitxInstanceCleanInputWindowDown(qpstate->owner);
-    qpstate->cur_focus = 0;
     FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
     FcitxCandidateWordSetChooseAndModifier(
         candList, DIGIT_STR_CHOOSE, cmodtable[qpstate->config.chooseModifier]);

@@ -69,7 +69,6 @@ typedef struct _FcitxKeyboard {
     int lastLength;
     int dataSlot;
     int enUSRegistered;
-    int cur_focus;
 } FcitxKeyboard;
 
 typedef struct _FcitxKeyboardLayout {
