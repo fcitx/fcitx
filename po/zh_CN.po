@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-25 12:07-0500\n"
+"POT-Creation-Date: 2012-12-25 16:21-0500\n"
 "PO-Revision-Date: 2012-12-17 23:45-0500\n"
 "Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
@@ -306,6 +306,8 @@ msgstr "自动组词"
 #: src/module/autoeng/fcitx-autoeng.desc:17
 #: src/module/autoeng/fcitx-autoeng.desc:26
 #: src/module/autoeng/fcitx-autoeng.desc:34
+#: src/module/autoeng/fcitx-autoeng.desc:40
+#: src/module/autoeng/fcitx-autoeng.desc:45
 msgid "Auto English"
 msgstr "自动英文模式"
 
@@ -1661,6 +1663,7 @@ msgid "Native"
 msgstr "原生"
 
 #: src/im/keyboard/fcitx-keyboard.desc:29
+#: src/module/autoeng/fcitx-autoeng.desc:48
 #: src/module/clipboard/fcitx-clipboard.desc:58
 #: src/module/quickphrase/fcitx-quickphrase.desc:48
 msgid "Next Candidate Word"
@@ -1873,7 +1876,7 @@ msgstr "按下 1 删除常用字表中的 %s (ESC 取消)"
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
 
-#: src/module/autoeng/AutoEng.c:582 src/module/quickphrase/quickphrase.c:418
+#: src/module/autoeng/AutoEng.c:699 src/module/quickphrase/quickphrase.c:417
 msgid "Press Enter to input text"
 msgstr "按下回车输入文本"
 
@@ -1899,6 +1902,7 @@ msgid "Prev Page Icon"
 msgstr "上一页图标"
 
 #: src/im/keyboard/fcitx-keyboard.desc:24
+#: src/module/autoeng/fcitx-autoeng.desc:43
 #: src/module/clipboard/fcitx-clipboard.desc:53
 #: src/module/quickphrase/fcitx-quickphrase.desc:43
 msgid "Previous Candidate Word"
@@ -1965,7 +1969,7 @@ msgstr "快速输入编辑器"
 msgid "Quick Phrase List"
 msgstr "快速输入列表"
 
-#: src/module/quickphrase/quickphrase.c:340
+#: src/module/quickphrase/quickphrase.c:339
 msgid "Quick Phrase: "
 msgstr "快速输入: "
 
@@ -2123,7 +2127,7 @@ msgstr "选择局部输入法："
 msgid "Select specific input method via keyboard"
 msgstr "通过键盘选择特定的输入法"
 
-#: src/module/clipboard/clipboard.c:447
+#: src/module/clipboard/clipboard.c:437
 msgid "Select to paste"
 msgstr "选择以粘贴"
 
@@ -2269,7 +2273,7 @@ msgstr "皮肤托盘图标设置"
 msgid "Space Line Color"
 msgstr "分隔线颜色"
 
-#: src/module/quickphrase/quickphrase.c:250
+#: src/module/quickphrase/quickphrase.c:249
 #, c-format
 msgid "Space for %s Enter for %s"
 msgstr "空格输入 %s 回车输入 %s"
@@ -2456,7 +2460,7 @@ msgstr "切换来禁用或启用"
 msgid "Toggle the word hint"
 msgstr "切换单词提示"
 
-#: src/module/autoeng/AutoEng.c:462
+#: src/module/autoeng/AutoEng.c:579
 msgid "Too long item for AutoEng"
 msgstr "自动英文条目过长"
 

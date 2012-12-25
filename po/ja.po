@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-25 12:07-0500\n"
+"POT-Creation-Date: 2012-12-25 16:21-0500\n"
 "PO-Revision-Date: 2012-12-08 14:06+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
@@ -306,6 +306,8 @@ msgstr "フレーズを自動生成"
 #: src/module/autoeng/fcitx-autoeng.desc:17
 #: src/module/autoeng/fcitx-autoeng.desc:26
 #: src/module/autoeng/fcitx-autoeng.desc:34
+#: src/module/autoeng/fcitx-autoeng.desc:40
+#: src/module/autoeng/fcitx-autoeng.desc:45
 msgid "Auto English"
 msgstr ""
 
@@ -1664,6 +1666,7 @@ msgid "Native"
 msgstr "ネイティブ"
 
 #: src/im/keyboard/fcitx-keyboard.desc:29
+#: src/module/autoeng/fcitx-autoeng.desc:48
 #: src/module/clipboard/fcitx-clipboard.desc:58
 #: src/module/quickphrase/fcitx-quickphrase.desc:48
 #, fuzzy
@@ -1875,7 +1878,7 @@ msgstr ""
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/module/autoeng/AutoEng.c:582 src/module/quickphrase/quickphrase.c:418
+#: src/module/autoeng/AutoEng.c:699 src/module/quickphrase/quickphrase.c:417
 msgid "Press Enter to input text"
 msgstr ""
 
@@ -1901,6 +1904,7 @@ msgid "Prev Page Icon"
 msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.desc:24
+#: src/module/autoeng/fcitx-autoeng.desc:43
 #: src/module/clipboard/fcitx-clipboard.desc:53
 #: src/module/quickphrase/fcitx-quickphrase.desc:43
 #, fuzzy
@@ -1968,7 +1972,7 @@ msgstr ""
 msgid "Quick Phrase List"
 msgstr ""
 
-#: src/module/quickphrase/quickphrase.c:340
+#: src/module/quickphrase/quickphrase.c:339
 msgid "Quick Phrase: "
 msgstr ""
 
@@ -2126,7 +2130,7 @@ msgstr ""
 msgid "Select specific input method via keyboard"
 msgstr ""
 
-#: src/module/clipboard/clipboard.c:447
+#: src/module/clipboard/clipboard.c:437
 msgid "Select to paste"
 msgstr ""
 
@@ -2272,7 +2276,7 @@ msgstr "スキントレイアイコン"
 msgid "Space Line Color"
 msgstr ""
 
-#: src/module/quickphrase/quickphrase.c:250
+#: src/module/quickphrase/quickphrase.c:249
 #, c-format
 msgid "Space for %s Enter for %s"
 msgstr ""
@@ -2455,7 +2459,7 @@ msgstr "有効無効を切り替え"
 msgid "Toggle the word hint"
 msgstr ""
 
-#: src/module/autoeng/AutoEng.c:462
+#: src/module/autoeng/AutoEng.c:579
 msgid "Too long item for AutoEng"
 msgstr ""
 
