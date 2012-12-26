@@ -572,6 +572,27 @@ extern "C" {
 /** convinient string for candidate word */
 #define DIGIT_STR_CHOOSE "1234567890"
 
+    static inline void
+    FcitxCandidateWordSetType(FcitxCandidateWord *cand_word,
+                              FcitxMessageType type)
+    {
+        cand_word->wordType = (cand_word->wordType & ~MSG_REGULAR_MASK) | type;
+    }
+
+    static inline boolean
+    FcitxCandidateWordCheckFocus(FcitxCandidateWord *cand_word, boolean clear)
+    {
+        if ((cand_word->wordType & MSG_REGULAR_MASK) == MSG_CANDIATE_CURSOR) {
+            if (clear)
+                FcitxCandidateWordSetType(cand_word, MSG_OTHER);
+            return true;
+        }
+        return false;
+    }
+
+    FcitxCandidateWord *FcitxCandidateWordGetFocus(
+        FcitxCandidateWordList *cand_list, boolean clear);
+
 #ifdef __cplusplus
 }
 #endif

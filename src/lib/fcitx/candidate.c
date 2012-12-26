@@ -482,5 +482,21 @@ void FcitxCandidateWordSetOverridePaging(FcitxCandidateWordList* candList, boole
     candList->overrideDestroyNotify = destroyNotify;
 }
 
+FCITX_EXPORT_API FcitxCandidateWord*
+FcitxCandidateWordGetFocus(FcitxCandidateWordList *cand_list, boolean clear)
+{
+    FcitxCandidateWord *res = NULL;
+    FcitxCandidateWord *cand_word;
+    for (cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
+         cand_word;cand_word = FcitxCandidateWordGetCurrentWindowNext(
+             cand_list, cand_word)) {
+        if (FcitxCandidateWordCheckFocus(cand_word, clear)) {
+            res = cand_word;
+        }
+    }
+    if (!res)
+        return FcitxCandidateWordGetCurrentWindow(cand_list);
+    return res;
+}
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

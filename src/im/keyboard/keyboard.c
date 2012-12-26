@@ -520,35 +520,6 @@ static const FcitxHotkey FCITX_HYPHEN_APOS[2] = {
     {NULL, FcitxKey_apostrophe, FcitxKeyState_None}
 };
 
-static inline boolean
-_check_and_clear_cand_word(FcitxCandidateWord *cand_word)
-{
-    if ((cand_word->wordType & MSG_REGULAR_MASK) == MSG_CANDIATE_CURSOR) {
-        cand_word->wordType = MSG_OTHER;
-        return true;
-    }
-    return false;
-}
-
-static FcitxCandidateWord*
-_clear_current_focus(FcitxInstance *instance)
-{
-    FcitxInputState *input = FcitxInstanceGetInputState(instance);
-    FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
-    FcitxCandidateWord *res = NULL;
-    FcitxCandidateWord *cand_word;
-    for (cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
-         cand_word;cand_word = FcitxCandidateWordGetCurrentWindowNext(
-             cand_list, cand_word)) {
-        if (_check_and_clear_cand_word(cand_word)) {
-            res = cand_word;
-        }
-    }
-    if (!res)
-        return FcitxCandidateWordGetCurrentWindow(cand_list);
-    return res;
-}
-
 static void
 FcitxKeyboardSetBuff(FcitxKeyboard *keyboard, const char *str)
 {
@@ -572,7 +543,7 @@ FcitxKeyboardHandleFocus(FcitxKeyboard *keyboard, FcitxKeySym sym,
         return IRV_TO_PROCESS;
     FcitxGlobalConfig *fc = FcitxInstanceGetGlobalConfig(instance);
     if (FcitxHotkeyIsHotKey(sym, state, keyboard->config.nextWord)) {
-        cand_word = _clear_current_focus(instance);
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         cand_word = FcitxCandidateWordGetNext(cand_list, cand_word);
         if (!cand_word) {
             FcitxCandidateWordSetPage(cand_list, 0);
@@ -582,7 +553,7 @@ FcitxKeyboardHandleFocus(FcitxKeyboard *keyboard, FcitxKeySym sym,
                 cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
         }
     } else if (FcitxHotkeyIsHotKey(sym, state, keyboard->config.prevWord)) {
-        cand_word = _clear_current_focus(instance);
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         cand_word = FcitxCandidateWordGetPrev(cand_list, cand_word);
         if (!cand_word) {
             FcitxCandidateWordSetPage(
@@ -594,26 +565,25 @@ FcitxKeyboardHandleFocus(FcitxKeyboard *keyboard, FcitxKeySym sym,
         }
     } else if (FcitxHotkeyIsHotKey(sym, state,
                                    FcitxConfigPrevPageKey(instance, fc))) {
-        cand_word = _clear_current_focus(instance);
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         if (FcitxCandidateWordGoPrevPage(cand_list)) {
             cand_word = FcitxCandidateWordGetCurrentWindow(cand_list) +
                 FcitxCandidateWordGetCurrentWindowSize(cand_list) - 1;
         }
     } else if (FcitxHotkeyIsHotKey(sym, state,
                                    FcitxConfigNextPageKey(instance, fc))) {
-        cand_word = _clear_current_focus(instance);
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         if (FcitxCandidateWordGoNextPage(cand_list)) {
             cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
         }
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
-        cand_word = _clear_current_focus(instance);
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         return FcitxCandidateWordChooseByTotalIndex(
             cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
     } else {
         return IRV_TO_PROCESS;
     }
-    cand_word->wordType = (cand_word->wordType & ~MSG_REGULAR_MASK) |
-        MSG_CANDIATE_CURSOR;
+    FcitxCandidateWordSetType(cand_word, MSG_CANDIATE_CURSOR);
     FcitxKeyboardSetBuff(keyboard, cand_word->strWord);
     FcitxMessages *client_preedit = FcitxInputStateGetClientPreedit(input);
     FcitxMessagesSetMessageCount(client_preedit, 0);
