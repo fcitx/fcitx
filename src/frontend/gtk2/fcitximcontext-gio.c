@@ -613,7 +613,7 @@ _fcitx_im_context_update_formatted_preedit_cb(FcitxClient* im, GPtrArray* array,
         }
 
         if (type & MSG_HIGHLIGHT) {
-            gboolean hasColor;
+            gboolean hasColor = false;
             GdkColor fg;
             GdkColor bg;
             memset(&fg, 0, sizeof(GdkColor));
