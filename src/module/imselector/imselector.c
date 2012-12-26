@@ -179,21 +179,13 @@ boolean IMSelectorPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPU
     FcitxGlobalConfig* fc = FcitxInstanceGetGlobalConfig(instance);
     if (!imselector->triggered)
         return false;
-
-    const FcitxHotkey* hkPrevPage = FcitxInstanceGetContextHotkey(instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
-    if (hkPrevPage == NULL)
-        hkPrevPage = fc->hkPrevPage;
-
-    const FcitxHotkey* hkNextPage = FcitxInstanceGetContextHotkey(instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
-    if (hkNextPage == NULL)
-        hkNextPage = fc->hkNextPage;
-
     FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
-
-    if (FcitxHotkeyIsHotKey(sym, state, hkPrevPage)) {
+    if (FcitxHotkeyIsHotKey(sym, state,
+                            FcitxConfigPrevPageKey(instance, fc))) {
         FcitxCandidateWordGoPrevPage(candList);
         *retval = IRV_DISPLAY_MESSAGE;
-    } else if (FcitxHotkeyIsHotKey(sym, state, hkNextPage)) {
+    } else if (FcitxHotkeyIsHotKey(sym, state,
+                                   FcitxConfigNextPageKey(instance, fc))) {
         FcitxCandidateWordGoNextPage(candList);
         *retval = IRV_DISPLAY_MESSAGE;
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {

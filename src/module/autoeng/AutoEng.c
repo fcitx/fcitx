@@ -300,26 +300,6 @@ void *AutoEngCreate(FcitxInstance *instance)
     return autoEngState;
 }
 
-static inline const FcitxHotkey*
-_prev_page_key(FcitxInstance *instance, FcitxGlobalConfig *fc)
-{
-    const FcitxHotkey *prev = FcitxInstanceGetContextHotkey(
-        instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
-    if (!prev)
-        return fc->hkPrevPage;
-    return prev;
-}
-
-static inline const FcitxHotkey*
-_next_page_key(FcitxInstance *instance, FcitxGlobalConfig *fc)
-{
-    const FcitxHotkey *next = FcitxInstanceGetContextHotkey(
-        instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
-    if (!next)
-        return fc->hkNextPage;
-    return next;
-}
-
 static inline boolean
 _check_and_clear_cand_word(FcitxCandidateWord *cand_word)
 {
@@ -391,7 +371,8 @@ AutoEngCheckSelect(FcitxAutoEngState *autoEngState,
             FcitxCandidateWordSetFocus(
                 cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
         }
-    } else if (FcitxHotkeyIsHotKey(sym, state, _prev_page_key(instance, fc))) {
+    } else if (FcitxHotkeyIsHotKey(sym, state,
+                                   FcitxConfigPrevPageKey(instance, fc))) {
         cand_word = _clear_current_focus(instance);
         if (!FcitxCandidateWordGoPrevPage(cand_list)) {
             _set_cand_word_focus(cand_word);
@@ -399,7 +380,8 @@ AutoEngCheckSelect(FcitxAutoEngState *autoEngState,
         }
         cand_word = FcitxCandidateWordGetCurrentWindow(cand_list) +
             FcitxCandidateWordGetCurrentWindowSize(cand_list) - 1;
-    } else if (FcitxHotkeyIsHotKey(sym, state, _next_page_key(instance, fc))) {
+    } else if (FcitxHotkeyIsHotKey(sym, state,
+                                   FcitxConfigNextPageKey(instance, fc))) {
         cand_word = _clear_current_focus(instance);
         if (!FcitxCandidateWordGoNextPage(cand_list)) {
             _set_cand_word_focus(cand_word);

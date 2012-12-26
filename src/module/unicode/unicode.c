@@ -89,34 +89,30 @@ void* UnicodeCreate(FcitxInstance* instance)
 }
 
 boolean UnicodePreFilter(void* arg, FcitxKeySym sym, unsigned int state,
-                             INPUT_RETURN_VALUE *r)
+                         INPUT_RETURN_VALUE *r)
 {
     INPUT_RETURN_VALUE retVal = IRV_TO_PROCESS;
     do {
-        UnicodeModule* uni = arg;
-        FcitxInputState *input = FcitxInstanceGetInputState(uni->owner);
-        FcitxGlobalConfig* fc = FcitxInstanceGetGlobalConfig(uni->owner);
-        FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
+        UnicodeModule *uni = arg;
         if (!uni->enable)
             break;
+        FcitxInstance *instance = uni->owner;
+        FcitxInputState *input = FcitxInstanceGetInputState(instance);
+        FcitxGlobalConfig *fc = FcitxInstanceGetGlobalConfig(instance);
+        FcitxCandidateWordList *candList;
+        candList = FcitxInputStateGetCandidateList(input);
 
-        FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), 4);
-        FcitxCandidateWordSetChooseAndModifier(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE, FcitxKeyState_Alt);
-
-        const FcitxHotkey* hkPrevPage = FcitxInstanceGetContextHotkey(uni->owner, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
-        if (hkPrevPage == NULL)
-            hkPrevPage = fc->hkPrevPage;
-
-        const FcitxHotkey* hkNextPage = FcitxInstanceGetContextHotkey(uni->owner, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
-        if (hkNextPage == NULL)
-            hkNextPage = fc->hkNextPage;
-
-        if (FcitxHotkeyIsHotKey(sym, state, hkPrevPage)) {
+        FcitxCandidateWordSetPageSize(candList, 4);
+        FcitxCandidateWordSetChooseAndModifier(candList, DIGIT_STR_CHOOSE,
+                                               FcitxKeyState_Alt);
+        if (FcitxHotkeyIsHotKey(sym, state,
+                                FcitxConfigNextPageKey(instance, fc))) {
             if (FcitxCandidateWordGoPrevPage(candList))
                 retVal = IRV_DISPLAY_MESSAGE;
             else
                 retVal = IRV_DO_NOTHING;
-        } else if (FcitxHotkeyIsHotKey(sym, state, hkNextPage)) {
+        } else if (FcitxHotkeyIsHotKey(sym, state,
+                                       FcitxConfigNextPageKey(instance, fc))) {
             if (FcitxCandidateWordGoNextPage(candList))
                 retVal = IRV_DISPLAY_MESSAGE;
             else

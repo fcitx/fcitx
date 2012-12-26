@@ -195,6 +195,7 @@ extern "C" {
     boolean FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback);
 
     boolean FcitxInstanceRemoveTimeoutById(FcitxInstance* instance, uint64_t id);
+
 #ifdef __cplusplus
 }
 #endif

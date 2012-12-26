@@ -127,6 +127,26 @@ extern "C" {
      **/
     const FcitxHotkey* FcitxInstanceGetContextHotkey(FcitxInstance* instance, const char* key);
 
+    static inline const FcitxHotkey*
+    FcitxConfigPrevPageKey(FcitxInstance *instance, FcitxGlobalConfig *fc)
+    {
+        const FcitxHotkey *prev = FcitxInstanceGetContextHotkey(
+            instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
+        if (!prev)
+            return fc->hkPrevPage;
+        return prev;
+    }
+
+    static inline const FcitxHotkey*
+    FcitxConfigNextPageKey(FcitxInstance *instance, FcitxGlobalConfig *fc)
+    {
+        const FcitxHotkey *next = FcitxInstanceGetContextHotkey(
+            instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
+        if (!next)
+            return fc->hkNextPage;
+        return next;
+    }
+
 #ifdef __cplusplus
 }
 #endif
