@@ -307,7 +307,6 @@ AutoEngCheckSelect(FcitxAutoEngState *autoEngState,
         return IRV_TO_PROCESS;
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxGlobalConfig *fc = FcitxInstanceGetGlobalConfig(instance);
-    FcitxAutoEngConfig *config = &autoEngState->config;
     int key;
     FcitxCandidateWord *cand_word;
     if (FcitxHotkeyIsHotKey(sym, state, fc->nextWord)) {
