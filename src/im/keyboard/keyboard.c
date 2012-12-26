@@ -542,7 +542,7 @@ FcitxKeyboardHandleFocus(FcitxKeyboard *keyboard, FcitxKeySym sym,
     if (!FcitxCandidateWordGetListSize(cand_list))
         return IRV_TO_PROCESS;
     FcitxGlobalConfig *fc = FcitxInstanceGetGlobalConfig(instance);
-    if (FcitxHotkeyIsHotKey(sym, state, keyboard->config.nextWord)) {
+    if (FcitxHotkeyIsHotKey(sym, state, fc->nextWord)) {
         cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         cand_word = FcitxCandidateWordGetNext(cand_list, cand_word);
         if (!cand_word) {
@@ -552,7 +552,7 @@ FcitxKeyboardHandleFocus(FcitxKeyboard *keyboard, FcitxKeySym sym,
             FcitxCandidateWordSetFocus(
                 cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
         }
-    } else if (FcitxHotkeyIsHotKey(sym, state, keyboard->config.prevWord)) {
+    } else if (FcitxHotkeyIsHotKey(sym, state, fc->prevWord)) {
         cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         cand_word = FcitxCandidateWordGetPrev(cand_list, cand_word);
         if (!cand_word) {

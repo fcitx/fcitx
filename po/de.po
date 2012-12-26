@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2012-12-25 16:21-0500\n"
+"POT-Creation-Date: 2012-12-25 21:51-0500\n"
 "PO-Revision-Date: 2012-12-08 14:06+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/fcitx/"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/im/table/table.c:1405
+#: src/im/table/table.c:1407
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -79,7 +79,7 @@ msgstr ""
 msgid "/XIM"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1594
+#: src/lib/fcitx/ime.c:1588
 msgid "/min  Time Used: "
 msgstr "/min Verwendete Zeit:"
 
@@ -107,7 +107,7 @@ msgstr ""
 msgid "<not assigned>"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:43
+#: src/im/keyboard/fcitx-keyboard.desc:33
 msgid ""
 "A different value from the global one may be useful when using horizontal "
 "candidate list"
@@ -137,7 +137,7 @@ msgstr ""
 msgid "ALT_SUPER"
 msgstr ""
 
-#: data/config.desc:164
+#: data/config.desc:178
 msgid "Action after press enter"
 msgstr "Verhalten ENTER Taste"
 
@@ -145,7 +145,7 @@ msgstr "Verhalten ENTER Taste"
 msgid "Activate input method"
 msgstr ""
 
-#: data/config.desc:147
+#: data/config.desc:161
 msgid "Active"
 msgstr ""
 
@@ -185,7 +185,7 @@ msgstr ""
 msgid "Add Unicode Typing Support"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:54
+#: src/im/keyboard/fcitx-keyboard.desc:44
 msgid "Add current input buffer to user dictionary"
 msgstr ""
 
@@ -230,7 +230,7 @@ msgstr ""
 msgid "AdjustNo"
 msgstr ""
 
-#: data/config.desc:138
+#: data/config.desc:152
 msgid "All"
 msgstr ""
 
@@ -271,9 +271,9 @@ msgstr ""
 msgid "Alternative Trigger Key for QuickPhrase"
 msgstr ""
 
-#: data/config.desc:198 data/config.desc:204 data/config.desc:210
-#: data/config.desc:216 data/config.desc:222 data/config.desc:228
-#: data/config.desc:234
+#: data/config.desc:212 data/config.desc:218 data/config.desc:224
+#: data/config.desc:230 data/config.desc:236 data/config.desc:242
+#: data/config.desc:248
 msgid "Appearance"
 msgstr ""
 
@@ -307,8 +307,6 @@ msgstr ""
 #: src/module/autoeng/fcitx-autoeng.desc:17
 #: src/module/autoeng/fcitx-autoeng.desc:26
 #: src/module/autoeng/fcitx-autoeng.desc:34
-#: src/module/autoeng/fcitx-autoeng.desc:40
-#: src/module/autoeng/fcitx-autoeng.desc:45
 msgid "Auto English"
 msgstr ""
 
@@ -383,7 +381,7 @@ msgstr ""
 msgid "Can't Create imWindow"
 msgstr "Kann Eigabemethodenfenster nicht erzeugen"
 
-#: src/module/punc/punc.c:416
+#: src/module/punc/punc.c:407
 msgid "Can't open punc file."
 msgstr ""
 
@@ -396,7 +394,7 @@ msgstr ""
 msgid "Candidate Index Color"
 msgstr "Farbe vorgeschlagene Kandidaten"
 
-#: data/config.desc:182
+#: data/config.desc:196
 msgid "Candidate Word Number"
 msgstr "Anzahl Zeichenvorschläge"
 
@@ -447,7 +445,7 @@ msgstr ""
 msgid "Cannot find xim_server on root window."
 msgstr ""
 
-#: src/im/table/table.c:650
+#: src/im/table/table.c:652
 msgid "Cannot found Pinyin"
 msgstr ""
 
@@ -478,15 +476,15 @@ msgstr ""
 msgid "Choose key modifier"
 msgstr ""
 
-#: src/im/table/table.c:715
+#: src/im/table/table.c:717
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:707
+#: src/im/table/table.c:709
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:723
+#: src/im/table/table.c:725
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
@@ -511,7 +509,7 @@ msgstr "CLASSIC mit Unterstützung von Skins"
 msgid "ClassicUI"
 msgstr "Klassik Oberfläche"
 
-#: data/config.desc:161
+#: data/config.desc:175
 msgid "Clean"
 msgstr ""
 
@@ -523,7 +521,7 @@ msgstr ""
 msgid "Clear local Input Method"
 msgstr ""
 
-#: src/module/imselector/imselector.c:327
+#: src/module/imselector/imselector.c:319
 msgid "Clear local input method"
 msgstr ""
 
@@ -535,8 +533,6 @@ msgstr ""
 #: src/module/clipboard/fcitx-clipboard.desc:27
 #: src/module/clipboard/fcitx-clipboard.desc:34
 #: src/module/clipboard/fcitx-clipboard.desc:44
-#: src/module/clipboard/fcitx-clipboard.desc:50
-#: src/module/clipboard/fcitx-clipboard.desc:55
 msgid "Clipboard"
 msgstr ""
 
@@ -552,7 +548,7 @@ msgstr ""
 msgid "Code Table Name"
 msgstr ""
 
-#: src/im/table/table.c:1401
+#: src/im/table/table.c:1403
 msgid "Code is "
 msgstr ""
 
@@ -586,7 +582,7 @@ msgstr "Farbe der Cursors"
 msgid "Comment"
 msgstr "Kommentar"
 
-#: data/config.desc:162
+#: data/config.desc:176
 msgid "Commit"
 msgstr ""
 
@@ -602,7 +598,7 @@ msgstr ""
 msgid "Commit string when there is no match"
 msgstr ""
 
-#: data/config.desc:176
+#: data/config.desc:190
 msgid "Commit when toggle state"
 msgstr ""
 
@@ -668,7 +664,7 @@ msgstr ""
 msgid "Current Input Method Name"
 msgstr ""
 
-#: src/module/imselector/imselector.c:310
+#: src/module/imselector/imselector.c:302
 #, c-format
 msgid "Current local input method is %s"
 msgstr ""
@@ -705,7 +701,7 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: data/config.desc:148
+#: data/config.desc:162
 msgid "Default Input Method State"
 msgstr "Standard Status Eingabemethode"
 
@@ -738,7 +734,7 @@ msgstr ""
 msgid "Dianbaoma"
 msgstr "Dianbaoma 电报码"
 
-#: data/config.desc:170
+#: data/config.desc:184
 msgid "Disable Paging in Remind Mode"
 msgstr ""
 
@@ -757,7 +753,7 @@ msgstr ""
 msgid "Disabled"
 msgstr ""
 
-#: data/config.desc:195
+#: data/config.desc:209
 msgid "Do not commit preedit text when unfocus a window"
 msgstr ""
 
@@ -765,11 +761,11 @@ msgstr ""
 msgid "Do not show in GUI"
 msgstr ""
 
-#: data/config.desc:237
+#: data/config.desc:251
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr ""
 
-#: data/config.desc:231
+#: data/config.desc:245
 msgid "Do not show input window if there is only preedit string"
 msgstr ""
 
@@ -1094,7 +1090,7 @@ msgstr ""
 msgid "Full width Character"
 msgstr ""
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:571
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:562
 msgid "Full width punct"
 msgstr ""
 
@@ -1150,7 +1146,7 @@ msgstr "Fuzzy Pinyin uan/uang"
 msgid "Fuzzy z and zh"
 msgstr "Fuzzy Pinyin z/zh"
 
-#: data/config.desc:189
+#: data/config.desc:203
 msgid "Give the tips of Phrase"
 msgstr ""
 
@@ -1209,7 +1205,7 @@ msgstr ""
 #: data/config.desc:69 data/config.desc:75 data/config.desc:81
 #: data/config.desc:87 data/config.desc:93 data/config.desc:99
 #: data/config.desc:104 data/config.desc:109 data/config.desc:115
-#: data/config.desc:121
+#: data/config.desc:121 data/config.desc:127 data/config.desc:134
 msgid "Hotkey"
 msgstr "Kurzbefehl"
 
@@ -1280,7 +1276,7 @@ msgstr ""
 msgid "Inactivate Input Method"
 msgstr ""
 
-#: data/config.desc:146
+#: data/config.desc:160
 msgid "Inactive"
 msgstr ""
 
@@ -1316,7 +1312,7 @@ msgstr "Schriftgröße Eingabe"
 msgid "Input Message Color"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1500 data/fcitx-autostart.desktop.in:3
+#: src/lib/fcitx/ime.c:1494 data/fcitx-autostart.desktop.in:3
 #: data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Eingabemethode"
@@ -1325,7 +1321,7 @@ msgstr "Eingabemethode"
 msgid "Input Method Disabled"
 msgstr ""
 
-#: data/config.desc:213
+#: data/config.desc:227
 msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 
@@ -1338,7 +1334,7 @@ msgstr ""
 msgid "Input Methods:"
 msgstr "Eingabemethode"
 
-#: src/lib/fcitx/ime.c:1591
+#: src/lib/fcitx/ime.c:1585
 msgid "Input Speed: "
 msgstr "Eingabegeschwindigkeit"
 
@@ -1410,11 +1406,9 @@ msgstr "Icon für Virtuelle Tastatur"
 #: src/im/keyboard/fcitx-keyboard.desc:1 src/im/keyboard/fcitx-keyboard.desc:6
 #: src/im/keyboard/fcitx-keyboard.desc:16
 #: src/im/keyboard/fcitx-keyboard.desc:21
-#: src/im/keyboard/fcitx-keyboard.desc:26
-#: src/im/keyboard/fcitx-keyboard.desc:31
-#: src/im/keyboard/fcitx-keyboard.desc:37
-#: src/im/keyboard/fcitx-keyboard.desc:46
-#: src/im/keyboard/fcitx-keyboard.desc:51
+#: src/im/keyboard/fcitx-keyboard.desc:27
+#: src/im/keyboard/fcitx-keyboard.desc:36
+#: src/im/keyboard/fcitx-keyboard.desc:41
 msgid "Keyboard"
 msgstr ""
 
@@ -1471,11 +1465,11 @@ msgstr ""
 msgid "Latin"
 msgstr ""
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:571
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:562
 msgid "Latin punct"
 msgstr ""
 
-#: src/im/table/table.c:601
+#: src/im/table/table.c:603
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1581,7 +1575,7 @@ msgstr ""
 msgid "Maximum length of each candidate word"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:42
+#: src/im/keyboard/fcitx-keyboard.desc:32
 msgid "Maximum length of spell hint list"
 msgstr ""
 
@@ -1621,7 +1615,7 @@ msgstr ""
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:35
+#: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
 msgstr ""
 
@@ -1667,10 +1661,7 @@ msgstr ""
 msgid "Native"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:29
-#: src/module/autoeng/fcitx-autoeng.desc:48
-#: src/module/clipboard/fcitx-clipboard.desc:58
-#: src/module/quickphrase/fcitx-quickphrase.desc:48
+#: data/config.desc:137
 #, fuzzy
 msgid "Next Candidate Word"
 msgstr "Anzahl Zeichenvorschläge"
@@ -1684,7 +1675,7 @@ msgstr ""
 msgid "Next Page Icon"
 msgstr "Icon für nächste Seite Kandidaten"
 
-#: data/config.desc:137
+#: data/config.desc:151
 msgid "No"
 msgstr ""
 
@@ -1700,7 +1691,7 @@ msgstr "Keine Schnittstelle verfügbar"
 msgid "No input window"
 msgstr ""
 
-#: src/module/imselector/imselector.c:316
+#: src/module/imselector/imselector.c:308
 msgid "No local input method"
 msgstr ""
 
@@ -1725,7 +1716,7 @@ msgstr ""
 msgid "Note for GNOME Later than 3.6"
 msgstr ""
 
-#: data/config.desc:160
+#: data/config.desc:174
 msgid "Nothing"
 msgstr ""
 
@@ -1759,9 +1750,9 @@ msgstr ""
 msgid "Other Color"
 msgstr ""
 
-#: data/config.desc:151 data/config.desc:157 data/config.desc:167
-#: data/config.desc:173 data/config.desc:179 data/config.desc:186
-#: data/config.desc:192
+#: data/config.desc:165 data/config.desc:171 data/config.desc:181
+#: data/config.desc:187 data/config.desc:193 data/config.desc:200
+#: data/config.desc:206
 msgid "Output"
 msgstr "Ausgabe"
 
@@ -1773,7 +1764,7 @@ msgstr ""
 msgid "Parent"
 msgstr "Parent"
 
-#: data/config.desc:139
+#: data/config.desc:153
 msgid "PerProgram"
 msgstr ""
 
@@ -1781,7 +1772,7 @@ msgstr ""
 msgid "Phrase"
 msgstr ""
 
-#: src/im/table/table.c:1397
+#: src/im/table/table.c:1399
 msgid "Phrase is already in Dict "
 msgstr ""
 
@@ -1826,7 +1817,7 @@ msgstr "Die \"Pinyin Index Magic Number\" stimmt nicht überein!"
 msgid "Pinyin Key"
 msgstr ""
 
-#: src/im/table/table.c:626
+#: src/im/table/table.c:628
 msgid "Pinyin: "
 msgstr ""
 
@@ -1881,7 +1872,7 @@ msgstr ""
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/module/autoeng/AutoEng.c:699 src/module/quickphrase/quickphrase.c:417
+#: src/module/autoeng/AutoEng.c:641 src/module/quickphrase/quickphrase.c:413
 msgid "Press Enter to input text"
 msgstr ""
 
@@ -1907,10 +1898,7 @@ msgstr ""
 msgid "Prev Page Icon"
 msgstr "Icon für vorherige Seite Kandidaten"
 
-#: src/im/keyboard/fcitx-keyboard.desc:24
-#: src/module/autoeng/fcitx-autoeng.desc:43
-#: src/module/clipboard/fcitx-clipboard.desc:53
-#: src/module/quickphrase/fcitx-quickphrase.desc:43
+#: data/config.desc:130
 #, fuzzy
 msgid "Previous Candidate Word"
 msgstr "Farbe erster Kandidat"
@@ -1928,7 +1916,7 @@ msgstr ""
 msgid "Profile"
 msgstr "Profil"
 
-#: data/config.desc:127 data/config.desc:133 data/config.desc:142
+#: data/config.desc:141 data/config.desc:147 data/config.desc:156
 msgid "Program"
 msgstr "Programm"
 
@@ -1976,7 +1964,7 @@ msgstr ""
 msgid "Quick Phrase List"
 msgstr ""
 
-#: src/module/quickphrase/quickphrase.c:339
+#: src/module/quickphrase/quickphrase.c:335
 msgid "Quick Phrase: "
 msgstr ""
 
@@ -1985,8 +1973,6 @@ msgstr ""
 #: src/module/quickphrase/fcitx-quickphrase.desc:15
 #: src/module/quickphrase/fcitx-quickphrase.desc:25
 #: src/module/quickphrase/fcitx-quickphrase.desc:31
-#: src/module/quickphrase/fcitx-quickphrase.desc:40
-#: src/module/quickphrase/fcitx-quickphrase.desc:45
 msgid "QuickPhrase"
 msgstr ""
 
@@ -2018,7 +2004,7 @@ msgstr ""
 msgid "Register IM"
 msgstr "Eingabemethode registrieren"
 
-#: src/im/table/table.c:1289
+#: src/im/table/table.c:1291
 msgid "Remind:"
 msgstr ""
 
@@ -2114,19 +2100,19 @@ msgstr ""
 msgid "Scroll between Input Method"
 msgstr ""
 
-#: src/module/unicode/unicode.c:230
+#: src/module/unicode/unicode.c:225
 msgid "Search unicode"
 msgstr ""
 
-#: data/config.desc:130
+#: data/config.desc:144
 msgid "Seconds sleep before fcitx really start"
 msgstr "Warten, bevor fcitx started (sec.)"
 
-#: src/module/imselector/imselector.c:304
+#: src/module/imselector/imselector.c:296
 msgid "Select global input method: "
 msgstr ""
 
-#: src/module/imselector/imselector.c:305
+#: src/module/imselector/imselector.c:297
 msgid "Select local input method: "
 msgstr ""
 
@@ -2134,7 +2120,7 @@ msgstr ""
 msgid "Select specific input method via keyboard"
 msgstr ""
 
-#: src/module/clipboard/clipboard.c:437
+#: src/module/clipboard/clipboard.c:383
 msgid "Select to paste"
 msgstr ""
 
@@ -2150,11 +2136,11 @@ msgstr ""
 msgid "Send Raw Preedit"
 msgstr ""
 
-#: data/config.desc:177
+#: data/config.desc:191
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr ""
 
-#: data/config.desc:140
+#: data/config.desc:154
 msgid "Share State Among Window"
 msgstr "Eingabemethode beibehalten"
 
@@ -2173,15 +2159,15 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-#: data/config.desc:201
+#: data/config.desc:215
 msgid "Show Input Method Hint After Input method changed"
 msgstr ""
 
-#: data/config.desc:207
+#: data/config.desc:221
 msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr ""
 
-#: data/config.desc:219
+#: data/config.desc:233
 msgid "Show Input Speed"
 msgstr "Eingabegeschwindigkeit zeigen"
 
@@ -2189,7 +2175,7 @@ msgstr "Eingabegeschwindigkeit zeigen"
 msgid "Show Preedit String in Client Window"
 msgstr ""
 
-#: data/config.desc:225
+#: data/config.desc:239
 msgid "Show Version"
 msgstr "Version zeigen"
 
@@ -2280,7 +2266,7 @@ msgstr "Oberfläche Trayicons"
 msgid "Space Line Color"
 msgstr ""
 
-#: src/module/quickphrase/quickphrase.c:249
+#: src/module/quickphrase/quickphrase.c:245
 #, c-format
 msgid "Space for %s Enter for %s"
 msgstr ""
@@ -2418,6 +2404,18 @@ msgid ""
 "larger than this when multiple characters have the same order of strokes."
 msgstr ""
 
+#: data/config.desc:138
+msgid ""
+"This is used in some modules and input methods to navigate to the next "
+"candidate word"
+msgstr ""
+
+#: data/config.desc:131
+msgid ""
+"This is used in some modules and input methods to navigate to the previous "
+"candidate word"
+msgstr ""
+
 #: src/ui/classic/skin.desc:33
 msgid "Tip Message Color"
 msgstr ""
@@ -2430,7 +2428,7 @@ msgid ""
 "freezing, see ${link2}."
 msgstr ""
 
-#: src/module/punc/punc.c:149 src/module/punc/punc.c:572
+#: src/module/punc/punc.c:149 src/module/punc/punc.c:563
 msgid "Toggle Full Width Punctuation"
 msgstr ""
 
@@ -2463,7 +2461,7 @@ msgstr ""
 msgid "Toggle the word hint"
 msgstr ""
 
-#: src/module/autoeng/AutoEng.c:579
+#: src/module/autoeng/AutoEng.c:521
 msgid "Too long item for AutoEng"
 msgstr ""
 
@@ -2497,7 +2495,7 @@ msgstr ""
 msgid "Type"
 msgstr "Typ"
 
-#: data/config.desc:154
+#: data/config.desc:168
 msgid "Type half width Punc After a Number"
 msgstr ""
 
@@ -2579,7 +2577,7 @@ msgstr ""
 msgid "Use Wide Punctuation"
 msgstr "Verwende Vollbreite Form der Punktuation"
 
-#: src/im/keyboard/fcitx-keyboard.desc:49
+#: src/im/keyboard/fcitx-keyboard.desc:39
 msgid "Use enter to commit the existing string"
 msgstr ""
 
@@ -2755,7 +2753,7 @@ msgstr ""
 msgid "here"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1597
+#: src/lib/fcitx/ime.c:1591
 msgid "min Num of Characters: "
 msgstr "min Anzahl Zeichen:"
 

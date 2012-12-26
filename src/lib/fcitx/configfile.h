@@ -132,7 +132,15 @@ extern "C" {
         boolean bShowInputWindowOnlyWhenActive;
 
         boolean bIMSwitchIncludeInactive;
-        int padding[39]; /**< padding */
+        union {
+            FcitxHotkey prevWord[2];
+            int _dummy4[8];
+        };
+        union {
+            FcitxHotkey nextWord[2];
+            int _dummy5[8];
+        };
+        int padding[23]; /**< padding */
     } FcitxGlobalConfig;
 
     /**

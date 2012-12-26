@@ -70,8 +70,6 @@ typedef struct {
     QuickPhraseChooseModifier chooseModifier;
     int maxHintLength;
     boolean disableSpell;
-    FcitxHotkey prevWord[2];
-    FcitxHotkey nextWord[2];
 } QuickPhraseConfig;
 
 typedef struct {
@@ -147,8 +145,6 @@ CONFIG_BINDING_REGISTER("QuickPhrase", "AlternativeTriggerKey",
 CONFIG_BINDING_REGISTER("QuickPhrase", "ChooseModifier", chooseModifier)
 CONFIG_BINDING_REGISTER("QuickPhrase", "DisableSpell", disableSpell)
 CONFIG_BINDING_REGISTER("QuickPhrase", "MaximumHintLength", maxHintLength)
-CONFIG_BINDING_REGISTER("QuickPhrase", "PrevWord", prevWord)
-CONFIG_BINDING_REGISTER("QuickPhrase", "NextWord", nextWord)
 CONFIG_BINDING_END()
 
 int PhraseCmp(const void* a, const void* b)
@@ -485,7 +481,7 @@ QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
     if (!FcitxCandidateWordGetListSize(cand_list))
         return IRV_TO_PROCESS;
     FcitxCandidateWord *cand_word;
-    if (FcitxHotkeyIsHotKey(sym, state, qpstate->config.nextWord)) {
+    if (FcitxHotkeyIsHotKey(sym, state, fc->nextWord)) {
         cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         cand_word = FcitxCandidateWordGetNext(cand_list, cand_word);
         if (!cand_word) {
@@ -495,7 +491,7 @@ QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
             FcitxCandidateWordSetFocus(
                 cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
         }
-    } else if (FcitxHotkeyIsHotKey(sym, state, qpstate->config.prevWord)) {
+    } else if (FcitxHotkeyIsHotKey(sym, state, fc->prevWord)) {
         cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         cand_word = FcitxCandidateWordGetPrev(cand_list, cand_word);
         if (!cand_word) {

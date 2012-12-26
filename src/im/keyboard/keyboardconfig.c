@@ -28,6 +28,4 @@ CONFIG_BINDING_REGISTER("Keyboard", "MaximumHintLength", maximumHintLength);
 CONFIG_BINDING_REGISTER("Keyboard", "UseEnterToCommit", bUseEnterToCommit);
 CONFIG_BINDING_REGISTER("Keyboard", "HotkeyAddToUserDict", hkAddToUserDict);
 CONFIG_BINDING_REGISTER("Keyboard", "ChooseModifier", chooseModifier);
-CONFIG_BINDING_REGISTER("Keyboard", "PrevWord", prevWord);
-CONFIG_BINDING_REGISTER("Keyboard", "NextWord", nextWord);
 CONFIG_BINDING_END();

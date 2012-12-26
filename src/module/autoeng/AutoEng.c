@@ -57,8 +57,6 @@ typedef struct {
     int maxHintLength;
     boolean selectAddSpace;
     int maxKeep;
-    FcitxHotkey prev_word[2];
-    FcitxHotkey next_word[2];
 } FcitxAutoEngConfig;
 
 typedef struct _FcitxAutoEngState {
@@ -87,8 +85,6 @@ CONFIG_BINDING_REGISTER("Auto English", "DisableSpell", disableSpell);
 CONFIG_BINDING_REGISTER("Auto English", "MaximumHintLength", maxHintLength);
 CONFIG_BINDING_REGISTER("Auto English", "MaximumKeep", maxKeep);
 CONFIG_BINDING_REGISTER("Auto English", "SelectAddSpace", selectAddSpace);
-CONFIG_BINDING_REGISTER("Auto English", "NextWord", next_word);
-CONFIG_BINDING_REGISTER("Auto English", "PrevWord", prev_word);
 CONFIG_BINDING_END();
 
 /**
@@ -314,7 +310,7 @@ AutoEngCheckSelect(FcitxAutoEngState *autoEngState,
     FcitxAutoEngConfig *config = &autoEngState->config;
     int key;
     FcitxCandidateWord *cand_word;
-    if (FcitxHotkeyIsHotKey(sym, state, config->next_word)) {
+    if (FcitxHotkeyIsHotKey(sym, state, fc->nextWord)) {
         cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         cand_word = FcitxCandidateWordGetNext(cand_list, cand_word);
         if (!cand_word) {
@@ -324,7 +320,7 @@ AutoEngCheckSelect(FcitxAutoEngState *autoEngState,
             FcitxCandidateWordSetFocus(
                 cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
         }
-    } else if (FcitxHotkeyIsHotKey(sym, state, config->prev_word)) {
+    } else if (FcitxHotkeyIsHotKey(sym, state, fc->prevWord)) {
         cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         cand_word = FcitxCandidateWordGetPrev(cand_list, cand_word);
         if (!cand_word) {

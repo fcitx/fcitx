@@ -201,7 +201,7 @@ ClipboardPreHook(void *arg, FcitxKeySym sym, unsigned int state,
     *ret_val = IRV_TO_PROCESS;
     int key;
     FcitxCandidateWord *cand_word;
-    if (FcitxHotkeyIsHotKey(sym, state, clipboard->config.next_word)) {
+    if (FcitxHotkeyIsHotKey(sym, state, fc->nextWord)) {
         cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         cand_word = FcitxCandidateWordGetNext(cand_list, cand_word);
         if (!cand_word) {
@@ -211,7 +211,7 @@ ClipboardPreHook(void *arg, FcitxKeySym sym, unsigned int state,
             FcitxCandidateWordSetFocus(
                 cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
         }
-    } else if (FcitxHotkeyIsHotKey(sym, state, clipboard->config.prev_word)) {
+    } else if (FcitxHotkeyIsHotKey(sym, state, fc->prevWord)) {
         cand_word = FcitxCandidateWordGetFocus(cand_list, true);
         cand_word = FcitxCandidateWordGetPrev(cand_list, cand_word);
         if (!cand_word) {

@@ -70,6 +70,8 @@ CONFIG_BINDING_REGISTER("Hotkey", "NextPageKey", hkNextPage)
 CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "SecondThirdCandWordKey", str2nd3rdCand, Filter2nd3rdKey)
 CONFIG_BINDING_REGISTER("Hotkey", "SaveAllKey", hkSaveAll)
 CONFIG_BINDING_REGISTER("Hotkey", "SwitchPreedit", hkSwitchEmbeddedPreedit);
+CONFIG_BINDING_REGISTER("Hotkey", "PrevWord", prevWord);
+CONFIG_BINDING_REGISTER("Hotkey", "NextWord", nextWord);
 CONFIG_BINDING_END()
 
 void Filter2nd3rdKey(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg)

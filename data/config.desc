@@ -124,6 +124,20 @@ DefaultValue=CTRL_ALT_P
 Description=Switch Embeded Preedit
 Advance=True
 
+[Hotkey/PrevWord]
+Type=Hotkey
+DefaultValue=SHIFT_TAB
+Description=Previous Candidate Word
+LongDescription=This is used in some modules and input methods to navigate to the previous candidate word
+Advance=True
+
+[Hotkey/NextWord]
+Type=Hotkey
+DefaultValue=TAB
+Description=Next Candidate Word
+LongDescription=This is used in some modules and input methods to navigate to the next candidate word
+Advance=True
+
 [Program/DelayStart]
 Type=Integer
 DefaultValue=0

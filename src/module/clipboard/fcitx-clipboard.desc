@@ -47,15 +47,5 @@ Type=Boolean
 DefaultValue=True
 Advance=True
 
-[Clipboard/PrevWord]
-Type=Hotkey
-DefaultValue=SHIFT_TAB
-Description=Previous Candidate Word
-
-[Clipboard/NextWord]
-Type=Hotkey
-DefaultValue=TAB
-Description=Next Candidate Word
-
 [DescriptionFile]
 LocaleDomain=fcitx

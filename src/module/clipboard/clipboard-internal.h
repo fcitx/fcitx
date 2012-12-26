@@ -46,8 +46,6 @@ typedef struct {
     ClipboardChooseModifier choose_modifier;
     boolean use_primary;
     boolean ignore_blank;
-    FcitxHotkey next_word[2];
-    FcitxHotkey prev_word[2];
 } FcitxClipboardConfig;
 
 typedef struct {
