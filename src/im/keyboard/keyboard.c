@@ -576,10 +576,6 @@ FcitxKeyboardHandleFocus(FcitxKeyboard *keyboard, FcitxKeySym sym,
         if (FcitxCandidateWordGoNextPage(cand_list)) {
             cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
         }
-    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
-        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
-        return FcitxCandidateWordChooseByTotalIndex(
-            cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
     } else {
         return IRV_TO_PROCESS;
     }
