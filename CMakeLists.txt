@@ -198,7 +198,6 @@ set(configdescdir ${pkgdatadir}/configdesc)
 set(addonconfigdir ${pkgdatadir}/addon)
 set(imconfigdir ${pkgdatadir}/inputmethod)
 set(localedir ${CMAKE_INSTALL_PREFIX}/share/locale)
-set(includedir  ${CMAKE_INSTALL_PREFIX}/include)
 
 list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}" _isSystemPlatformLibDir)
 list(FIND CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}" _isSystemCxxLibDir)

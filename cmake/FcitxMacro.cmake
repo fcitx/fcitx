@@ -52,6 +52,7 @@ find_package(Gettext REQUIRED)
 #     (To distribute this file outside of CMake, substitute the full
 #      License text for the above reference.)
 
+set(includedir "${CMAKE_INSTALL_PREFIX}/include")
 function(fcitx_parse_arguments prefix _optionNames
     _singleArgNames _multiArgNames)
   # first set all result variables to empty/FALSE

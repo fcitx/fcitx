@@ -576,7 +576,8 @@ extern "C" {
     FcitxCandidateWordSetType(FcitxCandidateWord *cand_word,
                               FcitxMessageType type)
     {
-        cand_word->wordType = (cand_word->wordType & ~MSG_REGULAR_MASK) | type;
+        cand_word->wordType = (FcitxMessageType)((cand_word->wordType &
+                                                  ~MSG_REGULAR_MASK) | type);
     }
 
     static inline boolean
