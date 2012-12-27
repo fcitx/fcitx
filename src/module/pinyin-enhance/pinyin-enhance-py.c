@@ -22,13 +22,6 @@
 #include "fcitx-utils/memory.h"
 #include "pinyin-enhance-py.h"
 
-typedef struct {
-    const char *const str;
-    const int len;
-} PyEnhanceStrLen;
-
-#define PY_STR_LEN(s) {.str = s, .len = sizeof(s) - 1}
-
 static const char*
 py_enhance_get_vokal(int8_t index, int8_t tone, int *len)
 {
@@ -352,13 +345,57 @@ py_enhance_py_to_str(char *buff, const int8_t *py, int *len)
 
 #define PY_TABLE_FILE  "py_table.mb"
 
+static inline uint32_t
+py_enhance_py_alloc_py(PyEnhanceBuff *buff, const char *word, int8_t word_l,
+                       const int8_t *py_buff, int8_t py_size, int8_t **py_list,
+                       int8_t count)
+{
+    uint32_t res;
+    res = py_enhance_buff_alloc_noalign(buff, word_l + py_size + 3);
+    *py_list = buff->data + res;
+    (*py_list)[0] = word_l + 1;
+    (*py_list)++;
+    memcpy(*py_list, word, word_l);
+    int8_t *tmp;
+    tmp = *py_list + word_l;
+    *tmp = 0;
+    tmp++;
+    *tmp = count;
+    memcpy(tmp + 1, py_buff, py_size);
+    return res + 1;
+}
+
+#define PY_ENHANCE_UINT32_ALIGN_SIZE                                    \
+    fcitx_utils_align_to(sizeof(uint32_t), PY_ENHANCE_BUFF_ALIGH)
+
+static inline void
+py_enhance_add_word_p(PyEnhanceBuff *py_table, PyEnhanceBuff *array,
+                      const char *word, uint32_t id)
+{
+    int32_t offset;
+    for (offset = array->len - PY_ENHANCE_UINT32_ALIGN_SIZE;offset >= 0;
+         offset -= PY_ENHANCE_UINT32_ALIGN_SIZE) {
+        uint32_t table_offset = *(uint32_t*)(array->data + offset);
+        if (strcmp(py_table->data + table_offset, word) < 0) {
+            break;
+        }
+    }
+    offset += PY_ENHANCE_UINT32_ALIGN_SIZE;
+    uint32_t old_len = array->len;
+    py_enhance_buff_alloc(array, sizeof(uint32_t));
+    if (offset < old_len)
+        memmove(array->data + offset + PY_ENHANCE_UINT32_ALIGN_SIZE,
+                array->data + offset, old_len - offset);
+    *(uint32_t*)(array->data + offset) = id;
+}
+
 static void
 py_enhance_load_py(PinyinEnhance *pyenhance)
 {
-    UT_array *array = &pyenhance->py_list;
-    if (array->icd)
+    PyEnhanceBuff *array = &pyenhance->py_list;
+    PyEnhanceBuff *py_table = &pyenhance->py_table;
+    if (py_table->len)
         return;
-    utarray_init(array, fcitx_ptr_icd);
     FILE *fp;
     char *fname;
     fname = fcitx_utils_get_fcitx_path_with_filename(
@@ -366,7 +403,8 @@ py_enhance_load_py(PinyinEnhance *pyenhance)
     fp = fopen(fname, "r");
     free(fname);
     if (fp) {
-        FcitxMemoryPool *pool = pyenhance->static_pool;
+        py_enhance_buff_reserve(py_table, 416 * 1024);
+        py_enhance_buff_reserve(array, 192 * 1024);
         char buff[UTF8_MAX_LENGTH + 1];
         int buff_size = 33;
         int8_t *list_buff = malloc(buff_size);
@@ -374,9 +412,7 @@ py_enhance_load_py(PinyinEnhance *pyenhance)
         int8_t word_l;
         int8_t count;
         int8_t py_size;
-        int i;
         int8_t *py_list;
-        int8_t *tmp;
         /**
          * Format:
          * int8_t word_l;
@@ -397,63 +433,56 @@ py_enhance_load_py(PinyinEnhance *pyenhance)
             if (count == 0)
                 continue;
             py_size = count * 3;
-            if (buff_size < py_size) {
+            if (fcitx_unlikely(buff_size < py_size)) {
                 buff_size = py_size;
                 list_buff = realloc(list_buff, buff_size);
             }
             res = fread(list_buff, py_size, 1, fp);
             if (!res)
                 break;
-            py_list = fcitx_memory_pool_alloc(pool, word_l + py_size + 3);
-            py_list[0] = word_l + 1;
-            py_list++;
-            memcpy(py_list, buff, word_l);
-            tmp = py_list + word_l;
-            *tmp = '\0';
-            tmp++;
-            *tmp = count;
-            memcpy(tmp + 1, list_buff, py_size);
-            for (i = utarray_len(array) - 1;i >= 0;i--) {
-                if (strcmp(*(char**)_utarray_eltptr(array, i),
-                           (char*)py_list) < 0) {
-                    break;
-                }
-            }
-            utarray_insert(array, &py_list, i + 1);
+            uint32_t id = py_enhance_py_alloc_py(
+                py_table, buff, word_l, list_buff, py_size, &py_list, count);
+            py_enhance_add_word_p(py_table, array, (char*)py_list, id);
         }
         free(list_buff);
+        py_enhance_buff_shrink(array);
+        py_enhance_buff_shrink(py_table);
         fclose(fp);
     }
 }
+
+/* since bsearch doesn't support user data afaik. */
+static const void *_evil_global_py_table_data = NULL;
 
 static int
 compare_func(const void *p1, const void *p2)
 {
     const char *str1 = p1;
-    const char *const *str2 = p2;
-    return strcmp(str1, *str2);
+    const uint32_t *id_p = p2;
+    const char *str2 = _evil_global_py_table_data + *id_p;
+    return strcmp(str1, str2);
 }
 
 const int8_t*
 py_enhance_py_find_py(PinyinEnhance *pyenhance, const char *str)
 {
     py_enhance_load_py(pyenhance);
-    if (!utarray_len(&pyenhance->py_list))
+    if (!pyenhance->py_list.len)
         return NULL;
-    int8_t **py_list;
-    py_list = bsearch(str, _utarray_eltptr(&pyenhance->py_list, 0),
-                      utarray_len(&pyenhance->py_list), sizeof(int8_t*),
-                      (int (*)(const void*, const void*))compare_func);
+    uint32_t *py_list;
+    _evil_global_py_table_data = pyenhance->py_table.data;
+    py_list = bsearch(str, pyenhance->py_list.data,
+                      pyenhance->py_list.len / PY_ENHANCE_UINT32_ALIGN_SIZE,
+                      sizeof(uint32_t), compare_func);
     if (!py_list)
         return NULL;
-    int8_t *res = *py_list;
+    int8_t *res = pyenhance->py_table.data + *py_list;
     return res + *(res - 1);
 }
 
 void
 py_enhance_py_destroy(PinyinEnhance *pyenhance)
 {
-    if (pyenhance->py_list.icd) {
-        utarray_done(&pyenhance->py_list);
-    }
+    py_enhance_buff_free(&pyenhance->py_list);
+    py_enhance_buff_free(&pyenhance->py_table);
 }

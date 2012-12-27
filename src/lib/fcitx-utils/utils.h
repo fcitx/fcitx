@@ -747,6 +747,15 @@ extern "C" {
     UT_array *fcitx_utils_string_list_append_len(UT_array *list,
                                                  const char *str, size_t len);
 
+    static inline uintptr_t
+    fcitx_utils_align_to(uintptr_t len, uintptr_t align)
+    {
+        uintptr_t left;
+        if ((left = len % align))
+            return len + align - left;
+        return len;
+    }
+
 #ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
 #define __FCITX_ATOMIC_USE_SYNC_FETCH
 #elif defined __has_builtin

@@ -23,8 +23,8 @@ Arg1=char*
 
 [DoInput]
 Name=do-input
-Arg0=FcitxKeySym*
-Arg1=unsigned int*
+Arg0=const FcitxKeySym*
+Arg1=const unsigned int*
 
 [GetCandwords]
 Name=get-candwords

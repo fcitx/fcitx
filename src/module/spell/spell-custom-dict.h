@@ -27,7 +27,7 @@ typedef struct {
 
 typedef struct {
     char *map;
-    char **words;
+    uint32_t *words;
     int words_count;
     const char *delim;
     boolean (*word_comp_func)(unsigned int, unsigned int);

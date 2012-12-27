@@ -520,21 +520,92 @@ static const FcitxHotkey FCITX_HYPHEN_APOS[2] = {
     {NULL, FcitxKey_apostrophe, FcitxKeyState_None}
 };
 
+static void
+FcitxKeyboardSetBuff(FcitxKeyboard *keyboard, const char *str)
+{
+    int len = strlen(str);
+    if (len > FCITX_KEYBOARD_MAX_BUFFER)
+        len = FCITX_KEYBOARD_MAX_BUFFER;
+    memcpy(keyboard->buffer, str, len);
+    keyboard->cursorPos = len;
+    keyboard->buffer[len] = '\0';
+}
+
+static INPUT_RETURN_VALUE
+FcitxKeyboardHandleFocus(FcitxKeyboard *keyboard, FcitxKeySym sym,
+                         unsigned int state)
+{
+    FcitxInstance *instance = keyboard->owner;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
+    FcitxCandidateWord *cand_word;
+    if (!FcitxCandidateWordGetListSize(cand_list))
+        return IRV_TO_PROCESS;
+    FcitxGlobalConfig *fc = FcitxInstanceGetGlobalConfig(instance);
+    if (FcitxHotkeyIsHotKey(sym, state, fc->nextWord)) {
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        cand_word = FcitxCandidateWordGetNext(cand_list, cand_word);
+        if (!cand_word) {
+            FcitxCandidateWordSetPage(cand_list, 0);
+            cand_word = FcitxCandidateWordGetFirst(cand_list);
+        } else {
+            FcitxCandidateWordSetFocus(
+                cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state, fc->prevWord)) {
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        cand_word = FcitxCandidateWordGetPrev(cand_list, cand_word);
+        if (!cand_word) {
+            FcitxCandidateWordSetPage(
+                cand_list, FcitxCandidateWordPageCount(cand_list) - 1);
+            cand_word = FcitxCandidateWordGetLast(cand_list);
+        } else {
+            FcitxCandidateWordSetFocus(
+                cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state,
+                                   FcitxConfigPrevPageKey(instance, fc))) {
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        if (FcitxCandidateWordGoPrevPage(cand_list)) {
+            cand_word = FcitxCandidateWordGetCurrentWindow(cand_list) +
+                FcitxCandidateWordGetCurrentWindowSize(cand_list) - 1;
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state,
+                                   FcitxConfigNextPageKey(instance, fc))) {
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        if (FcitxCandidateWordGoNextPage(cand_list)) {
+            cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
+        }
+    } else {
+        return IRV_TO_PROCESS;
+    }
+    FcitxCandidateWordSetType(cand_word, MSG_CANDIATE_CURSOR);
+    FcitxKeyboardSetBuff(keyboard, cand_word->strWord);
+    FcitxMessages *client_preedit = FcitxInputStateGetClientPreedit(input);
+    FcitxMessagesSetMessageCount(client_preedit, 0);
+    FcitxMessagesAddMessageStringsAtLast(client_preedit, MSG_INPUT,
+                                         keyboard->buffer);
+    FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);
+    return IRV_FLAG_UPDATE_INPUT_WINDOW;
+}
+
 INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int state)
 {
     FcitxKeyboardLayout* layout = (FcitxKeyboardLayout*) arg;
     FcitxKeyboard* keyboard = layout->owner;
     FcitxInstance* instance = keyboard->owner;
+    INPUT_RETURN_VALUE res = FcitxKeyboardHandleFocus(keyboard, sym, state);
+    if (res != IRV_TO_PROCESS)
+        return res;
     const char* currentLang = FcitxInstanceGetContextString(instance,
                                                             CONTEXT_IM_LANGUAGE);
     if (currentLang == NULL)
         currentLang = "";
 
-    if (sym == FcitxKey_Shift_L || sym == FcitxKey_Shift_R
-        || sym == FcitxKey_Alt_L || sym == FcitxKey_Alt_R
-        || sym == FcitxKey_Control_L || sym == FcitxKey_Control_R
-        || sym == FcitxKey_Super_L || sym == FcitxKey_Super_R
-    )
+    if (sym == FcitxKey_Shift_L || sym == FcitxKey_Shift_R ||
+        sym == FcitxKey_Alt_L || sym == FcitxKey_Alt_R ||
+        sym == FcitxKey_Control_L || sym == FcitxKey_Control_R ||
+        sym == FcitxKey_Super_L || sym == FcitxKey_Super_R)
         return IRV_TO_PROCESS;
 
     uint32_t result = processCompose(layout, sym, state);
@@ -559,8 +630,9 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
         if (FcitxHotkeyIsHotKey(sym, state,
                                 keyboard->config.hkAddToUserDict)) {
             if (FcitxSpellAddPersonal(instance, keyboard->buffer,
-                                      keyboard->dictLang))
+                                      keyboard->dictLang)) {
                 return IRV_DO_NOTHING;
+            }
         }
 
         if (IsValidChar(result) || FcitxHotkeyIsHotKeySimple(sym, state) ||
@@ -577,13 +649,14 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
                     Ucs4ToUtf8(keyboard->iconv, FcitxKeySymToUnicode(sym), buf);
                 size_t charlen = strlen(buf);
 
-                if (strlen(keyboard->buffer) >= FCITX_KEYBOARD_MAX_BUFFER) {
+                size_t len = strlen(keyboard->buffer);
+                if (len >= FCITX_KEYBOARD_MAX_BUFFER) {
                     FcitxInstanceCommitString(instance, currentIC,
                                               keyboard->buffer);
                     keyboard->cursorPos = 0;
                     keyboard->buffer[0] = '\0';
+                    len = 0;
                 }
-                size_t len = strlen(keyboard->buffer);
                 if (keyboard->buffer[keyboard->cursorPos] != 0) {
                     memmove(keyboard->buffer + keyboard->cursorPos + charlen,
                             keyboard->buffer + keyboard->cursorPos,
@@ -676,15 +749,15 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     if (keyboard->buffer[0] == '\0')
         return IRV_CLEAN;
 
-    unsigned int cmodtable[] = {FcitxKeyState_None, FcitxKeyState_Alt,
-                                FcitxKeyState_Ctrl, FcitxKeyState_Shift};
+    static const unsigned int cmodtable[] = {
+        FcitxKeyState_None, FcitxKeyState_Alt,
+        FcitxKeyState_Ctrl, FcitxKeyState_Shift};
     if (keyboard->config.chooseModifier > CM_CTRL)
         keyboard->config.chooseModifier = CM_CTRL;
-    FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input),
-                                  keyboard->config.maximumHintLength);
+    FcitxCandidateWordList *mainList = FcitxInputStateGetCandidateList(input);
+    FcitxCandidateWordSetPageSize(mainList, keyboard->config.maximumHintLength);
     FcitxCandidateWordSetChooseAndModifier(
-        FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE,
-        cmodtable[keyboard->config.chooseModifier]);
+        mainList, DIGIT_STR_CHOOSE, cmodtable[keyboard->config.chooseModifier]);
     size_t bufferlen = strlen(keyboard->buffer);
     memcpy(FcitxInputStateGetRawInputBuffer(input),
            keyboard->buffer, bufferlen + 1);
@@ -701,16 +774,15 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     if (bufferlen < keyboard->config.minimumHintLength)
         return IRV_DISPLAY_CANDWORDS;
 
-    FcitxCandidateWordList *candList;
-    candList = FcitxSpellGetCandWords(instance, NULL, keyboard->buffer, NULL,
-                                      keyboard->config.maximumHintLength,
-                                      keyboard->dictLang, NULL,
-                                      FcitxKeyboardGetCandWordCb, layout);
-    if (!candList)
+    FcitxCandidateWordList *newList;
+    newList = FcitxSpellGetCandWords(instance, NULL, keyboard->buffer, NULL,
+                                     keyboard->config.maximumHintLength,
+                                     keyboard->dictLang, NULL,
+                                     FcitxKeyboardGetCandWordCb, layout);
+    if (!newList)
         return IRV_DISPLAY_CANDWORDS;
-    FcitxCandidateWordMerge(FcitxInputStateGetCandidateList(input),
-                            candList, -1);
-    FcitxCandidateWordFreeList(candList);
+    FcitxCandidateWordMerge(mainList, newList, -1);
+    FcitxCandidateWordFreeList(newList);
     return IRV_DISPLAY_CANDWORDS;
 }
 
@@ -732,8 +804,7 @@ boolean LoadKeyboardConfig(FcitxKeyboard* keyboard, FcitxKeyboardConfig* fs)
 
     FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-keyboard.config", "r", NULL);
 
-    if (!fp)
-    {
+    if (!fp) {
         if (errno == ENOENT)
             SaveKeyboardConfig(fs);
     }
@@ -750,7 +821,8 @@ boolean LoadKeyboardConfig(FcitxKeyboard* keyboard, FcitxKeyboardConfig* fs)
 void SaveKeyboardConfig(FcitxKeyboardConfig* fs)
 {
     FcitxConfigFileDesc *configDesc = GetKeyboardConfigDesc();
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-keyboard.config", "w", NULL);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-keyboard.config",
+                                             "w", NULL);
     FcitxConfigSaveConfigFileFp(fp, &fs->gconfig, configDesc);
     if (fp)
         fclose(fp);

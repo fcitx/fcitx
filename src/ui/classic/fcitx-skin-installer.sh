@@ -13,6 +13,16 @@ else
     MESSAGE_COMMON="echo"
 fi
 
+if type gettext > /dev/null 2>&1; then
+    _() {
+        gettext "$@"
+    }
+else
+    _() {
+        echo "$@"
+    }
+fi
+
 zenity_error()
 {
     zenity --error --text="$1"
@@ -45,7 +55,7 @@ fi
 
 DIRCOUNT="$(tar -tf $1 | grep -c '/$')"
 if [ "x$DIRCOUNT" != "x1" ]; then
-    error "$(gettext "Error: skin file should only contain one directory.")"
+    error "$(_ "Error: skin file should only contain one directory.")"
     exit 1
 fi
 
@@ -53,7 +63,7 @@ DIRNAME="$(tar -tf $1 | grep '/$')"
 tar -tf $1 ${DIRNAME}fcitx_skin.conf >/dev/null 2>&1
 
 if [ $? != 0 ]; then
-    error "$(gettext "Error: skin file doesn't contain skin config.")"
+    error "$(_ "Error: skin file doesn't contain skin config.")"
     exit 1
 fi
 
@@ -66,7 +76,7 @@ elif [ ! -z "$HOME" ]; then
 fi
 
 if [ -z "$SKINPATH" ]; then
-    error "$(gettext 'Error: $HOME or $XDG_CONFIG_HOME is not set, cannot determine the install path')"
+    error "$(_ 'Error: $HOME or $XDG_CONFIG_HOME is not set, cannot determine the install path')"
     exit 1
 fi
 
@@ -75,8 +85,8 @@ mkdir -p $SKINPATH || ( echo "Error: cannot create skin dir" ; exit 1 )
 tar -C $SKINPATH -zxf $1
 
 if [ $? != 0 ]; then
-    error "$(gettext "Error: skin failed to install")"
+    error "$(_ "Error: skin failed to install")"
     exit 1
 else
-    message "$(gettext "Successfully Installed skin")"
+    message "$(_ "Successfully Installed skin")"
 fi

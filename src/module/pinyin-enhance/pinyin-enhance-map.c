@@ -39,7 +39,7 @@ PinyinEnhanceMapAdd(PyEnhanceMap **map, FcitxMemoryPool *pool,
 {
     PyEnhanceMapWord *py_word;
     PyEnhanceMap *py_map;
-#define uthash_malloc(sz) fcitx_memory_pool_alloc_align(pool, sz, 1)
+#define uthash_malloc(sz) fcitx_memory_pool_alloc_align(pool, sz)
 #define uthash_free(ptr)
     word_l++;
     py_word = uthash_malloc(sizeof(PyEnhanceMapWord) + word_l);

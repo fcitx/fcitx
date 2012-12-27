@@ -197,37 +197,69 @@ ClipboardPreHook(void *arg, FcitxKeySym sym, unsigned int state,
         return false;
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
-    FcitxGlobalConfig* fc = FcitxInstanceGetGlobalConfig(instance);
+    FcitxGlobalConfig *fc = FcitxInstanceGetGlobalConfig(instance);
     *ret_val = IRV_TO_PROCESS;
-
-    const FcitxHotkey *prev = FcitxInstanceGetContextHotkey(
-        instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
-    if (prev == NULL)
-        prev = fc->hkPrevPage;
-
     int key;
-    const FcitxHotkey *next = FcitxInstanceGetContextHotkey(
-        instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
-    if (next == NULL)
-        next = fc->hkNextPage;
-
-    if (FcitxHotkeyIsHotKey(sym, state, prev)) {
-        if (FcitxCandidateWordGoPrevPage(cand_list))
-            *ret_val = IRV_DISPLAY_MESSAGE;
-    } else if (FcitxHotkeyIsHotKey(sym, state, next)) {
-        if (FcitxCandidateWordGoNextPage(cand_list))
-            *ret_val = IRV_DISPLAY_MESSAGE;
+    FcitxCandidateWord *cand_word;
+    if (FcitxHotkeyIsHotKey(sym, state, fc->nextWord)) {
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        cand_word = FcitxCandidateWordGetNext(cand_list, cand_word);
+        if (!cand_word) {
+            FcitxCandidateWordSetPage(cand_list, 0);
+            cand_word = FcitxCandidateWordGetFirst(cand_list);
+        } else {
+            FcitxCandidateWordSetFocus(
+                cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state, fc->prevWord)) {
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        cand_word = FcitxCandidateWordGetPrev(cand_list, cand_word);
+        if (!cand_word) {
+            FcitxCandidateWordSetPage(
+                cand_list, FcitxCandidateWordPageCount(cand_list) - 1);
+            cand_word = FcitxCandidateWordGetLast(cand_list);
+        } else {
+            FcitxCandidateWordSetFocus(
+                cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state,
+                                   FcitxConfigPrevPageKey(instance, fc))) {
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        if (!FcitxCandidateWordGoPrevPage(cand_list)) {
+            FcitxCandidateWordSetType(cand_word, MSG_CANDIATE_CURSOR);
+            *ret_val = IRV_DO_NOTHING;
+            return true;
+        }
+        cand_word = FcitxCandidateWordGetCurrentWindow(cand_list) +
+            FcitxCandidateWordGetCurrentWindowSize(cand_list) - 1;
+    } else if (FcitxHotkeyIsHotKey(sym, state,
+                                   FcitxConfigNextPageKey(instance, fc))) {
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        if (!FcitxCandidateWordGoNextPage(cand_list)) {
+            FcitxCandidateWordSetType(cand_word, MSG_CANDIATE_CURSOR);
+            *ret_val = IRV_DO_NOTHING;
+            return true;
+        }
+        cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
     } else if ((key = FcitxCandidateWordCheckChooseKey(cand_list,
                                                        sym, state)) >= 0) {
         *ret_val = FcitxCandidateWordChooseByIndex(cand_list, key);
+        return true;
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
-        if (FcitxCandidateWordPageCount(cand_list) != 0)
-            *ret_val = FcitxCandidateWordChooseByIndex(cand_list, 0);
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        *ret_val = FcitxCandidateWordChooseByTotalIndex(
+            cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
+        return true;
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
         *ret_val = IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
-    }
-    if (*ret_val == IRV_TO_PROCESS)
+        return true;
+    } else {
         *ret_val = IRV_DO_NOTHING;
+        return true;
+    }
+
+    FcitxCandidateWordSetType(cand_word, MSG_CANDIATE_CURSOR);
+    *ret_val = IRV_FLAG_UPDATE_INPUT_WINDOW;
     return true;
 }
 

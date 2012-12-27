@@ -321,8 +321,10 @@ boolean TableInit(void *arg)
     FcitxInstanceSetContext(tbl->owner, CONTEXT_IM_KEYBOARD_LAYOUT, table->kbdlayout);
     FcitxInstanceSetContext(tbl->owner, CONTEXT_SHOW_REMIND_STATUS, &flag);
     if (table->bUseAlternativePageKey) {
-        FcitxInstanceSetContext(tbl->owner, CONTEXT_ALTERNATIVE_PREVPAGE_KEY, table->hkAlternativePrevPage);
-        FcitxInstanceSetContext(tbl->owner, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY, table->hkAlternativeNextPage);
+        FcitxInstanceSetContext(tbl->owner, CONTEXT_ALTERNATIVE_PREVPAGE_KEY,
+                                table->hkAlternativePrevPage);
+        FcitxInstanceSetContext(tbl->owner, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY,
+                                table->hkAlternativeNextPage);
     }
     FcitxAddon* pyaddon = FcitxPinyinGetAddon(tbl->owner);
     tbl->pyaddon = pyaddon;

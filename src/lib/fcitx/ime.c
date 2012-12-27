@@ -786,18 +786,12 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
      * GetCandWords after go for another page, simply update input window is ok.
      */
     if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
-        const FcitxHotkey* hkPrevPage = FcitxInstanceGetContextHotkey(instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
-        if (hkPrevPage == NULL)
-            hkPrevPage = fc->hkPrevPage;
-
-        const FcitxHotkey* hkNextPage = FcitxInstanceGetContextHotkey(instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
-        if (hkNextPage == NULL)
-            hkNextPage = fc->hkNextPage;
-
-        if (FcitxHotkeyIsHotKey(sym, state, hkPrevPage)) {
+        if (FcitxHotkeyIsHotKey(sym, state,
+                                FcitxConfigPrevPageKey(instance, fc))) {
             if (FcitxCandidateWordGoPrevPage(input->candList))
                 retVal = IRV_DISPLAY_CANDWORDS;
-        } else if (FcitxHotkeyIsHotKey(sym, state, hkNextPage)) {
+        } else if (FcitxHotkeyIsHotKey(sym, state,
+                                       FcitxConfigNextPageKey(instance, fc))) {
             if (FcitxCandidateWordGoNextPage(input->candList))
                 retVal = IRV_DISPLAY_CANDWORDS;
         }

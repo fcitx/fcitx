@@ -44,7 +44,7 @@
  * When it comes to update candidates, if the flag contains IRV_FLAG_UPDATE_CANDIDATE_WORDS, it will trigger the GetCandWords
  * of input method engine and clean up all stiring in the input window, after that, it will trigger update candidates hook.
  *
- * Key blocker is useful if you want to post input phase to do something, but you don't want forward key if they do nothing.
+ * Key blocker is useful if you want to do something in the post input phase, but you don't want forward key if they do nothing.
  * There is an default implemention inside fcitx, it will blocks key when raw input buffer is not empty. Those keys
  * contains direction key(left/right..), key will cause something input (a,b,c...), key will cause cursor move (home/end...).
  *

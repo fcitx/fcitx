@@ -124,7 +124,6 @@ PinyinEnhanceCreate(FcitxInstance *instance)
     }
     FcitxAddon *addon = FcitxPinyinEnhanceGetAddon(instance);
 
-    pyenhance->static_pool = fcitx_memory_pool_create();
     PinyinEnhanceSymInit(pyenhance);
 
     FcitxIMEventHook event_hook = {
@@ -203,7 +202,8 @@ PinyinEnhanceDestroy(void *arg)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     PinyinEnhanceSymDestroy(pyenhance);
-    fcitx_memory_pool_destroy(pyenhance->static_pool);
+    py_enhance_buff_free(&pyenhance->stroke_tree.keys);
+    py_enhance_buff_free(&pyenhance->stroke_tree.words);
 }
 
 static void

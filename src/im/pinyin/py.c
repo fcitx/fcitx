@@ -2083,8 +2083,8 @@ void* PYGetPYByHZWrapper(void * arg, FcitxModuleFunctionArg args)
 void* DoPYInputWrapper(void * arg, FcitxModuleFunctionArg args)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    FcitxKeySym *a = args.args[0];
-    unsigned int *b = args.args[1];
+    const FcitxKeySym *a = args.args[0];
+    const unsigned int *b = args.args[1];
     DoPYInput(pystate, *a, *b);
     return NULL;
 }

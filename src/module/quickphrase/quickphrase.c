@@ -202,9 +202,9 @@ void * QuickPhraseCreate(FcitxInstance *instance)
 
 void* QuickPhraseLaunch(void* arg, FcitxModuleFunctionArg args)
 {
-    int* key = args.args[0];
-    boolean* useDup = args.args[1];
-    boolean* append = args.args[2];
+    const int* key = args.args[0];
+    const boolean* useDup = args.args[1];
+    const boolean* append = args.args[2];
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     qpstate->curTriggerKey[0].sym = *key;
     qpstate->useDupKeyInput = *useDup;
@@ -468,38 +468,70 @@ void QuickPhraseReset(void* arg)
     qpstate->append = false;
     memset(qpstate->curTriggerKey, 0, sizeof(FcitxHotkey) * 2);
 }
-INPUT_RETURN_VALUE QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
+
+static INPUT_RETURN_VALUE
+QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
 {
-    QuickPhraseState *qpstate = (QuickPhraseState*) arg;
-    FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
-    FcitxGlobalConfig* fc = FcitxInstanceGetGlobalConfig(qpstate->owner);
-    int retVal = IRV_TO_PROCESS;
-
-    const FcitxHotkey* hkPrevPage = FcitxInstanceGetContextHotkey(qpstate->owner, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
-    if (hkPrevPage == NULL)
-        hkPrevPage = fc->hkPrevPage;
-
-    const FcitxHotkey* hkNextPage = FcitxInstanceGetContextHotkey(qpstate->owner, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
-    if (hkNextPage == NULL)
-        hkNextPage = fc->hkNextPage;
-
+    QuickPhraseState *qpstate = (QuickPhraseState*)arg;
+    FcitxInstance *instance = qpstate->owner;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    FcitxGlobalConfig *fc = FcitxInstanceGetGlobalConfig(instance);
     int iKey = -1;
-    FcitxCandidateWordList *candList = FcitxInputStateGetCandidateList(input);
-    if (FcitxHotkeyIsHotKey(sym, state, hkPrevPage)) {
-        if (FcitxCandidateWordGoPrevPage(candList))
-            retVal = IRV_DISPLAY_MESSAGE;
-    } else if (FcitxHotkeyIsHotKey(sym, state, hkNextPage)) {
-        if (FcitxCandidateWordGoNextPage(candList))
-            retVal = IRV_DISPLAY_MESSAGE;
-    } else if ((iKey = FcitxCandidateWordCheckChooseKey(candList,
-                                                        sym, state)) >= 0) {
-        retVal = FcitxCandidateWordChooseByIndex(candList, iKey);
+    FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
+    if (!FcitxCandidateWordGetListSize(cand_list))
+        return IRV_TO_PROCESS;
+    FcitxCandidateWord *cand_word;
+    if (FcitxHotkeyIsHotKey(sym, state, fc->nextWord)) {
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        cand_word = FcitxCandidateWordGetNext(cand_list, cand_word);
+        if (!cand_word) {
+            FcitxCandidateWordSetPage(cand_list, 0);
+            cand_word = FcitxCandidateWordGetFirst(cand_list);
+        } else {
+            FcitxCandidateWordSetFocus(
+                cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state, fc->prevWord)) {
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        cand_word = FcitxCandidateWordGetPrev(cand_list, cand_word);
+        if (!cand_word) {
+            FcitxCandidateWordSetPage(
+                cand_list, FcitxCandidateWordPageCount(cand_list) - 1);
+            cand_word = FcitxCandidateWordGetLast(cand_list);
+        } else {
+            FcitxCandidateWordSetFocus(
+                cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state,
+                                   FcitxConfigPrevPageKey(instance, fc))) {
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        if (!FcitxCandidateWordGoPrevPage(cand_list)) {
+            FcitxCandidateWordSetType(cand_word, MSG_CANDIATE_CURSOR);
+            return IRV_TO_PROCESS;
+        }
+        cand_word = FcitxCandidateWordGetCurrentWindow(cand_list) +
+            FcitxCandidateWordGetCurrentWindowSize(cand_list) - 1;
+    } else if (FcitxHotkeyIsHotKey(sym, state,
+                                   FcitxConfigNextPageKey(instance, fc))) {
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        if (!FcitxCandidateWordGoNextPage(cand_list)) {
+            FcitxCandidateWordSetType(cand_word, MSG_CANDIATE_CURSOR);
+            return IRV_TO_PROCESS;
+        }
+        cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
+    } else if ((iKey = FcitxCandidateWordCheckChooseKey(cand_list, sym,
+                                                        state)) >= 0) {
+        return FcitxCandidateWordChooseByIndex(cand_list, iKey);
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
-        if (FcitxCandidateWordPageCount(candList) != 0)
-            retVal = FcitxCandidateWordChooseByIndex(candList, 0);
+        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
+        return FcitxCandidateWordChooseByTotalIndex(
+            cand_list, FcitxCandidateWordGetIndex(cand_list, cand_word));
+    } else {
+        return IRV_TO_PROCESS;
     }
 
-    return retVal;
+    FcitxCandidateWordSetType(cand_word, MSG_CANDIATE_CURSOR);
+    return IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
 
 static void
@@ -523,7 +555,7 @@ QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
     char* search;
     char* needfree = NULL;
     if (qpstate->append) {
-        asprintf(&search, "%s%s", c, qpstate->buffer);
+        fcitx_utils_alloc_cat_str(search, c, qpstate->buffer);
         needfree = search;
     } else {
         search = qpstate->buffer;
@@ -549,7 +581,6 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
     int iLastQuickPhrase;
     int iFirstQuickPhrase;
     FcitxInstanceCleanInputWindowDown(qpstate->owner);
-
     FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
     FcitxCandidateWordSetChooseAndModifier(
         candList, DIGIT_STR_CHOOSE, cmodtable[qpstate->config.chooseModifier]);
@@ -590,8 +621,9 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
                 candWord.callback = QuickPhraseGetCandWord;
                 candWord.owner = qpstate;
                 candWord.priv = qpcand;
-                candWord.strExtra = strdup(currentQuickPhrase->strCode +
-                                           iInputLen);
+                fcitx_utils_alloc_cat_str(candWord.strExtra, " ",
+                                          currentQuickPhrase->strCode +
+                                          iInputLen);
                 candWord.strWord = strdup(currentQuickPhrase->strPhrase);
                 candWord.wordType = MSG_OTHER;
                 candWord.extraType = MSG_CODE;

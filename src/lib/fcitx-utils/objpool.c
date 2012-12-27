@@ -26,8 +26,6 @@
 #include "objpool.h"
 #include "fcitx/fcitx.h"
 
-#define OBJ_POOL_INIT_SIZE (4)
-
 FCITX_EXPORT_API
 void
 fcitx_obj_pool_done(FcitxObjPool *pool)
@@ -37,10 +35,17 @@ fcitx_obj_pool_done(FcitxObjPool *pool)
 
 FCITX_EXPORT_API
 FcitxObjPool*
-fcitx_obj_pool_new(size_t size)
+(fcitx_obj_pool_new)(size_t size)
+{
+    return fcitx_obj_pool_new(size);
+}
+
+FCITX_EXPORT_API
+FcitxObjPool*
+fcitx_obj_pool_new_with_prealloc(size_t size, size_t prealloc)
 {
     FcitxObjPool *pool = fcitx_utils_new(FcitxObjPool);
-    fcitx_obj_pool_init(pool, size);
+    fcitx_obj_pool_init_with_prealloc(pool, size, prealloc);
     return pool;
 }
 
@@ -54,7 +59,15 @@ fcitx_obj_pool_free(FcitxObjPool *pool)
 
 FCITX_EXPORT_API
 void
-fcitx_obj_pool_init(FcitxObjPool* pool, size_t size)
+(fcitx_obj_pool_init)(FcitxObjPool* pool, size_t size)
+{
+    fcitx_obj_pool_init(pool, size);
+}
+
+FCITX_EXPORT_API
+void
+fcitx_obj_pool_init_with_prealloc(FcitxObjPool* pool, size_t size,
+                                  size_t prealloc)
 {
     size_t rem = size % sizeof(int);
     if (rem) {
@@ -64,12 +77,12 @@ fcitx_obj_pool_init(FcitxObjPool* pool, size_t size)
     }
     pool->ele_size = size;
     pool->next_free = 0;
-    pool->alloc = size * OBJ_POOL_INIT_SIZE;
+    pool->alloc = size * prealloc;
     pool->array = malloc(pool->alloc);
 
     size_t offset = 0;
     int i = 0;
-    for (offset = 0, i = 0; i < OBJ_POOL_INIT_SIZE - 1; offset += size, i++) {
+    for (offset = 0, i = 0; i < prealloc - 1; offset += size, i++) {
         *(int*)(pool->array + offset) = i + 1;
     }
     *(int*)(pool->array + offset) = FCITX_OBJECT_POOL_INVALID_ID;

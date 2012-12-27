@@ -64,7 +64,7 @@ void FcitxQtConfigUIFactoryPrivate::scan()
     // check plugin files
     size_t len;
     char** path = FcitxXDGGetLibPath(&len);
-    for (int i = 0; i < len; i ++) {
+    for (size_t i = 0; i < len; i ++) {
         dirs << path[i];
     }
 

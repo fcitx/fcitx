@@ -56,28 +56,33 @@ typedef struct _MinimalBuffer {
 
 void SetMyExceptionHandler(void)
 {
-    int             signo;
+    int signo;
 
     for (signo = SIGHUP; signo < SIGUNUSED; signo++) {
-        if (signo == SIGTSTP || signo == SIGCONT)
+        switch (signo) {
+        case SIGTSTP:
+        case SIGCONT:
             continue;
-
-        if (signo != SIGALRM
-            && signo != SIGPIPE
-            && signo != SIGUSR2
-            && signo != SIGWINCH
-        )
-            signal(signo, OnException);
-        else
+        case SIGALRM:
+        case SIGPIPE:
+        case SIGUSR2:
+        case SIGWINCH:
             signal(signo, SIG_IGN);
+            break;
+        default:
+            signal(signo, OnException);
+        }
     }
 }
 
-static inline void BufferReset(MinimalBuffer* buffer) {
+static inline void BufferReset(MinimalBuffer* buffer)
+{
     buffer->offset = 0;
 }
 
-static inline void BufferAppendUInt64(MinimalBuffer* buffer, uint64_t number, int radix) {
+static inline void
+BufferAppendUInt64(MinimalBuffer* buffer, uint64_t number, int radix)
+{
     int i = 0;
     while (buffer->offset + i < MINIMAL_BUFFER_SIZE) {
         const int tmp = number % radix;
@@ -100,7 +105,26 @@ static inline void BufferAppendUInt64(MinimalBuffer* buffer, uint64_t number, in
         }
     }
     buffer->offset += i;
+}
 
+static inline void
+_write_string_len(int fd, const char *str, size_t len)
+{
+    if (fd >= 0 && fd != STDERR_FILENO)
+        write(fd, str, len);
+    write(STDERR_FILENO, str, len);
+}
+
+static inline void
+_write_string(int fd, const char *str)
+{
+    _write_string_len(fd, str, strlen(str));
+}
+
+static inline void
+_write_buffer(int fd, const MinimalBuffer *buffer)
+{
+    _write_string_len(fd, buffer->buffer, buffer->offset);
 }
 
 void OnException(int signo)
@@ -108,66 +132,49 @@ void OnException(int signo)
     if (signo == SIGCHLD)
         return;
 
-
-#define WRITE_STRING_LEN(STR, LEN) \
-    do { \
-        write(STDERR_FILENO, (STR), (LEN)); \
-        if (fd) \
-            write(fd, (STR), (LEN)); \
-    } while(0)
-
-#define WRITE_STRING(STR) \
-    WRITE_STRING_LEN(STR, (sizeof(STR) - sizeof(STR[0])))
-
-#define WRITE_BUFFER(BUFFER) \
-    WRITE_STRING_LEN((BUFFER).buffer, (BUFFER).offset)
-
     MinimalBuffer buffer;
+    int fd = -1;
 
-    int fd = 0;
-
-    if (crashlog && (signo == SIGSEGV || signo == SIGABRT || signo == SIGKILL))
+    if (crashlog && (signo == SIGSEGV || signo == SIGABRT))
         fd = open(crashlog, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
     /* print signal info */
     BufferReset(&buffer);
     BufferAppendUInt64(&buffer, signo, 10);
-    WRITE_STRING("=========================\n");
-    WRITE_STRING("FCITX " VERSION " -- Get Signal No.: ");
-    WRITE_BUFFER(buffer);
-    WRITE_STRING("\n");
+    _write_string(fd, "=========================\n");
+    _write_string(fd, "FCITX " VERSION " -- Get Signal No.: ");
+    _write_buffer(fd, &buffer);
+    _write_string(fd, "\n");
 
     /* print time info */
     time_t t = time(NULL);
     BufferReset(&buffer);
     BufferAppendUInt64(&buffer, t, 10);
-    WRITE_STRING("Date: try \"date -d @");
-    WRITE_BUFFER(buffer);
-    WRITE_STRING("\" if you are using GNU date ***\n");
+    _write_string(fd, "Date: try \"date -d @");
+    _write_buffer(fd, &buffer);
+    _write_string(fd, "\" if you are using GNU date ***\n");
 
     /* print process info */
     BufferReset(&buffer);
     BufferAppendUInt64(&buffer, getpid(), 10);
-    WRITE_STRING("ProcessID: ");
-    WRITE_BUFFER(buffer);
-    WRITE_STRING("\n");
+    _write_string(fd, "ProcessID: ");
+    _write_buffer(fd, &buffer);
+    _write_string(fd, "\n");
 
 #if defined(ENABLE_BACKTRACE)
 #define BACKTRACE_SIZE 32
-    void *array[BACKTRACE_SIZE] = {NULL, };
+    void *array[BACKTRACE_SIZE] = { NULL };
 
     int size = backtrace(array, BACKTRACE_SIZE);
     backtrace_symbols_fd(array, size, STDERR_FILENO);
-    if (fd)
+    if (fd >= 0)
         backtrace_symbols_fd(array, size, fd);
 #endif
 
-    if (fd)
+    if (fd >= 0)
         close(fd);
 
     switch (signo) {
-    case SIGKILL:
-        break;
     case SIGABRT:
     case SIGSEGV:
     case SIGBUS:
@@ -175,7 +182,6 @@ void OnException(int signo)
     case SIGFPE:
         exit(1);
         break;
-
     default:
         {
             if (!instance || !instance->initialized) {

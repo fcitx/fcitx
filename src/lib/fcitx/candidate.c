@@ -178,23 +178,45 @@ FcitxCandidateWord* FcitxCandidateWordGetCurrentWindow(FcitxCandidateWordList* c
         candList, candList->currentPage * candList->wordPerPage);
 }
 
-FCITX_EXPORT_API
-FcitxCandidateWord* FcitxCandidateWordGetCurrentWindowNext(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord)
+FCITX_EXPORT_API FcitxCandidateWord*
+FcitxCandidateWordGetCurrentWindowNext(FcitxCandidateWordList* candList,
+                                       FcitxCandidateWord* candWord)
 {
-    FcitxCandidateWord* nextCandWord = (FcitxCandidateWord*) utarray_next(&candList->candWords, candWord);
-    FcitxCandidateWord* startCandWord = FcitxCandidateWordGetCurrentWindow(candList);
+    FcitxCandidateWord *nextCandWord = (FcitxCandidateWord*)utarray_next(&candList->candWords, candWord);
     if (nextCandWord == NULL)
         return NULL;
-    int delta = utarray_eltidx(&candList->candWords, nextCandWord) - utarray_eltidx(&candList->candWords, startCandWord);
-    if (delta < 0 || delta >= candList->wordPerPage)
+    FcitxCandidateWord *startCandWord = FcitxCandidateWordGetCurrentWindow(candList);
+    if (nextCandWord < startCandWord ||
+        nextCandWord >= startCandWord + candList->wordPerPage)
         return NULL;
     return nextCandWord;
+}
+
+FCITX_EXPORT_API FcitxCandidateWord*
+FcitxCandidateWordGetCurrentWindowPrev(FcitxCandidateWordList* candList,
+                                       FcitxCandidateWord* candWord)
+{
+    FcitxCandidateWord *prevWord = utarray_prev(&candList->candWords, candWord);
+    if (prevWord == NULL)
+        return NULL;
+    FcitxCandidateWord *startWord = FcitxCandidateWordGetCurrentWindow(candList);
+    if (prevWord < startWord ||
+        prevWord >= startWord + candList->wordPerPage)
+        return NULL;
+    return prevWord;
 }
 
 FCITX_EXPORT_API
 FcitxCandidateWord *FcitxCandidateWordGetByTotalIndex(FcitxCandidateWordList* candList, int index)
 {
     return (FcitxCandidateWord*)utarray_eltptr(&candList->candWords, index);
+}
+
+FCITX_EXPORT_API int
+FcitxCandidateWordGetIndex(FcitxCandidateWordList *candList,
+                           FcitxCandidateWord *word)
+{
+    return utarray_eltidx(&candList->candWords, word);
 }
 
 FCITX_EXPORT_API
@@ -387,25 +409,40 @@ int FcitxCandidateWordGetListSize(FcitxCandidateWordList* candList)
 }
 
 FCITX_EXPORT_API
-boolean FcitxCandidateWordGetHasGoneToPrevPage(FcitxCandidateWordList* candList) {
+boolean FcitxCandidateWordGetHasGoneToPrevPage(FcitxCandidateWordList* candList)
+{
     return candList->hasGonePrevPage;
 }
 
 FCITX_EXPORT_API
-boolean FcitxCandidateWordGetHasGoneToNextPage(FcitxCandidateWordList* candList) {
+boolean FcitxCandidateWordGetHasGoneToNextPage(FcitxCandidateWordList* candList)
+{
     return candList->hasGoneNextPage;
 }
 
 FCITX_EXPORT_API
 FcitxCandidateWord* FcitxCandidateWordGetFirst(FcitxCandidateWordList* candList)
 {
-    return (FcitxCandidateWord*) utarray_front(&candList->candWords);
+    return (FcitxCandidateWord*)utarray_front(&candList->candWords);
+}
+
+FCITX_EXPORT_API
+FcitxCandidateWord* FcitxCandidateWordGetLast(FcitxCandidateWordList* candList)
+{
+    return (FcitxCandidateWord*)utarray_back(&candList->candWords);
 }
 
 FCITX_EXPORT_API
 FcitxCandidateWord* FcitxCandidateWordGetNext(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord)
 {
     return (FcitxCandidateWord*) utarray_next(&candList->candWords, candWord);
+}
+
+FCITX_EXPORT_API FcitxCandidateWord*
+FcitxCandidateWordGetPrev(FcitxCandidateWordList *candList,
+                          FcitxCandidateWord *candWord)
+{
+    return utarray_prev(&candList->candWords, candWord);
 }
 
 FCITX_EXPORT_API
@@ -445,5 +482,21 @@ void FcitxCandidateWordSetOverridePaging(FcitxCandidateWordList* candList, boole
     candList->overrideDestroyNotify = destroyNotify;
 }
 
+FCITX_EXPORT_API FcitxCandidateWord*
+FcitxCandidateWordGetFocus(FcitxCandidateWordList *cand_list, boolean clear)
+{
+    FcitxCandidateWord *res = NULL;
+    FcitxCandidateWord *cand_word;
+    for (cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
+         cand_word;cand_word = FcitxCandidateWordGetCurrentWindowNext(
+             cand_list, cand_word)) {
+        if (FcitxCandidateWordCheckFocus(cand_word, clear)) {
+            res = cand_word;
+        }
+    }
+    if (!res)
+        return FcitxCandidateWordGetCurrentWindow(cand_list);
+    return res;
+}
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

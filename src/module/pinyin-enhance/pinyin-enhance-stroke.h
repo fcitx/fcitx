@@ -24,18 +24,56 @@
 #include <stdint.h>
 #include "pinyin-enhance-internal.h"
 #include "pinyin-enhance-map.h"
+#include "fcitx-utils/utf8.h"
 
+typedef struct {
+    char word[UTF8_MAX_LENGTH + 1];
+    /**
+     * next % 4:
+     *     0: word_id,
+     *     2: key_id + 2,
+     *     1, 3: table_offset * 2 + 1,
+     **/
+    uint32_t next;
+} PyEnhanceStrokeWord;
 
-static inline char *py_enhance_stroke_get_key(const PyEnhanceStrokeKey *key)
+static inline PyEnhanceStrokeWord*
+_py_enhance_stroke_id_to_word(const PyEnhanceStrokeTree *tree, uint32_t id)
 {
-    return ((void*)(intptr_t)key) + sizeof(PyEnhanceStrokeKey);
+    return (PyEnhanceStrokeWord*)(tree->words.data + id);
 }
 
-void py_enhance_stroke_load_tree(PyEnhanceStrokeTree *tree, FILE *fp,
-                                 FcitxMemoryPool *pool);
+static inline PyEnhanceStrokeWord*
+py_enhance_stroke_id_to_word(const PyEnhanceStrokeTree *tree, uint32_t id)
+{
+    if (id % 4 != 0)
+        return NULL;
+    return _py_enhance_stroke_id_to_word(tree, id);
+}
+
+static inline PyEnhanceStrokeWord*
+py_enhance_stroke_word_next(const PyEnhanceStrokeTree *tree,
+                            const PyEnhanceStrokeWord *w)
+{
+    return py_enhance_stroke_id_to_word(tree, w->next);
+}
+
+static inline void
+py_enhance_stroke_word_tonext(const PyEnhanceStrokeTree *tree,
+                              const PyEnhanceStrokeWord **w)
+{
+    *w = py_enhance_stroke_word_next(tree, *w);
+}
+
+void py_enhance_stroke_load_tree(PyEnhanceStrokeTree *tree, FILE *fp);
 int py_enhance_stroke_get_match_keys(PinyinEnhance *pyenhance,
                                      const char *key_s, int key_l,
-                                     const PyEnhanceMapWord **word_buff,
+                                     PyEnhanceStrokeWord **word_buff,
                                      int buff_len);
+uint8_t *py_enhance_stroke_find_stroke(
+    PinyinEnhance *pyenhance, const char *str,
+    uint8_t *stroke, unsigned int *len);
+char *py_enhance_stroke_get_str(const uint8_t *stroke, unsigned int s_l,
+                                char *str, unsigned int *len);
 
 #endif
