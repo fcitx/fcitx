@@ -52,7 +52,6 @@ find_package(Gettext REQUIRED)
 #     (To distribute this file outside of CMake, substitute the full
 #      License text for the above reference.)
 
-set(includedir "${CMAKE_INSTALL_PREFIX}/include")
 function(fcitx_parse_arguments prefix _optionNames
     _singleArgNames _multiArgNames)
   # first set all result variables to empty/FALSE
@@ -171,6 +170,8 @@ function(__fcitx_cmake_init)
     set(FCITX_PO_PARSER_EXECUTABLE
       "${PROJECT_BINARY_DIR}/tools/dev/fcitx-po-parser"
       CACHE INTERNAL "fcitx-po-parser" FORCE)
+    set(FCITX4_FCITX_INCLUDE_DIRS "${CMAKE_INSTALL_PREFIX}/include"
+      CACHE INTERNAL "include dir" FORCE)
   else()
     find_program(FCITX_SCANNER_EXECUTABLE fcitx-scanner)
     find_program(FCITX_PO_PARSER_EXECUTABLE fcitx-po-parser)
@@ -368,7 +369,8 @@ function(__fcitx_install_addon_headers target_name subdir)
   add_custom_target("${header_target}" DEPENDS ${headers})
   add_dependencies("${target_name}" "${header_target}")
   install(FILES ${headers}
-    DESTINATION "${includedir}/${FCITX4_PACKAGE_NAME}/module/${subdir}")
+    DESTINATION
+    "${FCITX4_FCITX_INCLUDE_DIRS}/${FCITX4_PACKAGE_NAME}/module/${subdir}")
 endfunction()
 
 function(__fcitx_link_addon_headers)
@@ -834,5 +836,6 @@ function(FCITX_ADD_ADDON_HEADER subdir)
   __fcitx_link_addon_headers(${ARGN})
   set(headers ${ARGN})
   install(FILES ${headers}
-    DESTINATION "${includedir}/${FCITX4_PACKAGE_NAME}/module/${subdir}")
+    DESTINATION
+    "${FCITX4_FCITX_INCLUDE_DIRS}/${FCITX4_PACKAGE_NAME}/module/${subdir}")
 endfunction()

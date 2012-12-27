@@ -189,6 +189,7 @@ if(NOT DEFINED MAN_INSTALL_DIR)
     set(MAN_INSTALL_DIR ${prefix}/share/man)
 endif()
 
+set(includedir "${CMAKE_INSTALL_PREFIX}/include")
 set(libdir ${LIB_INSTALL_DIR})
 set(pkgconfdir ${LIBDATA_INSTALL_DIR}/pkgconfig)
 set(mandir ${MAN_INSTALL_DIR})
