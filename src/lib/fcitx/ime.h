@@ -155,8 +155,9 @@ extern "C" {
          * when user press inactivate key, default behavior is commit raw preedit.
          * If you want to OVERRIDE this behavior, be sure to implement this function.
          *
-         * controlled by [Output/SendTextWhenSwitchEng], when this value is true, OnClose is
-         * called.
+         * in some case, your implementation of OnClose should respect the value of
+         * [Output/SendTextWhenSwitchEng], when this value is true, commit something you
+         * want.
          *
          * And no matter in which case, Reset will be called after that.
          */

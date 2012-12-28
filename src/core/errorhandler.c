@@ -163,7 +163,7 @@ void OnException(int signo)
 
 #if defined(ENABLE_BACKTRACE)
 #define BACKTRACE_SIZE 32
-    void *array[BACKTRACE_SIZE] = { NULL };
+    void *array[BACKTRACE_SIZE] = { NULL, };
 
     int size = backtrace(array, BACKTRACE_SIZE);
     backtrace_symbols_fd(array, size, STDERR_FILENO);

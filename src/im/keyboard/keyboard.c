@@ -56,10 +56,12 @@
 static void* FcitxKeyboardCreate(FcitxInstance* instance);
 static boolean FcitxKeyboardInit(void *arg);
 static void  FcitxKeyboardResetIM(void *arg);
+void FcitxKeyboardOnClose(void* arg, FcitxIMCloseEventType event);
 static INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym, unsigned int);
 static void  FcitxKeyboardSave(void *arg);
 static void  FcitxKeyboardReloadConfig(void *arg);
-INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg);
+static INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg);
+static void FcitxKeyboardCommitBuffer(FcitxKeyboard* keyboard);
 static void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
                                       const char* name,
                                       const char* langCode,
@@ -250,20 +252,24 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
     } else {
         fcitx_utils_alloc_cat_str(uniqueName, "fcitx-keyboard-", layoutString);
     }
-    FcitxInstanceRegisterIM(
+
+    FcitxIMIFace iface;
+    memset(&iface, 0, sizeof(FcitxIMIFace));
+    iface.Init = FcitxKeyboardInit;
+    iface.ResetIM = FcitxKeyboardResetIM;
+    iface.DoInput = FcitxKeyboardDoInput;
+    iface.GetCandWords = FcitxKeyboardGetCandWords;
+    iface.Save = FcitxKeyboardSave;
+    iface.ReloadConfig = FcitxKeyboardReloadConfig;
+    iface.OnClose = FcitxKeyboardOnClose;
+
+    FcitxInstanceRegisterIMv2(
         keyboard->owner,
         layout,
         uniqueName,
         name,
         "kbd",
-        FcitxKeyboardInit,
-        FcitxKeyboardResetIM,
-        FcitxKeyboardDoInput,
-        FcitxKeyboardGetCandWords,
-        NULL,
-        FcitxKeyboardSave,
-        FcitxKeyboardReloadConfig,
-        NULL,
+        iface,
         iPriority,
         langCode);
     free(uniqueName);
@@ -499,6 +505,15 @@ boolean FcitxKeyboardInit(void *arg)
     return true;
 }
 
+void FcitxKeyboardCommitBuffer(FcitxKeyboard* keyboard)
+{
+    if (keyboard->buffer[0]) {
+        FcitxInstanceCommitString(keyboard->owner, FcitxInstanceGetCurrentIC(keyboard->owner),
+                                    keyboard->buffer);
+        FcitxKeyboardResetIM(keyboard);
+    }
+}
+
 void  FcitxKeyboardResetIM(void *arg)
 {
     FcitxKeyboardLayout *layout = (FcitxKeyboardLayout*) arg;
@@ -507,6 +522,18 @@ void  FcitxKeyboardResetIM(void *arg)
     keyboard->cursorPos = 0;
     keyboard->composeBuffer[0] = 0;
     keyboard->n_compose = 0;
+}
+
+void FcitxKeyboardOnClose(void* arg, FcitxIMCloseEventType event)
+{
+    FcitxKeyboardLayout *layout = (FcitxKeyboardLayout*) arg;
+    FcitxKeyboard *keyboard = layout->owner;
+    if (event == CET_LostFocus) {
+    } else if (event == CET_ChangeByInactivate) {
+        FcitxKeyboardCommitBuffer(keyboard);
+    } else if (event == CET_ChangeByUser) {
+        FcitxKeyboardCommitBuffer(keyboard);
+    }
 }
 
 static boolean IsDictAvailable(FcitxKeyboard* keyboard)
