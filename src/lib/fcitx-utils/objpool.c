@@ -69,12 +69,7 @@ void
 fcitx_obj_pool_init_with_prealloc(FcitxObjPool* pool, size_t size,
                                   size_t prealloc)
 {
-    size_t rem = size % sizeof(int);
-    if (rem) {
-        size += 2 * sizeof(int) - rem;
-    } else {
-        size += sizeof(int);
-    }
+    size = fcitx_utils_align_to(size + sizeof(int), sizeof(int));
     pool->ele_size = size;
     pool->next_free = 0;
     pool->alloc = size * prealloc;
