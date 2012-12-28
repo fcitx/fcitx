@@ -56,14 +56,12 @@ FCITX_DEFINE_PLUGIN(fcitx_clipboard, module, FcitxModule) = {
     .ReloadConfig = ClipboardReloadConfig
 };
 
-static const unsigned int cmodifiers[] = {
-    FcitxKeyState_None,
-    FcitxKeyState_Alt,
-    FcitxKeyState_Ctrl,
-    FcitxKeyState_Shift
+static const unsigned int cmodifiers[_CBCM_COUNT] = {
+    [CBCM_NONE] = FcitxKeyState_None,
+    [CBCM_ALT] = FcitxKeyState_Alt,
+    [CBCM_CTRL] = FcitxKeyState_Ctrl,
+    [CBCM_SHIFT] = FcitxKeyState_Shift
 };
-
-#define MODIFIERS_COUNT (sizeof(cmodifiers) / sizeof(unsigned int))
 
 static boolean
 ClipboardSelectionEqual(ClipboardSelectionStr *sel, const char *str, size_t len)
@@ -460,9 +458,8 @@ ApplyClipboardConfig(FcitxClipboard *clipboard)
         char *str = clipboard->clp_hist_lst[--clipboard->clp_hist_len].str;
         fcitx_utils_free(str);
     }
-    if (config->choose_modifier >= MODIFIERS_COUNT) {
-        config->choose_modifier = MODIFIERS_COUNT - 1;
-    }
+    if (fcitx_unlikely(config->choose_modifier >= _CBCM_COUNT))
+        config->choose_modifier = _CBCM_COUNT - 1;
     ClipboardWriteHistory(clipboard);
     if (config->cand_max_len < CAND_MAX_LEN_MIN) {
         config->cand_max_len = CAND_MAX_LEN_MIN;

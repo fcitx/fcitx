@@ -61,6 +61,7 @@ typedef enum {
     QPCM_ALT,
     QPCM_CTRL,
     QPCM_SHIFT,
+    _QPCM_COUNT
 } QuickPhraseChooseModifier;
 
 typedef struct {
@@ -692,8 +693,8 @@ boolean LoadQuickPhraseConfig(QuickPhraseConfig *qpconfig)
 
     QuickPhraseConfigConfigBind(qpconfig, cfile, configDesc);
     FcitxConfigBindSync(&qpconfig->gconfig);
-    if (qpconfig->chooseModifier > QPCM_CTRL)
-        qpconfig->chooseModifier = QPCM_CTRL;
+    if (fcitx_unlikely(qpconfig->chooseModifier >= _QPCM_COUNT))
+        qpconfig->chooseModifier = _QPCM_COUNT - 1;
 
     if (fp)
         fclose(fp);

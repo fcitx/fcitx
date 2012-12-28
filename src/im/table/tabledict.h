@@ -80,6 +80,7 @@ typedef enum {
     CM_ALT,
     CM_CTRL,
     CM_SHIFT,
+    _CM_COUNT
 } ChooseModifier;
 
 typedef struct {
