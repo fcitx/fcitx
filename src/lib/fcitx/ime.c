@@ -408,6 +408,9 @@ void FcitxInstanceRegisterIMv2(FcitxInstance *instance,
             FcitxLog(ERROR, "%s already exists", uniqueName);
             return ;
         }
+        fcitx_utils_free(entry->uniqueName);
+        fcitx_utils_free(entry->strName);
+        fcitx_utils_free(entry->strIconName);
     } else {
         utarray_extend_back(imes);
         entry = (FcitxIM*) utarray_back(imes);

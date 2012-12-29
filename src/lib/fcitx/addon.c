@@ -184,14 +184,26 @@ void FcitxInstanceResolveAddonDependencyInternal(FcitxInstance* instance, FcitxA
         reloadIM = false;
     }
 
+    /* check "all" */
+    if (instance->disableList
+        && utarray_len(instance->disableList) == 1
+        && fcitx_utils_string_list_contains(instance->disableList, "all"))
+    {
+        for (addon = startAddon;
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(addons, addon)) {
+            addon->bEnabled = false;
+        }
+    }
+
     /* override the enable and disable option */
     for (addon = startAddon;
          addon != NULL;
          addon = (FcitxAddon *) utarray_next(addons, addon)) {
-        if (instance->disableList && fcitx_utils_string_list_contains(instance->disableList, addon->name))
-            addon->bEnabled = false;
-        else if (instance->enableList && fcitx_utils_string_list_contains(instance->enableList, addon->name))
+        if (instance->enableList && fcitx_utils_string_list_contains(instance->enableList, addon->name))
             addon->bEnabled = true;
+        else if (instance->disableList && fcitx_utils_string_list_contains(instance->disableList, addon->name))
+            addon->bEnabled = false;
     }
 
     if (!reloadIM) {

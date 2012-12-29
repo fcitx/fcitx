@@ -28,40 +28,11 @@
 
 #include <locale.h>
 #include <libintl.h>
-#include <unistd.h>
-#include <semaphore.h>
-#include <fcntl.h>
 
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif // HAVE_UNISTD_H
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif // HAVE_MALLOC_H
-
-#include "fcitx/configfile.h"
-#include "fcitx/addon.h"
-#include "fcitx/module.h"
-#include "fcitx/ime-internal.h"
-#include "fcitx/frontend.h"
-#include "fcitx/profile.h"
 #include "fcitx/instance.h"
-#include "fcitx/instance-internal.h"
-#include "fcitx-utils/utils.h"
-#include "errorhandler.h"
+#include "simple-api.h"
 
 FcitxInstance* instance = NULL;
-int selfpipe[2];
-char* crashlog = NULL;
-
-static void WaitForEnd(sem_t *sem, int count)
-{
-    while (count) {
-        sem_wait(sem);
-        count --;
-    }
-}
 
 int main(int argc, char* argv[])
 {
@@ -71,31 +42,41 @@ int main(int argc, char* argv[])
     free(localedir);
     bind_textdomain_codeset("fcitx", "UTF-8");
     textdomain("fcitx");
-    if (pipe(selfpipe) < 0) {
-        fprintf(stderr, "Could not create self-pipe.\n");
-        exit(1);
-    }
-    fcntl(selfpipe[0], F_SETFL, O_NONBLOCK);
-    fcntl(selfpipe[1], F_SETFL, O_NONBLOCK);
-
-    /* prepare filename first */
-    FcitxXDGMakeDirUser("log");
-    FcitxXDGGetFileUserWithPrefix("log", "crash.log", NULL, &crashlog);
-    SetMyExceptionHandler();
-
-    int instanceCount = 1;
 
     sem_t sem;
     sem_init(&sem, 0, 0);
 
-    instance = FcitxInstanceCreateWithFD(&sem, argc, argv, selfpipe[0]);
-    WaitForEnd(&sem, instanceCount);
-
-    free(crashlog);
-    crashlog = NULL;
-    if (instance->loadingFatalError) {
+    if (argc < 2) {
         return 1;
     }
+
+    char* enableAddon = NULL;
+    asprintf(&enableAddon, "fcitx-simple-module,fcitx-simple-frontend,%s", argv[1]);
+
+    char* args[] = {
+        argv[0],
+        "-D",
+        "--disable",
+        "all",
+        "--enable",
+        enableAddon
+    };
+
+    if (argc < 3)
+        setenv("XDG_CONFIG_HOME", argv[1], 1);
+    else
+        setenv("XDG_CONFIG_HOME", "/", 1);
+
+    instance = FcitxInstanceCreatePause(&sem, 6, args, -1);
+    free(enableAddon);
+
+    FcitxSimpleGetFD(instance);
+    FcitxSimpleGetSemaphore(instance);
+    FcitxInstanceStart(instance);
+    FcitxSimpleSendKeyEvent(instance, false, FcitxKey_a, 0, 0);
+    char* candidateword = FcitxUICandidateWordToCString(instance);
+    FcitxLog(INFO, "%s", candidateword);
+    free(candidateword);
     return 0;
 }
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

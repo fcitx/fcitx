@@ -76,6 +76,29 @@ extern "C" {
     FcitxInstance* FcitxInstanceCreateWithFD(sem_t *sem, int argc, char* argv[], int fd);
 
     /**
+     * create new fcitx instance, but don't run it.
+     *
+     * @param sem semaphore to notify the instance is end
+     * @param argc argc
+     * @param argv argv
+     * @param signal fd
+     * @return FcitxInstance*
+     *
+     * @see FcitxInstanceCreate
+     *
+     * @since 4.2.5
+     **/
+    FcitxInstance* FcitxInstanceCreatePause(sem_t *sem, int argc, char* argv[], int fd);
+
+    /**
+     * start a paused instance
+     *
+     * @param instance instance
+     * @return void
+     **/
+    void FcitxInstanceStart(FcitxInstance* instance);
+
+    /**
      * replace existing fcitx instance
      *
      * @param instance fcitx instance
