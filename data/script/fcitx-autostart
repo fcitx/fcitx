@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# sleep for a little while to avoid duplicate startup
+sleep 2
+
 # Test whether fcitx is running correctly with dbus...
 fcitx-remote > /dev/null 2>&1
 
