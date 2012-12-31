@@ -98,12 +98,12 @@ Advance=True
 
 [Hotkey/PrevPageKey]
 Type=Hotkey
-DefaultValue=-
+DefaultValue=- UP
 Description=Prev Page
 
 [Hotkey/NextPageKey]
 Type=Hotkey
-DefaultValue==
+DefaultValue== DOWN
 Description=Next Page
 
 [Hotkey/SecondThirdCandWordKey]
