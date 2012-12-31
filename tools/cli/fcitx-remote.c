@@ -86,8 +86,9 @@ int main(int argc, char *argv[])
 
     int o = 0;
     char c;
+    char* imname = 0;
 
-    while ((c = getopt(argc, argv, "chortT")) != -1) {
+    while ((c = getopt(argc, argv, "chortTs:")) != -1) {
         switch (c) {
         case 'o':
             o = 1;
@@ -105,6 +106,11 @@ int main(int argc, char *argv[])
         case 't':
         case 'T':
             o = 3;
+            break;
+
+        case 's':
+            o = 4;
+            imname = optarg;
             break;
 
         case 'h':
@@ -128,16 +134,15 @@ int main(int argc, char *argv[])
     }
     free(socketfile);
 
+    write(socket_fd, &o, sizeof(o));
     if (o == 0) {
-        write(socket_fd, &o, sizeof(o));
         int buf;
         read(socket_fd, &buf, sizeof(buf));
         printf("%d\n", buf);
-        close(socket_fd);
-    } else {
-        write(socket_fd, &o, sizeof(o));
-        close(socket_fd);
+    } else if (o == 4) {
+       write(socket_fd, imname, strlen(imname));
     }
+    close(socket_fd);
 
     return 0;
 }               /* ----------  end of function main  ---------- */
