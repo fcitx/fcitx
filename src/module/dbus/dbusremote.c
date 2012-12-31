@@ -77,7 +77,8 @@ void usage(FILE* fp)
             "\t-t,-T\t\tswitch Active/Inactive\n"
             "\t-e\t\tAsk fcitx to exit\n"
             "\t-a\t\tprint fcitx's dbus address\n"
-            "\t-m [imname]\tprint corresponding addon name for im\n"
+            "\t-m <imname>\tprint corresponding addon name for im\n"
+            "\t-s <imname>\tswitch to the input method uniquely identified by <imname>\n"
             "\t[no option]\tdisplay fcitx state, %d for close, %d for inactive, %d for acitve\n"
             "\t-h\t\tdisplay this help and exit\n",
            IS_CLOSED, IS_INACTIVE, IS_ACTIVE);
@@ -90,7 +91,8 @@ enum {
     FCITX_DBUS_EXIT,
     FCITX_DBUS_TOGGLE,
     FCITX_DBUS_GET_CURRENT_STATE,
-    FCITX_DBUS_GET_IM_ADDON
+    FCITX_DBUS_GET_IM_ADDON,
+    FCITX_DBUS_SET_CURRENT_IM
 };
 
 int main (int argc, char* argv[])
@@ -103,7 +105,7 @@ int main (int argc, char* argv[])
     int ret = 1;
     int messageType = FCITX_DBUS_GET_CURRENT_STATE;
     char *imname = NULL;
-    while ((c = getopt(argc, argv, "chortTeam:")) != -1) {
+    while ((c = getopt(argc, argv, "chortTeam:s:")) != -1) {
         switch (c) {
         case 'o':
             messageType = FCITX_DBUS_ACTIVATE;
@@ -128,6 +130,11 @@ int main (int argc, char* argv[])
 
         case 'm':
             messageType = FCITX_DBUS_GET_IM_ADDON;
+            imname = strdup(optarg);
+            break;
+
+        case 's':
+            messageType = FCITX_DBUS_SET_CURRENT_IM;
             imname = strdup(optarg);
             break;
 
@@ -165,6 +172,7 @@ int main (int argc, char* argv[])
         CASE(TOGGLE, ToggleIM);
         CASE(GET_CURRENT_STATE, GetCurrentState);
         CASE(GET_IM_ADDON, GetIMAddon);
+        CASE(SET_CURRENT_IM, SetCurrentIM);
 
         default:
             goto some_error;
@@ -219,6 +227,17 @@ int main (int argc, char* argv[])
             } else {
                 fprintf(stderr, "Not get reply\n");
             }
+        } while(0);
+
+    }
+    else if (messageType == FCITX_DBUS_SET_CURRENT_IM) {
+        do {
+            if (!fcitx_utf8_check_string(imname))
+                break;
+            dbus_message_append_args(message, DBUS_TYPE_STRING, &imname, DBUS_TYPE_INVALID);
+            dbus_connection_send(conn, message, NULL);
+            dbus_connection_flush(conn);
+            ret = 0;
         } while(0);
     } else {
         dbus_connection_send(conn, message, NULL);

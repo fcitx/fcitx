@@ -586,6 +586,15 @@ void IPCGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, 
     *h = GetIPCIC(ic)->height;
 }
 
+static void IPCDBusUnknownMethod(DBusConnection *connection, DBusMessage *msg)
+{
+    DBusMessage* reply = dbus_message_new_error_printf(msg,
+                                                       DBUS_ERROR_UNKNOWN_METHOD,
+                                                       "No such method with signature (%s)",
+                                                       dbus_message_get_signature(msg));
+    dbus_connection_send(connection, reply, NULL);
+    dbus_message_unref(reply);
+}
 
 static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMessage *msg, void *user_data)
 {
@@ -644,6 +653,8 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             DBusMessage *reply = dbus_message_new_method_return(msg);
             dbus_connection_send(connection, reply, NULL);
             dbus_message_unref(reply);
+        } else {
+            IPCDBusUnknownMethod(connection, msg);
         }
         dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
@@ -660,14 +671,8 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             dbus_message_append_args(reply, DBUS_TYPE_STRING, &name, DBUS_TYPE_INVALID);
             dbus_connection_send(connection, reply, NULL);
             dbus_message_unref(reply);
-        }
-        else {
-            DBusMessage* reply = dbus_message_new_error_printf(msg,
-                                                               DBUS_ERROR_UNKNOWN_METHOD,
-                                                               "No such method with signature (%s)",
-                                                               dbus_message_get_signature(msg));
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
+        } else {
+            IPCDBusUnknownMethod(connection, msg);
         }
         dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
@@ -726,6 +731,8 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             if (addonname) {
                 fcitx_utils_launch_configure_tool_for_addon(addonname);
             }
+        } else {
+            IPCDBusUnknownMethod(connection, msg);
         }
         dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
@@ -740,6 +747,8 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             if (imname) {
                 fcitx_utils_launch_configure_tool_for_addon(imname);
             }
+        } else {
+            IPCDBusUnknownMethod(connection, msg);
         }
         dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
@@ -754,6 +763,8 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             if (addonname) {
                 FcitxInstanceReloadAddonConfig(instance, addonname);
             }
+        } else {
+            IPCDBusUnknownMethod(connection, msg);
         }
         dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
@@ -839,6 +850,8 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 DBusMessage *reply = dbus_message_new_method_return(msg);
                 dbus_connection_send(connection, reply, NULL);
                 dbus_message_unref(reply);
+            } else {
+                IPCDBusUnknownMethod(connection, msg);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCursorRect")) {
@@ -851,6 +864,8 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 DBusMessage *reply = dbus_message_new_method_return(msg);
                 dbus_connection_send(connection, reply, NULL);
                 dbus_message_unref(reply);
+            } else {
+                IPCDBusUnknownMethod(connection, msg);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCapacity")) {
@@ -865,6 +880,8 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 DBusMessage *reply = dbus_message_new_method_return(msg);
                 dbus_connection_send(connection, reply, NULL);
                 dbus_message_unref(reply);
+            } else {
+                IPCDBusUnknownMethod(connection, msg);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetSurroundingText")) {
@@ -883,6 +900,8 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 DBusMessage *reply = dbus_message_new_method_return(msg);
                 dbus_connection_send(connection, reply, NULL);
                 dbus_message_unref(reply);
+            } else {
+                IPCDBusUnknownMethod(connection, msg);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetSurroundingTextPosition")) {
@@ -898,6 +917,8 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 DBusMessage *reply = dbus_message_new_method_return(msg);
                 dbus_connection_send(connection, reply, NULL);
                 dbus_message_unref(reply);
+            } else {
+                IPCDBusUnknownMethod(connection, msg);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "DestroyIC")) {
@@ -926,6 +947,8 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 dbus_connection_send(connection, reply, NULL);
                 dbus_message_unref(reply);
                 dbus_connection_flush(connection);
+            } else {
+                IPCDBusUnknownMethod(connection, msg);
             }
 
             result = DBUS_HANDLER_RESULT_HANDLED;
