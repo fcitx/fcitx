@@ -59,9 +59,10 @@ static void ToggleChttransState(void*);
 static void* ChttransS2T(void* arg, FcitxModuleFunctionArg args);
 static void* ChttransT2S(void* arg, FcitxModuleFunctionArg args);
 
-static void ChttransEnabledForIMFilter(FcitxGenericConfig* config, FcitxConfigGroup *group,
-                        FcitxConfigOption *option, void* value,
-                        FcitxConfigSync sync, void* arg);
+static void ChttransEnabledForIMFilter(FcitxGenericConfig *config,
+                                       FcitxConfigGroup *group,
+                                       FcitxConfigOption *option, void* value,
+                                       FcitxConfigSync sync, void* arg);
 
 CONFIG_BINDING_BEGIN(FcitxChttrans)
 CONFIG_BINDING_REGISTER("TraditionalChinese", "TransEngine", engine)
@@ -90,10 +91,16 @@ static boolean ChttransEnabled(FcitxChttrans* chttrans) {
     return result;
 }
 
-void ChttransEnabledForIMFilter(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)
+static void
+ChttransEnabledForIMFilter(FcitxGenericConfig *config, FcitxConfigGroup *group,
+                           FcitxConfigOption *option, void *value,
+                           FcitxConfigSync sync, void *arg)
 {
-    FcitxChttrans* chttrans = (FcitxChttrans*) config;
-    char** enableForIM = (char**) value;
+    FCITX_UNUSED(group);
+    FCITX_UNUSED(option);
+    FCITX_UNUSED(arg);
+    FcitxChttrans *chttrans = (FcitxChttrans*)config;
+    char **enableForIM = (char**)value;
     if (sync == Value2Raw) {
         fcitx_utils_free(*enableForIM);
         *enableForIM = fcitx_string_map_to_string(chttrans->enableIM, ',');

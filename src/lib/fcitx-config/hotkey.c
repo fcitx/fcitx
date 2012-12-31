@@ -565,12 +565,10 @@ boolean FcitxHotkeyIsHotkeyCursorMove(FcitxKeySym sym, unsigned int state)
 FCITX_EXPORT_API
 boolean FcitxHotkeyIsHotKeyModifierCombine(FcitxKeySym sym, unsigned int state)
 {
-    if (sym == FcitxKey_Control_L
-            || sym == FcitxKey_Control_R
-            || sym == FcitxKey_Shift_L
-            || sym == FcitxKey_Shift_R)
+    FCITX_UNUSED(state);
+    if (sym == FcitxKey_Control_L || sym == FcitxKey_Control_R ||
+        sym == FcitxKey_Shift_L || sym == FcitxKey_Shift_R)
         return true;
-
     return false;
 }
 

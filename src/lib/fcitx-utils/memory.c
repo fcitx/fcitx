@@ -97,7 +97,7 @@ void* fcitx_memory_pool_alloc_align(FcitxMemoryPool* pool, size_t size, int alig
 
     if (chunk->end - chunk->cur <= FCITX_MEMORY_CHUNK_FULL_SIZE) {
         utarray_push_back(pool->fullchunks, chunk);
-        int idx = utarray_eltidx(pool->chunks, chunk);
+        unsigned int idx = utarray_eltidx(pool->chunks, chunk);
         utarray_remove_quick(pool->chunks, idx);
     }
 

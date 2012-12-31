@@ -381,7 +381,7 @@ py_enhance_add_word_p(PyEnhanceBuff *py_table, PyEnhanceBuff *array,
         }
     }
     offset += PY_ENHANCE_UINT32_ALIGN_SIZE;
-    uint32_t old_len = array->len;
+    int32_t old_len = array->len;
     py_enhance_buff_alloc(array, sizeof(uint32_t));
     if (offset < old_len)
         memmove(array->data + offset + PY_ENHANCE_UINT32_ALIGN_SIZE,

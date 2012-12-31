@@ -37,6 +37,7 @@
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
+#include "fcitx/fcitx.h"
 #include "x11stuff-internal.h"
 #include "x11selection.h"
 #include "xerrorhandler.h"
@@ -193,6 +194,9 @@ static void
 X11CompManagerSelectionNotify(FcitxX11 *x11priv, Atom selection, int subtype,
                               X11SelectionNotify *notify)
 {
+    FCITX_UNUSED(selection);
+    FCITX_UNUSED(subtype);
+    FCITX_UNUSED(notify);
     X11HandlerComposite(x11priv, X11GetCompositeManager(x11priv));
 }
 #endif
@@ -250,7 +254,7 @@ X11ProcessEventRealInternal(FcitxX11 *x11priv)
 static void*
 _X11SelectionNotifyRemove(void *arg, FcitxModuleFunctionArg args)
 {
-    unsigned int id = ((unsigned int)(intptr_t)args.args[0]) - 1;
+    int id = ((int)(intptr_t)args.args[0]) - 1;
     X11SelectionNotifyRemove(arg, id);
     return NULL;
 }
@@ -271,8 +275,8 @@ _X11SelectionNotifyRegister(void *arg, FcitxModuleFunctionArg args)
     X11SelectionNotifyCallback cb = args.args[2];
     void *data = args.args[3];
     FcitxDestroyNotify destroy = args.args[4];
-    unsigned int id = X11SelectionNotifyRegister(x11priv, sel_str,
-                                                 owner, cb, data, destroy);
+    int id = X11SelectionNotifyRegister(x11priv, sel_str, owner, cb,
+                                        data, destroy);
     return (void*)(intptr_t)(id + 1);
 }
 
@@ -286,8 +290,8 @@ _X11RequestConvertSelection(void *arg, FcitxModuleFunctionArg args)
     X11ConvertSelectionCallback cb = args.args[3];
     void *data = args.args[4];
     FcitxDestroyNotify destroy = args.args[5];
-    unsigned int id = X11RequestConvertSelection(x11priv, sel_str, tgt_str,
-                                                 owner, cb, data, destroy);
+    int id = X11RequestConvertSelection(x11priv, sel_str, tgt_str,
+                                        owner, cb, data, destroy);
     return (void*)(intptr_t)(id + 1);
 }
 
@@ -383,6 +387,7 @@ X11InitComposite(FcitxX11* x11priv)
 void*
 X11FindARGBVisual(void* arg, FcitxModuleFunctionArg args)
 {
+    FCITX_UNUSED(args);
     FcitxX11* x11priv = (FcitxX11*)arg;
     XVisualInfo *xvi;
     XVisualInfo temp;
@@ -482,7 +487,7 @@ void* X11SetWindowProperty(void* arg, FcitxModuleFunctionArg args)
 
     pid_t pid = getpid();
     XChangeProperty(x11priv->dpy, window, x11priv->pidAtom, XA_CARDINAL, 32,
-                    PropModeReplace, (unsigned char *)&pid, 1);
+                    PropModeReplace, (unsigned char*)&pid, 1);
 
     char res_name[] = "fcitx";
     char res_class[] = "fcitx";

@@ -267,11 +267,13 @@ fcitx_input_method_g_properties_changed(GDBusProxy          *proxy,
 }
 
 static void
-fcitx_input_method_g_signal(GDBusProxy   *proxy,
-                           const gchar  *sender_name,
-                           const gchar  *signal_name,
-                           GVariant     *parameters)
+fcitx_input_method_g_signal(GDBusProxy *proxy, const gchar *sender_name,
+                            const gchar *signal_name, GVariant *parameters)
 {
+    FCITX_UNUSED(proxy);
+    FCITX_UNUSED(sender_name);
+    FCITX_UNUSED(signal_name);
+    FCITX_UNUSED(parameters);
 }
 
 static void

@@ -533,8 +533,8 @@ struct _PYMappedSplitData {
 void InitPYSplitData(FcitxPinyinConfig* pyconfig)
 {
     size_t size = sizeof(pySplitData) / sizeof(pySplitData[0]);
-    int i = 0;
-    for (i = 0; i < size; i ++) {
+    unsigned int i = 0;
+    for (i = 0;i < size;i++) {
         PYMappedSplitData *data = fcitx_utils_new(PYMappedSplitData);
         const char *strs[] = {pySplitData[i].py1, " ", pySplitData[i].py2};
         fcitx_utils_cat_str_simple_with_len(data->py, MAX_PY_LENGTH * 2 + 2,

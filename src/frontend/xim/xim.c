@@ -252,6 +252,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
 
 Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data)
 {
+    FCITX_UNUSED(_ims);
     switch (call_data->major_code) {
     case XIM_OPEN:
         FcitxLog(DEBUG, "XIM_OPEN:\t\ticid=%d\tconnect_id=%d", ((IMForwardEventStruct *) call_data)->icid,
@@ -441,6 +442,7 @@ void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
 
 void XimGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, int* h)
 {
+    FCITX_UNUSED(arg);
     *x = ic->offset_x;
     *y = ic->offset_y;
     *w = 0;

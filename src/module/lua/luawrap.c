@@ -252,10 +252,11 @@ static void LuaResultItemDtor(void *_elt) {
 static void FreeTrigger(TriggerItem **triggers, LuaExtension *extension) {
     TriggerItem *trigger;
     for (trigger = *triggers; trigger != NULL; ) {
-        int count = utarray_len(trigger->functions);
-        int i;
-        for (i = 0; i < count; ) {
-            FunctionItem *f = (FunctionItem *)utarray_eltptr(trigger->functions, i);
+        unsigned int count = utarray_len(trigger->functions);
+        unsigned int i;
+        FunctionItem *f;
+        for (i = 0;i < count;) {
+            f = (FunctionItem*)utarray_eltptr(trigger->functions, i);
             if (f->lua == extension->lua) {
                 utarray_erase(trigger->functions, i, 1);
                 --count;

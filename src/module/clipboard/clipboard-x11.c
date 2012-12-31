@@ -29,6 +29,9 @@ _X11ClipboardPrimaryConvertCb(
     void *owner, const char *sel_str, const char *tgt_str, int format,
     size_t nitems, const void *buff, void *data)
 {
+    FCITX_UNUSED(sel_str);
+    FCITX_UNUSED(tgt_str);
+    FCITX_UNUSED(data);
     FcitxClipboard *clipboard = owner;
     if (format != 8)
         return;
@@ -39,6 +42,9 @@ static void
 _X11ClipboardPrimaryNotifyCb(void *owner, const char *sel_str,
                              int subtype, void *data)
 {
+    FCITX_UNUSED(sel_str);
+    FCITX_UNUSED(subtype);
+    FCITX_UNUSED(data);
     FcitxClipboard *clipboard = owner;
     FcitxX11RequestConvertSelect(clipboard->owner, "PRIMARY", NULL,
                                  clipboard, _X11ClipboardPrimaryConvertCb,
@@ -50,6 +56,9 @@ _X11ClipboardClipboardConvertCb(
     void *owner, const char *sel_str, const char *tgt_str, int format,
     size_t nitems, const void *buff, void *data)
 {
+    FCITX_UNUSED(sel_str);
+    FCITX_UNUSED(tgt_str);
+    FCITX_UNUSED(data);
     FcitxClipboard *clipboard = owner;
     if (format != 8)
         return;
@@ -60,6 +69,9 @@ static void
 _X11ClipboardClipboardNotifyCb(void *owner, const char *sel_str,
                                int subtype, void *data)
 {
+    FCITX_UNUSED(sel_str);
+    FCITX_UNUSED(subtype);
+    FCITX_UNUSED(data);
     FcitxClipboard *clipboard = owner;
     FcitxX11RequestConvertSelect(clipboard->owner, "CLIPBOARD", NULL,
                                  clipboard, _X11ClipboardClipboardConvertCb,

@@ -36,8 +36,10 @@ CharSelectData* CharSelectDataCreateFromFile(const char* f)
 
 int main(int argc, char* argv[])
 {
+    if (argc < 2)
+        return 1;
     CharSelectData* charselect = CharSelectDataCreateFromFile(argv[1]);
-    int i;
+    unsigned int i;
 
     CharSelectDataDump(charselect);
 

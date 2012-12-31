@@ -247,9 +247,9 @@ FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE *fp)
         if (p == NULL)
             continue;
 
-        int groupNameLen = p - group->groupName;
+        unsigned int groupNameLen = p - group->groupName;
 
-        int optionNameLen = strlen(p + 1);
+        unsigned int optionNameLen = strlen(p + 1);
 
         if (groupNameLen == 0 || optionNameLen == 0)
             continue;

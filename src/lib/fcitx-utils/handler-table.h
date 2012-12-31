@@ -32,14 +32,13 @@ typedef struct _FcitxHandlerTable FcitxHandlerTable;
 
     FcitxHandlerTable *fcitx_handler_table_new(size_t obj_size,
                                                FcitxFreeContentFunc free_func);
-    unsigned int fcitx_handler_table_append(FcitxHandlerTable *table,
-                                            size_t keysize, const void *key,
-                                            const void *obj);
-    unsigned int fcitx_handler_table_prepend(FcitxHandlerTable *table,
-                                             size_t keysize, const void *key,
-                                             const void *obj);
-    void *fcitx_handler_table_get_by_id(FcitxHandlerTable *table,
-                                        unsigned int id);
+    int fcitx_handler_table_append(FcitxHandlerTable *table,
+                                   size_t keysize, const void *key,
+                                   const void *obj);
+    int fcitx_handler_table_prepend(FcitxHandlerTable *table,
+                                    size_t keysize, const void *key,
+                                    const void *obj);
+    void *fcitx_handler_table_get_by_id(FcitxHandlerTable *table, int id);
     void *fcitx_handler_table_first(FcitxHandlerTable *table, size_t keysize,
                                     const void *key);
     void *fcitx_handler_table_last(FcitxHandlerTable *table, size_t keysize,
@@ -47,28 +46,25 @@ typedef struct _FcitxHandlerTable FcitxHandlerTable;
     void *fcitx_handler_table_next(FcitxHandlerTable *table, const void *obj);
     void *fcitx_handler_table_prev(FcitxHandlerTable *table, const void *obj);
     /* for remove when iterating */
-    unsigned int fcitx_handler_table_first_id(FcitxHandlerTable *table,
-                                              size_t keysize, const void *key);
-    unsigned int fcitx_handler_table_last_id(FcitxHandlerTable *table,
-                                             size_t keysize, const void *key);
-    unsigned int fcitx_handler_table_next_id(FcitxHandlerTable *table,
-                                             const void *obj);
-    unsigned int fcitx_handler_table_prev_id(FcitxHandlerTable *table,
-                                             const void *obj);
+    int fcitx_handler_table_first_id(FcitxHandlerTable *table,
+                                     size_t keysize, const void *key);
+    int fcitx_handler_table_last_id(FcitxHandlerTable *table,
+                                    size_t keysize, const void *key);
+    int fcitx_handler_table_next_id(FcitxHandlerTable *table, const void *obj);
+    int fcitx_handler_table_prev_id(FcitxHandlerTable *table, const void *obj);
     void fcitx_handler_table_remove_key(FcitxHandlerTable *table,
                                         size_t keysize, const void *key);
-    void fcitx_handler_table_remove_by_id(FcitxHandlerTable *table,
-                                          unsigned int id);
+    void fcitx_handler_table_remove_by_id(FcitxHandlerTable *table, int id);
     void fcitx_handler_table_free(FcitxHandlerTable *table);
 
-    static inline unsigned int
+    static inline int
     fcitx_handler_table_append_strkey(FcitxHandlerTable *table,
                                       const char *keystr, const void *obj)
     {
         return fcitx_handler_table_append(table, strlen(keystr),
                                           (const void*)keystr, obj);
     }
-    static inline unsigned int
+    static inline int
     fcitx_handler_table_prepend_strkey(FcitxHandlerTable *table,
                                        const char *keystr, const void *obj)
     {
@@ -89,14 +85,14 @@ typedef struct _FcitxHandlerTable FcitxHandlerTable;
         return fcitx_handler_table_last(table, strlen(keystr),
                                         (const void*)keystr);
     }
-    static inline unsigned int
+    static inline int
     fcitx_handler_table_first_id_strkey(FcitxHandlerTable *table,
                                         const char *keystr)
     {
         return fcitx_handler_table_first_id(table, strlen(keystr),
                                             (const void*)keystr);
     }
-    static inline unsigned int
+    static inline int
     fcitx_handler_table_last_id_strkey(FcitxHandlerTable *table,
                                        const char *keystr)
     {

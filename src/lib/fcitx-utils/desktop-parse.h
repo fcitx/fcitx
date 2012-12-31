@@ -142,8 +142,7 @@ extern "C" {
     }
     static inline FcitxDesktopGroup*
     fcitx_desktop_file_move_group_after(
-        FcitxDesktopFile *file, FcitxDesktopGroup *group,
-        const char *name, size_t name_len)
+        FcitxDesktopFile *file, FcitxDesktopGroup *group, const char *name)
     {
         return fcitx_desktop_file_move_group_after_with_len(
             file, group, name, strlen(name));
@@ -171,7 +170,7 @@ extern "C" {
     static inline FcitxDesktopGroup*
     fcitx_desktop_file_move_group_before(
         FcitxDesktopFile *file, FcitxDesktopGroup *group,
-        const char *name, size_t name_len)
+        const char *name)
     {
         return fcitx_desktop_file_move_group_before_with_len(
             file, group, name, strlen(name));
@@ -212,7 +211,7 @@ extern "C" {
     static inline FcitxDesktopEntry*
     fcitx_desktop_group_move_entry_after(
         FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
-        const char *name, size_t name_len)
+        const char *name)
     {
         return fcitx_desktop_group_move_entry_after_with_len(
             group, entry, name, strlen(name));
@@ -239,8 +238,7 @@ extern "C" {
     }
     static inline FcitxDesktopEntry*
     fcitx_desktop_group_move_entry_before(
-        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
-        const char *name, size_t name_len)
+        FcitxDesktopGroup *group, FcitxDesktopEntry *entry, const char *name)
     {
         return fcitx_desktop_group_move_entry_before_with_len(
             group, entry, name, strlen(name));

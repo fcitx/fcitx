@@ -53,6 +53,7 @@ static int Is(char *attr, XICAttribute * attr_list)
 
 boolean  XimCheckIC(void* arg, FcitxInputContext* context, void* priv)
 {
+    FCITX_UNUSED(arg);
     CARD16* picid = (CARD16*) priv;
     FcitxXimIC* rec = (FcitxXimIC*) context->privateic;
     if (rec->id == *picid)
@@ -199,6 +200,7 @@ void XimCreateIC(void* arg, FcitxInputContext* context, void *priv)
  **/
 void XimDestroyIC(void* arg, FcitxInputContext* context)
 {
+    FCITX_UNUSED(arg);
     //free resource
     FcitxXimIC* privic = (FcitxXimIC*) context->privateic;
     if (privic->resource_name)
@@ -351,6 +353,7 @@ void XimGetIC(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 
 boolean XimCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic)
 {
+    FCITX_UNUSED(arg);
     FcitxXimIC* ximictoCheck = GetXimIC(icToCheck);
     FcitxXimIC* ximic = GetXimIC(ic);
 

@@ -30,6 +30,7 @@
 #include <semaphore.h>
 
 #include "fcitx-utils/utarray.h"
+#include "fcitx-utils/utils.h"
 #include "ui-internal.h"
 #include "configfile.h"
 #include "profile.h"
@@ -45,7 +46,7 @@ typedef struct _UnusedIMItem {
 typedef struct _TimeoutItem {
     FcitxTimeoutCallback callback;
     void* arg;
-    long int milli;
+    unsigned long int milli;
     uint64_t idx;
     uint64_t time;
 } TimeoutItem;
@@ -146,5 +147,11 @@ struct _FcitxInstance {
     boolean destroy;
     int fd;
 };
+
+static inline FcitxAddon**
+FcitxInstanceGetPFrontend(FcitxInstance *instance, int id)
+{
+    return fcitx_array_eltptr(&instance->frontends, id);
+}
 
 #endif

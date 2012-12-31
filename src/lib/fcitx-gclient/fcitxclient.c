@@ -451,6 +451,7 @@ _fcitx_client_process_key_cb(GObject *source_object,
                              GAsyncResult *res,
                              gpointer user_data)
 {
+    FCITX_UNUSED(source_object);
     ProcessKeyStruct* pk = user_data;
     pk->callback(G_OBJECT(pk->self), res, pk->user_data);
     _process_key_data_free(pk);
@@ -458,6 +459,7 @@ _fcitx_client_process_key_cb(GObject *source_object,
 
 void _fcitx_client_process_key_cancelled(GCancellable* cancellable, gpointer user_data)
 {
+    FCITX_UNUSED(cancellable);
     ProcessKeyStruct* pk = user_data;
     _process_key_data_free(pk);
 }
@@ -558,6 +560,7 @@ fcitx_client_init(FcitxClient *self)
 static void
 _fcitx_client_create_ic(FcitxConnection* connection, gpointer user_data)
 {
+    FCITX_UNUSED(connection);
     fcitx_gclient_debug("_fcitx_client_create_ic");
     FcitxClient *self = user_data;
 
@@ -581,6 +584,7 @@ _fcitx_client_create_ic(FcitxConnection* connection, gpointer user_data)
 static void
 _fcitx_client_disconnect(FcitxConnection* connection, gpointer user_data)
 {
+    FCITX_UNUSED(connection);
     FcitxClient *self = user_data;
     _fcitx_client_clean_up(self, FALSE);
 }
@@ -590,6 +594,7 @@ _fcitx_client_create_ic_phase1_finished(GObject *source_object,
                                         GAsyncResult *res,
                                         gpointer user_data)
 {
+    FCITX_UNUSED(source_object);
     fcitx_gclient_debug("_fcitx_client_create_ic_phase1_finished");
     g_return_if_fail (user_data != NULL);
     g_return_if_fail (FCITX_IS_CLIENT(user_data));
@@ -685,6 +690,7 @@ _fcitx_client_create_ic_phase2_finished(GObject *source_object,
                                         GAsyncResult *res,
                                         gpointer user_data)
 {
+    FCITX_UNUSED(source_object);
     g_return_if_fail (user_data != NULL);
     g_return_if_fail (FCITX_IS_CLIENT(user_data));
     FcitxClient* self = (FcitxClient*) user_data;
@@ -734,6 +740,8 @@ _fcitx_client_g_signal(GDBusProxy *proxy,
                        GVariant   *parameters,
                        gpointer    user_data)
 {
+    FCITX_UNUSED(proxy);
+    FCITX_UNUSED(sender_name);
     if (strcmp(signal_name, "EnableIM") == 0) {
         g_signal_emit(user_data, signals[ENABLE_IM_SIGNAL], 0);
     }

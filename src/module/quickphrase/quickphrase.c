@@ -610,10 +610,10 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
             break;
         }
 
-        for (currentQuickPhrase = (QUICK_PHRASE*)utarray_eltptr(qpstate->quickPhrases,
-                                                                iFirstQuickPhrase);
+        for (currentQuickPhrase = fcitx_array_eltptr(qpstate->quickPhrases,
+                                                     iFirstQuickPhrase);
              currentQuickPhrase != NULL;
-             currentQuickPhrase = (QUICK_PHRASE*) utarray_next(qpstate->quickPhrases, currentQuickPhrase)) {
+             currentQuickPhrase = (QUICK_PHRASE*)utarray_next(qpstate->quickPhrases, currentQuickPhrase)) {
             if (!strncmp(qpstate->buffer, currentQuickPhrase->strCode,
                          iInputLen)) {
                 QuickPhraseCand *qpcand = fcitx_utils_new(QuickPhraseCand);

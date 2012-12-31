@@ -27,6 +27,7 @@ void XimQueueDestroy(FcitxXimFrontend* xim)
 
 void* XimConsumeQueue(void* arg, FcitxModuleFunctionArg args)
 {
+    FCITX_UNUSED(args);
     FcitxXimFrontend* xim = arg;
     if (!xim->ims)
         return NULL;
@@ -36,31 +37,26 @@ void* XimConsumeQueue(void* arg, FcitxModuleFunctionArg args)
 
     for (item = (XimQueue*) utarray_front(xim->queue);
          item != NULL;
-         item = (XimQueue*) utarray_next(xim->queue, item))
-    {
+         item = (XimQueue*) utarray_next(xim->queue, item)) {
         switch(item->type) {
         case XCT_FORWARD:
-            {
-                IMForwardEvent(xim->ims, item->ptr);
+            IMForwardEvent(xim->ims, item->ptr);
+            break;
+        case XCT_CALLCALLBACK: {
+            IMCallCallback(xim->ims, item->ptr);
+            IMPreeditCBStruct* pcb = (IMPreeditCBStruct*) item->ptr;
+            if (pcb->major_code == XIM_PREEDIT_DRAW) {
+                XFree(pcb->todo.draw.text->string.multi_byte);
+                free(pcb->todo.draw.text);
             }
             break;
-        case XCT_CALLCALLBACK:
-            {
-                IMCallCallback(xim->ims, item->ptr);
-                IMPreeditCBStruct* pcb = (IMPreeditCBStruct*) item->ptr;
-                if (pcb->major_code == XIM_PREEDIT_DRAW) {
-                    XFree(pcb->todo.draw.text->string.multi_byte);
-                    free(pcb->todo.draw.text);
-                }
-            }
+        }
+        case XCT_COMMIT: {
+            IMCommitString(xim->ims, item->ptr);
+            IMCommitStruct *cms = (IMCommitStruct*)item->ptr;
+            XFree(cms->commit_string);
             break;
-        case XCT_COMMIT:
-            {
-                IMCommitString(xim->ims, item->ptr);
-                IMCommitStruct* cms = (IMCommitStruct*) item->ptr;
-                XFree(cms->commit_string);
-            }
-            break;
+        }
         case XCT_PREEDIT_START:
             IMPreeditStart(xim->ims, item->ptr);
             break;

@@ -39,14 +39,14 @@
     (G_TYPE_CHECK_GET_CLASS ((obj), FCITX_TYPE_IM_CONTEXT, FcitxIMContextClass))
 
 G_BEGIN_DECLS
+
 typedef struct _FcitxIMContext FcitxIMContext;
 typedef struct _FcitxIMContextClass FcitxIMContextClass;
 
 GType fcitx_im_context_get_type(void);
-FcitxIMContext
-*fcitx_im_context_new(void);
-void fcitx_im_context_register_type
-(GTypeModule *type_module);
+FcitxIMContext *fcitx_im_context_new(void);
+void fcitx_im_context_register_type(GTypeModule *type_module);
+
 G_END_DECLS
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

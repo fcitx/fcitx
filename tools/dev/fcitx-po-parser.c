@@ -25,6 +25,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <string.h>
+#include <fcitx/fcitx.h>
 #include <fcitx-utils/utils.h>
 #include <fcitx-utils/log.h>
 #include <fcitx-utils/utarray.h>
@@ -39,6 +40,12 @@ _xerror_handler(int severity, po_message_t message, const char *filename,
                 size_t lineno, size_t column, int multiline_p,
                 const char *message_text)
 {
+    FCITX_UNUSED(message);
+    FCITX_UNUSED(filename);
+    FCITX_UNUSED(lineno);
+    FCITX_UNUSED(column);
+    FCITX_UNUSED(multiline_p);
+    FCITX_UNUSED(message_text);
     if (severity == PO_SEVERITY_FATAL_ERROR) {
         exit(1);
     }
@@ -51,6 +58,18 @@ _xerror2_handler(int severity, po_message_t message1, const char *filename1,
                  const char *filename2, size_t lineno2, size_t column2,
                  int multiline_p2, const char *message_text2)
 {
+    FCITX_UNUSED(message1);
+    FCITX_UNUSED(filename1);
+    FCITX_UNUSED(lineno1);
+    FCITX_UNUSED(column1);
+    FCITX_UNUSED(multiline_p1);
+    FCITX_UNUSED(message_text1);
+    FCITX_UNUSED(message2);
+    FCITX_UNUSED(filename2);
+    FCITX_UNUSED(lineno2);
+    FCITX_UNUSED(column2);
+    FCITX_UNUSED(multiline_p2);
+    FCITX_UNUSED(message_text2);
     if (severity == PO_SEVERITY_FATAL_ERROR) {
         exit(1);
     }
@@ -114,7 +133,7 @@ parse_po(const char *lang, const char *fname)
             continue;
         int id_len = strlen(msg_id);
         int str_len = strlen(msg_str);
-        int len = (id_len + str_len) * 2 + prefix_len + 2;
+        unsigned int len = (id_len + str_len) * 2 + prefix_len + 2;
         if (len > buff_len) {
             buff_len = len;
             buff = realloc(buff, buff_len);

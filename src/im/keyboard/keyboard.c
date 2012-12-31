@@ -278,6 +278,8 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
 
 void* SimpleCopy(void* arg, void* dest, void* src)
 {
+    FCITX_UNUSED(arg);
+    FCITX_UNUSED(dest);
     return src;
 }
 

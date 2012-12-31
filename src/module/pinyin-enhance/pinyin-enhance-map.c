@@ -35,7 +35,8 @@
 
 void
 PinyinEnhanceMapAdd(PyEnhanceMap **map, FcitxMemoryPool *pool,
-                    const char *key, int key_l, const char *word, int word_l)
+                    const char *key, unsigned int key_l,
+                    const char *word, unsigned int word_l)
 {
     PyEnhanceMapWord *py_word;
     PyEnhanceMap *py_map;
@@ -60,7 +61,7 @@ PinyinEnhanceMapAdd(PyEnhanceMap **map, FcitxMemoryPool *pool,
 }
 
 PyEnhanceMapWord*
-PinyinEnhanceMapGet(PyEnhanceMap *map, const char *key, int key_l)
+PinyinEnhanceMapGet(PyEnhanceMap *map, const char *key, unsigned int key_l)
 {
     PyEnhanceMap *py_map;
     HASH_FIND(hh, map, key, key_l, py_map);

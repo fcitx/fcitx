@@ -127,6 +127,9 @@ FilterIMList(FcitxGenericConfig* config, FcitxConfigGroup* group,
              FcitxConfigOption* option, void* value,
              FcitxConfigSync sync, void* arg)
 {
+    FCITX_UNUSED(config);
+    FCITX_UNUSED(group);
+    FCITX_UNUSED(option);
     FcitxInstance* instance = arg;
     if (sync == Value2Raw) {
         size_t imes_len = utarray_len(&instance->imes);
@@ -137,7 +140,7 @@ FilterIMList(FcitxGenericConfig* config, FcitxConfigGroup* group,
         size_t name_lens[count];
         count = 0;
         size_t res_len = 0;
-        int i;
+        unsigned int i;
         FcitxIM *ime;
 #define ADD_IM_NAME(imname, state, state_len)  do {             \
             names[count] = imname;                              \
@@ -189,6 +192,9 @@ FilterIMList(FcitxGenericConfig* config, FcitxConfigGroup* group,
 
 void FilterIMName(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)
 {
+    FCITX_UNUSED(config);
+    FCITX_UNUSED(group);
+    FCITX_UNUSED(option);
     FcitxInstance* instance = arg;
     char** imName = (char**) value;
     if (sync == Value2Raw) {

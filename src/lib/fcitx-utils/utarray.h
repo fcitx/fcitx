@@ -175,7 +175,7 @@ typedef struct {
             break;                                                      \
         if (f == t)                                                     \
             break;                                                      \
-        char *_temp = malloc((a)->icd->sz);                             \
+        void *_temp = malloc((a)->icd->sz);                             \
         if (f > t) {                                                    \
             memcpy(_temp, _utarray_eltptr(a, f), (a)->icd->sz);         \
             memmove(_utarray_eltptr(a, t + 1), _utarray_eltptr(a, t),   \

@@ -230,11 +230,12 @@ void FcitxInstanceSaveAllIM(FcitxInstance* instance)
 {
     UT_array* imes = &instance->availimes;
     FcitxIM *pim;
-    for (pim = (FcitxIM *) utarray_front(imes);
-            pim != NULL;
-            pim = (FcitxIM *) utarray_next(imes, pim)) {
-        if ((pim)->Save)
-            (pim)->Save(pim->klass);
+    for (pim = (FcitxIM*)utarray_front(imes);
+         pim != NULL;
+         pim = (FcitxIM*)utarray_next(imes, pim)) {
+        if (pim->Save) {
+            pim->Save(pim->klass);
+        }
     }
 }
 
@@ -247,13 +248,14 @@ boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance, FcitxI
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
     if (rec2->imname || ic2->imname)
         return false;
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
     if (pfrontend) {
-        FcitxFrontend* frontend = (*pfrontend)->frontend;
-        if (frontend->CheckICFromSameApplication
-            && frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
+        FcitxFrontend *frontend = (*pfrontend)->frontend;
+        if (frontend->CheckICFromSameApplication &&
+            frontend->CheckICFromSameApplication((*pfrontend)->addonInstance,
+                                                 rec, ic)) {
             return true;
+        }
     }
 
     return false;
@@ -627,9 +629,8 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
 
 #if 0
     /* Added by hubert_star AT forum.ubuntu.com.cn */
-    if (event == FCITX_RELEASE_KEY
-            && IsHotKeySimple(sym, state)
-            && retVal == IRV_TO_PROCESS)
+    if (event == FCITX_RELEASE_KEY && IsHotKeySimple(sym, state) &&
+        retVal == IRV_TO_PROCESS)
         return IRV_DO_NOTHING;
 #endif
 
@@ -648,12 +649,14 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                     return IRV_DO_NOTHING;
                 }
             }
-            if (!(FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey])))
+            if (!(FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) ||
+                  FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey])))
                 input->keyReleased = KR_OTHER;
             else {
-                if ((input->keyReleased == KR_SWITCH)
-                        && (timestamp - input->lastKeyPressedTime < fc->iTimeInterval)
-                        && fc->bDoubleSwitchKey) {
+                if (input->keyReleased == KR_SWITCH &&
+                    (timestamp - input->lastKeyPressedTime <
+                     (unsigned)fc->iTimeInterval) &&
+                    fc->bDoubleSwitchKey) {
                     FcitxInstanceCommitString(instance, instance->CurrentIC, FcitxInputStateGetRawInputBuffer(input));
                     FcitxInstanceChangeIMStateWithKey(instance, instance->CurrentIC, true);
                 }
@@ -706,10 +709,10 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
             retVal = IRV_DONOT_PROCESS;
     }
 
-    /* the key processed before this phase is very important, we don't let any interrupt */
-    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE
-        && retVal == IRV_TO_PROCESS
-       ) {
+    /* the key processed before this phase is very important,
+     * we don't let any interrupt */
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE &&
+        retVal == IRV_TO_PROCESS) {
         if (!input->bIsDoInputOnly) {
             FcitxInstanceProcessPreInputFilter(instance, sym, state, &retVal);
         }
@@ -730,13 +733,8 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
         }
     }
 
-    return FcitxInstanceDoInputCallback(
-                instance,
-                retVal,
-                event,
-                timestamp,
-                sym,
-                state);
+    return FcitxInstanceDoInputCallback(instance, retVal, event, timestamp,
+                                        sym, state);
 }
 
 
@@ -771,12 +769,15 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
     FcitxKeySym sym,
     unsigned int state)
 {
+    FCITX_UNUSED(event);
+    FCITX_UNUSED(timestamp);
     FcitxIM* currentIM = FcitxInstanceGetCurrentIM(instance);
     FcitxInputState *input = instance->input;
 
     FcitxGlobalConfig *fc = instance->config;
 
-    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && currentIM && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)) {
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && currentIM &&
+        (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)) {
         if (currentIM->GetCandWords) {
             FcitxInstanceCleanInputWindow(instance);
             retVal = currentIM->GetCandWords(currentIM->klass);
@@ -788,7 +789,8 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
      * since all candidate word are cached in candList, so we don't need to trigger
      * GetCandWords after go for another page, simply update input window is ok.
      */
-    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE &&
+        !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
         if (FcitxHotkeyIsHotKey(sym, state,
                                 FcitxConfigPrevPageKey(instance, fc))) {
             if (FcitxCandidateWordGoPrevPage(input->candList))
@@ -800,7 +802,8 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
         }
     }
 
-    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE &&
+        !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
         FcitxInstanceProcessPostInputFilter(instance, sym, state, &retVal);
 
         if (retVal == IRV_TO_PROCESS) {
@@ -867,11 +870,10 @@ void FcitxInstanceForwardKey(FcitxInstance* instance, FcitxInputContext *ic, Fci
 {
     if (ic == NULL)
         return;
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
     if (pfrontend == NULL)
         return;
-    FcitxFrontend* frontend = (*pfrontend)->frontend;
+    FcitxFrontend *frontend = (*pfrontend)->frontend;
     frontend->ForwardKey((*pfrontend)->addonInstance, ic, event, sym, state);
 }
 
@@ -897,7 +899,7 @@ FCITX_EXPORT_API
 void FcitxInstanceSwitchIMByIndex(FcitxInstance* instance, int index)
 {
     UT_array* imes = &instance->imes;
-    int iIMCount = utarray_len(imes);
+    const int iIMCount = utarray_len(imes);
     /* less than -2, invalid, set to zero
      * -2 scroll back
      * -1 scroll forward
@@ -943,14 +945,16 @@ void FcitxInstanceUnregisterIM(FcitxInstance* instance, const char* name)
     if (!im)
         return;
 
-    int index = utarray_eltidx(&instance->availimes, im);
+    unsigned int index = utarray_eltidx(&instance->availimes, im);
     utarray_erase(&instance->availimes, index, 1);
 }
 
-void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean skipZero, boolean updateGlobal)
+void
+FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index,
+                              boolean skipZero, boolean updateGlobal)
 {
     UT_array* imes = &instance->imes;
-    int iIMCount = utarray_len(imes);
+    const int iIMCount = utarray_len(imes);
 
     FcitxInstanceCleanInputWindow(instance);
     FcitxInstanceResetInput(instance);
@@ -959,11 +963,7 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
     FcitxIM* lastIM, *newIM;
 
     /* set lastIM */
-    if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
-        lastIM = NULL;
-    else {
-        lastIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
-    }
+    lastIM = fcitx_array_eltptr(imes, instance->iIMIndex);
 
     /* update instance->iIMIndex start */
     if (index >= iIMCount)
@@ -982,11 +982,7 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
     /* update instance->iIMIndex end */
 
     /* set newIM */
-    if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
-        newIM = NULL;
-    else {
-        newIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
-    }
+    newIM = fcitx_array_eltptr(imes, instance->iIMIndex);
 
     if (lastIM && lastIM->Save)
         lastIM->Save(lastIM->klass);
@@ -998,13 +994,13 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
         FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Disable, name);
         if (!im->initialized) {
             im->initialized = true;
-            int index = utarray_eltidx(&instance->availimes, im);
+            unsigned int index = utarray_eltidx(&instance->availimes, im);
             utarray_erase(&instance->availimes, index, 1);
         }
 
         FcitxInstanceUpdateIMList(instance);
         instance->iIMIndex = FcitxInstanceGetIMIndexByName(instance, name);
-        newIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
+        newIM = fcitx_array_eltptr(imes, instance->iIMIndex);
         free(name);
     }
 
@@ -1045,7 +1041,7 @@ void FcitxInstanceResetInput(FcitxInstance* instance)
 
     UT_array* ims = &instance->imes;
 
-    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->iIMIndex);
+    FcitxIM *currentIM = fcitx_array_eltptr(ims, instance->iIMIndex);
 
     if (currentIM && currentIM->ResetIM)
         currentIM->ResetIM(currentIM->klass);
@@ -1055,8 +1051,8 @@ void FcitxInstanceResetInput(FcitxInstance* instance)
 
 void FcitxInstanceDoPhraseTips(FcitxInstance* instance)
 {
-    UT_array* ims = &instance->imes;
-    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->iIMIndex);
+    UT_array *ims = &instance->imes;
+    FcitxIM *currentIM = fcitx_array_eltptr(ims, instance->iIMIndex);
     FcitxInputState *input = instance->input;
 
     if (currentIM->PhraseTips && currentIM->PhraseTips(currentIM->klass))
@@ -1272,8 +1268,8 @@ boolean FcitxInstanceUpdateCurrentIM(FcitxInstance* instance, boolean force) {
     boolean updateGlobal = false;
     /* global index is not valid, that's why we need to fix it. */
     if (globalIndex == 0) {
-        UT_array* ime = &instance->imes;
-        FcitxIM* im = (FcitxIM*) utarray_eltptr(ime, 1);
+        UT_array *ime = &instance->imes;
+        FcitxIM *im = (FcitxIM*)utarray_eltptr(ime, 1);
         if (im) {
             fcitx_utils_string_swap(&instance->globalIMName, im->uniqueName);
             globalIndex = 1;
@@ -1349,8 +1345,7 @@ void FcitxInstanceEnableIMInternal(FcitxInstance* instance, FcitxInputContext* i
 {
     if (ic == NULL)
         return ;
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
@@ -1408,8 +1403,7 @@ void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic
 {
     if (ic == NULL)
         return ;
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
@@ -1650,9 +1644,10 @@ int FcitxHotkeyCheckChooseKey(FcitxKeySym sym, unsigned int state, const char* s
 }
 
 FCITX_EXPORT_API
-int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, unsigned int state, const char* strChoose, int candState)
+int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, unsigned int state,
+                                         const char* strChoose, int candState)
 {
-    if (state != candState)
+    if (state != (unsigned)candState)
         return -1;
 
     char *p = strchr(strChoose, FcitxHotkeyPadToMain(sym));
@@ -1662,18 +1657,14 @@ int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, unsigned int state, co
 FCITX_EXPORT_API
 FcitxIM* FcitxInstanceGetCurrentIM(FcitxInstance* instance)
 {
-    UT_array* imes = &instance->imes;
-    FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
-    return pcurrentIM;
+    return fcitx_array_eltptr(&instance->imes, instance->iIMIndex);
 }
 
 FCITX_EXPORT_API
 FcitxIM* FcitxInstanceGetIMByIndex(FcitxInstance* instance, int index)
 {
-    UT_array* imes = &instance->imes;
     /* utarray helps us to check the overflow */
-    FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, index);
-    return pcurrentIM;
+    return fcitx_array_eltptr(&instance->imes, index);
 }
 
 FCITX_EXPORT_API

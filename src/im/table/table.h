@@ -109,7 +109,7 @@ INPUT_RETURN_VALUE _TableGetCandWord(TableMetaData* table, TABLECANDWORD* tableC
 INPUT_RETURN_VALUE TableGetCandWord(void* arg, FcitxCandidateWord* candWord);
 boolean            TablePhraseTips(void* arg);
 
-void               UpdateHZLastInput(TableMetaData* table, char* str);
+void UpdateHZLastInput(TableMetaData* table, const char* str);
 
 FcitxConfigFileDesc *GetTableConfigDesc();
 FcitxConfigFileDesc *GetTableGlobalConfigDesc();

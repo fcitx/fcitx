@@ -63,7 +63,7 @@ static void _fcitx_connection_connect(FcitxConnection* self, gboolean use_sessio
 static void fcitx_connection_init(FcitxConnection *self);
 static void fcitx_connection_finalize(GObject *object);
 static void fcitx_connection_dispose(GObject *object);
-static void _fcitx_connection_appear (GDBusConnection *connection, const gchar *name, const gchar *name_owner, gpointer user_data);
+static void _fcitx_connection_appear(GDBusConnection *connection, const gchar *name, const gchar *name_owner, gpointer user_data);
 static void _fcitx_connection_vanish (GDBusConnection *connection, const gchar *name, gpointer user_data);
 static void _fcitx_connection_socket_file_changed_cb (GFileMonitor *monitor, GFile *file, GFile *other_file, GFileMonitorEvent event_type, gpointer            user_data);
 static gchar* _fcitx_get_address ();
@@ -113,11 +113,11 @@ _fcitx_connection_new_service_appear(gpointer user_data)
 }
 
 static void
-_fcitx_connection_appear (GDBusConnection *connection,
-                      const gchar     *name,
-                      const gchar     *name_owner,
-                      gpointer         user_data)
+_fcitx_connection_appear(GDBusConnection *connection, const gchar *name,
+                         const gchar *name_owner, gpointer user_data)
 {
+    FCITX_UNUSED(connection);
+    FCITX_UNUSED(name);
     FcitxConnection* self = (FcitxConnection*) user_data;
     gboolean new_owner_good = name_owner && (name_owner[0] != '\0');
     if (new_owner_good) {
@@ -130,10 +130,11 @@ _fcitx_connection_appear (GDBusConnection *connection,
 }
 
 static void
-_fcitx_connection_vanish (GDBusConnection *connection,
-                      const gchar     *name,
-                      gpointer         user_data)
+_fcitx_connection_vanish(GDBusConnection *connection, const gchar *name,
+                         gpointer user_data)
 {
+    FCITX_UNUSED(connection);
+    FCITX_UNUSED(name);
     FcitxConnection* self = (FcitxConnection*) user_data;
     _fcitx_connection_clean_up(self, FALSE);
 }
@@ -160,7 +161,8 @@ fcitx_connection_init(FcitxConnection *self)
 {
     self->priv = FCITX_CONNECTION_GET_PRIVATE(self);
 
-    sprintf(self->priv->servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
+    sprintf(self->priv->servicename, "%s-%d", FCITX_DBUS_SERVICE,
+            fcitx_utils_get_display_number());
 
     self->priv->connection = NULL;
     self->priv->cancellable = NULL;
@@ -171,7 +173,8 @@ fcitx_connection_init(FcitxConnection *self)
     GFile* file = g_file_new_for_path(path);
     self->priv->monitor = g_file_monitor_file(file, 0, NULL, NULL);
 
-    g_signal_connect (self->priv->monitor, "changed", (GCallback) _fcitx_connection_socket_file_changed_cb, self);
+    g_signal_connect(self->priv->monitor, "changed",
+                     (GCallback)_fcitx_connection_socket_file_changed_cb, self);
 
     g_object_unref(file);
     g_free(path);
@@ -214,22 +217,24 @@ _fcitx_connection_connect(FcitxConnection *self, gboolean use_session_bus)
 
 static void
 _fcitx_connection_connection_closed(GDBusConnection *connection,
-                                gboolean         remote_peer_vanished,
-                                GError          *error,
-                                gpointer         user_data)
+                                    gboolean remote_peer_vanished,
+                                    GError *error, gpointer user_data)
 {
+    FCITX_UNUSED(connection);
+    FCITX_UNUSED(remote_peer_vanished);
+    FCITX_UNUSED(error);
     fcitx_gclient_debug("_fcitx_connection_connection_closed");
-    FcitxConnection* self = (FcitxConnection*) user_data;
+    FcitxConnection* self = (FcitxConnection*)user_data;
     _fcitx_connection_clean_up(self, FALSE);
 
     _fcitx_connection_watch(self);
 }
 
 static void
-_fcitx_connection_bus_finished(GObject *source_object,
-                                                GAsyncResult *res,
-                                                gpointer user_data)
+_fcitx_connection_bus_finished(GObject *source_object, GAsyncResult *res,
+                               gpointer user_data)
 {
+    FCITX_UNUSED(source_object);
     fcitx_gclient_debug("_fcitx_connection_bus_finished");
     g_return_if_fail (user_data != NULL);
     g_return_if_fail (FCITX_IS_CONNECTION(user_data));
@@ -246,7 +251,8 @@ _fcitx_connection_bus_finished(GObject *source_object,
         _fcitx_connection_clean_up(self, FALSE);
         self->priv->connection = connection;
         self->priv->connection_is_bus = TRUE;
-        g_signal_connect(connection, "closed", G_CALLBACK(_fcitx_connection_connection_closed), self);
+        g_signal_connect(connection, "closed",
+                         G_CALLBACK(_fcitx_connection_connection_closed), self);
         g_signal_emit(self, signals[CONNECTED_SIGNAL], 0);
     }
     /* unref for _fcitx_connection_connect */
@@ -281,10 +287,10 @@ _fcitx_connection_unwatch(FcitxConnection* self)
 
 static void
 _fcitx_connection_connection_finished(GObject *source_object,
-                                                   GAsyncResult *res,
-                                                   gpointer user_data)
+                                      GAsyncResult *res, gpointer user_data)
 
 {
+    FCITX_UNUSED(source_object);
     fcitx_gclient_debug("_fcitx_connection_connection_finished");
     g_return_if_fail (user_data != NULL);
     g_return_if_fail (FCITX_IS_CONNECTION(user_data));
@@ -421,12 +427,14 @@ fcitx_connection_get_g_dbus_connection(FcitxConnection* connection)
 }
 
 static void
-_fcitx_connection_socket_file_changed_cb (GFileMonitor       *monitor,
-                                      GFile              *file,
-                                      GFile              *other_file,
-                                      GFileMonitorEvent   event_type,
-                                      gpointer            user_data)
+_fcitx_connection_socket_file_changed_cb(GFileMonitor *monitor, GFile *file,
+                                         GFile *other_file,
+                                         GFileMonitorEvent event_type,
+                                         gpointer user_data)
 {
+    FCITX_UNUSED(monitor);
+    FCITX_UNUSED(file);
+    FCITX_UNUSED(other_file);
     FcitxConnection* connection = user_data;
     if (event_type != G_FILE_MONITOR_EVENT_CHANGED &&
         event_type != G_FILE_MONITOR_EVENT_CREATED &&

@@ -320,12 +320,14 @@ void DBusDestroy(void* arg) {
 
 void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args)
 {
+    FCITX_UNUSED(args);
     FcitxDBus* dbusmodule = (FcitxDBus*)arg;
     return dbusmodule->conn;
 }
 
 void* DBusGetPrivateConnection(void* arg, FcitxModuleFunctionArg args)
 {
+    FCITX_UNUSED(args);
     FcitxDBus* dbusmodule = (FcitxDBus*)arg;
     return dbusmodule->privconn;
 }

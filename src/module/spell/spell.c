@@ -107,7 +107,7 @@ SpellCreate(FcitxInstance *instance)
     FcitxAddon* addon;
     spell->owner = instance;
 
-    SpellCustomInit(spell);
+    /* SpellCustomInit(spell); */
 #ifdef ENABLE_PRESAGE
     SpellPresageInit(spell);
 #endif
@@ -342,14 +342,10 @@ static const SpellHintProvider hint_provider[] = {
 };
 
 static const SpellHintProvider*
-SpellFindHintProvider(const char *str, int len)
+SpellFindHintProvider(const char *str, unsigned int len)
 {
     int i;
-    if (!str)
-        return NULL;
-    if (len < 0)
-        len = strlen(str);
-    if (!len)
+    if (!str || !len)
         return NULL;
     for (i = 0;hint_provider[i].hint_func;i++) {
         if ((strlen(hint_provider[i].name) == len &&

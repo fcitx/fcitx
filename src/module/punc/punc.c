@@ -50,9 +50,9 @@
 
 struct _FcitxPuncState;
 typedef struct _WidePunc {
-    char            ASCII;
-    char            strWidePunc[MAX_PUNC_NO][MAX_PUNC_LENGTH * UTF8_MAX_LENGTH + 1];
-    unsigned        iCount: 2;
+    char ASCII;
+    char strWidePunc[MAX_PUNC_NO][MAX_PUNC_LENGTH * UTF8_MAX_LENGTH + 1];
+    unsigned iCount: 2;
 } WidePunc;
 
 typedef struct _PuncWhich {
@@ -148,17 +148,19 @@ void* PuncCreate(FcitxInstance* instance)
                           profile->bUseWidePunc ? _("Full width punct") :  _("Latin punct"),
                           _("Toggle Full Width Punctuation"), TogglePuncState, GetPuncState);
 
-    puncState->slot = FcitxInstanceAllocDataForIC(instance, PuncWhichAlloc, PuncWhichCopy, PuncWhichFree, puncState);
+    puncState->slot = FcitxInstanceAllocDataForIC(instance, PuncWhichAlloc,
+                                                  PuncWhichCopy, PuncWhichFree,
+                                                  puncState);
 
     FcitxModuleAddFunction(puncaddon, PuncGetPunc);
     FcitxModuleAddFunction(puncaddon, PuncGetPunc2);
     return puncState;
 }
 
-void* PuncWhichAlloc(void* arg)
+void* PuncWhichAlloc(void *arg)
 {
-    FcitxPunc* puncState = arg;
-    PuncWhich* which = fcitx_utils_new(PuncWhich);
+    FcitxPunc *puncState = arg;
+    PuncWhich *which = fcitx_utils_new(PuncWhich);
     which->lastPunc = puncState->curPunc;
     which->bitset = fcitx_bitset_new(256);
     return which;
@@ -166,8 +168,9 @@ void* PuncWhichAlloc(void* arg)
 
 void* PuncWhichCopy(void* arg, void* data, void* src)
 {
-    PuncWhich* which = data;
-    PuncWhich* whichsrc = src;
+    FCITX_UNUSED(arg);
+    PuncWhich *which = data;
+    PuncWhich *whichsrc = src;
     which->lastPunc = whichsrc->lastPunc;
     memcpy(which->bitset, whichsrc->bitset, fcitx_bitset_size(256));
     return data;
@@ -175,7 +178,8 @@ void* PuncWhichCopy(void* arg, void* data, void* src)
 
 void PuncWhichFree(void* arg, void* data)
 {
-    PuncWhich* which = data;
+    FCITX_UNUSED(arg);
+    PuncWhich *which = data;
     free(which->bitset);
     free(data);
 }
@@ -253,15 +257,14 @@ void ResetPuncWhichStatus(void* arg)
     fcitx_bitset_clear(puncWhich->bitset);
 }
 
-boolean PuncPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
+boolean PuncPreFilter(void* arg, FcitxKeySym sym, unsigned int state,
+                      INPUT_RETURN_VALUE* retVal)
 {
-    FcitxPuncState* puncState = (FcitxPuncState*) arg;
-    if (!FcitxHotkeyIsHotKeySimple(sym, state))
-        return false;
-
-    if (!FcitxHotkeyIsHotKeyDigit(sym, state) && !IsHotKeyPunc(sym, state))
+    FCITX_UNUSED(retVal);
+    FcitxPuncState *puncState = (FcitxPuncState*)arg;
+    if (FcitxHotkeyIsHotKeySimple(sym, state) &&
+        !FcitxHotkeyIsHotKeyDigit(sym, state) && !IsHotKeyPunc(sym, state))
         puncState->bLastIsNumber = false;
-
     return false;
 }
 

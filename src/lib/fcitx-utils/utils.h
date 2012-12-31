@@ -801,6 +801,54 @@ extern "C" {
 
 #undef FCITX_UTIL_DECLARE_ATOMIC
 
+    static inline void*
+    fcitx_array_eltptr(UT_array *ary, int i)
+    {
+        if (fcitx_unlikely(i < 0))
+            return NULL;
+        return (void*)utarray_eltptr(ary, (unsigned)i);
+    }
+
+    static inline void
+    fcitx_array_insert(UT_array *ary, void *p, int i)
+    {
+        if (fcitx_unlikely(i < 0))
+            return;
+        utarray_insert(ary, p, (unsigned)i);
+    }
+
+    static inline void
+    fcitx_array_inserta(UT_array *ary, UT_array *ary2, int i)
+    {
+        if (fcitx_unlikely(i < 0))
+            return;
+        utarray_inserta(ary, ary2, (unsigned)i);
+    }
+
+    static inline void
+    fcitx_array_move(UT_array *ary, int from, int to)
+    {
+        if (fcitx_unlikely(from < 0 || to < 0))
+            return;
+        utarray_move(ary, (unsigned)from, (unsigned)to);
+    }
+
+    static inline void
+    fcitx_array_erase(UT_array *ary, int pos, int len)
+    {
+        if (fcitx_unlikely(pos < 0 || len < 0))
+            return;
+        utarray_erase(ary, (unsigned)pos, (unsigned)len);
+    }
+
+    static inline void
+    fcitx_array_resize(UT_array *ary, int len)
+    {
+        if (fcitx_unlikely(len < 0))
+            return;
+        utarray_resize(ary, (unsigned)len);
+    }
+
 #ifdef __cplusplus
 }
 #endif

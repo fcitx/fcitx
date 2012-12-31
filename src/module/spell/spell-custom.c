@@ -78,11 +78,11 @@ SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
 }
 
 /* Init work is done in set lang, nothing else to init here */
-boolean
-SpellCustomInit(FcitxSpell *spell)
-{
-    return true;
-}
+/* boolean */
+/* SpellCustomInit(FcitxSpell *spell) */
+/* { */
+/*     return true; */
+/* } */
 
 static int
 SpellCustomGetDistance(SpellCustomDict *custom_dict, const char *word,
@@ -203,7 +203,7 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
 {
     SpellCustomCWord clist[len_limit + 1];
     int i;
-    int num = 0;
+    unsigned int num = 0;
     int word_type = 0;
     SpellCustomDict *dict = spell->custom_dict;
     const char *word;

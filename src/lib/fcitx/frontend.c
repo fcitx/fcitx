@@ -43,10 +43,10 @@ static void FillICData(FcitxInstance* instance, FcitxInputContext* ic);
 void FillICData(FcitxInstance* instance, FcitxInputContext* ic)
 {
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
-    int i = utarray_len(ic2->data);
-    for (; i < utarray_len(&instance->icdata); i ++) {
-        FcitxICDataInfo* info = (FcitxICDataInfo*) utarray_eltptr(&instance->icdata, i);
-        void* data = NULL;
+    unsigned int i = utarray_len(ic2->data);
+    for (;i < utarray_len(&instance->icdata);i++) {
+        FcitxICDataInfo *info = (FcitxICDataInfo*)utarray_eltptr(&instance->icdata, i);
+        void *data = NULL;
         if (info->allocCallback)
             data = info->allocCallback(info->arg);
         utarray_push_back(ic2->data, &data);
@@ -64,10 +64,10 @@ void NewICData(FcitxInstance* instance, FcitxInputContext* ic)
 void FreeICData(FcitxInstance* instance, FcitxInputContext* ic)
 {
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
-    int i = 0;
-    for (; i < utarray_len(ic2->data); i ++) {
-        void** data = (void**) utarray_eltptr(ic2->data, i);
-        FcitxICDataInfo* info = (FcitxICDataInfo*) utarray_eltptr(&instance->icdata, i);
+    unsigned int i = 0;
+    for (;i < utarray_len(ic2->data);i++) {
+        void** data = (void**)utarray_eltptr(ic2->data, i);
+        FcitxICDataInfo* info = (FcitxICDataInfo*)utarray_eltptr(&instance->icdata, i);
         if (info->freeCallback) {
             info->freeCallback(info->arg, *data);
         }
@@ -75,14 +75,16 @@ void FreeICData(FcitxInstance* instance, FcitxInputContext* ic)
     utarray_free(ic2->data);
 }
 
-FCITX_EXPORT_API
-void* FcitxInstanceGetICData(struct _FcitxInstance* instance, FcitxInputContext* ic, int icdataid)
+FCITX_EXPORT_API void*
+FcitxInstanceGetICData(FcitxInstance *instance, FcitxInputContext *ic,
+                       int icdataid)
 {
+    FCITX_UNUSED(instance);
     if (!ic)
         return NULL;
 
-    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
-    void** data = (void**) utarray_eltptr(ic2->data, icdataid);
+    FcitxInputContext2* ic2 = (FcitxInputContext2*)ic;
+    void **data = fcitx_array_eltptr(ic2->data, icdataid);
     if (!data)
         return NULL;
     return *data;
@@ -92,8 +94,8 @@ static
 void FcitxInstanceSetICDataInternal(struct _FcitxInstance* instance, FcitxInputContext* ic, int icdataid, void* newdata, boolean copy)
 {
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
-    FcitxICDataInfo* info = (FcitxICDataInfo*) utarray_eltptr(&instance->icdata, icdataid);
-    void** data = (void**) utarray_eltptr(ic2->data, icdataid);
+    FcitxICDataInfo *info = fcitx_array_eltptr(&instance->icdata, icdataid);
+    void **data = fcitx_array_eltptr(ic2->data, icdataid);
     if (!data || !info)
         return;
     if (copy) {
@@ -140,13 +142,12 @@ void FcitxFrontendsInit(UT_array* frontends)
     utarray_init(frontends, fcitx_ptr_icd);
 }
 
-FCITX_EXPORT_API
-FcitxInputContext* FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid, void * priv)
+FCITX_EXPORT_API FcitxInputContext*
+FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid, void * priv)
 {
     /* clean up invalid ic here */
     FcitxInstanceCleanUpIC(instance);
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, frontendid);
     if (pfrontend == NULL)
         return NULL;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
@@ -206,12 +207,12 @@ int FcitxInstanceAllocDataForIC(FcitxInstance* instance,
 
 void FcitxInstanceCleanUpIC(FcitxInstance* instance)
 {
-    UT_array* frontends = &instance->frontends;
     FcitxInputContext *rec = instance->ic_list, *last = NULL, *todel;
 
     while (rec) {
-        FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, rec->frontendid);
-        FcitxFrontend* frontend = (*pfrontend)->frontend;
+        FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance,
+                                                           rec->frontendid);
+        FcitxFrontend *frontend = (*pfrontend)->frontend;
         pid_t pid = 0;
         if (frontend->GetPid)
             pid = frontend->GetPid((*pfrontend)->addonInstance, rec);
@@ -243,8 +244,7 @@ void FcitxInstanceCleanUpIC(FcitxInstance* instance)
 FCITX_EXPORT_API
 FcitxInputContext* FcitxInstanceFindIC(FcitxInstance* instance, int frontendid, void *filter)
 {
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, frontendid);
     if (pfrontend == NULL)
         return NULL;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
@@ -260,8 +260,7 @@ FcitxInputContext* FcitxInstanceFindIC(FcitxInstance* instance, int frontendid, 
 FCITX_EXPORT_API
 void FcitxInstanceSetICStateFromSameApplication(FcitxInstance* instance, int frontendid, FcitxInputContext *ic)
 {
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, frontendid);
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
@@ -280,9 +279,8 @@ void FcitxInstanceSetICStateFromSameApplication(FcitxInstance* instance, int fro
 FCITX_EXPORT_API
 void FcitxInstanceDestroyIC(FcitxInstance* instance, int frontendid, void* filter)
 {
-    FcitxInputContext             *rec, *last;
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, frontendid);
+    FcitxInputContext *rec, *last;
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, frontendid);
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
@@ -353,13 +351,11 @@ void FcitxInstanceCommitString(FcitxInstance* instance, FcitxInputContext* ic, c
     if (ic == NULL)
         return;
 
-    UT_array* frontends = &instance->frontends;
-
     char *pstr = FcitxInstanceProcessCommitFilter(instance, str);
     if (pstr != NULL)
         str = pstr;
 
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
@@ -382,9 +378,7 @@ boolean FcitxInstanceGetSurroundingText(FcitxInstance* instance, FcitxInputConte
 
     if (!(ic->contextCaps & CAPACITY_SURROUNDING_TEXT))
         return false;
-
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
     if (pfrontend == NULL)
         return false;
 
@@ -400,10 +394,7 @@ void FcitxInstanceDeleteSurroundingText(FcitxInstance* instance, FcitxInputConte
 {
     if (ic == NULL)
         return;
-
-    UT_array* frontends = &instance->frontends;
-
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
     if (pfrontend == NULL)
         return;
 
@@ -424,10 +415,7 @@ void FcitxInstanceUpdatePreedit(FcitxInstance* instance, FcitxInputContext* ic)
 
     if (!(ic->contextCaps & CAPACITY_PREEDIT))
         return;
-
-    UT_array* frontends = &instance->frontends;
-
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
@@ -442,10 +430,7 @@ void FcitxInstanceUpdateClientSideUI(FcitxInstance* instance, FcitxInputContext*
 
     if (!(ic->contextCaps & CAPACITY_CLIENT_SIDE_UI))
         return;
-
-    UT_array* frontends = &instance->frontends;
-
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
@@ -456,8 +441,7 @@ void FcitxInstanceUpdateClientSideUI(FcitxInstance* instance, FcitxInputContext*
 FCITX_EXPORT_API
 void FcitxInstanceSetWindowOffset(FcitxInstance* instance, FcitxInputContext *ic, int x, int y)
 {
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
@@ -471,14 +455,14 @@ void FcitxInstanceGetWindowPosition(FcitxInstance* instance, FcitxInputContext* 
     if (ic == NULL)
         return;
 
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
     int rx, ry, rw, rh;
     if (frontend->GetWindowRect) {
-        frontend->GetWindowRect((*pfrontend)->addonInstance, ic, &rx, &ry, &rw, &rh);
+        frontend->GetWindowRect((*pfrontend)->addonInstance, ic,
+                                &rx, &ry, &rw, &rh);
         *x = rx;
         *y = ry + rh;
     }
@@ -490,8 +474,7 @@ void FcitxInstanceGetWindowRect(FcitxInstance* instance, FcitxInputContext* ic, 
     if (ic == NULL)
         return;
 
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;

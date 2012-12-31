@@ -236,7 +236,7 @@ void* RunInstance(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
     instance->initialized = true;
-    int64_t curtime = 0;
+    uint64_t curtime = 0;
     while (1) {
         FcitxAddon** pmodule;
         uint8_t signo = 0;
@@ -262,7 +262,7 @@ void* RunInstance(void* arg)
             gettimeofday(&current_time, NULL);
             curtime = (current_time.tv_sec * 1000LL) + (current_time.tv_usec / 1000LL);
 
-            int idx = 0;
+            unsigned int idx = 0;
             while(idx < utarray_len(&instance->timeout))
             {
                 TimeoutItem* ti = (TimeoutItem*) utarray_eltptr(&instance->timeout, idx);
@@ -310,12 +310,10 @@ void* RunInstance(void* arg)
         struct timeval tval;
         struct timeval* ptval = NULL;
         if (utarray_len(&instance->timeout) != 0) {
-            long int min_time = LONG_MAX;
+            unsigned long int min_time = LONG_MAX;
             TimeoutItem* ti;
-            for (ti = (TimeoutItem*) utarray_front(&instance->timeout);
-                 ti != NULL;
-                 ti = (TimeoutItem*) utarray_next(&instance->timeout, ti))
-            {
+            for (ti = (TimeoutItem*)utarray_front(&instance->timeout);ti;
+                 ti = (TimeoutItem*)utarray_next(&instance->timeout, ti)) {
                 if (ti->time + ti->milli - curtime < min_time) {
                     min_time = ti->time + ti->milli - curtime;
                 }
@@ -324,7 +322,8 @@ void* RunInstance(void* arg)
             tval.tv_sec = min_time / 1000;
             ptval = &tval;
         }
-        select(instance->maxfd + 1, &instance->rfds, &instance->wfds, &instance->efds, ptval);
+        select(instance->maxfd + 1, &instance->rfds, &instance->wfds,
+               &instance->efds, ptval);
     }
     return NULL;
 }
@@ -367,29 +366,31 @@ void FcitxInstanceEnd(FcitxInstance* instance)
     FcitxFrontend* frontend;
     FcitxInputContext* rec = NULL;
 
-    for (pimclass = (FcitxAddon**) utarray_front(&instance->imeclasses);
-            pimclass != NULL;
-            pimclass = (FcitxAddon**) utarray_next(&instance->imeclasses, pimclass)
+    for (pimclass = (FcitxAddon**)utarray_front(&instance->imeclasses);
+         pimclass != NULL;
+         pimclass = (FcitxAddon**)utarray_next(&instance->imeclasses, pimclass)
         ) {
         if ((*pimclass)->imclass->Destroy)
             (*pimclass)->imclass->Destroy((*pimclass)->addonInstance);
     }
 
     for (rec = instance->ic_list; rec != NULL; rec = rec->next) {
-        pfrontend = (FcitxAddon**) utarray_eltptr(&instance->frontends, rec->frontendid);
+        pfrontend = (FcitxAddon**)utarray_eltptr(&instance->frontends,
+                                                 (unsigned int)rec->frontendid);
         frontend = (*pfrontend)->frontend;
         frontend->CloseIM((*pfrontend)->addonInstance, rec);
     }
 
     for (rec = instance->ic_list; rec != NULL; rec = rec->next) {
-        pfrontend = (FcitxAddon**) utarray_eltptr(&instance->frontends, rec->frontendid);
+        pfrontend = (FcitxAddon**)utarray_eltptr(&instance->frontends,
+                                                 (unsigned int)rec->frontendid);
         frontend = (*pfrontend)->frontend;
         frontend->DestroyIC((*pfrontend)->addonInstance, rec);
     }
 
-    for (pfrontend = (FcitxAddon**) utarray_front(&instance->frontends);
-            pfrontend != NULL;
-            pfrontend = (FcitxAddon**) utarray_next(&instance->frontends, pfrontend)
+    for (pfrontend = (FcitxAddon**)utarray_front(&instance->frontends);
+         pfrontend != NULL;
+         pfrontend = (FcitxAddon**)utarray_next(&instance->frontends, pfrontend)
         ) {
         if (pfrontend == NULL)
             continue;
@@ -399,9 +400,8 @@ void FcitxInstanceEnd(FcitxInstance* instance)
 
     FcitxAddon** pmodule;
     for (pmodule = (FcitxAddon**) utarray_front(&instance->modules);
-            pmodule != NULL;
-            pmodule = (FcitxAddon**) utarray_next(&instance->modules, pmodule)
-        ) {
+         pmodule != NULL;
+         pmodule = (FcitxAddon**) utarray_next(&instance->modules, pmodule)) {
         if (pmodule == NULL)
             return;
         FcitxModule* module = (*pmodule)->module;
@@ -653,16 +653,16 @@ boolean FcitxInstanceCheckTimeoutById(FcitxInstance *instance, uint64_t id)
     return false;
 }
 
-FCITX_EXPORT_API
-boolean FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback)
+FCITX_EXPORT_API boolean
+FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance,
+                                 FcitxTimeoutCallback callback)
 {
     TimeoutItem* ti;
     for (ti = (TimeoutItem*) utarray_front(&instance->timeout);
          ti != NULL;
-         ti = (TimeoutItem*) utarray_next(&instance->timeout, ti))
-    {
+         ti = (TimeoutItem*) utarray_next(&instance->timeout, ti)) {
         if (ti->callback == callback) {
-            int idx = utarray_eltidx(&instance->timeout, ti);
+            unsigned int idx = utarray_eltidx(&instance->timeout, ti);
             utarray_remove_quick(&instance->timeout, idx);
             return true;
         }
@@ -678,16 +678,14 @@ boolean FcitxInstanceRemoveTimeoutById(FcitxInstance* instance, uint64_t id)
     TimeoutItem* ti;
     for (ti = (TimeoutItem*) utarray_front(&instance->timeout);
          ti != NULL;
-         ti = (TimeoutItem*) utarray_next(&instance->timeout, ti))
-    {
+         ti = (TimeoutItem*) utarray_next(&instance->timeout, ti)) {
         if (ti->idx == id) {
-            int idx = utarray_eltidx(&instance->timeout, ti);
+            unsigned int idx = utarray_eltidx(&instance->timeout, ti);
             utarray_remove_quick(&instance->timeout, idx);
             return true;
         }
     }
     return false;
 }
-
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

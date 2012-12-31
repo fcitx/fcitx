@@ -395,10 +395,10 @@ static void
 FcitxXkbGetCurrentLayoutInternal(FcitxXkb *xkb, char **layout, char **variant)
 {
     int cur_group = FcitxXkbGetCurrentGroup(xkb);
-    char* const *layoutName = (char* const*)utarray_eltptr(xkb->defaultLayouts,
-                                                           cur_group);
-    char* const *pVariantName = (char* const*)utarray_eltptr(
-        xkb->defaultVariants, cur_group);
+    char* const *layoutName = fcitx_array_eltptr(xkb->defaultLayouts,
+                                                 cur_group);
+    char* const *pVariantName = fcitx_array_eltptr(xkb->defaultVariants,
+                                                   cur_group);
     if (layoutName)
         *layout = strdup(*layoutName);
     else
@@ -600,8 +600,8 @@ static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
             const char* layout = (const char*) value;
             if (layout) {
                 s = fcitx_utils_split_string(layout, ',');
-                char** pLayoutString = (char**) utarray_eltptr(s, 0);
-                char** pVariantString = (char**) utarray_eltptr(s, 1);
+                char  **pLayoutString = (char**)utarray_eltptr(s, 0);
+                char **pVariantString = (char**)utarray_eltptr(s, 1);
                 layoutString = (pLayoutString)? *pLayoutString: NULL;
                 variantString = (pVariantString)? *pVariantString: NULL;
             }
@@ -627,7 +627,7 @@ static int FcitxXkbFindLayoutIndex(FcitxXkb* xkb, const char* layout, const char
     if (layout == NULL)
         return -1;
 
-    int i = 0;
+    unsigned int i = 0;
     for (i = 0;i < utarray_len(xkb->defaultLayouts);i++) {
         layoutName = (char**)utarray_eltptr(xkb->defaultLayouts, i);
         pVariantName = (char**)utarray_eltptr(xkb->defaultVariants, i);
@@ -812,7 +812,8 @@ static void FcitxXkbReloadConfig(void* arg)
 
 static void* FcitxXkbGetRules(void* arg, FcitxModuleFunctionArg args)
 {
-    FcitxXkb* xkb = (FcitxXkb*) arg;
+    FCITX_UNUSED(args);
+    FcitxXkb *xkb = (FcitxXkb*)arg;
     return xkb->rules;
 }
 
@@ -888,9 +889,9 @@ void LoadLayoutOverride(FcitxXkb* xkb)
         trimedbuf = fcitx_utils_trim(buf);
 
         UT_array* s = fcitx_utils_split_string(trimedbuf, ',');
-        char** pIMString = (char**) utarray_eltptr(s, 0);
-        char** pLayoutString = (char**) utarray_eltptr(s, 1);
-        char** pVariantString = (char**) utarray_eltptr(s, 2);
+        char** pIMString = (char**)utarray_eltptr(s, 0);
+        char** pLayoutString = (char**)utarray_eltptr(s, 1);
+        char** pVariantString = (char**)utarray_eltptr(s, 2);
         char* imString = (pIMString)? *pIMString: NULL;
         char* layoutString = (pLayoutString)? *pLayoutString: NULL;
         char* variantString = (pVariantString)? *pVariantString: NULL;

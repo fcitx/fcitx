@@ -138,7 +138,7 @@ FcitxAddon* FcitxAddonsLoadInternal(UT_array* addons, boolean reloadIM)
                 FcitxLog(INFO, _("Load Addon Config File:%s"), string->name);
         }
 
-        for (i = 0; i < len ; i ++) {
+        for (i = len - 1;i >= 0;i--) {
             free(paths[i]);
         }
     }

@@ -291,20 +291,19 @@ void IMSelectorGetCands(IMSelector* imselector)
     if (!ic)
         return;
 
-    FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetAuxUp(input),
-                                         MSG_TIPS, imselector->global ?
+    FcitxMessages *aux_up = FcitxInputStateGetAuxUp(input);
+    FcitxMessagesAddMessageStringsAtLast(aux_up, MSG_TIPS, imselector->global ?
                                          _("Select global input method: ") :
                                          _("Select local input method: "));
     if (ic2->imname) {
         int idx = FcitxInstanceGetIMIndexByName(instance, ic2->imname);
-        FcitxIM* im = (FcitxIM*) utarray_eltptr(imes, idx);
+        FcitxIM *im = fcitx_array_eltptr(imes, idx);
         if (im) {
-            FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Current local input method is %s"), im->strName);
+            FcitxMessagesAddMessageStringsAtLast(aux_up, MSG_TIPS,
+                _("Current local input method is "), im->strName);
         }
-    }
-    else {
-        FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetAuxUp(input),
-                                             MSG_TIPS,
+    } else {
+        FcitxMessagesAddMessageStringsAtLast(aux_up, MSG_TIPS,
                                              _("No local input method"));
     }
     for (pim = (FcitxIM *) utarray_front(imes);

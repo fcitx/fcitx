@@ -185,12 +185,14 @@ int main(int argc, char **argv)
         int s;
 
         for (s = 0; s < symcount ; s++) {
-            ScelPinyin *py = (ScelPinyin*) utarray_eltptr(pys, pyindex[0]);
+            ScelPinyin *py = (ScelPinyin*)utarray_eltptr(
+                pys, (unsigned int)pyindex[0]);
             fprintf(fout, "%s",  py->pinyin);
             int i;
 
             for (i = 1 ; i < wordcount ; i ++) {
-                py = (ScelPinyin*) utarray_eltptr(pys, pyindex[i]);
+                py = (ScelPinyin*)utarray_eltptr(pys,
+                                                 (unsigned int)pyindex[i]);
                 fprintf(fout, "\'%s", py->pinyin);
             }
 

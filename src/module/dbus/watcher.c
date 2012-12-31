@@ -9,6 +9,7 @@
 #include "dbusstuff.h"
 #include "dbussocket.h"
 #include "fcitx-utils/utils.h"
+#include "fcitx/fcitx.h"
 
 static char* servicename = NULL;
 enum {
@@ -19,8 +20,11 @@ enum {
 
 int status = WATCHER_WAITING;
 
-DBusHandlerResult WatcherDBusFilter(DBusConnection* connection, DBusMessage* msg, void* user_data)
+DBusHandlerResult
+WatcherDBusFilter(DBusConnection* connection, DBusMessage* msg, void* user_data)
 {
+    FCITX_UNUSED(connection);
+    FCITX_UNUSED(user_data);
     if (dbus_message_is_signal(msg, DBUS_INTERFACE_DBUS, "NameOwnerChanged")) {
         const char *service, *oldowner, *newowner;
         DBusError error;

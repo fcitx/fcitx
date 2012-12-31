@@ -63,9 +63,10 @@ void FcitxCandidateWordFreeList(FcitxCandidateWordList* list)
 }
 
 FCITX_EXPORT_API
-void FcitxCandidateWordInsert(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord, int position)
+void FcitxCandidateWordInsert(FcitxCandidateWordList* candList,
+                              FcitxCandidateWord* candWord, int position)
 {
-    utarray_insert(&candList->candWords, candWord, position);
+    fcitx_array_insert(&candList->candWords, candWord, position);
 }
 
 FCITX_EXPORT_API
@@ -77,7 +78,8 @@ FcitxCandidateWordMerge(FcitxCandidateWordList* candList,
     if (!newList)
         return;
     if (position >= 0) {
-        utarray_inserta(&candList->candWords, &newList->candWords, position);
+        fcitx_array_inserta(&candList->candWords, &newList->candWords,
+                            position);
     } else {
         utarray_concat(&candList->candWords, &newList->candWords);
     }
@@ -88,28 +90,30 @@ FcitxCandidateWordMerge(FcitxCandidateWordList* candList,
 
 INPUT_RETURN_VALUE DummyHandler(void* arg, FcitxCandidateWord* candWord)
 {
+    FCITX_UNUSED(arg);
+    FCITX_UNUSED(candWord);
     return IRV_DO_NOTHING;
 }
 
 FCITX_EXPORT_API
-void FcitxCandidateWordInsertPlaceHolder(FcitxCandidateWordList* candList, int position)
+void FcitxCandidateWordInsertPlaceHolder(FcitxCandidateWordList* candList,
+                                         int position)
 {
     FcitxCandidateWord candWord;
     memset(&candWord, 0, sizeof(FcitxCandidateWord));
     candWord.callback = DummyHandler;
-    utarray_insert(&candList->candWords, &candWord, position);
+    fcitx_array_insert(&candList->candWords, &candWord, position);
 }
 
 FCITX_EXPORT_API
 void FcitxCandidateWordMove(FcitxCandidateWordList* candList, int from, int to)
 {
-    if (from < 0 || to < 0)
-        return;
-    utarray_move(&candList->candWords, from, to);
+    fcitx_array_move(&candList->candWords, from, to);
 }
 
-FCITX_EXPORT_API
-void FcitxCandidateWordMoveByWord(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord, int to)
+FCITX_EXPORT_API void
+FcitxCandidateWordMoveByWord(FcitxCandidateWordList *candList,
+                             FcitxCandidateWord *candWord, int to)
 {
     int from = utarray_eltidx(&candList->candWords, candWord);
     FcitxCandidateWordMove(candList, from, to);
@@ -118,9 +122,7 @@ void FcitxCandidateWordMoveByWord(FcitxCandidateWordList* candList, FcitxCandida
 FCITX_EXPORT_API void
 FcitxCandidateWordRemoveByIndex(FcitxCandidateWordList *candList, int idx)
 {
-    if (idx < 0 || idx >= utarray_len(&candList->candWords))
-        return;
-    utarray_erase(&candList->candWords, idx, 1);
+    fcitx_array_erase(&candList->candWords, idx, 1);
 }
 
 FCITX_EXPORT_API void
@@ -131,16 +133,16 @@ FcitxCandidateWordRemove(FcitxCandidateWordList *candList,
     FcitxCandidateWordRemoveByIndex(candList, idx);
 }
 
-FCITX_EXPORT_API
-void FcitxCandidateWordSetPage(FcitxCandidateWordList *candList, int index)
+FCITX_EXPORT_API void
+FcitxCandidateWordSetPage(FcitxCandidateWordList *candList, int index)
 {
     if (index >= 0 && index < FcitxCandidateWordPageCount(candList)) {
         candList->currentPage = index;
     }
 }
 
-FCITX_EXPORT_API
-void FcitxCandidateWordSetFocus(FcitxCandidateWordList* candList, int index)
+FCITX_EXPORT_API void
+FcitxCandidateWordSetFocus(FcitxCandidateWordList* candList, int index)
 {
     FcitxCandidateWordSetPage(candList, index / candList->wordPerPage);
 }
@@ -171,8 +173,8 @@ int FcitxCandidateWordGetCurrentIndex(FcitxCandidateWordList* candList)
     return candList->currentPage * candList->wordPerPage;
 }
 
-FCITX_EXPORT_API
-FcitxCandidateWord* FcitxCandidateWordGetCurrentWindow(FcitxCandidateWordList* candList)
+FCITX_EXPORT_API FcitxCandidateWord*
+FcitxCandidateWordGetCurrentWindow(FcitxCandidateWordList* candList)
 {
     return FcitxCandidateWordGetByTotalIndex(
         candList, candList->currentPage * candList->wordPerPage);
@@ -206,10 +208,10 @@ FcitxCandidateWordGetCurrentWindowPrev(FcitxCandidateWordList* candList,
     return prevWord;
 }
 
-FCITX_EXPORT_API
-FcitxCandidateWord *FcitxCandidateWordGetByTotalIndex(FcitxCandidateWordList* candList, int index)
+FCITX_EXPORT_API FcitxCandidateWord*
+FcitxCandidateWordGetByTotalIndex(FcitxCandidateWordList* candList, int index)
 {
-    return (FcitxCandidateWord*)utarray_eltptr(&candList->candWords, index);
+    return fcitx_array_eltptr(&candList->candWords, index);
 }
 
 FCITX_EXPORT_API int
@@ -219,8 +221,8 @@ FcitxCandidateWordGetIndex(FcitxCandidateWordList *candList,
     return utarray_eltidx(&candList->candWords, word);
 }
 
-FCITX_EXPORT_API
-FcitxCandidateWord* FcitxCandidateWordGetByIndex(FcitxCandidateWordList* candList, int index)
+FCITX_EXPORT_API FcitxCandidateWord*
+FcitxCandidateWordGetByIndex(FcitxCandidateWordList* candList, int index)
 {
     if (index < candList->wordPerPage && index >= 0)
         return FcitxCandidateWordGetByTotalIndex(
@@ -228,8 +230,8 @@ FcitxCandidateWord* FcitxCandidateWordGetByIndex(FcitxCandidateWordList* candLis
     return NULL;
 }
 
-FCITX_EXPORT_API
-INPUT_RETURN_VALUE FcitxCandidateWordChooseByIndex(FcitxCandidateWordList* candList, int index)
+FCITX_EXPORT_API INPUT_RETURN_VALUE
+FcitxCandidateWordChooseByIndex(FcitxCandidateWordList* candList, int index)
 {
     FcitxCandidateWord* candWord = FcitxCandidateWordGetByIndex(candList, index);
     if (candWord == NULL) {
@@ -278,8 +280,8 @@ boolean FcitxCandidateWordHasNext(FcitxCandidateWordList* candList)
         return false;
 }
 
-FCITX_EXPORT_API
-int FcitxCandidateWordPageCount(FcitxCandidateWordList* candList)
+FCITX_EXPORT_API int
+FcitxCandidateWordPageCount(FcitxCandidateWordList* candList)
 {
     return (utarray_len(&candList->candWords) + candList->wordPerPage - 1) / candList->wordPerPage;
 }
@@ -370,7 +372,7 @@ int FcitxCandidateWordGetCurrentPage(FcitxCandidateWordList* candList)
 FCITX_EXPORT_API
 void FcitxCandidateWordResize(FcitxCandidateWordList* candList, int length)
 {
-    utarray_resize(&candList->candWords, length);
+    fcitx_array_resize(&candList->candWords, length);
 }
 
 FCITX_EXPORT_API
@@ -435,7 +437,7 @@ FcitxCandidateWord* FcitxCandidateWordGetLast(FcitxCandidateWordList* candList)
 FCITX_EXPORT_API
 FcitxCandidateWord* FcitxCandidateWordGetNext(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord)
 {
-    return (FcitxCandidateWord*) utarray_next(&candList->candWords, candWord);
+    return (FcitxCandidateWord*)utarray_next(&candList->candWords, candWord);
 }
 
 FCITX_EXPORT_API FcitxCandidateWord*

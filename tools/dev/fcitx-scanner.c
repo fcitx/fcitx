@@ -278,7 +278,7 @@ fxaddon_write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
                        const char *func_name, int id)
 {
     FcitxDesktopGroup *grp;
-    int i;
+    unsigned int i;
     grp = fcitx_desktop_file_find_group(dfile, func_name);
     if (!grp)
         return;
@@ -382,7 +382,7 @@ fxaddon_scan_addon(FILE *ifp, FILE *ofp)
 {
     FcitxDesktopFile dfile;
     char *buff = NULL;
-    int i;
+    unsigned int i;
     char **p;
     if (!fcitx_desktop_file_init(&dfile, NULL, NULL))
         return 1;

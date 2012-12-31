@@ -183,7 +183,8 @@ void CreatePYPhrase(void)
 
         kkk = 0;
 
-        if (strTemp.iHZCount != fcitx_utf8_strlen(strPhrase) || (strTemp.iMode & PARSE_ABBR)) {
+        if (strTemp.iHZCount != (int)fcitx_utf8_strlen(strPhrase) ||
+            (strTemp.iMode & PARSE_ABBR)) {
             fprintf(f, "%s %s\n", strPY, strPhrase);
             continue;
         }

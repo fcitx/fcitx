@@ -1,6 +1,7 @@
 #include <fcitx-gclient/fcitxkbd.h>
 #include <fcitx-gclient/fcitxclient.h>
 #include <fcitx-utils/keysym.h>
+#include <fcitx/fcitx.h>
 
 static gboolean
 timeout_cb (gpointer data)
@@ -21,6 +22,7 @@ run_loop_with_timeout (gint interval)
 static void
 foreach_cb(gpointer data, gpointer user_data)
 {
+    FCITX_UNUSED(user_data);
     FcitxLayoutItem* item = data;
     g_debug("%s %s %s %s", item->layout, item->variant, item->name, item->langcode);
 }
@@ -40,15 +42,17 @@ test_keyboard (void)
 }
 
 static void
-_process_cb(GObject* obj,
-            GAsyncResult* res,
-            gpointer user_data)
+_process_cb(GObject* obj, GAsyncResult* res, gpointer user_data)
 {
+    FCITX_UNUSED(obj);
+    FCITX_UNUSED(res);
+    FCITX_UNUSED(user_data);
 }
 
 static void
 _connect_cb(FcitxClient* client, void* user_data)
 {
+    FCITX_UNUSED(user_data);
     GCancellable* cancellable = g_cancellable_new();
     fcitx_client_process_key_async(client, FcitxKey_a, 0, 0, 0, 0, -1, cancellable, _process_cb, NULL);
     g_cancellable_cancel(cancellable);

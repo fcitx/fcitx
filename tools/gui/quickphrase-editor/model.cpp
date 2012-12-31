@@ -58,11 +58,13 @@ QVariant QuickPhraseModel::headerData(int section, Qt::Orientation orientation, 
 
 int QuickPhraseModel::rowCount(const QModelIndex& parent) const
 {
+    Q_UNUSED(parent);
     return m_list.count();
 }
 
 int QuickPhraseModel::columnCount(const QModelIndex& parent) const
 {
+    Q_UNUSED(parent);
     return 2;
 }
 

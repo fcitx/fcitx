@@ -163,7 +163,7 @@ FCITX_DEFINE_PLUGIN(fcitx_autoeng, module ,FcitxModule) = {
 static void
 AutoEngSetBuffLen(FcitxAutoEngState* autoEngState, size_t len)
 {
-    int size = (len / MAX_USER_INPUT + 1) * MAX_USER_INPUT;
+    unsigned int size = (len / MAX_USER_INPUT + 1) * MAX_USER_INPUT;
     if (autoEngState->buf) {
         if (autoEngState->buff_size != size) {
             autoEngState->buf = realloc(autoEngState->buf, size);

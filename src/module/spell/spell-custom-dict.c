@@ -193,6 +193,7 @@ SpellCustomEnglishComplete(SpellHint *hint, int type)
 static int
 SpellCustomGetSysDictFile(FcitxSpell *spell, const char *lang)
 {
+    FCITX_UNUSED(spell);
     int fd;
     char *path;
     char *fname;
@@ -204,20 +205,20 @@ SpellCustomGetSysDictFile(FcitxSpell *spell, const char *lang)
     return fd;
 }
 
-static off_t
+static size_t
 SpellCustomMapDict(FcitxSpell *spell, SpellCustomDict *dict, const char *lang)
 {
     int fd;
     struct stat stat_buf;
-    off_t flen = 0;
-    off_t total_len;
+    size_t flen = 0;
+    size_t total_len;
     char magic_buff[strlen(DICT_BIN_MAGIC)];
     fd = SpellCustomGetSysDictFile(spell, lang);
 
     if (fd == -1)
         return 0;
     if (fstat(fd, &stat_buf) == -1 ||
-        stat_buf.st_size <= sizeof(uint32_t) + strlen(DICT_BIN_MAGIC))
+        (size_t)stat_buf.st_size <= sizeof(uint32_t) + strlen(DICT_BIN_MAGIC))
         goto out;
     if (read(fd, magic_buff, strlen(DICT_BIN_MAGIC)) <= 0)
         goto out;
@@ -243,9 +244,9 @@ out:
 static boolean
 SpellCustomInitDict(FcitxSpell *spell, SpellCustomDict *dict, const char *lang)
 {
-    int i;
+    unsigned int i;
     int j;
-    off_t map_len;
+    size_t map_len;
     int lcount;
     if (!lang || !lang[0])
         return false;
@@ -297,6 +298,7 @@ SpellCustomNewDict(FcitxSpell *spell, const char *lang)
 void
 SpellCustomFreeDict(FcitxSpell *spell, SpellCustomDict *dict)
 {
+    FCITX_UNUSED(spell);
     fcitx_utils_free(dict->map);
     fcitx_utils_free(dict->words);
     free(dict);

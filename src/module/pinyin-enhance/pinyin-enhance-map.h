@@ -53,10 +53,10 @@ py_enhance_map_key(PyEnhanceMap *map)
     return (void*)map + sizeof(PyEnhanceMap);
 }
 void PinyinEnhanceMapAdd(PyEnhanceMap **map, FcitxMemoryPool *pool,
-                         const char *key, int key_l,
-                         const char *word, int word_l);
+                         const char *key, unsigned int key_l,
+                         const char *word, unsigned int word_l);
 PyEnhanceMapWord *PinyinEnhanceMapGet(PyEnhanceMap *map,
-                                      const char *key, int key_l);
+                                      const char *key, unsigned int key_l);
 static inline void
 PinyinEnhanceMapClear(PyEnhanceMap **map, FcitxMemoryPool *pool)
 {

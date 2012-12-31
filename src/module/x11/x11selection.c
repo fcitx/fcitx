@@ -39,7 +39,7 @@
 
 static void X11SelectionNotifyFreeFunc(void *obj);
 static void X11ConvertSelectionFreeFunc(void *obj);
-static unsigned int X11RequestConvertSelectionInternal(
+static int X11RequestConvertSelectionInternal(
     FcitxX11 *x11priv, const char *sel_str, Atom selection, Atom target,
     void *owner, X11ConvertSelectionInternalCallback cb, void *data,
     FcitxDestroyNotify destroy, FcitxCallBack func);
@@ -104,7 +104,7 @@ X11SelectionNotifyHelper(FcitxX11 *x11priv, Atom selection, int subtype,
 #endif
 }
 
-unsigned int
+int
 X11SelectionNotifyRegister(
     FcitxX11 *x11priv, const char *sel_str, void *owner,
     X11SelectionNotifyCallback cb, void *data, FcitxDestroyNotify destroy)
@@ -120,7 +120,7 @@ X11SelectionNotifyRegister(
 #endif
 }
 
-unsigned int
+int
 X11SelectionNotifyRegisterInternal(
     FcitxX11 *x11priv, Atom selection, void *owner,
     X11SelectionNotifyInternalCallback cb, void *data,
@@ -150,10 +150,10 @@ X11SelectionNotifyRegisterInternal(
 }
 
 void
-X11SelectionNotifyRemove(FcitxX11 *x11priv, unsigned int id)
+X11SelectionNotifyRemove(FcitxX11 *x11priv, int id)
 {
 #ifdef HAVE_XFIXES
-    if (!(x11priv->hasXfixes && id != FCITX_OBJECT_POOL_INVALID_ID))
+    if (!(x11priv->hasXfixes && id >= 0))
         return;
     fcitx_handler_table_remove_by_id(x11priv->selectionNotify, id);
 #endif
@@ -210,7 +210,7 @@ out:
     return res;
 }
 
-static unsigned int
+static int
 X11RequestConvertSelectionInternal(
     FcitxX11 *x11priv, const char *sel_str, Atom selection, Atom target,
     void *owner, X11ConvertSelectionInternalCallback cb, void *data,
@@ -234,7 +234,7 @@ X11RequestConvertSelectionInternal(
                                        sizeof(Atom), &selection, &convert);
 }
 
-unsigned int
+int
 X11RequestConvertSelection(
     FcitxX11 *x11priv, const char *sel_str, const char *tgt_str,
     void *owner, X11ConvertSelectionCallback cb, void *data,
@@ -295,8 +295,8 @@ X11ProcessSelectionNotifyEvent(FcitxX11 *x11priv,
                                XSelectionEvent *selection_event)
 {
     X11ConvertSelection *convert;
-    unsigned int id;
-    unsigned int next_id;
+    int id;
+    int next_id;
     FcitxHandlerTable *table = x11priv->convertSelection;
     id = fcitx_handler_table_first_id(table, sizeof(Atom),
                                       &selection_event->selection);

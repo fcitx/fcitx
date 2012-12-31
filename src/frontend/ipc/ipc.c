@@ -361,6 +361,7 @@ void* IPCCreate(FcitxInstance* instance, int frontendid)
 
 boolean IPCDestroy(void* arg)
 {
+    FCITX_UNUSED(arg);
     return true;
 }
 
@@ -479,7 +480,8 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
 
 boolean IPCCheckIC(void* arg, FcitxInputContext* context, void* priv)
 {
-    int *id = (int*) priv;
+    FCITX_UNUSED(arg);
+    int *id = (int*)priv;
     if (GetIPCIC(context)->id == *id)
         return true;
     return false;
@@ -574,12 +576,14 @@ void IPCForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event, Fc
 
 void IPCSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
 {
+    FCITX_UNUSED(arg);
     ic->offset_x = x;
     ic->offset_y = y;
 }
 
 void IPCGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, int* h)
 {
+    FCITX_UNUSED(arg);
     *x = ic->offset_x;
     *y = ic->offset_y;
     *w = GetIPCIC(ic)->width;
@@ -1184,6 +1188,7 @@ void IPCDeleteSurroundingText(void* arg, FcitxInputContext* ic, int offset, unsi
 
 boolean IPCGetSurroundingText(void* arg, FcitxInputContext* ic, char** str, unsigned int *cursor, unsigned int *anchor)
 {
+    FCITX_UNUSED(arg);
     FcitxIPCIC* ipcic = GetIPCIC(ic);
 
     if (!ipcic->surroundingText)
@@ -1262,6 +1267,7 @@ void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic)
 
 boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic)
 {
+    FCITX_UNUSED(arg);
     FcitxIPCIC* ipcicToCheck = GetIPCIC(icToCheck);
     FcitxIPCIC* ipcic = GetIPCIC(ic);
     if (ipcic->appname == NULL || ipcicToCheck->appname == NULL)
@@ -1522,6 +1528,7 @@ void IPCUpdateIMList(void* arg)
 
 pid_t IPCGetPid(void* arg, FcitxInputContext* ic)
 {
+    FCITX_UNUSED(arg);
     return GetIPCIC(ic)->pid;
 }
 

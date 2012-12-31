@@ -482,11 +482,14 @@ void KimpanelMoveInputWindow(void* arg)
 
 void KimpanelRegisterMenu(void* arg, FcitxUIMenu* menu)
 {
-    return ;
+    FCITX_UNUSED(arg);
+    FCITX_UNUSED(menu);
+    return;
 }
 
 void KimpanelRegisterStatus(void* arg, FcitxUIStatus* status)
 {
+    FCITX_UNUSED(status);
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
     KimpanelRegisterAllStatus(kimpanel);
     return ;
@@ -494,7 +497,8 @@ void KimpanelRegisterStatus(void* arg, FcitxUIStatus* status)
 
 void KimpanelRegisterComplexStatus(void* arg, FcitxUIComplexStatus* status)
 {
-    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
+    FCITX_UNUSED(status);
+    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*)arg;
     KimpanelRegisterAllStatus(kimpanel);
     return ;
 }
@@ -655,6 +659,7 @@ void KimpanelShowInputWindow(void* arg)
 
 void KimpanelUpdateStatus(void* arg, FcitxUIStatus* status)
 {
+    FCITX_UNUSED(status);
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
     KimpanelRegisterAllStatus(kimpanel);
     return ;
@@ -662,14 +667,18 @@ void KimpanelUpdateStatus(void* arg, FcitxUIStatus* status)
 
 void KimpanelUpdateComplexStatus(void* arg, FcitxUIComplexStatus* status)
 {
+    FCITX_UNUSED(status);
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
     KimpanelRegisterAllStatus(kimpanel);
     return ;
 }
 
-static DBusHandlerResult KimpanelDBusEventHandler(DBusConnection *connection, DBusMessage *msg, void *arg)
+static DBusHandlerResult
+KimpanelDBusEventHandler(DBusConnection *connection,
+                         DBusMessage *msg, void *arg)
 {
-    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
+    FCITX_UNUSED(connection);
+    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*)arg;
 
     if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect")) {
         DBusMessage *reply = dbus_message_new_method_return(msg);
@@ -805,28 +814,30 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                         sscanf(pos, "%d", &index);
                         if (menup)
                             menup->MenuAction(menup, index);
-                    }
-                    else {
-                        FcitxUIMenu* menu = FcitxUIGetMenuByStatusName(instance, s0);
+                    } else {
+                        FcitxUIMenu *menu = FcitxUIGetMenuByStatusName(instance, s0);
                         if (menu) {
                             menu->UpdateMenu(menu);
 
-                            int i = 0, index = 0;
-                            int len = utarray_len(&menu->shell);
+                            unsigned int i = 0, index = 0;
+                            unsigned int len = utarray_len(&menu->shell);
                             char *prop[len];
                             for (i = 0; i < len; i++) {
-                                if (GetMenuItem(menu, i)->type ==
-                                    MENUTYPE_SIMPLE) {
-                                    asprintf(&prop[index], "/Fcitx/%s/%d:%s::%s", s0, index, GetMenuItem(menu, i)->tipstr, GetMenuItem(menu, i)->tipstr);
+                                FcitxMenuItem *menu_item = GetMenuItem(menu, i);
+                                if (menu_item->type == MENUTYPE_SIMPLE) {
+                                    asprintf(&prop[index],
+                                             "/Fcitx/%s/%d:%s::%s", s0, index,
+                                             menu_item->tipstr,
+                                             menu_item->tipstr);
                                     index++;
                                 }
                             }
                             KimExecMenu(kimpanel, prop, index);
                             while (index--)
                                 free(prop[index]);
-                        }
-                        else
+                        } else {
                             FcitxUIUpdateStatus(instance, s0);
+                        }
                     }
                 }
             }
@@ -1596,18 +1607,17 @@ void KimUpdateScreen(FcitxKimpanelUI* kimpanel, int id)
 
 int CalKimCursorPos(FcitxKimpanelUI *kimpanel)
 {
-    size_t             i = 0;
-    int             iChar;
-    int             iCount = 0;
-    FcitxMessages* messageUp = kimpanel->messageUp;
+    int i = 0;
+    unsigned int iChar;
+    int iCount = 0;
+    FcitxMessages *messageUp = kimpanel->messageUp;
 
-    const char      *p1;
-    const char      *pivot;
+    const char *p1;
+    const char *pivot;
 
     iChar = kimpanel->iCursorPos;
 
-
-    for (i = 0; i < FcitxMessagesGetMessageCount(messageUp) ; i++) {
+    for (i = 0;i < FcitxMessagesGetMessageCount(messageUp);i++) {
         if (kimpanel->iCursorPos && iChar) {
             p1 = pivot = FcitxMessagesGetMessageString(messageUp, i);
             while (*p1 && p1 < pivot + iChar) {

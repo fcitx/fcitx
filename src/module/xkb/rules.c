@@ -19,18 +19,15 @@
  ***************************************************************************/
 
 #include <libxml/parser.h>
+#include <fcitx/fcitx.h>
 
 #include "rules.h"
 #define XMLCHAR_CAST (const char*)
 
-static void RulesHandlerStartElement(void *ctx,
-                              const xmlChar *name,
-                              const xmlChar **atts);
-static void RulesHandlerEndElement(void *ctx,
-                const xmlChar *name);
-static void RulesHandlerCharacters(void *ctx,
-                const xmlChar *ch,
-                int len);
+static void RulesHandlerStartElement(void *ctx, const xmlChar *name,
+                                     const xmlChar **atts);
+static void RulesHandlerEndElement(void *ctx, const xmlChar *name);
+static void RulesHandlerCharacters(void *ctx, const xmlChar *ch, int len);
 static void FcitxXkbLayoutInfoInit(void* arg);
 static void FcitxXkbVariantInfoInit(void* arg);
 static void FcitxXkbModelInfoInit(void* arg);
@@ -162,9 +159,9 @@ void MergeRules(FcitxXkbRules* rules, FcitxXkbRules* rulesextra)
             utarray_push_back(&toAdd, &layoutInfo);
     }
 
-    int i;
-    for(i = 0; i < utarray_len(&toAdd); i ++) {
-        FcitxXkbLayoutInfo* p = *(FcitxXkbLayoutInfo**) utarray_eltptr(&toAdd, i);
+    unsigned int i;
+    for(i = 0;i < utarray_len(&toAdd);i++) {
+        FcitxXkbLayoutInfo* p = *(FcitxXkbLayoutInfo**)utarray_eltptr(&toAdd, i);
         utarray_push_back(rules->layoutInfos, p);
     }
 
@@ -250,8 +247,7 @@ FcitxXkbLayoutInfo* FindByName(FcitxXkbRules* rules, const char* name) {
 }
 
 /* code borrow from kde-workspace/kcontrol/keyboard/xkb_rules.cpp */
-void RulesHandlerStartElement(void *ctx,
-                              const xmlChar *name,
+void RulesHandlerStartElement(void *ctx, const xmlChar *name,
                               const xmlChar **atts)
 {
     FcitxXkbRulesHandler* ruleshandler = (FcitxXkbRulesHandler*) ctx;
@@ -296,9 +292,9 @@ void RulesHandlerStartElement(void *ctx,
     free(strPath);
 }
 
-void RulesHandlerEndElement(void *ctx,
-                const xmlChar *name)
+void RulesHandlerEndElement(void *ctx, const xmlChar *name)
 {
+    FCITX_UNUSED(name);
     FcitxXkbRulesHandler* ruleshandler = (FcitxXkbRulesHandler*) ctx;
     utarray_pop_back(ruleshandler->path);
 }

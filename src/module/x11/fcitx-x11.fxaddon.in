@@ -95,7 +95,7 @@ Arg1=int*
 
 [RegSelectNotify]
 Name=reg-select-notify
-Return=unsigned int
+Return=int
 Arg0=const char*
 Arg1=void*
 Arg2=X11SelectionNotifyCallback
@@ -104,7 +104,7 @@ Arg4=FcitxDestroyNotify
 
 [RemoveSelectNotify]
 Name=remove-select-notify
-Arg0=unsigned int
+Arg0=int
 
 [DefaultEventWindow]
 Name=default-event-window
@@ -114,7 +114,7 @@ EnableWrapper=@ENABLE_X11@
 
 [RequestConvertSelect]
 Name=request-convert-select
-Return=unsigned int
+Return=int
 Arg0=const char*
 Arg1=const char*
 Arg2=void*

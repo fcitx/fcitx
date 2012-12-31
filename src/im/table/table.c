@@ -110,8 +110,9 @@ boolean LoadTableConfig(TableConfig* config)
     return true;
 }
 
-void SaveTableConfig(TableConfig* config)
+void SaveTableConfig(TableConfig *config)
 {
+    FCITX_UNUSED(config);
 }
 
 void *TableCreate(FcitxInstance* instance)
@@ -241,10 +242,12 @@ boolean LoadTableInfo(FcitxTableState *tbl)
             FcitxLog(DEBUG, "Load Table Config File:%s", paths[i]);
         }
         // FcitxLog(INFO, _("Load Table Config File:%s"), string->name);
-        FcitxConfigFile* cfile = FcitxConfigParseMultiConfigFile(paths, len, GetTableConfigDesc());
+        FcitxConfigFile *cfile;
+        cfile = FcitxConfigParseMultiConfigFile(paths, len,
+                                                GetTableConfigDesc());
         if (cfile) {
             do {
-                char* tableName = TableConfigStealTableName(cfile);
+                char *tableName = TableConfigStealTableName(cfile);
                 boolean needunregister = true;
                 if (!tableName)
                     break;
@@ -252,8 +255,7 @@ boolean LoadTableInfo(FcitxTableState *tbl)
                 if (!t) {
                     t = fcitx_utils_new(TableMetaData);
                     needunregister = false;
-                }
-                else {
+                } else {
                     TableMetaDataUnlink(&tbl->tables, t);
                 }
                 TableMetaDataConfigBind(t, cfile, GetTableConfigDesc());
@@ -266,50 +268,45 @@ boolean LoadTableInfo(FcitxTableState *tbl)
                         t->status = TABLE_REGISTERED;
                     else
                         t->status = TABLE_NEW;
-                }
-                else {
+                } else {
                     if (needunregister) {
-                        FcitxInstanceUnregisterIM(tbl->owner, TableMetaDataGetName(t));
+                        FcitxInstanceUnregisterIM(tbl->owner,
+                                                  TableMetaDataGetName(t));
                         imchanged = true;
                     }
                     TableMetaDataFree(t);
                 }
             } while(0);
         }
-        for (i = 0; i < len ; i ++) {
+        for (i = len - 1;i >= 0;i--) {
             free(paths[i]);
         }
     }
     FcitxXDGFreePath(tablePath);
     fcitx_utils_free_string_hash_set(sset);
 
-    {
-        TableMetaData* titer = tbl->tables;
-        while(titer)
-        {
-            /*
-             * if it's this case, the configuration file may already gone
-             * thus let's remove it
-             */
-            if (titer->status == TABLE_PENDING) {
-                TableMetaData* cur = titer;
-                FcitxInstanceUnregisterIM(tbl->owner, TableMetaDataGetName(cur));
-                TableMetaDataRemove(&tbl->tables, cur);
+    TableMetaData* titer = tbl->tables;
+    while (titer) {
+        /*
+         * if it's this case, the configuration file may already gone
+         * thus let's remove it
+         */
+        if (titer->status == TABLE_PENDING) {
+            TableMetaData* cur = titer;
+            FcitxInstanceUnregisterIM(tbl->owner, TableMetaDataGetName(cur));
+            TableMetaDataRemove(&tbl->tables, cur);
+            imchanged = true;
+        } else {
+            if (titer->status != TABLE_REGISTERED) {
+                // FcitxLog(INFO, "register %s", TableMetaDataGetName(titer));
+                TableMetaDataRegister(tbl, titer);
                 imchanged = true;
             }
-            else {
-                if (titer->status != TABLE_REGISTERED) {
-                    // FcitxLog(INFO, "register %s", TableMetaDataGetName(titer));
-                    TableMetaDataRegister(tbl, titer);
-                    imchanged = true;
-                }
-                titer = titer->hh.next;
-            }
+            titer = titer->hh.next;
         }
     }
 
     tbl->iTableCount = HASH_COUNT(tbl->tables);
-
     return imchanged;
 }
 
@@ -357,9 +354,9 @@ boolean TableCheckNoMatch(TableMetaData* table, const char* code)
     FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
     if (!table->bTableExactMatch) {
         return FcitxCandidateWordGetListSize(candList) == 0;
-    }
-    else {
-        return (FcitxCandidateWordGetListSize(candList) == 0) && TableFindFirstMatchCode(table, code, false, false) == -1;
+    } else {
+        return (FcitxCandidateWordGetListSize(candList) == 0) &&
+            TableFindFirstMatchCode(table, code, false, false) == -1;
     }
 }
 
@@ -1370,9 +1367,9 @@ boolean TablePhraseTips(void *arg)
 {
     TableMetaData* table = (TableMetaData*) arg;
     FcitxTableState *tbl = table->owner;
-    RECORD         *recTemp = NULL;
-    char            strTemp[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1] = "\0", *ps;
-    short           i, j;
+    RECORD *recTemp = NULL;
+    char strTemp[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1] = "", *ps;
+    short i, j;
     FcitxInstance *instance = tbl->owner;
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
 
@@ -1419,28 +1416,32 @@ boolean TablePhraseTips(void *arg)
     return false;
 }
 
-void UpdateHZLastInput(TableMetaData* table, char *str)
+void UpdateHZLastInput(TableMetaData* table, const char *str)
 {
-    int             i, j;
-    char           *pstr;
+    unsigned int i, j;
+    unsigned int str_len = fcitx_utf8_strlen(str);
+    TableDict *const tableDict = table->tableDict;
+    SINGLE_HZ *const hzLastInput = tableDict->hzLastInput;
 
-    pstr = str;
-
-    for (i = 0; i < fcitx_utf8_strlen(str) ; i++) {
-        if (table->tableDict->iHZLastInputCount < PHRASE_MAX_LENGTH)
-            table->tableDict->iHZLastInputCount++;
-        else {
-            for (j = 0; j < (table->tableDict->iHZLastInputCount - 1); j++) {
-                strncpy(table->tableDict->hzLastInput[j].strHZ, table->tableDict->hzLastInput[j + 1].strHZ, fcitx_utf8_char_len(table->tableDict->hzLastInput[j + 1].strHZ));
+    for (i = 0;i < str_len;i++) {
+        if (tableDict->iHZLastInputCount < PHRASE_MAX_LENGTH) {
+            tableDict->iHZLastInputCount++;
+        } else {
+            for (j = 0;j < (tableDict->iHZLastInputCount - 1);j++) {
+                strncpy(hzLastInput[j].strHZ, hzLastInput[j + 1].strHZ,
+                        fcitx_utf8_char_len(hzLastInput[j + 1].strHZ));
             }
         }
-        strncpy(table->tableDict->hzLastInput[table->tableDict->iHZLastInputCount - 1].strHZ, pstr, fcitx_utf8_char_len(pstr));
-        table->tableDict->hzLastInput[table->tableDict->iHZLastInputCount - 1].strHZ[fcitx_utf8_char_len(pstr)] = '\0';
-        pstr = pstr + fcitx_utf8_char_len(pstr);
+        unsigned int char_len = fcitx_utf8_char_len(str);
+        strncpy(hzLastInput[tableDict->iHZLastInputCount - 1].strHZ,
+                str, char_len);
+        hzLastInput[tableDict->iHZLastInputCount - 1].strHZ[char_len] = '\0';
+        str += char_len;
     }
 
-    if (table->tableDict->bRule && table->bAutoPhrase)
-        TableCreateAutoPhrase(table, (char)(fcitx_utf8_strlen(str)));
+    if (tableDict->bRule && table->bAutoPhrase) {
+        TableCreateAutoPhrase(table, (char)(str_len));
+    }
 }
 
 void TableMetaDataFree(TableMetaData *table)
@@ -1462,37 +1463,39 @@ int TableCandCmp(const void* a, const void* b, void *arg)
     case AD_NO:
         return 0;
     case AD_FAST: {
-        int result = strcmp(canda->candWord.record->strCode, candb->candWord.record->strCode);
+        int result = strcmp(canda->candWord.record->strCode,
+                            candb->candWord.record->strCode);
         if (result != 0)
             return result;
         return candb->candWord.record->iIndex - canda->candWord.record->iIndex;
     }
-    break;
     case AD_FREQ: {
-        int result = strcmp(canda->candWord.record->strCode, candb->candWord.record->strCode);
+        int result = strcmp(canda->candWord.record->strCode,
+                            candb->candWord.record->strCode);
         if (result != 0)
             return result;
         return candb->candWord.record->iHit - canda->candWord.record->iHit;
     }
-    break;
     }
     return 0;
 }
 
 INPUT_RETURN_VALUE TableKeyBlocker(void* arg, FcitxKeySym sym, unsigned int state)
 {
-    TableMetaData* table = arg;
-    FcitxInstance* instance = table->owner->owner;
-    FcitxInputState* input = FcitxInstanceGetInputState(instance);
+    TableMetaData *table = arg;
+    FcitxInstance *instance = table->owner->owner;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
 
     do {
         if (!table->bCommitAndPassByInvalidKey)
             break;
         if (!FcitxHotkeyIsHotKeySimple(sym, state))
             break;
-
-        if (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input))) {
-            FcitxCandidateWord* candWord = FcitxCandidateWordGetCurrentWindow(FcitxInputStateGetCandidateList(input));
+        FcitxCandidateWordList *cand_list;
+        cand_list = FcitxInputStateGetCandidateList(input);
+        if (FcitxCandidateWordPageCount(cand_list)) {
+            FcitxCandidateWord *candWord;
+            candWord = FcitxCandidateWordGetCurrentWindow(cand_list);
             if (candWord->owner != table)
                 break;
             TABLECANDWORD* tableCandWord = candWord->priv;
@@ -1501,10 +1504,13 @@ INPUT_RETURN_VALUE TableKeyBlocker(void* arg, FcitxKeySym sym, unsigned int stat
             INPUT_RETURN_VALUE ret = TableGetCandWord(table, candWord);
             if (!(ret & IRV_FLAG_PENDING_COMMIT_STRING))
                 break;
-            FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), FcitxInputStateGetOutputString(input));
-        }
-        else if (table->bSendRawPreedit) {
-            FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), FcitxInputStateGetRawInputBuffer(input));
+            FcitxInstanceCommitString(
+                instance, FcitxInstanceGetCurrentIC(instance),
+                FcitxInputStateGetOutputString(input));
+        } else if (table->bSendRawPreedit) {
+            FcitxInstanceCommitString(
+                instance, FcitxInstanceGetCurrentIC(instance),
+                FcitxInputStateGetRawInputBuffer(input));
         }
         FcitxInputStateSetRawInputBufferSize(input, 0);
         FcitxInputStateGetRawInputBuffer(input)[0] = '\0';

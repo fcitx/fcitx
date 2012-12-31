@@ -123,8 +123,8 @@ FcitxModuleFindFunction(FcitxAddon *addon, int func_id)
             FcitxInstanceUpdateIMList(addon->owner);
         }
     }
-    FcitxModuleFunction *func_p = (FcitxModuleFunction*)utarray_eltptr(
-        &addon->functionList, func_id);
+    FcitxModuleFunction *func_p = fcitx_array_eltptr(&addon->functionList,
+                                                     func_id);
     if (func_p)
         return *func_p;
     return NULL;

@@ -37,13 +37,11 @@ static const GtkIMContextInfo *info_list[] = {
     &fcitx_im_info
 };
 
-FCITX_EXPORT_API
-G_MODULE_EXPORT const gchar*
+FCITX_EXPORT_API G_MODULE_EXPORT const gchar*
 g_module_check_init(GModule *module)
 {
-    return glib_check_version(GLIB_MAJOR_VERSION,
-                              GLIB_MINOR_VERSION,
-                              0);
+    FCITX_UNUSED(module);
+    return glib_check_version(GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, 0);
 }
 
 FCITX_EXPORT_API

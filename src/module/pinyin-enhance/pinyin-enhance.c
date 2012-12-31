@@ -99,6 +99,7 @@ check_im_type(PinyinEnhance *pyenhance)
 static void*
 PinyinEnhancePyToString(void *self, FcitxModuleFunctionArg args)
 {
+    FCITX_UNUSED(self);
     char *buff = args.args[0];
     const int8_t *py = args.args[1];
     int *len = args.args[2];

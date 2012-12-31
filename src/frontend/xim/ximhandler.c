@@ -34,6 +34,8 @@
 
 Bool XIMOpenHandler(FcitxXimFrontend* xim, IMOpenStruct * call_data)
 {
+    FCITX_UNUSED(xim);
+    FCITX_UNUSED(call_data);
     return True;
 }
 
@@ -95,6 +97,7 @@ Bool XIMUnsetFocusHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 
 Bool XIMCloseHandler(FcitxXimFrontend* xim, IMOpenStruct * call_data)
 {
+    FCITX_UNUSED(call_data);
     FcitxUICloseInputWindow(xim->owner);
     FcitxInstanceSaveAllIM(xim->owner);
     return True;
@@ -295,11 +298,12 @@ XimPreeditCallbackDone(FcitxXimFrontend *xim, const FcitxXimIC* ic)
 }
 
 void
-XimPreeditCallbackDraw(FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preedit_string, int cursorPos)
+XimPreeditCallbackDraw(FcitxXimFrontend* xim, FcitxXimIC* ic,
+                       const char* preedit_string, int cursorPos)
 {
     XTextProperty tp;
 
-    uint i, len;
+    int i, len;
 
     if (preedit_string == NULL)
         return;
@@ -308,33 +312,31 @@ XimPreeditCallbackDraw(FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preedi
 
     if (len + 1 > xim->feedback_len) {
         xim->feedback_len = len + 1;
-        if (xim->feedback) {
-            xim->feedback = realloc(xim->feedback, sizeof(XIMFeedback) * xim->feedback_len);
-        } else {
-            xim->feedback = fcitx_utils_malloc0(sizeof(XIMFeedback) * xim->feedback_len);
-        }
+        xim->feedback = realloc(xim->feedback,
+                                sizeof(XIMFeedback) * xim->feedback_len);
     }
 
     FcitxInputState* input = FcitxInstanceGetInputState(xim->owner);
     FcitxMessages* clientPreedit = FcitxInputStateGetClientPreedit(input);
     int offset = 0;
-    for (i = 0; i < FcitxMessagesGetMessageCount(clientPreedit) ; i ++) {
+    for (i = 0;i < FcitxMessagesGetMessageCount(clientPreedit);i++) {
         int type = FcitxMessagesGetClientMessageType(clientPreedit, i);
         char* str = FcitxMessagesGetMessageString(clientPreedit, i);
-        int j = 0;
         XIMFeedback fb = 0;
         if ((type & MSG_NOUNDERLINE) == 0)
             fb |= XIMUnderline;
         if (type & MSG_HIGHLIGHT)
             fb |= XIMReverse;
-        for (; j < fcitx_utf8_strlen(str); j++) {
+        unsigned int j;
+        unsigned int str_len = fcitx_utf8_strlen(str);
+        for (j = 0;j < str_len;j++) {
             xim->feedback[offset] = fb;
-            offset ++;
+            offset++;
         }
     }
     xim->feedback[len] = 0;
 
-    IMPreeditCBStruct* pcb = fcitx_utils_new(IMPreeditCBStruct);
+    IMPreeditCBStruct *pcb = fcitx_utils_new(IMPreeditCBStruct);
     XIMText* text = fcitx_utils_new(XIMText);
     pcb->major_code = XIM_PREEDIT_DRAW;
     pcb->connect_id = ic->connect_id;
@@ -347,8 +349,7 @@ XimPreeditCallbackDraw(FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preedi
 
     text->feedback = xim->feedback;
 
-    Xutf8TextListToTextProperty(xim->display,
-                                (char **)&preedit_string,
+    Xutf8TextListToTextProperty(xim->display, (char**)&preedit_string,
                                 1, XCompoundTextStyle, &tp);
     text->encoding_is_wchar = 0;
     text->length = strlen((char*)tp.value);
