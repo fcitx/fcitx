@@ -37,6 +37,8 @@
 #include "fcitx/instance.h"
 #include "fcitx-utils/utils.h"
 
+#define MAX_IMNAME_LEN 30
+
 static void* RemoteCreate(FcitxInstance* instance);
 static void RemoteProcessEvent(void* arg);
 static void RemoteSetFD(void* arg);
@@ -145,7 +147,7 @@ static void RemoteProcessEvent(void* p)
 {
     FcitxRemote* remote = (FcitxRemote*) p;
     unsigned int O;
-    // lower 16bit 0->get 1->set, 2->reload, 3->toggle
+    // lower 16bit 0->get 1->set, 2->reload, 3->toggle, 4->setIM
     int client_fd = UdAccept(remote->socket_fd);
     if (client_fd < 0)
         return;
@@ -171,6 +173,13 @@ static void RemoteProcessEvent(void* p)
     case 3:
         FcitxInstanceChangeIMState(remote->owner, FcitxInstanceGetCurrentIC(remote->owner));
         break;
+    case 4: {
+        char imname[MAX_IMNAME_LEN];
+        int n = read(client_fd, imname, MAX_IMNAME_LEN-1);
+        imname[n] = '\0';
+        FcitxInstanceSwitchIMByName(remote->owner, imname);
+        break;
+    }
     default:
         break;
         /// }}}
