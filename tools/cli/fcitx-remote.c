@@ -74,6 +74,7 @@ void usage(FILE* fp)
             "\t-o\t\tactivate input method\n"
             "\t-r\t\treload fcitx config\n"
             "\t-t,-T\t\tswitch Active/Inactive\n"
+            "\t-s <imname>\tswitch to the input method uniquely identified by <imname>\n"
             "\t[no option]\tdisplay fcitx state, %d for close, %d for inactive, %d for acitve\n"
             "\t-h\t\tdisplay this help and exit\n",
             IS_CLOSED, IS_INACTIVE, IS_ACTIVE);
