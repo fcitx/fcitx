@@ -35,6 +35,7 @@ typedef enum {
     CBCM_ALT,
     CBCM_CTRL,
     CBCM_SHIFT,
+    _CBCM_COUNT
 } ClipboardChooseModifier;
 
 typedef struct {

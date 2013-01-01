@@ -204,7 +204,7 @@ static int ImeRegisterTrigger_Export(lua_State *lua) {
             return 0;
         }
         size_t i;
-        size_t len = lua_objlen(lua, kInputStringsArg);
+        size_t len = luaL_len(lua, kInputStringsArg);
         for (i = 1; i <= len; ++i) {
             lua_pushinteger(lua, i);
             lua_gettable(lua, kInputStringsArg);
@@ -618,7 +618,7 @@ static UT_array * LuaCallFunction(lua_State *lua,
                                   const char *function_name,
                                   const char *argument) {
     UT_array *result = NULL;
-    lua_getfield(lua, LUA_GLOBALSINDEX, "__ime_call_function");
+    lua_getglobal(lua, "__ime_call_function");
     lua_pushstring(lua, function_name);
     lua_pushstring(lua, argument);
     int rv = lua_pcall(lua, 2, 1, 0);
@@ -643,7 +643,7 @@ static UT_array * LuaCallFunction(lua_State *lua,
             FcitxLog(WARNING, "lua function return return null");
         }
     } else if (type == LUA_TTABLE) {
-        size_t i, len = lua_objlen(lua, -1);
+        size_t i, len = luaL_len(lua, -1);
         if (len < 1) {
             return result;
         }

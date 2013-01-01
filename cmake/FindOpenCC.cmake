@@ -1,4 +1,4 @@
-# - Try to find the Enchant libraries
+# - Try to find the Opencc libraries
 # Once done this will define
 #
 #  OPENCC_FOUND - system has OPENCC

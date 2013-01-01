@@ -133,8 +133,8 @@ void LuaUpdateCandidateWordHookCallback(void *arg) {
     char *text = FcitxInputStateGetRawInputBuffer(input);
     UT_array *result = InputTrigger(luamodule, text);
     if (result) {
-        LuaResultItem *p;
-        while ((p = (LuaResultItem *)utarray_next(result, p))) {
+        LuaResultItem *p = NULL;
+        while ((p = (LuaResultItem*)utarray_next(result, p))) {
             AddToCandList(luamodule, text, p->result);
         }
         utarray_free(result);

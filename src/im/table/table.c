@@ -73,9 +73,12 @@ static void SaveTableConfig(TableConfig* config);
 
 static inline unsigned int GetTableMod(TableMetaData* table)
 {
-    unsigned int cmodtable[] = {FcitxKeyState_None, FcitxKeyState_Alt, FcitxKeyState_Ctrl, FcitxKeyState_Shift};
-    if (table->chooseModifier > CM_CTRL)
-        table->chooseModifier = CM_CTRL;
+    static unsigned int cmodtable[] = {
+        FcitxKeyState_None, FcitxKeyState_Alt,
+        FcitxKeyState_Ctrl, FcitxKeyState_Shift
+    };
+    if (fcitx_unlikely(table->chooseModifier >= _CM_COUNT))
+        table->chooseModifier = _CM_COUNT - 1;
 
     return cmodtable[table->chooseModifier];
 }

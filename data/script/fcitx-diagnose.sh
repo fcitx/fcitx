@@ -3,7 +3,13 @@
 shopt -s extglob nullglob globstar
 export TEXTDOMAIN=fcitx
 
-if type gettext &> /dev/null; then
+__test_bash_unicode() {
+    local magic_str='${1}'$'\xe4'$'\xb8'$'\x80'
+    local magic_replace=${magic_str//\$\{/$'\n'$\{}
+    ! [ "${magic_str}" = "${magic_replace}" ]
+}
+
+if type gettext &> /dev/null && __test_bash_unicode; then
     _() {
         gettext "$@"
     }

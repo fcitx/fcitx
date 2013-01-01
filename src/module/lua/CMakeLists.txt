@@ -1,6 +1,6 @@
 if(ENABLE_LUA)
-  find_package(Lua51 REQUIRED)
-  include_directories(${LUA_INCLUDE_DIR})
+  find_package(Lua REQUIRED)
+  include_directories(${LUA_INCLUDE_DIRS})
   set(lua_noinstall)
 else()
   set(lua_noinstall NO_INSTALL)

@@ -23,6 +23,10 @@
 
 #include <lua.h>
 
+#if LUA_VERSION_NUM < 502
+# define luaL_len lua_objlen
+#endif
+
 typedef struct _LuaResultItem {
     char *result;
     char *help;
