@@ -5,7 +5,7 @@ build*/
 .git/
 src/lib/fcitx-utils/keysymdef.h
 *.tar.*
-fcitx.kdev4
+*.kdev4
 tools/pybase.mb
 tools/pyphrase.mb
 *.kate-swp
