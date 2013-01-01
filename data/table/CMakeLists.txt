@@ -1,3 +1,5 @@
+set(TXT2MB_BIN "${PROJECT_BINARY_DIR}/tools/cli/txt2mb")
+
 set(TABLE_DATA
   "${CMAKE_CURRENT_BINARY_DIR}/db.mb"
   "${CMAKE_CURRENT_BINARY_DIR}/erbi.mb"
@@ -26,7 +28,7 @@ foreach(tableconffile ${TABLE_CONF})
   set(INSTALL_TABLE_CONF ${INSTALL_TABLE_CONF}
     ${CMAKE_CURRENT_BINARY_DIR}/${tableconffile})
 endforeach()
-add_custom_target(table_conf ALL DEPENDS ${INSTALL_TABLE_CONF} )
+add_custom_target(table_conf ALL DEPENDS ${INSTALL_TABLE_CONF})
 add_custom_target(table_data ALL DEPENDS ${TABLE_DATA})
 
 fcitx_download(table-data-download "${TABLE_URL}" "${TABLE_TAR}"
@@ -37,8 +39,8 @@ add_custom_command(OUTPUT ${TABLEORG_DATA}
 
 foreach(tblname ${TABLE_NAME})
   add_custom_command(OUTPUT ${tblname}.mb
-    DEPENDS ${tblname}.txt
-    COMMAND txt2mb ${tblname}.txt ${tblname}.mb)
+    DEPENDS ${tblname}.txt "${TXT2MB_BIN}"
+    COMMAND "${TXT2MB_BIN}" ${tblname}.txt ${tblname}.mb)
 endforeach()
 
 install(FILES ${TABLE_DATA} DESTINATION ${pkgdatadir}/table )
