@@ -70,15 +70,16 @@ download_cmake() {
     done
     if [[ -z "${stdin_file}" ]]; then
         tmpdir="${FCITX_CMAKE_CACHE_BASE}/cmake_download"
-        cmake -E make_directory "${tmpdir}"
+        "${FCITX_HELPER_CMAKE_CMD}" -E make_directory "${tmpdir}"
         fname="$(mktemp "${tmpdir}/tmp.XXXXXX")" || return 1
         __print_cmake_download_cmd > "${fname}"
-        cmake -P "${fname}"
+        "${FCITX_HELPER_CMAKE_CMD}" -P "${fname}"
         res=$?
         rm "${fname}"
         return $res
     else
-        __print_cmake_download_cmd | cmake -P "${stdin_file}" || return 1
+        __print_cmake_download_cmd | "${FCITX_HELPER_CMAKE_CMD}" \
+            -P "${stdin_file}" || return 1
         return $?
     fi
 }
@@ -166,7 +167,8 @@ case "${action}" in
         ;;
     --clean)
         rm -f "${src_cache}" "${po_cache}" "${handler_cache}"
-        cmake -E touch "${src_cache}" "${po_cache}" "${handler_cache}"
+        "${FCITX_HELPER_CMAKE_CMD}" -E touch \
+            "${src_cache}" "${po_cache}" "${handler_cache}"
         exit 0
         ;;
     --uninstall)
