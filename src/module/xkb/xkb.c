@@ -252,7 +252,7 @@ FcitxXkbInitDefaultLayout(FcitxXkb* xkb)
     if (vd.variant) {
         fcitx_utils_append_split_string(xkb->defaultVariants, vd.variant, ",");
     }
-    
+
     FcitxXkbClearVarDefsRec(&vd);
 }
 
@@ -673,6 +673,10 @@ static void* FcitxXkbCreate(FcitxInstance* instance)
             break;
         }
 
+        if (getenv("HOME")) {
+            asprintf(&xkb->defaultXmodmapPath, "%s/.Xmodmap", getenv("HOME"));
+        }
+
         char* rulesPath = FcitxXkbFindXkbRulesFile(xkb);
         xkb->rules = FcitxXkbReadRules(rulesPath);
         free(rulesPath);
@@ -811,20 +815,30 @@ static void FcitxXkbApplyCustomScript(FcitxXkb* xkb)
     if (!xkb->config.bOverrideSystemXKBSettings)
         return;
 
-    if (!(xkb->config.xmodmapCommand && xkb->config.xmodmapCommand[0]
-          && xkb->config.customXModmapScript && xkb->config.customXModmapScript[0]))
+    if (!xkb->config.xmodmapCommand || !xkb->config.xmodmapCommand[0])
         return;
 
+    char* XModmapScript = NULL;
     char* customXModmapScript = NULL;
-    FcitxXDGGetFileUserWithPrefix("data", xkb->config.customXModmapScript, NULL, &customXModmapScript);
+    if (!xkb->config.customXModmapScript || !xkb->config.customXModmapScript[0]) {
+        if (xkb->defaultXmodmapPath
+            && (fcitx_utils_isreg(xkb->defaultXmodmapPath) || fcitx_utils_isreg(xkb->defaultXmodmapPath)))
+            XModmapScript = xkb->defaultXmodmapPath;
+    } else {
+        FcitxXDGGetFileUserWithPrefix("data", xkb->config.customXModmapScript, NULL, &customXModmapScript);
+        XModmapScript = customXModmapScript;
+    }
+
+    if (!XModmapScript)
+        return;
 
     char* args[] = {
         xkb->config.xmodmapCommand,
-        customXModmapScript,
+        XModmapScript,
         0
     };
     fcitx_utils_start_process(args);
-    free(customXModmapScript);
+    fcitx_utils_free(customXModmapScript);
 }
 
 static inline void LayoutOverrideFree(LayoutOverride* item) {

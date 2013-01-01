@@ -43,6 +43,7 @@ typedef struct _FcitxXkb
     struct _FcitxInstance* owner;
     char *closeLayout;
     char *closeVariant;
+    char *defaultXmodmapPath;
     FcitxXkbRules* rules;
     FcitxXkbConfig config;
     int xkbOpcode;
