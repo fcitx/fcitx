@@ -1,5 +1,5 @@
 #!/bin/sh
-#   Copyright (C) 2012~2012 by Yichao Yu
+#   Copyright (C) 2012~2013 by Yichao Yu
 #   yyc1992@gmail.com
 #
 #   This program is free software; you can redistribute it and/or modify
@@ -166,6 +166,7 @@ case "${action}" in
         ;;
     --clean)
         rm -f "${src_cache}" "${po_cache}" "${handler_cache}"
+        cmake -E touch "${src_cache}" "${po_cache}" "${handler_cache}"
         exit 0
         ;;
     --uninstall)
