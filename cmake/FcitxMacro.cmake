@@ -418,7 +418,7 @@ function(__fcitx_addon_config_file target conf_file dest_dir)
   set(SRC_FILE "${conf_file}.in")
   get_filename_component(base_name "${conf_file}" NAME)
   set(TGT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${base_name}")
-  fcitx_translate_add_apply_source("${SRC_FILE}" "${TGT_FILE}")
+  fcitx_translate_add_apply_source("${SRC_FILE}" "${TGT_FILE}" NOT_ALL)
   __fcitx_addon_get_unique_name("${target}--conf" conf_target)
   add_custom_target("${conf_target}" DEPENDS "${TGT_FILE}")
   add_dependencies("${target}" "${conf_target}")
@@ -539,6 +539,11 @@ _fcitx_translate_add_handler("${FCITX_TRANSLATION_EXTRACT_KDE}" kde)
 # Proper handler script has to be added before this macro is called, or there
 # will be a FATAL_ERROR
 function(fcitx_translate_add_apply_source in_file out_file)
+  set(options NOT_ALL)
+  set(one_value_args)
+  set(multi_value_args)
+  fcitx_parse_arguments(FCITX_APPLY_SRC
+    "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
   get_property(scripts GLOBAL
     PROPERTY FCITX_TRANSLATION_APPLY_HANDLERS)
   get_filename_component(in_file "${in_file}" ABSOLUTE)
@@ -567,8 +572,10 @@ function(fcitx_translate_add_apply_source in_file out_file)
         "${FCITX_CMAKE_HELPER_SCRIPT}" ${all_po_files}
         "${FCITX_PO_PARSER_EXECUTABLE}"
         WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
-      __fcitx_addon_get_unique_name("apply-translation" target_name)
-      add_custom_target("${target_name}" ALL DEPENDS "${out_file}")
+      if(NOT FCITX_APPLY_SRC_NOT_ALL)
+        __fcitx_addon_get_unique_name("apply-translation" target_name)
+        add_custom_target("${target_name}" ALL DEPENDS "${out_file}")
+      endif()
       return()
     endif()
   endforeach()
