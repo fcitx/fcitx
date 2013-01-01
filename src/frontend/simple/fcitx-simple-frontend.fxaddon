@@ -1,9 +1,0 @@
-[FcitxAddon]
-Name=fcitx-simple-frontend
-Prefix=SimpleFrontend
-Include0="simple.h"
-Function0=ProcessKey
-
-[ProcessKey]
-Name=process-key
-Arg0=FcitxSimplePackage*

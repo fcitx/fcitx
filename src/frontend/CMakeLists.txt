@@ -1,6 +1,5 @@
 add_subdirectory(xim)
 add_subdirectory(ipc)
-add_subdirectory(simple)
 
 if(_ENABLE_DBUS)
   if(ENABLE_GLIB2 AND (ENABLE_GTK2_IM_MODULE OR ENABLE_GTK3_IM_MODULE))
