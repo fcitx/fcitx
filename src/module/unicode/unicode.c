@@ -106,7 +106,7 @@ boolean UnicodePreFilter(void* arg, FcitxKeySym sym, unsigned int state,
         FcitxCandidateWordSetChooseAndModifier(candList, DIGIT_STR_CHOOSE,
                                                FcitxKeyState_Alt);
         if (FcitxHotkeyIsHotKey(sym, state,
-                                FcitxConfigNextPageKey(instance, fc))) {
+                                FcitxConfigPrevPageKey(instance, fc))) {
             if (FcitxCandidateWordGoPrevPage(candList))
                 retVal = IRV_DISPLAY_MESSAGE;
             else
