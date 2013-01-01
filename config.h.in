@@ -8,6 +8,7 @@
 #cmakedefine _DEBUG
 #cmakedefine _ENABLE_DBUS
 #cmakedefine _ENABLE_PANGO
+#cmakedefine _FCITX_DISABLE_GETTEXT
 #cmakedefine ENABLE_OPENCC
 #cmakedefine LIBKVM_FOUND
 #cmakedefine HAVE_XINERAMA

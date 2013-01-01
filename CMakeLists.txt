@@ -36,10 +36,12 @@ option(FORCE_PRESAGE
 option(ENABLE_ICU "Enable icu for qt/keyboard compose" On)
 option(ENABLE_BACKTRACE "Enable backtrace support" On)
 option(ENABLE_XDGAUTOSTART "Enable xdg autostart desktop file installion" On)
+option(ENABLE_GETTEXT "Enable gettext support." On)
 
-if (NOT NO_SNOOPER_APPS)
-set(NO_SNOOPER_APPS ".*chrome.*,.*chromium.*,firefox.*,Do.*" CACHE STRING "Disable Key Snooper for following app")
-endif (NOT NO_SNOOPER_APPS)
+if(NOT NO_SNOOPER_APPS)
+  set(NO_SNOOPER_APPS ".*chrome.*,.*chromium.*,firefox.*,Do.*"
+    CACHE STRING "Disable Key Snooper for following app")
+endif()
 
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
@@ -53,21 +55,24 @@ check_include_files(malloc.h HAVE_MALLOC_H)
 check_include_files(stdbool.h HAVE_STDBOOL_H)
 check_function_exists(asprintf HAVE_ASPRINTF)
 
-find_package(Gettext REQUIRED)
 find_package(Libintl REQUIRED)
 find_package(Libiconv REQUIRED)
 find_package(Pthread REQUIRED)
-
 find_package(Libexecinfo)
+find_package(GettextPo)
 
-if (LIBEXECINFO_LIB_FOUND)
-    set(ENABLE_BACKTRACE 1)
-else (LIBEXECINFO_LIB_FOUND)
-    set(ENABLE_BACKTRACE 0)
-endif (LIBEXECINFO_LIB_FOUND)
+if(NOT ENABLE_GETTEXT OR NOT GETTEXTPO_FOUND)
+  fcitx_disable_gettext()
+endif()
+
+if(LIBEXECINFO_LIB_FOUND)
+  set(ENABLE_BACKTRACE 1)
+else()
+  set(ENABLE_BACKTRACE 0)
+endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "BSD")
-    find_package(Libkvm REQUIRED)
+  find_package(Libkvm REQUIRED)
 endif(${CMAKE_SYSTEM_NAME} MATCHES "BSD")
 find_package(DL REQUIRED)
 if(ENABLE_ENCHANT)
