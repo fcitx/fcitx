@@ -656,6 +656,21 @@ FcitxXkbSaveCloseGroup(FcitxXkb *xkb)
     xkb->closeVariant = tmpvariant;
 }
 
+static void
+FcitxXkbGetDefaultXmodmap(FcitxXkb *xkb)
+{
+    static char *home = NULL;
+    if (fcitx_likely(xkb->defaultXmodmapPath))
+        return;
+    if (fcitx_likely(!home)) {
+        home = getenv("HOME");
+        if (fcitx_unlikely(!home)) {
+            return;
+        }
+    }
+    fcitx_utils_alloc_cat_str(xkb->defaultXmodmapPath, home, "/.Xmodmap");
+}
+
 static void* FcitxXkbCreate(FcitxInstance* instance)
 {
     FcitxAddon* addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-xkb");
@@ -671,10 +686,6 @@ static void* FcitxXkbCreate(FcitxInstance* instance)
 
         if (!LoadXkbConfig(xkb)) {
             break;
-        }
-
-        if (getenv("HOME")) {
-            asprintf(&xkb->defaultXmodmapPath, "%s/.Xmodmap", getenv("HOME"));
         }
 
         char* rulesPath = FcitxXkbFindXkbRulesFile(xkb);
@@ -785,6 +796,7 @@ static void FcitxXkbDestroy(void* arg)
     fcitx_utils_free_string_list(xkb->defaultOptions);
     fcitx_utils_free(xkb->closeLayout);
     fcitx_utils_free(xkb->closeVariant);
+    fcitx_utils_free(xkb->defaultXmodmapPath);
     free(xkb);
 }
 
@@ -815,33 +827,34 @@ static void* FcitxXkbLayoutExists(void* arg, FcitxModuleFunctionArg args)
 
 static void FcitxXkbApplyCustomScript(FcitxXkb* xkb)
 {
-    if (!xkb->config.bOverrideSystemXKBSettings)
+    FcitxXkbConfig *config = &xkb->config;
+    if (!config->bOverrideSystemXKBSettings || !config->xmodmapCommand ||
+        !config->xmodmapCommand[0])
         return;
 
-    if (!xkb->config.xmodmapCommand || !xkb->config.xmodmapCommand[0])
-        return;
-
-    char* XModmapScript = NULL;
-    char* customXModmapScript = NULL;
-    if (!xkb->config.customXModmapScript || !xkb->config.customXModmapScript[0]) {
-        if (xkb->defaultXmodmapPath
-            && (fcitx_utils_isreg(xkb->defaultXmodmapPath) || fcitx_utils_isreg(xkb->defaultXmodmapPath)))
-            XModmapScript = xkb->defaultXmodmapPath;
+    char *to_free = NULL;
+    char *xmodmap_script = NULL;
+    if (!config->customXModmapScript || !config->customXModmapScript[0]) {
+        if (strcmp(config->xmodmapCommand, "xmodmap") == 0) {
+            FcitxXkbGetDefaultXmodmap(xkb);
+            if (!(xkb->defaultXmodmapPath &&
+                  fcitx_utils_isreg(xkb->defaultXmodmapPath)))
+                return;
+            xmodmap_script = xkb->defaultXmodmapPath;
+        }
     } else {
-        FcitxXDGGetFileUserWithPrefix("data", xkb->config.customXModmapScript, NULL, &customXModmapScript);
-        XModmapScript = customXModmapScript;
+        FcitxXDGGetFileUserWithPrefix("data", config->customXModmapScript,
+                                      NULL, &to_free);
+        xmodmap_script = to_free;
     }
 
-    if (!XModmapScript)
-        return;
-
     char* args[] = {
-        xkb->config.xmodmapCommand,
-        XModmapScript,
-        0
+        config->xmodmapCommand,
+        xmodmap_script,
+        NULL
     };
     fcitx_utils_start_process(args);
-    fcitx_utils_free(customXModmapScript);
+    fcitx_utils_free(to_free);
 }
 
 static inline void LayoutOverrideFree(LayoutOverride* item) {
