@@ -48,6 +48,7 @@ typedef struct _FcitxXkb
     FcitxXkbConfig config;
     int xkbOpcode;
     struct _LayoutOverride* layoutOverride;
+    unsigned long lastSerial;
 } FcitxXkb;
 
 

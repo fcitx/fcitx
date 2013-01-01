@@ -743,7 +743,10 @@ static boolean FcitxXkbEventHandler(void* arg, XEvent* event)
                 FcitxXkbSaveCloseGroup(xkb);
         }
 
-        if (xkbEvent->any.xkb_type == XkbNewKeyboardNotify) {
+        if (xkbEvent->any.xkb_type == XkbNewKeyboardNotify
+            && xkbEvent->new_kbd.serial != xkb->lastSerial
+        ) {
+            xkb->lastSerial = xkbEvent->new_kbd.serial;
             XSync(xkb->dpy, False);
             FcitxUIUpdateInputWindow(xkb->owner);
             FcitxXkbInitDefaultLayout(xkb);
