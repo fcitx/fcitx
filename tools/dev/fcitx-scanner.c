@@ -260,8 +260,8 @@ fxaddon_write_macro(FILE *ofp, FcitxDesktopFile *dfile, const char *macro_name)
                "\n"
                "#  undef ");
     _write_str(ofp, macro_name);
-    _write_str(ofp, "\n");
-    _write_str(ofp, "#endif\n");
+    _write_str(ofp, "\n"
+                    "#endif\n");
     if (define) {
         _write_str(ofp, "#define ");
         _write_str(ofp, macro_name);
@@ -417,7 +417,12 @@ fxaddon_scan_addon(FILE *ifp, FILE *ofp)
     _write_str(ofp, "_H\n");
     _write_str(ofp, "#define __FCITX_MODULE_");
     _write_len(ofp, buff, name_len);
-    _write_str(ofp, "_H\n");
+    _write_str(ofp, "_H\n"
+                    "\n"
+                    "#ifdef __cplusplus\n"
+                    "extern \"C\" {\n"
+                    "#endif\n"
+                    "\n");
     for (i = 0;i < utarray_len(&macros);i++) {
         p = (char**)_utarray_eltptr(&macros, i);
         fxaddon_write_macro(ofp, &dfile, *p);
@@ -433,7 +438,12 @@ fxaddon_scan_addon(FILE *ifp, FILE *ofp)
         p = (char**)_utarray_eltptr(&functions, i);
         fxaddon_write_function(ofp, &dfile, prefix, *p, i);
     }
-    _write_str(ofp, "#endif\n");
+    _write_str(ofp, "\n"
+                    "#ifdef __cplusplus\n"
+                    "}\n"
+                    "#endif\n"
+                    "\n"
+                    "#endif\n");
     fclose(ofp);
     fcitx_utils_free(buff);
     fcitx_desktop_file_done(&dfile);
