@@ -216,6 +216,7 @@ EOF
         po_lang="${line%% *}"
         po_file="${line#* }"
         echo "Updating ${po_file} ..."
+        [ -z "${po_file}" ] && continue
         msgmerge --quiet --update --backup=none -s --lang="${po_lang}" \
             "${po_file}" "${pot_file}"
     done <<EOF
