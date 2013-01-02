@@ -408,9 +408,6 @@ void FcitxInstanceRegisterIMv2(FcitxInstance *instance,
             FcitxLog(ERROR, "%s already exists", uniqueName);
             return ;
         }
-        fcitx_utils_free(entry->uniqueName);
-        fcitx_utils_free(entry->strName);
-        fcitx_utils_free(entry->strIconName);
     } else {
         utarray_extend_back(imes);
         entry = (FcitxIM*) utarray_back(imes);
@@ -419,9 +416,12 @@ void FcitxInstanceRegisterIMv2(FcitxInstance *instance,
     if (entry == NULL)
         return;
 
-    entry->uniqueName = strdup(uniqueName);
-    entry->strName = strdup(name);
-    entry->strIconName = strdup(iconName);
+    if (!entry->uniqueName)
+        entry->uniqueName = strdup(uniqueName);
+    if (!entry->strName)
+        entry->strName = strdup(name);
+    if (!entry->strIconName)
+        entry->strIconName = strdup(iconName);
     entry->Init = iface.Init;
     entry->ResetIM = iface.ResetIM;
     entry->DoInput = iface.DoInput;
