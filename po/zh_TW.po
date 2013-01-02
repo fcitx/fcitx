@@ -667,9 +667,8 @@ msgid "Current Input Method Name"
 msgstr "目前輸入法名稱"
 
 #: src/module/imselector/imselector.c:303
-#, fuzzy
 msgid "Current local input method is "
-msgstr "目前輸入法為 %s"
+msgstr "目前輸入法為 "
 
 #: data/script/fcitx-diagnose.sh:424
 msgid "Current locale:"
