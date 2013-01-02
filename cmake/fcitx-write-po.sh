@@ -141,6 +141,7 @@ fcitx_generate_pot() {
     local bug_addr="${1}"
     local type_list=()
     while read line; do
+        [ -z "${line}" ] && continue
         type="${line%% *}"
         file="${line#* }"
         type_list=("${type_list[@]}" "${type}")
@@ -156,6 +157,7 @@ EOF
     done
     local handler_list=()
     while read line; do
+        [ -z "${line}" ] && continue
         type="${line%% *}"
         handler="${line#* }"
         handler_list=("${handler_list[@]}" "${handler}")
@@ -213,10 +215,10 @@ EOF
     echo "Merging sub po files..."
     fcitx_merge_all_pos "${bug_addr}" "${pot_file}" "${po_list[@]}"
     while read line; do
+        [ -z "${line}" ] && continue
         po_lang="${line%% *}"
         po_file="${line#* }"
         echo "Updating ${po_file} ..."
-        [ -z "${po_file}" ] && continue
         msgmerge --quiet --update --backup=none -s --lang="${po_lang}" \
             "${po_file}" "${pot_file}"
     done <<EOF

@@ -77,6 +77,7 @@ fcitx_parse_all_pos() {
     local po_parse_cache_file
     local line
     while read line; do
+        [ -z "${line}" ] && continue
         po_lang="${line%% *}"
         po_file="${line#* }"
         prefix="$(fcitx_lang_to_prefix "${po_lang}")"
@@ -104,6 +105,7 @@ fcitx_load_all_pos() {
     local po_parse_cache_file
     local line
     while read line; do
+        [ -z "${line}" ] && continue
         po_lang="${line%% *}"
         po_file="${line#* }"
         prefix="$(fcitx_lang_to_prefix "${po_lang}")"
