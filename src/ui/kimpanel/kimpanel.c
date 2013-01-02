@@ -911,6 +911,7 @@ void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[], int n)
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg;
     DBusMessageIter args;
+    int i;
 
     // create a signal and check for errors
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
@@ -921,17 +922,11 @@ void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[], int n)
         return;
     }
 
-    if (n == -1) {
-        n = 0;
-        while (*(props[n]) != 0) {
-            if (!fcitx_utf8_check_string(props[n]))
-                return;
-            n++;
-        }
-
+    for (i = 0; i < n; i++) {
+        if (!fcitx_utf8_check_string(props[i]))
+            return;
     }
 
-    int i;
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     DBusMessageIter sub;
@@ -959,6 +954,7 @@ void KimRegisterProperties(FcitxKimpanelUI* kimpanel, char *props[], int n)
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg;
     DBusMessageIter args;
+    int i;
 
     // create a signal and check for errors
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
@@ -969,16 +965,11 @@ void KimRegisterProperties(FcitxKimpanelUI* kimpanel, char *props[], int n)
         return;
     }
 
-    if (n == -1) {
-        n = 0;
-        while (*(props[n]) != 0) {
-            if (!fcitx_utf8_check_string(props[n]))
-                return;
-            n++;
-        }
+    for (i = 0; i < n; i++) {
+        if (!fcitx_utf8_check_string(props[i]))
+            return;
     }
 
-    int i;
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     DBusMessageIter sub;

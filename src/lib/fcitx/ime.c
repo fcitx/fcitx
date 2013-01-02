@@ -417,9 +417,12 @@ void FcitxInstanceRegisterIMv2(FcitxInstance *instance,
     if (entry == NULL)
         return;
 
-    entry->uniqueName = strdup(uniqueName);
-    entry->strName = strdup(name);
-    entry->strIconName = strdup(iconName);
+    if (!entry->uniqueName)
+        entry->uniqueName = strdup(uniqueName);
+    if (!entry->strName)
+        entry->strName = strdup(name);
+    if (!entry->strIconName)
+        entry->strIconName = strdup(iconName);
     entry->Init = iface.Init;
     entry->ResetIM = iface.ResetIM;
     entry->DoInput = iface.DoInput;
