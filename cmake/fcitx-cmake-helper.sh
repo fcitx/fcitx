@@ -173,6 +173,7 @@ case "${action}" in
         ;;
     --uninstall)
         while read file; do
+            [ -z "${file}" ] && continue
             file="${DESTDIR}/${file}"
             [ -f "${file}" ] || [ -L "${file}" ] || {
                 echo "File: ${file}, doesn't exist or is not a regular file."
