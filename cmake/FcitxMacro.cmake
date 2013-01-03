@@ -217,6 +217,7 @@ __fcitx_cmake_init()
 #         determined by the FXADDON_GEN arguement.
 #     DESC: Install main config-desc file, the path of the file (with the .desc
 #         suffix) is determined by the DESC_SRC arguement.
+#     SCAN_NO_INSTALL: Do not install generated api header.
 # single value arguments:
 #     HEADER_DIR: The subdirectory under fcitx/module to which the header files
 #         of the addon will be installed (default ${short_name})
@@ -244,7 +245,7 @@ __fcitx_cmake_init()
 #     DEPENDS: extra targets or files the addon library should depend on.
 #     IM_CONFIG: input method config files.
 function(fcitx_add_addon_full short_name)
-  set(options NO_INSTALL SCAN DESC SCAN_IN)
+  set(options NO_INSTALL SCAN DESC SCAN_IN SCAN_NO_INSTALL)
   set(one_value_args HEADER_DIR FXADDON_SRC FXADDON_GEN
     CONF_SRC DESC_SRC UNIQUE_NAME LIB_NAME)
   set(multi_value_args SOURCES HEADERS EXTRA_DESC EXTRA_PO LINK_LIBS
@@ -319,7 +320,9 @@ function(fcitx_add_addon_full short_name)
     __fcitx_scan_addon("${FCITX_ADDON_UNIQUE_NAME}"
       "${FCITX_ADDON_FXADDON_SRC}"
       "${FCITX_ADDON_FXADDON_GEN}")
-    list(APPEND FCITX_ADDON_HEADERS "${FCITX_ADDON_FXADDON_GEN}")
+    if(NOT FCITX_ADDON_SCAN_NO_INSTALL)
+      list(APPEND FCITX_ADDON_HEADERS "${FCITX_ADDON_FXADDON_GEN}")
+    endif()
   endif()
   fcitx_translate_add_sources(${files_to_translate})
   if(FCITX_ADDON_NO_INSTALL)
