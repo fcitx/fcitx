@@ -304,7 +304,7 @@ extern "C" {
          */
         void (*CloseInputWindow)(void *arg);
         /**
-         * show the input window
+         * shoinstancew the input window
          */
         void (*ShowInputWindow)(void *arg);
         /**

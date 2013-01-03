@@ -200,6 +200,10 @@ extern "C" {
     /* FcitxModuleFunctionArg var[] = { { .n = __##var##_length,           \ */
     /*                                    .args = __##var##_array } } */
 
+#define FCITX_MODULE_FUNCTION_ARGS void* arg, FcitxModuleFunctionArg args
+#define FCITX_MODULE_SELF(NAME, TYPE) TYPE* NAME = (TYPE*) arg;
+#define FCITX_MODULE_ARG(NAME, TYPE, INDEX) TYPE NAME = (TYPE) (intptr_t) args.args[(INDEX)]
+
 #ifdef __cplusplus
 }
 #endif
