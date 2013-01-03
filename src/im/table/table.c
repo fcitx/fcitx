@@ -1118,8 +1118,6 @@ void TableAdjustOrderByIndex(TableMetaData* table, TABLECANDWORD* tableCandWord)
     RECORD         *recTemp;
     int             iTemp;
 
-    FcitxTableState* tbl = table->owner;
-
     recTemp = tableCandWord->candWord.record;
     while (!strcmp(recTemp->strCode, recTemp->prev->strCode))
         recTemp = recTemp->prev;
@@ -1138,9 +1136,11 @@ void TableAdjustOrderByIndex(TableMetaData* table, TABLECANDWORD* tableCandWord)
 
     //需要的话，更新索引
     if (tableCandWord->candWord.record->strCode[1] == '\0') {
-        for (iTemp = 0; iTemp < strlen(table->tableDict->strInputCode); iTemp++) {
-            if (tbl->recordIndex[iTemp].cCode == tableCandWord->candWord.record->strCode[0]) {
-                tbl->recordIndex[iTemp].record = tableCandWord->candWord.record;
+        size_t tmp_len = strlen(table->tableDict->strInputCode);
+        for (iTemp = 0; iTemp < tmp_len; iTemp++) {
+            if (table->tableDict->recordIndex[iTemp].cCode ==
+                tableCandWord->candWord.record->strCode[0]) {
+                table->tableDict->recordIndex[iTemp].record = tableCandWord->candWord.record;
                 break;
             }
         }
