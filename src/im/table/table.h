@@ -64,8 +64,6 @@ typedef struct _FcitxTableState {
     TableMetaData* curLoadedTable;
     RECORD         *pCurCandRecord; //Records current cand word selected, to update the hit-frequency information
 
-    RECORD_INDEX   *recordIndex;
-
     char            strTableRemindSource[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
 
     boolean         bIsTableDelPhrase;
