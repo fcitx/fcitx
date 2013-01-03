@@ -24,6 +24,12 @@ Enum0=AdjustNo
 Enum1=AdjustFast
 Enum2=AdjustFreq
 
+[CodeTable/SimpleCodeOrderLevel]
+Description=Level of simple code
+LongDescription=Do not sort word with code less than this level
+Type=Integer
+DefaultValue=0
+
 [CodeTable/Priority]
 Description=Order of Code Table
 Type=Integer

@@ -16,3 +16,4 @@ PromptTableCode=False
 Enabled=True
 LangCode=zh_CN
 NoMatchDontCommit=True
+SimpleCodeOrderLevel=2

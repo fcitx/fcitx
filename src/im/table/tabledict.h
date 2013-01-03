@@ -118,6 +118,7 @@ typedef struct {
     char           *strIconName;
     char           *strPath;
     ADJUSTORDER     tableOrder;
+    int             iSimpleLevel;
     int             iPriority;
     boolean         bUsePY;
     char            cPinyin;    //输入该键后，表示进入临时拼音状态

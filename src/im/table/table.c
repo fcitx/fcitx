@@ -49,6 +49,7 @@
 static void TableMetaDataFree(TableMetaData *table);
 typedef struct {
     ADJUSTORDER order;
+    int simpleLevel;
 } TableCandWordSortContext;
 
 static void *TableCreate(FcitxInstance* instance);
@@ -991,6 +992,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
 
     TableCandWordSortContext context;
     context.order = table->tableOrder;
+    context.simpleLevel = table->iSimpleLevel;
     UT_array candTemp;
     utarray_init(&candTemp, fcitx_ptr_icd);
 
@@ -1460,8 +1462,25 @@ int TableCandCmp(const void* a, const void* b, void *arg)
     TABLECANDWORD* candb = *(TABLECANDWORD**)b;
     TableCandWordSortContext* context = arg;
 
+    if (context->simpleLevel > 0) {
+        size_t lengthA = strlen(canda->candWord.record->strCode);
+        size_t lengthB = strlen(candb->candWord.record->strCode);
+
+        if (lengthA <= context->simpleLevel && lengthB <= context->simpleLevel) {
+            /* we use msort which is stable, so it doesn't matter */
+            return 0;
+        }
+        if (lengthA > context->simpleLevel && lengthB <= context->simpleLevel) {
+            return 1;
+        }
+        if (lengthA <= context->simpleLevel && lengthB > context->simpleLevel) {
+            return -1;
+        }
+    }
+
     switch (context->order) {
     case AD_NO:
+        /* actually this is dead code, since AD_NO doesn't sort at all */
         return 0;
     case AD_FAST: {
         int result = strcmp(canda->candWord.record->strCode,
