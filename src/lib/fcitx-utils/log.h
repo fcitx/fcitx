@@ -50,14 +50,15 @@ extern "C" {
     /**
      * @brief ErrorLevel, DEBUG will not be printed if -DENABLE_DEBUG=On is not specified while compiling
      **/
-    typedef enum _ErrorLevel
+    typedef enum _FcitxLogLevel
     {
-        FCITX_DEBUG,
-        FCITX_ERROR,
-        FCITX_INFO,
-        FCITX_FATAL,
-        FCITX_WARNING
-    } ErrorLevel;
+        FCITX_DEBUG = 0,
+        FCITX_ERROR = 1,
+        FCITX_INFO = 2,
+        FCITX_FATAL = 3,
+        FCITX_WARNING = 4,
+        FCITX_NONE = 5
+    } FcitxLogLevel, ErrorLevel;
 
 /**
  * a convenient macro for log, it will automatically printed current file and code line number.
@@ -74,7 +75,24 @@ extern "C" {
      * @param  ...
      * @return void
      **/
-    void FcitxLogFunc(ErrorLevel level, const char* filename, const int line, const char* fmt, ...);
+    void FcitxLogFunc(FcitxLogLevel level, const char* filename, const int line, const char* fmt, ...);
+
+    /**
+     * set log level
+     *
+     * @param e log level
+     * @return void
+     *
+     * @since 4.2.7
+     **/
+    void FcitxLogSetLevel(FcitxLogLevel e);
+
+    /**
+     * get log level
+     *
+     * @return FcitxLogLevel
+     **/
+    FcitxLogLevel FcitxLogGetLevel();
 
 #ifdef __cplusplus
 }

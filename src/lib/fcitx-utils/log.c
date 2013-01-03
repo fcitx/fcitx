@@ -35,18 +35,33 @@ static iconv_t iconvW = NULL;
 static int init = 0;
 static int is_utf8 = 0;
 
+#ifndef _DEBUG
+static FcitxLogLevel errorLevel = FCITX_WARNING;
+#else
+static FcitxLogLevel errorLevel = FCITX_DEBUG;
+#endif
+
 FCITX_EXPORT_API
-void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char* fmt, ...)
+void FcitxLogSetLevel(FcitxLogLevel e) {
+    errorLevel = e;
+}
+
+FcitxLogLevel FcitxLogGetLevel()
+{
+    return errorLevel;
+}
+
+FCITX_EXPORT_API
+void FcitxLogFunc(FcitxLogLevel e, const char* filename, const int line, const char* fmt, ...)
 {
     if (!init) {
         init = 1;
         is_utf8 = fcitx_utils_current_locale_is_utf8();
     }
 
-#ifndef _DEBUG
-    if (e == FCITX_DEBUG)
+    if (e < errorLevel)
         return;
-#endif
+
     switch (e) {
     case FCITX_INFO:
         fprintf(stderr, "(INFO-");
@@ -62,6 +77,8 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
         break;
     case FCITX_FATAL:
         fprintf(stderr, "(FATAL-");
+        break;
+    default:
         break;
     }
 
