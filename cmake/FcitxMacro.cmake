@@ -772,6 +772,24 @@ function(fcitx_download tgt_name url output)
   add_custom_command(OUTPUT "${output}" DEPENDS "${tgt_name}")
 endfunction()
 
+function(fcitx_extract tgt_name ifile)
+  set(options)
+  set(one_value_args)
+  set(multi_value_args OUTPUT DEPENDS)
+  fcitx_parse_arguments(FCITX_EXTRACT
+    "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
+  set(STAMP_FILE "${CMAKE_CURRENT_BINARY_DIR}/.${tgt_name}.stamp")
+  get_filename_component(ifile "${ifile}" ABSOLUTE)
+  add_custom_command(OUTPUT "${STAMP_FILE}"
+    COMMAND "${CMAKE_COMMAND}" -E tar x "${ifile}"
+    COMMAND "${CMAKE_COMMAND}" -E touch "${STAMP_FILE}"
+    COMMAND "${CMAKE_COMMAND}" -E touch_nocreate ${FCITX_EXTRACT_OUTPUT}
+    DEPENDS ${FCITX_EXTRACT_DEPENDS} "${ifile}")
+  add_custom_target("${tgt_name}" ALL DEPENDS "${STAMP_FILE}")
+  add_custom_command(OUTPUT ${FCITX_EXTRACT_OUTPUT}
+    DEPENDS "${tgt_name}")
+endfunction()
+
 
 function(__fcitx_conf_file_get_unique_target_name name unique_name)
   set(propertyName "_FCITX_UNIQUE_COUNTER_${name}")
