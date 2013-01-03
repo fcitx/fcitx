@@ -686,14 +686,17 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 if (candWord->owner == table && tbl->bIsTableDelPhrase) {
                     TableDelPhraseByIndex(table, candWord->priv);
                     tbl->bIsTableDelPhrase = false;
+                    FcitxInputStateSetIsDoInputOnly(input, false);
                     retVal = IRV_DISPLAY_CANDWORDS;
                 } else if (candWord->owner == table && tbl->bIsTableAdjustOrder) {
                     TableAdjustOrderByIndex(table, candWord->priv);
                     tbl->bIsTableAdjustOrder = false;
+                    FcitxInputStateSetIsDoInputOnly(input, false);
                     retVal = IRV_DISPLAY_CANDWORDS;
                 } else if (candWord->owner == table && tbl->bIsTableClearFreq) {
                     TableClearFreqByIndex(table, candWord->priv);
                     tbl->bIsTableClearFreq = false;
+                    FcitxInputStateSetIsDoInputOnly(input, false);
                     retVal = IRV_DISPLAY_CANDWORDS;
                 }
                 else
