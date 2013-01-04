@@ -45,6 +45,7 @@
 #include "instance-internal.h"
 #include "module-internal.h"
 #include "addon-internal.h"
+#include "setjmp.h"
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
                                       || (icase ? \
@@ -235,6 +236,9 @@ void FcitxInstanceSetRecheckEvent(FcitxInstance* instance)
     instance->uiflag |= UI_EVENT_CHECK;
 }
 
+FCITX_EXPORT_API
+jmp_buf FcitxRecover;
+
 void* RunInstance(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
@@ -291,6 +295,8 @@ void* RunInstance(void* arg)
             if (instance->uiflag & UI_UPDATE)
                 FcitxUIUpdateInputWindowReal(instance);
         } while (instance->uiflag != UI_NONE);
+
+        setjmp(FcitxRecover);
 
         if (instance->destroy) {
             FcitxInstanceRealEnd(instance);

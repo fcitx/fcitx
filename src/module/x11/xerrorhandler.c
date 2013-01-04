@@ -22,6 +22,7 @@
 #include "fcitx/instance.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx/ime.h"
+#include <setjmp.h>
 #include "xerrorhandler.h"
 
 static XErrorHandler   oldXErrorHandler;
@@ -45,6 +46,8 @@ void UnsetXErrorHandler(FcitxX11* x11priv)
     /* we don't set back to old handler, to avoid any x error  */
 }
 
+extern jmp_buf FcitxRecover;
+
 int FcitxXIOErrorHandler(Display *d)
 {
     FCITX_UNUSED(d);
@@ -58,6 +61,8 @@ int FcitxXIOErrorHandler(Display *d)
     FcitxInstanceSaveAllIM(x11handle->owner);
 
     FcitxInstanceEnd(x11handle->owner);
+
+    longjmp(FcitxRecover, 1);
     return 0;
 }
 
