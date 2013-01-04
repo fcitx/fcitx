@@ -55,14 +55,6 @@ FcitxInstance* instance = NULL;
 int selfpipe[2];
 char* crashlog = NULL;
 
-static void WaitForEnd(sem_t *sem, int count)
-{
-    while (count) {
-        sem_wait(sem);
-        count --;
-    }
-}
-
 int main(int argc, char* argv[])
 {
     char* localedir = fcitx_utils_get_fcitx_path("localedir");
@@ -83,13 +75,12 @@ int main(int argc, char* argv[])
     FcitxXDGGetFileUserWithPrefix("log", "crash.log", NULL, &crashlog);
     SetMyExceptionHandler();
 
-    int instanceCount = 1;
-
     sem_t sem;
     sem_init(&sem, 0, 0);
 
     instance = FcitxInstanceCreateWithFD(&sem, argc, argv, selfpipe[0]);
-    WaitForEnd(&sem, instanceCount);
+    sem_wait(&sem);
+    FcitxInstanceWaitForEnd(instance);
 
     free(crashlog);
     crashlog = NULL;

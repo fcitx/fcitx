@@ -41,8 +41,14 @@ static FcitxLogLevel errorLevel = FCITX_WARNING;
 static FcitxLogLevel errorLevel = FCITX_DEBUG;
 #endif
 
+static const int RealLevelIndex[] = {0, 2, 3, 4, 1, 6};
+
 FCITX_EXPORT_API
 void FcitxLogSetLevel(FcitxLogLevel e) {
+    if ((int) e < 0)
+        e = 0;
+    else if (e > FCITX_NONE)
+        e = FCITX_NONE;
     errorLevel = e;
 }
 
@@ -59,7 +65,15 @@ void FcitxLogFunc(FcitxLogLevel e, const char* filename, const int line, const c
         is_utf8 = fcitx_utils_current_locale_is_utf8();
     }
 
-    if (e < errorLevel)
+    if ((int) e < 0)
+        e = 0;
+    else if (e >= FCITX_NONE)
+        e = FCITX_INFO;
+
+    int realLevel = RealLevelIndex[e];
+    int globalRealLevel = RealLevelIndex[errorLevel];
+
+    if (realLevel < globalRealLevel)
         return;
 
     switch (e) {

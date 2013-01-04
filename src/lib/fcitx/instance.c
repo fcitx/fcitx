@@ -89,6 +89,7 @@ static void Version();
 static void* RunInstance(void* arg);
 static void FcitxInstanceInitBuiltContext(FcitxInstance* instance);
 static void FcitxInstanceShowRemindStatusChanged(void* arg, const void* value);
+static void FcitxInstanceRealEnd(FcitxInstance* instance);
 
 /**
  * 显示命令行参数
@@ -209,8 +210,10 @@ FCITX_EXPORT_API
 void FcitxInstanceStart(FcitxInstance* instance)
 {
     if (!instance->loadingFatalError) {
+        instance->initialized = true;
         /* make in order to use block X, query is not good here */
-        pthread_create(&instance->pid, NULL, RunInstance, instance);
+        if (pthread_create(&instance->pid, NULL, RunInstance, instance) != 0)
+            instance->initialized = false;
     }
 }
 
@@ -235,7 +238,6 @@ void FcitxInstanceSetRecheckEvent(FcitxInstance* instance)
 void* RunInstance(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
-    instance->initialized = true;
     uint64_t curtime = 0;
     while (1) {
         FcitxAddon** pmodule;
@@ -289,6 +291,11 @@ void* RunInstance(void* arg)
             if (instance->uiflag & UI_UPDATE)
                 FcitxUIUpdateInputWindowReal(instance);
         } while (instance->uiflag != UI_NONE);
+
+        if (instance->destroy) {
+            FcitxInstanceRealEnd(instance);
+            break;
+        }
 
         FD_ZERO(&instance->rfds);
         FD_ZERO(&instance->wfds);
@@ -346,6 +353,10 @@ void FcitxInstanceEnd(FcitxInstance* instance)
     }
 
     instance->destroy = true;
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceRealEnd(FcitxInstance* instance) {
 
     FcitxProfileSave(instance->profile);
     FcitxInstanceSaveAllIM(instance);
@@ -410,13 +421,6 @@ void FcitxInstanceEnd(FcitxInstance* instance)
     }
 
     sem_post(instance->sem);
-
-    /* don't return to main loop, wait for exit */
-    int countDown = 5;
-    while(countDown--) {
-        sleep(1000);
-    }
-    exit(0);
 }
 
 void FcitxInitThread(FcitxInstance* inst)
@@ -686,6 +690,14 @@ boolean FcitxInstanceRemoveTimeoutById(FcitxInstance* instance, uint64_t id)
         }
     }
     return false;
+}
+
+FCITX_EXPORT_API
+int FcitxInstanceWaitForEnd(FcitxInstance* instance) {
+    if (instance->initialized) {
+        return pthread_join(instance->pid, NULL);
+    }
+    return 0;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
