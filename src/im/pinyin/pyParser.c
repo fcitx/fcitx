@@ -558,4 +558,13 @@ double LookupPYFreq(FcitxPinyinConfig* pyconfig, int index1, int index2)
     return s->freq;
 }
 
+void FreePYSplitData(FcitxPinyinConfig* pyconfig)
+{
+    while (pyconfig->splitData) {
+        PYMappedSplitData* data = pyconfig->splitData;
+        HASH_DEL(pyconfig->splitData, data);
+        free(data);
+    }
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -60,6 +60,7 @@ int             CmpMap(struct _FcitxPinyinConfig* pyconfig, const char* strMap1,
 int             Cmp1Map(struct _FcitxPinyinConfig* pyconfig, char map1, char map2, boolean b, boolean bUseMH, boolean bSP);
 int             Cmp2Map(struct _FcitxPinyinConfig* pyconfig, char map1[3], char map2[3], boolean bSP);
 void            InitPYSplitData(struct _FcitxPinyinConfig* pyconfig);
+void            FreePYSplitData(struct _FcitxPinyinConfig* pyconfig);
 
 #endif
 

@@ -55,7 +55,7 @@
 
 FCITX_DEFINE_PLUGIN(fcitx_pinyin, ime, FcitxIMClass) = {
     PYCreate,
-    NULL
+    PYDestroy
 };
 
 typedef struct {
@@ -90,6 +90,7 @@ void *PYCreate(FcitxInstance* instance)
         free(pystate->pyconfig.MHPY_C);
         free(pystate->pyconfig.MHPY_S);
         free(pystate->pyconfig.PYTable);
+        FreePYSplitData(&pystate->pyconfig);
         free(pystate);
         return NULL;
     }
@@ -142,6 +143,50 @@ void *PYCreate(FcitxInstance* instance)
     FcitxModuleAddFunction(pyaddon, PYSP2QP); // 6
     FcitxModuleAddFunction(pyaddon, PYAddUserPhraseFromCString); // 6
     return pystate;
+}
+
+void PYDestroy(void* arg)
+{
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    free(pystate->pyconfig.MHPY_C);
+    free(pystate->pyconfig.MHPY_S);
+    free(pystate->pyconfig.PYTable);
+    FreePYSplitData(&pystate->pyconfig);
+    FcitxConfigFree(&pystate->pyconfig.gconfig);
+    fcitx_memory_pool_destroy(pystate->pool);
+
+    int i, j, k;
+    PYFA *PYFAList = pystate->PYFAList;
+    for (i = 0; i < pystate->iPYFACount; i++) {
+        for (j = 0; j < PYFAList[i].iBase; j++) {
+            PyPhrase* phrase = USER_PHRASE_NEXT(PYFAList[i].pyBase[j].userPhrase);
+            for (k = 0; k < PYFAList[i].pyBase[j].iUserPhrase; k++) {
+                PyPhrase* cur = phrase;
+                fcitx_utils_free(cur->strPhrase);
+                fcitx_utils_free(cur->strMap);
+                phrase = USER_PHRASE_NEXT(phrase);
+                free(cur);
+            }
+
+            free(PYFAList[i].pyBase[j].userPhrase);
+            fcitx_utils_free(PYFAList[i].pyBase[j].phrase);
+        }
+        free(PYFAList[i].pyBase);
+    }
+    free(PYFAList);
+
+    while(pystate->pyFreq) {
+        PyFreq* pCurFreq = pystate->pyFreq;
+        pystate->pyFreq = pCurFreq->next;
+        while (pCurFreq->HZList) {
+            HZ* pHZ = pCurFreq->HZList;
+            pCurFreq->HZList = pHZ->next;
+            free(pHZ);
+        }
+        free(pCurFreq);
+    }
+
+    free(pystate);
 }
 
 boolean PYInit(void *arg)

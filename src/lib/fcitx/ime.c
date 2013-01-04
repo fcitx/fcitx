@@ -1717,6 +1717,7 @@ void UnusedIMItemFreeAll(UnusedIMItem* item)
         cur = item;
         HASH_DEL(item, cur);
         fcitx_utils_free(cur->name);
+        free(cur);
     }
 }
 
