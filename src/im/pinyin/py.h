@@ -195,6 +195,7 @@ typedef struct _FcitxPinyinState {
 } FcitxPinyinState;
 
 void *PYCreate(FcitxInstance *instance);
+void PYDestroy(void* arg);
 boolean         PYInit(void* arg);
 boolean         SPInit(void* arg);
 boolean         LoadPYBaseDict(FcitxPinyinState* pystate);
