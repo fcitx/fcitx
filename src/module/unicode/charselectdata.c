@@ -468,12 +468,18 @@ UnicodeSet* InsertResult(UnicodeSet* set, uint16_t unicode) {
 
 UnicodeSet* CharSelectDataGetMatchingChars(CharSelectData* charselect, const char* s)
 {
-    UnicodeSet* result = NULL;
-
-    CharSelectDataIndex** pos = utarray_custom_bsearch(s, charselect->indexList, 0, index_search_cmp);
-    CharSelectDataIndex** last = utarray_custom_bsearch(s, charselect->indexList, 0, index_search_a_cmp);
-
-    while (pos != last && strncasecmp(s, (*pos)->key, strlen(s)) == 0) {
+    UnicodeSet *result = NULL;
+    size_t s_l = strlen(s);
+    CharSelectDataIndex **pos;
+    CharSelectDataIndex **last;
+    pos = utarray_custom_bsearch(s, charselect->indexList, 0, index_search_cmp);
+    last = utarray_custom_bsearch(s, charselect->indexList,
+                                  0, index_search_a_cmp);
+    if (!pos)
+        return NULL;
+    if (!last)
+        last = (CharSelectDataIndex**)utarray_back(charselect->indexList);
+    while (pos != last && strncasecmp(s, (*pos)->key, s_l) == 0) {
         utarray_foreach (c, (*pos)->items, uint16_t) {
             result = InsertResult(result, *c);
         }
