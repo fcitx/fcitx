@@ -2,7 +2,8 @@
 
 #include "fcitx/module.h"
 #include "fcitx/instance.h"
-#include "module/dbus/dbusstuff.h"
+#include "module/dbus/fcitx-dbus.h"
+#include "freedesktop-notify.h"
 
 #define NOTIFICATIONS_SERVICE_NAME "org.freedesktop.Notifications"
 #define NOTIFICATIONS_INTERFACE_NAME "org.freedesktop.Notifications"
@@ -26,13 +27,10 @@ typedef struct _FcitxNotify
     FcitxInstance* owner;
 } FcitxNotify;
 
-typedef void (*FcitxFreedesktopNotifyCallback)(void* arg, uint32_t id);
-typedef void (*FcitxNotifyFreeFunc)(void* data);
-
 typedef struct _FcitxNotifyStruct {
     FcitxNotify* owner;
     FcitxFreedesktopNotifyCallback callback;
-    FcitxNotifyFreeFunc freeFunc;
+    FcitxDestroyNotify freeFunc;
     void* data;
 } FcitxNotifyStruct;
 
@@ -50,14 +48,15 @@ static void FcitxNotifySendNotification(
     int32_t timeout,
     FcitxFreedesktopNotifyCallback callback,
     void* userData,
-    FcitxNotifyFreeFunc freeFunc
+    FcitxDestroyNotify freeFunc
 );
 
 void* FcitxNotifyCreate(FcitxInstance* instance)
 {
     FcitxNotify* notify = fcitx_utils_new(FcitxNotify);
+    FcitxAddon* addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-freedesktop-notify");
     notify->owner = instance;
-    notify->conn = InvokeVaArgs(notify->owner, FCITX_DBUS, GETCONNECTION, NULL);
+    notify->conn = FcitxDBusGetConnection(notify->owner);
     if (!notify->conn)
         goto _notify_create_error;
 
@@ -91,6 +90,9 @@ void* FcitxNotifyCreate(FcitxInstance* instance)
         goto _notify_create_error;
 
     dbus_error_free(&err);
+
+    FcitxModuleAddFunction(addon, FcitxNotifySendNotification);
+
     return notify;
 _notify_create_error:
     if (notify->conn)
@@ -133,7 +135,7 @@ void FcitxNotifySendNotification(
     int32_t timeout,
     FcitxFreedesktopNotifyCallback callback,
     void* userData,
-    FcitxNotifyFreeFunc freeFunc
+    FcitxDestroyNotify freeFunc
 ) {
     if (actionsCount % 2 != 0)
         return;

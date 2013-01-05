@@ -1,15 +1,17 @@
-include_directories(${PROJECT_SOURCE_DIR}/src)
-include_directories(${DBUS_INCLUDE_DIRS})
-
-link_directories(${DBUS_LIBRARY_DIRS})
-
 set(FCITX_FREEDESKTOP_NOTIFY_SOURCES
-    notify.c
+    freedesktop-notify.c
 )
 
-fcitx_add_addon(fcitx-freedesktop-notify ${FCITX_FREEDESKTOP_NOTIFY_SOURCES})
-target_link_libraries( fcitx-freedesktop-notify ${DBUS_LIBRARIES})
-#fcitx_add_addon_header(freedesktop-notify freedesktop-notify.h)
-fcitx_add_addon_conf_file(fcitx-freedesktop-notify.conf)
+fcitx_translate_add_sources(${FCITX_FREEDESKTOP_NOTIFY_SOURCES})
 
+if(NOT _ENABLE_DBUS)
+    return()
+endif()
 
+include_directories(${DBUS_INCLUDE_DIRS})
+link_directories(${DBUS_LIBRARY_DIRS})
+
+fcitx_add_addon_full(freedesktop-notify
+    SCAN
+    SOURCES ${FCITX_FREEDESKTOP_NOTIFY_SOURCES}
+    LINK_LIBS ${DBUS_LIBRARIES})

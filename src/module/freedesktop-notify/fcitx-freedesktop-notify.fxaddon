@@ -1,0 +1,19 @@
+[FcitxAddon]
+Name=fcitx-freeedesktop-notify
+Prefix=FreeDesktopNotify
+Function0=SendNotification
+Include0=<fcitx-utils/utils.h>
+
+[SendNotification]
+Name=send-notification
+Arg0=const char*
+Arg1=uint32_t
+Arg2=const char*
+Arg3=const char*
+Arg4=const char*
+Arg5=const char**
+Arg6=int
+Arg7=int32_t
+Arg8=FcitxFreedesktopNotifyCallback
+Arg9=void*
+Arg10=FcitxDestroyNotify
