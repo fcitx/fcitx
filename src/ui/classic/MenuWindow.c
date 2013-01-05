@@ -295,7 +295,6 @@ void DrawXlibMenu(XlibMenu * menu)
     FcitxSkin *sc = &menu->owner->skin;
     FcitxClassicUI *classicui = menu->owner;
     Display* dpy = classicui->dpy;
-    GC gc = XCreateGC(dpy, menu->menuWindow, 0, NULL);
     int i = 0;
     int fontheight;
     int iPosY = 0;
@@ -347,7 +346,6 @@ void DrawXlibMenu(XlibMenu * menu)
     cairo_paint(c);
     cairo_destroy(c);
     cairo_surface_flush(menu->menu_x_cs);
-    XFreeGC(dpy, gc);
 }
 
 void DisplayXlibMenu(XlibMenu * menu)

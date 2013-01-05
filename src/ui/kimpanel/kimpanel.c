@@ -292,7 +292,7 @@ void* KimpanelCreate(FcitxInstance* instance)
 
         // add a rule to receive signals from kimpanel
         dbus_bus_add_match(kimpanel->conn,
-                           "type='signal',interface='org.kde.impanel'",
+                           "type='signal',sender='org.kde.impanel',interface='org.kde.impanel'",
                            &err);
         dbus_connection_flush(kimpanel->conn);
         if (dbus_error_is_set(&err)) {
@@ -300,7 +300,7 @@ void* KimpanelCreate(FcitxInstance* instance)
             break;
         }
         dbus_bus_add_match(kimpanel->conn,
-                           "type='signal',interface='org.kde.impanel2'",
+                           "type='signal',sender='org.kde.impanel',interface='org.kde.impanel2'",
                            &err);
         dbus_connection_flush(kimpanel->conn);
         if (dbus_error_is_set(&err)) {
@@ -310,6 +310,7 @@ void* KimpanelCreate(FcitxInstance* instance)
 
         dbus_bus_add_match(kimpanel->conn,
                            "type='signal',"
+                           "sender='" DBUS_SERVICE_DBUS "',"
                            "interface='" DBUS_INTERFACE_DBUS "',"
                            "path='" DBUS_PATH_DBUS "',"
                            "member='NameOwnerChanged'",
@@ -1722,12 +1723,15 @@ void KimpanelDestroy(void* arg)
     dbus_connection_remove_filter(kimpanel->conn, KimpanelDBusFilter, kimpanel);
 
     dbus_bus_remove_match(kimpanel->conn,
-                          "type='signal',interface='org.kde.impanel'",
+                          "type='signal',sender='org.kde.impanel',interface='org.kde.impanel'",
+                           NULL);
+    dbus_bus_remove_match(kimpanel->conn,
+                          "type='signal',sender='org.kde.impanel',interface='org.kde.impanel2'",
                           NULL);
-    dbus_connection_flush(kimpanel->conn);
 
     dbus_bus_remove_match(kimpanel->conn,
                           "type='signal',"
+                           "sender='" DBUS_SERVICE_DBUS "',"
                           "interface='" DBUS_INTERFACE_DBUS "',"
                           "path='" DBUS_PATH_DBUS "',"
                           "member='NameOwnerChanged'",
