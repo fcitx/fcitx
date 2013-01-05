@@ -167,8 +167,6 @@ void QFcitxInputContext::cleanUp()
 
     m_icMap.clear();
 
-    setFocusWidget(0);
-
     if (m_improxy) {
         delete m_improxy;
         m_improxy = 0;
@@ -769,6 +767,8 @@ FcitxQtInputContextProxy* QFcitxInputContext::validICByWidget(QWidget* w)
         return 0;
 
     FcitxQtICData* icData = m_icMap.value(w->effectiveWinId());
+    if (!icData)
+        return 0;
     if (icData->proxy.isNull()) {
         return 0;
     } else if (icData->proxy->isValid()) {
