@@ -38,6 +38,19 @@
 #include <X11/Xlib.h>
 #include "fcitx/frontend.h"
 
+struct FcitxQtICData {
+    FcitxQtICData() : proxy(0) {}
+    ~FcitxQtICData() {
+        if (proxy && proxy->isValid()) {
+            proxy->DestroyIC();
+            delete proxy;
+        }
+    }
+    QFlags<FcitxCapacityFlags> capacity;
+    QPointer<FcitxQtInputContextProxy> proxy;
+    QRect rect;
+};
+
 class FcitxQtConnection;
 
 class ProcessKeyWatcher : public QDBusPendingCallWatcher
@@ -92,7 +105,8 @@ public:
     virtual void mouseHandler(int x, QMouseEvent* event);
 
 private Q_SLOTS:
-    void createInputContext();
+    void connected();
+    void createInputContext(WId w);
     void cleanUp();
     void commitString(const QString& str);
     void updateFormattedPreedit(const FcitxQtFormattedPreeditList& preeditList, int cursorPos);
@@ -114,35 +128,32 @@ private:
 #endif // Q_WS_X11
     QKeyEvent* createKeyEvent(uint keyval, uint state, int type);
     bool isValid();
-    bool isConnected();
+    FcitxQtInputContextProxy* validIC();
+    FcitxQtInputContextProxy* validICByWidget(QWidget* w);
 
-    void addCapacity(QFlags<FcitxCapacityFlags> capacity, bool forceUpdage = false)
+    void addCapacity(FcitxQtICData* data, QFlags<FcitxCapacityFlags> capacity, bool forceUpdate = false)
     {
-        QFlags< FcitxCapacityFlags > newcaps = m_capacity | capacity;
-        if (m_capacity != newcaps || forceUpdage) {
-            m_capacity = newcaps;
-            updateCapacity();
+        QFlags< FcitxCapacityFlags > newcaps = data->capacity | capacity;
+        if (data->capacity != newcaps || forceUpdate) {
+            data->capacity = newcaps;
+            updateCapacity(data);
         }
     }
 
-    void removeCapacity(QFlags<FcitxCapacityFlags> capacity, bool forceUpdage = false)
+    void removeCapacity(FcitxQtICData* data, QFlags<FcitxCapacityFlags> capacity, bool forceUpdate = false)
     {
-        QFlags< FcitxCapacityFlags > newcaps = m_capacity & (~capacity);
-        if (m_capacity != newcaps || forceUpdage) {
-            m_capacity = newcaps;
-            updateCapacity();
+        QFlags< FcitxCapacityFlags > newcaps = data->capacity & (~capacity);
+        if (data->capacity != newcaps || forceUpdate) {
+            data->capacity = newcaps;
+            updateCapacity(data);
         }
     }
 
-    void updateCapacity();
+    void updateCapacity(FcitxQtICData* data);
     void commitPreedit();
+    void createICData(QWidget* w);
 
     FcitxQtInputMethodProxy* m_improxy;
-    FcitxQtInputContextProxy* m_icproxy;
-    QFlags<FcitxCapacityFlags> m_capacity;
-    int m_id;
-    QString m_path;
-    bool m_has_focus;
     uint m_compose_buffer[FCITX_MAX_COMPOSE_LEN + 1];
     int m_n_compose;
     QString m_preedit;
@@ -151,11 +162,11 @@ private:
     int m_cursorPos;
     bool m_useSurroundingText;
     bool m_syncMode;
-    QRect m_rect;
     FcitxQtConnection* m_connection;
     QString m_lastSurroundingText;
     int m_lastSurroundingAnchor;
     int m_lastSurroundingCursor;
+    QHash<WId, FcitxQtICData*> m_icMap;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_
