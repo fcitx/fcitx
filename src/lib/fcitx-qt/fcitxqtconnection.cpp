@@ -88,7 +88,6 @@ bool FcitxQtConnection::isConnected()
 
 FcitxQtConnection::~FcitxQtConnection()
 {
-
 }
 
 FcitxQtConnectionPrivate::FcitxQtConnectionPrivate(FcitxQtConnection* conn) : QObject(conn)
@@ -111,6 +110,8 @@ FcitxQtConnectionPrivate::~FcitxQtConnectionPrivate()
 {
     if (!m_watcher.isNull())
         delete m_watcher.data();
+    if (m_connection)
+        delete m_connection;
 }
 
 void FcitxQtConnectionPrivate::initialize() {

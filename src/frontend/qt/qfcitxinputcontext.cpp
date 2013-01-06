@@ -324,7 +324,7 @@ bool QFcitxInputContext::filterEvent(const QEvent* event)
     m_icproxy->FocusIn();
 
     struct timeval current_time;
-    gettimeofday(&current_time, NULL);
+    gettimeofday(&current_time, 0);
     uint time = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
 
     QDBusPendingReply< int > result =  this->m_icproxy->ProcessKeyEvent(key_event->nativeVirtualKey(),
@@ -403,8 +403,11 @@ QKeyEvent* QFcitxInputContext::createKeyEvent(uint keyval, uint state, int type)
 
 void QFcitxInputContext::createICData(QWidget* w)
 {
-    FcitxQtICData* data = new FcitxQtICData;
-    m_icMap[w->effectiveWinId()] = data;
+    FcitxQtICData* data = m_icMap.value(w->effectiveWinId());
+    if (!data) {
+        data = new FcitxQtICData;
+        m_icMap[w->effectiveWinId()] = data;
+    }
     createInputContext(w->effectiveWinId());
 }
 
@@ -486,7 +489,7 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     KeySym sym = 0;
     char strbuf[64];
     memset(strbuf, 0, 64);
-    XLookupString(&event->xkey, strbuf, 64, &sym, NULL);
+    XLookupString(&event->xkey, strbuf, 64, &sym, 0);
 
     FcitxQtInputContextProxy* proxy = validICByWidget(keywidget);
 
@@ -559,7 +562,7 @@ void QFcitxInputContext::createInputContext(WId w)
 
     if (m_improxy) {
         delete m_improxy;
-        m_improxy = NULL;
+        m_improxy = 0;
     }
     m_improxy = new FcitxQtInputMethodProxy(m_connection->serviceName(), QLatin1String(FCITX_IM_DBUS_PATH), *m_connection->connection(), this);
 
@@ -706,7 +709,7 @@ void QFcitxInputContext::deleteSurroundingText(int offset, uint nchar)
 void QFcitxInputContext::forwardKey(uint keyval, uint state, int type)
 {
     QWidget* widget = focusWidget();
-    if (Q_LIKELY(widget != NULL)) {
+    if (Q_LIKELY(widget != 0)) {
         key_filtered = true;
 #if defined(Q_WS_X11) && defined(ENABLE_X11)
         const WId window_id = widget->winId();
@@ -739,10 +742,10 @@ XEvent* QFcitxInputContext::createXEvent(Display* dpy, WId wid, uint keyval, uin
     xkeyevent->same_screen = FALSE;
 
     struct timeval current_time;
-    gettimeofday(&current_time, NULL);
+    gettimeofday(&current_time, 0);
     xkeyevent->time = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
 
-    if (dpy != NULL) {
+    if (dpy != 0) {
         xkeyevent->root = DefaultRootWindow(dpy);
         xkeyevent->keycode = XKeysymToKeycode(dpy, (KeySym) keyval);
     } else {
@@ -891,7 +894,7 @@ case FcitxKey_dead_##keysym: combination_buffer[i + 1] = unicode; break
 #if 0
         if (check_normalize_nfc(combination_buffer, m_n_compose)) {
             gunichar value;
-            combination_utf8 = g_ucs4_to_utf8(combination_buffer, -1, NULL, NULL, NULL);
+            combination_utf8 = g_ucs4_to_utf8(combination_buffer, -1, 0, 0, 0);
             nfc = g_utf8_normalize(combination_utf8, -1, G_NORMALIZE_NFC);
 
             value = g_utf8_get_char(nfc);
@@ -948,7 +951,7 @@ QFcitxInputContext::checkCompactTable(const FcitxComposeTableCompact *table)
         return true;
     }
 
-    seq = NULL;
+    seq = 0;
     for (i = m_n_compose - 1; i < table->max_seq_len; i++) {
         row_stride = i + 1;
 
@@ -983,7 +986,7 @@ QFcitxInputContext::checkCompactTable(const FcitxComposeTableCompact *table)
 QWidget* QFcitxInputContext::validFocusWidget() {
     QWidget* widget = focusWidget();
     if (widget && !widget->testAttribute(Qt::WA_WState_Created))
-        widget = NULL;
+        widget = 0;
     return widget;
 }
 
