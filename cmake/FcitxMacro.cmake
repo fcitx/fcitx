@@ -408,7 +408,9 @@ function(__fcitx_scan_addon name in_file out_file)
   if(NOT FCITX_SCANNER_EXECUTABLE)
     message(FATAL_ERROR "Cannot find fcitx-scanner")
   endif()
+  get_filename_component(dir "${out_file}" PATH)
   add_custom_command(
+    COMMAND "${CMAKE_COMMAND}" -E make_directory "${dir}"
     COMMAND "${FCITX_SCANNER_EXECUTABLE}" "${in_file}" "${out_file}"
     OUTPUT "${out_file}" DEPENDS "${in_file}" "${FCITX_SCANNER_EXECUTABLE}"
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -567,7 +569,9 @@ function(fcitx_translate_add_apply_source in_file out_file)
       "${FCITX_CMAKE_HELPER_SCRIPT}" --check-apply-handler
       "${script}" "${in_file}" "${out_file}" RESULT_VARIABLE result)
     if(NOT result)
+      get_filename_component(dir "${out_file}" PATH)
       add_custom_command(OUTPUT "${out_file}"
+        COMMAND "${CMAKE_COMMAND}" -E make_directory "${dir}"
         COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
         "${FCITX_CMAKE_HELPER_SCRIPT}" --apply-po-merge
         "${script}" "${in_file}" "${out_file}"
@@ -741,8 +745,10 @@ function(fcitx_download tgt_name url output)
   fcitx_parse_arguments(FCITX_DOWNLOAD
     "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
   get_filename_component(output "${output}" ABSOLUTE)
+  get_filename_component(dir "${output}" PATH)
   if(FCITX_DOWNLOAD_MD5SUM)
     add_custom_target("${tgt_name}" ALL
+      COMMAND "${CMAKE_COMMAND}" -E make_directory "${dir}"
       COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
       "${FCITX_CMAKE_HELPER_SCRIPT}"
       --download "${url}" "${output}" "${FCITX_DOWNLOAD_MD5SUM}"
@@ -752,6 +758,7 @@ function(fcitx_download tgt_name url output)
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
   else()
     add_custom_target("${tgt_name}" ALL
+      COMMAND "${CMAKE_COMMAND}" -E make_directory "${dir}"
       COMMAND env ${__FCITX_CMAKE_HELPER_EXPORT}
       "${FCITX_CMAKE_HELPER_SCRIPT}" --download "${url}" "${output}"
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
