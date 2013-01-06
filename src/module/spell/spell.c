@@ -323,7 +323,7 @@ SpellParseNextProvider(const char *str, const char **name, int *len)
     *name = str;
     p = index(str, ',');
     if (!p) {
-        *len = -1;
+        *len = strlen(str);
         return NULL;
     }
     *len = p - str;
