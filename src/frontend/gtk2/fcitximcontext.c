@@ -939,14 +939,20 @@ get_selection_anchor_point (FcitxIMContext *fcitxcontext,
 
 static void
 fcitx_im_context_set_surrounding (GtkIMContext *context,
-                                 const gchar *text,
-                                 gint len,
-                                 gint cursor_index)
+                                  const gchar *text,
+                                  gint l,
+                                  gint cursor_index)
 {
     g_return_if_fail (context != NULL);
     g_return_if_fail (FCITX_IS_IM_CONTEXT (context));
     g_return_if_fail (text != NULL);
-    g_return_if_fail (strlen (text) >= len);
+
+    gint len = l;
+    if (len < 0) {
+        len = strlen(text);
+    } else {
+        g_return_if_fail (strlen(text) >= (unsigned)len);
+    }
     g_return_if_fail (0 <= cursor_index && cursor_index <= len);
 
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
@@ -971,7 +977,7 @@ fcitx_im_context_set_surrounding (GtkIMContext *context,
     }
     gtk_im_context_set_surrounding (fcitxcontext->slave,
                                     text,
-                                    len,
+                                    l,
                                     cursor_index);
 }
 
