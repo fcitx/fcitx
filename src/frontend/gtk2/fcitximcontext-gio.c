@@ -917,9 +917,8 @@ fcitx_im_context_set_surrounding (GtkIMContext *context,
     gint len = l;
     if (len < 0) {
         len = strlen(text);
-    } else {
-        g_return_if_fail (strlen(text) >= (unsigned)len);
     }
+
     g_return_if_fail (0 <= cursor_index && cursor_index <= len);
 
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
