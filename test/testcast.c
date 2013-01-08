@@ -5,7 +5,7 @@
 #include "fcitx/fcitx.h"
 
 typedef struct {
-    char str[5];
+    char str[3];
 } TestType;
 
 int
@@ -27,7 +27,7 @@ main()
     assert(f0 == f1);
 
     TestType t0 = {
-        .str = "\0asji"
+        .str = "\0as"
     };
     _FCITX_CAST_TO_PTR(p, TestType, t0);
     TestType t1;
