@@ -918,24 +918,24 @@ extern "C" {
         return __fx_return_as_ptr_tmp;                \
     } while (0)
 
-#define __FCITX_DEF_CAST_TO_PTR(name, type)     \
+#define __FCITX_DEF_CAST_TO_PTR_FUNC(name, type)     \
     static inline void*                         \
     fcitx_utils_##name##_to_ptr(type value)     \
     {                                           \
         FCITX_RETURN_AS_PTR(type, value);       \
     }
 
-    __FCITX_DEF_CAST_TO_PTR(float, float)
-    __FCITX_DEF_CAST_TO_PTR(int, int)
-    __FCITX_DEF_CAST_TO_PTR(intptr, intptr_t)
-    __FCITX_DEF_CAST_TO_PTR(int8, int8_t)
-    __FCITX_DEF_CAST_TO_PTR(int16, int16_t)
-    __FCITX_DEF_CAST_TO_PTR(int32, int32_t)
-    __FCITX_DEF_CAST_TO_PTR(uint, unsigned int)
-    __FCITX_DEF_CAST_TO_PTR(uintptr, uintptr_t)
-    __FCITX_DEF_CAST_TO_PTR(uint8, uint8_t)
-    __FCITX_DEF_CAST_TO_PTR(uint16, uint16_t)
-    __FCITX_DEF_CAST_TO_PTR(uint32, uint32_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(float, float)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(int, int)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(intptr, intptr_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(int8, int8_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(int16, int16_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(int32, int32_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(uint, unsigned int)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(uintptr, uintptr_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(uint8, uint8_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(uint16, uint16_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(uint32, uint32_t)
 
 #define _FCITX_CAST_FROM_INT(new_type, new_val, old_type, old_val) do { \
         if (sizeof(new_type) <= 1) {                                    \
@@ -975,24 +975,24 @@ extern "C" {
         return __fx_return_from_ptr_tmp;                                \
     } while (0)
 
-#define __FCITX_DEF_CAST_FROM_PTR(name, type)    \
-    static inline type                           \
-    fcitx_utils_ptr_to_##name(void *value)       \
-    {                                            \
-        FCITX_RETURN_FROM_PTR(type, value);      \
+#define __FCITX_DEF_CAST_FROM_PTR_FUNC(name, type)      \
+    static inline type                                  \
+    fcitx_utils_ptr_to_##name(void *value)              \
+    {                                                   \
+        FCITX_RETURN_FROM_PTR(type, value);             \
     }
 
-    __FCITX_DEF_CAST_FROM_PTR(float, float)
-    __FCITX_DEF_CAST_FROM_PTR(int, int)
-    __FCITX_DEF_CAST_FROM_PTR(intptr, intptr_t)
-    __FCITX_DEF_CAST_FROM_PTR(int8, int8_t)
-    __FCITX_DEF_CAST_FROM_PTR(int16, int16_t)
-    __FCITX_DEF_CAST_FROM_PTR(int32, int32_t)
-    __FCITX_DEF_CAST_FROM_PTR(uint, unsigned int)
-    __FCITX_DEF_CAST_FROM_PTR(uintptr, uintptr_t)
-    __FCITX_DEF_CAST_FROM_PTR(uint8, uint8_t)
-    __FCITX_DEF_CAST_FROM_PTR(uint16, uint16_t)
-    __FCITX_DEF_CAST_FROM_PTR(uint32, uint32_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(float, float)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(int, int)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(intptr, intptr_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(int8, int8_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(int16, int16_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(int32, int32_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(uint, unsigned int)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(uintptr, uintptr_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(uint8, uint8_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(uint16, uint16_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(uint32, uint32_t)
 
 #ifdef __cplusplus
 }

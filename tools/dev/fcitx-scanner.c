@@ -443,7 +443,7 @@ fxscanner_write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
         p = (char**)_utarray_eltptr(&args, i);
         _write_str(ofp, ", ");
         _write_str(ofp, *p);
-        _write_str(ofp, " arg");
+        _write_str(ofp, " _arg");
         fprintf(ofp, "%d", i);
     }
     _write_str(ofp,
@@ -454,17 +454,27 @@ fxscanner_write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
                    "    static boolean _init = false;\n"
                    "    static void *result = NULL;\n"
                    "    if (fcitx_likely(_init))\n"
-                   "        return (");
+                   "        FCITX_RETURN_FROM_PTR(");
         _write_str(ofp, type);
         _write_str(ofp,
-                   ")(intptr_t)result;\n"
+                   ", result);\n"
                    "    _init = true;\n");
     } else if (type) {
         _write_str(ofp, "    void *result;\n");
     }
+    for (i = 0;i < utarray_len(&args);i++) {
+        p = (char**)_utarray_eltptr(&args, i);
+        _write_str(ofp, "    FCITX_DEF_CAST_TO_PTR(arg");
+        fprintf(ofp, "%d", i);
+        _write_str(ofp, ", ");
+        _write_str(ofp, *p);
+        _write_str(ofp, ", _arg");
+        fprintf(ofp, "%d", i);
+        _write_str(ofp, ");\n");
+    }
     _write_str(ofp, "    FCITX_DEF_MODULE_ARGS(args");
     for (i = 0;i < utarray_len(&args);i++) {
-        _write_str(ofp, ", (void*)(intptr_t)arg");
+        _write_str(ofp, ", arg");
         fprintf(ofp, "%d", i);
     }
     _write_str(ofp,
@@ -479,9 +489,9 @@ fxscanner_write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
     _write_str(ofp, func_name);
     _write_str(ofp, "(instance, args);\n");
     if (type) {
-        _write_str(ofp, "    return (");
+        _write_str(ofp, "    FCITX_RETURN_FROM_PTR(");
         _write_str(ofp, type);
-        _write_str(ofp, ")(intptr_t)result;\n");
+        _write_str(ofp, ", result);\n");
     }
     if (enable_wrapper) {
         _write_str(ofp, "}\n\n");
