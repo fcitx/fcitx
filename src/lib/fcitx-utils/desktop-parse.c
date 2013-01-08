@@ -200,6 +200,7 @@ fcitx_desktop_group_hash_remove_entry(FcitxDesktopGroup *group,
     HASH_DEL(group->entries, entry);
     entry->prev = NULL;
     entry->next = NULL;
+    entry->hh.tbl = NULL;
     fcitx_desktop_entry_unref(entry);
 }
 
@@ -243,6 +244,7 @@ fcitx_desktop_file_hash_remove_group(FcitxDesktopFile *file,
     HASH_DEL(file->groups, group);
     group->prev = NULL;
     group->next = NULL;
+    group->hh.tbl = NULL;
     fcitx_desktop_group_unref(group);
 }
 
@@ -536,13 +538,8 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
         new_entry->comments = tmp_ary;
         char *value = line + key_len + 1;
         int value_len = buff + line_len - value;
-        if (value_len <= 0) {
-            fcitx_utils_free(new_entry->value);
-            new_entry->value = NULL;
-        } else {
-            new_entry->value = fcitx_utils_set_str_with_len(new_entry->value,
-                                                            value, value_len);
-        }
+        new_entry->value = fcitx_utils_set_str_with_len(new_entry->value,
+                                                        value, value_len);
     }
     fcitx_desktop_file_clean(file);
     fcitx_utils_free(buff);
@@ -623,6 +620,8 @@ _check_entry_key(char *str)
 static void
 fcitx_desktop_entry_write_fp(const FcitxDesktopEntry *entry, FILE *fp)
 {
+    if (!entry->value)
+        return;
     size_t key_len = _check_entry_key(entry->name);
     if (!key_len)
         return;
@@ -687,10 +686,10 @@ fcitx_desktop_file_write(const FcitxDesktopFile *file, const char *name)
     return res;
 }
 
-static boolean
-fcitx_desktop_file_has_group(FcitxDesktopFile *file, FcitxDesktopGroup *group)
+static inline boolean
+_fcitx_desktop_file_has_group(FcitxDesktopFile *file, FcitxDesktopGroup *group)
 {
-    if (!file->groups || !group)
+    if (fcitx_unlikely(!file->groups || !group))
         return false;
     return file->groups->hh.tbl == group->hh.tbl;
 }
@@ -699,7 +698,7 @@ FCITX_EXPORT_API boolean
 fcitx_desktop_file_delete_group(FcitxDesktopFile *file,
                                 FcitxDesktopGroup *group)
 {
-    if (!fcitx_desktop_file_has_group(file, group))
+    if (!_fcitx_desktop_file_has_group(file, group))
         return false;
     fcitx_desktop_group_unlink(file, group);
     fcitx_desktop_file_hash_remove_group(file, group);
@@ -713,7 +712,7 @@ fcitx_desktop_file_add_group_after_with_len(
 {
     FcitxDesktopGroup *new_group;
     if (group) {
-        if (!fcitx_desktop_file_has_group(file, group)) {
+        if (!_fcitx_desktop_file_has_group(file, group)) {
             FcitxLog(ERROR,
                      "The given group doesn't belong to the given file.");
             return NULL;
@@ -739,7 +738,7 @@ fcitx_desktop_file_add_group_before_with_len(
 {
     FcitxDesktopGroup *new_group;
     if (group) {
-        if (!fcitx_desktop_file_has_group(file, group)) {
+        if (!_fcitx_desktop_file_has_group(file, group)) {
             FcitxLog(ERROR,
                      "The given group doesn't belong to the given file.");
             return NULL;
@@ -758,10 +757,11 @@ fcitx_desktop_file_add_group_before_with_len(
     return new_group;
 }
 
-static boolean
-fcitx_desktop_group_has_entry(FcitxDesktopGroup *group, FcitxDesktopEntry *entry)
+static inline boolean
+_fcitx_desktop_group_has_entry(FcitxDesktopGroup *group,
+                               FcitxDesktopEntry *entry)
 {
-    if (!group->entries || !entry)
+    if (fcitx_unlikely(!group->entries || !entry))
         return false;
     return group->entries->hh.tbl == entry->hh.tbl;
 }
@@ -770,7 +770,7 @@ FCITX_EXPORT_API boolean
 fcitx_desktop_group_delete_entry(FcitxDesktopGroup *group,
                                  FcitxDesktopEntry *entry)
 {
-    if (!fcitx_desktop_group_has_entry(group, entry))
+    if (!_fcitx_desktop_group_has_entry(group, entry))
         return false;
     fcitx_desktop_entry_unlink(group, entry);
     fcitx_desktop_group_hash_remove_entry(group, entry);
@@ -784,7 +784,7 @@ fcitx_desktop_group_add_entry_after_with_len(
 {
     FcitxDesktopEntry *new_entry;
     if (entry) {
-        if (!fcitx_desktop_group_has_entry(group, entry)) {
+        if (!_fcitx_desktop_group_has_entry(group, entry)) {
             FcitxLog(ERROR,
                      "The given entry doesn't belong to the given group.");
             return NULL;
@@ -811,7 +811,7 @@ fcitx_desktop_group_add_entry_before_with_len(
 {
     FcitxDesktopEntry *new_entry;
     if (entry) {
-        if (!fcitx_desktop_group_has_entry(group, entry)) {
+        if (!_fcitx_desktop_group_has_entry(group, entry)) {
             FcitxLog(ERROR,
                      "The given entry doesn't belong to the given group.");
             return NULL;
