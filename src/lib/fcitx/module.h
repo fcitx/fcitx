@@ -154,10 +154,10 @@ extern "C" {
     static inline FcitxAddon*                                    \
     Fcitx##prefix##GetAddon(FcitxInstance *instance)             \
     {                                                            \
-        static int _init = false;                                \
         static FcitxAddon *addon = NULL;                         \
-        if (fcitx_unlikely(!_init)) {                            \
-            _init = true;                                        \
+        static FcitxInstance *_instance = NULL;                  \
+        if (fcitx_unlikely(_instance != instance)) {             \
+            _instance = instance;                                \
             addon = FcitxAddonsGetAddonByName(                   \
                 FcitxInstanceGetAddons(instance), name);         \
         }                                                        \
@@ -171,10 +171,10 @@ extern "C" {
     static inline FcitxModuleFunction                                  \
     Fcitx##prefix##Find##suffix(FcitxAddon *addon)                     \
     {                                                                  \
-        static int _init = false;                                      \
+        static FcitxAddon *_addon = NULL;                              \
         static FcitxModuleFunction func = NULL;                        \
-        if (fcitx_unlikely(!_init)) {                                  \
-            _init = true;                                              \
+        if (fcitx_unlikely(addon != _addon)) {                         \
+            _addon = addon;                                            \
             func = FcitxModuleFindFunction(addon, id);                 \
         }                                                              \
         return func;                                                   \
