@@ -9,8 +9,8 @@ public:
     TestQConnectionApp(int& argc, char** argv) : QCoreApplication(argc, argv) {
         conn = new FcitxQtConnection(this);
 
-        connect(conn, SIGNAL(fcitxConnected()), SLOT(connected()));
-        connect(conn, SIGNAL(fcitxDisconnected()), SLOT(disconnected()));
+        connect(conn, SIGNAL(connected()), SLOT(connected()));
+        connect(conn, SIGNAL(disconnected()), SLOT(disconnected()));
         conn->setAutoReconnect(false);
         conn->startConnection();
     }
