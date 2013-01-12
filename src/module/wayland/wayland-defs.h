@@ -24,10 +24,13 @@
 #include <stdint.h>
 
 #ifndef FCITX_DISABLE_WAYLAND
+
 #include <wayland-client.h>
 #include <sys/epoll.h>
+
 #else
 
+/* copied from glibc header */
 enum EPOLL_EVENTS {
     EPOLLIN = 0x001,
 #define EPOLLIN EPOLLIN
@@ -58,23 +61,16 @@ enum EPOLL_EVENTS {
     EPOLLET = 1u << 31
 #define EPOLLET EPOLLET
 };
+
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-    typedef struct _FcitxWaylandTask FcitxWaylandTask;
-    typedef void (*FcitxWaylandTaskHandler)(FcitxWaylandTask *task,
-                                            uint32_t events);
-    struct _FcitxWaylandTask {
-        FcitxWaylandTaskHandler handler;
-        int fd;
-        void *padding[2];
-    };
-
-#ifdef __cplusplus
-}
-#endif
+typedef struct _FcitxWaylandTask FcitxWaylandTask;
+typedef void (*FcitxWaylandTaskHandler)(FcitxWaylandTask *task,
+                                        uint32_t events);
+struct _FcitxWaylandTask {
+    FcitxWaylandTaskHandler handler;
+    int fd;
+    void *padding[2];
+};
 
 #endif
