@@ -411,7 +411,7 @@ function(__fcitx_scan_addon name in_file out_file)
   get_filename_component(dir "${out_file}" PATH)
   add_custom_command(
     COMMAND "${CMAKE_COMMAND}" -E make_directory "${dir}"
-    COMMAND "${FCITX_SCANNER_EXECUTABLE}" "${in_file}" "${out_file}"
+    COMMAND "${FCITX_SCANNER_EXECUTABLE}" --api "${in_file}" "${out_file}"
     OUTPUT "${out_file}" DEPENDS "${in_file}" "${FCITX_SCANNER_EXECUTABLE}"
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
   __fcitx_addon_get_unique_name("${name}--scan" target_name)
