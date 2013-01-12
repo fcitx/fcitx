@@ -347,7 +347,7 @@ static const UT_icd ut_int_icd _UNUSED_ = {
          key = (type*)utarray_next((array), key))
 
 static inline UT_array*
-utarray_clone(UT_array *from)
+utarray_clone(const UT_array *from)
 {
     UT_array *to;
     utarray_new(to, from->icd);
