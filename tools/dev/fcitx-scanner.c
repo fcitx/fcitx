@@ -247,10 +247,8 @@ fxscanner_ignore_blank(const char *str)
 static const char*
 fxscanner_std_type(const char *type)
 {
-    if (!type)
-        return NULL;
-    type += strspn(type, FXSCANNER_BLANK);
-    if (fxscanner_strs_strip_cmp(type, false, "void", NULL) != 0)
+    if (fxscanner_strs_strip_cmp(fxscanner_ignore_blank(type),
+                                 false, "void", NULL) != 0)
         return NULL;
     return type;
 }
@@ -377,10 +375,6 @@ fxscanner_arg_loader(UT_array *array, const char *value, FcitxAddonBuff *buff,
     memcpy(buff->buff + prefix_l, ".DerefType", sizeof(".DerefType"));
     tmp_str = fxscanner_group_get_value(grp, buff->buff);
     arg_desc.deref_type = fxscanner_ignore_blank(tmp_str);
-    if ((!!arg_desc.deref) != (!!arg_desc.deref_type)) {
-        FcitxLog(ERROR, "DerefType and Deref must be both set (or not set).");
-        return false;
-    }
     utarray_push_back(array, &arg_desc);
     return true;
 }
@@ -411,10 +405,6 @@ fxscanner_func_loader(UT_array *array, const char *value, FcitxAddonBuff *buff,
     fxaddon_load_string(func_desc.inline_code, grp, "Inline.Code");
     fxaddon_load_string(func_desc.res_deref, grp, "Res.Deref");
     fxaddon_load_string(func_desc.res_dereftype, grp, "Res.DerefType");
-    if ((!!func_desc.res_deref) != (!!func_desc.res_dereftype)) {
-        FcitxLog(ERROR, "DerefType and Deref must be both set (or not set).");
-        return false;
-    }
     fxaddon_load_string(func_desc.res_exp, grp, "Res.Exp");
     fxaddon_load_string(func_desc.res_wrapfunc, grp, "Res.WrapFunc");
     fxaddon_load_string(func_desc.is_static, grp, "Static");
