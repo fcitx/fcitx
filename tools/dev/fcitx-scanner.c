@@ -102,15 +102,6 @@ typedef struct {
 } FcitxAddonFuncDesc;
 
 static void
-_fxaddon_func_desc_copy(void *_dst, const void *_src)
-{
-    FcitxAddonFuncDesc *dst = _dst;
-    const FcitxAddonFuncDesc *src = _src;
-    *dst = *src;
-    dst->args = *utarray_clone(&src->args);
-}
-
-static void
 _fxaddon_func_desc_free(void *_elt)
 {
     FcitxAddonFuncDesc *elt = _elt;
@@ -119,7 +110,6 @@ _fxaddon_func_desc_free(void *_elt)
 
 static const UT_icd fxaddon_func_icd = {
     .sz = sizeof(FcitxAddonFuncDesc),
-    .copy = _fxaddon_func_desc_copy,
     .dtor = _fxaddon_func_desc_free
 };
 
@@ -658,252 +648,29 @@ fxscanner_addon_write_public(FcitxAddonDesc *addon_desc, FILE *ofp)
                     "#endif\n"
                     "\n"
                     "#endif\n");
-    fclose(ofp);
     free(buff);
     return true;
-}
-
-static void
-fxscanner_write_includes(FILE *ofp, UT_array *includes)
-{
-    _write_str(ofp,
-               "#include <stdint.h>\n"
-               "#include <fcitx-utils/utils.h>\n"
-               "#include <fcitx/instance.h>\n"
-               "#include <fcitx/addon.h>\n"
-               "#include <fcitx/module.h>");
-    char **p;
-    for (p = (char**)utarray_front(includes);p;
-         p = (char**)utarray_next(includes, p)) {
-        _write_str(ofp, "\n#include ");
-        _write_str(ofp, *p);
-    }
-    _write_str(ofp, "\n\n");
-}
-
-static void
-fxscanner_write_macro(FILE *ofp, FcitxDesktopFile *dfile,
-                      const char *macro_name)
-{
-    FcitxDesktopGroup *grp;
-    grp = fcitx_desktop_file_find_group(dfile, macro_name);
-    if (!grp)
-        return;
-    const char *value = fxscanner_group_get_value(grp, "Value");
-    boolean define = fxscanner_macro_get_define(grp);
-    _write_str(ofp, "#ifdef ");
-    _write_str(ofp, macro_name);
-    _write_str(ofp,
-               "\n"
-               "#  undef ");
-    _write_str(ofp, macro_name);
-    _write_str(ofp, "\n"
-                    "#endif\n");
-    if (define) {
-        _write_str(ofp, "#define ");
-        _write_str(ofp, macro_name);
-        if (value && *value) {
-            _write_str(ofp, " ");
-            _write_str(ofp, value);
-        }
-        _write_str(ofp, "\n");
-    }
-}
-
-static void
-fxscanner_write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
-                         const char *func_name, int id)
-{
-    FcitxDesktopGroup *grp;
-    unsigned int i;
-    grp = fcitx_desktop_file_find_group(dfile, func_name);
-    if (!grp)
-        return;
-    /* require the Name entry although not used now. */
-    if (!fcitx_desktop_group_find_entry(grp, "Name"))
-        return;
-    UT_array args;
-    utarray_init(&args, fcitx_ptr_icd);
-    fxscanner_load_entry_list(&args, grp, "Arg", true);
-    const char *type = fxscanner_function_get_return(grp);
-    const char *err_ret = fxscanner_group_get_value(grp, "ErrorReturn");
-    boolean cache = fxscanner_group_get_boolean(grp, "CacheResult", false);
-    boolean enable_wrapper = fxscanner_group_get_boolean(grp, "EnableWrapper",
-                                                         true);
-    if (cache && !type) {
-        FcitxLog(WARNING, "Cannot cache result of type void.");
-        cache = false;
-    }
-    if (!err_ret) {
-        _write_str(ofp, "DEFINE_GET_AND_INVOKE_FUNC(");
-        _write_str(ofp, prefix);
-        _write_str(ofp, ", ");
-        _write_str(ofp, func_name);
-        _write_str(ofp, ", ");
-        fprintf(ofp, "%d", id);
-        _write_str(ofp, ")\n");
-    } else {
-        _write_str(ofp, "DEFINE_GET_AND_INVOKE_FUNC_WITH_ERROR(");
-        _write_str(ofp, prefix);
-        _write_str(ofp, ", ");
-        _write_str(ofp, func_name);
-        _write_str(ofp, ", ");
-        fprintf(ofp, "%d", id);
-        _write_str(ofp, ", ");
-        _write_str(ofp, err_ret);
-        _write_str(ofp, ")\n");
-    }
-    if (!enable_wrapper)
-        _write_str(ofp, "#if 0\n");
-    _write_str(ofp, "static inline ");
-    _write_str(ofp, type ? type : "void");
-    _write_str(ofp, "\nFcitx");
-    _write_str(ofp, prefix);
-    _write_str(ofp, func_name);
-    _write_str(ofp, "(FcitxInstance *instance");
-    char **p;
-    for (i = 0;i < utarray_len(&args);i++) {
-        p = (char**)_utarray_eltptr(&args, i);
-        _write_str(ofp, ", ");
-        _write_str(ofp, *p);
-        _write_str(ofp, " _arg");
-        fprintf(ofp, "%d", i);
-    }
-    _write_str(ofp,
-               ")\n"
-               "{\n");
-    if (cache) {
-        _write_str(ofp,
-                   "    static boolean _init = false;\n"
-                   "    static void *result = NULL;\n"
-                   "    if (fcitx_likely(_init))\n"
-                   "        FCITX_RETURN_FROM_PTR(");
-        _write_str(ofp, type);
-        _write_str(ofp,
-                   ", result);\n"
-                   "    _init = true;\n");
-    } else if (type) {
-        _write_str(ofp, "    void *result;\n");
-    }
-    for (i = 0;i < utarray_len(&args);i++) {
-        p = (char**)_utarray_eltptr(&args, i);
-        _write_str(ofp, "    FCITX_DEF_CAST_TO_PTR(arg");
-        fprintf(ofp, "%d", i);
-        _write_str(ofp, ", ");
-        _write_str(ofp, *p);
-        _write_str(ofp, ", _arg");
-        fprintf(ofp, "%d", i);
-        _write_str(ofp, ");\n");
-    }
-    _write_str(ofp, "    FCITX_DEF_MODULE_ARGS(args");
-    for (i = 0;i < utarray_len(&args);i++) {
-        _write_str(ofp, ", arg");
-        fprintf(ofp, "%d", i);
-    }
-    _write_str(ofp,
-               ");\n"
-               "    ");
-    if (type) {
-        _write_str(ofp, "result = ");
-    }
-    _write_str(ofp, "Fcitx");
-    _write_str(ofp, prefix);
-    _write_str(ofp, "Invoke");
-    _write_str(ofp, func_name);
-    _write_str(ofp, "(instance, args);\n");
-    if (type) {
-        _write_str(ofp, "    FCITX_RETURN_FROM_PTR(");
-        _write_str(ofp, type);
-        _write_str(ofp, ", result);\n");
-    }
-    if (enable_wrapper) {
-        _write_str(ofp, "}\n\n");
-    } else {
-        _write_str(ofp,
-                   "}\n"
-                   "#endif\n\n");
-    }
-    utarray_done(&args);
 }
 
 static int
 fxscanner_scan_addon(FILE *ifp, FILE *ofp)
 {
     FcitxAddonDesc addon_desc;
-    FcitxDesktopFile *dfile = &addon_desc.dfile;
-    char *buff = NULL;
-    unsigned int i;
-    char **p;
-    if (!fcitx_desktop_file_init(dfile, NULL, NULL))
-        return 1;
-    if (!fcitx_desktop_file_load_fp(dfile, ifp))
-        return 1;
+    int res = 0;
+    fxscanner_addon_init(&addon_desc);
+    if (!fxscanner_addon_load(&addon_desc, ifp)) {
+        res = 1;
+        goto out;
+    }
+    if (!fxscanner_addon_write_public(&addon_desc, ofp)) {
+        res = 1;
+        goto out;
+    }
+out:
+    fxscanner_addon_done(&addon_desc);
     fclose(ifp);
-    FcitxDesktopEntry *tmp_ety;
-    addon_desc.addon_grp = fcitx_desktop_file_find_group(dfile, "FcitxAddon");
-    if (!addon_desc.addon_grp)
-        return 1;
-    tmp_ety = fcitx_desktop_group_find_entry(addon_desc.addon_grp, "Name");
-    if (!tmp_ety)
-        return 1;
-    addon_desc.name = tmp_ety->value;
-    tmp_ety = fcitx_desktop_group_find_entry(addon_desc.addon_grp, "Prefix");
-    if (!tmp_ety)
-        return 1;
-    addon_desc.prefix = tmp_ety->value;
-    UT_array macros;
-    utarray_init(&macros, fcitx_ptr_icd);
-    fxscanner_load_entry_list(&macros, addon_desc.addon_grp, "Macro", false);
-    UT_array includes;
-    utarray_init(&includes, fcitx_ptr_icd);
-    fxscanner_load_entry_list(&includes, addon_desc.addon_grp,
-                              "Include", false);
-    UT_array functions;
-    utarray_init(&functions, fcitx_ptr_icd);
-    fxscanner_load_entry_list(&functions, addon_desc.addon_grp,
-                              "Function", true);
-    fxscanner_write_header(ofp);
-    addon_desc.name_len = strlen(addon_desc.name);
-    buff = fcitx_utils_set_str_with_len(buff, addon_desc.name,
-                                        addon_desc.name_len);
-    fxscanner_name_to_macro(buff);
-    _write_str(ofp, "\n#ifndef __FCITX_MODULE_");
-    _write_len(ofp, buff, addon_desc.name_len);
-    _write_str(ofp, "_H\n");
-    _write_str(ofp, "#define __FCITX_MODULE_");
-    _write_len(ofp, buff, addon_desc.name_len);
-    _write_str(ofp, "_H\n"
-                    "\n"
-                    "#ifdef __cplusplus\n"
-                    "extern \"C\" {\n"
-                    "#endif\n"
-                    "\n");
-    for (i = 0;i < utarray_len(&macros);i++) {
-        p = (char**)_utarray_eltptr(&macros, i);
-        fxscanner_write_macro(ofp, dfile, *p);
-    }
-    fxscanner_write_includes(ofp, &includes);
-    utarray_done(&includes);
-    _write_str(ofp, "DEFINE_GET_ADDON(\"");
-    _write_len(ofp, addon_desc.name, addon_desc.name_len);
-    _write_str(ofp, "\", ");
-    _write_str(ofp, addon_desc.prefix);
-    _write_str(ofp, ")\n\n");
-    for (i = 0;i < utarray_len(&functions);i++) {
-        p = (char**)_utarray_eltptr(&functions, i);
-        fxscanner_write_function(ofp, dfile, addon_desc.prefix, *p, i);
-    }
-    _write_str(ofp, "\n"
-                    "#ifdef __cplusplus\n"
-                    "}\n"
-                    "#endif\n"
-                    "\n"
-                    "#endif\n");
     fclose(ofp);
-    fcitx_utils_free(buff);
-    fcitx_desktop_file_done(dfile);
-    utarray_done(&functions);
-    return 0;
+    return res;
 }
 
 int
