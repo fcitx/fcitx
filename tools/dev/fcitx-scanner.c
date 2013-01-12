@@ -591,45 +591,50 @@ fxscanner_write_function(FILE *ofp, FcitxDesktopFile *dfile, const char *prefix,
     utarray_done(&args);
 }
 
+static void
+fxscanner_addon_init(FcitxAddonDesc *addon_desc)
+{
+    fcitx_desktop_file_init(&addon_desc->dfile, NULL, NULL);
+    utarray_init(&addon_desc->includes, fcitx_ptr_icd);
+    utarray_init(&addon_desc->functions, &fxaddon_func_icd);
+    utarray_init(&addon_desc->macros, &fxaddon_macro_icd);
+}
+
+static void
+fxscanner_addon_done(FcitxAddonDesc *addon_desc)
+{
+    fcitx_desktop_file_done(&addon_desc->dfile);
+    utarray_done(&addon_desc->includes);
+    utarray_done(&addon_desc->functions);
+    utarray_done(&addon_desc->macros);
+}
+
 static boolean
-fxscanner_load_addon(FcitxAddonDesc *addon_desc, FILE *ifp)
+fxscanner_addon_load(FcitxAddonDesc *addon_desc, FILE *ifp)
 {
     FcitxDesktopFile *dfile = &addon_desc->dfile;
-    if (!fcitx_desktop_file_init(dfile, NULL, NULL))
-        return false;
     if (!fcitx_desktop_file_load_fp(dfile, ifp))
-        goto free_desktop;
+        return false;
     FcitxDesktopGroup *grp;
     grp = fcitx_desktop_file_find_group(dfile, "FcitxAddon");
     if (!grp)
-        goto free_desktop;
+        return false;
     addon_desc->addon_grp = grp;
     fxaddon_load_string(addon_desc->name, grp, "Name");
     if (!addon_desc->name)
-        goto free_desktop;
+        return false;
     fxaddon_load_string(addon_desc->prefix, grp, "Prefix")
     if (!addon_desc->prefix)
-        goto free_desktop;
+        return false;
     fxaddon_load_string(addon_desc->self_type, grp, "Self.Type");
-    utarray_init(&addon_desc->includes, fcitx_ptr_icd);
     fxscanner_load_entry_list(&addon_desc->includes, grp, "Include", false);
-    utarray_init(&addon_desc->functions, &fxaddon_func_icd);
     if (!fxscanner_load_entry_list(&addon_desc->functions, grp, "Function",
                                    true, fxscanner_func_loader, addon_desc))
-        goto free_functions;
-    utarray_init(&addon_desc->macros, &fxaddon_macro_icd);
+        return false;
     if (!fxscanner_load_entry_list(&addon_desc->macros, grp, "Macro", true,
                                    fxscanner_macro_loader, addon_desc))
-        goto free_macros;
+        return false;
     return true;
-free_macros:
-    utarray_done(&addon_desc->macros);
-free_functions:
-    utarray_done(&addon_desc->functions);
-    utarray_done(&addon_desc->includes);
-free_desktop:
-    fcitx_desktop_file_done(dfile);
-    return false;
 }
 
 static int
