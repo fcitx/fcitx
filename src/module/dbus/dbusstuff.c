@@ -49,8 +49,7 @@ static void* DBusCreate(FcitxInstance* instance);
 static void DBusSetFD(void* arg);
 static void DBusProcessEvent(void* arg);
 static void DBusDestroy(void* arg);
-static void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args);
-static void* DBusGetPrivateConnection(void* arg, FcitxModuleFunctionArg args);
+DECLARE_ADDFUNCTIONS(DBus)
 
 FCITX_DEFINE_PLUGIN(fcitx_dbus, module, FcitxModule) = {
     DBusCreate,
@@ -60,7 +59,8 @@ FCITX_DEFINE_PLUGIN(fcitx_dbus, module, FcitxModule) = {
     NULL
 };
 
-DBusHandlerResult DBusModuleFilter(DBusConnection* connection, DBusMessage* msg, void* user_data)
+DBusHandlerResult
+DBusModuleFilter(DBusConnection* connection, DBusMessage* msg, void* user_data)
 {
     FCITX_UNUSED(connection);
 
@@ -80,7 +80,6 @@ DBusHandlerResult DBusModuleFilter(DBusConnection* connection, DBusMessage* msg,
 void* DBusCreate(FcitxInstance* instance)
 {
     FcitxDBus *dbusmodule = (FcitxDBus*) fcitx_utils_malloc0(sizeof(FcitxDBus));
-    FcitxAddon* dbusaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_DBUS_NAME);
     dbusmodule->owner = instance;
 
     DBusError err;
@@ -131,8 +130,9 @@ void* DBusCreate(FcitxInstance* instance)
         if (!dbus_connection_add_filter(conn, DBusModuleFilter, dbusmodule, NULL))
             break;
 
-        if (!dbus_connection_set_watch_functions(conn, DBusAddWatch, DBusRemoveWatch,
-                NULL, &dbusmodule->watches, NULL)) {
+        if (!dbus_connection_set_watch_functions(conn, DBusAddWatch,
+                                                 DBusRemoveWatch, NULL,
+                                                 &dbusmodule->watches, NULL)) {
             FcitxLog(WARNING, "Add Watch Function Error");
             dbus_error_free(&err);
             dbus_error_init(&err);
@@ -239,8 +239,9 @@ void* DBusCreate(FcitxInstance* instance)
         if (!dbus_connection_add_filter(privconn, DBusModuleFilter, dbusmodule, NULL))
             break;
 
-        if (!dbus_connection_set_watch_functions(privconn, DBusAddWatch, DBusRemoveWatch,
-                NULL, &dbusmodule->watches, NULL)) {
+        if (!dbus_connection_set_watch_functions(privconn, DBusAddWatch,
+                                                 DBusRemoveWatch, NULL,
+                                                 &dbusmodule->watches, NULL)) {
             FcitxLog(WARNING, "Add Watch Function Error");
             break;
         }
@@ -287,12 +288,10 @@ void* DBusCreate(FcitxInstance* instance)
         }
     }
 
-    FcitxModuleAddFunction(dbusaddon, DBusGetConnection);
-    FcitxModuleAddFunction(dbusaddon, DBusGetPrivateConnection);
+    FcitxDBusAddFunctions(instance);
     dbus_error_free(&err);
 
     dbusmodule->serviceName = servicename;
-
     return dbusmodule;
 
 dbus_init_failed:
@@ -316,20 +315,6 @@ void DBusDestroy(void* arg) {
     DBusKill(&dbusmodule->daemon);
     free(dbusmodule->serviceName);
     free(dbusmodule);
-}
-
-void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args)
-{
-    FCITX_UNUSED(args);
-    FcitxDBus* dbusmodule = (FcitxDBus*)arg;
-    return dbusmodule->conn;
-}
-
-void* DBusGetPrivateConnection(void* arg, FcitxModuleFunctionArg args)
-{
-    FCITX_UNUSED(args);
-    FcitxDBus* dbusmodule = (FcitxDBus*)arg;
-    return dbusmodule->privconn;
 }
 
 void DBusSetFD(void* arg)
@@ -357,4 +342,4 @@ void DBusProcessEvent(void* arg)
     DBusProcessEventForConnection(dbusmodule->privconn);
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+#include "fcitx-dbus-addfunctions.h"
