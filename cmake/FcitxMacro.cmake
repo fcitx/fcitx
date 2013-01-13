@@ -211,6 +211,9 @@ __fcitx_cmake_init()
 #     SCAN: Generate api header, the path of the input file is determined by the
 #         FXADDON_SRC arguement and the name of the generated header file is
 #         determined by the FXADDON_GEN arguement.
+#     SCAN_PRIV: Generate add function header, the path of the input file is
+#         determined by the FXADDON_SRC arguement and the name of the
+#         generated header file is determined by the ADDFUNCTIONS_GEN arguement.
 #     SCAN_IN: Generate api header from .in, the path of the fxaddon.in file
 #         (without the .in suffix) is determined by the
 #         FXADDON_SRC arguement and the name of the generated header file is
@@ -229,6 +232,10 @@ __fcitx_cmake_init()
 #     FXADDON_GEN: the name of the generated header file. (path will be ignored)
 #          Setting this argument will automatically set the SCAN option as well.
 #          (default: fcitx-${short_name}.h)
+#     ADDFUNCTIONS_GEN: the name of the generated add function header file.
+#          (path will be ignored) Setting this argument will automatically
+#          set the SCAN_PRIV option as well.
+#          (default: fcitx-${short_name}-addfunctions.h)
 #     CONF_SRC: the path of the addon conf file (without the .in suffix)
 #         (default: fcitx-${short_name}.conf)
 #     DESC_SRC: the path of the main config-desc file. Setting this argument
@@ -245,9 +252,9 @@ __fcitx_cmake_init()
 #     DEPENDS: extra targets or files the addon library should depend on.
 #     IM_CONFIG: input method config files.
 function(fcitx_add_addon_full short_name)
-  set(options NO_INSTALL SCAN DESC SCAN_IN SCAN_NO_INSTALL)
+  set(options NO_INSTALL SCAN DESC SCAN_IN SCAN_NO_INSTALL SCAN_PRIV)
   set(one_value_args HEADER_DIR FXADDON_SRC FXADDON_GEN
-    CONF_SRC DESC_SRC UNIQUE_NAME LIB_NAME)
+    CONF_SRC DESC_SRC UNIQUE_NAME LIB_NAME ADDFUNCTIONS_GEN)
   set(multi_value_args SOURCES HEADERS EXTRA_DESC EXTRA_PO LINK_LIBS
     DEPENDS IM_CONFIG)
   fcitx_parse_arguments(FCITX_ADDON
@@ -300,6 +307,20 @@ function(fcitx_add_addon_full short_name)
         IMMEDIATE @ONLY)
     endif()
   endif()
+  if(FCITX_ADDON_SCAN_PRIV OR FCITX_ADDON_ADDFUNCTIONS_GEN)
+    if(NOT FCITX_ADDON_FXADDON_SRC)
+      set(FCITX_ADDON_FXADDON_SRC "fcitx-${short_name}.fxaddon")
+    endif()
+    if(NOT FCITX_ADDON_ADDFUNCTIONS_GEN)
+      set(FCITX_ADDON_ADDFUNCTIONS_GEN
+        "${CMAKE_CURRENT_BINARY_DIR}/fcitx-${short_name}-addfunctions.h")
+    else()
+      get_filename_component(FCITX_ADDON_ADDFUNCTIONS_GEN
+        "${FCITX_ADDON_ADDFUNCTIONS_GEN}" NAME)
+      set(FCITX_ADDON_ADDFUNCTIONS_GEN
+        "${CMAKE_CURRENT_BINARY_DIR}/${FCITX_ADDON_ADDFUNCTIONS_GEN}")
+    endif()
+  endif()
   if(FCITX_ADDON_DESC OR FCITX_ADDON_DESC_SRC)
     if(NOT FCITX_ADDON_DESC_SRC)
       set(FCITX_ADDON_DESC_SRC "fcitx-${short_name}.desc")
@@ -329,6 +350,13 @@ function(fcitx_add_addon_full short_name)
     return()
   endif()
 
+  if(FCITX_ADDON_ADDFUNCTIONS_GEN)
+    __fcitx_scan_addon_priv("${FCITX_ADDON_UNIQUE_NAME}"
+      "${FCITX_ADDON_FXADDON_SRC}"
+      "${FCITX_ADDON_ADDFUNCTIONS_GEN}")
+  endif()
+  include_directories("${CMAKE_CURRENT_BINARY_DIR}")
+  include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
   set(target_name "${FCITX_ADDON_UNIQUE_NAME}--addon")
   add_custom_target("${target_name}" ALL)
 
@@ -415,6 +443,21 @@ function(__fcitx_scan_addon name in_file out_file)
     OUTPUT "${out_file}" DEPENDS "${in_file}" "${FCITX_SCANNER_EXECUTABLE}"
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
   __fcitx_addon_get_unique_name("${name}--scan" target_name)
+  add_custom_target("${target_name}" DEPENDS "${out_file}")
+  add_dependencies(fcitx-scan-addons.target "${target_name}")
+endfunction()
+
+function(__fcitx_scan_addon_priv name in_file out_file)
+  if(NOT FCITX_SCANNER_EXECUTABLE)
+    message(FATAL_ERROR "Cannot find fcitx-scanner")
+  endif()
+  get_filename_component(dir "${out_file}" PATH)
+  add_custom_command(
+    COMMAND "${CMAKE_COMMAND}" -E make_directory "${dir}"
+    COMMAND "${FCITX_SCANNER_EXECUTABLE}" --private "${in_file}" "${out_file}"
+    OUTPUT "${out_file}" DEPENDS "${in_file}" "${FCITX_SCANNER_EXECUTABLE}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+  __fcitx_addon_get_unique_name("${name}--scan-priv" target_name)
   add_custom_target("${target_name}" DEPENDS "${out_file}")
   add_dependencies(fcitx-scan-addons.target "${target_name}")
 endfunction()
