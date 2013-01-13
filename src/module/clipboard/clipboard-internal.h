@@ -75,6 +75,4 @@ void ClipboardPushClipboard(FcitxClipboard *clipboard,
                             uint32_t len, const char *str);
 CONFIG_BINDING_DECLARE(FcitxClipboardConfig);
 
-DEFINE_GET_ADDON("fcitx-clipboard", Clipboard)
-
 #endif

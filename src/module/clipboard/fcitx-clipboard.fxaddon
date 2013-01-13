@@ -9,14 +9,18 @@ Function3=
 Function4=
 Function5=
 Function6=
+Self.Type=FcitxClipboard*
 
 [GetPrimarySelection]
 Name=get-primary-selection
 Return=const char*
 Arg0=unsigned int*
+Inline.Code=if ($0) *$0 = $<->primary.len
+Res.Exp=$<->primary.str
 
 [GetClipboardHistory]
 Name=get-clipboard-history
 Return=const char*
 Arg0=unsigned int
 Arg1=unsigned int*
+Res.WrapFunc=ClipboardGetClipboard
