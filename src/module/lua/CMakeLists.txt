@@ -10,7 +10,7 @@ set(FCITX_LUA_SOURCES
   lua.c
   luawrap.c)
 
-fcitx_add_addon_full(lua SCAN ${lua_noinstall}
+fcitx_add_addon_full(lua SCAN SCAN_PRIV ${lua_noinstall}
   SOURCES ${FCITX_LUA_SOURCES}
   HEADERS luamod.h
   LINK_LIBS ${LUA_LIBRARIES}

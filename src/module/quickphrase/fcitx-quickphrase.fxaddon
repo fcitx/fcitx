@@ -13,7 +13,6 @@ Function7=
 Function8=
 Self.Type=QuickPhraseState*
 
-# TODO
 [Launch]
 Name=launch
 Return=boolean
@@ -26,6 +25,5 @@ Arg1.DerefType=boolean
 Arg2=const boolean*
 Arg2.Deref=1
 Arg2.DerefType=boolean
-Res.WrapFunc=
+Res.WrapFunc=QuickPhraseLaunch
 Res.Deref=true
-Res.DerefType=void

@@ -29,9 +29,9 @@
 #include "luamod.h"
 #include "luawrap.h"
 
-static void* LuaCreate(FcitxInstance* instance);
-static void LuaReloadConfig(void* arg);
-static void* LuaCallCommand(void* arg, FcitxModuleFunctionArg args);
+static void *LuaCreate(FcitxInstance *instance);
+static void LuaReloadConfig(void *arg);
+DECLARE_ADDFUNCTIONS(Lua)
 
 FCITX_DEFINE_PLUGIN(fcitx_lua, module, FcitxModule) = {
     LuaCreate,
@@ -41,7 +41,9 @@ FCITX_DEFINE_PLUGIN(fcitx_lua, module, FcitxModule) = {
     LuaReloadConfig
 };
 
-static int LoadLuaConfig(LuaModule *luamodule) {
+static int
+LoadLuaConfig(LuaModule *luamodule)
+{
     int count = 0;
     FcitxStringHashSet *sset = FcitxXDGGetFiles("lua", NULL, ".lua");
     FcitxStringHashSet *str;
@@ -82,19 +84,20 @@ LuaGetCandWord(void *arg, FcitxCandidateWord *candWord)
     return IRV_COMMIT_STRING;
 }
 
-static void* LuaCallCommand(void* arg, FcitxModuleFunctionArg args) {
-    LuaModule *luamodule = (LuaModule *)arg;
-    UT_array *result = InputCommand(luamodule, (const char *)args.args[0]);
+static void
+LuaCallCommand(LuaModule *luamodule, const char *input,
+               FcitxCandidateWordCommitCallback callback, void *owner)
+{
+    UT_array *result = InputCommand(luamodule, input);
     if (result) {
-        FcitxInputState* input = FcitxInstanceGetInputState(GetFcitx(luamodule));
+        FcitxInputState *input = FcitxInstanceGetInputState(GetFcitx(luamodule));
         LuaResultItem *p = NULL;
         while ((p = (LuaResultItem *)utarray_next(result, p))) {
             FcitxCandidateWord candWord;
-            if (args.args[1] && args.args[2]) {
-                candWord.callback = args.args[1];
-                candWord.owner = args.args[2];
-            }
-            else {
+            if (callback && owner) {
+                candWord.callback = callback;
+                candWord.owner = owner;
+            } else {
                 candWord.callback = LuaGetCandWord;
                 candWord.owner = luamodule;
             }
@@ -109,14 +112,15 @@ static void* LuaCallCommand(void* arg, FcitxModuleFunctionArg args) {
             candWord.strWord = strdup(p->result);
             candWord.wordType = MSG_TIPS;
             candWord.extraType = MSG_CODE;
-            FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+            FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input),
+                                     &candWord);
         }
         utarray_free(result);
     }
-    return NULL;
 }
 
-void AddToCandList(LuaModule *luamodule, const char *in, const char *out)
+void
+AddToCandList(LuaModule *luamodule, const char *in, const char *out)
 {
     FCITX_UNUSED(in);
     FcitxCandidateWord candWord;
@@ -132,7 +136,9 @@ void AddToCandList(LuaModule *luamodule, const char *in, const char *out)
     FcitxCandidateWordInsert(candList, &candWord, 0);
 }
 
-void LuaUpdateCandidateWordHookCallback(void *arg) {
+void
+LuaUpdateCandidateWordHookCallback(void *arg)
+{
     LuaModule *luamodule = (LuaModule *)arg;
     FcitxInputState* input = FcitxInstanceGetInputState(GetFcitx(luamodule));
     char *text = FcitxInputStateGetRawInputBuffer(input);
@@ -146,7 +152,9 @@ void LuaUpdateCandidateWordHookCallback(void *arg) {
     }
 }
 
-void* LuaCreate(FcitxInstance* instance) {
+void*
+LuaCreate(FcitxInstance* instance)
+{
     LuaModule *luamodule = LuaModuleAlloc(instance);
     if (luamodule == NULL) {
         FcitxLog(ERROR, "LuaModule alloc failed");
@@ -159,10 +167,7 @@ void* LuaCreate(FcitxInstance* instance) {
 
     FcitxInstanceRegisterUpdateCandidateWordHook(instance, hook);
 
-    FcitxAddon* luaAddon = FcitxAddonsGetAddonByName(
-        FcitxInstanceGetAddons(instance), FCITX_LUA_NAME);
-    FcitxModuleAddFunction(luaAddon, LuaCallCommand);
-
+    FcitxLuaAddFunctions(instance);
     return luamodule;
 err:
     if (luamodule) {
@@ -177,3 +182,5 @@ void LuaReloadConfig(void* arg)
     UnloadAllExtension(luamodule);
     LoadLuaConfig(luamodule);
 }
+
+#include "fcitx-lua-addfunctions.h"
