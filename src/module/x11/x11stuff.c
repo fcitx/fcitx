@@ -41,6 +41,7 @@
 #include "x11stuff-internal.h"
 #include "x11selection.h"
 #include "xerrorhandler.h"
+#include "frontend/xim/fcitx-xim.h"
 
 static void* X11Create(FcitxInstance* instance);
 static void X11SetFD(void* arg);
@@ -72,9 +73,6 @@ FCITX_DEFINE_PLUGIN(fcitx_x11, module, FcitxModule) = {
     X11Destroy,
     NULL
 };
-
-DEFINE_GET_ADDON("fcitx-xim", Xim)
-DEFINE_GET_AND_INVOKE_FUNC(Xim, ConsumeQueue, 0)
 
 void* X11Create(FcitxInstance* instance)
 {
@@ -224,8 +222,7 @@ X11ProcessEvent(void *arg)
 {
     FcitxX11 *x11priv = (FcitxX11*)arg;
     X11ProcessEventRealInternal(x11priv);
-    FCITX_DEF_MODULE_ARGS(args);
-    FcitxXimInvokeConsumeQueue(x11priv->owner, args);
+    FcitxXimConsumeQueue(x11priv->owner);
 }
 
 static void

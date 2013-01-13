@@ -57,6 +57,7 @@ static void XimUpdatePreedit(void* arg, FcitxInputContext* ic);
 // static pid_t XimFindApplicationPid(FcitxXimFrontend* xim, Window w);
 
 static Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data);
+DECLARE_ADDFUNCTIONS(Xim)
 
 static XIMStyle OverTheSpot_Styles[] = {
     XIMPreeditPosition | XIMStatusArea, //OverTheSpot
@@ -114,7 +115,8 @@ static XIMEncoding zhEncodings[] = {
 
 static char strLocale[LOCALES_BUFSIZE + 1] = LOCALES_STRING;
 
-void* XimCreate(FcitxInstance* instance, int frontendid)
+static void*
+XimCreate(FcitxInstance* instance, int frontendid)
 {
     if (ximfrontend != NULL)
         return NULL;
@@ -127,10 +129,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     char *imname = NULL;
     char *p;
 
-    UT_array *addons = FcitxInstanceGetAddons(instance);
-    FcitxAddon *ximaddon = FcitxAddonsGetAddonByName(addons, "fcitx-xim");
     xim->display = FcitxX11GetDisplay(instance);
-
     if (xim->display == NULL) {
         FcitxLog(FATAL, _("X11 not initialized"));
         free(xim);
@@ -178,12 +177,15 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
         if (!fp) {
             if (errno == ENOENT) {
                 char *file;
-                FILE *fp2 = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-xim.config", "w", &file);
+                FILE *fp2 = FcitxXDGGetFileUserWithPrefix("conf",
+                                                          "fcitx-xim.config",
+                                                          "w", &file);
                 FcitxLog(DEBUG, "Save Config to %s", file);
                 FcitxConfigSaveConfigFileFp(fp2, &xim->gconfig, configDesc);
                 free(file);
-                if (fp2)
+                if (fp2) {
                     fclose(fp2);
+                }
             }
         }
 
@@ -192,8 +194,9 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
         FcitxXimFrontendConfigBind(xim, cfile, configDesc);
         FcitxConfigBindSync((FcitxGenericConfig*)xim);
 
-        if (fp)
+        if (fp) {
             fclose(fp);
+        }
     }
 
     XIMStyles input_styles;
@@ -239,14 +242,13 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
                         NULL);
 
     if (xim->ims == (XIMS) NULL) {
-        FcitxLog(ERROR, _("Start XIM error. Another XIM daemon named %s is running?"), imname);
+        FcitxLog(ERROR, _("Start XIM error. Another XIM daemon named %s "
+                          "is running?"), imname);
         XimDestroy(xim);
         FcitxInstanceEnd(instance);
         return NULL;
     }
-
-    FcitxModuleAddFunction(ximaddon, XimConsumeQueue);
-
+    FcitxXimAddFunctions(instance);
     return xim;
 }
 
@@ -528,4 +530,4 @@ pid_t XimFindApplicationPid(FcitxXimFrontend* xim, Window w) {
 }
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+#include "fcitx-xim-addfunctions.h"
