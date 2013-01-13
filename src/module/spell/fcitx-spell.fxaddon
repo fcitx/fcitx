@@ -31,14 +31,13 @@ Arg0=const char*
 Arg1=const char*
 Res.WrapFunc=SpellAddPersonal
 
-# TODO
 [DictAvailable]
 Name=dict-available
 Return=boolean
 Arg0=const char*
 Arg1=const char*
+Res.WrapFunc=FcitxSpellDictAvailable
 
-# TODO
 [GetCandWords]
 Name=get-cand-words
 Return=FcitxCandidateWordList*
@@ -50,9 +49,10 @@ Arg4=const char*
 Arg5=const char*
 Arg6=FcitxSpellGetCandWordCb
 Arg7=void*
+Res.WrapFunc=SpellGetCandWords
 
-# TODO
 [CandWordGetCommit]
 Name=cand-word-get-commit
 Return=const char*
 Arg0=FcitxCandidateWord*
+Res.WrapFunc=FcitxSpellCandWordGetCommit
