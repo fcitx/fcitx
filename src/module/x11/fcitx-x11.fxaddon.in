@@ -32,25 +32,24 @@ CacheResult=True
 EnableWrapper=@ENABLE_X11@
 Res.Exp=$<->dpy
 
-# TODO
 [AddXEventHandler]
 Name=add-xevent-handler
 Arg0=FcitxX11XEventHandler
 Arg1=void*
 EnableWrapper=@ENABLE_X11@
+Res.WrapFunc=X11AddEventHandler
 
-# TODO
 [RemoveXEventHandler]
 Name=remove-xevent-handler
 Arg0=void*
+Res.WrapFunc=X11RemoveEventHandler
 
-# TODO
 [FindARGBVisual]
 Name=find-argb-visual
 Return=Visual*
 EnableWrapper=@ENABLE_X11@
+Res.WrapFunc=X11FindARGBVisual
 
-# TODO
 [InitWindowAttribute]
 Name=init-window-attribute
 Arg0=Visual**
@@ -59,52 +58,63 @@ Arg2=XSetWindowAttributes*
 Arg3=unsigned long*
 Arg4=int*
 EnableWrapper=@ENABLE_X11@
+Res.WrapFunc=X11InitWindowAttribute
 
-# TODO
 [SetWindowProp]
 Name=set-window-prop
 Arg0=const Window*
+Arg0.Deref=1
+Arg0.DerefType=Window
 Arg1=const FcitxXWindowType*
+Arg1.Deref=1
+Arg1.DerefType=FcitxXWindowType
 Arg2=char*
 EnableWrapper=@ENABLE_X11@
+Res.WrapFunc=X11SetWindowProperty
 
-# TODO
 [GetScreenSize]
 Name=get-screen-size
 Arg0=int*
 Arg1=int*
+Res.WrapFunc=X11GetScreenSize
 
-# TODO
 [MouseClick]
 Name=mouse-click
 Arg0=const Window*
+Arg0.Deref=1
+Arg0.DerefType=Window
 Arg1=int*
 Arg2=int*
 Arg3=boolean*
 EnableWrapper=@ENABLE_X11@
+Res.WrapFunc=X11MouseClick
 
-# TODO
 [AddCompositeHandler]
 Name=add-composite-handler
 Arg0=FcitxX11CompositeHandler
 Arg1=void*
+Res.WrapFunc=X11AddCompositeHandler
 
-# TODO
 [GetScreenGeometry]
 Name=get-screen-geometry
 Arg0=const int*
+Arg0.Deref=1
+Arg0.DerefType=int
 Arg1=const int*
+Arg1.Deref=1
+Arg1.DerefType=int
 Arg2=FcitxRect*
+Res.WrapFunc=X11ScreenGeometry
 
 [ProcessRemainEvent]
 Name=process-remain-event
 Res.WrapFunc=X11ProcessEventRealInternal
 
-# TODO
 [GetDPI]
 Name=get-dpi
 Arg0=int*
 Arg1=double*
+Res.WrapFunc=X11GetDPI
 
 [RegSelectNotify]
 Name=reg-select-notify

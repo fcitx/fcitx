@@ -87,7 +87,7 @@ static void* PuncWhichAlloc(void* arg);
 static void* PuncWhichCopy(void* arg, void* data, void* src);
 static void PuncWhichFree(void* arg, void* data);
 
-static void FcitxPuncAddFunctions(FcitxInstance *instance);
+DECLARE_ADDFUNCTIONS(Punc)
 
 typedef struct _FcitxPuncState {
     char cLastIsAutoConvert;

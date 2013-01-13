@@ -72,8 +72,8 @@ static void ClassicUIResume(void *arg);
 static FcitxConfigFileDesc* GetClassicUIDesc();
 static void ClassicUIMainWindowSizeHint(void *arg, int* x, int* y,
                                         int* w, int* h);
-static inline FcitxAddon *Fcitx_ClassicUI_GetAddon(FcitxInstance *instance);
-static void FcitxClassicUIAddFunctions(FcitxInstance *instance);
+
+DECLARE_ADDFUNCTIONS(ClassicUI)
 
 FCITX_DEFINE_PLUGIN(fcitx_classic_ui, ui, FcitxUI) = {
     ClassicUICreate,

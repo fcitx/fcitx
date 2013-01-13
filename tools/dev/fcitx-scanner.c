@@ -1161,5 +1161,8 @@ main(int argc, char *argv[])
     FILE *ofp = fopen(argv[3], "w");
     if (!ofp)
         exit(1);
-    return fxscanner_scan_addon(argv[1], ifp, ofp);
+    int res = fxscanner_scan_addon(argv[1], ifp, ofp);
+    if (res != 0)
+        unlink(argv[3]);
+    return res;
 }

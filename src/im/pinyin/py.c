@@ -71,7 +71,8 @@ static void PinyinMigration();
 static int PYCandWordCmp(const void* b, const void* a, void* arg);
 static boolean PYGetPYMapByHZ(FcitxPinyinState*pystate, char *strHZ,
                               char* mapHint, char *strMap);
-static void FcitxPinyinAddFunctions(FcitxInstance *instance);
+
+DECLARE_ADDFUNCTIONS(Pinyin)
 
 void *PYCreate(FcitxInstance* instance)
 {
