@@ -155,7 +155,6 @@ enum {
 };
 
 DEFINE_GET_ADDON("fcitx-sunpinyin", SunPinyin)
-DEFINE_GET_ADDON("fcitx-pinyin-enhance", PinyinEnhance)
 char *PinyinEnhanceGetSelected(PinyinEnhance *pyenhance);
 
 #endif /* _PINYIN_ENHANCE_H */

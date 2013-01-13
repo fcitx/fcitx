@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2011~2012 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
+ *   Copyright (C) 2012~2013 by Yichao Yu                                  *
+ *   yyc1992@gmail.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,8 +32,6 @@
 #include "pinyin-enhance-sym.h"
 #include "pinyin-enhance-py.h"
 
-#define LOGLEVEL DEBUG
-
 static void *PinyinEnhanceCreate(FcitxInstance *instance);
 static void PinyinEnhanceDestroy(void *arg);
 static void PinyinEnhanceReloadConfig(void *arg);
@@ -43,6 +43,8 @@ static boolean PinyinEnhancePostInput(void *arg, FcitxKeySym sym,
 static boolean PinyinEnhancePreInput(void *arg, FcitxKeySym sym,
                                      unsigned int state,
                                      INPUT_RETURN_VALUE *retval);
+
+DECLARE_ADDFUNCTIONS(PinyinEnhance)
 
 CONFIG_BINDING_BEGIN(PinyinEnhanceConfig)
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "ShortAsEnglish", short_as_english);
@@ -97,23 +99,6 @@ check_im_type(PinyinEnhance *pyenhance)
 }
 
 static void*
-PinyinEnhancePyToString(void *self, FcitxModuleFunctionArg args)
-{
-    FCITX_UNUSED(self);
-    char *buff = args.args[0];
-    const int8_t *py = args.args[1];
-    int *len = args.args[2];
-    return (void*)(intptr_t)py_enhance_py_to_str(buff, py, len);
-}
-
-static void*
-PinyinEnhanceFindPy(void *self, FcitxModuleFunctionArg args)
-{
-    const char *str = args.args[0];
-    return (void*)(intptr_t)py_enhance_py_find_py(self, str);
-}
-
-static void*
 PinyinEnhanceCreate(FcitxInstance *instance)
 {
     PinyinEnhance *pyenhance = fcitx_utils_new(PinyinEnhance);
@@ -123,7 +108,6 @@ PinyinEnhanceCreate(FcitxInstance *instance)
         free(pyenhance);
         return NULL;
     }
-    FcitxAddon *addon = FcitxPinyinEnhanceGetAddon(instance);
 
     PinyinEnhanceSymInit(pyenhance);
 
@@ -143,9 +127,7 @@ PinyinEnhanceCreate(FcitxInstance *instance)
     key_hook.func = PinyinEnhancePreInput;
     FcitxInstanceRegisterPreInputFilter(pyenhance->owner, key_hook);
 
-    FcitxModuleAddFunction(addon, PinyinEnhanceFindPy);
-    FcitxModuleAddFunction(addon, PinyinEnhancePyToString);
-
+    FcitxPinyinEnhanceAddFunctions(instance);
     return pyenhance;
 }
 
@@ -238,4 +220,5 @@ PinyinEnhanceResetHook(void *arg)
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     PinyinEnhanceCharFromPhraseReset(pyenhance);
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+
+#include "fcitx-pinyin-enhance-addfunctions.h"
