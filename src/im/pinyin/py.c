@@ -2224,7 +2224,9 @@ PYSP2QP(FcitxPinyinState *pystate, const char* strSP)
     return strdup(strQP);
 }
 
-boolean PYGetPYMapByHZ(FcitxPinyinState* pystate, char* strHZ, char* mapHint, char* strMap)
+static boolean
+PYGetPYMapByHZ(FcitxPinyinState* pystate, char* strHZ,
+               char* mapHint, char* strMap)
 {
     int i, j;
     PYFA* PYFAList = pystate->PYFAList;
@@ -2302,4 +2304,3 @@ PYAddUserPhraseFromCString(FcitxPinyinState *pystate, const char *strHZ)
 }
 
 #include "fcitx-pinyin-addfunctions.h"
-// kate: indent-mode cstyle; space-indent on; indent-width 0;

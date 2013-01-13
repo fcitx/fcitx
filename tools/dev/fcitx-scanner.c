@@ -98,6 +98,8 @@ typedef struct {
     const char *res_dereftype;
     const char *res_exp;
     const char *res_wrapfunc;
+    const char *self_deref;
+    const char *self_dereftype;
     boolean is_static;
 } FcitxAddonFuncDesc;
 
@@ -449,6 +451,8 @@ fxscanner_func_loader(UT_array *array, const char *value, FcitxAddonBuff *buff,
     fxaddon_load_string(func_desc.inline_code, grp, "Inline.Code");
     fxaddon_load_string(func_desc.res_deref, grp, "Res.Deref");
     func_desc.res_dereftype = fxscanner_group_get_type(grp, "Res.DerefType");
+    fxaddon_load_string(func_desc.self_deref, grp, "Self.Deref");
+    func_desc.self_dereftype = fxscanner_group_get_type(grp, "Self.DerefType");
     fxaddon_load_string(func_desc.res_exp, grp, "Res.Exp");
     fxaddon_load_string(func_desc.res_wrapfunc, grp, "Res.WrapFunc");
     func_desc.is_static = fxscanner_group_get_boolean(grp, "Static", false);
@@ -696,6 +700,11 @@ fxscanner_function_check_private(FcitxAddonFuncDesc *func_desc)
         FcitxLog(ERROR, "Res.Deref must be set if Res.DerefType is set.");
         return false;
     }
+    if (FXSCANNER_XOR(func_desc->self_deref, func_desc->self_dereftype)) {
+        FcitxLog(ERROR, "Self.Deref and Self.DerefType must be both"
+                 "set or not set.");
+        return false;
+    }
     if (func_desc->is_static && !func_desc->res_wrapfunc) {
         FcitxLog(WARNING, "Static doesn't make sense without Res.WrapFunc.");
     }
@@ -723,7 +732,7 @@ fxscanner_func_args_deref_translator(FILE *ofp, const char *str, void *data)
 {
     const FcitxAddonFuncDesc *func_desc = data;
     if (str[0] == '<') {
-        _write_str(ofp, "(self)");
+        _write_str(ofp, "(__self)");
         return 1;
     }
     char *end;
@@ -845,7 +854,32 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
                    "(void *_self, FcitxModuleFunctionArg _args)\n"
                    "{\n"
                    "    FCITX_DEF_CAST_FROM_PTR(", addon_desc->self_type,
-                   ", self, _self);\n");
+                   ", __self, _self);\n");
+    if (func_desc->self_deref) {
+        _write_strings(ofp, "    ", func_desc->self_dereftype, " self = (");
+        int level;
+        if (fxscanner_parse_int(func_desc->self_deref, &level)) {
+            if (level < -1) {
+                FcitxLog(ERROR, "Invalid Deref expression \"%d\"", level);
+                return false;
+            } else if (level == -1) {
+                _write_strings(ofp, "&__self");
+            } else {
+                int j;
+                for (j = 0;j < level;j++) {
+                    _write_str(ofp, "*");
+                }
+                _write_strings(ofp, "__self");
+            }
+        } else {
+            fxscanner_write_translate(ofp, func_desc->self_deref,
+                                      fxscanner_func_args_deref_translator,
+                                      func_desc);
+        }
+        _write_strings(ofp, ");\n");
+    } else {
+        _write_strings(ofp, "    ", addon_desc->self_type, " self = __self;\n");
+    }
     _write_strings(ofp, "    FCITX_UNUSED(self);\n");
 
     /**
