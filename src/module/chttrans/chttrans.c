@@ -47,8 +47,10 @@ static void* ChttransCreate(FcitxInstance* instance);
 static char* ChttransOutputFilter(void* arg, const char* strin);
 static void ChttransIMChanged(void* arg);
 static void ReloadChttrans(void* arg);
-static char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char* strHZ);
-static char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ);
+static char *ConvertGBKSimple2Tradition(FcitxChttrans* transState,
+                                        const char* strHZ);
+static char *ConvertGBKTradition2Simple(FcitxChttrans* transState,
+                                        const char *strHZ);
 static boolean GetChttransEnabled(void* arg);
 static void ChttransLanguageChanged(void* arg, const void* value);
 boolean LoadChttransConfig(FcitxChttrans* transState);
@@ -56,18 +58,18 @@ static FcitxConfigFileDesc* GetChttransConfigDesc();
 static void SaveChttransConfig(FcitxChttrans* transState);
 static INPUT_RETURN_VALUE HotkeyToggleChttransState(void*);
 static void ToggleChttransState(void*);
-static void* ChttransS2T(void* arg, FcitxModuleFunctionArg args);
-static void* ChttransT2S(void* arg, FcitxModuleFunctionArg args);
-
 static void ChttransEnabledForIMFilter(FcitxGenericConfig *config,
                                        FcitxConfigGroup *group,
                                        FcitxConfigOption *option, void* value,
                                        FcitxConfigSync sync, void* arg);
 
+DECLARE_ADDFUNCTIONS(Chttrans)
+
 CONFIG_BINDING_BEGIN(FcitxChttrans)
 CONFIG_BINDING_REGISTER("TraditionalChinese", "TransEngine", engine)
 CONFIG_BINDING_REGISTER("TraditionalChinese", "Hotkey", hkToggle)
-CONFIG_BINDING_REGISTER_WITH_FILTER("TraditionalChinese", "EnabledForIM", strEnableForIM, ChttransEnabledForIMFilter);
+CONFIG_BINDING_REGISTER_WITH_FILTER("TraditionalChinese", "EnabledForIM",
+                                    strEnableForIM, ChttransEnabledForIMFilter);
 CONFIG_BINDING_END()
 
 FCITX_DEFINE_PLUGIN(fcitx_chttrans, module, FcitxModule) = {
@@ -78,15 +80,20 @@ FCITX_DEFINE_PLUGIN(fcitx_chttrans, module, FcitxModule) = {
     ReloadChttrans
 };
 
-static boolean ChttransEnabled(FcitxChttrans* chttrans) {
+static boolean
+ChttransEnabled(FcitxChttrans *chttrans)
+{
     boolean result = false;
     FcitxIM* im = FcitxInstanceGetCurrentIM(chttrans->owner);
     if (im) {
         boolean defaultValue = false;
-        if (strcmp(im->langCode, "zh_TW") == 0 || strcmp(im->langCode, "en_HK") == 0 || strcmp(im->langCode, "zh_HK") == 0) {
+        if (strcmp(im->langCode, "zh_TW") == 0 ||
+            strcmp(im->langCode, "en_HK") == 0 ||
+            strcmp(im->langCode, "zh_HK") == 0) {
             defaultValue = true;
         }
-        result = fcitx_string_map_get(chttrans->enableIM, im->uniqueName, defaultValue);
+        result = fcitx_string_map_get(chttrans->enableIM, im->uniqueName,
+                                      defaultValue);
     }
     return result;
 }
@@ -111,10 +118,9 @@ ChttransEnabledForIMFilter(FcitxGenericConfig *config, FcitxConfigGroup *group,
     }
 }
 
-void* ChttransCreate(FcitxInstance* instance)
+void *ChttransCreate(FcitxInstance* instance)
 {
-    FcitxChttrans* transState = fcitx_utils_malloc0(sizeof(FcitxChttrans));
-    FcitxAddon* transAddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_CHTTRANS_NAME);
+    FcitxChttrans *transState = fcitx_utils_new(FcitxChttrans);
     transState->owner = instance;
     transState->enableIM = fcitx_string_map_new(NULL, '\0');
     if (!LoadChttransConfig(transState)) {
@@ -146,11 +152,10 @@ void* ChttransCreate(FcitxInstance* instance)
                           ToggleChttransState,
                           GetChttransEnabled);
 
-    FcitxInstanceWatchContext(instance, CONTEXT_IM_LANGUAGE, ChttransLanguageChanged, transState);
+    FcitxInstanceWatchContext(instance, CONTEXT_IM_LANGUAGE,
+                              ChttransLanguageChanged, transState);
 
-    FcitxModuleAddFunction(transAddon, ChttransS2T);
-    FcitxModuleAddFunction(transAddon, ChttransT2S);
-
+    FcitxChttransAddFunctions(instance);
     return transState;
 }
 
@@ -224,22 +229,6 @@ void ChttransIMChanged(void* arg)
     FcitxUIRefreshStatus(transState->owner, "chttrans");
 }
 
-void* ChttransS2T(void* arg, FcitxModuleFunctionArg args)
-{
-    FcitxChttrans* transState = (FcitxChttrans*) arg;
-    const char* s = args.args[0];
-
-    return ConvertGBKSimple2Tradition(transState, s);
-}
-
-void* ChttransT2S(void* arg, FcitxModuleFunctionArg args)
-{
-    FcitxChttrans* transState = (FcitxChttrans*) arg;
-    const char* s = args.args[0];
-
-    return ConvertGBKTradition2Simple(transState, s);
-}
-
 /**
  * 该函数装载data/gbks2t.tab的简体转繁体的码表，
  * 然后按码表将GBK字符转换成GBK繁体字符。
@@ -310,7 +299,7 @@ char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char *strHZ)
         i = 0;
         len = fcitx_utf8_strlen(strHZ);
         ret_len = 0;
-        ret = (char *) fcitx_utils_malloc0(sizeof(char) * (UTF8_MAX_LENGTH * len + 1));
+        ret = fcitx_utils_malloc0(UTF8_MAX_LENGTH * len + 1);
         ps = strHZ;
         ret[0] = '\0';
         for (; i < len; ++i) {
@@ -412,7 +401,7 @@ char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ)
         i = 0;
         len = fcitx_utf8_strlen(strHZ);
         ret_len = 0;
-        ret = (char *) fcitx_utils_malloc0(sizeof(char) * (UTF8_MAX_LENGTH * len + 1));
+        ret = fcitx_utils_malloc0(UTF8_MAX_LENGTH * len + 1);
         ps = strHZ;
         ret[0] = '\0';
         for (; i < len; ++i) {
@@ -450,7 +439,8 @@ boolean LoadChttransConfig(FcitxChttrans* transState)
 
     FILE *fp;
     char *file;
-    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config", "r", &file);
+    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config",
+                                       "r", &file);
     FcitxLog(DEBUG, "Load Config File %s", file);
     free(file);
     if (!fp) {
@@ -475,12 +465,14 @@ void SaveChttransConfig(FcitxChttrans* transState)
 {
     FcitxConfigFileDesc* configDesc = GetChttransConfigDesc();
     char *file;
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config", "w", &file);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config",
+                                             "w", &file);
     FcitxLog(DEBUG, "Save Config to %s", file);
     FcitxConfigSaveConfigFileFp(fp, &transState->gconfig, configDesc);
     free(file);
-    if (fp)
+    if (fp) {
         fclose(fp);
+    }
 }
 
 void ReloadChttrans(void* arg)
@@ -500,4 +492,4 @@ void ChttransLanguageChanged(void* arg, const void* value)
     FcitxUISetStatusVisable(transState->owner, "chttrans", visible);
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+#include "fcitx-chttrans-addfunctions.h"
