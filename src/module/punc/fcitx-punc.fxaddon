@@ -21,7 +21,6 @@ Arg0.Deref=1
 Arg0.DerefType=int
 Res.WrapFunc=GetPunc
 
-# TODO
 [GetPunc2]
 Name=get-punc2
 Arg0=int*
@@ -29,3 +28,4 @@ Arg0.Deref=1
 Arg0.DerefType=int
 Arg1=char**
 Arg2=char**
+Res.WrapFunc=PuncGetPunc2
