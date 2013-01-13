@@ -48,13 +48,13 @@ Name=reset
 Inline.Code=$<->bSP = false
 Res.WrapFunc=ResetPYStatus
 
-# TODO still need a wrapper function
 [SP2QP]
 Name=sp2qp
 Return=char*
 Arg0=const char*
+Res.WrapFunc=PYSP2QP
 
-# TODO still need a wrapper function
 [AddUserPhrase]
 Name=add-user-phrase
 Arg0=const char*
+Res.WrapFunc=PYAddUserPhraseFromCString

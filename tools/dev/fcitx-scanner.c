@@ -862,7 +862,7 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
         _write_strings(ofp, "    FCITX_DEF_CAST_FROM_PTR(", arg_desc->type,
                        arg_desc->deref ? ", _arg" : ", arg");
         fprintf(ofp, "%d", i);
-        _write_strings(ofp, ", _args[");
+        _write_strings(ofp, ", _args.args[");
         fprintf(ofp, "%d", i);
         _write_strings(ofp, "]);\n");
     }
