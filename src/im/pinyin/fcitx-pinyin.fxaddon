@@ -27,7 +27,11 @@ Res.WrapFunc=PYGetPYByHZ
 [DoInput]
 Name=do-input
 Arg0=const FcitxKeySym*
+Arg0.Deref=1
+Arg0.DerefType=FcitxKeySym
 Arg1=const unsigned int*
+Arg1.Deref=1
+Arg1.DerefType=unsigned int
 Res.WrapFunc=DoPYInput
 
 [GetCandwords]
