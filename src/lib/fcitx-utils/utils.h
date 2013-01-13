@@ -919,10 +919,10 @@ extern "C" {
     } while (0)
 
 #define __FCITX_DEF_CAST_TO_PTR_FUNC(name, type)     \
-    static inline void*                         \
-    fcitx_utils_##name##_to_ptr(type value)     \
-    {                                           \
-        FCITX_RETURN_AS_PTR(type, value);       \
+    static inline void*                              \
+    fcitx_utils_##name##_to_ptr(type value)          \
+    {                                                \
+        FCITX_RETURN_AS_PTR(type, value);            \
     }
 
     __FCITX_DEF_CAST_TO_PTR_FUNC(float, float)
