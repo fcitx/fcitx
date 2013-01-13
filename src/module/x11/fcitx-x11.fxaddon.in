@@ -56,8 +56,8 @@ EnableWrapper=@ENABLE_X11@
 
 [SetWindowProp]
 Name=set-window-prop
-Arg0=Window*
-Arg1=FcitxXWindowType*
+Arg0=const Window*
+Arg1=const FcitxXWindowType*
 Arg2=char*
 EnableWrapper=@ENABLE_X11@
 
@@ -68,7 +68,7 @@ Arg1=int*
 
 [MouseClick]
 Name=mouse-click
-Arg0=Window*
+Arg0=const Window*
 Arg1=int*
 Arg2=int*
 Arg3=boolean*
@@ -81,8 +81,8 @@ Arg1=void*
 
 [GetScreenGeometry]
 Name=get-screen-geometry
-Arg0=int*
-Arg1=int*
+Arg0=const int*
+Arg1=const int*
 Arg2=FcitxRect*
 
 [ProcessRemainEvent]
@@ -91,7 +91,7 @@ Name=process-remain-event
 [GetDPI]
 Name=get-dpi
 Arg0=int*
-Arg1=int*
+Arg1=double*
 
 [RegSelectNotify]
 Name=reg-select-notify
