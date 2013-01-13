@@ -31,22 +31,22 @@ Arg1=const char*
 Arg2=boolean*
 Res.Exp=*$2 = (FcitxXkbFindLayoutIndex($<, $0, $1) >= 0)
 
-# TODO
 [GetLayoutOverride]
 Name=get-layout-override
 Arg0=const char*
 Arg1=char**
 Arg2=char**
+Res.WrapFunc=FcitxXkbGetLayoutOverride
 
-# TODO
 [SetLayoutOverride]
 Name=set-layout-override
 Arg0=const char*
 Arg1=const char*
 Arg2=const char*
+Res.WrapFunc=FcitxXkbSetLayoutOverride
 
-# TODO
 [SetDefaultLayout]
 Name=set-default-layout
 Arg0=const char*
 Arg1=const char*
+Res.WrapFunc=FcitxXkbSetDefaultLayout

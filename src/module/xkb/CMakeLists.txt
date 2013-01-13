@@ -18,7 +18,7 @@ set(FCITX_XKB_SOURCES
   rules.c
   xkbconfig.c)
 
-fcitx_add_addon_full(xkb SCAN DESC ${xkb_noinstall}
+fcitx_add_addon_full(xkb SCAN SCAN_PRIV DESC ${xkb_noinstall}
   SOURCES ${FCITX_XKB_SOURCES}
   HEADERS xkb.h
   LINK_LIBS ${FCITX_XKB_LINK_LIBS}

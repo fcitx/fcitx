@@ -49,17 +49,12 @@
 #define XKB_RULES_XML_FILE "/usr/share/X11/xkb/rules/evdev.xml"
 #endif
 
-#define GROUP_CHANGE_MASK                                               \
-    (XkbGroupStateMask | XkbGroupBaseMask | XkbGroupLatchMask | XkbGroupLockMask)
+#define GROUP_CHANGE_MASK (XkbGroupStateMask | XkbGroupBaseMask |       \
+                           XkbGroupLatchMask | XkbGroupLockMask)
 
-static void* FcitxXkbGetRules(void* arg, FcitxModuleFunctionArg args);
-static void* FcitxXkbLayoutExists(void* arg, FcitxModuleFunctionArg args);
+DECLARE_ADDFUNCTIONS(Xkb)
 static void FcitxXkbGetCurrentLayoutInternal(FcitxXkb *xkb,
                                              char **layout, char **variant);
-static void* FcitxXkbGetCurrentLayout(void* arg, FcitxModuleFunctionArg args);
-static void* FcitxXkbGetLayoutOverride(void* arg, FcitxModuleFunctionArg args);
-static void* FcitxXkbSetLayoutOverride(void* arg, FcitxModuleFunctionArg args);
-static void* FcitxXkbSetDefaultLayout(void* arg, FcitxModuleFunctionArg args);
 static void* FcitxXkbCreate(struct _FcitxInstance* instance);
 static void FcitxXkbDestroy(void*);
 static void FcitxXkbReloadConfig(void*);
@@ -409,13 +404,6 @@ FcitxXkbGetCurrentLayoutInternal(FcitxXkb *xkb, char **layout, char **variant)
         *variant = NULL;
 }
 
-static void*
-FcitxXkbGetCurrentLayout(void* arg, FcitxModuleFunctionArg args)
-{
-    FcitxXkbGetCurrentLayoutInternal((FcitxXkb*)arg,
-                                     args.args[0], args.args[1]);
-    return NULL;
-}
 #if 0
 
 static char*
@@ -673,7 +661,6 @@ FcitxXkbGetDefaultXmodmap(FcitxXkb *xkb)
 
 static void* FcitxXkbCreate(FcitxInstance* instance)
 {
-    FcitxAddon* addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-xkb");
     FcitxXkb *xkb = fcitx_utils_new(FcitxXkb);
     xkb->owner = instance;
     do {
@@ -719,16 +706,9 @@ static void* FcitxXkbCreate(FcitxInstance* instance)
         hk.func = FcitxXkbCurrentStateChangedTriggerOn;
         FcitxInstanceRegisterTriggerOnHook(instance, hk);
 
-        FcitxModuleAddFunction(addon, FcitxXkbGetRules);
-        FcitxModuleAddFunction(addon, FcitxXkbGetCurrentLayout);
-        FcitxModuleAddFunction(addon, FcitxXkbLayoutExists);
-        FcitxModuleAddFunction(addon, FcitxXkbGetLayoutOverride);
-        FcitxModuleAddFunction(addon, FcitxXkbSetLayoutOverride);
-        FcitxModuleAddFunction(addon, FcitxXkbSetDefaultLayout);
-
+        FcitxXkbAddFunctions(instance);
         if (xkb->config.bOverrideSystemXKBSettings)
             FcitxXkbSetLayout(xkb, NULL, NULL, NULL);
-
         return xkb;
     } while (0);
 
@@ -807,23 +787,6 @@ static void FcitxXkbReloadConfig(void* arg)
     FcitxXkbCurrentStateChanged(xkb);
     if (xkb->config.bOverrideSystemXKBSettings)
         FcitxXkbSetLayout(xkb, NULL, NULL, NULL);
-}
-
-
-static void* FcitxXkbGetRules(void* arg, FcitxModuleFunctionArg args)
-{
-    FCITX_UNUSED(args);
-    FcitxXkb *xkb = (FcitxXkb*)arg;
-    return xkb->rules;
-}
-
-static void* FcitxXkbLayoutExists(void* arg, FcitxModuleFunctionArg args)
-{
-    FcitxXkb* xkb = (FcitxXkb*) arg;
-    int idx = FcitxXkbFindLayoutIndex(xkb, args.args[0], args.args[1]);
-    boolean* result = args.args[2];
-    *result = (idx >= 0);
-    return NULL;
 }
 
 static void FcitxXkbApplyCustomScript(FcitxXkb* xkb)
@@ -978,34 +941,26 @@ void SaveXkbConfig(FcitxXkb* xkb)
     SaveLayoutOverride(xkb);
 }
 
-
-void* FcitxXkbGetLayoutOverride(void* arg, FcitxModuleFunctionArg args)
+static void
+FcitxXkbGetLayoutOverride(FcitxXkb *xkb, const char *imname, char **layout,
+                          char **variant)
 {
-    FcitxXkb* xkb = arg;
-    const char* imname = args.args[0];
-    char** layout = args.args[1];
-    char** variant = args.args[2];
-    LayoutOverride* item = NULL;
+    LayoutOverride *item = NULL;
     HASH_FIND_STR(xkb->layoutOverride, imname, item);
     if (item) {
         *layout = item->layout;
         *variant = item->variant;
-    }
-    else {
+    } else {
         *layout = NULL;
         *variant = NULL;
     }
-    return NULL;
 }
 
-
-void* FcitxXkbSetLayoutOverride(void* arg, FcitxModuleFunctionArg args)
+static void
+FcitxXkbSetLayoutOverride(FcitxXkb *xkb, const char *imname, const char *layout,
+                          const char* variant)
 {
-    FcitxXkb* xkb = arg;
-    const char* imname = args.args[0];
-    const char* layout = args.args[1];
-    const char* variant = args.args[2];
-    LayoutOverride* item = NULL;
+    LayoutOverride *item = NULL;
     HASH_FIND_STR(xkb->layoutOverride, imname, item);
     if (item) {
         HASH_DEL(xkb->layoutOverride, item);
@@ -1018,22 +973,17 @@ void* FcitxXkbSetLayoutOverride(void* arg, FcitxModuleFunctionArg args)
         item->im = strdup(imname);
         item->layout = strdup(layout);
         item->variant= (variant && variant[0] != '\0')? strdup(variant) : NULL;
-
-        HASH_ADD_KEYPTR(hh, xkb->layoutOverride, item->im, strlen(item->im), item);
+        HASH_ADD_KEYPTR(hh, xkb->layoutOverride, item->im,
+                        strlen(item->im), item);
     }
-
     SaveLayoutOverride(xkb);
     FcitxXkbCurrentStateChanged(xkb);
-
-    return NULL;
 }
 
-void* FcitxXkbSetDefaultLayout(void* arg, FcitxModuleFunctionArg args)
+static void
+FcitxXkbSetDefaultLayout(FcitxXkb *xkb, const char *layout, const char *variant)
 {
-    FcitxXkb* xkb = arg;
-    const char* layout = args.args[0];
-    const char* variant = args.args[1];
-    LayoutOverride* item = NULL;
+    LayoutOverride *item = NULL;
     HASH_FIND_STR(xkb->layoutOverride, "default", item);
     if (item) {
         HASH_DEL(xkb->layoutOverride, item);
@@ -1045,12 +995,11 @@ void* FcitxXkbSetDefaultLayout(void* arg, FcitxModuleFunctionArg args)
         item->im = strdup("default");
         item->layout = strdup(layout);
         item->variant= (variant && variant[0] != '\0')? strdup(variant) : NULL;
-
-        HASH_ADD_KEYPTR(hh, xkb->layoutOverride, item->im, strlen(item->im), item);
+        HASH_ADD_KEYPTR(hh, xkb->layoutOverride, item->im,
+                        strlen(item->im), item);
     }
-
     SaveLayoutOverride(xkb);
     FcitxXkbCurrentStateChanged(xkb);
-
-    return NULL;
 }
+
+#include "fcitx-xkb-addfunctions.h"
