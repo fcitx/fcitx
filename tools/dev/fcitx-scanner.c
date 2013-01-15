@@ -243,7 +243,7 @@ fxscanner_group_get_value(FcitxDesktopGroup *grp, const char *name)
 }
 
 #define fxaddon_load_string(tgt, grp, name)     \
-    tgt = fxscanner_group_get_value(grp, name);
+    tgt = fxscanner_group_get_value(grp, name)
 
 static inline boolean
 fxscanner_value_get_boolean(const char *value, boolean default_val)
@@ -434,15 +434,19 @@ fxscanner_func_loader(UT_array *array, const char *value, FcitxAddonBuff *buff,
     FcitxAddonDesc *desc = data;
     FcitxDesktopGroup *grp;
     grp = fcitx_desktop_file_find_group(&desc->dfile, value);
-    if (!grp)
+    if (!grp) {
+        FcitxLog(ERROR, "Group %s not found.", value);
         return false;
+    }
     FcitxAddonFuncDesc func_desc = {
         .name = value,
         .grp = grp
     };
     fxaddon_load_string(func_desc.name_id, grp, "Name");
-    if (!func_desc.name_id)
+    if (!func_desc.name_id) {
+        FcitxLog(ERROR, "Entry \"Name\" not found in group [%s].", value);
         return false;
+    }
     func_desc.type = fxscanner_group_get_type(grp, "Return");
     fxaddon_load_string(func_desc.err_ret, grp, "ErrorReturn");
     func_desc.cache = fxscanner_group_get_boolean(grp, "CacheResult", false);
@@ -489,20 +493,28 @@ static boolean
 fxscanner_addon_load(FcitxAddonDesc *addon_desc, FILE *ifp)
 {
     FcitxDesktopFile *dfile = &addon_desc->dfile;
-    if (!fcitx_desktop_file_load_fp(dfile, ifp))
+    if (!fcitx_desktop_file_load_fp(dfile, ifp)) {
+        FcitxLog(ERROR, "Failed to load desktop file.");
         return false;
+    }
     FcitxDesktopGroup *grp;
     grp = fcitx_desktop_file_find_group(dfile, "FcitxAddon");
-    if (!grp)
+    if (!grp) {
+        FcitxLog(ERROR, "group [FcitxAddon] not found.");
         return false;
+    }
     addon_desc->addon_grp = grp;
     fxaddon_load_string(addon_desc->name, grp, "Name");
-    if (!addon_desc->name)
+    if (!addon_desc->name) {
+        FcitxLog(ERROR, "Entry \"Name\" not found in [FcitxAddon] group.");
         return false;
+    }
     addon_desc->name_len = strlen(addon_desc->name);
-    fxaddon_load_string(addon_desc->prefix, grp, "Prefix")
-    if (!addon_desc->prefix)
+    fxaddon_load_string(addon_desc->prefix, grp, "Prefix");
+    if (!addon_desc->prefix) {
+        FcitxLog(ERROR, "Entry \"Prefix\" not found in [FcitxAddon] group.");
         return false;
+    }
     addon_desc->self_type = fxscanner_group_get_type(grp, "Self.Type");
     fxscanner_load_entry_list(&addon_desc->includes, grp, "Include", false);
     if (!fxscanner_load_entry_list(&addon_desc->functions, grp, "Function",
@@ -1131,14 +1143,20 @@ out:
 int
 main(int argc, char *argv[])
 {
-    if (argc != 4)
+    if (argc != 4) {
+        FcitxLog(ERROR, "Wrong number of arguments.");
         exit(1);
+    }
     FILE *ifp = fopen(argv[2], "r");
-    if (!ifp)
+    if (!ifp) {
+        FcitxLog(ERROR, "Cannot open file %s for reading.", argv[2]);
         exit(1);
+    }
     FILE *ofp = fopen(argv[3], "w");
-    if (!ofp)
+    if (!ofp) {
+        FcitxLog(ERROR, "Cannot open file %s for writing.", argv[3]);
         exit(1);
+    }
     int res = fxscanner_scan_addon(argv[1], ifp, ofp);
     if (res != 0)
         unlink(argv[3]);
