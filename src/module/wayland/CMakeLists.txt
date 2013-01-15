@@ -11,7 +11,7 @@ endif()
 set(FCITX_WAYLAND_SOURCES
   wayland.c
   epoll-utils.c)
-fcitx_add_addon_full(wayland SCAN_IN ${wayland_noinstall}
+fcitx_add_addon_full(wayland SCAN_IN SCAN_PRIV ${wayland_noinstall}
   SOURCES ${FCITX_WAYLAND_SOURCES}
   HEADERS wayland-defs.h
   LINK_LIBS ${FCITX_WAYLAND_LINK_LIBS}

@@ -24,14 +24,14 @@
 #include "config.h"
 #include "fcitx/fcitx.h"
 #include "wayland-defs.h"
+#include <fcitx-utils/handler-table.h>
 
 typedef struct {
     FcitxInstance *owner;
     struct wl_display *dpy;
     int epoll_fd;
     FcitxWaylandTask dpy_task;
+    FcitxHandlerTable *global_handlers;
 } FcitxWayland;
-
-DEFINE_GET_ADDON("fcitx-wayland", Wayland)
 
 #endif

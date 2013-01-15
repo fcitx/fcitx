@@ -34,6 +34,7 @@ static void* FxWaylandCreate(FcitxInstance *instance);
 static void FxWaylandSetFD(void *self);
 static void FxWaylandProcessEvent(void *self);
 static void FxWaylandDestroy(void *self);
+DECLARE_ADDFUNCTIONS(Wayland)
 
 FCITX_DEFINE_PLUGIN(fcitx_wayland, module, FcitxModule) = {
     .Create = FxWaylandCreate,
@@ -96,7 +97,6 @@ FxWaylandCreate(FcitxInstance *instance)
     wl->dpy = wl_display_connect(NULL);
     if (fcitx_unlikely(!wl->dpy))
         goto free;
-    /* FcitxAddon *wl_addon = FcitxWaylandGetAddon(instance); */
 
     wl->epoll_fd = fx_epoll_create_cloexec();
     if (wl->epoll_fd < 0)
@@ -107,6 +107,7 @@ FxWaylandCreate(FcitxInstance *instance)
                           EPOLLIN | EPOLLERR | EPOLLHUP) == -1)
         goto close_epoll;
 
+    FcitxWaylandAddFunctions(instance);
     return wl;
 close_epoll:
     close(wl->epoll_fd);
@@ -146,3 +147,5 @@ FxWaylandProcessEvent(void *self)
     fx_epoll_dispatch(wl->epoll_fd);
     FxWaylandScheduleFlush(wl);
 }
+
+#include "fcitx-wayland-addfunctions.h"
