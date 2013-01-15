@@ -60,6 +60,12 @@ Enum3=ALT_SUPER
 DefaultValue=CTRL_SHIFT
 Description=Scroll between Input Method
 
+[Hotkey/ReloadConfig]
+Type=Hotkey
+DefaultValue=CTRL_5
+Description=Reload configuration
+Advance=True
+
 [Hotkey/DoubleSwitchKey]
 Type=Boolean
 DefaultValue=False

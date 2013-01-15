@@ -307,8 +307,12 @@ void FcitxCandidateWordAppend(FcitxCandidateWordList* candList, FcitxCandidateWo
 FCITX_EXPORT_API
 boolean FcitxCandidateWordGoPrevPage(FcitxCandidateWordList* candList)
 {
-    if (candList->override && candList->paging) {
-        return candList->paging(candList->overrideArg, true);
+    if (candList->override) {
+        if (candList->paging) {
+            return candList->paging(candList->overrideArg, true);
+        } else {
+            return true;
+        }
     }
 
     if (!FcitxCandidateWordPageCount(candList))
@@ -324,8 +328,12 @@ boolean FcitxCandidateWordGoPrevPage(FcitxCandidateWordList* candList)
 FCITX_EXPORT_API
 boolean FcitxCandidateWordGoNextPage(FcitxCandidateWordList* candList)
 {
-    if (candList->override && candList->paging) {
-        return candList->paging(candList->overrideArg, false);
+    if (candList->override) {
+        if (candList->paging) {
+            return candList->paging(candList->overrideArg, false);
+        } else {
+            return true;
+        }
     }
 
     if (!FcitxCandidateWordPageCount(candList))

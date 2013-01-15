@@ -140,7 +140,11 @@ extern "C" {
             FcitxHotkey nextWord[2];
             int _dummy5[8];
         };
-        int padding[23]; /**< padding */
+        union {
+            FcitxHotkey hkReloadConfig[2];
+            int _dummy6[8];
+        };
+        int padding[15]; /**< padding */
     } FcitxGlobalConfig;
 
     /**

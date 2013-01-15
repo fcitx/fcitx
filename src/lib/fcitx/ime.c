@@ -187,7 +187,7 @@ int IMPriorityCmp(const void *a, const void *b)
 void FcitxInstanceInitBuiltInHotkey(FcitxInstance *instance)
 {
     FcitxHotkeyHook hk;
-    hk.hotkey = FCITX_CTRL_5;
+    hk.hotkey = instance->config->hkReloadConfig;
     hk.hotkeyhandle = ImProcessReload;
     hk.arg = instance;
     FcitxInstanceRegisterHotkeyFilter(instance, hk);
