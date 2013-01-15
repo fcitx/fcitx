@@ -835,6 +835,57 @@ fxscanner_write_translate_exp(FILE *ofp, const char *str,
 }
 
 static boolean
+fxscanner_write_deref(FILE *ofp, const char *prefix, const char *deref,
+                      const char *deref_type,
+                      const FcitxAddonFuncDesc *func_desc,
+                      const char *self_str, const char *res_str,
+                      const char *arg_prefix, const char *deref_prefix,
+                      const char *res_fmt, const char *orig_fmt, ...)
+{
+    va_list ap;
+    _write_strings(ofp, prefix);
+    if (deref_type) {
+        _write_strings(ofp, deref_type, " ");
+        va_start(ap, orig_fmt);
+        vfprintf(ofp, res_fmt, ap);
+        va_end(ap);
+        _write_strings(ofp, " = (");
+    }
+    int level;
+    if (fxscanner_parse_int(deref, &level)) {
+        if (!deref_type) {
+            FcitxLog(ERROR, "Trying to Deref %d level without a DerefType.",
+                     level);
+            return false;
+        }
+        if (level < -1) {
+            FcitxLog(ERROR, "Invalid Deref expression \"%d\"", level);
+            return false;
+        } else if (level == -1) {
+            _write_strings(ofp, "&");
+        } else {
+            int j;
+            for (j = 0;j < level;j++) {
+                _write_str(ofp, "*");
+            }
+        }
+        _write_strings(ofp, "(");
+        va_start(ap, orig_fmt);
+        vfprintf(ofp, orig_fmt, ap);
+        va_end(ap);
+        _write_strings(ofp, ")");
+    } else if (!fxscanner_write_translate_exp(ofp, deref, func_desc, self_str,
+                                              res_str, arg_prefix,
+                                              deref_prefix)) {
+        return false;
+    }
+    if (deref_type)
+        _write_strings(ofp, ")");
+    _write_strings(ofp, ";\n");
+    return true;
+}
+
+static boolean
 fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
                                  FcitxAddonDesc *addon_desc,
                                  FcitxAddonBuff *buff, FILE *ofp)
@@ -877,29 +928,13 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
     /**
      * deref self
      **/
-    if (func_desc->self_deref) {
-        _write_strings(ofp, "    ", func_desc->self_dereftype, " self = (");
-        int level;
-        if (fxscanner_parse_int(func_desc->self_deref, &level)) {
-            if (level < -1) {
-                FcitxLog(ERROR, "Invalid Deref expression \"%d\"", level);
-                return false;
-            } else if (level == -1) {
-                _write_strings(ofp, "&__self");
-            } else {
-                int j;
-                for (j = 0;j < level;j++) {
-                    _write_str(ofp, "*");
-                }
-                _write_strings(ofp, "__self");
-            }
-        } else {
-            fxscanner_write_translate_exp(ofp, func_desc->self_deref, func_desc,
-                                          "(__self)", NULL, "arg", "_arg");
-        }
-        _write_strings(ofp, ");\n");
-    } else {
+    if (!func_desc->self_deref){
         _write_strings(ofp, "    ", addon_desc->self_type, " self = __self;\n");
+    } else if (!fxscanner_write_deref(ofp, "    ", func_desc->self_deref,
+                                      func_desc->self_dereftype, func_desc,
+                                      "(__self)", NULL, "arg", "_arg", "self",
+                                      "__self")) {
+        return false;
     }
     _write_strings(ofp, "    FCITX_UNUSED(self);\n");
     /**
@@ -908,46 +943,16 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
     for (i = 0;i < utarray_len(&func_desc->args);i++) {
         arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&func_desc->args, i);
         if (arg_desc->deref) {
-            if (arg_desc->deref_type) {
-                _write_strings(ofp, "    ", arg_desc->deref_type, " arg");
-                fprintf(ofp, "%d", i);
-                _write_strings(ofp, " = (");
-            } else {
-                if (func_desc->res_wrapfunc) {
-                    FcitxLog(ERROR, "Using arg%d of DerefType void with "
-                             "Res.WrapFunc.", i);
-                    return false;
-                }
-                _write_strings(ofp, "    ");
+            if (!arg_desc->deref_type && func_desc->res_wrapfunc) {
+                FcitxLog(ERROR, "Using arg%d of DerefType void with "
+                         "Res.WrapFunc.", i);
+                return false;
             }
-            int level;
-            if (fxscanner_parse_int(arg_desc->deref, &level)) {
-                if (!arg_desc->deref_type) {
-                    FcitxLog(ERROR, "Trying to Deref %d level "
-                             "without a DerefType.", level);
-                    return false;
-                }
-                if (level < -1) {
-                    FcitxLog(ERROR, "Invalid Deref expression \"%d\"", level);
-                    return false;
-                } else if (level == -1) {
-                    _write_strings(ofp, "&_arg");
-                } else {
-                    int j;
-                    for (j = 0;j < level;j++) {
-                        _write_str(ofp, "*");
-                    }
-                    _write_strings(ofp, "_arg");
-                }
-                fprintf(ofp, "%d", i);
-            } else {
-                fxscanner_write_translate_exp(ofp, arg_desc->deref, func_desc,
-                                              "(__self)", NULL, "arg", "_arg");
-            }
-            if (arg_desc->deref_type) {
-                _write_strings(ofp, ");\n");
-            } else {
-                _write_strings(ofp, ";\n");
+            if (!fxscanner_write_deref(ofp, "    ", arg_desc->deref,
+                                      arg_desc->deref_type, func_desc,
+                                      "(__self)", NULL, "arg", "_arg", "arg%d",
+                                       "_arg%d", i)) {
+                return false;
             }
         }
     }
@@ -957,26 +962,21 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
      **/
     if (func_desc->inline_code) {
         _write_strings(ofp, "    ");
-        fxscanner_write_translate_exp(ofp, func_desc->inline_code, func_desc,
-                                      "(self)", NULL, "arg", NULL);
+        if (!fxscanner_write_translate_exp(ofp, func_desc->inline_code,
+                                           func_desc, "(self)", NULL, "arg",
+                                           NULL))
+            return false;
         _write_strings(ofp, ";\n");
     }
 
     /**
      * result expresion
      **/
-    const char *res_type;
-    if (func_desc->res_deref) {
-        res_type = func_desc->res_dereftype;
-    } else {
-        res_type = func_desc->type;
-    }
-
-    if (res_type) {
-        _write_strings(ofp, "    ", res_type, " res = (");
-    } else {
-        _write_strings(ofp, "    ");
-    }
+    const char *res_type = (func_desc->res_deref ? func_desc->res_dereftype :
+                            func_desc->type);
+    _write_strings(ofp, "    ");
+    if (res_type)
+        _write_strings(ofp, res_type, " res = (");
     if (func_desc->res_wrapfunc) {
         _write_strings(ofp, func_desc->res_wrapfunc, "(");
         if (!func_desc->is_static) {
@@ -993,45 +993,28 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
             fprintf(ofp, "%d", i);
         }
         _write_strings(ofp, ")");
-    } else {
-        fxscanner_write_translate_exp(ofp, func_desc->res_exp, func_desc,
-                                      "(self)", NULL, "arg", NULL);
+    } else if (!fxscanner_write_translate_exp(ofp, func_desc->res_exp,
+                                              func_desc, "(self)", NULL, "arg",
+                                              NULL)) {
+        return false;
     }
-    if (res_type) {
-        _write_strings(ofp, ");\n");
-    } else {
-        _write_strings(ofp, ";\n");
-    }
+    if (res_type)
+        _write_strings(ofp, ")");
+    _write_strings(ofp, ";\n");
 
-    const char *res_name = NULL;
-    if (func_desc->res_deref) {
-        if (func_desc->type) {
-            _write_strings(ofp, "    ", func_desc->type, " _res = (");
-            res_name = "_res";
-        } else {
-            _write_strings(ofp, "    ");
-        }
-        fxscanner_write_translate_exp(ofp, func_desc->res_deref, func_desc,
-                                      "(self)", res_type ? "(res)" : NULL,
-                                      "arg", NULL);
-        if (func_desc->type) {
-            _write_strings(ofp, ");\n");
-        } else {
-            _write_strings(ofp, ";\n");
-        }
-    } else if (func_desc->type) {
-        res_name = "res";
+    if (func_desc->res_deref &&
+        !fxscanner_write_deref(ofp, "    ", func_desc->res_deref,
+                               func_desc->type, func_desc,"(self)", res_type ?
+                               "(res)" : NULL, "arg", NULL, "_res", "res")) {
+            return false;
     }
-
-    if (res_name) {
+    if (func_desc->type) {
         _write_strings(ofp, "    FCITX_RETURN_AS_PTR(", func_desc->type,
-                       ", ", res_name, ");\n");
+                       ", ", func_desc->res_deref ? "_res" : "res", ");\n");
     } else {
         _write_strings(ofp, "    return NULL;\n");
     }
-
-    _write_strings(ofp,
-                   "}\n\n");
+    _write_strings(ofp, "}\n\n");
     return true;
 }
 
