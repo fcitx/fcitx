@@ -38,25 +38,22 @@ typedef struct _UnicodeSet {
     UT_hash_handle hh;
 } UnicodeSet;
 
-static const UT_icd uint32_icd = { sizeof(uint32_t), NULL, NULL, NULL };
-static const UT_icd uint16_icd = { sizeof(uint16_t), NULL, NULL, NULL };
-
 static const char JAMO_L_TABLE[][4] = {
-        "G", "GG", "N", "D", "DD", "R", "M", "B", "BB",
-        "S", "SS", "", "J", "JJ", "C", "K", "T", "P", "H"
-    };
+    "G", "GG", "N", "D", "DD", "R", "M", "B", "BB",
+    "S", "SS", "", "J", "JJ", "C", "K", "T", "P", "H"
+};
 
 static const char JAMO_V_TABLE[][4] = {
-        "A", "AE", "YA", "YAE", "EO", "E", "YEO", "YE", "O",
-        "WA", "WAE", "OE", "YO", "U", "WEO", "WE", "WI",
-        "YU", "EU", "YI", "I"
-    };
+    "A", "AE", "YA", "YAE", "EO", "E", "YEO", "YE", "O",
+    "WA", "WAE", "OE", "YO", "U", "WEO", "WE", "WI",
+    "YU", "EU", "YI", "I"
+};
 
 static const char JAMO_T_TABLE[][4] = {
-        "", "G", "GG", "GS", "N", "NJ", "NH", "D", "L", "LG", "LM",
-        "LB", "LS", "LT", "LP", "LH", "M", "B", "BS",
-        "S", "SS", "NG", "J", "C", "K", "T", "P", "H"
-    };
+    "", "G", "GG", "GS", "N", "NJ", "NH", "D", "L", "LG", "LM",
+    "LB", "LS", "LT", "LP", "LH", "M", "B", "BS",
+    "S", "SS", "NG", "J", "C", "K", "T", "P", "H"
+};
 
 int uni_cmp(const void* a, const void* b) {
     const UnicodeSet* sa = a;
@@ -383,7 +380,7 @@ UT_array* CharSelectDataFind(CharSelectData* charselect, const char* needle)
     UnicodeSet *result = NULL;
 
     UT_array* returnRes;
-    utarray_new(returnRes, &uint32_icd);
+    utarray_new(returnRes, fcitx_int32_icd);
     char* simplified = Simplified(needle);
     UT_array* searchStrings = SplitString(simplified);
 
@@ -537,10 +534,11 @@ UT_array* CharSelectDataNotes(CharSelectData* charselect, uint32_t unicode)
     return notes;
 }
 
-UT_array* CharSelectDataSeeAlso(CharSelectData* charselect, uint32_t unicode)
+UT_array*
+CharSelectDataSeeAlso(CharSelectData* charselect, uint32_t unicode)
 {
-    UT_array* seeAlso;
-    utarray_new(seeAlso, &uint32_icd);
+    UT_array *seeAlso;
+    utarray_new(seeAlso, fcitx_int32_icd);
     const int detailIndex = CharSelectDataGetDetailIndex(charselect, unicode);
     if(detailIndex == 0) {
         return seeAlso;
@@ -645,7 +643,7 @@ CharSelectDataIndex* CharSelectDataIndexNew(const char* key)
 {
     CharSelectDataIndex* idx = fcitx_utils_new(CharSelectDataIndex);
     idx->key = strdup(key);
-    utarray_new(idx->items, &uint16_icd);
+    utarray_new(idx->items, fcitx_int16_icd);
     return idx;
 }
 

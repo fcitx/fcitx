@@ -106,16 +106,21 @@ extern "C" {
     extern const UT_icd *const fcitx_ptr_icd;
     extern const UT_icd *const fcitx_str_icd;
     extern const UT_icd *const fcitx_int_icd;
+    extern const UT_icd *const fcitx_int8_icd;
+    extern const UT_icd *const fcitx_int16_icd;
+    extern const UT_icd *const fcitx_int32_icd;
+    extern const UT_icd *const fcitx_int64_icd;
 
     /**
      * Function used to free the pointer
      **/
-    typedef void (*FcitxDestroyNotify)(void*);
+    typedef void (*FcitxDestroyNotify)(void *p);
     /**
      * Function used to free the content of a structure,
      * DO NOT free the pointer itself
      **/
-    typedef void (*FcitxFreeContentFunc)(void*);
+    typedef void (*FcitxFreeContentFunc)(void *data);
+    typedef void (*FcitxInitContentFunc)(void *data, void *owner);
     typedef void (*FcitxCallBack)();
     /**
      * A hash set for string

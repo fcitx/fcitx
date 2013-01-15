@@ -69,11 +69,19 @@
 #include <sys/endian.h>
 #endif
 
-static const UT_icd __fcitx_ptr_icd = {
-    sizeof(void*), NULL, NULL, NULL
-};
+#define DEFINE_SIMPLE_UT_ICD(type, name)                      \
+    static const UT_icd __fcitx_##name##_icd = {              \
+        sizeof(type), NULL, NULL, NULL                        \
+    };                                                        \
+    FCITX_EXPORT_API const UT_icd *const fcitx_##name##_icd = \
+        &__fcitx_##name##_icd;
 
-FCITX_EXPORT_API const UT_icd *const fcitx_ptr_icd = &__fcitx_ptr_icd;
+DEFINE_SIMPLE_UT_ICD(void*, ptr)
+DEFINE_SIMPLE_UT_ICD(int8_t, int8)
+DEFINE_SIMPLE_UT_ICD(int16_t, int16)
+DEFINE_SIMPLE_UT_ICD(int32_t, int32)
+DEFINE_SIMPLE_UT_ICD(int64_t, int64)
+
 FCITX_EXPORT_API const UT_icd *const fcitx_str_icd = &ut_str_icd;
 FCITX_EXPORT_API const UT_icd *const fcitx_int_icd = &ut_int_icd;
 
