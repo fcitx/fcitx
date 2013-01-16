@@ -42,6 +42,7 @@
 #define _FCITX_LOG_H_
 
 #include <stddef.h>
+#include <stdarg.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -75,7 +76,23 @@ extern "C" {
      * @param  ...
      * @return void
      **/
-    void FcitxLogFunc(FcitxLogLevel level, const char* filename, const int line, const char* fmt, ...);
+    void FcitxLogFunc(FcitxLogLevel level, const char* filename,
+                      const int line, const char* fmt, ...);
+
+    /**
+     * print a log string to stderr, may used to hook into other log system.
+     *
+     * @param level log level
+     * @param filename current filename
+     * @param line line number
+     * @param fmt printf fmt
+     * @param ap va_list
+     * @return void
+     *
+     * @since 4.2.7
+     **/
+    void FcitxLogFuncV(FcitxLogLevel e, const char* filename, const int line,
+                       const char* fmt, va_list ap);
 
     /**
      * set log level

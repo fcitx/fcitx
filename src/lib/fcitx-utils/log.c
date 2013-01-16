@@ -22,7 +22,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <stdarg.h>
 #include <wchar.h>
 
 #include "config.h"
@@ -57,18 +56,21 @@ FcitxLogLevel FcitxLogGetLevel()
     return errorLevel;
 }
 
-FCITX_EXPORT_API
-void FcitxLogFunc(FcitxLogLevel e, const char* filename, const int line, const char* fmt, ...)
+
+FCITX_EXPORT_API void
+FcitxLogFuncV(FcitxLogLevel e, const char* filename, const int line,
+              const char* fmt, va_list ap)
 {
     if (!init) {
         init = 1;
         is_utf8 = fcitx_utils_current_locale_is_utf8();
     }
 
-    if ((int) e < 0)
+    if ((int) e < 0) {
         e = 0;
-    else if (e >= FCITX_NONE)
+    } else if (e >= FCITX_NONE) {
         e = FCITX_INFO;
+    }
 
     int realLevel = RealLevelIndex[e];
     int globalRealLevel = RealLevelIndex[errorLevel];
@@ -97,11 +99,8 @@ void FcitxLogFunc(FcitxLogLevel e, const char* filename, const int line, const c
     }
 
     char *buffer = NULL;
-    va_list ap;
     fprintf(stderr, "%d %s:%u) ", getpid(), filename, line);
-    va_start(ap, fmt);
     vasprintf(&buffer, fmt, ap);
-    va_end(ap);
 
     if (is_utf8) {
         fprintf(stderr, "%s\n", buffer);
@@ -118,7 +117,7 @@ void FcitxLogFunc(FcitxLogLevel e, const char* filename, const int line, const c
         size_t len = strlen(buffer);
         wchar_t *wmessage = NULL;
         size_t wlen = (len) * sizeof(wchar_t);
-        wmessage = (wchar_t *) fcitx_utils_malloc0((len + 10) * sizeof(wchar_t));
+        wmessage = (wchar_t *)fcitx_utils_malloc0((len + 10) * sizeof(wchar_t));
 
         IconvStr inp = buffer;
         char *outp = (char*) wmessage;
@@ -126,11 +125,19 @@ void FcitxLogFunc(FcitxLogLevel e, const char* filename, const int line, const c
         iconv(iconvW, &inp, &len, &outp, &wlen);
 
         fprintf(stderr, "%ls\n", wmessage);
-
         free(wmessage);
     }
-
     free(buffer);
+}
+
+FCITX_EXPORT_API void
+FcitxLogFunc(FcitxLogLevel e, const char* filename, const int line,
+             const char* fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    FcitxLogFuncV(e, filename, line, fmt, ap);
+    va_end(ap);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
