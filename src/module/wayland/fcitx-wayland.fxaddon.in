@@ -4,7 +4,7 @@ Prefix=Wayland
 Include0="wayland-defs.h"
 Macro0=FCITX_DISABLE_WAYLAND
 Function0=AddTask
-Function1=
+Function1=ScheduleFlush
 Function2=
 Function3=
 Function4=
@@ -18,11 +18,16 @@ Self.Type=FcitxWayland*
 [AddTask]
 Name=add-task
 Return=int
+ErrorReturn=-1
 Self.Deref=$<->epoll_fd
 Self.DerefType=int
 Arg0=FcitxWaylandTask*
 Arg1=uint32_t
 Res.WrapFunc=fx_epoll_add_task
+
+[ScheduleFlush]
+Name=schedule-flush
+Res.WrapFunc=FxWaylandScheduleFlush
 
 [FCITX_DISABLE_WAYLAND]
 Undefine=@ENABLE_WAYLAND@

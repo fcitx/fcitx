@@ -73,4 +73,10 @@ struct _FcitxWaylandTask {
     void *padding[2];
 };
 
+typedef void (*FcitxWaylandHandleGlobalAdded)(void *data, uint32_t id,
+                                              const char *iface,
+                                              uint32_t version);
+typedef void (*FcitxWaylandHandleGlobalRemoved)(void *data, uint32_t id,
+                                                const char *iface);
+
 #endif

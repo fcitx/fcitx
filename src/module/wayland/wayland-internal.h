@@ -32,6 +32,13 @@ typedef struct {
     int epoll_fd;
     FcitxWaylandTask dpy_task;
     FcitxHandlerTable *global_handlers;
+    struct wl_registry *registry;
 } FcitxWayland;
+
+typedef struct {
+    FcitxWaylandHandleGlobalAdded added;
+    FcitxWaylandHandleGlobalRemoved removed;
+    void *data;
+} FcitxWaylandGlobalHandler;
 
 #endif

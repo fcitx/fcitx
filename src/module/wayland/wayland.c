@@ -89,10 +89,60 @@ FxWaylandDisplayTaskHandler(FcitxWaylandTask *task, uint32_t events)
     }
 }
 
+static void
+FxWaylandGlobalHandlerFree(void *p)
+{
+    FcitxWaylandGlobalHandler *handler = p;
+    FCITX_UNUSED(handler);
+}
+
+static void
+FxWaylandUtArrayDone(void *p)
+{
+    UT_array *ary = p;
+    utarray_done(ary);
+}
+
+static void
+FxWaylandUtArrayInit(void *p)
+{
+    UT_array *ary = p;
+    utarray_init(ary, fcitx_int32_icd);
+}
+
+static void
+FcitxWaylandGlobalAdded(void *data, struct wl_registry *wl_registry,
+                        uint32_t name, const char *interface, uint32_t version)
+{
+    // TODO
+}
+
+static void
+FcitxWaylandGlobalRemoved(void *data, struct wl_registry *wl_registry,
+                          uint32_t name)
+{
+    // TODO
+}
+
+void
+FcitxWaylandLogFunc(const char *fmt, va_list ap)
+{
+    /* all of the log's (at least on the client side) are errors. */
+    FcitxLogFuncV(FCITX_ERROR, __FILE__, __LINE__, fmt, ap);
+}
+
+static const struct wl_registry_listener fx_wl_registry_listener = {
+    .global = FcitxWaylandGlobalAdded,
+    .global_remove = FcitxWaylandGlobalRemoved
+};
+
 static void*
 FxWaylandCreate(FcitxInstance *instance)
 {
     FcitxWayland *wl = fcitx_utils_new(FcitxWayland);
+
+    wl_log_set_handler_client(FcitxWaylandLogFunc);
+
     wl->owner = instance;
     wl->dpy = wl_display_connect(NULL);
     if (fcitx_unlikely(!wl->dpy))
@@ -101,12 +151,21 @@ FxWaylandCreate(FcitxInstance *instance)
     wl->epoll_fd = fx_epoll_create_cloexec();
     if (wl->epoll_fd < 0)
         goto disconnect;
+
     wl->dpy_task.fd = wl_display_get_fd(wl->dpy);
     wl->dpy_task.handler = FxWaylandDisplayTaskHandler;
     if (fx_epoll_add_task(wl->epoll_fd, &wl->dpy_task,
                           EPOLLIN | EPOLLERR | EPOLLHUP) == -1)
         goto close_epoll;
 
+    wl->registry = wl_display_get_registry(wl->dpy);
+    wl_registry_add_listener(wl->registry, &fx_wl_registry_listener, wl);
+
+    wl->global_handlers = fcitx_handler_table_new_with_data(
+        sizeof(FcitxWaylandGlobalHandler), FxWaylandGlobalHandlerFree,
+        sizeof(UT_array), FxWaylandUtArrayInit, FxWaylandUtArrayDone);
+
+    wl_display_roundtrip(wl->dpy);
     FcitxWaylandAddFunctions(instance);
     return wl;
 close_epoll:
@@ -131,7 +190,7 @@ static void
 FxWaylandSetFD(void *self)
 {
     FcitxWayland *wl = (FcitxWayland*)self;
-    int fd = wl_display_get_fd(wl->dpy);
+    int fd = wl->epoll_fd;
     FcitxInstance *instance = wl->owner;
     FD_SET(fd, FcitxInstanceGetReadFDSet(instance));
 
