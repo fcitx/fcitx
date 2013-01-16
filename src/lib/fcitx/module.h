@@ -150,10 +150,19 @@ extern "C" {
      **/
     void FcitxModuleAddFunction(FcitxAddon *addon, FcitxModuleFunction func);
 
+#ifdef __cplusplus
+#define DECLARE_ADDFUNCTIONS(prefix)                                    \
+    extern "C" {                                                        \
+        static inline FcitxAddon*                                       \
+        Fcitx_##prefix##_GetAddon(FcitxInstance *instance);             \
+        static void Fcitx##prefix##AddFunctions(FcitxInstance *instance); \
+    }
+#else
 #define DECLARE_ADDFUNCTIONS(prefix)                                    \
     static inline FcitxAddon*                                           \
     Fcitx_##prefix##_GetAddon(FcitxInstance *instance);                 \
     static void Fcitx##prefix##AddFunctions(FcitxInstance *instance);
+#endif
 
 // Well won't work if there are multiple instances, but that will also break
 // lots of other things anyway.
