@@ -1,4 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
@@ -6,21 +5,22 @@
 #   <alisha.4m@gmail.com>, 2012.
 # Alisha <alisha.4m@gmail.com>, 2012.
 #   <hiunnhue108@ymail.com>, 2012.
-# Weng Xuetian <wengxt@gmail.com>, 2012.
+# Weng Xuetian <wengxt@gmail.com>, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-01-01 16:17-0500\n"
-"PO-Revision-Date: 2012-12-08 16:14+0000\n"
-"Last-Translator: Alisha <alisha.4m@gmail.com>\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
+"POT-Creation-Date: 2013-01-17 10:22-0500\n"
+"PO-Revision-Date: 2013-01-17 10:25-0500\n"
+"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
+"Language-Team: Chinese Simplified <kde-china@kde.org>\n"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: src/im/table/table.c:1410
 msgid " Ctrl+Delete To Delete"
@@ -140,7 +140,7 @@ msgstr "Alt+Shift"
 msgid "ALT_SUPER"
 msgstr "Alt+Super"
 
-#: data/config.desc:178
+#: data/config.desc:184
 msgid "Action after press enter"
 msgstr "按下 enter 鍵後動作"
 
@@ -148,7 +148,7 @@ msgstr "按下 enter 鍵後動作"
 msgid "Activate input method"
 msgstr "啟用輸入法"
 
-#: data/config.desc:161
+#: data/config.desc:167
 msgid "Active"
 msgstr "作用"
 
@@ -232,7 +232,7 @@ msgstr "依據頻率"
 msgid "AdjustNo"
 msgstr "不調整"
 
-#: data/config.desc:152
+#: data/config.desc:158
 msgid "All"
 msgstr "所有"
 
@@ -254,18 +254,18 @@ msgstr ""
 msgid "Allow to Override System XKB Settings"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:12 src/im/table/table.desc:131
+#: src/im/keyboard/fcitx-keyboard.desc:12 src/im/table/table.desc:137
 #: src/module/autoeng/fcitx-autoeng.desc:7
 #: src/module/clipboard/fcitx-clipboard.desc:40
 #: src/module/quickphrase/fcitx-quickphrase.desc:21
 msgid "Alt"
 msgstr "Alt"
 
-#: src/im/table/table.desc:166
+#: src/im/table/table.desc:172
 msgid "Alternative Next Page Key"
 msgstr "替代下一頁快捷鍵"
 
-#: src/im/table/table.desc:156 src/im/table/table.desc:161
+#: src/im/table/table.desc:162 src/im/table/table.desc:167
 msgid "Alternative Prev Page Key"
 msgstr "替代上一頁快捷鍵"
 
@@ -273,9 +273,9 @@ msgstr "替代上一頁快捷鍵"
 msgid "Alternative Trigger Key for QuickPhrase"
 msgstr "額外快速輸入觸發鍵"
 
-#: data/config.desc:212 data/config.desc:218 data/config.desc:224
-#: data/config.desc:230 data/config.desc:236 data/config.desc:242
-#: data/config.desc:248
+#: data/config.desc:218 data/config.desc:224 data/config.desc:230
+#: data/config.desc:236 data/config.desc:242 data/config.desc:248
+#: data/config.desc:254
 msgid "Appearance"
 msgstr "外觀"
 
@@ -319,19 +319,19 @@ msgstr "自動英文模式"
 msgid "Auto English Trigger Word"
 msgstr "自動觸發英文模式字詞"
 
-#: src/im/table/table.desc:82
+#: src/im/table/table.desc:88
 msgid "Auto Phrase"
 msgstr "自動字詞"
 
-#: src/im/table/table.desc:92
+#: src/im/table/table.desc:98
 msgid "Auto Phrase Length"
 msgstr "自動字詞長度"
 
-#: src/im/table/table.desc:97
+#: src/im/table/table.desc:103
 msgid "Auto Phrase Phrase"
 msgstr "字詞參與自動造詞"
 
-#: src/im/table/table.desc:43
+#: src/im/table/table.desc:49
 msgid "Auto Send Candidate Word"
 msgstr "自動送出候選字"
 
@@ -365,7 +365,7 @@ msgstr "Ctrl+Shift"
 msgid "CTRL_SUPER"
 msgstr "Ctrl+Super"
 
-#: src/im/pinyin/py.c:357
+#: src/im/pinyin/py.c:402
 msgid "Can not find System Database of Pinyin!"
 msgstr ""
 
@@ -395,7 +395,7 @@ msgstr "無法開啟 Socket %s：%s"
 msgid "Candidate Index Color"
 msgstr ""
 
-#: data/config.desc:196
+#: data/config.desc:202
 msgid "Candidate Word Number"
 msgstr "候選字數"
 
@@ -403,17 +403,17 @@ msgstr "候選字數"
 msgid "Cangjie"
 msgstr "倉頡"
 
-#: src/im/pinyin/py.c:1683
+#: src/im/pinyin/py.c:1728
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: src/im/pinyin/py.c:1745
+#: src/im/pinyin/py.c:1790
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
 
-#: src/im/pinyin/py.c:1620
+#: src/im/pinyin/py.c:1665
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
@@ -446,7 +446,7 @@ msgstr ""
 msgid "Cannot find xim_server on root window."
 msgstr ""
 
-#: src/im/table/table.c:655
+#: src/im/table/table.c:653
 msgid "Cannot found Pinyin"
 msgstr ""
 
@@ -462,30 +462,30 @@ msgstr ""
 msgid "Category"
 msgstr "類別"
 
-#: src/im/table/table.desc:121
+#: src/im/table/table.desc:127
 msgid "Choose"
 msgstr "選擇鍵"
 
-#: data/config.desc:112
+#: data/config.desc:118
 msgid "Choose Second and Third Candidate Word"
 msgstr "選擇第二第三候選詞"
 
-#: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:126
+#: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:132
 #: src/module/autoeng/fcitx-autoeng.desc:2
 #: src/module/clipboard/fcitx-clipboard.desc:35
 #: src/module/quickphrase/fcitx-quickphrase.desc:16
 msgid "Choose key modifier"
 msgstr "選詞修飾鍵"
 
-#: src/im/table/table.c:720
+#: src/im/table/table.c:721
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr "選擇要刪除的字詞，Escape 鍵取消"
 
-#: src/im/table/table.c:712
+#: src/im/table/table.c:713
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "選擇放在前面的字詞，Escape 鍵取消"
 
-#: src/im/table/table.c:728
+#: src/im/table/table.c:729
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "選擇要清理輸入頻率的字詞，Escape 鍵取消"
 
@@ -510,7 +510,7 @@ msgstr "支援皮膚的經典介面"
 msgid "ClassicUI"
 msgstr "經典介面"
 
-#: data/config.desc:175
+#: data/config.desc:181
 msgid "Clean"
 msgstr "清除"
 
@@ -556,22 +556,23 @@ msgstr "編碼為 "
 #: src/im/table/table.desc:1 src/im/table/table.desc:6
 #: src/im/table/table.desc:10 src/im/table/table.desc:14
 #: src/im/table/table.desc:18 src/im/table/table.desc:27
-#: src/im/table/table.desc:32 src/im/table/table.desc:37
-#: src/im/table/table.desc:42 src/im/table/table.desc:47
-#: src/im/table/table.desc:52 src/im/table/table.desc:57
-#: src/im/table/table.desc:62 src/im/table/table.desc:67
-#: src/im/table/table.desc:72 src/im/table/table.desc:77
-#: src/im/table/table.desc:81 src/im/table/table.desc:86
-#: src/im/table/table.desc:91 src/im/table/table.desc:96
-#: src/im/table/table.desc:101 src/im/table/table.desc:106
-#: src/im/table/table.desc:110 src/im/table/table.desc:115
-#: src/im/table/table.desc:120 src/im/table/table.desc:125
-#: src/im/table/table.desc:135 src/im/table/table.desc:140
-#: src/im/table/table.desc:145 src/im/table/table.desc:150
-#: src/im/table/table.desc:155 src/im/table/table.desc:160
-#: src/im/table/table.desc:165 src/im/table/table.desc:170
-#: src/im/table/table.desc:175 src/im/table/table.desc:180
-#: src/im/table/table.desc:185 src/im/table/table.desc:190
+#: src/im/table/table.desc:33 src/im/table/table.desc:38
+#: src/im/table/table.desc:43 src/im/table/table.desc:48
+#: src/im/table/table.desc:53 src/im/table/table.desc:58
+#: src/im/table/table.desc:63 src/im/table/table.desc:68
+#: src/im/table/table.desc:73 src/im/table/table.desc:78
+#: src/im/table/table.desc:83 src/im/table/table.desc:87
+#: src/im/table/table.desc:92 src/im/table/table.desc:97
+#: src/im/table/table.desc:102 src/im/table/table.desc:107
+#: src/im/table/table.desc:112 src/im/table/table.desc:116
+#: src/im/table/table.desc:121 src/im/table/table.desc:126
+#: src/im/table/table.desc:131 src/im/table/table.desc:141
+#: src/im/table/table.desc:146 src/im/table/table.desc:151
+#: src/im/table/table.desc:156 src/im/table/table.desc:161
+#: src/im/table/table.desc:166 src/im/table/table.desc:171
+#: src/im/table/table.desc:176 src/im/table/table.desc:181
+#: src/im/table/table.desc:186 src/im/table/table.desc:191
+#: src/im/table/table.desc:196
 msgid "CodeTable"
 msgstr "碼表"
 
@@ -583,23 +584,23 @@ msgstr ""
 msgid "Comment"
 msgstr "描述"
 
-#: data/config.desc:176
+#: data/config.desc:182
 msgid "Commit"
 msgstr "提交輸入"
 
-#: src/im/table/table.desc:176
+#: src/im/table/table.desc:182
 msgid "Commit and pass when invalid key of this table pressed"
 msgstr "當輸入碼表中非法的按鍵時，提交輸入並且發送這個按鍵"
 
-#: src/im/table/table.desc:181
+#: src/im/table/table.desc:187
 msgid "Commit key for select first candidate"
 msgstr "第一個候選字的提交鍵"
 
-#: src/im/table/table.desc:186
+#: src/im/table/table.desc:192
 msgid "Commit string when there is no match"
 msgstr "當無符合時提交輸入"
 
-#: data/config.desc:190
+#: data/config.desc:196
 msgid "Commit when toggle state"
 msgstr "切換狀態時提交"
 
@@ -637,21 +638,13 @@ msgstr "方便地輸入英文或使用者定義的碼表"
 msgid "Convert Simplified Chinese To Traditional Chinese"
 msgstr "轉換簡體中文為正體中文"
 
-#: src/module/chttrans/chttrans.c:144 src/module/chttrans/chttrans.c:180
-msgid "Convert to Simplified Chinese"
-msgstr "轉換至簡體中文"
-
-#: src/module/chttrans/chttrans.c:144 src/module/chttrans/chttrans.c:180
-msgid "Convert to Traditional Chinese"
-msgstr "轉換至正體中文"
-
 #: src/ui/classic/skin.desc:103 src/ui/classic/skin.desc:111
 #: src/ui/classic/skin.desc:195 src/ui/classic/skin.desc:203
 #: src/ui/classic/skin.desc:247 src/ui/classic/skin.desc:255
 msgid "Copy"
 msgstr "複製"
 
-#: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:132
+#: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:138
 #: src/module/autoeng/fcitx-autoeng.desc:8
 #: src/module/clipboard/fcitx-clipboard.desc:41
 #: src/module/quickphrase/fcitx-quickphrase.desc:22
@@ -702,7 +695,7 @@ msgstr "刪除全部 (&l)"
 msgid "Default"
 msgstr "預設"
 
-#: data/config.desc:162
+#: data/config.desc:168
 msgid "Default Input Method State"
 msgstr "預設輸入法狀態"
 
@@ -735,7 +728,7 @@ msgstr "佈景說明"
 msgid "Dianbaoma"
 msgstr "電報碼"
 
-#: data/config.desc:184
+#: data/config.desc:190
 msgid "Disable Paging in Remind Mode"
 msgstr "聯想模式停用翻頁"
 
@@ -753,7 +746,7 @@ msgstr ""
 msgid "Disabled"
 msgstr "停用"
 
-#: data/config.desc:209
+#: data/config.desc:215
 msgid "Do not commit preedit text when unfocus a window"
 msgstr "未聚焦視窗時，不要提交預編輯文字"
 
@@ -761,11 +754,11 @@ msgstr "未聚焦視窗時，不要提交預編輯文字"
 msgid "Do not show in GUI"
 msgstr ""
 
-#: data/config.desc:251
+#: data/config.desc:257
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr "只有一個候選詞和預編輯字串時不顯示輸入視窗"
 
-#: data/config.desc:245
+#: data/config.desc:251
 msgid "Do not show input window if there is only preedit string"
 msgstr "只有預編輯字串時不顯示輸入視窗"
 
@@ -773,6 +766,10 @@ msgstr "只有預編輯字串時不顯示輸入視窗"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
 #: src/module/quickphrase/fcitx-quickphrase.desc:26
 msgid "Do not show spell hint"
+msgstr ""
+
+#: src/im/table/table.desc:29
+msgid "Do not sort word with code less than this level"
 msgstr ""
 
 #: src/lib/fcitx-utils/desktop-parse.c:525
@@ -800,7 +797,7 @@ msgstr ""
 msgid "E&xport"
 msgstr "匯出 (&X)"
 
-#: src/im/table/table.desc:141
+#: src/im/table/table.desc:147
 msgid "Enable"
 msgstr "啟用"
 
@@ -820,7 +817,7 @@ msgstr ""
 msgid "Enchance pinyin input in Fcitx"
 msgstr "增強 Fcitx 的拼音輸入"
 
-#: src/im/table/table.desc:63
+#: src/im/table/table.desc:69
 msgid "End Key"
 msgstr "中止鍵"
 
@@ -885,7 +882,7 @@ msgstr ""
 msgid "Error: skin file should only contain one directory."
 msgstr ""
 
-#: src/im/table/table.desc:78
+#: src/im/table/table.desc:84
 msgid "Exact Match"
 msgstr "精確相符"
 
@@ -978,7 +975,7 @@ msgstr ""
 msgid "First Candidate Color"
 msgstr ""
 
-#: src/im/table/table.desc:171
+#: src/im/table/table.desc:177
 msgid "First Candidate Display as Preedit"
 msgstr "顯示第一候選字為預編輯文字"
 
@@ -1146,7 +1143,7 @@ msgstr "模糊 uan 和 uang"
 msgid "Fuzzy z and zh"
 msgstr "模糊 z 和 zh"
 
-#: data/config.desc:203
+#: data/config.desc:209
 msgid "Give the tips of Phrase"
 msgstr "提示詞庫中字詞"
 
@@ -1204,8 +1201,9 @@ msgstr "平假名"
 #: data/config.desc:47 data/config.desc:53 data/config.desc:63
 #: data/config.desc:69 data/config.desc:75 data/config.desc:81
 #: data/config.desc:87 data/config.desc:93 data/config.desc:99
-#: data/config.desc:104 data/config.desc:109 data/config.desc:115
-#: data/config.desc:121 data/config.desc:127 data/config.desc:134
+#: data/config.desc:105 data/config.desc:110 data/config.desc:115
+#: data/config.desc:121 data/config.desc:127 data/config.desc:133
+#: data/config.desc:140
 msgid "Hotkey"
 msgstr "快捷鍵"
 
@@ -1264,7 +1262,7 @@ msgstr ""
 msgid "Ignore Input Method Layout Request"
 msgstr ""
 
-#: src/im/table/table.desc:191
+#: src/im/table/table.desc:197
 msgid "Ignore Punctuation"
 msgstr "忽略標點"
 
@@ -1276,7 +1274,7 @@ msgstr ""
 msgid "Inactivate Input Method"
 msgstr "不啟用輸入法"
 
-#: data/config.desc:160
+#: data/config.desc:166
 msgid "Inactive"
 msgstr "非作用"
 
@@ -1321,7 +1319,7 @@ msgstr "輸入法"
 msgid "Input Method Disabled"
 msgstr "停用輸入法"
 
-#: data/config.desc:227
+#: data/config.desc:233
 msgid "Input Method Hint will be only shown when state is active"
 msgstr "輸入法提示只在啟用狀態顯示"
 
@@ -1352,7 +1350,7 @@ msgstr "輸入法"
 msgid "Installer Script for Fcitx Skin"
 msgstr ""
 
-#: data/config.desc:72
+#: data/config.desc:78
 msgid "Interval of Two Key Input"
 msgstr "輸入間隔"
 
@@ -1383,7 +1381,7 @@ msgstr ""
 msgid "Katakana"
 msgstr "片假名"
 
-#: src/im/table/table.desc:87
+#: src/im/table/table.desc:93
 msgid ""
 "Keep current buffer when there is no match item and input length is equal "
 "code length"
@@ -1415,7 +1413,7 @@ msgstr "鍵盤"
 msgid "Keyboard Layout"
 msgstr "鍵盤配置"
 
-#: src/im/table/table.desc:151
+#: src/im/table/table.desc:157
 msgid "Keyboard Layout to be used"
 msgstr "鍵盤配置"
 
@@ -1456,7 +1454,7 @@ msgstr "左 Shift"
 msgid "LangCode"
 msgstr "語言代碼"
 
-#: src/im/table/table.desc:136
+#: src/im/table/table.desc:142
 msgid "Language Code for this table"
 msgstr "這個碼表的語言代碼"
 
@@ -1468,7 +1466,7 @@ msgstr "拉丁字母"
 msgid "Latin punct"
 msgstr "英文標點符號"
 
-#: src/im/table/table.c:606
+#: src/im/table/table.c:604
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1477,6 +1475,10 @@ msgstr "左/右鍵選字，Enter 鍵確認，Escape 鍵取消"
 #: src/module/clipboard/fcitx-clipboard.desc:11
 msgid "Length of Clipboard History to Save"
 msgstr "剪切簿歷史長度"
+
+#: src/im/table/table.desc:28
+msgid "Level of simple code"
+msgstr ""
 
 #: data/addon.desc:31
 msgid "Library"
@@ -1495,7 +1497,7 @@ msgstr "載入自動字詞成功"
 msgid "Load Table Dict OK"
 msgstr "載入碼表字典成功"
 
-#: src/im/pinyin/py.c:373
+#: src/im/pinyin/py.c:418
 #, c-format
 msgid "Load extra dict: %s"
 msgstr ""
@@ -1557,7 +1559,7 @@ msgstr ""
 msgid "Main Window Position Y"
 msgstr ""
 
-#: src/im/table/table.desc:73
+#: src/im/table/table.desc:79
 msgid "Matching Key"
 msgstr "模糊鍵"
 
@@ -1607,7 +1609,7 @@ msgstr "選單字型"
 msgid "Menu Font Size"
 msgstr "選單字體尺寸"
 
-#: src/im/pinyin/py.c:2135
+#: src/im/pinyin/py.c:2180
 msgid "Migrate the old file path to the new one"
 msgstr ""
 
@@ -1619,12 +1621,12 @@ msgstr ""
 msgid "Minimum length to trigger word hint"
 msgstr "最小觸發單字提示長度"
 
-#: src/im/table/table.desc:53
+#: src/im/table/table.desc:59
 msgid ""
 "Minimum length trigger auto send candidate when there will be no candidate"
 msgstr "沒有候選字時觸發自動送出候選字的最短輸入長度"
 
-#: src/im/table/table.desc:48
+#: src/im/table/table.desc:54
 msgid "Minimum length trigger auto send candidate word when only one candidate"
 msgstr "在只有一個候選字時觸發自動送出候選字的最短輸入長度"
 
@@ -1661,12 +1663,12 @@ msgstr "顯示於使用者介面的名稱"
 msgid "Native"
 msgstr "原生"
 
-#: data/config.desc:137
+#: data/config.desc:143
 #, fuzzy
 msgid "Next Candidate Word"
 msgstr "自動送出候選字"
 
-#: data/config.desc:107
+#: data/config.desc:113
 msgid "Next Page"
 msgstr "下一頁"
 
@@ -1675,7 +1677,7 @@ msgstr "下一頁"
 msgid "Next Page Icon"
 msgstr ""
 
-#: data/config.desc:151
+#: data/config.desc:157
 msgid "No"
 msgstr "否"
 
@@ -1695,7 +1697,7 @@ msgstr "沒有輸入視窗"
 msgid "No local input method"
 msgstr "沒有局部輸入法"
 
-#: src/lib/fcitx/instance.c:186 src/lib/fcitx/instance.c:451
+#: src/lib/fcitx/instance.c:188 src/lib/fcitx/instance.c:461
 msgid "No remind"
 msgstr "沒有聯想"
 
@@ -1704,7 +1706,7 @@ msgstr "沒有聯想"
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:130
+#: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:136
 #: src/module/autoeng/fcitx-autoeng.desc:6
 #: src/module/clipboard/fcitx-clipboard.desc:39
 #: src/module/quickphrase/fcitx-quickphrase.desc:5
@@ -1716,7 +1718,7 @@ msgstr "無"
 msgid "Note for GNOME Later than 3.6"
 msgstr ""
 
-#: data/config.desc:174
+#: data/config.desc:180
 msgid "Nothing"
 msgstr "不動作"
 
@@ -1742,7 +1744,7 @@ msgstr ""
 msgid "Option %s is Invalid."
 msgstr ""
 
-#: src/im/table/table.desc:28
+#: src/im/table/table.desc:34
 msgid "Order of Code Table"
 msgstr "碼表順序"
 
@@ -1750,9 +1752,9 @@ msgstr "碼表順序"
 msgid "Other Color"
 msgstr ""
 
-#: data/config.desc:165 data/config.desc:171 data/config.desc:181
-#: data/config.desc:187 data/config.desc:193 data/config.desc:200
-#: data/config.desc:206
+#: data/config.desc:171 data/config.desc:177 data/config.desc:187
+#: data/config.desc:193 data/config.desc:199 data/config.desc:206
+#: data/config.desc:212
 msgid "Output"
 msgstr "輸出"
 
@@ -1764,7 +1766,7 @@ msgstr ""
 msgid "Parent"
 msgstr "所屬附加元件"
 
-#: data/config.desc:153
+#: data/config.desc:159
 msgid "PerProgram"
 msgstr "按程式"
 
@@ -1780,7 +1782,7 @@ msgstr "字詞已在碼表中"
 msgid "Phrase:"
 msgstr "字詞："
 
-#: src/im/pinyin/py.c:104 src/im/pinyin/fcitx-pinyin.conf.in:3
+#: src/im/pinyin/py.c:105 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
 #: src/im/pinyin/fcitx-pinyin.desc:15 src/im/pinyin/fcitx-pinyin.desc:20
 #: src/im/pinyin/fcitx-pinyin.desc:25 src/im/pinyin/fcitx-pinyin.desc:30
@@ -1809,15 +1811,15 @@ msgstr "拼音"
 msgid "Pinyin Enhance"
 msgstr "拼音增強"
 
-#: src/im/pinyin/py.c:423
+#: src/im/pinyin/py.c:468
 msgid "Pinyin Index Magic Number Doesn't match"
 msgstr ""
 
-#: src/im/table/table.desc:38
+#: src/im/table/table.desc:44
 msgid "Pinyin Key"
 msgstr "拼音鍵"
 
-#: src/im/table/table.c:631
+#: src/im/table/table.c:629
 msgid "Pinyin: "
 msgstr "拼音："
 
@@ -1861,12 +1863,12 @@ msgstr ""
 msgid "Preferred Enchant provider"
 msgstr ""
 
-#: src/im/pinyin/py.c:727
+#: src/im/pinyin/py.c:772
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:729
+#: src/im/pinyin/py.c:774
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
@@ -1875,19 +1877,19 @@ msgstr ""
 msgid "Press Enter to input text"
 msgstr "按下 Enter 輸入文字"
 
-#: data/config.desc:66
+#: data/config.desc:72
 msgid "Press Switch Key twice to Change Mode"
 msgstr "按兩下切換鍵時切換模式"
 
-#: src/im/pinyin/py.c:686
+#: src/im/pinyin/py.c:731
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:699
+#: src/im/pinyin/py.c:744
 msgid "Press number to make word in frequent list"
 msgstr "按下數字加入常用字表"
 
-#: data/config.desc:102
+#: data/config.desc:108
 msgid "Prev Page"
 msgstr "上一頁"
 
@@ -1896,7 +1898,7 @@ msgstr "上一頁"
 msgid "Prev Page Icon"
 msgstr ""
 
-#: data/config.desc:130
+#: data/config.desc:136
 #, fuzzy
 msgid "Previous Candidate Word"
 msgstr "自動送出候選字"
@@ -1914,11 +1916,11 @@ msgstr "附加元件優先權"
 msgid "Profile"
 msgstr "設定檔"
 
-#: data/config.desc:141 data/config.desc:147 data/config.desc:156
+#: data/config.desc:147 data/config.desc:153 data/config.desc:162
 msgid "Program"
 msgstr "程式"
 
-#: src/im/table/table.desc:107
+#: src/im/table/table.desc:113
 msgid "Prompt Table Code"
 msgstr "提示碼表編碼"
 
@@ -2002,11 +2004,16 @@ msgstr "右Shift"
 msgid "Register IM"
 msgstr "註冊輸入法方法"
 
+#: data/config.desc:66
+#, fuzzy
+msgid "Reload configuration"
+msgstr "設定"
+
 #: src/im/table/table.c:1294
 msgid "Remind:"
 msgstr "聯想："
 
-#: src/im/pinyin/py.c:2001
+#: src/im/pinyin/py.c:2046
 msgid "Remind: "
 msgstr "聯想："
 
@@ -2078,7 +2085,7 @@ msgstr "兩側 Shift"
 msgid "Save Auto Created Phrase"
 msgstr ""
 
-#: src/im/table/table.desc:102
+#: src/im/table/table.desc:108
 msgid "Save Auto Phrase"
 msgstr "儲存自動字詞"
 
@@ -2090,7 +2097,7 @@ msgstr "儲存剪貼簿歷史為檔案"
 msgid "Save dict error"
 msgstr ""
 
-#: data/config.desc:118
+#: data/config.desc:124
 msgid "Saving All Config and Input History"
 msgstr "保存所有設定及輸入歷史"
 
@@ -2102,7 +2109,7 @@ msgstr "輸入法切換鍵"
 msgid "Search unicode"
 msgstr "搜尋 unicode"
 
-#: data/config.desc:144
+#: data/config.desc:150
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx 真正啟動前延遲的秒數"
 
@@ -2130,15 +2137,15 @@ msgstr ""
 msgid "Semicolon"
 msgstr "分號"
 
-#: src/im/table/table.desc:58
+#: src/im/table/table.desc:64
 msgid "Send Raw Preedit"
 msgstr "發送原始輸入按鍵"
 
-#: data/config.desc:191
+#: data/config.desc:197
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr "切換到非作用模式時直接送出輸入文字"
 
-#: data/config.desc:154
+#: data/config.desc:160
 msgid "Share State Among Window"
 msgstr "在視窗間共享狀態"
 
@@ -2146,7 +2153,7 @@ msgstr "在視窗間共享狀態"
 msgid "SharedLibrary"
 msgstr "共享庫"
 
-#: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:133
+#: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:139
 #: src/module/autoeng/fcitx-autoeng.desc:9
 #: src/module/clipboard/fcitx-clipboard.desc:42
 #: src/module/quickphrase/fcitx-quickphrase.desc:23
@@ -2157,15 +2164,15 @@ msgstr "Shift"
 msgid "Show"
 msgstr "顯示"
 
-#: data/config.desc:215
+#: data/config.desc:221
 msgid "Show Input Method Hint After Input method changed"
 msgstr "切換輸入法時顯示輸入法提示"
 
-#: data/config.desc:221
+#: data/config.desc:227
 msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr "獲得輸入焦點並且輸入法變化時顯示輸入法提示"
 
-#: data/config.desc:233
+#: data/config.desc:239
 msgid "Show Input Speed"
 msgstr "顯示輸入速度"
 
@@ -2173,7 +2180,7 @@ msgstr "顯示輸入速度"
 msgid "Show Preedit String in Client Window"
 msgstr "在用戶端視窗中顯示預編輯字串"
 
-#: data/config.desc:239
+#: data/config.desc:245
 msgid "Show Version"
 msgstr "顯示版本"
 
@@ -2181,13 +2188,17 @@ msgstr "顯示版本"
 msgid "Shuang Pin Schema"
 msgstr "預設雙拼方案"
 
-#: src/im/pinyin/py.c:120 src/im/pinyin/shuangpin.conf.in:3
+#: src/im/pinyin/py.c:121 src/im/pinyin/shuangpin.conf.in:3
 msgid "Shuangpin"
 msgstr "雙拼"
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:4
 msgid "Simple Pinyin support for Fcitx"
 msgstr "Fcitx 簡單的拼音支援"
+
+#: src/module/chttrans/chttrans.c:144 src/module/chttrans/chttrans.c:180
+msgid "Simplified Chinese"
+msgstr "至簡體中文"
 
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
@@ -2302,11 +2313,11 @@ msgstr ""
 msgid "Successfully Installed skin"
 msgstr ""
 
-#: data/config.desc:124
+#: data/config.desc:130
 msgid "Switch Embeded Preedit"
 msgstr "切換嵌入預編輯字串"
 
-#: data/config.desc:96
+#: data/config.desc:102
 msgid "Switch Full Width Punc Mode"
 msgstr "切換全形標點符號"
 
@@ -2355,24 +2366,24 @@ msgstr "切換至第6個輸入法"
 msgid "Switch to the Third Input Method"
 msgstr "切換至第3個輸入法"
 
-#: data/config.desc:90
+#: data/config.desc:96
 msgid "Switching Full Width Character Mode"
 msgstr "切換全形字元模式"
 
-#: data/config.desc:84
+#: data/config.desc:90
 msgid "Switching Remind Mode"
 msgstr "切換聯想模式"
 
-#: data/config.desc:78
+#: data/config.desc:84
 msgid "Switching Virtual Keyboard"
 msgstr "切換虛擬鍵盤"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:9
-#: src/im/table/table.desc:111
+#: src/im/table/table.desc:117
 msgid "Symbol"
 msgstr "符號"
 
-#: src/im/table/table.desc:116
+#: src/im/table/table.desc:122
 msgid "Symbol File"
 msgstr "符號檔案"
 
@@ -2402,13 +2413,13 @@ msgid ""
 "larger than this when multiple characters have the same order of strokes."
 msgstr ""
 
-#: data/config.desc:138
+#: data/config.desc:144
 msgid ""
 "This is used in some modules and input methods to navigate to the next "
 "candidate word"
 msgstr ""
 
-#: data/config.desc:131
+#: data/config.desc:137
 msgid ""
 "This is used in some modules and input methods to navigate to the previous "
 "candidate word"
@@ -2439,7 +2450,7 @@ msgstr "切換全形半形字元"
 msgid "Toggle Input Method"
 msgstr "切換輸入法"
 
-#: src/lib/fcitx/instance.c:187 src/lib/fcitx/instance.c:452
+#: src/lib/fcitx/instance.c:189 src/lib/fcitx/instance.c:462
 msgid "Toggle Remind"
 msgstr "切換聯想"
 
@@ -2462,6 +2473,10 @@ msgstr "切換單字提示"
 #: src/module/autoeng/AutoEng.c:521
 msgid "Too long item for AutoEng"
 msgstr "自動英文條目過長"
+
+#: src/module/chttrans/chttrans.c:144 src/module/chttrans/chttrans.c:180
+msgid "Traditional Chinese"
+msgstr "正體中文"
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
@@ -2493,7 +2508,7 @@ msgstr "快速輸入觸發鍵"
 msgid "Type"
 msgstr "類型"
 
-#: data/config.desc:168
+#: data/config.desc:174
 msgid "Type half width Punc After a Number"
 msgstr "數字後跟半形標點符號"
 
@@ -2531,7 +2546,7 @@ msgstr ""
 msgid "Use Complete Pinyin"
 msgstr "使用完整拼音"
 
-#: src/im/table/table.desc:146
+#: src/im/table/table.desc:152
 msgid "Use Custom Prompt String defined in table"
 msgstr "使用碼表中自訂的提示文字"
 
@@ -2547,7 +2562,7 @@ msgstr "使用全形字元"
 msgid "Use Keyboard Layout as Input Method"
 msgstr "使用鍵盤配置作為輸入法"
 
-#: src/im/table/table.desc:68
+#: src/im/table/table.desc:74
 msgid "Use Matching Key"
 msgstr "使用模糊鍵"
 
@@ -2555,7 +2570,7 @@ msgstr "使用模糊鍵"
 msgid "Use On The Spot Style for XIM (Can not change during running)"
 msgstr "對 XIM 使用 On The Spot 風格（無法在執行時切換）"
 
-#: src/im/table/table.desc:33
+#: src/im/table/table.desc:39
 msgid "Use Pinyin"
 msgstr "使用拼音"
 
@@ -2583,7 +2598,7 @@ msgstr "使用 enter 鍵確認輸入字串"
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr "只在用額外切換鍵取消啟動後才使用它進行切換"
 
-#: src/lib/fcitx/instance.c:186 src/lib/fcitx/instance.c:451
+#: src/lib/fcitx/instance.c:188 src/lib/fcitx/instance.c:461
 msgid "Use remind"
 msgstr "使用聯想"
 
@@ -2767,7 +2782,7 @@ msgstr ""
 msgid "process:"
 msgstr ""
 
-#: src/lib/fcitx/instance.c:427
+#: src/lib/fcitx/instance.c:437
 msgid "pthread mutex init failed"
 msgstr ""
 
@@ -2784,6 +2799,9 @@ msgstr ""
 #, c-format
 msgid "your current font is: %s"
 msgstr ""
+
+#~ msgid "Convert to Traditional Chinese"
+#~ msgstr "轉換至正體中文"
 
 #, fuzzy
 #~ msgid "remote:"
