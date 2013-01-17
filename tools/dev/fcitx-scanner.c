@@ -288,7 +288,7 @@ fxscanner_load_entry_list(UT_array *ary, FcitxDesktopGroup *grp,
                           FxScannerListLoader loader, void *data)
 {
     size_t prefix_len = strlen(prefix);
-    FcitxAddonBuff buff = {0};
+    FcitxAddonBuff buff = {0, 0};
     int i;
     FcitxDesktopEntry *tmp_ety;
     boolean res = true;
@@ -600,7 +600,7 @@ fxscanner_function_write_public(FcitxAddonFuncDesc *func_desc,
                    func_desc->type ? func_desc->type : "void", "\n"
                    "Fcitx", addon_desc->prefix, func_desc->name,
                    "(FcitxInstance *instance");
-    int i;
+    unsigned int i;
     FcitxAddonArgDesc *arg_desc;
     for (i = 0;i < utarray_len(&func_desc->args);i++) {
         arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&func_desc->args, i);
@@ -667,7 +667,7 @@ fxscanner_addon_write_public(FcitxAddonDesc *addon_desc, FILE *ofp)
                    "#ifdef __cplusplus\n"
                    "extern \"C\" {\n"
                    "#endif\n\n");
-    int i;
+    unsigned int i;
     FcitxAddonMacroDesc *macro_desc;
     for (i = 0;i < utarray_len(&addon_desc->macros);i++) {
         macro_desc = (FcitxAddonMacroDesc*)_utarray_eltptr(
@@ -909,6 +909,7 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
 {
     if (!fxscanner_function_check_private(func_desc))
         return false;
+    FCITX_UNUSED(buff);
 
     /**
      * function definition
@@ -928,7 +929,7 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
      **/
     if (!utarray_len(&func_desc->args))
         _write_strings(ofp, "    FCITX_UNUSED(_args);\n");
-    int i;
+    unsigned int i;
     FcitxAddonArgDesc *arg_desc;
     for (i = 0;i < utarray_len(&func_desc->args);i++) {
         arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&func_desc->args, i);
@@ -1051,7 +1052,7 @@ fxscanner_addon_write_private(FcitxAddonDesc *addon_desc, FILE *ofp)
 {
     if (!fxscanner_addon_check_private(addon_desc))
         return false;
-    FcitxAddonBuff buff = {0};
+    FcitxAddonBuff buff = {0, 0};
     fxaddon_buff_realloc(&buff, addon_desc->name_len + 1);
     memcpy(buff.buff, addon_desc->name, addon_desc->name_len + 1);
     fxscanner_name_to_macro(buff.buff);
@@ -1069,7 +1070,7 @@ fxscanner_addon_write_private(FcitxAddonDesc *addon_desc, FILE *ofp)
                    addon_desc->prefix, "_)\n\n");
 
     FcitxAddonFuncDesc *func_desc;
-    int i;
+    unsigned int i;
     for (i = 0;i < utarray_len(&addon_desc->functions);i++) {
         func_desc = (FcitxAddonFuncDesc*)_utarray_eltptr(
             &addon_desc->functions, i);
