@@ -577,16 +577,21 @@ fxscanner_function_write_public(FcitxAddonFuncDesc *func_desc,
         FcitxLog(WARNING, "Cannot cache result of type void.");
         func_desc->cache = false;
     }
+    if (func_desc->err_ret && !func_desc->type) {
+        FcitxLog(WARNING, "Cannot set error return of type void.");
+        func_desc->err_ret = false;
+    }
     if (!func_desc->err_ret) {
         _write_strings(ofp, "DEFINE_GET_AND_INVOKE_FUNC(",
                        addon_desc->prefix, ", ", func_desc->name, ", ");
         fprintf(ofp, "%d", id);
         _write_str(ofp, ")\n");
     } else {
-        _write_strings(ofp, "DEFINE_GET_AND_INVOKE_FUNC_WITH_ERROR(",
+        _write_strings(ofp, "DEFINE_GET_AND_INVOKE_FUNC_WITH_TYPE_AND_ERROR(",
                        addon_desc->prefix, ", ", func_desc->name, ", ");
         fprintf(ofp, "%d", id);
-        _write_strings(ofp, ", ", func_desc->err_ret, ")\n");
+        _write_strings(ofp, ", ", func_desc->type,
+                       ", ", func_desc->err_ret, ")\n");
     }
     if (!func_desc->enable_wrapper)
         _write_str(ofp, "#if 0\n");

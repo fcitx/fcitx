@@ -182,8 +182,12 @@ extern "C" {
 
 #define DEFINE_GET_AND_INVOKE_FUNC(prefix, suffix, id)                  \
     DEFINE_GET_AND_INVOKE_FUNC_WITH_ERROR(prefix, suffix, id, NULL)
-
 #define DEFINE_GET_AND_INVOKE_FUNC_WITH_ERROR(prefix, suffix, id, err_ret) \
+    DEFINE_GET_AND_INVOKE_FUNC_WITH_TYPE_AND_ERROR(prefix, suffix, id,  \
+                                                   intptr_t, (intptr_t)err_ret)
+
+#define DEFINE_GET_AND_INVOKE_FUNC_WITH_TYPE_AND_ERROR(prefix, suffix,  \
+                                                       id, type, err_ret) \
     static inline FcitxModuleFunction                                  \
     Fcitx##prefix##Find##suffix(FcitxAddon *addon)                     \
     {                                                                  \
@@ -199,7 +203,8 @@ extern "C" {
     Fcitx##prefix##Invoke##suffix(FcitxInstance *instance,             \
                                   FcitxModuleFunctionArg args)         \
     {                                                                  \
-        static void *const on_err = (void*)(intptr_t)(err_ret);        \
+        static type _on_err = (err_ret);                               \
+        FCITX_DEF_CAST_TO_PTR(on_err, type, _on_err);                  \
         FcitxAddon *addon = Fcitx##prefix##GetAddon(instance);         \
         if (fcitx_unlikely(!addon))                                    \
             return on_err;                                             \
