@@ -2246,7 +2246,7 @@ PYGetPYMapByHZ(FcitxPinyinState* pystate, char* strHZ,
     return false;
 }
 
-void
+static void
 PYAddUserPhraseFromCString(FcitxPinyinState *pystate, const char *strHZ)
 {
     const char *pivot;

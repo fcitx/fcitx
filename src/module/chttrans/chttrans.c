@@ -69,7 +69,7 @@ CONFIG_BINDING_BEGIN(FcitxChttrans)
 CONFIG_BINDING_REGISTER("TraditionalChinese", "TransEngine", engine)
 CONFIG_BINDING_REGISTER("TraditionalChinese", "Hotkey", hkToggle)
 CONFIG_BINDING_REGISTER_WITH_FILTER("TraditionalChinese", "EnabledForIM",
-                                    strEnableForIM, ChttransEnabledForIMFilter);
+                                    strEnableForIM, ChttransEnabledForIMFilter)
 CONFIG_BINDING_END()
 
 FCITX_DEFINE_PLUGIN(fcitx_chttrans, module, FcitxModule) = {

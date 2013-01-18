@@ -222,7 +222,7 @@ extern "C" {
     /*                                    .args = __##var##_array } } */
 
 #define FCITX_MODULE_FUNCTION_ARGS void *arg, FcitxModuleFunctionArg args
-#define FCITX_MODULE_SELF(NAME, TYPE) TYPE *NAME = (TYPE*)arg;
+#define FCITX_MODULE_SELF(NAME, TYPE) TYPE *NAME = (TYPE*)arg
 #define FCITX_MODULE_ARG(NAME, TYPE, INDEX)                     \
     FCITX_DEF_CAST_FROM_PTR(TYPE, NAME, args.args[(INDEX)])
 
