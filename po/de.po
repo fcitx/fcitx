@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-01-18 11:14-0500\n"
-"PO-Revision-Date: 2012-12-08 14:06+0000\n"
+"POT-Creation-Date: 2013-01-18 15:05-0500\n"
+"PO-Revision-Date: 2013-01-17 15:29+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/fcitx/"
 "language/de_DE/)\n"
@@ -202,14 +202,12 @@ msgid "Addon Config %s is %s"
 msgstr "Addon Konfiguration %s ist %s"
 
 #: data/script/fcitx-diagnose.sh:704
-#, fuzzy
 msgid "Addon Config Dir:"
-msgstr "Addon Konfiguration %s ist %s"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:715
-#, fuzzy
 msgid "Addon List:"
-msgstr "Addon"
+msgstr ""
 
 #: src/im/table/fcitx-table.desc:14 src/im/table/table.desc:19
 msgid "Adjust Order"
@@ -658,9 +656,8 @@ msgid "Current Input Method Name"
 msgstr ""
 
 #: src/module/imselector/imselector.c:303
-#, fuzzy
 msgid "Current local input method is "
-msgstr "Standard Status Eingabemethode"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:424
 msgid "Current locale:"
@@ -707,9 +704,8 @@ msgid "Default Spell Hint Backends Order"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:780
-#, fuzzy
 msgid "Default input methods:"
-msgstr "Standard Status Eingabemethode"
+msgstr ""
 
 #: src/im/table/fcitx-table.desc:9
 msgid "Delete Phrase"
@@ -942,9 +938,8 @@ msgid "Fcitx Spelling Hint/Completion Support"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:436
-#, fuzzy
 msgid "Fcitx State."
-msgstr "Fcitx Skin Installer"
+msgstr ""
 
 #: src/module/unicode/fcitx-unicode.conf.in:3
 msgid "Fcitx Unicode Typing Support"
@@ -1328,9 +1323,8 @@ msgid "Input Method Related Environment Variables: "
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:750
-#, fuzzy
 msgid "Input Methods:"
-msgstr "Eingabemethode"
+msgstr ""
 
 #: src/lib/fcitx/ime.c:1582
 msgid "Input Speed: "
@@ -1360,9 +1354,8 @@ msgid "Invalid Entry: line %d missing '='"
 msgstr "Ungültiger Eintrag: In Linie %d fehlt \"=\""
 
 #: data/script/fcitx-diagnose.sh:719
-#, fuzzy
 msgid "Invalid addon config file ${1}."
-msgstr "Lade Addon Konfigurationsdatei: %s"
+msgstr ""
 
 #: src/lib/fcitx-utils/desktop-parse.c:515
 #, c-format
@@ -1652,9 +1645,8 @@ msgid "Native"
 msgstr ""
 
 #: data/config.desc:143
-#, fuzzy
 msgid "Next Candidate Word"
-msgstr "Anzahl Zeichenvorschläge"
+msgstr ""
 
 #: data/config.desc:113
 msgid "Next Page"
@@ -1889,9 +1881,8 @@ msgid "Prev Page Icon"
 msgstr "Icon für vorherige Seite Kandidaten"
 
 #: data/config.desc:136
-#, fuzzy
 msgid "Previous Candidate Word"
-msgstr "Farbe erster Kandidat"
+msgstr ""
 
 #: data/inputmethod.desc:15
 msgid "Priority"
@@ -2186,9 +2177,8 @@ msgid "Simple Pinyin support for Fcitx"
 msgstr "Simple Pinyin Unterstützung für Fcitx"
 
 #: src/module/chttrans/chttrans.c:144 src/module/chttrans/chttrans.c:180
-#, fuzzy
 msgid "Simplified Chinese"
-msgstr "Kurz-/Langzeichen"
+msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
@@ -2477,9 +2467,8 @@ msgid "Too long item for AutoEng"
 msgstr ""
 
 #: src/module/chttrans/chttrans.c:144 src/module/chttrans/chttrans.c:180
-#, fuzzy
 msgid "Traditional Chinese"
-msgstr "Chinesisch Langform"
+msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
@@ -2791,9 +2780,8 @@ msgid "pthread mutex init failed"
 msgstr "Initialisierung von pthread mutex fehlgeschlagen"
 
 #: data/script/fcitx-diagnose.sh:447
-#, fuzzy
 msgid "version:"
-msgstr "Version zeigen"
+msgstr ""
 
 #: src/module/xkb/fcitx-xkb.desc:14
 msgid "xmodmap command"
@@ -2803,7 +2791,3 @@ msgstr ""
 #, c-format
 msgid "your current font is: %s"
 msgstr ""
-
-#, fuzzy
-#~ msgid "remote:"
-#~ msgstr "Fcitx-Remote"

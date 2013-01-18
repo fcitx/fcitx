@@ -1,26 +1,26 @@
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
 #   <alisha.4m@gmail.com>, 2012.
 # Alisha <alisha.4m@gmail.com>, 2012.
-#   <hiunnhue108@ymail.com>, 2012.
-# Weng Xuetian <wengxt@gmail.com>, 2012, 2013.
+#   <hiunnhue108@ymail.com>, 2012-2013.
+# Weng Xuetian <wengxt@gmail.com>, 2012-2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-01-18 11:14-0500\n"
-"PO-Revision-Date: 2013-01-18 11:16-0500\n"
-"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
-"Language-Team: Chinese Simplified <kde-china@kde.org>\n"
+"POT-Creation-Date: 2013-01-18 15:05-0500\n"
+"PO-Revision-Date: 2013-01-17 15:30+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
+"language/zh_TW/)\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"language/zh_TW/)\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 1.5\n"
 
 #: src/im/table/table.c:1410
 msgid " Ctrl+Delete To Delete"
@@ -28,15 +28,15 @@ msgstr " 用 Ctrl+Delete 刪除"
 
 #: data/script/fcitx-diagnose.sh:179
 msgid "${1} not found."
-msgstr ""
+msgstr "找不到 ${1}。"
 
 #: data/script/fcitx-diagnose.sh:480
 msgid "${1} works properly."
-msgstr ""
+msgstr "${1} 運作正常。"
 
 #: tools/gui/quickphrase-editor/editor.cpp:42
 msgid "&Add"
-msgstr ""
+msgstr "新增 (&A)"
 
 #: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
@@ -88,23 +88,23 @@ msgstr "/分 經過時間："
 
 #: src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
-msgstr ""
+msgstr "0 代表立即提交，-1 代表保留所有已選單字"
 
 #: src/module/unicode/charselectdata.c:251
 msgid "<Low Surrogate>"
-msgstr ""
+msgstr "<低半代理區>"
 
 #: src/module/unicode/charselectdata.c:247
 msgid "<Non Private Use High Surrogate>"
-msgstr ""
+msgstr "<非專用高半代理區>"
 
 #: src/module/unicode/charselectdata.c:249
 msgid "<Private Use High Surrogate>"
-msgstr ""
+msgstr "<專用高半代理區>"
 
 #: src/module/unicode/charselectdata.c:253
 msgid "<Private Use>"
-msgstr ""
+msgstr "<專用區>"
 
 #: src/module/unicode/charselectdata.c:281
 msgid "<not assigned>"
@@ -174,7 +174,7 @@ msgstr ""
 
 #: src/module/autoeng/fcitx-autoeng.desc:37
 msgid "Add Extra space when selecting a candidate word"
-msgstr ""
+msgstr "選擇候選字時輸入額外空格"
 
 #: src/module/lua/fcitx-lua.conf.in:4
 msgid "Add Lua script support to Fcitx"
@@ -206,12 +206,11 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:704
 msgid "Addon Config Dir:"
-msgstr ""
+msgstr "附加元件設定目錄："
 
 #: data/script/fcitx-diagnose.sh:715
-#, fuzzy
 msgid "Addon List:"
-msgstr "附加元件"
+msgstr "附加元件清單："
 
 #: src/im/table/fcitx-table.desc:14 src/im/table/table.desc:19
 msgid "Adjust Order"
@@ -238,21 +237,21 @@ msgstr "所有"
 
 #: data/script/fcitx-diagnose.sh:426
 msgid "All locale:"
-msgstr ""
+msgstr "全部地區設定："
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:11
 msgid ""
 "Allow Pinyin Enhance to replace the first candidate word when the input "
 "string is very closed to English."
-msgstr ""
+msgstr "允許在輸入字串十分接近英文的時候替換第一個候選字"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
 msgid "Allow replacing the first candidate"
-msgstr ""
+msgstr "允許替換第一個候選字"
 
 #: src/module/xkb/fcitx-xkb.desc:4
 msgid "Allow to Override System XKB Settings"
-msgstr ""
+msgstr "允許覆蓋系統的 XKB 設定"
 
 #: src/im/keyboard/fcitx-keyboard.desc:12 src/im/table/table.desc:137
 #: src/module/autoeng/fcitx-autoeng.desc:7
@@ -281,7 +280,7 @@ msgstr "外觀"
 
 #: src/module/xkb/fcitx-xkb.desc:19
 msgid "Apply this custom xmodmap script after layout change"
-msgstr ""
+msgstr "在鍵盤配置修改之後應用自訂的 xmodmap 文稿"
 
 #: data/addon.desc:67
 msgid "Argument for InputMethod Register"
@@ -301,7 +300,7 @@ msgstr "在輸入特定字串時自動切換到英文模式"
 
 #: src/im/pinyin/fcitx-pinyin.desc:33
 msgid "Auto Create Phrase"
-msgstr ""
+msgstr "自動組詞"
 
 #: src/module/autoeng/fcitx-autoeng.desc:1
 #: src/module/autoeng/fcitx-autoeng.desc:11
@@ -343,11 +342,11 @@ msgstr ""
 #: src/ui/classic/skin.desc:69 src/ui/classic/skin.desc:137
 #: src/ui/classic/skin.desc:217
 msgid "Background Image"
-msgstr ""
+msgstr "背景圖片"
 
 #: data/script/fcitx-diagnose.sh:316
 msgid "Beginner's Guide"
-msgstr ""
+msgstr "新手指南"
 
 #: data/table/qxm.conf.in:3
 msgid "Bingchan"
@@ -367,7 +366,7 @@ msgstr "Ctrl+Super"
 
 #: src/im/pinyin/py.c:402
 msgid "Can not find System Database of Pinyin!"
-msgstr ""
+msgstr "無法找到系統的拼音字庫！"
 
 #: src/ui/classic/skin.c:121
 msgid "Can not load default skin, is installion correct?"
@@ -406,29 +405,29 @@ msgstr "倉頡"
 #: src/im/pinyin/py.c:1728
 #, c-format
 msgid "Cannot Save Frequent word: %s"
-msgstr ""
+msgstr "無法保存詞頻：%s"
 
 #: src/im/pinyin/py.c:1790
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
-msgstr ""
+msgstr "無法保存拼音索引：%s"
 
 #: src/im/pinyin/py.c:1665
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
-msgstr ""
+msgstr "無法保存使用者拼音字庫：%s"
 
 #: data/script/fcitx-diagnose.sh:478
 msgid "Cannot connect to fcitx correctly."
-msgstr ""
+msgstr "無法正確連接 fcitx。"
 
 #: data/script/fcitx-diagnose.sh:706
 msgid "Cannot find fcitx addon config directory."
-msgstr ""
+msgstr "找不到附加元件設定目錄。"
 
 #: data/script/fcitx-diagnose.sh:439
 msgid "Cannot find fcitx executable!"
-msgstr ""
+msgstr "找不到 fcitx 可執行檔！"
 
 #: data/script/fcitx-diagnose.sh:676
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
@@ -440,7 +439,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:609
 msgid "Cannot find fcitx input method module for qt."
-msgstr ""
+msgstr "找不到 fcitx 的Qt 輸入法模組。"
 
 #: data/script/fcitx-diagnose.sh:547
 msgid "Cannot find xim_server on root window."
@@ -448,15 +447,15 @@ msgstr ""
 
 #: src/im/table/table.c:653
 msgid "Cannot found Pinyin"
-msgstr ""
+msgstr "找不到拼音"
 
 #: data/script/fcitx-diagnose.sh:521
 msgid "Cannot interpret XMODIFIERS: ${1}."
-msgstr ""
+msgstr "無法解析 XMODIFIERS：${1}。"
 
 #: data/script/fcitx-diagnose.sh:754
 msgid "Cannot read im list from fcitx profile."
-msgstr ""
+msgstr "無法從 fcitx 設定檔中讀取輸入法清單。"
 
 #: data/addon.desc:22
 msgid "Category"
@@ -578,7 +577,7 @@ msgstr "碼表"
 
 #: src/ui/classic/skin.desc:157
 msgid "Color of Cursor"
-msgstr ""
+msgstr "游標顏色"
 
 #: data/addon.desc:12
 msgid "Comment"
@@ -613,9 +612,8 @@ msgid "ConfigFile"
 msgstr "設定檔"
 
 #: data/script/fcitx-diagnose.sh:862
-#, fuzzy
 msgid "Configuration."
-msgstr "設定"
+msgstr "設定。"
 
 #: src/ui/classic/classicui.c:459
 msgid "Configure"
@@ -665,7 +663,7 @@ msgstr "目前輸入法為 "
 
 #: data/script/fcitx-diagnose.sh:424
 msgid "Current locale:"
-msgstr ""
+msgstr "目前地區設定："
 
 #: data/addon.desc:37
 msgid "DBus"
@@ -705,12 +703,11 @@ msgstr "預設雙拼方案"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
-msgstr ""
+msgstr "拼寫提示後端的使用順序"
 
 #: data/script/fcitx-diagnose.sh:780
-#, fuzzy
 msgid "Default input methods:"
-msgstr "預設輸入法狀態"
+msgstr "預設輸入法："
 
 #: src/im/table/fcitx-table.desc:9
 msgid "Delete Phrase"
@@ -752,7 +749,7 @@ msgstr "未聚焦視窗時，不要提交預編輯文字"
 
 #: data/addon.desc:77
 msgid "Do not show in GUI"
-msgstr ""
+msgstr "不在圖形介面顯示"
 
 #: data/config.desc:257
 msgid "Do not show input window if there is only one candidate and preedit"
@@ -766,7 +763,7 @@ msgstr "只有預編輯字串時不顯示輸入視窗"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
 #: src/module/quickphrase/fcitx-quickphrase.desc:26
 msgid "Do not show spell hint"
-msgstr ""
+msgstr "不顯示拼寫提示"
 
 #: src/im/table/table.desc:29
 msgid "Do not sort word with code less than this level"
@@ -827,7 +824,7 @@ msgstr "英文（美國）"
 
 #: src/ui/classic/skin.desc:77
 msgid "English Mode Icon"
-msgstr ""
+msgstr "英文模式圖示"
 
 #: src/lib/fcitx-config/fcitx-config.c:390
 msgid "Enum Option is invalid, take it as string"
@@ -849,11 +846,11 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:495
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
-msgstr ""
+msgstr "環境變數 ${1} 正確地設定為「${2}」。"
 
 #: data/script/fcitx-diagnose.sh:412
 msgid "Environment."
-msgstr ""
+msgstr "環境。"
 
 #: data/table/erbi.conf.in:3
 msgid "Erbi"
@@ -909,7 +906,7 @@ msgstr "Fcitx"
 
 #: data/script/fcitx-diagnose.sh:703
 msgid "Fcitx Addons:"
-msgstr ""
+msgstr "Fcitx 附加元件："
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:4
 msgid "Fcitx Clipboard access"
@@ -940,9 +937,8 @@ msgid "Fcitx Spelling Hint/Completion Support"
 msgstr "Fcitx 的拼寫提示與補全支援"
 
 #: data/script/fcitx-diagnose.sh:436
-#, fuzzy
 msgid "Fcitx State."
-msgstr "Fcitx 佈景安裝程式"
+msgstr "Fcitx 狀態。"
 
 #: src/module/unicode/fcitx-unicode.conf.in:3
 msgid "Fcitx Unicode Typing Support"
@@ -954,12 +950,12 @@ msgstr "Fcitx XIM 前端"
 
 #: data/script/fcitx-diagnose.sh:463
 msgid "Fcitx is not running."
-msgstr ""
+msgstr "Fcitx 未執行。"
 
 #: data/script/fcitx-diagnose.sh:450
 #, sh-format
 msgid "Fcitx version: ${version}"
-msgstr ""
+msgstr "Fcitx 版本：${version}"
 
 #: src/ui/classic/skin.desc:109 src/ui/classic/skin.desc:201
 #: src/ui/classic/skin.desc:253
@@ -973,7 +969,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:45
 msgid "First Candidate Color"
-msgstr ""
+msgstr "第一候選字顏色"
 
 #: src/im/table/table.desc:177
 msgid "First Candidate Display as Preedit"
@@ -981,11 +977,11 @@ msgstr "顯示第一候選字為預編輯文字"
 
 #: src/im/pinyin/fcitx-pinyin.desc:140
 msgid "Fix misstype gn/ng"
-msgstr ""
+msgstr "忽略拼音中ng->gn的輸入錯誤"
 
 #: src/im/pinyin/fcitx-pinyin.desc:145
 msgid "Fix misstype v/u"
-msgstr ""
+msgstr "忽略拼音中 u->v 的輸入錯誤"
 
 #: src/im/pinyin/fcitx-pinyin.desc:18
 msgid "Fix preedit cursor at head"
@@ -1009,32 +1005,31 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:741
 msgid "Found ${1} disabled addons:"
-msgstr ""
+msgstr "找到 ${1} 停用附加元件："
 
 #: data/script/fcitx-diagnose.sh:736
 msgid "Found ${1} enabled addons:"
-msgstr ""
+msgstr "找到 ${1} 啟用附加元件："
 
 #: data/script/fcitx-diagnose.sh:775
-#, fuzzy
 msgid "Found ${1} enabled input methods:"
-msgstr "目前啟用的輸入法清單"
+msgstr "找到 ${1} 啟用輸入法："
 
 #: data/script/fcitx-diagnose.sh:472
 msgid "Found ${1} fcitx process:"
-msgstr ""
+msgstr "找到 ${1} fcitx 行程："
 
 #: data/script/fcitx-diagnose.sh:470
 msgid "Found ${1} fcitx processes:"
-msgstr ""
+msgstr "找到 ${1} fcitx 行程："
 
 #: data/script/fcitx-diagnose.sh:713
 msgid "Found fcitx addon config directory: ${1}."
-msgstr ""
+msgstr "找到 fcitx 附加元件設定目錄：${1}。"
 
 #: data/script/fcitx-diagnose.sh:445
 msgid "Found fcitx at ${1}."
-msgstr ""
+msgstr "在 ${1} 找到 fcitx。"
 
 #: data/script/fcitx-diagnose.sh:636
 msgid "Found fcitx im modules for gtk ${1}."
@@ -1046,7 +1041,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:593
 msgid "Found fcitx qt im module: ${1}."
-msgstr ""
+msgstr "找到 fcitx Qt 輸入法模組：${1}。"
 
 #: data/script/fcitx-diagnose.sh:631
 msgid "Found gtk-query-immodules for gtk ${1} at ${2}."
@@ -1058,7 +1053,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:601
 msgid "Found unknown fcitx qt module: ${1}."
-msgstr ""
+msgstr "找到未知的 fcitx Qt 模組：${1}。"
 
 #: data/addon.desc:19
 msgid "Frontend"
@@ -1078,9 +1073,8 @@ msgid "Frontend: open %s fail %s"
 msgstr "前端：開啟 %s 失敗 %s"
 
 #: data/script/fcitx-diagnose.sh:855
-#, fuzzy
 msgid "Frontends setup."
-msgstr "前端"
+msgstr "前端設定。"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1186,7 +1180,7 @@ msgstr "半形字元"
 
 #: data/script/fcitx-diagnose.sh:349
 msgid "Hall of Shame for Linux IME Support"
-msgstr ""
+msgstr "Linux 程式的輸入法支援問題"
 
 #: src/ui/classic/fcitx-classic-ui.desc:46
 msgid "Hide"
@@ -1209,11 +1203,11 @@ msgstr "快捷鍵"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:30
 msgid "Hotkey for Inputing Character From Phrase"
-msgstr ""
+msgstr "以詞定字"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:35
 msgid "Hotkey for switching to Inputing Character From Phrase mode"
-msgstr ""
+msgstr "切換至以詞定字模式"
 
 #: src/im/pinyin/fcitx-pinyin.desc:43
 msgid "Hotkey of Adding Frequent Word"
@@ -1230,7 +1224,7 @@ msgstr "快捷鍵：刪除常用字"
 #: src/lib/fcitx/ime.c:300
 #, c-format
 msgid "IM: bad im %s"
-msgstr ""
+msgstr "輸入法：有問題的輸入法 %s"
 
 #: src/lib/fcitx/ime.c:281
 #, c-format
@@ -1260,7 +1254,7 @@ msgstr ""
 
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Ignore Input Method Layout Request"
-msgstr ""
+msgstr "忽略輸入法的鍵盤配置請求"
 
 #: src/im/table/table.desc:197
 msgid "Ignore Punctuation"
@@ -1268,7 +1262,7 @@ msgstr "忽略標點"
 
 #: src/module/clipboard/fcitx-clipboard.desc:45
 msgid "Ignore blank selections"
-msgstr ""
+msgstr "忽略空白的剪貼簿內容"
 
 #: data/config.desc:39
 msgid "Inactivate Input Method"
@@ -1292,7 +1286,7 @@ msgstr "輸入法間切換時包含未啟用狀態"
 
 #: src/module/clipboard/fcitx-clipboard.desc:31
 msgid "Include the text currently selected in clipboard history."
-msgstr ""
+msgstr "加入目前選取文字到剪貼簿歷史"
 
 #: src/ui/classic/skin.desc:213
 msgid "Inctive Tray Icon"
@@ -1308,7 +1302,7 @@ msgstr "輸入字體尺寸"
 
 #: src/ui/classic/skin.desc:37
 msgid "Input Message Color"
-msgstr ""
+msgstr "輸入訊息顏色"
 
 #: src/lib/fcitx/ime.c:1491 data/fcitx-autostart.desktop.in:3
 #: data/fcitx.desktop.in:3
@@ -1325,12 +1319,11 @@ msgstr "輸入法提示只在啟用狀態顯示"
 
 #: data/script/fcitx-diagnose.sh:327
 msgid "Input Method Related Environment Variables: "
-msgstr ""
+msgstr "輸入法相關環境變數："
 
 #: data/script/fcitx-diagnose.sh:750
-#, fuzzy
 msgid "Input Methods:"
-msgstr "輸入法"
+msgstr "輸入法："
 
 #: src/lib/fcitx/ime.c:1582
 msgid "Input Speed: "
@@ -1371,7 +1364,7 @@ msgstr ""
 #: src/lib/fcitx-utils/desktop-parse.c:473
 #, c-format
 msgid "Invalid group name line @ line %d %s"
-msgstr ""
+msgstr "非法組名出現在第 %d 行：%s"
 
 #: data/script/fcitx-diagnose.sh:764
 msgid "Invalid item ${1} in im list."
@@ -1418,9 +1411,8 @@ msgid "Keyboard Layout to be used"
 msgstr "鍵盤配置"
 
 #: data/script/fcitx-diagnose.sh:415
-#, fuzzy
 msgid "Keyboard Layout:"
-msgstr "鍵盤配置"
+msgstr "鍵盤配置："
 
 #: tools/gui/quickphrase-editor/model.cpp:52
 msgid "Keyword"
@@ -1500,7 +1492,7 @@ msgstr "載入碼表字典成功"
 #: src/im/pinyin/py.c:418
 #, c-format
 msgid "Load extra dict: %s"
-msgstr ""
+msgstr "載入額外的字典：%s"
 
 #: src/im/table/tabledict.c:288
 msgid "Loading Autophrase."
@@ -1527,17 +1519,16 @@ msgid "LocalSelector"
 msgstr "局部選擇"
 
 #: data/script/fcitx-diagnose.sh:421
-#, fuzzy
 msgid "Locale:"
-msgstr "局部選擇"
+msgstr "地區設定："
 
 #: data/script/fcitx-diagnose.sh:868
 msgid "Log."
-msgstr ""
+msgstr "日誌。"
 
 #: src/ui/classic/skin.desc:73
 msgid "Logo Icon"
-msgstr ""
+msgstr "Logo 圖示"
 
 #: src/im/table/fcitx-table.desc:24
 msgid "Lookup Pinyin"
@@ -1559,11 +1550,11 @@ msgstr "數學符號"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:23
 #: src/module/quickphrase/fcitx-quickphrase.desc:36
 msgid "Maximum hint length"
-msgstr ""
+msgstr "拼寫提示候選字的最大數"
 
 #: src/module/clipboard/fcitx-clipboard.desc:19
 msgid "Maximum length of each candidate word"
-msgstr ""
+msgstr "每個候選字最大長度"
 
 #: src/im/keyboard/fcitx-keyboard.desc:32
 msgid "Maximum length of spell hint list"
@@ -1571,11 +1562,11 @@ msgstr "拼寫提示候選字最大個數"
 
 #: src/module/autoeng/fcitx-autoeng.desc:23
 msgid "Maximum length of spell hint list for Auto English"
-msgstr ""
+msgstr "自動英文的拼寫提示候選詞最大個數"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 msgid "Maximum length of spell hint list for Pinyin Enhance"
-msgstr ""
+msgstr "拼音增強的拼寫提示候選字最大個數"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:37
 msgid "Maximum length of spell hint list for Quick Phrase"
@@ -1587,7 +1578,7 @@ msgstr ""
 
 #: src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
-msgstr ""
+msgstr "在預編輯中保留的最大單字數"
 
 #: src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
@@ -1599,11 +1590,11 @@ msgstr "選單字體尺寸"
 
 #: src/im/pinyin/py.c:2180
 msgid "Migrate the old file path to the new one"
-msgstr ""
+msgstr "移動舊檔案路徑到新檔案路徑"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
-msgstr ""
+msgstr "最小觸發筆劃輸入的輸入長度（設為-1禁用筆劃輸入）"
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
@@ -1652,9 +1643,8 @@ msgid "Native"
 msgstr "原生"
 
 #: data/config.desc:143
-#, fuzzy
 msgid "Next Candidate Word"
-msgstr "自動送出候選字"
+msgstr "下一個候選字"
 
 #: data/config.desc:113
 msgid "Next Page"
@@ -1738,7 +1728,7 @@ msgstr "碼表順序"
 
 #: src/ui/classic/skin.desc:57
 msgid "Other Color"
-msgstr ""
+msgstr "其他顏色"
 
 #: data/config.desc:171 data/config.desc:177 data/config.desc:187
 #: data/config.desc:193 data/config.desc:199 data/config.desc:206
@@ -1801,7 +1791,7 @@ msgstr "拼音增強"
 
 #: src/im/pinyin/py.c:468
 msgid "Pinyin Index Magic Number Doesn't match"
-msgstr ""
+msgstr "拼音索引的Magic Number不相符"
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
@@ -1817,13 +1807,13 @@ msgstr "拼音加加"
 
 #: data/script/fcitx-diagnose.sh:441
 msgid "Please check ${1} for how to install fcitx."
-msgstr ""
+msgstr "如何安裝 fcitx 請查閱 ${1}。"
 
 #: data/script/fcitx-diagnose.sh:465
 msgid ""
 "Please check the Configure link of your distribution in ${1} for how to "
 "setup fcitx autostart."
-msgstr ""
+msgstr "請在 ${1} 檢查您的發行版的設定連結是如何設定 fcitx 自動啟動。"
 
 #: src/frontend/xim/xim.c:162
 msgid "Please set XMODIFIERS."
@@ -1834,6 +1824,8 @@ msgid ""
 "Please set environment variable ${env_name} to \"${value}\" using the tool "
 "your distribution provides or add ${1} to your ${2}. See ${link}."
 msgstr ""
+"請設定環境變數 ${env_name} 到「$ {value}」，使用您的發行版提供的工具或加入 "
+"${1} 到您的 ${2}。請參閱 ${link}。"
 
 #: src/ui/classic/skin.desc:165
 msgid "Position or offset of LookupTable"
@@ -1845,21 +1837,21 @@ msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:14
 msgid "Possible Providers: presage, custom, enchant (separate with comma)"
-msgstr ""
+msgstr "可用的後端：presage, custom, enchant（用半形逗號分隔）"
 
 #: src/module/spell/fcitx-spell.desc:8
 msgid "Preferred Enchant provider"
-msgstr ""
+msgstr "Enchant 後端"
 
 #: src/im/pinyin/py.c:772
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
-msgstr ""
+msgstr "按下 1 刪除常用字表中的 %s（ESC 取消）"
 
 #: src/im/pinyin/py.c:774
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
-msgstr ""
+msgstr "按下 1-%d 來刪除常用字表中的 %s（ESC 取消）"
 
 #: src/module/autoeng/AutoEng.c:641 src/module/quickphrase/quickphrase.c:414
 msgid "Press Enter to input text"
@@ -1871,7 +1863,7 @@ msgstr "按兩下切換鍵時切換模式"
 
 #: src/im/pinyin/py.c:731
 msgid "Press index to delete user phrase (ESC for cancel)"
-msgstr ""
+msgstr "按下索引來刪除使用者字詞（ESC 取消）"
 
 #: src/im/pinyin/py.c:744
 msgid "Press number to make word in frequent list"
@@ -1887,9 +1879,8 @@ msgid "Prev Page Icon"
 msgstr ""
 
 #: data/config.desc:136
-#, fuzzy
 msgid "Previous Candidate Word"
-msgstr "自動送出候選字"
+msgstr "前一個候選字"
 
 #: data/inputmethod.desc:15
 msgid "Priority"
@@ -1942,7 +1933,7 @@ msgstr "標點支援"
 
 #: data/script/fcitx-diagnose.sh:584
 msgid "Qt IM module files:"
-msgstr ""
+msgstr "Qt 輸入法模組檔案："
 
 #: tools/gui/quickphrase-editor/editor.cpp:93
 msgid "Quick Phrase Editor"
@@ -1993,9 +1984,8 @@ msgid "Register IM"
 msgstr "註冊輸入法方法"
 
 #: data/config.desc:66
-#, fuzzy
 msgid "Reload configuration"
-msgstr "設定"
+msgstr ""
 
 #: src/im/table/table.c:1294
 msgid "Remind:"
@@ -2047,19 +2037,19 @@ msgstr "重新啟動"
 msgid ""
 "Roughly the same length with this number of english letters, the actual "
 "length depends on the font and the content"
-msgstr ""
+msgstr "大致長度和英文字母相同，實際長度取決於字型與內容"
 
 #: src/im/pinyin/fcitx-pinyin.desc:71
 msgid "Rule of Candidate Phrase Order"
-msgstr ""
+msgstr "候選詞順序"
 
 #: src/im/pinyin/fcitx-pinyin.desc:62
 msgid "Rule of Candidate Word Order"
-msgstr ""
+msgstr "候選字順序"
 
 #: src/im/pinyin/fcitx-pinyin.desc:80
 msgid "Rule of Frequent Word Order"
-msgstr ""
+msgstr "常用字順序"
 
 #: src/module/vk/vk.c:54
 msgid "Russian"
@@ -2071,7 +2061,7 @@ msgstr "兩側 Shift"
 
 #: src/im/pinyin/fcitx-pinyin.desc:38
 msgid "Save Auto Created Phrase"
-msgstr ""
+msgstr "保存自動組詞"
 
 #: src/im/table/table.desc:108
 msgid "Save Auto Phrase"
@@ -2083,7 +2073,7 @@ msgstr "儲存剪貼簿歷史為檔案"
 
 #: src/im/table/tabledict.c:375
 msgid "Save dict error"
-msgstr ""
+msgstr "儲存碼表出錯"
 
 #: data/config.desc:124
 msgid "Saving All Config and Input History"
@@ -2215,12 +2205,12 @@ msgstr "佈景版本"
 #: src/ui/classic/skin.desc:51 src/ui/classic/skin.desc:55
 #: src/ui/classic/skin.desc:59 src/ui/classic/skin.desc:63
 msgid "SkinFont"
-msgstr ""
+msgstr "佈景字形"
 
 #: src/ui/classic/skin.desc:1 src/ui/classic/skin.desc:5
 #: src/ui/classic/skin.desc:9 src/ui/classic/skin.desc:13
 msgid "SkinInfo"
-msgstr ""
+msgstr "佈景資訊"
 
 #: src/ui/classic/skin.desc:135 src/ui/classic/skin.desc:139
 #: src/ui/classic/skin.desc:143 src/ui/classic/skin.desc:147
@@ -2290,20 +2280,23 @@ msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "啟動 XIM 錯誤。是否有另一個名為 %s 的 XIM 守護程式正在執行？"
 
 #: src/ui/classic/fcitx-classic-ui.desc:48
+#, fuzzy
 msgid "Status Panel Hide Mode"
-msgstr "狀態面板隱藏模式"
+msgstr "主視窗隱藏模式"
 
 #: src/ui/classic/fcitx-classic-ui.desc:2
+#, fuzzy
 msgid "Status Panel Position X"
-msgstr ""
+msgstr "主視窗 X 軸位置"
 
 #: src/ui/classic/fcitx-classic-ui.desc:8
+#, fuzzy
 msgid "Status Panel Position Y"
-msgstr ""
+msgstr "主視窗 Y 軸位置"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
-msgstr ""
+msgstr "筆劃輸入觸發長度"
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
@@ -2389,7 +2382,7 @@ msgstr "符號檔案"
 
 #: data/script/fcitx-diagnose.sh:381
 msgid "System Info."
-msgstr ""
+msgstr "系統資訊。"
 
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
 msgid "Table"
@@ -2417,17 +2410,17 @@ msgstr ""
 msgid ""
 "This is used in some modules and input methods to navigate to the next "
 "candidate word"
-msgstr ""
+msgstr "這將在一些模組和輸入法中移至下一個候選字"
 
 #: data/config.desc:137
 msgid ""
 "This is used in some modules and input methods to navigate to the previous "
 "candidate word"
-msgstr ""
+msgstr "這將在一些模組和輸入法中移至前一個候選字"
 
 #: src/ui/classic/skin.desc:33
 msgid "Tip Message Color"
-msgstr ""
+msgstr "提示訊息顏色"
 
 #: data/script/fcitx-diagnose.sh:346
 #, sh-format
@@ -2436,6 +2429,8 @@ msgid ""
 "${link1}. For other more general problems of using XIM including application "
 "freezing, see ${link2}."
 msgstr ""
+"若要查看您在使用 xim 時，一些應用程式的特定問題，請檢查 ${link1}。使用 XIM 的"
+"其他一般性的問題包括應用程式凍結，請參閱 ${link2}。"
 
 #: src/module/punc/punc.c:149 src/module/punc/punc.c:566
 msgid "Toggle Full Width Punctuation"
@@ -2490,7 +2485,7 @@ msgstr "正體中文"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
 msgid "Treating abbreviated Pinyin as English"
-msgstr ""
+msgstr "將簡拼視為英文"
 
 #: data/config.desc:4
 msgid "Trigger Input Method"
@@ -2518,7 +2513,7 @@ msgstr "介面"
 
 #: src/lib/fcitx/ui.c:204
 msgid "UI: bad ui"
-msgstr ""
+msgstr "界面：有問題的界面"
 
 #: src/lib/fcitx/ui.c:191
 #, c-format
@@ -2576,7 +2571,7 @@ msgstr "使用拼音"
 
 #: src/module/clipboard/fcitx-clipboard.desc:30
 msgid "Use Selection Text"
-msgstr ""
+msgstr "使用選取區文字"
 
 #: src/ui/classic/fcitx-classic-ui.desc:39
 msgid "Use System Tray Icon"
@@ -2608,7 +2603,7 @@ msgstr "藉由 fcitx-remote 從指令列改變 Fcitx 的狀態"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
 msgid "Useful when you hardly ever use abbreviated pinyin."
-msgstr ""
+msgstr "適用於很少使用簡拼的情況"
 
 #: src/im/pinyin/fcitx-pinyin.desc:11
 msgid "User Defined"
@@ -2703,7 +2698,7 @@ msgstr "Xim"
 
 #: data/script/fcitx-diagnose.sh:529
 msgid "Xim Server Name from Environment variable is ${1}."
-msgstr ""
+msgstr "環境變數中 XIM 伺服器名稱為 ${1}。"
 
 #: data/script/fcitx-diagnose.sh:541
 msgid "Xim server name is the same with that set in the environment variable."
@@ -2717,33 +2712,37 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:564
 msgid "You are using xim in ${1} programs."
-msgstr ""
+msgstr "你在 ${1} 程式使用 xim。"
 
 #: data/script/fcitx-diagnose.sh:783
 msgid "You don't have any input methods enabled."
-msgstr ""
+msgstr "你沒有啟用任何輸入法。"
 
 #: data/script/fcitx-diagnose.sh:791
 msgid ""
 "You have a keyboard input method \"${1}\" correctly added as your default "
 "input method."
-msgstr ""
+msgstr "您使用鍵盤輸入法 ${1}，正確加入作為您的預設輸入法。"
 
 #: data/script/fcitx-diagnose.sh:569
 msgid "You may have trouble using fcitx in ${1} programs."
-msgstr ""
+msgstr "在 ${1} 程式使用 fcitx 你可能會遇到一些問題。"
 
 #: data/script/fcitx-diagnose.sh:786
 msgid ""
 "You only have one input method enabled, please add a keyboard input method "
 "as the first one and your main input method as the second one."
 msgstr ""
+"您只有啟用一個輸入法。請加入一個鍵盤輸入法作為第一個輸入法，以及將你主要的輸"
+"入法作為第二個輸入法。"
 
 #: data/script/fcitx-diagnose.sh:795
 msgid ""
 "Your first (default) input method is ${1} instead of a keyboard input "
 "method. You may have trouble deactivate fcitx."
 msgstr ""
+"您第一個（預設）輸入法使用 ${1} 代替鍵盤輸入法。您可能會有無法使用 fcitx 的問"
+"題。"
 
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"
@@ -2759,11 +2758,11 @@ msgstr "自然碼"
 
 #: data/script/fcitx-diagnose.sh:437
 msgid "executable:"
-msgstr ""
+msgstr "可執行檔："
 
 #: data/script/fcitx-diagnose.sh:353
 msgid "here"
-msgstr ""
+msgstr "在此"
 
 #: src/lib/fcitx/ime.c:1588
 msgid "min Num of Characters: "
@@ -2780,29 +2779,21 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:451
 msgid "process:"
-msgstr ""
+msgstr "行程："
 
 #: src/lib/fcitx/instance.c:437
 msgid "pthread mutex init failed"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:447
-#, fuzzy
 msgid "version:"
-msgstr "顯示版本"
+msgstr "版本："
 
 #: src/module/xkb/fcitx-xkb.desc:14
 msgid "xmodmap command"
-msgstr ""
+msgstr "xmodmap 指令"
 
 #: src/ui/cairostuff/font.c:90
 #, c-format
 msgid "your current font is: %s"
 msgstr ""
-
-#~ msgid "Convert to Traditional Chinese"
-#~ msgstr "轉換至正體中文"
-
-#, fuzzy
-#~ msgid "remote:"
-#~ msgstr "遠端操作"

@@ -1,25 +1,26 @@
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
 # Christopher Meng <cickumqt@gmail.com>, 2012.
 # marguerite su <i@marguerite.su>, 2012.
+# Weng Xuetian <wengxt@gmail.com>, 2010-2012.
 # Weng Xuetian <wengxt@gmail.com>, 2010-2012, 2013.
 # Yichao Yu <yyc1992@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-01-18 11:14-0500\n"
-"PO-Revision-Date: 2013-01-18 11:15-0500\n"
-"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
-"Language-Team: Chinese Simplified <kde-china@kde.org>\n"
+"POT-Creation-Date: 2013-01-18 15:05-0500\n"
+"PO-Revision-Date: 2013-01-17 15:30+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 1.5\n"
 
 #: src/im/table/table.c:1410
 msgid " Ctrl+Delete To Delete"
@@ -2283,16 +2284,19 @@ msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
 
 #: src/ui/classic/fcitx-classic-ui.desc:48
+#, fuzzy
 msgid "Status Panel Hide Mode"
-msgstr "状态栏隐藏模式"
+msgstr "主窗口隐藏模式"
 
 #: src/ui/classic/fcitx-classic-ui.desc:2
+#, fuzzy
 msgid "Status Panel Position X"
-msgstr "状态栏X位置"
+msgstr "主窗口X位置"
 
 #: src/ui/classic/fcitx-classic-ui.desc:8
+#, fuzzy
 msgid "Status Panel Position Y"
-msgstr "状态栏Y位置"
+msgstr "主窗口Y位置"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
@@ -2799,6 +2803,3 @@ msgstr "xmodmap 命令"
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
-
-#~ msgid "Convert to Traditional Chinese"
-#~ msgstr "转换为繁体中文"

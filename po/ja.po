@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-01-18 11:14-0500\n"
-"PO-Revision-Date: 2012-12-08 14:06+0000\n"
+"POT-Creation-Date: 2013-01-18 15:05-0500\n"
+"PO-Revision-Date: 2013-01-17 15:29+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -207,9 +207,8 @@ msgid "Addon Config Dir:"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:715
-#, fuzzy
 msgid "Addon List:"
-msgstr "アドオン"
+msgstr ""
 
 #: src/im/table/fcitx-table.desc:14 src/im/table/table.desc:19
 msgid "Adjust Order"
@@ -612,9 +611,8 @@ msgid "ConfigFile"
 msgstr "設定ファイル"
 
 #: data/script/fcitx-diagnose.sh:862
-#, fuzzy
 msgid "Configuration."
-msgstr "設定"
+msgstr ""
 
 #: src/ui/classic/classicui.c:459
 msgid "Configure"
@@ -659,9 +657,8 @@ msgid "Current Input Method Name"
 msgstr "現在のIM"
 
 #: src/module/imselector/imselector.c:303
-#, fuzzy
 msgid "Current local input method is "
-msgstr "現在使えるIMのリスト"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:424
 msgid "Current locale:"
@@ -708,9 +705,8 @@ msgid "Default Spell Hint Backends Order"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:780
-#, fuzzy
 msgid "Default input methods:"
-msgstr "既定の入力メソッドの状態"
+msgstr ""
 
 #: src/im/table/fcitx-table.desc:9
 msgid "Delete Phrase"
@@ -940,9 +936,8 @@ msgid "Fcitx Spelling Hint/Completion Support"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:436
-#, fuzzy
 msgid "Fcitx State."
-msgstr "Fcitxスキンインストーラー"
+msgstr ""
 
 #: src/module/unicode/fcitx-unicode.conf.in:3
 msgid "Fcitx Unicode Typing Support"
@@ -1016,9 +1011,8 @@ msgid "Found ${1} enabled addons:"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:775
-#, fuzzy
 msgid "Found ${1} enabled input methods:"
-msgstr "現在使えるIMのリスト"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:472
 msgid "Found ${1} fcitx process:"
@@ -1078,9 +1072,8 @@ msgid "Frontend: open %s fail %s"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:855
-#, fuzzy
 msgid "Frontends setup."
-msgstr "フロントエンド"
+msgstr ""
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1328,9 +1321,8 @@ msgid "Input Method Related Environment Variables: "
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:750
-#, fuzzy
 msgid "Input Methods:"
-msgstr "入力メソッド"
+msgstr ""
 
 #: src/lib/fcitx/ime.c:1582
 msgid "Input Speed: "
@@ -1650,9 +1642,8 @@ msgid "Native"
 msgstr "ネイティブ"
 
 #: data/config.desc:143
-#, fuzzy
 msgid "Next Candidate Word"
-msgstr "縦の候補ウィンドウ"
+msgstr ""
 
 #: data/config.desc:113
 msgid "Next Page"
@@ -1885,9 +1876,8 @@ msgid "Prev Page Icon"
 msgstr ""
 
 #: data/config.desc:136
-#, fuzzy
 msgid "Previous Candidate Word"
-msgstr "縦の候補ウィンドウ"
+msgstr ""
 
 #: data/inputmethod.desc:15
 msgid "Priority"
@@ -1991,9 +1981,8 @@ msgid "Register IM"
 msgstr ""
 
 #: data/config.desc:66
-#, fuzzy
 msgid "Reload configuration"
-msgstr "設定"
+msgstr ""
 
 #: src/im/table/table.c:1294
 msgid "Remind:"
@@ -2476,9 +2465,8 @@ msgid "Too long item for AutoEng"
 msgstr ""
 
 #: src/module/chttrans/chttrans.c:144 src/module/chttrans/chttrans.c:180
-#, fuzzy
 msgid "Traditional Chinese"
-msgstr "中国語繁体字"
+msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
@@ -2789,9 +2777,8 @@ msgid "pthread mutex init failed"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:447
-#, fuzzy
 msgid "version:"
-msgstr "バージョンを表示する"
+msgstr ""
 
 #: src/module/xkb/fcitx-xkb.desc:14
 msgid "xmodmap command"
@@ -2801,7 +2788,3 @@ msgstr ""
 #, c-format
 msgid "your current font is: %s"
 msgstr "あなたの現在のフォントは %s です"
-
-#, fuzzy
-#~ msgid "remote:"
-#~ msgstr "リモート"
