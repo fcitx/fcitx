@@ -83,6 +83,11 @@ void ListEditor::save()
     m_model->save("data/QuickPhrase.mb");
 }
 
+QString ListEditor::addon()
+{
+    return "fcitx-quickphrase";
+}
+
 QString ListEditor::title()
 {
     return _("Quick Phrase Editor");

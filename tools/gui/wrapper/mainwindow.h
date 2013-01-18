@@ -25,6 +25,8 @@
 #include "ui_mainwindow.h"
 #include "fcitx-qt/fcitxqtconfiguiwidget.h"
 
+class FcitxQtInputMethodProxy;
+class FcitxQtConnection;
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
@@ -33,10 +35,13 @@ public:
 public slots:
     void changed(bool changed);
     void clicked(QAbstractButton* button);
+    void connected();
 
 private:
     Ui::MainWindow* m_ui;
+    FcitxQtConnection* m_connection;
     FcitxQtConfigUIWidget* m_pluginWidget;
+    FcitxQtInputMethodProxy* m_proxy;
 };
 
 #endif // MAINWINDOW_H

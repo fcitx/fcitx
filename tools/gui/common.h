@@ -22,6 +22,6 @@
 
 #include <libintl.h>
 
-#define _(x) QString::fromUtf8(gettext(x))
+#define _(x) QString::fromUtf8(dgettext("fcitx", x))
 
 #endif // _FCITX_TOOL_GUI_COMMON_H

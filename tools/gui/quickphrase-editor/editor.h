@@ -41,6 +41,7 @@ public:
     virtual void load();
     virtual void save();
     virtual QString title();
+    virtual QString addon();
 
 private slots:
     void addWord();

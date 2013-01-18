@@ -34,7 +34,6 @@ public:
 private slots:
     void errorExit();
 private:
-    FcitxQtConnection* m_connection;
     FcitxQtConfigUIFactory* m_factory;
     MainWindow* m_mainWindow;
 };

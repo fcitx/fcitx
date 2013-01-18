@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by CSSlayer                                   *
+ *   Copyright (C) 2012~2013 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -25,11 +25,15 @@
 #include "common.h"
 #include "mainwindow.h"
 #include "fcitx-qt/fcitxqtconfiguifactory.h"
+#include "fcitx-qt/fcitxqtconnection.h"
+#include "fcitx-qt/fcitxqtinputmethodproxy.h"
 #include "fcitx-utils/utils.h"
 
 MainWindow::MainWindow(FcitxQtConfigUIWidget* pluginWidget, QWidget* parent): QMainWindow(parent)
     ,m_ui(new Ui::MainWindow)
+    ,m_connection(new FcitxQtConnection(this))
     ,m_pluginWidget(pluginWidget)
+    ,m_proxy(0)
 {
     m_ui->setupUi(this);
     m_ui->verticalLayout->insertWidget(0, m_pluginWidget);
@@ -43,14 +47,28 @@ MainWindow::MainWindow(FcitxQtConfigUIWidget* pluginWidget, QWidget* parent): QM
 
     connect(m_pluginWidget, SIGNAL(changed(bool)), this, SLOT(changed(bool)));
     connect(m_ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(clicked(QAbstractButton*)));
+    connect(m_connection, SIGNAL(connected()), this, SLOT(connected()));
+
+    m_connection->startConnection();
+}
+
+void MainWindow::connected()
+{
+    if (m_proxy) {
+        delete m_proxy;
+    }
+    m_proxy = new FcitxQtInputMethodProxy(m_connection->serviceName(), QLatin1String("/inputmethod"), *m_connection->connection(), this);
 }
 
 void MainWindow::clicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standardButton = m_ui->buttonBox->standardButton(button);
-    if (standardButton == QDialogButtonBox::Save)
+    if (standardButton == QDialogButtonBox::Save) {
         m_pluginWidget->save();
-    else if (standardButton == QDialogButtonBox::Close) {
+        if (m_proxy) {
+            m_proxy->ReloadAddonConfig(m_pluginWidget->addon());
+        }
+    } else if (standardButton == QDialogButtonBox::Close) {
         qApp->quit();
     }
     else if (standardButton == QDialogButtonBox::Reset) {

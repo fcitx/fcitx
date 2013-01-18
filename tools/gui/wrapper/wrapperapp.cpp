@@ -29,7 +29,6 @@
 #include "fcitx-utils/utils.h"
 
 WrapperApp::WrapperApp(int& argc, char** argv): QApplication(argc, argv)
-    ,m_connection(new FcitxQtConnection(this))
     ,m_factory(new FcitxQtConfigUIFactory(this))
     ,m_mainWindow(0)
 {
