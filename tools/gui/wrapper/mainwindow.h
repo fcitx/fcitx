@@ -24,12 +24,11 @@
 
 #include "ui_mainwindow.h"
 #include "fcitx-qt/fcitxqtconfiguiwidget.h"
-#include "fcitx-qt/fcitxqtconfiguifactory.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
-    explicit MainWindow(QWidget* parent = 0);
+    explicit MainWindow(FcitxQtConfigUIWidget* pluginWidget, QWidget* parent = 0);
     virtual ~MainWindow();
 public slots:
     void changed(bool changed);
@@ -37,7 +36,6 @@ public slots:
 
 private:
     Ui::MainWindow* m_ui;
-    FcitxQtConfigUIFactory* m_factory;
     FcitxQtConfigUIWidget* m_pluginWidget;
 };
 

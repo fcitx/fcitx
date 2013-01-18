@@ -27,12 +27,11 @@
 #include "fcitx-qt/fcitxqtconfiguifactory.h"
 #include "fcitx-utils/utils.h"
 
-MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
+MainWindow::MainWindow(FcitxQtConfigUIWidget* pluginWidget, QWidget* parent): QMainWindow(parent)
     ,m_ui(new Ui::MainWindow)
-    ,m_factory(new FcitxQtConfigUIFactory(this))
+    ,m_pluginWidget(pluginWidget)
 {
     m_ui->setupUi(this);
-    m_pluginWidget = m_factory->create("data/QuickPhrase.mb");
     m_ui->verticalLayout->insertWidget(0, m_pluginWidget);
     m_ui->buttonBox->button(QDialogButtonBox::Save)->setText(_("&Save"));
     m_ui->buttonBox->button(QDialogButtonBox::Reset)->setText(_("&Reset"));

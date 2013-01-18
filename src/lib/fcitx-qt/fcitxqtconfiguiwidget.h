@@ -30,6 +30,7 @@ public:
     virtual void load() = 0;
     virtual void save() = 0;
     virtual QString title() = 0;
+    virtual QString icon();
 signals:
     void changed(bool changed);
 };

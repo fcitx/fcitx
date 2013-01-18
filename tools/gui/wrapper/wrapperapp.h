@@ -27,12 +27,15 @@ class FcitxQtConnection;
 class FcitxQtConfigUIFactory;
 class WrapperApp : public QApplication {
     Q_OBJECT
-    FcitxQtConfigUIFactory* m_factory;
 public:
     WrapperApp(int& argc, char** argv);
     virtual ~WrapperApp();
+
+private slots:
+    void errorExit();
 private:
     FcitxQtConnection* m_connection;
+    FcitxQtConfigUIFactory* m_factory;
     MainWindow* m_mainWindow;
 };
 
