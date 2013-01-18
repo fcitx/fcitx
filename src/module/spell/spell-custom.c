@@ -21,8 +21,6 @@
 #include "fcitx/fcitx.h"
 #include "config.h"
 
-#include <unicode/unorm.h>
-
 #include "fcitx/ime.h"
 #include "fcitx/instance.h"
 #include "fcitx/context.h"
@@ -32,7 +30,6 @@
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/utf8.h"
 #include <sys/stat.h>
-#include <fcntl.h>
 #include <time.h>
 #if defined(__linux__) || defined(__GLIBC__)
 #include <endian.h>
