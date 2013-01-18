@@ -1,0 +1,108 @@
+##
+# This file is a example of the .fxaddon file that fcitx uses to generate
+# api headers, which are used as a more convinient wrapper of fcitx's
+# inter-module function calls with type check, as well as 'addfunctions'
+# headers, which are used to register api function into fcitx for a addon.
+# The following comments explain how this file should be used. For real example,
+# see any addon in fcitx's repo with a .fxaddon or .fxaddon.in file.
+# You may want to search for macro/function/option/file names mentioned below
+# to see how they are used.
+
+##
+# A .fxaddon file is a simple .desktop style file and should be phrased by
+# `fcitx-scanner`. Each groups and entries in this file have special meanings
+# that are explained with examples below.
+#
+# NOTE: you shouldn't use the `fcitx-scanner` directly (its command line options
+# are NOT guaranteed to be stable). Instead, you should ALWAYS use the cmake
+# wrapper of this command defined in `FcitxMacro.cmake`.
+
+##
+# API header:
+# To use a .fxaddon file to generate a api header, you just need to add the
+# `SCAN` option to the cmake function `fcitx_add_addon_full` (See documentation
+# of `fcitx_add_addon_full` in `FcitxMacro.cmake` for more related options.).
+# The generated header will define several static inline functions including a
+#
+#     FcitxAddon *Fcitx[prefix]GetAddon(FcitxInstance*):
+#         function for getting the `FcitxAddon*` correspond to
+#         this addon (with cache).
+#
+# and three functions for each api provided by this addon, which are:
+#
+#     FcitxModuleFunction Fcitx[prefix]Find[function_name](FcitxAddon*):
+#         used to find the function pointer of the api (with cache).
+#
+#     void *Fcitx[prefix]Invoke[function_name](FcitxInstance*,
+#                                              FcitxModuleFunctionArg):
+#         used to call the api function with certain FcitxModuleFunctionArg.
+# and
+#     [return_type] Fcitx[prefix][function_name](FcitxInstance*,
+#                                                [arguments])
+#         used to call the api function using normal c arguments
+#         with type check.
+#
+# ([prefix], [function_name], [return_type], [arguments] are values defined in
+# this file.)
+#
+# NOTE: The GetAddon function and the first two functions for each api of
+# the addon is defined using macros in `module.h`, therefore if you are writing
+# a addon that need to call another addon but you don't want to depend on
+# the api header of that addon at compile time, you can use these macros to
+# easily define your own inline functions.
+
+##
+# AddFunctions header:
+# To use this to generate a addfunctions header, you need SCAN_PRIV option in
+# the `fcitx_add_addon_full`, just as that for api header, as well as including
+# the generated header (usually named as `fcitx-*-addfunctions.h`) in your
+# source file. This header will generally refer to functions or definitions in
+# your source files as well as being called by your code in that file, therefore
+# in order to get the file compiled correctly, you may need to include this file
+# in the correct place. The easiest way to do this is using the
+# `DECLARE_ADDFUNCTIONS(prefix)` macro defined in module.h at the beginning of
+# your source file to declare the all the functions you may need to use from
+# the generated header and then include the generated header file at the end of
+# your source file (well maybe it shouldn't be called a "header" anymore).
+#
+# The generated headers define one static internal function for each of your api
+# that shouldn't be used in your code directly as well as two public functions:
+#
+#     FcitxAddon *Fcitx_[prefix]_GetAddon(FcitxInstance*):
+#         function for getting the `FcitxAddon*` correspond to this addon
+#         (with cache). This function may be useful if you need the FcitxAddon*
+#         pointer of yourself. NOTE the "_" in the function name used to
+#         lower the chance of possible name conflict.
+# and
+#     void Fcitx[prefix]AddFunctions(FcitxInstance*):
+#         which should be called in your Create Addon function to register your
+#         api's into fcitx. In most cases, this is the only function you need
+#         from this generated file.
+
+# TODO
+[FcitxAddon]
+Name=fcitx-example
+Prefix=Example
+Include0="example.h"
+Function0=MyFunction0
+Function1=MyFunction1
+Function2=MyFunction2
+Function3=MyFunction3
+Function4=
+Function5=
+Function6=
+Self.Type=FcitxExample*
+
+# TODO
+[MyFunction0]
+Name=my-function0
+Return=my_return_type1
+Self.Deref=
+Self.DerefType=
+Arg0=
+Arg1=
+Arg1.Deref=
+Arg1.DerefType=
+Res.WrapFunc=
+Res.Deref=
+Res.DerefType=
