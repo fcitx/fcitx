@@ -21,8 +21,6 @@
 #include "fcitx/fcitx.h"
 #include "config.h"
 
-#include <unicode/unorm.h>
-
 #include "fcitx/ime.h"
 #include "fcitx/instance.h"
 #include "fcitx/context.h"
@@ -31,7 +29,6 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
 #include <sys/stat.h>
-#include <fcntl.h>
 #include <time.h>
 #include <dlfcn.h>
 
