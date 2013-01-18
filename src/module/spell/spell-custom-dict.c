@@ -21,8 +21,6 @@
 #include "fcitx/fcitx.h"
 #include "config.h"
 
-#include <unicode/unorm.h>
-
 #include "fcitx/ime.h"
 #include "fcitx/instance.h"
 #include "fcitx/context.h"
