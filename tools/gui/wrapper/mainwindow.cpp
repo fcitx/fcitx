@@ -78,7 +78,6 @@ void MainWindow::clicked(QAbstractButton* button)
 
 void MainWindow::changed(bool changed)
 {
-    qDebug() << changed;
     m_ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(changed);
     m_ui->buttonBox->button(QDialogButtonBox::Reset)->setEnabled(changed);
 }

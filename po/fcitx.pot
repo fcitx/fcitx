@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-01-17 10:22-0500\n"
+"POT-Creation-Date: 2013-01-18 11:14-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1018,7 +1018,7 @@ msgstr ""
 msgid "E&xport"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:88
+#: tools/gui/quickphrase-editor/editor.cpp:93
 msgid "Quick Phrase Editor"
 msgstr ""
 
@@ -1030,15 +1030,15 @@ msgstr ""
 msgid "Phrase"
 msgstr ""
 
-#: tools/gui/wrapper/mainwindow.cpp:37
+#: tools/gui/wrapper/mainwindow.cpp:40
 msgid "&Save"
 msgstr ""
 
-#: tools/gui/wrapper/mainwindow.cpp:38
+#: tools/gui/wrapper/mainwindow.cpp:41
 msgid "&Reset"
 msgstr ""
 
-#: tools/gui/wrapper/mainwindow.cpp:39
+#: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
 msgstr ""
 
@@ -2495,11 +2495,11 @@ msgid "ClassicUI"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:2
-msgid "Main Window Position X"
+msgid "Status Panel Position X"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:8
-msgid "Main Window Position Y"
+msgid "Status Panel Position Y"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:16
@@ -2539,7 +2539,7 @@ msgid "Hide"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:48
-msgid "Main Window Hide Mode"
+msgid "Status Panel Hide Mode"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:53

@@ -1,11 +1,11 @@
 [ClassicUI/MainWindowOffsetX]
-Description=Main Window Position X
+Description=Status Panel Position X
 Type=Integer
 DefaultValue=500
 Advance=True
 
 [ClassicUI/MainWindowOffsetY]
-Description=Main Window Position Y
+Description=Status Panel Position Y
 Type=Integer
 DefaultValue=40
 Advance=True
@@ -45,7 +45,7 @@ Enum0=Show
 Enum1=Auto
 Enum2=Hide
 DefaultValue=Auto
-Description=Main Window Hide Mode
+Description=Status Panel Hide Mode
 
 [ClassicUI/VerticalList]
 Type=Boolean

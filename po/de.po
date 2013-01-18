@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-01-17 10:22-0500\n"
+"POT-Creation-Date: 2013-01-18 11:14-0500\n"
 "PO-Revision-Date: 2012-12-08 14:06+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/fcitx/"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "&Add"
 msgstr ""
 
-#: tools/gui/wrapper/mainwindow.cpp:39
+#: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
 msgstr ""
 
@@ -47,11 +47,11 @@ msgstr ""
 msgid "&Import"
 msgstr ""
 
-#: tools/gui/wrapper/mainwindow.cpp:38
+#: tools/gui/wrapper/mainwindow.cpp:41
 msgid "&Reset"
 msgstr ""
 
-#: tools/gui/wrapper/mainwindow.cpp:37
+#: tools/gui/wrapper/mainwindow.cpp:40
 msgid "&Save"
 msgstr ""
 
@@ -1547,18 +1547,6 @@ msgstr ""
 msgid "MS"
 msgstr ""
 
-#: src/ui/classic/fcitx-classic-ui.desc:48
-msgid "Main Window Hide Mode"
-msgstr ""
-
-#: src/ui/classic/fcitx-classic-ui.desc:2
-msgid "Main Window Position X"
-msgstr ""
-
-#: src/ui/classic/fcitx-classic-ui.desc:8
-msgid "Main Window Position Y"
-msgstr ""
-
 #: src/im/table/table.desc:79
 msgid "Matching Key"
 msgstr ""
@@ -1958,7 +1946,7 @@ msgstr "Unterstützung Interpunktion"
 msgid "Qt IM module files:"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:88
+#: tools/gui/quickphrase-editor/editor.cpp:93
 msgid "Quick Phrase Editor"
 msgstr ""
 
@@ -2302,6 +2290,18 @@ msgstr ""
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "Fehler beim Starten von XIM. Läuft bereits ein anderer XIM Deamon %s?"
+
+#: src/ui/classic/fcitx-classic-ui.desc:48
+msgid "Status Panel Hide Mode"
+msgstr ""
+
+#: src/ui/classic/fcitx-classic-ui.desc:2
+msgid "Status Panel Position X"
+msgstr ""
+
+#: src/ui/classic/fcitx-classic-ui.desc:8
+msgid "Status Panel Position Y"
+msgstr ""
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"

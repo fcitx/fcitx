@@ -36,6 +36,7 @@ public:
     explicit FcitxQtConfigUIFactory(QObject* parent = 0);
     virtual ~FcitxQtConfigUIFactory();
     FcitxQtConfigUIWidget* create(const QString& file);
+    bool test(const QString& file);
 private:
     FcitxQtConfigUIFactoryPrivate* d_ptr;
     Q_DECLARE_PRIVATE(FcitxQtConfigUIFactory);

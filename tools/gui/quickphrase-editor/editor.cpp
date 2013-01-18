@@ -158,7 +158,6 @@ void ListEditor::exportData()
 void ListEditor::importFileSelected()
 {
     const QFileDialog* dialog = qobject_cast< const QFileDialog* >(QObject::sender());
-    qDebug() << dialog->selectedFiles();
     if (dialog->selectedFiles().length() <= 0)
         return;
     QString file = dialog->selectedFiles()[0];

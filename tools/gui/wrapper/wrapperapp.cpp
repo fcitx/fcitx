@@ -41,15 +41,23 @@ WrapperApp::WrapperApp(int& argc, char** argv): QApplication(argc, argv)
 
     FcitxQtConfigUIWidget* widget = 0;
 
-    if (argc == 2) {
-        widget = m_factory->create(QString::fromLocal8Bit(argv[1]));
-    }
-    if (!widget) {
-        qWarning("Could not find plugin for file.");
-        QTimer::singleShot(0, this, SLOT(errorExit()));
+    if (argc == 3 && strcmp(argv[1], "--test") == 0) {
+        if (m_factory->test(QString::fromLocal8Bit(argv[2]))) {
+            QTimer::singleShot(0, this, SLOT(quit()));
+        } else {
+            QTimer::singleShot(0, this, SLOT(errorExit()));
+        }
     } else {
-        m_mainWindow = new MainWindow(widget);
-        m_mainWindow->show();
+        if (argc == 2) {
+            widget = m_factory->create(QString::fromLocal8Bit(argv[1]));
+        }
+        if (!widget) {
+            qWarning("Could not find plugin for file.");
+            QTimer::singleShot(0, this, SLOT(errorExit()));
+        } else {
+            m_mainWindow = new MainWindow(widget);
+            m_mainWindow->show();
+        }
     }
 }
 

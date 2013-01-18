@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-01-17 10:22-0500\n"
-"PO-Revision-Date: 2013-01-17 10:24-0500\n"
+"POT-Creation-Date: 2013-01-18 11:14-0500\n"
+"PO-Revision-Date: 2013-01-18 11:15-0500\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-china@kde.org>\n"
 "Language: zh_CN\n"
@@ -37,7 +37,7 @@ msgstr "${1} 工作正常."
 msgid "&Add"
 msgstr "添加(&A)"
 
-#: tools/gui/wrapper/mainwindow.cpp:39
+#: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
 msgstr "关闭(&C)"
 
@@ -49,11 +49,11 @@ msgstr "删除(&D)"
 msgid "&Import"
 msgstr "导入(&I)"
 
-#: tools/gui/wrapper/mainwindow.cpp:38
+#: tools/gui/wrapper/mainwindow.cpp:41
 msgid "&Reset"
 msgstr "重置(&R)"
 
-#: tools/gui/wrapper/mainwindow.cpp:37
+#: tools/gui/wrapper/mainwindow.cpp:40
 msgid "&Save"
 msgstr "保存(&S)"
 
@@ -1541,18 +1541,6 @@ msgstr "反查拼音"
 msgid "MS"
 msgstr "微软"
 
-#: src/ui/classic/fcitx-classic-ui.desc:48
-msgid "Main Window Hide Mode"
-msgstr "主窗口隐藏模式"
-
-#: src/ui/classic/fcitx-classic-ui.desc:2
-msgid "Main Window Position X"
-msgstr "主窗口X位置"
-
-#: src/ui/classic/fcitx-classic-ui.desc:8
-msgid "Main Window Position Y"
-msgstr "主窗口Y位置"
-
 #: src/im/table/table.desc:79
 msgid "Matching Key"
 msgstr "模糊键"
@@ -1950,7 +1938,7 @@ msgstr "标点支持"
 msgid "Qt IM module files:"
 msgstr "Qt 输入法模块文件:"
 
-#: tools/gui/quickphrase-editor/editor.cpp:88
+#: tools/gui/quickphrase-editor/editor.cpp:93
 msgid "Quick Phrase Editor"
 msgstr "快速输入编辑器"
 
@@ -2293,6 +2281,18 @@ msgstr "拼写提示"
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
+
+#: src/ui/classic/fcitx-classic-ui.desc:48
+msgid "Status Panel Hide Mode"
+msgstr "状态栏隐藏模式"
+
+#: src/ui/classic/fcitx-classic-ui.desc:2
+msgid "Status Panel Position X"
+msgstr "状态栏X位置"
+
+#: src/ui/classic/fcitx-classic-ui.desc:8
+msgid "Status Panel Position Y"
+msgstr "状态栏Y位置"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"

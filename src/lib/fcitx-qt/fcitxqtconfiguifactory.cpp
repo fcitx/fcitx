@@ -62,6 +62,12 @@ FcitxQtConfigUIWidget* FcitxQtConfigUIFactory::create(const QString& file)
     return d->plugins[file]->create(file);
 }
 
+bool FcitxQtConfigUIFactory::test(const QString& file) {
+    Q_D(FcitxQtConfigUIFactory);
+
+    return d->plugins.contains(file);
+}
+
 void FcitxQtConfigUIFactoryPrivate::scan()
 {
     QStringList dirs;
