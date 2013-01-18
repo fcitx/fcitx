@@ -341,6 +341,11 @@ fxscanner_write_translate(FILE *ofp, const char *str,
         str += len;
         if (!*str)
             return true;
+        if (str[0] == str[1]) {
+            _write_len(ofp, str, 1);
+            str += 2;
+            continue;
+        }
         str++;
         len = translator(ofp, str, data);
         if (len < 0)
