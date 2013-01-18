@@ -612,12 +612,12 @@ fxscanner_function_write_public(FcitxAddonFuncDesc *func_desc,
                "{\n");
     if (func_desc->cache) {
         _write_strings(ofp,
-                       "    static boolean _init = false;\n"
+                       "    static FcitxInstance *_instance = NULL;\n"
                        "    static void *result = NULL;\n"
-                       "    if (fcitx_likely(_init))\n"
+                       "    if (fcitx_likely(_instance == instance))\n"
                        "        FCITX_RETURN_FROM_PTR(", func_desc->type,
                        ", result);\n"
-                       "    _init = true;\n");
+                       "    _instance = instance;\n");
     } else if (func_desc->type) {
         _write_str(ofp, "    void *result;\n");
     }
@@ -663,10 +663,7 @@ fxscanner_addon_write_public(FcitxAddonDesc *addon_desc, FILE *ofp)
                                               addon_desc->name_len);
     fxscanner_name_to_macro(buff);
     _write_strings(ofp, "\n#ifndef __FCITX_MODULE_", buff, "_API_H\n",
-                   "#define __FCITX_MODULE_", buff, "_API_H\n\n"
-                   "#ifdef __cplusplus\n"
-                   "extern \"C\" {\n"
-                   "#endif\n\n");
+                   "#define __FCITX_MODULE_", buff, "_API_H\n\n");
     unsigned int i;
     FcitxAddonMacroDesc *macro_desc;
     for (i = 0;i < utarray_len(&addon_desc->macros);i++) {
@@ -675,7 +672,11 @@ fxscanner_addon_write_public(FcitxAddonDesc *addon_desc, FILE *ofp)
         fxscanner_macro_write_public(macro_desc, ofp);
     }
     fxscanner_includes_write_public(&addon_desc->includes, ofp);
-    _write_strings(ofp, "DEFINE_GET_ADDON(\"", addon_desc->name, "\", ",
+    _write_strings(ofp,
+                   "#ifdef __cplusplus\n"
+                   "extern \"C\" {\n"
+                   "#endif\n\n"
+                   "DEFINE_GET_ADDON(\"", addon_desc->name, "\", ",
                    addon_desc->prefix, ")\n\n");
     FcitxAddonFuncDesc *func_desc;
     for (i = 0;i < utarray_len(&addon_desc->functions);i++) {
