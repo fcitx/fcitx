@@ -22,6 +22,7 @@
 #define WAYLAND_DEFS_H
 
 #include <stdint.h>
+#include <fcitx-utils/utils.h>
 
 #ifndef FCITX_DISABLE_WAYLAND
 
@@ -73,10 +74,9 @@ struct _FcitxWaylandTask {
     void *padding[2];
 };
 
-typedef void (*FcitxWaylandHandleGlobalAdded)(void *data, uint32_t id,
-                                              const char *iface,
-                                              uint32_t version);
-typedef void (*FcitxWaylandHandleGlobalRemoved)(void *data, uint32_t id,
-                                                const char *iface);
-
+typedef void (*FcitxWaylandHandleGlobalAdded)(void *data, uint32_t name,
+                                              const char *iface, uint32_t ver);
+typedef void (*FcitxWaylandHandleGlobalRemoved)(void *data, uint32_t name,
+                                                const char *iface,
+                                                uint32_t ver);
 #endif

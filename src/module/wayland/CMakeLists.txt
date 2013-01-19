@@ -10,6 +10,7 @@ endif()
 
 set(FCITX_WAYLAND_SOURCES
   wayland.c
+  wayland-global.c
   epoll-utils.c)
 fcitx_add_addon_full(wayland SCAN_IN SCAN_PRIV ${wayland_noinstall}
   SOURCES ${FCITX_WAYLAND_SOURCES}

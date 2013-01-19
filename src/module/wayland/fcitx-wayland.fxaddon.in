@@ -5,8 +5,8 @@ Include0="wayland-defs.h"
 Macro0=FCITX_DISABLE_WAYLAND
 Function0=AddTask
 Function1=ScheduleFlush
-Function2=
-Function3=
+Function2=BindObject
+Function3=RegGlobalHandler
 Function4=
 Function5=
 Function6=
@@ -17,17 +17,40 @@ Self.Type=FcitxWayland*
 
 [AddTask]
 Name=add-task
-Return=int
-ErrorReturn=-1
+Return=boolean
 Self.Deref=$<->epoll_fd
 Self.DerefType=int
 Arg0=FcitxWaylandTask*
 Arg1=uint32_t
 Res.WrapFunc=fx_epoll_add_task
+Res.DerefType=int
+Res.Deref=$@ == 0
 
 [ScheduleFlush]
 Name=schedule-flush
 Res.WrapFunc=FxWaylandScheduleFlush
+
+[BindObject]
+Name=bind-object
+Arg0=uint32_t
+Arg1=const struct wl_interface*
+Arg2=uint32_t
+Self.Deref=$<->registry
+Self.DerefType=struct wl_registry*
+Return=void*
+Res.WrapFunc=wl_registry_bind
+
+[RegGlobalHandler]
+Name=reg-global-handler
+Arg0=const char*
+Arg1=FcitxWaylandHandleGlobalAdded
+Arg2=FcitxWaylandHandleGlobalRemoved
+Arg3=void*
+Arg4=boolean
+Return=int
+Res.Deref=$@ + 1
+Res.DerefType=int
+Res.WrapFunc=FxWaylandRegGlobalHandler
 
 [FCITX_DISABLE_WAYLAND]
 Undefine=@ENABLE_WAYLAND@

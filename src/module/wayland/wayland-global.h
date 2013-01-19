@@ -18,45 +18,14 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef WAYLAND_INTERNAL_H
-#define WAYLAND_INTERNAL_H
+#ifndef WAYLAND_GLOBAL_H
+#define WAYLAND_GLOBAL_H
 
-#include "config.h"
-#include <fcitx/fcitx.h>
-#include "wayland-defs.h"
-#include <fcitx-utils/handler-table.h>
-#include <fcitx-utils/uthash.h>
-#include <fcitx/instance.h>
+#include "wayland-internal.h"
 
-typedef struct {
-    FcitxHandlerKey *key;
-    struct wl_list link;
-    UT_hash_handle hh;
-    uint32_t name;
-    uint32_t version;
-} FcitxWaylandObject;
-
-typedef struct {
-    FcitxInstance *owner;
-    struct wl_display *dpy;
-    int epoll_fd;
-    boolean scheduled_flush;
-    FcitxWaylandTask dpy_task;
-    FcitxHandlerTable *global_handlers;
-    FcitxHandlerKey *general_handlers;
-    struct wl_registry *registry;
-    FcitxWaylandObject *wl_objs;
-} FcitxWayland;
-
-typedef struct {
-    FcitxWaylandHandleGlobalAdded added;
-    FcitxWaylandHandleGlobalRemoved removed;
-    void *data;
-} FcitxWaylandGlobalHandler;
-
-typedef struct {
-    FcitxWayland *wl;
-    struct wl_list obj_list;
-} FcitxWaylandIfaceData;
+boolean FxWaylandRegGlobalHandler(
+    FcitxWayland *wl, const char *iface, FcitxWaylandHandleGlobalAdded added,
+    FcitxWaylandHandleGlobalRemoved removed, void *data, boolean run_exists);
+boolean FxWaylandGlobalInit(FcitxWayland *wl);
 
 #endif
