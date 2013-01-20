@@ -7,9 +7,9 @@ Function0=AddTask
 Function1=ScheduleFlush
 Function2=BindObject
 Function3=RegGlobalHandler
-Function4=Sync
-Function5=
-Function6=
+Function4=RemoveGlobalHandler
+Function5=Sync
+Function6=GetDisplay
 Function7=
 Function8=
 Function9=
@@ -52,12 +52,25 @@ Res.Deref=$@ + 1
 Res.DerefType=int
 Res.WrapFunc=FxWaylandRegGlobalHandler
 
+[RemoveGlobalHandler]
+Name=remove-global-handler
+Arg0=int
+Arg0.Deref=$0 - 1
+Arg0.DerefType=int
+Res.WrapFunc=FxWaylandRemoveGlobalHandler
+
 [Sync]
 Name=sync
 Arg0=FcitxWaylandSyncCallback
 Arg1=void*
 Return=boolean
 Res.WrapFunc=FxWaylandSync
+
+[GetDisplay]
+Name=get-display
+Return=struct wl_display*
+CacheResult=True
+Res.Exp=$<->dpy
 
 [FCITX_DISABLE_WAYLAND]
 Undefine=@ENABLE_WAYLAND@

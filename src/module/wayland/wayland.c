@@ -176,6 +176,7 @@ static void
 FxWaylandDestroy(void *self)
 {
     FcitxWayland *wl = (FcitxWayland*)self;
+    fcitx_handler_table_free(wl->global_handlers);
     wl_registry_destroy(wl->registry);
     close(wl->epoll_fd);
     wl_display_disconnect(wl->dpy);

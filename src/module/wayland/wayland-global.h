@@ -26,6 +26,7 @@
 boolean FxWaylandRegGlobalHandler(
     FcitxWayland *wl, const char *iface, FcitxWaylandHandleGlobalAdded added,
     FcitxWaylandHandleGlobalRemoved removed, void *data, boolean run_exists);
+void FxWaylandRemoveGlobalHandler(FcitxWayland *wl, int id);
 boolean FxWaylandGlobalInit(FcitxWayland *wl);
 
 #endif

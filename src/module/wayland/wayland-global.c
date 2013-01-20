@@ -156,9 +156,6 @@ FxWaylandIfaceDataFree(void *_data)
     }
 }
 
-/**
- * insert into handler table and trigger callback for each object.
- **/
 int
 FxWaylandRegGlobalHandler(FcitxWayland *wl, const char *iface,
                           FcitxWaylandHandleGlobalAdded added,
@@ -198,6 +195,14 @@ FxWaylandRegGlobalHandler(FcitxWayland *wl, const char *iface,
         }
     }
     return res;
+}
+
+void
+FxWaylandRemoveGlobalHandler(FcitxWayland *wl, int id)
+{
+    if (id < 0)
+        return;
+    fcitx_handler_table_remove_by_id(wl->global_handlers, id);
 }
 
 boolean
