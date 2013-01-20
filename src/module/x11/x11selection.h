@@ -23,8 +23,10 @@
 
 #include "x11stuff-internal.h"
 void X11InitSelection(FcitxX11 *x11priv);
+#ifdef HAVE_XFIXES
 void X11ProcessXFixesSelectionNotifyEvent(
     FcitxX11 *x11priv, XFixesSelectionNotifyEvent *notify_event);
+#endif
 void X11ProcessSelectionNotifyEvent(
     FcitxX11 *x11priv, XSelectionEvent *selection_event);
 int X11SelectionNotifyRegisterInternal(

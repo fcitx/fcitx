@@ -37,7 +37,9 @@
 
 #define FCITX_X11_SEL "FCITX_X11_SEL_"
 
+#ifdef HAVE_XFIXES
 static void X11SelectionNotifyFreeFunc(void *obj);
+#endif
 static void X11ConvertSelectionFreeFunc(void *obj);
 static int X11RequestConvertSelectionInternal(
     FcitxX11 *x11priv, const char *sel_str, Atom selection, Atom target,
@@ -75,11 +77,11 @@ X11ConvertSelectionFreeFunc(void *obj)
         convert->destroy(convert->data);
 }
 
+#ifdef HAVE_XFIXES
 void
 X11ProcessXFixesSelectionNotifyEvent(FcitxX11 *x11priv,
                                      XFixesSelectionNotifyEvent *notify_event)
 {
-#ifdef HAVE_XFIXES
     X11SelectionNotify *notify;
     notify = fcitx_handler_table_first(x11priv->selectionNotify, sizeof(Atom),
                                        &notify_event->selection);
@@ -88,8 +90,8 @@ X11ProcessXFixesSelectionNotifyEvent(FcitxX11 *x11priv,
         notify->cb(x11priv, notify_event->selection,
                    notify_event->subtype, notify);
     }
-#endif
 }
+#endif
 
 void
 X11SelectionNotifyHelper(FcitxX11 *x11priv, Atom selection, int subtype,
