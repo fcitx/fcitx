@@ -41,11 +41,16 @@ typedef struct {
     struct wl_display *dpy;
     int epoll_fd;
     boolean scheduled_flush;
+    uint32_t dpy_events;
     FcitxWaylandTask dpy_task;
     FcitxHandlerTable *global_handlers;
     FcitxHandlerKey *general_handlers;
     struct wl_registry *registry;
     FcitxWaylandObject *wl_objs;
+    struct wl_compositor *compositor;
+    struct wl_shell *shell;
+    struct wl_shm *shm;
+    struct wl_data_device_manager *data_device_manager;
 } FcitxWayland;
 
 typedef struct {

@@ -98,6 +98,7 @@ static void
 FxWaylandDisplayTaskHandler(FcitxWaylandTask *task, uint32_t events)
 {
     FcitxWayland *wl = fcitx_container_of(task, FcitxWayland, dpy_task);
+    wl->dpy_events = events;
     int ret;
     if (events & EPOLLERR || events & EPOLLHUP) {
         FxWaylandExit(wl);
@@ -130,6 +131,54 @@ FcitxWaylandLogFunc(const char *fmt, va_list ap)
     FcitxLogFuncV(FCITX_ERROR, __FILE__, __LINE__, fmt, ap);
 }
 
+typedef struct {
+    int id;
+    const char *iface_name;
+    const struct wl_interface *iface;
+    void (**listener)();
+    FcitxWayland *wl;
+    struct wl_proxy **ret;
+    void (*destroy)(struct wl_proxy *proxy);
+} FxWaylandSingletonListener;
+
+#define FXWL_DEF_SINGLETON(_wl, field, name, _iface, _listener, _destroy) { \
+        .id = -1,                                                       \
+        .iface_name = name,                                             \
+        .iface = &_iface,                                               \
+        .wl = _wl,                                                      \
+        .ret = (struct wl_proxy**)(&wl->field),                         \
+        .listener = (void (**)())_listener,                             \
+        .destroy = (void (*)(struct wl_proxy*))_destroy,                \
+    }
+
+static void
+FxWaylandHandleSingletonAdded(void *data, uint32_t name, const char *iface,
+                              uint32_t ver)
+{
+    FxWaylandSingletonListener *singleton = data;
+    FcitxWayland *wl = singleton->wl;
+    struct wl_proxy *proxy = wl_registry_bind(wl->registry, name,
+                                              singleton->iface, ver);
+    printf("%s, %s, %s, %x\n", __func__, iface, singleton->iface_name, name);
+    *singleton->ret = proxy;
+    if (singleton->listener) {
+        wl_proxy_add_listener(proxy, singleton->listener, wl);
+    }
+}
+
+static void
+FxWaylandShmFormatHandler(void *data, struct wl_shm *shm, uint32_t format)
+{
+    FcitxWayland *wl = data;
+    FCITX_UNUSED(wl);
+    FCITX_UNUSED(shm);
+    printf("%s, %x\n", __func__, format);
+}
+
+static const struct wl_shm_listener fx_shm_listenr = {
+    .format = FxWaylandShmFormatHandler
+};
+
 static void*
 FxWaylandCreate(FcitxInstance *instance)
 {
@@ -156,11 +205,50 @@ FxWaylandCreate(FcitxInstance *instance)
         goto close_epoll;
     if (fcitx_unlikely(!FxWaylandGlobalInit(wl)))
         goto destroy_registry;
+    FxWaylandSingletonListener singleton_listeners[] = {
+        FXWL_DEF_SINGLETON(wl, compositor, "wl_compositor",
+                           wl_compositor_interface, NULL,
+                           wl_compositor_destroy),
+        FXWL_DEF_SINGLETON(wl, shell, "wl_shell", wl_shell_interface, NULL,
+                           wl_shell_destroy),
+        FXWL_DEF_SINGLETON(wl, shm, "wl_shm", wl_shm_interface,
+                           &fx_shm_listenr, wl_shm_destroy),
+        FXWL_DEF_SINGLETON(wl, data_device_manager, "wl_data_device_manager",
+                           wl_data_device_manager_interface, NULL,
+                           wl_data_device_manager_destroy),
+    };
 
+    const int singleton_count =
+        sizeof(singleton_listeners) / sizeof(singleton_listeners[0]);
+    int i;
+    for (i = 0;i < singleton_count;i++) {
+        FxWaylandSingletonListener *listener = singleton_listeners + i;
+        listener->id = FxWaylandRegGlobalHandler(wl, listener->iface_name,
+                                                 FxWaylandHandleSingletonAdded,
+                                                 NULL, listener, true);
+    }
     wl_display_roundtrip(wl->dpy);
+    boolean initialized = true;
+    for (i = 0;i < singleton_count;i++) {
+        FxWaylandSingletonListener *listener = singleton_listeners + i;
+        FxWaylandRemoveGlobalHandler(wl, listener->id);
+        if (!*listener->ret) {
+            initialized = false;
+        }
+    }
+    if (!initialized)
+        goto free_handlers;
     FxWaylandScheduleFlush(wl);
     FcitxWaylandAddFunctions(instance);
     return wl;
+free_handlers:
+    for (i = 0;i < singleton_count;i++) {
+        FxWaylandSingletonListener *listener = singleton_listeners + i;
+        if (*listener->ret) {
+            listener->destroy(*listener->ret);
+        }
+    }
+    fcitx_handler_table_free(wl->global_handlers);
 destroy_registry:
     wl_registry_destroy(wl->registry);
 close_epoll:
@@ -176,9 +264,16 @@ static void
 FxWaylandDestroy(void *self)
 {
     FcitxWayland *wl = (FcitxWayland*)self;
+    wl_compositor_destroy(wl->compositor);
+    wl_shell_destroy(wl->shell);
+    wl_shm_destroy(wl->shm);
+    wl_data_device_manager_destroy(wl->data_device_manager);
     fcitx_handler_table_free(wl->global_handlers);
     wl_registry_destroy(wl->registry);
     close(wl->epoll_fd);
+    if (!(wl->dpy_events & EPOLLERR) && !(wl->dpy_events & EPOLLHUP)) {
+        wl_display_flush(wl->dpy);
+    }
     wl_display_disconnect(wl->dpy);
     free(self);
 }
