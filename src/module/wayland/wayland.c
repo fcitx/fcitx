@@ -41,9 +41,45 @@ FCITX_DEFINE_PLUGIN(fcitx_wayland, module, FcitxModule) = {
     .ReloadConfig = NULL
 };
 
+typedef struct {
+    FcitxWayland *wl;
+    FcitxWaylandSyncCallback cb;
+    void *data;
+} FxWaylandSyncData;
+
+static void
+SyncCallback(void *data, struct wl_callback *callback, uint32_t serial)
+{
+    FxWaylandSyncData *sync_data = data;
+    wl_callback_destroy(callback);
+    sync_data->cb(sync_data->data, serial);
+    free(sync_data);
+}
+
+static const struct wl_callback_listener sync_listener = {
+    .done = SyncCallback
+};
+
+static boolean
+FxWaylandSync(FcitxWayland *wl, FcitxWaylandSyncCallback cb, void *data)
+{
+    if (fcitx_unlikely(!cb))
+        return false;
+    struct wl_callback *callback = wl_display_sync(wl->dpy);
+    if (fcitx_unlikely(!callback))
+        return false;
+    FxWaylandSyncData *sync_data = fcitx_utils_new(FxWaylandSyncData);
+    sync_data->wl = wl;
+    sync_data->cb = cb;
+    sync_data->data = data;
+    wl_callback_add_listener(callback, &sync_listener, sync_data);
+    return true;
+}
+
 static void
 FxWaylandExit(FcitxWayland *wl)
 {
+    printf("%s\n", __func__);
     fx_epoll_del_task(wl->epoll_fd, &wl->dpy_task);
     // TODO
 }
@@ -121,6 +157,7 @@ FxWaylandCreate(FcitxInstance *instance)
     if (fcitx_unlikely(!FxWaylandGlobalInit(wl)))
         goto destroy_registry;
 
+    wl_display_roundtrip(wl->dpy);
     FxWaylandScheduleFlush(wl);
     FcitxWaylandAddFunctions(instance);
     return wl;

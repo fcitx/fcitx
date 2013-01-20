@@ -7,7 +7,7 @@ Function0=AddTask
 Function1=ScheduleFlush
 Function2=BindObject
 Function3=RegGlobalHandler
-Function4=
+Function4=Sync
 Function5=
 Function6=
 Function7=
@@ -51,6 +51,13 @@ Return=int
 Res.Deref=$@ + 1
 Res.DerefType=int
 Res.WrapFunc=FxWaylandRegGlobalHandler
+
+[Sync]
+Name=sync
+Arg0=FcitxWaylandSyncCallback
+Arg1=void*
+Return=boolean
+Res.WrapFunc=FxWaylandSync
 
 [FCITX_DISABLE_WAYLAND]
 Undefine=@ENABLE_WAYLAND@

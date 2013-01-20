@@ -79,4 +79,6 @@ typedef void (*FcitxWaylandHandleGlobalAdded)(void *data, uint32_t name,
 typedef void (*FcitxWaylandHandleGlobalRemoved)(void *data, uint32_t name,
                                                 const char *iface,
                                                 uint32_t ver);
+typedef void (*FcitxWaylandSyncCallback)(void *data, uint32_t serial);
+
 #endif

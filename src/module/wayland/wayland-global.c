@@ -105,6 +105,7 @@ FxWaylandGlobalAdded(void *self, struct wl_registry *wl_registry,
 {
     FcitxWayland *wl = (FcitxWayland*)self;
     FcitxWaylandObject *wl_obj;
+    printf("%s, %s, %x\n", __func__, iface, name);
     wl_obj = FxWaylandAddGlobal(wl, name, iface, ver);
     FxWaylandRunGlobalAdded(wl, wl_obj->key, wl_obj);
     FxWaylandRunGlobalAdded(wl, FxWaylandGetGeneralHandlers(wl), wl_obj);
