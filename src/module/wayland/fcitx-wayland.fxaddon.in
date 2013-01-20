@@ -10,9 +10,14 @@ Function3=RegGlobalHandler
 Function4=RemoveGlobalHandler
 Function5=Sync
 Function6=GetDisplay
-Function7=
-Function8=
-Function9=
+Function7=GetCompositor
+Function8=GetShell
+Function9=GetShm
+Function10=GetDataDeviceManager
+Function11=GetShmFormats
+Function12=
+Function13=
+Function14=
 Self.Type=FcitxWayland*
 
 [AddTask]
@@ -71,6 +76,35 @@ Name=get-display
 Return=struct wl_display*
 CacheResult=True
 Res.Exp=$<->dpy
+
+[GetCompositor]
+Name=get-compositor
+Return=struct wl_compositor*
+CacheResult=True
+Res.Exp=$<->compositor
+
+[GetShell]
+Name=get-shell
+Return=struct wl_shell*
+CacheResult=True
+Res.Exp=$<->shell
+
+[GetShm]
+Name=get-shm
+Return=struct wl_shm*
+CacheResult=True
+Res.Exp=$<->shm
+
+[GetDataDeviceManager]
+Name=get-data-device-manager
+Return=struct wl_data_device_manager*
+CacheResult=True
+Res.Exp=$<->data_device_manager
+
+[GetShmFormats]
+Name=get-shm-formats
+Return=uint32_t
+Res.Exp=$<->shm_formats
 
 [FCITX_DISABLE_WAYLAND]
 Undefine=@ENABLE_WAYLAND@

@@ -50,6 +50,7 @@ typedef struct {
     struct wl_compositor *compositor;
     struct wl_shell *shell;
     struct wl_shm *shm;
+    uint32_t shm_formats;
     struct wl_data_device_manager *data_device_manager;
 } FcitxWayland;
 

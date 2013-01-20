@@ -139,6 +139,7 @@ typedef struct {
     FcitxWayland *wl;
     struct wl_proxy **ret;
     void (*destroy)(struct wl_proxy *proxy);
+    boolean failed;
 } FxWaylandSingletonListener;
 
 #define FXWL_DEF_SINGLETON(_wl, field, name, _iface, _listener, _destroy) { \
@@ -149,6 +150,7 @@ typedef struct {
         .ret = (struct wl_proxy**)(&wl->field),                         \
         .listener = (void (**)())_listener,                             \
         .destroy = (void (*)(struct wl_proxy*))_destroy,                \
+        .failed = true,                                                 \
     }
 
 static void
@@ -157,10 +159,15 @@ FxWaylandHandleSingletonAdded(void *data, uint32_t name, const char *iface,
 {
     FxWaylandSingletonListener *singleton = data;
     FcitxWayland *wl = singleton->wl;
+    if (*singleton->ret) {
+        singleton->failed = true;
+        return;
+    }
     struct wl_proxy *proxy = wl_registry_bind(wl->registry, name,
                                               singleton->iface, ver);
     printf("%s, %s, %s, %x\n", __func__, iface, singleton->iface_name, name);
     *singleton->ret = proxy;
+    singleton->failed = false;
     if (singleton->listener) {
         wl_proxy_add_listener(proxy, singleton->listener, wl);
     }
@@ -170,9 +177,8 @@ static void
 FxWaylandShmFormatHandler(void *data, struct wl_shm *shm, uint32_t format)
 {
     FcitxWayland *wl = data;
-    FCITX_UNUSED(wl);
     FCITX_UNUSED(shm);
-    printf("%s, %x\n", __func__, format);
+    wl->shm_formats |= (1 << format);
 }
 
 static const struct wl_shm_listener fx_shm_listenr = {
@@ -228,15 +234,15 @@ FxWaylandCreate(FcitxInstance *instance)
                                                  NULL, listener, true);
     }
     wl_display_roundtrip(wl->dpy);
-    boolean initialized = true;
+    boolean failed = false;
     for (i = 0;i < singleton_count;i++) {
         FxWaylandSingletonListener *listener = singleton_listeners + i;
         FxWaylandRemoveGlobalHandler(wl, listener->id);
-        if (!*listener->ret) {
-            initialized = false;
+        if (listener->failed) {
+            failed = true;
         }
     }
-    if (!initialized)
+    if (failed)
         goto free_handlers;
     FxWaylandScheduleFlush(wl);
     FcitxWaylandAddFunctions(instance);
