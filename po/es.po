@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
+# Adolfo Jayme Barrientos <fitoschido@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2013-01-21 12:09-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: LANG\n"
+"PO-Revision-Date: 2013-01-21 17:10+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"Language-Team: Spanish (http://www.transifex.com/projects/p/fcitx/language/es/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: data/script/fcitx-diagnose.sh:179
 msgid "${1} not found."
@@ -54,16 +55,16 @@ msgstr ""
 #: data/script/fcitx-diagnose.sh:339
 msgid ""
 "If you are using ${1}, you may want to uninstall ${2} or remove ${3} to be "
-"able to use any input method other than ${2}. See ${link} for more detail as "
-"well as alternative solutions."
+"able to use any input method other than ${2}. See ${link} for more detail as"
+" well as alternative solutions."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:346
 #, sh-format
 msgid ""
-"To see some application specific problems you may have when using xim, check "
-"${link1}. For other more general problems of using XIM including application "
-"freezing, see ${link2}."
+"To see some application specific problems you may have when using xim, check"
+" ${link1}. For other more general problems of using XIM including "
+"application freezing, see ${link2}."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:349
@@ -345,7 +346,7 @@ msgstr ""
 
 #: src/frontend/xim/xim.c:135
 msgid "X11 not initialized"
-msgstr ""
+msgstr "X11 no inicializado"
 
 #: src/frontend/xim/xim.c:147
 msgid "Can't Create imWindow"
@@ -395,11 +396,11 @@ msgstr ""
 #: src/im/pinyin/fcitx-pinyin.desc:127 src/im/pinyin/fcitx-pinyin.desc:132
 #: src/im/pinyin/fcitx-pinyin.desc:137 src/im/pinyin/fcitx-pinyin.desc:142
 msgid "Pinyin"
-msgstr ""
+msgstr "Pinyin"
 
 #: src/im/pinyin/py.c:121 src/im/pinyin/shuangpin.conf.in:3
 msgid "Shuangpin"
-msgstr ""
+msgstr "Shuangpin"
 
 #: src/im/pinyin/py.c:402
 msgid "Can not find System Database of Pinyin!"
@@ -453,7 +454,7 @@ msgstr ""
 
 #: src/im/pinyin/py.c:2180
 msgid "Migrate the old file path to the new one"
-msgstr ""
+msgstr "Migrar la ruta de archivo anterior a la nueva"
 
 #: src/im/qw/qw.c:64 src/im/qw/fcitx-qw.conf.in:3 src/im/qw/qw.conf.in:3
 msgid "Quwei"
@@ -463,11 +464,11 @@ msgstr ""
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
-msgstr ""
+msgstr "Izq/Der para elegir el carácter seleccionado. Oprima Intro para confirmar. Oprima Escape para cancelar."
 
 #: src/im/table/table.c:629
 msgid "Pinyin: "
-msgstr ""
+msgstr "Pinyin:"
 
 #: src/im/table/table.c:653
 msgid "Cannot found Pinyin"
@@ -495,11 +496,11 @@ msgstr ""
 
 #: src/im/table/table.c:1406
 msgid "Code is "
-msgstr ""
+msgstr "El código es"
 
 #: src/im/table/table.c:1410
 msgid " Ctrl+Delete To Delete"
-msgstr ""
+msgstr "Ctrl+Supr para eliminar"
 
 #: src/im/table/tabledict.c:41
 msgid "Loading Table Dict"
@@ -631,11 +632,11 @@ msgstr ""
 #: src/lib/fcitx/ime.c:1491 data/fcitx-autostart.desktop.in:3
 #: data/fcitx.desktop.in:3
 msgid "Input Method"
-msgstr ""
+msgstr "Método de entrada"
 
 #: src/lib/fcitx/ime.c:1582
 msgid "Input Speed: "
-msgstr ""
+msgstr "Velocidad de entrada"
 
 #: src/lib/fcitx/ime.c:1585
 msgid "/min  Time Used: "
@@ -711,7 +712,7 @@ msgstr ""
 
 #: src/module/autoeng/AutoEng.c:641 src/module/quickphrase/quickphrase.c:415
 msgid "Press Enter to input text"
-msgstr ""
+msgstr "Oprima Intro para introducir texto"
 
 #: src/module/chttrans/chttrans.c:144 src/module/chttrans/chttrans.c:180
 msgid "Traditional Chinese"
@@ -868,11 +869,11 @@ msgstr ""
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
-msgstr ""
+msgstr "Estado del teclado virtual"
 
 #: src/module/vk/vk.c:175
 msgid "Virtual Keyboard"
-msgstr ""
+msgstr "Teclado virtual"
 
 #: src/module/vk/vk.c:208
 msgid "Close virtual keyboard"
@@ -884,12 +885,12 @@ msgstr ""
 
 #: src/ui/cairostuff/font.c:49
 msgid "Error: Load fontconfig failed"
-msgstr ""
+msgstr "Error: Falló la carga de fontconfig"
 
 #: src/ui/cairostuff/font.c:90
 #, c-format
 msgid "your current font is: %s"
-msgstr ""
+msgstr "su tipo de letra actual es: %s"
 
 #: src/ui/cairostuff/font.c:106
 msgid "no valid font."
@@ -897,7 +898,7 @@ msgstr ""
 
 #: src/ui/classic/classicui.c:395
 msgid "Online Help"
-msgstr ""
+msgstr "Ayuda en línea"
 
 #: src/ui/classic/classicui.c:458 src/ui/kimpanel/kimpanel.c:753
 msgid "Configure Current Input Method"
@@ -905,7 +906,7 @@ msgstr ""
 
 #: src/ui/classic/classicui.c:459
 msgid "Configure"
-msgstr ""
+msgstr "Configurar"
 
 #: src/ui/classic/classicui.c:460 src/ui/kimpanel/kimpanel.c:758
 msgid "Restart"
@@ -913,7 +914,7 @@ msgstr ""
 
 #: src/ui/classic/classicui.c:461
 msgid "Exit"
-msgstr ""
+msgstr "Salir"
 
 #: src/ui/classic/fcitx-skin-installer.sh:58
 msgid "Error: skin file should only contain one directory."
@@ -975,16 +976,16 @@ msgstr ""
 #: src/ui/kimpanel/kimpanel.c:254 src/ui/kimpanel/kimpanel.c:259
 #: data/config.desc:26
 msgid "Disabled"
-msgstr ""
+msgstr "Desactivado"
 
 #: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:260
 msgid "Input Method Disabled"
-msgstr ""
+msgstr "Método de entrada desactivado"
 
 #: src/ui/kimpanel/kimpanel.c:375 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
-msgstr ""
+msgstr "Fcitx"
 
 #: src/ui/kimpanel/kimpanel.c:750
 msgid "Toggle Input Method"
@@ -1088,7 +1089,7 @@ msgstr ""
 
 #: data/table/zrm.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:4
 msgid "Ziranma"
-msgstr ""
+msgstr "Ziranma"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -1120,7 +1121,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:9
 msgid "Shuang Pin Schema"
-msgstr ""
+msgstr "Shuang Pin Schema"
 
 #: src/im/qw/fcitx-qw.conf.in:4
 msgid "Quwei Input Method for Fcitx"
@@ -1128,7 +1129,7 @@ msgstr ""
 
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
 msgid "Table"
-msgstr ""
+msgstr "Tabla"
 
 #: src/im/table/fcitx-table.conf.in:4
 msgid "Table Input Method for Fcitx"
@@ -1152,7 +1153,7 @@ msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.conf.in:4
 msgid "Convert Simplified Chinese To Traditional Chinese"
-msgstr ""
+msgstr "Convertir chino simplificado a chino tradicional"
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:3
 #: src/module/clipboard/fcitx-clipboard.desc:1
@@ -1232,7 +1233,7 @@ msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
-msgstr ""
+msgstr "Lista de frases rápidas"
 
 #: src/module/remote/fcitx-remote-module.conf.in:3
 msgid "Remote"
@@ -1316,15 +1317,15 @@ msgstr ""
 
 #: data/addon.desc:3 data/inputmethod.desc:7
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: data/addon.desc:7
 msgid "Name that can be display in UI"
-msgstr ""
+msgstr "Nombre que puede mostrarse en la IU"
 
 #: data/addon.desc:12
 msgid "Comment"
-msgstr ""
+msgstr "Comentario"
 
 #: data/addon.desc:18 data/inputmethod.desc:1 data/inputmethod.desc:5
 #: data/inputmethod.desc:9 data/inputmethod.desc:13 data/inputmethod.desc:17
@@ -1334,27 +1335,27 @@ msgstr ""
 
 #: data/addon.desc:19
 msgid "Frontend"
-msgstr ""
+msgstr "Interfaz"
 
 #: data/addon.desc:20
 msgid "Module"
-msgstr ""
+msgstr "Módulo"
 
 #: data/addon.desc:21
 msgid "UI"
-msgstr ""
+msgstr "IU"
 
 #: data/addon.desc:22
 msgid "Category"
-msgstr ""
+msgstr "Categoría"
 
 #: data/addon.desc:27
 msgid "Enabled"
-msgstr ""
+msgstr "Activado"
 
 #: data/addon.desc:31
 msgid "Library"
-msgstr ""
+msgstr "Biblioteca"
 
 #: data/addon.desc:36
 msgid "SharedLibrary"
@@ -1366,11 +1367,11 @@ msgstr ""
 
 #: data/addon.desc:38
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: data/addon.desc:43
 msgid "Dependency"
-msgstr ""
+msgstr "Dependencia"
 
 #: data/addon.desc:48
 msgid "Priority of addon"
@@ -1589,11 +1590,11 @@ msgstr ""
 
 #: data/config.desc:157
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: data/config.desc:158
 msgid "All"
-msgstr ""
+msgstr "Todo"
 
 #: data/config.desc:159
 msgid "PerProgram"
@@ -1605,7 +1606,7 @@ msgstr ""
 
 #: data/config.desc:166
 msgid "Inactive"
-msgstr ""
+msgstr "Inactivo"
 
 #: data/config.desc:167
 msgid "Active"
@@ -1613,13 +1614,13 @@ msgstr ""
 
 #: data/config.desc:168
 msgid "Default Input Method State"
-msgstr ""
+msgstr "Estado predeterminado del método de entrada"
 
 #: data/config.desc:171 data/config.desc:177 data/config.desc:187
 #: data/config.desc:193 data/config.desc:199 data/config.desc:206
 #: data/config.desc:212
 msgid "Output"
-msgstr ""
+msgstr "Salida"
 
 #: data/config.desc:174
 msgid "Type half width Punc After a Number"
@@ -1627,7 +1628,7 @@ msgstr ""
 
 #: data/config.desc:180
 msgid "Nothing"
-msgstr ""
+msgstr "Ninguno"
 
 #: data/config.desc:181
 msgid "Clean"
@@ -1639,7 +1640,7 @@ msgstr ""
 
 #: data/config.desc:184
 msgid "Action after press enter"
-msgstr ""
+msgstr "Acción después de oprimir Intro"
 
 #: data/config.desc:190
 msgid "Disable Paging in Remind Mode"
@@ -1655,7 +1656,7 @@ msgstr ""
 
 #: data/config.desc:202
 msgid "Candidate Word Number"
-msgstr ""
+msgstr "Número de palabra candidata"
 
 #: data/config.desc:209
 msgid "Give the tips of Phrase"
@@ -1669,7 +1670,7 @@ msgstr ""
 #: data/config.desc:236 data/config.desc:242 data/config.desc:248
 #: data/config.desc:254
 msgid "Appearance"
-msgstr ""
+msgstr "Apariencia"
 
 #: data/config.desc:221
 msgid "Show Input Method Hint After Input method changed"
@@ -1685,15 +1686,15 @@ msgstr ""
 
 #: data/config.desc:239
 msgid "Show Input Speed"
-msgstr ""
+msgstr "Mostrar velocidad de entrada"
 
 #: data/config.desc:245
 msgid "Show Version"
-msgstr ""
+msgstr "Mostrar versión"
 
 #: data/config.desc:251
 msgid "Do not show input window if there is only preedit string"
-msgstr ""
+msgstr "No mostrar ventanas de entrada si solo hay una cadena preeditada"
 
 #: data/config.desc:257
 msgid "Do not show input window if there is only one candidate and preedit"
@@ -1709,7 +1710,7 @@ msgstr ""
 
 #: data/inputmethod.desc:15
 msgid "Priority"
-msgstr ""
+msgstr "Prioridad"
 
 #: data/inputmethod.desc:19
 msgid "LangCode"
@@ -1717,7 +1718,7 @@ msgstr ""
 
 #: data/inputmethod.desc:23
 msgid "Parent"
-msgstr ""
+msgstr "Padre"
 
 #: data/profile.desc:1 data/profile.desc:6 data/profile.desc:11
 #: data/profile.desc:16 data/profile.desc:21 data/profile.desc:26
@@ -1726,11 +1727,11 @@ msgstr ""
 
 #: data/profile.desc:2
 msgid "Use Full Width Character"
-msgstr ""
+msgstr "Usar carácter de anchura completa"
 
 #: data/profile.desc:7
 msgid "Use Wide Punctuation"
-msgstr ""
+msgstr "Usar puntuación ancha"
 
 #: data/profile.desc:12
 msgid "Prompt the phrases after input"
@@ -1738,11 +1739,11 @@ msgstr ""
 
 #: data/profile.desc:17
 msgid "Current Input Method Name"
-msgstr ""
+msgstr "Nombre del método de entrada actual"
 
 #: data/profile.desc:22
 msgid "Current Enabled Input Method List"
-msgstr ""
+msgstr "Lista de métodos de entrada activados"
 
 #: data/profile.desc:29
 msgid "Show Preedit String in Client Window"
@@ -1824,11 +1825,11 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:5
 msgid "MS"
-msgstr ""
+msgstr "MS"
 
 #: src/im/pinyin/fcitx-pinyin.desc:6
 msgid "Ziguang"
-msgstr ""
+msgstr "Ziguang"
 
 #: src/im/pinyin/fcitx-pinyin.desc:7
 msgid "ABC"
@@ -1836,7 +1837,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"
-msgstr ""
+msgstr "Zhongwenzhixing"
 
 #: src/im/pinyin/fcitx-pinyin.desc:9
 msgid "PinyinJiaJia"
@@ -1848,7 +1849,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:11
 msgid "User Defined"
-msgstr ""
+msgstr "Definido por el usuario"
 
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
@@ -1864,15 +1865,15 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
-msgstr ""
+msgstr "Usar pinyin completo"
 
 #: src/im/pinyin/fcitx-pinyin.desc:33
 msgid "Auto Create Phrase"
-msgstr ""
+msgstr "Crear frase automáticamente"
 
 #: src/im/pinyin/fcitx-pinyin.desc:38
 msgid "Save Auto Created Phrase"
-msgstr ""
+msgstr "Guardar la frase creada automáticamente"
 
 #: src/im/pinyin/fcitx-pinyin.desc:43
 msgid "Hotkey of Adding Frequent Word"
@@ -2016,7 +2017,7 @@ msgstr ""
 
 #: src/im/table/table.desc:2
 msgid "Unique Name for Table"
-msgstr ""
+msgstr "Nombre único para la tabla"
 
 #: src/im/table/table.desc:7
 msgid "Code Table Name"
@@ -2055,7 +2056,8 @@ msgid "Auto Send Candidate Word"
 msgstr ""
 
 #: src/im/table/table.desc:54
-msgid "Minimum length trigger auto send candidate word when only one candidate"
+msgid ""
+"Minimum length trigger auto send candidate word when only one candidate"
 msgstr ""
 
 #: src/im/table/table.desc:59
@@ -2123,7 +2125,7 @@ msgstr ""
 
 #: src/im/table/table.desc:147
 msgid "Enable"
-msgstr ""
+msgstr "Activar"
 
 #: src/im/table/table.desc:152
 msgid "Use Custom Prompt String defined in table"
@@ -2205,11 +2207,11 @@ msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:4
 msgid "Native"
-msgstr ""
+msgstr "Nativo"
 
 #: src/module/chttrans/fcitx-chttrans.desc:5
 msgid "OpenCC"
-msgstr ""
+msgstr "OpenCC"
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
@@ -2520,11 +2522,11 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:23
 msgid "Font"
-msgstr ""
+msgstr "Tipo de letra"
 
 #: src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
-msgstr ""
+msgstr "Tipo de letra del menú"
 
 #: src/ui/classic/fcitx-classic-ui.desc:33
 msgid "Font Locale to display"
@@ -2532,11 +2534,11 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:39
 msgid "Use System Tray Icon"
-msgstr ""
+msgstr "Usar icono en el área de notificación"
 
 #: src/ui/classic/fcitx-classic-ui.desc:44
 msgid "Show"
-msgstr ""
+msgstr "Mostrar"
 
 #: src/ui/classic/fcitx-classic-ui.desc:45
 msgid "Auto"
@@ -2544,7 +2546,7 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:46
 msgid "Hide"
-msgstr ""
+msgstr "Ocultar"
 
 #: src/ui/classic/fcitx-classic-ui.desc:48
 msgid "Status Panel Hide Mode"
@@ -2586,11 +2588,11 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:19
 msgid "Input Font Size"
-msgstr ""
+msgstr "Tamaño de letra de entrada"
 
 #: src/ui/classic/skin.desc:23
 msgid "Menu Font Size"
-msgstr ""
+msgstr "Tamaño de letra de los menús"
 
 #: src/ui/classic/skin.desc:28
 msgid "Font size repect dpi setting"
@@ -2622,7 +2624,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:57
 msgid "Other Color"
-msgstr ""
+msgstr "Otro color"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -2645,7 +2647,7 @@ msgstr ""
 #: src/ui/classic/skin.desc:69 src/ui/classic/skin.desc:137
 #: src/ui/classic/skin.desc:217
 msgid "Background Image"
-msgstr ""
+msgstr "Imagen de fondo"
 
 #: src/ui/classic/skin.desc:73
 msgid "Logo Icon"
@@ -2688,13 +2690,13 @@ msgstr ""
 #: src/ui/classic/skin.desc:195 src/ui/classic/skin.desc:203
 #: src/ui/classic/skin.desc:247 src/ui/classic/skin.desc:255
 msgid "Copy"
-msgstr ""
+msgstr "Copiar"
 
 #: src/ui/classic/skin.desc:104 src/ui/classic/skin.desc:112
 #: src/ui/classic/skin.desc:196 src/ui/classic/skin.desc:204
 #: src/ui/classic/skin.desc:248 src/ui/classic/skin.desc:256
 msgid "Resize"
-msgstr ""
+msgstr "Redimensionar"
 
 #: src/ui/classic/skin.desc:109 src/ui/classic/skin.desc:201
 #: src/ui/classic/skin.desc:253
@@ -2730,7 +2732,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:157
 msgid "Color of Cursor"
-msgstr ""
+msgstr "Color del cursor"
 
 #: src/ui/classic/skin.desc:161
 msgid "Position or offset of Preedit"

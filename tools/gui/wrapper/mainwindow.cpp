@@ -46,6 +46,8 @@ MainWindow::MainWindow(FcitxQtConfigUIWidget* pluginWidget, QWidget* parent): QM
     setWindowTitle(m_pluginWidget->title());
 
     connect(m_pluginWidget, SIGNAL(changed(bool)), this, SLOT(changed(bool)));
+    if (m_pluginWidget->asyncSave())
+        connect(m_pluginWidget, SIGNAL(saveFinished()), this, SLOT(saveFinished()));
     connect(m_ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(clicked(QAbstractButton*)));
     connect(m_connection, SIGNAL(connected()), this, SLOT(connected()));
 
@@ -64,15 +66,25 @@ void MainWindow::clicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standardButton = m_ui->buttonBox->standardButton(button);
     if (standardButton == QDialogButtonBox::Save) {
+        if (m_pluginWidget->asyncSave())
+            m_pluginWidget->setEnabled(false);
         m_pluginWidget->save();
-        if (m_proxy) {
-            m_proxy->ReloadAddonConfig(m_pluginWidget->addon());
-        }
+        if (!m_pluginWidget->asyncSave())
+            saveFinished();
     } else if (standardButton == QDialogButtonBox::Close) {
         qApp->quit();
     }
     else if (standardButton == QDialogButtonBox::Reset) {
         m_pluginWidget->load();
+    }
+}
+
+void MainWindow::saveFinished()
+{
+    if (m_pluginWidget->asyncSave())
+        m_pluginWidget->setEnabled(true);
+    if (m_proxy) {
+        m_proxy->ReloadAddonConfig(m_pluginWidget->addon());
     }
 }
 

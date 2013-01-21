@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by CSSlayer                                   *
+ *   Copyright (C) 2013~2013 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -17,32 +17,33 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "common.h"
+#include "ui_batchdialog.h"
+#include "batchdialog.h"
 
-#include <QMainWindow>
+namespace fcitx {
+BatchDialog::BatchDialog(QWidget* parent): QDialog(parent),
+    m_ui(new Ui::BatchDialog)
+{
+    m_ui->setupUi(this);
+    m_ui->iconLabel->setPixmap(QIcon::fromTheme("dialog-information").pixmap(22, 22));
+    m_ui->infoLabel->setText(_("Use <Keyword> <Phrase> format on every line."));
+}
 
-#include "ui_mainwindow.h"
-#include "fcitx-qt/fcitxqtconfiguiwidget.h"
+BatchDialog::~BatchDialog()
+{
+    delete m_ui;
+}
 
-class FcitxQtInputMethodProxy;
-class FcitxQtConnection;
-class MainWindow : public QMainWindow {
-    Q_OBJECT
-public:
-    explicit MainWindow(FcitxQtConfigUIWidget* pluginWidget, QWidget* parent = 0);
-    virtual ~MainWindow();
-public slots:
-    void changed(bool changed);
-    void clicked(QAbstractButton* button);
-    void connected();
-    void saveFinished();
+void BatchDialog::setText(const QString& s)
+{
+    m_ui->plainTextEdit->setPlainText(s);
+}
 
-private:
-    Ui::MainWindow* m_ui;
-    FcitxQtConnection* m_connection;
-    FcitxQtConfigUIWidget* m_pluginWidget;
-    FcitxQtInputMethodProxy* m_proxy;
-};
+QString BatchDialog::text() const
+{
+    return m_ui->plainTextEdit->toPlainText();
+}
 
-#endif // MAINWINDOW_H
+
+}

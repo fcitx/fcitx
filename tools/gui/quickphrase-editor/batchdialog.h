@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by CSSlayer                                   *
+ *   Copyright (C) 2013~2013 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -17,43 +17,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "common.h"
-#include "ui_dialog.h"
-#include "dialog.h"
+#ifndef FCITX_TOOLS_GUI_BATCHDIALOG_H
+#define FCITX_TOOLS_GUI_BATCHDIALOG_H
+
+#include <QDialog>
+
+class CMacroTable;
+namespace Ui {
+class BatchDialog;
+}
 
 namespace fcitx {
-EditorDialog::EditorDialog(QWidget* parent): QDialog(parent),
-    m_ui(new Ui::Dialog)
-{
-    m_ui->setupUi(this);
-    m_ui->keyLabel->setText(_("Keyword:"));
-    m_ui->valueLabel->setText(_("Phrase:"));
-}
+class BatchDialog : public QDialog {
+    Q_OBJECT
+public:
+    explicit BatchDialog(QWidget* parent = 0);
+    virtual ~BatchDialog();
 
-EditorDialog::~EditorDialog()
-{
-    delete m_ui;
-}
+    QString text() const;
+    void setText(const QString& s);
 
-void EditorDialog::setKey(const QString& s)
-{
-    m_ui->keyLineEdit->setText(s);
-}
-
-void EditorDialog::setValue(const QString& s)
-{
-    m_ui->valueLineEdit->setText(s);
-}
-
-QString EditorDialog::key() const
-{
-    return m_ui->keyLineEdit->text();
-}
-
-QString EditorDialog::value() const
-{
-    return m_ui->valueLineEdit->text();
+private:
+    Ui::BatchDialog* m_ui;
+};
 }
 
 
-}
+#endif // FCITX_TOOLS_GUI_

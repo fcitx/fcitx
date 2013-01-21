@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-01-18 15:05-0500\n"
+"POT-Creation-Date: 2013-01-21 12:09-0500\n"
 "PO-Revision-Date: 2013-01-17 15:29+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/fcitx/"
@@ -31,19 +31,23 @@ msgstr ""
 msgid "${1} works properly."
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:42
+#: tools/gui/quickphrase-editor/editor.cpp:43
 msgid "&Add"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:44
+msgid "&Batch Edit"
 msgstr ""
 
 #: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:43
+#: tools/gui/quickphrase-editor/editor.cpp:45
 msgid "&Delete"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:45
+#: tools/gui/quickphrase-editor/editor.cpp:47
 msgid "&Import"
 msgstr ""
 
@@ -683,7 +687,7 @@ msgstr ""
 msgid "DRAW MainWindow"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:44
+#: tools/gui/quickphrase-editor/editor.cpp:46
 msgid "De&lete All"
 msgstr ""
 
@@ -789,7 +793,7 @@ msgstr ""
 msgid "Duplicate option, overwrite: line %d"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:46
+#: tools/gui/quickphrase-editor/editor.cpp:48
 msgid "E&xport"
 msgstr ""
 
@@ -1419,7 +1423,7 @@ msgstr ""
 msgid "Keyword"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/dialog.cpp:29
+#: tools/gui/quickphrase-editor/editordialog.cpp:29
 msgid "Keyword:"
 msgstr ""
 
@@ -1758,7 +1762,7 @@ msgstr ""
 msgid "Phrase is already in Dict "
 msgstr ""
 
-#: tools/gui/quickphrase-editor/dialog.cpp:30
+#: tools/gui/quickphrase-editor/editordialog.cpp:30
 msgid "Phrase:"
 msgstr ""
 
@@ -1854,7 +1858,7 @@ msgstr ""
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/module/autoeng/AutoEng.c:641 src/module/quickphrase/quickphrase.c:414
+#: src/module/autoeng/AutoEng.c:641 src/module/quickphrase/quickphrase.c:415
 msgid "Press Enter to input text"
 msgstr ""
 
@@ -1937,7 +1941,7 @@ msgstr "Unterstützung Interpunktion"
 msgid "Qt IM module files:"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:93
+#: tools/gui/quickphrase-editor/editor.cpp:103
 msgid "Quick Phrase Editor"
 msgstr ""
 
@@ -1945,7 +1949,7 @@ msgstr ""
 msgid "Quick Phrase List"
 msgstr ""
 
-#: src/module/quickphrase/quickphrase.c:336
+#: src/module/quickphrase/quickphrase.c:337
 msgid "Quick Phrase: "
 msgstr ""
 
@@ -2532,6 +2536,10 @@ msgstr "Eindeutiger Name"
 #: src/lib/fcitx-config/fcitx-config.c:396
 #, c-format
 msgid "Unknown type, take it as string: %s"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/batchdialog.cpp:30
+msgid "Use <Keyword> <Phrase> format on every line."
 msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:28

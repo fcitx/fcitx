@@ -27,8 +27,9 @@
 
 #include "common.h"
 #include "editor.h"
-#include "dialog.h"
+#include "editordialog.h"
 #include "model.h"
+#include "batchdialog.h"
 #include "ui_editor.h"
 
 namespace fcitx {
@@ -40,6 +41,7 @@ ListEditor::ListEditor(fcitx::QuickPhraseModel* model, QWidget* parent)
 {
     m_ui->setupUi(this);
     m_ui->addButton->setText(_("&Add"));
+    m_ui->batchEditButton->setText(_("&Batch Edit"));
     m_ui->deleteButton->setText(_("&Delete"));
     m_ui->clearButton->setText(_("De&lete All"));
     m_ui->importButton->setText(_("&Import"));
@@ -49,6 +51,7 @@ ListEditor::ListEditor(fcitx::QuickPhraseModel* model, QWidget* parent)
     m_ui->macroTableView->setEditTriggers(QAbstractItemView::DoubleClicked);
 
     connect(m_ui->addButton, SIGNAL(clicked(bool)), this, SLOT(addWord()));
+    connect(m_ui->batchEditButton, SIGNAL(clicked(bool)), this, SLOT(batchEditWord()));
     connect(m_ui->deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteWord()));
     connect(m_ui->clearButton, SIGNAL(clicked(bool)), this, SLOT(deleteAllWord()));
     connect(m_ui->importButton, SIGNAL(clicked(bool)), this, SLOT(importData()));
@@ -80,13 +83,20 @@ void ListEditor::save(const QString& file)
 
 void ListEditor::save()
 {
-    m_model->save("data/QuickPhrase.mb");
+    QFutureWatcher< bool >* futureWatcher = m_model->save("data/QuickPhrase.mb");
+    connect(futureWatcher, SIGNAL(finished()), this, SIGNAL(saveFinished()));
 }
 
 QString ListEditor::addon()
 {
     return "fcitx-quickphrase";
 }
+
+bool ListEditor::asyncSave()
+{
+    return true;
+}
+
 
 QString ListEditor::title()
 {
@@ -125,11 +135,36 @@ void ListEditor::addWord()
     connect(dialog, SIGNAL(accepted()), this, SLOT(addWordAccepted()));
 }
 
+void ListEditor::batchEditWord()
+{
+    BatchDialog* dialog = new BatchDialog(this);
+    QString text;
+    QTextStream stream(&text);
+    m_model->saveData(stream);
+    dialog->setAttribute(Qt::WA_DeleteOnClose, true);
+    dialog->setText(text);
+    dialog->open();
+    connect(dialog, SIGNAL(accepted()), this, SLOT(batchEditAccepted()));
+}
+
 void ListEditor::addWordAccepted()
 {
     const EditorDialog* dialog = qobject_cast< const EditorDialog* >(QObject::sender());
 
     m_model->addItem(dialog->key(), dialog->value());
+    QModelIndex last = m_model->index(m_model->rowCount() - 1, 0);
+    m_ui->macroTableView->setCurrentIndex(last);
+    m_ui->macroTableView->scrollTo(last);
+}
+
+void ListEditor::batchEditAccepted()
+{
+    const BatchDialog* dialog = qobject_cast< const BatchDialog* >(QObject::sender());
+
+    QString s = dialog->text();
+    QTextStream stream(&s);
+
+    m_model->loadData(stream);
     QModelIndex last = m_model->index(m_model->rowCount() - 1, 0);
     m_ui->macroTableView->setCurrentIndex(last);
     m_ui->macroTableView->scrollTo(last);

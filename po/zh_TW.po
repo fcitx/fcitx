@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-01-18 15:05-0500\n"
+"POT-Creation-Date: 2013-01-21 12:09-0500\n"
 "PO-Revision-Date: 2013-01-17 15:30+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
@@ -34,19 +34,23 @@ msgstr "找不到 ${1}。"
 msgid "${1} works properly."
 msgstr "${1} 運作正常。"
 
-#: tools/gui/quickphrase-editor/editor.cpp:42
+#: tools/gui/quickphrase-editor/editor.cpp:43
 msgid "&Add"
 msgstr "新增 (&A)"
+
+#: tools/gui/quickphrase-editor/editor.cpp:44
+msgid "&Batch Edit"
+msgstr ""
 
 #: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
 msgstr "關閉 (&C)"
 
-#: tools/gui/quickphrase-editor/editor.cpp:43
+#: tools/gui/quickphrase-editor/editor.cpp:45
 msgid "&Delete"
 msgstr "刪除 (&D)"
 
-#: tools/gui/quickphrase-editor/editor.cpp:45
+#: tools/gui/quickphrase-editor/editor.cpp:47
 msgid "&Import"
 msgstr "匯入 (&I)"
 
@@ -685,7 +689,7 @@ msgstr "DISPLAY MainWindow"
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
-#: tools/gui/quickphrase-editor/editor.cpp:44
+#: tools/gui/quickphrase-editor/editor.cpp:46
 msgid "De&lete All"
 msgstr "刪除全部 (&l)"
 
@@ -790,7 +794,7 @@ msgstr ""
 msgid "Duplicate option, overwrite: line %d"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:46
+#: tools/gui/quickphrase-editor/editor.cpp:48
 msgid "E&xport"
 msgstr "匯出 (&X)"
 
@@ -1418,7 +1422,7 @@ msgstr "鍵盤配置："
 msgid "Keyword"
 msgstr "關鍵字"
 
-#: tools/gui/quickphrase-editor/dialog.cpp:29
+#: tools/gui/quickphrase-editor/editordialog.cpp:29
 msgid "Keyword:"
 msgstr "關鍵字："
 
@@ -1756,7 +1760,7 @@ msgstr "字詞"
 msgid "Phrase is already in Dict "
 msgstr "字詞已在碼表中"
 
-#: tools/gui/quickphrase-editor/dialog.cpp:30
+#: tools/gui/quickphrase-editor/editordialog.cpp:30
 msgid "Phrase:"
 msgstr "字詞："
 
@@ -1853,7 +1857,7 @@ msgstr "按下 1 刪除常用字表中的 %s（ESC 取消）"
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1-%d 來刪除常用字表中的 %s（ESC 取消）"
 
-#: src/module/autoeng/AutoEng.c:641 src/module/quickphrase/quickphrase.c:414
+#: src/module/autoeng/AutoEng.c:641 src/module/quickphrase/quickphrase.c:415
 msgid "Press Enter to input text"
 msgstr "按下 Enter 輸入文字"
 
@@ -1935,7 +1939,7 @@ msgstr "標點支援"
 msgid "Qt IM module files:"
 msgstr "Qt 輸入法模組檔案："
 
-#: tools/gui/quickphrase-editor/editor.cpp:93
+#: tools/gui/quickphrase-editor/editor.cpp:103
 msgid "Quick Phrase Editor"
 msgstr "快速輸入編輯器"
 
@@ -1943,7 +1947,7 @@ msgstr "快速輸入編輯器"
 msgid "Quick Phrase List"
 msgstr "快速輸入清單"
 
-#: src/module/quickphrase/quickphrase.c:336
+#: src/module/quickphrase/quickphrase.c:337
 msgid "Quick Phrase: "
 msgstr "快速輸入："
 
@@ -2535,6 +2539,10 @@ msgstr "唯一名稱"
 #: src/lib/fcitx-config/fcitx-config.c:396
 #, c-format
 msgid "Unknown type, take it as string: %s"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/batchdialog.cpp:30
+msgid "Use <Keyword> <Phrase> format on every line."
 msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:28

@@ -322,6 +322,7 @@ void FreeQuickPhrase(void *arg)
         return;
 
     utarray_free(qpstate->quickPhrases);
+    qpstate->quickPhrases = NULL;
 }
 
 void ShowQuickPhraseMessage(QuickPhraseState *qpstate)

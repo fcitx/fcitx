@@ -24,7 +24,7 @@
 
 class CMacroTable;
 namespace Ui {
-class Dialog;
+class EditorDialog;
 }
 
 namespace fcitx {
@@ -40,7 +40,7 @@ public:
     void setKey(const QString& s);
 
 private:
-    Ui::Dialog* m_ui;
+    Ui::EditorDialog* m_ui;
 };
 }
 

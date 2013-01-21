@@ -22,6 +22,8 @@
 
 #include <QAbstractTableModel>
 #include <QSet>
+#include <QTextStream>
+#include <QFutureWatcher>
 
 class QFile;
 namespace fcitx {
@@ -38,11 +40,13 @@ public:
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual void load(const QString& file, bool append);
-    virtual void addItem(const QString& macro, const QString& word);
-    virtual void deleteItem(int row);
-    virtual void deleteAllItem();
-    virtual void save(const QString& file);
+    void load(const QString& file, bool append);
+    void loadData(QTextStream& stream);
+    void addItem(const QString& macro, const QString& word);
+    void deleteItem(int row);
+    void deleteAllItem();
+    QFutureWatcher< bool >* save(const QString& file);
+    void saveData(QTextStream& stream);
     bool needSave();
 
 signals:

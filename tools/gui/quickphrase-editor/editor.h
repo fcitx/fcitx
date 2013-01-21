@@ -42,9 +42,11 @@ public:
     virtual void save();
     virtual QString title();
     virtual QString addon();
+    virtual bool asyncSave();
 
 private slots:
     void addWord();
+    void batchEditWord();
     void deleteWord();
     void deleteAllWord();
     void itemFocusChanged();
@@ -58,6 +60,8 @@ private:
     void save(const QString& file);
     Ui::Editor* m_ui;
     QuickPhraseModel* m_model;
+public slots:
+    void batchEditAccepted();
 };
 }
 

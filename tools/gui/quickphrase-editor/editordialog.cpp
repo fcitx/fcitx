@@ -17,32 +17,43 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "common.h"
+#include "ui_editordialog.h"
+#include "editordialog.h"
 
-#include <QMainWindow>
+namespace fcitx {
+EditorDialog::EditorDialog(QWidget* parent): QDialog(parent),
+    m_ui(new Ui::EditorDialog)
+{
+    m_ui->setupUi(this);
+    m_ui->keyLabel->setText(_("Keyword:"));
+    m_ui->valueLabel->setText(_("Phrase:"));
+}
 
-#include "ui_mainwindow.h"
-#include "fcitx-qt/fcitxqtconfiguiwidget.h"
+EditorDialog::~EditorDialog()
+{
+    delete m_ui;
+}
 
-class FcitxQtInputMethodProxy;
-class FcitxQtConnection;
-class MainWindow : public QMainWindow {
-    Q_OBJECT
-public:
-    explicit MainWindow(FcitxQtConfigUIWidget* pluginWidget, QWidget* parent = 0);
-    virtual ~MainWindow();
-public slots:
-    void changed(bool changed);
-    void clicked(QAbstractButton* button);
-    void connected();
-    void saveFinished();
+void EditorDialog::setKey(const QString& s)
+{
+    m_ui->keyLineEdit->setText(s);
+}
 
-private:
-    Ui::MainWindow* m_ui;
-    FcitxQtConnection* m_connection;
-    FcitxQtConfigUIWidget* m_pluginWidget;
-    FcitxQtInputMethodProxy* m_proxy;
-};
+void EditorDialog::setValue(const QString& s)
+{
+    m_ui->valueLineEdit->setText(s);
+}
 
-#endif // MAINWINDOW_H
+QString EditorDialog::key() const
+{
+    return m_ui->keyLineEdit->text();
+}
+
+QString EditorDialog::value() const
+{
+    return m_ui->valueLineEdit->text();
+}
+
+
+}

@@ -29,6 +29,18 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="batchEditButton">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="document-edit">
+         <normaloff/>
+        </iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="deleteButton">
        <property name="text">
         <string/>

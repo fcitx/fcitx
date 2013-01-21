@@ -1,4 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
@@ -12,15 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-01-18 15:05-0500\n"
-"PO-Revision-Date: 2013-01-17 15:30+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
-"Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
+"POT-Creation-Date: 2013-01-21 12:09-0500\n"
+"PO-Revision-Date: 2013-01-21 12:09-0500\n"
+"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
+"Language-Team: Chinese Simplified <kde-china@kde.org>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: src/im/table/table.c:1410
 msgid " Ctrl+Delete To Delete"
@@ -34,19 +34,23 @@ msgstr "${1} 未找到."
 msgid "${1} works properly."
 msgstr "${1} 工作正常."
 
-#: tools/gui/quickphrase-editor/editor.cpp:42
+#: tools/gui/quickphrase-editor/editor.cpp:43
 msgid "&Add"
 msgstr "添加(&A)"
+
+#: tools/gui/quickphrase-editor/editor.cpp:44
+msgid "&Batch Edit"
+msgstr "批量编辑(&B)"
 
 #: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
 msgstr "关闭(&C)"
 
-#: tools/gui/quickphrase-editor/editor.cpp:43
+#: tools/gui/quickphrase-editor/editor.cpp:45
 msgid "&Delete"
 msgstr "删除(&D)"
 
-#: tools/gui/quickphrase-editor/editor.cpp:45
+#: tools/gui/quickphrase-editor/editor.cpp:47
 msgid "&Import"
 msgstr "导入(&I)"
 
@@ -685,7 +689,7 @@ msgstr "DISPLAY MainWindow"
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
-#: tools/gui/quickphrase-editor/editor.cpp:44
+#: tools/gui/quickphrase-editor/editor.cpp:46
 msgid "De&lete All"
 msgstr "删除全部(&l)"
 
@@ -790,7 +794,7 @@ msgstr "组名重复，和之前的组合并: %s :行 %d"
 msgid "Duplicate option, overwrite: line %d"
 msgstr "重复的配置项，覆盖: 行%d"
 
-#: tools/gui/quickphrase-editor/editor.cpp:46
+#: tools/gui/quickphrase-editor/editor.cpp:48
 msgid "E&xport"
 msgstr "导出(&X)"
 
@@ -1422,7 +1426,7 @@ msgstr "键盘布局:"
 msgid "Keyword"
 msgstr "关键字"
 
-#: tools/gui/quickphrase-editor/dialog.cpp:29
+#: tools/gui/quickphrase-editor/editordialog.cpp:29
 msgid "Keyword:"
 msgstr "关键字："
 
@@ -1760,7 +1764,7 @@ msgstr "词组"
 msgid "Phrase is already in Dict "
 msgstr "词组已在码表中"
 
-#: tools/gui/quickphrase-editor/dialog.cpp:30
+#: tools/gui/quickphrase-editor/editordialog.cpp:30
 msgid "Phrase:"
 msgstr "词组："
 
@@ -1857,7 +1861,7 @@ msgstr "按下 1 删除常用字表中的 %s (ESC 取消)"
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
 
-#: src/module/autoeng/AutoEng.c:641 src/module/quickphrase/quickphrase.c:414
+#: src/module/autoeng/AutoEng.c:641 src/module/quickphrase/quickphrase.c:415
 msgid "Press Enter to input text"
 msgstr "按下回车输入文本"
 
@@ -1939,7 +1943,7 @@ msgstr "标点支持"
 msgid "Qt IM module files:"
 msgstr "Qt 输入法模块文件:"
 
-#: tools/gui/quickphrase-editor/editor.cpp:93
+#: tools/gui/quickphrase-editor/editor.cpp:103
 msgid "Quick Phrase Editor"
 msgstr "快速输入编辑器"
 
@@ -1947,7 +1951,7 @@ msgstr "快速输入编辑器"
 msgid "Quick Phrase List"
 msgstr "快速输入列表"
 
-#: src/module/quickphrase/quickphrase.c:336
+#: src/module/quickphrase/quickphrase.c:337
 msgid "Quick Phrase: "
 msgstr "快速输入: "
 
@@ -2284,19 +2288,16 @@ msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
 
 #: src/ui/classic/fcitx-classic-ui.desc:48
-#, fuzzy
 msgid "Status Panel Hide Mode"
-msgstr "主窗口隐藏模式"
+msgstr "状态栏隐藏模式"
 
 #: src/ui/classic/fcitx-classic-ui.desc:2
-#, fuzzy
 msgid "Status Panel Position X"
-msgstr "主窗口X位置"
+msgstr "状态栏 X 位置"
 
 #: src/ui/classic/fcitx-classic-ui.desc:8
-#, fuzzy
 msgid "Status Panel Position Y"
-msgstr "主窗口Y位置"
+msgstr "状态栏 Y 位置"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
@@ -2542,6 +2543,10 @@ msgstr "唯一名称"
 #, c-format
 msgid "Unknown type, take it as string: %s"
 msgstr "未知类型，作为字符串处理: %s"
+
+#: tools/gui/quickphrase-editor/batchdialog.cpp:30
+msgid "Use <Keyword> <Phrase> format on every line."
+msgstr "每行使用 <关键词> <词组> 的格式。"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
@@ -2803,3 +2808,4 @@ msgstr "xmodmap 命令"
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
+

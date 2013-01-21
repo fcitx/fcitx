@@ -187,12 +187,39 @@ void QuickPhraseModel::loadFinished()
     endResetModel();
 }
 
-void QuickPhraseModel::save(const QString& file)
+QFutureWatcher< bool >* QuickPhraseModel::save(const QString& file)
 {
     QFutureWatcher< bool >* futureWatcher = new QFutureWatcher< bool >(this);
     futureWatcher->setFuture(QtConcurrent::run<bool>(this, &QuickPhraseModel::saveData, file));
     connect(futureWatcher, SIGNAL(finished()), this, SLOT(saveFinished()));
     connect(futureWatcher, SIGNAL(finished()), futureWatcher, SLOT(deleteLater()));
+    return futureWatcher;
+}
+
+void QuickPhraseModel::saveData(QTextStream& dev)
+{
+    for (int i = 0; i < m_list.size(); i ++) {
+        dev << m_list[i].first << "\t" << m_list[i].second << "\n";
+    }
+}
+
+void QuickPhraseModel::loadData(QTextStream& stream)
+{
+    beginResetModel();
+    m_list.clear();
+    setNeedSave(true);
+    QString s;
+    while (!(s = stream.readLine()).isNull()) {
+        s = s.simplified();
+        if (s.isEmpty())
+            continue;
+        QString key = s.section(" ", 0, 0, QString::SectionSkipEmpty);
+        QString value = s.section(" ", 1, -1, QString::SectionSkipEmpty);
+        if (key.isEmpty() || value.isEmpty())
+            continue;
+        m_list.append(QPair<QString, QString>(key, value));
+    }
+    endResetModel();
 }
 
 bool QuickPhraseModel::saveData(const QString& file)

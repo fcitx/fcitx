@@ -32,8 +32,10 @@ public:
     virtual QString title() = 0;
     virtual QString addon() = 0;
     virtual QString icon();
+    virtual bool asyncSave();
 signals:
     void changed(bool changed);
+    void saveFinished();
 };
 
 #endif // FCITXCONFIGUIWIDGET_H
