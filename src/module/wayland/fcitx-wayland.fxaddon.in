@@ -15,7 +15,7 @@ Function8=GetShell
 Function9=GetShm
 Function10=GetDataDeviceManager
 Function11=GetShmFormats
-Function12=
+Function12=ReadAll
 Function13=
 Function14=
 Self.Type=FcitxWayland*
@@ -105,6 +105,15 @@ Res.Exp=$<->data_device_manager
 Name=get-shm-formats
 Return=uint32_t
 Res.Exp=$<->shm_formats
+
+[ReadAll]
+Name=read-all
+Arg0=int
+Arg1=FcitxWaylandReadAllCallback
+Arg2=void*
+Arg3=size_t
+Return=void*
+Res.WrapFunc=FxWaylandReadAll
 
 [FCITX_DISABLE_WAYLAND]
 Undefine=@ENABLE_WAYLAND@

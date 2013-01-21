@@ -81,4 +81,8 @@ typedef void (*FcitxWaylandHandleGlobalRemoved)(void *data, uint32_t name,
                                                 uint32_t ver);
 typedef void (*FcitxWaylandSyncCallback)(void *data, uint32_t serial);
 
+/* need to free buff */
+typedef void (*FcitxWaylandReadAllCallback)(void *data, char *buff,
+                                            size_t len);
+
 #endif

@@ -43,6 +43,73 @@ FCITX_DEFINE_PLUGIN(fcitx_wayland, module, FcitxModule) = {
 
 typedef struct {
     FcitxWayland *wl;
+    FcitxWaylandReadAllCallback cb;
+    void *data;
+    FcitxWaylandTask task;
+    char *buff;
+    size_t len;
+    size_t alloc;
+    size_t limit;
+} FxWaylandReadData;
+
+static void
+FxWaylandReadTaskHandler(FcitxWaylandTask *task, uint32_t events)
+{
+    FxWaylandReadData *read_data;
+    read_data = fcitx_container_of(task, FxWaylandReadData, task);
+    if (events & EPOLLERR || events & EPOLLHUP)
+        goto done;
+    size_t len;
+    char buff[4096];
+    len = read(task->fd, buff, sizeof(buff));
+    if (len <= 0)
+        goto done;
+
+    size_t whole_len = len + read_data->len;
+    if (read_data->limit && whole_len > read_data->limit) {
+        whole_len = read_data->limit;
+        len = whole_len - read_data->len;
+    }
+    if (whole_len >= read_data->alloc) {
+        read_data->alloc = fcitx_utils_align_to(whole_len + 1, 4096);
+        read_data->buff = realloc(read_data->buff, read_data->alloc);
+    }
+    memcpy(read_data->buff + read_data->len, buff, len);
+    read_data->len = whole_len;
+    read_data->buff[whole_len] = '\0';
+    if (!read_data->limit || whole_len < read_data->limit) {
+        return;
+    }
+done:
+    fx_epoll_del_task(read_data->wl->epoll_fd, task);
+    close(task->fd);
+    read_data->cb(read_data->data, read_data->buff, read_data->len);
+    free(read_data);
+}
+
+static void*
+FxWaylandReadAll(FcitxWayland *wl, int fd, FcitxWaylandReadAllCallback cb,
+                 void *data, size_t limit)
+{
+    if (fcitx_unlikely(!cb || fd < 0))
+        return NULL;
+    FxWaylandReadData *read_data = fcitx_utils_new(FxWaylandReadData);
+    read_data->cb = cb;
+    read_data->data = data;
+    read_data->limit = limit;
+    read_data->task.fd = fd;
+    read_data->task.handler = FxWaylandReadTaskHandler;
+    if (fcitx_unlikely(
+            fx_epoll_add_task(wl->epoll_fd, &read_data->task,
+                              EPOLLIN | EPOLLERR | EPOLLHUP) == -1)) {
+        free(read_data);
+        return NULL;
+    }
+    return read_data;
+}
+
+typedef struct {
+    FcitxWayland *wl;
     FcitxWaylandSyncCallback cb;
     void *data;
 } FxWaylandSyncData;
