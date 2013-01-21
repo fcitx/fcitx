@@ -11,7 +11,7 @@ typedef enum _XimCallType {
 
 typedef struct _XimQueue XimQueue;
 
-void XimQueueInit(FcitxXimFrontend* xim);
-void* XimConsumeQueue(void* arg, FcitxModuleFunctionArg args);
-void XimPendingCall(FcitxXimFrontend* xim, XimCallType type, XPointer ptr);
+void XimQueueInit(FcitxXimFrontend *xim);
+void XimConsumeQueue(FcitxXimFrontend *xim);
+void XimPendingCall(FcitxXimFrontend *xim, XimCallType type, XPointer ptr);
 void XimQueueDestroy(FcitxXimFrontend *xim);

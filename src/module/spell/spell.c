@@ -47,15 +47,9 @@ static void SpellDestroy(void *arg);
 static void SpellReloadConfig(void *arg);
 static void SpellSetLang(FcitxSpell *spell, const char *lang);
 static void ApplySpellConfig(FcitxSpell *spell);
-
-static void *FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args);
-static void *FcitxSpellAddPersonal(void *arg, FcitxModuleFunctionArg args);
-static void *FcitxSpellDictAvailable(void *arg, FcitxModuleFunctionArg args);
-static void *FcitxSpellGetCandWords(void *arg, FcitxModuleFunctionArg args);
-static void *FcitxSpellCandWordGetCommit(void *arg,
-                                         FcitxModuleFunctionArg args);
-
 static boolean SpellOrderHasValidProvider(const char *providers);
+
+DECLARE_ADDFUNCTIONS(Spell)
 
 FCITX_DEFINE_PLUGIN(fcitx_spell, module, FcitxModule) = {
     .Create = SpellCreate,
@@ -104,7 +98,6 @@ static void*
 SpellCreate(FcitxInstance *instance)
 {
     FcitxSpell *spell = fcitx_utils_new(FcitxSpell);
-    FcitxAddon* addon;
     spell->owner = instance;
 
     /* SpellCustomInit(spell); */
@@ -122,13 +115,7 @@ SpellCreate(FcitxInstance *instance)
     ApplySpellConfig(spell);
 
     SpellSetLang(spell, "en");
-    addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
-                                      FCITX_SPELL_NAME);
-    FcitxModuleAddFunction(addon, FcitxSpellHintWords);
-    FcitxModuleAddFunction(addon, FcitxSpellAddPersonal);
-    FcitxModuleAddFunction(addon, FcitxSpellDictAvailable);
-    FcitxModuleAddFunction(addon, FcitxSpellGetCandWords);
-    FcitxModuleAddFunction(addon, FcitxSpellCandWordGetCommit);
+    FcitxSpellAddFunctions(instance);
     return spell;
 }
 
@@ -415,21 +402,6 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
 
 #define HINT_WORDS_ARGC 6
 
-static void*
-FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args)
-{
-    FcitxSpell *spell = (FcitxSpell*)arg;
-    const char *before_str = args.args[0];
-    const char *current_str = args.args[1];
-    const char *after_str = args.args[2];
-    /* from GPOINTER_TO_UINT */
-    unsigned int len_limit = (unsigned int)(unsigned long)args.args[3];
-    const char *lang = args.args[4];
-    const char *providers = args.args[5];
-    return SpellGetSpellHintWords(spell, before_str, current_str, after_str,
-                                  len_limit, lang, providers);
-}
-
 static boolean
 SpellAddPersonal(FcitxSpell *spell, const char *new_word, const char *lang)
 {
@@ -442,21 +414,10 @@ SpellAddPersonal(FcitxSpell *spell, const char *new_word, const char *lang)
     return false;
 }
 
-static void*
-FcitxSpellAddPersonal(void *arg, FcitxModuleFunctionArg args)
+static boolean
+FcitxSpellDictAvailable(FcitxSpell *spell, const char *lang,
+                        const char *providers)
 {
-    FcitxSpell *spell = (FcitxSpell*)arg;
-    const char *new_word = args.args[0];
-    const char *lang = args.args[1];
-    return (void*)(unsigned long)SpellAddPersonal(spell, new_word, lang);
-}
-
-static void*
-FcitxSpellDictAvailable(void *arg, FcitxModuleFunctionArg args)
-{
-    FcitxSpell *spell = (FcitxSpell*)arg;
-    const char *lang = args.args[0];
-    const char *providers = args.args[1];
     const char *iter = providers ? providers : spell->provider_order;
     const SpellHintProvider *hint_provider;
     const char *name = NULL;
@@ -469,10 +430,10 @@ FcitxSpellDictAvailable(void *arg, FcitxModuleFunctionArg args)
         hint_provider = SpellFindHintProvider(name, len);
         if (hint_provider && hint_provider->check_func) {
             if (hint_provider->check_func(spell))
-                return (void*)true;
+                return true;
         }
     }
-    return (void*)false;
+    return false;
 }
 
 boolean
@@ -499,14 +460,13 @@ typedef struct {
     void *arg;
 } GetCandWordsArgs;
 
-static void*
-FcitxSpellCandWordGetCommit(void *arg, FcitxModuleFunctionArg args)
+static const char*
+FcitxSpellCandWordGetCommit(FcitxSpell *spell, FcitxCandidateWord *candWord)
 {
-    FcitxCandidateWord *candWord = args.args[0];
     GetCandWordsArgs *cand_word_args = candWord->priv;
-    if (cand_word_args->arg != arg)
+    if (cand_word_args->arg != spell)
         return NULL;
-    return (void*)(cand_word_args + 1);
+    return (const char*)(cand_word_args + 1);
 }
 
 static INPUT_RETURN_VALUE
@@ -541,29 +501,33 @@ SpellNewGetCandWordArgs(FcitxSpellGetCandWordCb cb, void *arg, const char *commi
     return res;
 }
 
-static void*
-FcitxSpellGetCandWords(void *arg, FcitxModuleFunctionArg args)
+static FcitxCandidateWordList*
+SpellGetCandWords(FcitxSpell *spell, const char *before_str,
+                  const char *current_str, const char *after_str,
+                  unsigned int len_limit, const char *lang,
+                  const char *providers, FcitxSpellGetCandWordCb cb, void *arg)
 {
     SpellHint *hints;
     int i;
     FcitxCandidateWordList* cand_list;
-    FcitxSpellGetCandWordCb get_cand_word_cb = args.args[HINT_WORDS_ARGC]; // 6
-    void *get_cand_word_arg = args.args[HINT_WORDS_ARGC + 1]; // 7
-    hints = FcitxSpellHintWords(arg, args);
+    hints = SpellGetSpellHintWords(spell, before_str, current_str, after_str,
+                                   len_limit, lang, providers);
     if (!hints)
         return NULL;
     cand_list =  FcitxCandidateWordNewList();
+    FcitxCandidateWord candWord = {
+        .callback = FcitxSpellGetCandWord,
+        .owner = arg,
+        .strExtra = NULL,
+        .wordType = MSG_OTHER
+    };
     for (i = 0;hints[i].display;i++) {
-        FcitxCandidateWord candWord;
-        candWord.callback = FcitxSpellGetCandWord;
-        candWord.owner = get_cand_word_arg;
         candWord.strWord = strdup(hints[i].display);
-        candWord.strExtra = NULL;
-        candWord.priv = SpellNewGetCandWordArgs(get_cand_word_cb, arg,
-                                                hints[i].commit);
-        candWord.wordType = MSG_OTHER;
+        candWord.priv = SpellNewGetCandWordArgs(cb, spell, hints[i].commit);
         FcitxCandidateWordAppend(cand_list, &candWord);
     }
     free(hints);
     return cand_list;
 }
+
+#include "fcitx-spell-addfunctions.h"

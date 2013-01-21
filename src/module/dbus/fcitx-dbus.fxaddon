@@ -9,11 +9,14 @@ Function3=
 Function4=
 Function5=
 Function6=
+Self.Type=FcitxDBus*
 
 [GetConnection]
 Name=get-connection
 Return=DBusConnection*
+Res.Exp=$<->conn
 
 [GetPrivConnection]
 Name=get-priv-connection
 Return=DBusConnection*
+Res.Exp=$<->privconn

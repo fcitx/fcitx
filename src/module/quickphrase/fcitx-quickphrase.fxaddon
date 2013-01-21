@@ -11,10 +11,19 @@ Function5=
 Function6=
 Function7=
 Function8=
+Self.Type=QuickPhraseState*
 
 [Launch]
 Name=launch
 Return=boolean
 Arg0=const int*
+Arg0.Deref=1
+Arg0.DerefType=int
 Arg1=const boolean*
+Arg1.Deref=1
+Arg1.DerefType=boolean
 Arg2=const boolean*
+Arg2.Deref=1
+Arg2.DerefType=boolean
+Res.WrapFunc=QuickPhraseLaunch
+Res.Deref=true

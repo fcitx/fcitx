@@ -110,8 +110,8 @@ static boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
                                     INPUT_RETURN_VALUE *retval
     );
 static void QuickPhraseReset(void* arg);
-static void* QuickPhraseLaunch(void* arg, FcitxModuleFunctionArg args);
 static void _QuickPhraseLaunch(QuickPhraseState* qpstate);
+DECLARE_ADDFUNCTIONS(QuickPhrase)
 
 FCITX_DEFINE_PLUGIN(fcitx_quickphrase, module, FcitxModule) = {
     QuickPhraseCreate,
@@ -165,9 +165,9 @@ int PhraseCmpA(const void* a, const void* b)
     }
 }
 
-void * QuickPhraseCreate(FcitxInstance *instance)
+void *QuickPhraseCreate(FcitxInstance *instance)
 {
-    QuickPhraseState *qpstate = fcitx_utils_malloc0(sizeof(QuickPhraseState));
+    QuickPhraseState *qpstate = fcitx_utils_new(QuickPhraseState);
     qpstate->owner = instance;
     qpstate->enabled = false;
 
@@ -191,29 +191,23 @@ void * QuickPhraseCreate(FcitxInstance *instance)
     resethk.func = QuickPhraseReset;
     FcitxInstanceRegisterResetInputHook(instance, resethk);
 
-    FcitxInstanceRegisterWatchableContext(instance, CONTEXT_DISABLE_QUICKPHRASE, FCT_Boolean, FCF_ResetOnInputMethodChange);
+    FcitxInstanceRegisterWatchableContext(instance, CONTEXT_DISABLE_QUICKPHRASE,
+                                          FCT_Boolean,
+                                          FCF_ResetOnInputMethodChange);
 
-    FcitxAddon* addon = FcitxAddonsGetAddonByName(
-        FcitxInstanceGetAddons(instance),
-        FCITX_QUICKPHRASE_NAME);
-    FcitxModuleAddFunction(addon, QuickPhraseLaunch);
-
+    FcitxQuickPhraseAddFunctions(instance);
     return qpstate;
 }
 
-void* QuickPhraseLaunch(void* arg, FcitxModuleFunctionArg args)
+static void
+QuickPhraseLaunch(QuickPhraseState *qpstate, int key, boolean useDup,
+                  boolean append)
 {
-    const int* key = args.args[0];
-    const boolean* useDup = args.args[1];
-    const boolean* append = args.args[2];
-    QuickPhraseState *qpstate = (QuickPhraseState*) arg;
-    qpstate->curTriggerKey[0].sym = *key;
-    qpstate->useDupKeyInput = *useDup;
-    qpstate->append = *append;
+    qpstate->curTriggerKey[0].sym = key;
+    qpstate->useDupKeyInput = useDup;
+    qpstate->append = append;
     _QuickPhraseLaunch(qpstate);
     FcitxUIUpdateInputWindow(qpstate->owner);
-
-    return (void*)true;
 }
 
 void QuickPhraseFillKeyString(QuickPhraseState* qpstate, char c[2])
@@ -716,4 +710,4 @@ void SaveQuickPhraseConfig(QuickPhraseConfig* qpconfig)
         fclose(fp);
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+#include "fcitx-quickphrase-addfunctions.h"

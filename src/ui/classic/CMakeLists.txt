@@ -48,7 +48,7 @@ set(FCITX_CLASSIC_UI_SOURCES
   ../cairostuff/cairostuff.c
   )
 
-fcitx_add_addon_full(classic-ui DESC SCAN ${classicui_noinstall}
+fcitx_add_addon_full(classic-ui DESC SCAN SCAN_PRIV ${classicui_noinstall}
   HEADER_DIR classicui
   FXADDON_SRC fcitx-classicui.fxaddon
   FXADDON_GEN fcitx-classicui.h

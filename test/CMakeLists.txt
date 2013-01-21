@@ -31,6 +31,9 @@ target_link_libraries(testunicode fcitx-utils fcitx-config)
 add_executable(testobjpool testobjpool.c)
 target_link_libraries(testobjpool fcitx-utils)
 
+add_executable(testcast testcast.c)
+target_link_libraries(testcast fcitx-utils)
+
 add_executable(testhandlertable testhandlertable.c)
 target_link_libraries(testhandlertable fcitx-utils)
 
@@ -73,6 +76,9 @@ add_test(NAME testarray
 
 add_test(NAME testobjpool
          COMMAND testobjpool)
+
+add_test(NAME testcast
+         COMMAND testcast)
 
 add_test(NAME testhandlertable
          COMMAND testhandlertable)

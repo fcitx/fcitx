@@ -11,11 +11,13 @@ Function5=
 Function6=
 Function7=
 Function8=
+Self.Type=PinyinEnhance*
 
 [FindPy]
 Name=find-py
 Return=const int8_t*
 Arg0=const char*
+Res.WrapFunc=py_enhance_py_find_py
 
 [PyToString]
 Name=py-to-string
@@ -23,3 +25,5 @@ Return=char*
 Arg0=char*
 Arg1=const int8_t*
 Arg2=int*
+Res.WrapFunc=py_enhance_py_to_str
+Static=1

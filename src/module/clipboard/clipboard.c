@@ -48,6 +48,8 @@ static void ClipboardDestroy(void *arg);
 static void ClipboardReloadConfig(void *arg);
 static void ApplyClipboardConfig(FcitxClipboard *clipboard);
 
+DECLARE_ADDFUNCTIONS(Clipboard)
+
 FCITX_DEFINE_PLUGIN(fcitx_clipboard, module, FcitxModule) = {
     .Create = ClipboardCreate,
     .Destroy = ClipboardDestroy,
@@ -82,22 +84,9 @@ ClipboardSelectionClipboardFind(FcitxClipboard *clipboard,
     return -1;
 }
 
-static void*
-ClipboardGetPrimary(void *arg, FcitxModuleFunctionArg args)
+static const char*
+ClipboardGetClipboard(FcitxClipboard *clipboard, unsigned index, unsigned *len)
 {
-    FcitxClipboard *clipboard = arg;
-    unsigned int *len = args.args[0];
-    if (len)
-        *len = clipboard->primary.len;
-    return clipboard->primary.str;
-}
-
-static void*
-ClipboardGetClipboard(void *arg, FcitxModuleFunctionArg args)
-{
-    FcitxClipboard *clipboard = arg;
-    unsigned int index = (intptr_t)args.args[0];
-    unsigned int *len = args.args[1];
     if (index >= clipboard->clp_hist_len) {
         if (len)
             *len = 0;
@@ -427,9 +416,7 @@ ClipboardCreate(FcitxInstance *instance)
         .func = ClipboardReset
     };
     FcitxInstanceRegisterResetInputHook(instance, reset_hook);
-    FcitxAddon *self = FcitxClipboardGetAddon(instance);
-    FcitxModuleAddFunction(self, ClipboardGetPrimary);
-    FcitxModuleAddFunction(self, ClipboardGetClipboard);
+    FcitxClipboardAddFunctions(instance);
     return clipboard;
 }
 
@@ -533,3 +520,5 @@ ClipboardPushClipboard(FcitxClipboard *clipboard, uint32_t len, const char *str)
     clipboard->clp_hist_lst->len = len;
     clipboard->clp_hist_lst->str = new_str;
 }
+
+#include "fcitx-clipboard-addfunctions.h"

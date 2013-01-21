@@ -1,0 +1,371 @@
+##
+# This file is a example of the .fxaddon file that fcitx uses to generate
+# api headers, which are used as a more convinient wrapper of fcitx's
+# inter-module function calls with type check, as well as 'addfunctions'
+# headers, which are used to register api function into fcitx for a addon.
+# The following comments explain how this file should be used. For real example,
+# see any addon in fcitx's repo with a .fxaddon or .fxaddon.in file.
+# You may want to search for macro/function/option/file names mentioned below
+# to see how they are used.
+
+##
+# A .fxaddon file is a simple .desktop style file and should be phrased by
+# `fcitx-scanner`. Each groups and entries in this file have special meanings
+# that are explained with examples below.
+#
+# NOTE: you shouldn't use the `fcitx-scanner` directly (its command line options
+# are NOT guaranteed to be stable). Instead, you should ALWAYS use the cmake
+# wrapper of this command defined in `FcitxMacro.cmake`.
+
+##
+# API header:
+# To use a .fxaddon file to generate a api header, you just need to add the
+# `SCAN` option to the cmake function `fcitx_add_addon_full` (See documentation
+# of `fcitx_add_addon_full` in `FcitxMacro.cmake` for more related options.).
+# The generated header will define several static inline functions including a
+#
+#     FcitxAddon *Fcitx[prefix]GetAddon(FcitxInstance*):
+#         function for getting the `FcitxAddon*` correspond to
+#         this addon (with cache).
+#
+# and three functions for each api provided by this addon, which are:
+#
+#     FcitxModuleFunction Fcitx[prefix]Find[function_name](FcitxAddon*):
+#         used to find the function pointer of the api (with cache).
+#
+#     void *Fcitx[prefix]Invoke[function_name](FcitxInstance*,
+#                                              FcitxModuleFunctionArg):
+#         used to call the api function with certain FcitxModuleFunctionArg.
+# and
+#     [return_type] Fcitx[prefix][function_name](FcitxInstance*,
+#                                                [arguments])
+#         used to call the api function using normal c arguments
+#         with type check.
+#
+# ([prefix], [function_name], [return_type], [arguments] are values defined in
+# this file.)
+#
+# NOTE: The GetAddon function and the first two functions for each api of
+# the addon is defined using macros in `module.h`, therefore if you are writing
+# a addon that need to call another addon but you don't want to depend on
+# the api header of that addon at compile time, you can use these macros to
+# easily define your own inline functions.
+
+##
+# AddFunctions header:
+# To use this to generate a addfunctions header, you need SCAN_PRIV option in
+# the `fcitx_add_addon_full`, just as that for api header, as well as including
+# the generated header (usually named as `fcitx-*-addfunctions.h`) in your
+# source file. This header will generally refer to functions or definitions in
+# your source files as well as being called by your code in that file, therefore
+# in order to get the file compiled correctly, you may need to include this file
+# in the correct place. The easiest way to do this is using the
+# `DECLARE_ADDFUNCTIONS(prefix)` macro defined in module.h at the beginning of
+# your source file to declare the all the functions you may need to use from
+# the generated header and then include the generated header file at the end of
+# your source file (well maybe it shouldn't be called a "header" anymore).
+#
+# The generated headers define one static internal function for each of your api
+# that shouldn't be used in your code directly as well as two public functions:
+#
+#     FcitxAddon *Fcitx_[prefix]_GetAddon(FcitxInstance*):
+#         function for getting the `FcitxAddon*` correspond to this addon
+#         (with cache). This function may be useful if you need the FcitxAddon*
+#         pointer of yourself. NOTE the "_" in the function name used to
+#         lower the chance of possible name conflict.
+# and
+#     void Fcitx[prefix]AddFunctions(FcitxInstance*):
+#         which should be called in your Create Addon function to register your
+#         api's into fcitx. In most cases, this is the only function you need
+#         from this generated file.
+
+##
+# Notes on Types:
+#     Many of the entries define types related to the functions. The value
+#     of these entries are just the type name as what you put before a
+#     variable's name in a c-declaration, e.g. int, const char*, struct s1,
+#     Type_Defined_With_typedef, etc. (`static` cannot be used here).
+#     Function pointer type, e.g. `int (*)()`, is not supported directly,
+#     but you can use typedef to define a simple name for such a type
+#     (in one of the include's for the api headers or just in your source file
+#     for the add-functions headers) and then use that name as the value of
+#     the entries. The same applies to structure types.
+#
+#     NOTE: cpp classes and structures (especially with copy functions)
+#     is not supported but you can always pass a pointer of such a value.
+#
+#     The fcitx's inter module function call uses `void*` to pass arguments and
+#     return values so for the real type of such variables (Arg*= and Return=
+#     in a function group, see below), the size of the type should NEVER
+#     be larger than that of a pointer which means,
+#     Integer types (including char):
+#         Fixed sized integer types:
+#             (intN_t and uintN_t defined in stdint.h) up to N=32 (we are not
+#             interested in running fcitx on a 16 bit processer).
+#         char:
+#             char, unsigned char, signed char
+#         other integer types:
+#             int, unsigned, short, unsigned short, long, unsigned long,
+#             intptr_t, uintptr_t
+#     Floating point numbers:
+#         float:
+#             On most platform this is a "Single-precision floating-point"
+#     Pointers:
+#         Any pointers including const pointers.
+#     Structures:
+#         Self defined structures whose sizes are smaller than 4 or the size of
+#         a pointer on all platforms.
+
+##
+# [FcitxAddon] Group:
+# Every .fxaddon file must have one [FcitxAddon] group which include some
+# general information of the addon (see below).
+[FcitxAddon]
+# Name:
+#     The unique name of the addon. DO NOT quote or include extra spaces.
+Name=fcitx-example
+
+# Prefix:
+#     The prefix of the addon. This is uses as namespace in the names of the
+#     generated functions (see the function lists above).
+Prefix=Example
+
+# Include(s):
+#     (Array, Api Headers only)
+#     Entries with names "Include[n]" where n is a number starting from 0 will
+#     be read (will stop at the first smallest which no entry of the
+#     corresponding name is found, entries with blank values will be skipped).
+#     These are files that should be included in the api header before any
+#     functions are defined. If your api's uses self-defined types,
+#     this is where they should be defined.
+#
+#     NOTE: The value strings of these entries will be added directly
+#     after "#include " in the header file so you MUST QUOTE the file name
+#     using `""` or `<>` here correctly.
+#
+#     NOTE: stdint.h, fcitx-utils/utils.h as well as some other fcitx headers
+#     are always included so you don't need to include them if you are to use
+#     types defined in these headers like intN_t or boolean.
+Include0="example.h"
+
+# Macro(s):
+#     (Array, Api Headers only)
+#     These entries are loaded in a way similar to that of Include*'s EXCEPT
+#     it will stop at a missing entry OR an entry with blank value.
+#
+#     The value of these entries are names of macros that will be defined
+#     (or undefined controled by the corresponding group,
+#     see Macro Group below) by the api header before any files are included.
+#     This can be used as configure header to control definitions/declarations
+#     if necessary.
+Macro0=FCITX_DISABLE_X11
+
+# Function(s):
+#     (Array)
+#     These entries are loaded in the same way with that of Macro*'s, i.e.
+#     stop when an entry is not found or found to be empty.
+#
+#     The value of these entries are names of the api functions
+#     ([function_name]'s in the function names above.). See Function Groups
+#     below for more detail.
+Function0=MyFunction0
+Function1=MyFunction1
+Function2=MyFunction2
+Function3=MyFunction3
+# Function loading will stop here, the following entries will not be read
+# and are not required (as mentioned above). They are sometimes useful when
+# you want to add new functions.
+Function4=
+Function5=
+Function6=
+
+# Self.Type:
+#     (Add Functions Headers only)
+#     This is the type of your addon's main object (The return value of your
+#     Create function).
+#
+#     NOTE: although this is usually a pointer, the "*" cannot be omit here.
+Self.Type=FcitxExample*
+
+##
+# Macro Groups:
+#     (Api Headers only)
+#     A macro group's name is one of the macro names listed as value of
+#     Macro* entries in the [FcitxAddon] main group. If such a group is
+#     not defined for a macro in the main group, that macro will be
+#     silently ignore (may change to a error in the future).
+[FCITX_EXAMPLE_MACRO]
+# Undefine and Define entries:
+#     Specify whether the macro should be defined or undefined. If non of them
+#     is specified the macro will be defined. If both of them are specified,
+#     "Define" entry will be used. The values of these entries are not case
+#     sencitive. "On", "True", "Yes", and "1" (with the lower case version etc.)
+#     are treated as True in these entries, any value other than these are
+#     considered false.
+Undefine=@ENABLE_EXAMPLE@
+Define=On
+
+# Value entry:
+#     Used only if the macro is defined as described by the Undefine and Define
+#     entries. If specified, the value of this entry will be added directly
+#     after the "#define [macro_name] " in the generated header.
+Value=
+
+##
+# Function Groups:
+#     These are the most important groups in the .fxaddon file. Entries in
+#     a function group specify all the information `fcitx-scanner` used
+#     to generate the code for a api function both in the api header and in the
+#     add-functions header.
+[MyFunction0]
+# Name entry:
+#     (Required but not used)
+#     This is a unique id of the function. A error will be raised if such a
+#     entry is not found in a function group although it value isn't used
+#     by any code now. It may be used in the future.
+Name=my-function0
+
+# Return Entry:
+#     This is the type of the return value. The size of this type should NOT
+#     be larger than that of a pointer. (See "Notes on Types" section above).
+Return=my_return_type1
+
+# ErrorReturn Entry:
+#     (Api headers only)
+#     This is the return value of the wrapper function
+#     (Fcitx[prefix][function_name]) if the addon or the function is not found.
+#     The value of this entry can be any legal initializer of that type.
+ErrorReturn=-1
+
+# CacheResule Entry:
+#     (Api headers only)
+#     Whether the result should be cached, this is useful if the api function
+#     simply returns a static value (e.g. file descriptor of a certain
+#     connection, etc.). Similar to Undefined and Defined entries in a Macro
+#     group, this entry is case insensitive, "On", "True", "Yes", "1" will be
+#     treated as true and any other values including empty will be treated as
+#     false.
+CacheResult=True
+
+# EnableWrapper Entry:
+#     (Api headers only)
+#     Whether the wrapper function (Fcitx[prefix][function_name]) should be
+#     generated for this function. The value of this entry is also case
+#     insensitive but only "Off", "False", "No", and "0" will be treated as
+#     false while all other values including empty will be considered true.
+#
+#     This is useful when you only want to enable the wrapper for some of
+#     the api's for some reason. (e.g. the addon is disabled due to missing
+#     dependency (so the definition of certain types necessary for some
+#     functions cannot be found) but you still want to enable some functions
+#     that are not using special types in order to be friendly to other addons
+#     using those functions.) (See fcitx-x11 @ src/module/x11 for a real
+#     example).
+EnableWrapper=@ENABLE_EXAMPLE@
+
+# Arg* Entries:
+#     (Array)
+#     These entries are loaded in the same way as macro's and function's
+#     entries in the [FcitxAddon] group (although leaving empty entries will
+#     not help a lot here).
+#
+#     The value of these entries are type names of the arguments. See the Notes
+#     on Types section above for more detail including the size limit.
+Arg0=type_of_arg0
+Arg1=int
+Arg2=boolean
+
+##
+# Entries for add-functions headers only:
+#     All following fields are used only to generate the add-functions headers.
+#     They provide information for `fcitx-scanner` to run code/call functions
+#     in each of the api functions.
+
+##
+# Notes on Expressions (and statements):
+#     Some of the following entries' value are simple expressions or statements.
+#     You can refer to some special variables in these expressions using
+#     sh-style argument subsitution (e.g. $0). The pharse of these expressions
+#     are really simple so quoting "$" will NOT work. Whenever you need a
+#     literal $ in your expression, use $$ to escape it. (although it should
+#     be really rare..)
+
+##
+# Dereference expressions (.Deref=) and Dereference Types (.DerefType=)
+#     A dereference expression is either a integer not less than -1 (in which
+#     case the corresponding .DerefType= entry cannot be omitted, empty or
+#     void) or a expression as described in Notes on Expressions
+#     (and statements) section, and a Dereference Type is the return type
+#     of the expression (except for Res.Deref, where Return is the return type
+#     of Res.Deref and Res.DerefType is the type before Deref)
+#     (can be omitted, empty or void). If the dereference expression is an
+#     integer n >= 0, the Deref result is taking the value this variable point
+#     to n times (i.e. a `.Deref=2` on a `int**` will result in a `int`),
+#     For n = -1, the result is the address of the variable.
+#
+#     NOTE: returning the address of a local variable can obviously causes
+#     problems. `fcitx-scanner` will NOT check for these although the compiler
+#     should give you a WARNING if you really do so.
+#
+#     NOTE: if you really need a literal integer in a .Deref expression use
+#     parentheses e.g. (-1).
+
+##
+# Stages in a generated private api wrapper function:
+#     Each generated private wrapper function can be separated into several
+#     stages:
+#     1. Cast arguments from pointers:
+#         In this stage, the self pointer and all arguments are cast from
+#         void* to the correct types, using `Self.Type=` entry in the
+#         [FcitxAddon] group and the `Arg*=` entries.
+#     2. Dereference of arguments:
+#         `Self.Deref=` and `Arg*.Deref=` entries (and corresponding .DerefType
+#         entries) are used in this stage. You can use `$<` to refer to the self
+#         pointer and `$n` (where n is a positive number) for the n'th argument
+#         (all of the are values before any deref.)
+#     3. Inline Code:
+#         The value of the Inline.Code entry will be inserted in the function
+#         with a semi-colon appended at the end. `$<` and `$n`'s can be used
+#         to refer to the self pointer and arguments after Deref (if any).
+#     4. Calculating Result:
+#         One and ONLY one of `Res.Exp=` an `Res.WrapFunc=` MUST be provided
+#         for each function in order to generate a add-functions header.
+#         The type of this result should be `Res.DerefType=` (if `Res.Deref=`
+#         is provided), or `Return=` (if not).
+#         For `Res.Exp=`:
+#             This is a general expression just like those in `Inline.Code=`
+#             and `.Deref=`. `$<` and `$n`'s can be used in the same way as in
+#             `Inline.Code=`.
+#         For `Res.WrapFunc=`:
+#             This is the name of the function (or function-like macro) to be
+#             wrapped in this api function. None of the arguments' type can be
+#             void after Deref in this case.
+#             If `Static=` (see below) is true, the function is called with
+#             all the arguments after .Deref, and if not, the self pointer
+#             will be inserted as the first argument.
+#     5. Dereference of Result:
+#         This is the final stage you can insert code, in which you can preform
+#         the last simple operation on the result. This is controled by
+#         `Res.Deref=` and `Res.DerefType=` with the meaning of
+#         `Res.DerefType=` slightly modified as described above. In addition
+#         to all substitution available in `Inline.Code=` and `Res.Exp=`,
+#         `$@` can be used in this expression to refer to the result
+#         before Deref.
+#     6. Cast Result to pointer and return:
+#         The final result is cast to `void*` (with the size limit keeping in
+#         mind) and return. If the return type of the api is void, `NULL` will
+#         be returned.
+Arg2.Deref=
+Arg2.DerefType=
+Self.Deref=
+Self.DerefType=
+Res.WrapFunc=
+Res.Deref=
+Res.DerefType=
+Res.Exp=$<->rules
+
+# Static Entry:
+#     Similar to any boolean value entries above, "On", "True", "Yes", and "1"
+#     will be treated as true and otherwise false.
+Static=1
+Inline.Code=if ($0) *$0 = $<->primary.len

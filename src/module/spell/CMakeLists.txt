@@ -14,10 +14,10 @@ endif()
 
 link_directories(${DL_LIBRARY_DIRS})
 
-fcitx_add_addon_full(spell SCAN DESC
+fcitx_add_addon_full(spell SCAN SCAN_PRIV DESC
   SOURCES ${FCITX_SPELL_SOURCES}
   HEADERS spell.h
   LINK_LIBS ${DL_LIBRARIES}
-  EXTRA_PO  spell-enchant.c spell-presage.c)
+  EXTRA_PO spell-enchant.c spell-presage.c)
 
 add_subdirectory(dict)

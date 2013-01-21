@@ -47,7 +47,7 @@ set(FCITX_XIM_HEADERS
   ximqueue.h
   )
 
-fcitx_add_addon_full(xim DESC ${xim_noinstall}
+fcitx_add_addon_full(xim DESC SCAN SCAN_PRIV SCAN_NO_INSTALL ${xim_noinstall}
   SOURCES ${FCITX_XIM_SOURCES} ${Ximd_SOURCES}
   LINK_LIBS ${FCITX_XIM_LINK_LIBS}
   EXTRA_PO ${FCITX_XIM_HEADERS} ${Ximd_HEADERS})

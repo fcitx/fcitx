@@ -1,6 +1,10 @@
 /***************************************************************************
  *   Copyright (C) 2002~2005 by Yuking                                     *
  *   yuking_net@sohu.com                                                   *
+ *   Copyright (C) 2011~2012 by CSSlayer                                   *
+ *   wengxt@gmail.com                                                      *
+ *   Copyright (C) 2012~2013 by Yichao Yu                                  *
+ *   yyc1992@gmail.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -86,7 +90,7 @@ typedef int32_t boolean;
 #define fcitx_container_of(ptr, type, member)           \
     ((type*)(((void*)(ptr)) - offsetof(type, member)))
 
-#if defined(__GNUC__) && (__GNUC__ > 2)
+#if (defined(__GNUC__) && (__GNUC__ > 2))
 #  define fcitx_expect(exp, var) __builtin_expect(exp, var)
 #else
 #  define fcitx_expect(exp, var) (exp)
@@ -848,6 +852,147 @@ extern "C" {
             return;
         utarray_resize(ary, (unsigned)len);
     }
+
+    /**
+     * rely on compiler to optimize out unnecessary memcpy's and branches here
+     * (and both gcc and clang can do it very well).
+     **/
+#define __FCITX_BYTE_CAST(new_val, old_type, old_val) do {      \
+        old_type __fx_byte_cast_old = (old_val);                \
+        memset(&new_val, 0, sizeof(new_val));                   \
+        memcpy(&new_val, &__fx_byte_cast_old,                   \
+               sizeof(old_type) < sizeof(new_val) ?             \
+               sizeof(old_type) : sizeof(new_val));             \
+    } while (0)
+
+    /**
+     * cast a arbitrary type to integer. for pointers and integers types,
+     * this is compatible with normal type casting for other types
+     * (especially float), this will not loss any information
+     * as long as the size of the types is not larger than the integer type
+     **/
+#define _FCITX_CAST_TO_INT(new_type, new_val, old_type, old_val) do {   \
+        if (sizeof(old_type) <= 1) {                                    \
+            int8_t __fx_cast_to_int_tmp;                                \
+            __FCITX_BYTE_CAST(__fx_cast_to_int_tmp, old_type, old_val); \
+            new_val = (new_type)__fx_cast_to_int_tmp;                   \
+        } else if (sizeof(old_type) <= 2) {                             \
+            int16_t __fx_cast_to_int_tmp;                               \
+            __FCITX_BYTE_CAST(__fx_cast_to_int_tmp, old_type, old_val); \
+            new_val = (new_type)__fx_cast_to_int_tmp;                   \
+        } else if (sizeof(old_type) <= 4) {                             \
+            int32_t __fx_cast_to_int_tmp;                               \
+            __FCITX_BYTE_CAST(__fx_cast_to_int_tmp, old_type, old_val); \
+            new_val = (new_type)__fx_cast_to_int_tmp;                   \
+        } else {                                                        \
+            int64_t __fx_cast_to_int_tmp;                               \
+            __FCITX_BYTE_CAST(__fx_cast_to_int_tmp, old_type, old_val); \
+            new_val = (new_type)__fx_cast_to_int_tmp;                   \
+        }                                                               \
+    } while (0)
+
+#define _FCITX_CAST_TO_PTR(new_val, old_type, old_val) do {             \
+        intptr_t __fx_cast_to_ptr_tmp;                                  \
+        _FCITX_CAST_TO_INT(intptr_t, __fx_cast_to_ptr_tmp,              \
+                           old_type, old_val);                          \
+        new_val = (void*)__fx_cast_to_ptr_tmp;                          \
+    } while (0)
+
+#define FCITX_DEF_CAST_TO_INT(new_type, new_val, old_type, old_val)     \
+    new_type new_val;                                                   \
+    _FCITX_CAST_TO_INT(new_type, new_val, old_type, old_val)
+
+#define FCITX_DEF_CAST_TO_PTR(new_val, old_type, old_val)       \
+    void *new_val;                                              \
+    _FCITX_CAST_TO_PTR(new_val, old_type, old_val)
+
+#define FCITX_RETURN_AS_INT(new_type, old_type, old_val) do {   \
+        FCITX_DEF_CAST_TO_INT(new_type, __fx_return_as_int_tmp, \
+                              old_type, old_val);               \
+        return __fx_return_as_int_tmp;                          \
+    } while (0)
+
+#define FCITX_RETURN_AS_PTR(old_type, old_val) do {   \
+        FCITX_DEF_CAST_TO_PTR(__fx_return_as_ptr_tmp, \
+                              old_type, old_val);     \
+        return __fx_return_as_ptr_tmp;                \
+    } while (0)
+
+#define __FCITX_DEF_CAST_TO_PTR_FUNC(name, type)     \
+    static inline void*                              \
+    fcitx_utils_##name##_to_ptr(type value)          \
+    {                                                \
+        FCITX_RETURN_AS_PTR(type, value);            \
+    }
+
+    __FCITX_DEF_CAST_TO_PTR_FUNC(float, float)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(int, int)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(intptr, intptr_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(int8, int8_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(int16, int16_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(int32, int32_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(uint, unsigned int)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(uintptr, uintptr_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(uint8, uint8_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(uint16, uint16_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(uint32, uint32_t)
+
+#define _FCITX_CAST_FROM_INT(new_type, new_val, old_type, old_val) do { \
+        if (sizeof(new_type) <= 1) {                                    \
+            int8_t __fx_cast_from_int_tmp = (int8_t)(old_val);          \
+            __FCITX_BYTE_CAST(new_val, int8_t, __fx_cast_from_int_tmp); \
+        } else if (sizeof(new_type) <= 2) {                             \
+            int16_t __fx_cast_from_int_tmp = (int16_t)(old_val);        \
+            __FCITX_BYTE_CAST(new_val, int16_t, __fx_cast_from_int_tmp); \
+        } else if (sizeof(new_type) <= 4) {                             \
+            int32_t __fx_cast_from_int_tmp = (int32_t)(old_val);        \
+            __FCITX_BYTE_CAST(new_val, uint32_t, __fx_cast_from_int_tmp); \
+        } else {                                                        \
+            int64_t __fx_cast_from_int_tmp = (int64_t)(old_val);        \
+            __FCITX_BYTE_CAST(new_val, int64_t, __fx_cast_from_int_tmp); \
+        }                                                               \
+    } while (0)
+
+#define _FCITX_CAST_FROM_PTR(new_type, new_val, p)                      \
+    _FCITX_CAST_FROM_INT(new_type, new_val, intptr_t, (intptr_t)p)
+
+#define FCITX_DEF_CAST_FROM_INT(new_type, new_val, old_type, old_val)   \
+    new_type new_val;                                                   \
+    _FCITX_CAST_FROM_INT(new_type, new_val, old_type, old_val)
+
+#define FCITX_DEF_CAST_FROM_PTR(new_type, new_val, p)                   \
+    FCITX_DEF_CAST_FROM_INT(new_type, new_val, intptr_t, (intptr_t)p)
+
+#define FCITX_RETURN_FROM_INT(new_type, old_type, old_val) do {         \
+        FCITX_DEF_CAST_FROM_INT(new_type, __fx_return_from_int_tmp,     \
+                                old_type, old_val);                     \
+        return __fx_return_from_int_tmp;                                \
+    } while (0)
+
+#define FCITX_RETURN_FROM_PTR(new_type, old_val) do {                   \
+        FCITX_DEF_CAST_FROM_PTR(new_type, __fx_return_from_ptr_tmp,     \
+                                old_val);                               \
+        return __fx_return_from_ptr_tmp;                                \
+    } while (0)
+
+#define __FCITX_DEF_CAST_FROM_PTR_FUNC(name, type)      \
+    static inline type                                  \
+    fcitx_utils_ptr_to_##name(void *value)              \
+    {                                                   \
+        FCITX_RETURN_FROM_PTR(type, value);             \
+    }
+
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(float, float)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(int, int)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(intptr, intptr_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(int8, int8_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(int16, int16_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(int32, int32_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(uint, unsigned int)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(uintptr, uintptr_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(uint8, uint8_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(uint16, uint16_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(uint32, uint32_t)
 
 #ifdef __cplusplus
 }

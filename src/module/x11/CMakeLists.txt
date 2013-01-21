@@ -18,7 +18,7 @@ set(FCITX_X11_SOURCES
   xerrorhandler.c
   x11stuff.c
   x11selection.c)
-fcitx_add_addon_full(x11 SCAN_IN ${x11_noinstall}
+fcitx_add_addon_full(x11 SCAN_IN SCAN_PRIV ${x11_noinstall}
   SOURCES ${FCITX_X11_SOURCES}
   HEADERS x11stuff.h
   LINK_LIBS ${FCITX_X11_LINK_LIBS}

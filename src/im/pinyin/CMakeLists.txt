@@ -18,7 +18,7 @@ set(FCITX_PINYIN_HEADERS
   pydef.h
   )
 
-fcitx_add_addon_full(pinyin SCAN DESC
+fcitx_add_addon_full(pinyin SCAN SCAN_PRIV DESC
   SOURCES ${FCITX_PINYIN_SOURCES}
   HEADERS pydef.h
   IM_CONFIG pinyin.conf shuangpin.conf

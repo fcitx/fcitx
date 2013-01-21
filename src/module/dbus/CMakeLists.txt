@@ -15,7 +15,7 @@ set(FCITX_DBUS_SOURCES
   dbuslauncher.c
   )
 
-fcitx_add_addon_full(dbus SCAN ${dbus_noinstall}
+fcitx_add_addon_full(dbus SCAN SCAN_PRIV ${dbus_noinstall}
   SOURCES ${FCITX_DBUS_SOURCES}
   HEADERS dbusstuff.h
   LINK_LIBS ${FCITX_DBUS_LINK_LIBS})

@@ -96,7 +96,4 @@ struct _X11ConvertSelection {
     FcitxCallBack func;
 };
 
-DEFINE_GET_ADDON("fcitx-x11", X11)
-
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0;

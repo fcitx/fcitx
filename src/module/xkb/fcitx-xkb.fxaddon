@@ -11,35 +11,42 @@ Function5=SetDefaultLayout
 Function6=
 Function7=
 Function8=
+Self.Type=FcitxXkb*
 
 [GetRules]
 Name=get-rules
 Return=FcitxXkbRules*
+Res.Exp=$<->rules
 
 [GetCurrentLayout]
 Name=get-current-layout
 Arg0=char**
 Arg1=char**
+Res.WrapFunc=FcitxXkbGetCurrentLayoutInternal
 
 [LayoutExists]
 Name=layout-exists
 Arg0=const char*
 Arg1=const char*
 Arg2=boolean*
+Res.Exp=*$2 = (FcitxXkbFindLayoutIndex($<, $0, $1) >= 0)
 
 [GetLayoutOverride]
 Name=get-layout-override
 Arg0=const char*
 Arg1=char**
 Arg2=char**
+Res.WrapFunc=FcitxXkbGetLayoutOverride
 
 [SetLayoutOverride]
 Name=set-layout-override
 Arg0=const char*
 Arg1=const char*
 Arg2=const char*
+Res.WrapFunc=FcitxXkbSetLayoutOverride
 
 [SetDefaultLayout]
 Name=set-default-layout
 Arg0=const char*
 Arg1=const char*
+Res.WrapFunc=FcitxXkbSetDefaultLayout

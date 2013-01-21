@@ -11,14 +11,21 @@ Function5=
 Function6=
 Function7=
 Function8=
+Self.Type=FcitxPuncState*
 
 [GetPunc]
 Name=get-punc
 Return=char*
 Arg0=int*
+Arg0.Deref=1
+Arg0.DerefType=int
+Res.WrapFunc=GetPunc
 
 [GetPunc2]
 Name=get-punc2
 Arg0=int*
+Arg0.Deref=1
+Arg0.DerefType=int
 Arg1=char**
 Arg2=char**
+Res.WrapFunc=PuncGetPunc2

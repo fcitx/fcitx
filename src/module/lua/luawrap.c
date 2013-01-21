@@ -717,7 +717,9 @@ static UT_array * LuaCallFunction(lua_State *lua,
     return result;
 }
 
-UT_array * InputCommand(LuaModule *module, const char *input) {
+UT_array *
+InputCommand(LuaModule *module, const char *input)
+{
     CommandItem *command;
     char key[3];
     strncpy(key, input, sizeof(key));

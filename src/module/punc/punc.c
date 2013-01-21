@@ -74,8 +74,6 @@ static void FreePunc(struct _FcitxPuncState* puncState);
 static void* PuncCreate(FcitxInstance* instance);
 static boolean PuncPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
 static boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
-static void* PuncGetPunc(void* a, FcitxModuleFunctionArg arg);
-static void* PuncGetPunc2(void* a, FcitxModuleFunctionArg arg);
 static void TogglePuncState(void *arg);
 static boolean GetPuncState(void *arg);
 static void ReloadPunc(void *arg);
@@ -89,6 +87,7 @@ static void* PuncWhichAlloc(void* arg);
 static void* PuncWhichCopy(void* arg, void* data, void* src);
 static void PuncWhichFree(void* arg, void* data);
 
+DECLARE_ADDFUNCTIONS(Punc)
 
 typedef struct _FcitxPuncState {
     char cLastIsAutoConvert;
@@ -110,7 +109,6 @@ FCITX_DEFINE_PLUGIN(fcitx_punc, module, FcitxModule) = {
 void* PuncCreate(FcitxInstance* instance)
 {
     FcitxPuncState* puncState = fcitx_utils_malloc0(sizeof(FcitxPuncState));
-    FcitxAddon* puncaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_PUNC_NAME);
     puncState->owner = instance;
     LoadPuncDict(puncState);
     FcitxKeyFilterHook hk;
@@ -141,19 +139,21 @@ void* PuncCreate(FcitxInstance* instance)
 
     FcitxInstanceRegisterInputUnFocusHook(instance, hook);
 
-    FcitxInstanceWatchContext(instance, CONTEXT_IM_LANGUAGE, PuncLanguageChanged, puncState);
+    FcitxInstanceWatchContext(instance, CONTEXT_IM_LANGUAGE,
+                              PuncLanguageChanged, puncState);
 
     FcitxProfile* profile = FcitxInstanceGetProfile(instance);
     FcitxUIRegisterStatus(instance, puncState, "punc",
-                          profile->bUseWidePunc ? _("Full width punct") :  _("Latin punct"),
-                          _("Toggle Full Width Punctuation"), TogglePuncState, GetPuncState);
+                          profile->bUseWidePunc ? _("Full width punct") :
+                          _("Latin punct"),
+                          _("Toggle Full Width Punctuation"), TogglePuncState,
+                          GetPuncState);
 
     puncState->slot = FcitxInstanceAllocDataForIC(instance, PuncWhichAlloc,
                                                   PuncWhichCopy, PuncWhichFree,
                                                   puncState);
 
-    FcitxModuleAddFunction(puncaddon, PuncGetPunc);
-    FcitxModuleAddFunction(puncaddon, PuncGetPunc2);
+    FcitxPuncAddFunctions(instance);
     return puncState;
 }
 
@@ -201,28 +201,17 @@ void PuncLanguageChanged(void* arg, const void* value)
     FcitxUISetStatusVisable (puncState->owner, "punc",  puncState->curPunc != NULL) ;
 }
 
-void* PuncGetPunc(void* a, FcitxModuleFunctionArg arg)
+static void
+PuncGetPunc2(FcitxPuncState *puncState, int key, char **p1, char **p2)
 {
-    FcitxPuncState* puncState = (FcitxPuncState*) a;
-    int *key = arg.args[0];
-    return GetPunc(puncState, *key);
-}
-
-
-void* PuncGetPunc2(void* a, FcitxModuleFunctionArg arg)
-{
-    FcitxPuncState* puncState = (FcitxPuncState*) a;
-    int *key = arg.args[0];
-    char** p1 = arg.args[1];
-    char** p2 = arg.args[2];
-    int             iIndex = 0;
-    WidePunc       *curPunc = puncState->curPunc;
+    int iIndex = 0;
+    WidePunc *curPunc = puncState->curPunc;
 
     if (!curPunc)
-        return NULL;
+        return;
 
     while (curPunc[iIndex].ASCII) {
-        if (curPunc[iIndex].ASCII == *key) {
+        if (curPunc[iIndex].ASCII == key) {
             if (p1)
                 *p1 = curPunc[iIndex].strWidePunc[0];
             if (curPunc[iIndex].iCount > 1 && p2)
@@ -231,8 +220,6 @@ void* PuncGetPunc2(void* a, FcitxModuleFunctionArg arg)
         }
         iIndex++;
     }
-
-    return NULL;
 }
 
 void ResetPunc(void* arg)
@@ -533,25 +520,27 @@ static inline void SetPuncWhich(FcitxPuncState* puncState, WidePunc* punc)
  * 根据字符得到相应的标点符号
  * 如果该字符不在标点符号集中，则返回NULL
  */
-char           *GetPunc(FcitxPuncState* puncState, int iKey)
+static char*
+GetPunc(FcitxPuncState *puncState, int iKey)
 {
-    int             iIndex = 0;
-    char           *pPunc;
-    WidePunc       *curPunc = puncState->curPunc;
+    int iIndex = 0;
+    char *pPunc;
+    WidePunc *curPunc = puncState->curPunc;
 
     if (!curPunc)
-        return (char *) NULL;
+        return NULL;
 
     while (curPunc[iIndex].ASCII) {
         if (curPunc[iIndex].ASCII == iKey) {
-            pPunc = curPunc[iIndex].strWidePunc[GetPuncWhich(puncState, &curPunc[iIndex])];
+            pPunc = curPunc[iIndex].strWidePunc[GetPuncWhich(puncState,
+                                                             &curPunc[iIndex])];
             SetPuncWhich(puncState, &curPunc[iIndex]);
             return pPunc;
         }
         iIndex++;
     }
 
-    return (char *) NULL;
+    return NULL;
 }
 
 void TogglePuncState(void* arg)
@@ -562,8 +551,9 @@ void TogglePuncState(void* arg)
     profile->bUseWidePunc = !profile->bUseWidePunc;
 
     FcitxUISetStatusString(puncState->owner, "punc",
-                           profile->bUseWidePunc ? _("Full width punct") :  _("Latin punct"),
-                          _("Toggle Full Width Punctuation"));
+                           profile->bUseWidePunc ? _("Full width punct") :
+                           _("Latin punct"),
+                           _("Toggle Full Width Punctuation"));
     FcitxProfileSave(profile);
 }
 
@@ -608,6 +598,4 @@ boolean IsHotKeyPunc(FcitxKeySym sym, unsigned int state)
 
     return false;
 }
-
-
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+#include "fcitx-punc-addfunctions.h"

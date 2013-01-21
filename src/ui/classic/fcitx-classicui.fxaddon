@@ -9,17 +9,27 @@ Function3=
 Function4=
 Function5=
 Function6=
+Self.Type=FcitxClassicUI*
 
 [LoadImage]
 Name=load-image
 Return=cairo_surface_t*
+Self.Deref=&$<->skin
+Self.DerefType=FcitxSkin*
 Arg0=const char*
 Arg1=boolean*
+Arg1.Deref=1
+Arg1.DerefType=boolean
+Res.WrapFunc=LoadImage
+Res.Deref=$@ ? $@->image : NULL
+Res.DerefType=SkinImage*
 
 [GetKeyboardFontColor]
 Name=get-keyboard-font-color
 Return=FcitxConfigColor*
+Res.Exp=&$<->skin.skinKeyboard.keyColor
 
 [GetFont]
 Name=get-font
 Return=char**
+Res.Exp=&$<->font

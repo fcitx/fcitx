@@ -1,0 +1,9 @@
+[FcitxAddon]
+Name=fcitx-xim
+Prefix=Xim
+Function0=ConsumeQueue
+Self.Type=FcitxXimFrontend*
+
+[ConsumeQueue]
+Name=consume-queue
+Res.WrapFunc=XimConsumeQueue

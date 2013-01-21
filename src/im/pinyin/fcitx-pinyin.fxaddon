@@ -12,35 +12,49 @@ Function5=Reset
 Function6=SP2QP
 Function7=AddUserPhrase
 Function8=
+Self.Type=FcitxPinyinState*
 
 [LoadBaseDict]
 Name=load-base-dict
+Res.Exp=$<->bPYBaseDictLoaded ? false : LoadPYBaseDict($<)
 
 [GetPyByHZ]
 Name=get-py-by-hz
 Arg0=const char*
 Arg1=char*
+Res.WrapFunc=PYGetPYByHZ
 
 [DoInput]
 Name=do-input
 Arg0=const FcitxKeySym*
+Arg0.Deref=1
+Arg0.DerefType=FcitxKeySym
 Arg1=const unsigned int*
+Arg1.Deref=1
+Arg1.DerefType=unsigned int
+Res.WrapFunc=DoPYInput
 
 [GetCandwords]
 Name=get-candwords
+Res.WrapFunc=PYGetCandWords
 
 [GetFindString]
 Name=get-find-string
 Return=char*
+Res.Exp=$<->strFindString
 
 [Reset]
 Name=reset
+Inline.Code=$<->bSP = false
+Res.WrapFunc=ResetPYStatus
 
 [SP2QP]
 Name=sp2qp
 Return=char*
 Arg0=const char*
+Res.WrapFunc=PYSP2QP
 
 [AddUserPhrase]
 Name=add-user-phrase
 Arg0=const char*
+Res.WrapFunc=PYAddUserPhraseFromCString

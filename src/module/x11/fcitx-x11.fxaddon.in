@@ -23,27 +23,32 @@ Function16=
 Function17=
 Function18=
 Function19=
+Self.Type=FcitxX11*
 
 [GetDisplay]
 Name=get-display
 Return=Display*
 CacheResult=True
 EnableWrapper=@ENABLE_X11@
+Res.Exp=$<->dpy
 
 [AddXEventHandler]
 Name=add-xevent-handler
 Arg0=FcitxX11XEventHandler
 Arg1=void*
 EnableWrapper=@ENABLE_X11@
+Res.WrapFunc=X11AddEventHandler
 
 [RemoveXEventHandler]
 Name=remove-xevent-handler
 Arg0=void*
+Res.WrapFunc=X11RemoveEventHandler
 
 [FindARGBVisual]
 Name=find-argb-visual
 Return=Visual*
 EnableWrapper=@ENABLE_X11@
+Res.WrapFunc=X11FindARGBVisual
 
 [InitWindowAttribute]
 Name=init-window-attribute
@@ -53,45 +58,63 @@ Arg2=XSetWindowAttributes*
 Arg3=unsigned long*
 Arg4=int*
 EnableWrapper=@ENABLE_X11@
+Res.WrapFunc=X11InitWindowAttribute
 
 [SetWindowProp]
 Name=set-window-prop
 Arg0=const Window*
+Arg0.Deref=1
+Arg0.DerefType=Window
 Arg1=const FcitxXWindowType*
+Arg1.Deref=1
+Arg1.DerefType=FcitxXWindowType
 Arg2=char*
 EnableWrapper=@ENABLE_X11@
+Res.WrapFunc=X11SetWindowProperty
 
 [GetScreenSize]
 Name=get-screen-size
 Arg0=int*
 Arg1=int*
+Res.WrapFunc=X11GetScreenSize
 
 [MouseClick]
 Name=mouse-click
 Arg0=const Window*
+Arg0.Deref=1
+Arg0.DerefType=Window
 Arg1=int*
 Arg2=int*
 Arg3=boolean*
 EnableWrapper=@ENABLE_X11@
+Res.WrapFunc=X11MouseClick
 
 [AddCompositeHandler]
 Name=add-composite-handler
 Arg0=FcitxX11CompositeHandler
 Arg1=void*
+Res.WrapFunc=X11AddCompositeHandler
 
 [GetScreenGeometry]
 Name=get-screen-geometry
 Arg0=const int*
+Arg0.Deref=1
+Arg0.DerefType=int
 Arg1=const int*
+Arg1.Deref=1
+Arg1.DerefType=int
 Arg2=FcitxRect*
+Res.WrapFunc=X11ScreenGeometry
 
 [ProcessRemainEvent]
 Name=process-remain-event
+Res.WrapFunc=X11ProcessEventRealInternal
 
 [GetDPI]
 Name=get-dpi
 Arg0=int*
 Arg1=double*
+Res.WrapFunc=X11GetDPI
 
 [RegSelectNotify]
 Name=reg-select-notify
@@ -101,16 +124,23 @@ Arg1=void*
 Arg2=X11SelectionNotifyCallback
 Arg3=void*
 Arg4=FcitxDestroyNotify
+Res.WrapFunc=X11SelectionNotifyRegister
+Res.Deref=$@ + 1
+Res.DerefType=int
 
 [RemoveSelectNotify]
 Name=remove-select-notify
 Arg0=int
+Arg0.Deref=$0 - 1
+Arg0.DerefType=int
+Res.WrapFunc=X11SelectionNotifyRemove
 
 [DefaultEventWindow]
 Name=default-event-window
 Return=Window
 CacheResult=True
 EnableWrapper=@ENABLE_X11@
+Res.Exp=$<->eventWindow
 
 [RequestConvertSelect]
 Name=request-convert-select
@@ -121,6 +151,9 @@ Arg2=void*
 Arg3=X11ConvertSelectionCallback
 Arg4=void*
 Arg5=FcitxDestroyNotify
+Res.WrapFunc=X11RequestConvertSelection
+Res.Deref=$@ + 1
+Res.DerefType=int
 
 [FCITX_DISABLE_X11]
 Undefine=@ENABLE_X11@

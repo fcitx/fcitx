@@ -70,11 +70,10 @@ static void ClassicUISuspend(void *arg);
 static void ClassicUIResume(void *arg);
 
 static FcitxConfigFileDesc* GetClassicUIDesc();
-static void ClassicUIMainWindowSizeHint(void *arg, int* x, int* y, int* w, int* h);
+static void ClassicUIMainWindowSizeHint(void *arg, int* x, int* y,
+                                        int* w, int* h);
 
-static void* ClassicUILoadImage(void *arg, FcitxModuleFunctionArg args);
-static void* ClassicUIGetKeyBoardFontColor(void* arg, FcitxModuleFunctionArg args);
-static void* ClassicUIGetFont(void *arg, FcitxModuleFunctionArg args);
+DECLARE_ADDFUNCTIONS(ClassicUI)
 
 FCITX_DEFINE_PLUGIN(fcitx_classic_ui, ui, FcitxUI) = {
     ClassicUICreate,
@@ -101,8 +100,8 @@ FCITX_DEFINE_PLUGIN(fcitx_classic_ui, ui, FcitxUI) = {
 
 void* ClassicUICreate(FcitxInstance* instance)
 {
-    FcitxAddon* classicuiaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_CLASSIC_UI_NAME);
-    FcitxClassicUI* classicui = fcitx_utils_malloc0(sizeof(FcitxClassicUI));
+    FcitxAddon *classicuiaddon = Fcitx_ClassicUI_GetAddon(instance);
+    FcitxClassicUI *classicui = fcitx_utils_new(FcitxClassicUI);
     classicui->owner = instance;
     if (!LoadClassicUIConfig(classicui)) {
         free(classicui);
@@ -144,7 +143,6 @@ void* ClassicUICreate(FcitxInstance* instance)
     classicui->mainMenu.priv = classicui;
     classicui->mainMenu.mark = -1;
 
-
     classicui->inputWindow = CreateInputWindow(classicui);
     classicui->mainWindow = CreateMainWindow(classicui);
     classicui->trayWindow = CreateTrayWindow(classicui);
@@ -158,11 +156,7 @@ void* ClassicUICreate(FcitxInstance* instance)
 
     DisplaySkin(classicui, classicui->skinType);
 
-    /* ensure order ! */
-    FcitxModuleAddFunction(classicuiaddon, ClassicUILoadImage);
-    FcitxModuleAddFunction(classicuiaddon, ClassicUIGetKeyBoardFontColor);
-    FcitxModuleAddFunction(classicuiaddon, ClassicUIGetFont);
-
+    FcitxClassicUIAddFunctions(instance);
     return classicui;
 }
 
@@ -532,30 +526,6 @@ void ClassicUIMainWindowSizeHint(void* arg, int* x, int* y, int* w, int* h)
 
 }
 
-void* ClassicUILoadImage(void *arg, FcitxModuleFunctionArg args)
-{
-    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    const char *name = args.args[0];
-    boolean *fallback = args.args[1];
-    SkinImage* image = LoadImage(&classicui->skin, name, *fallback);
-    if (image == NULL)
-        return NULL;
-    else
-        return image->image;
-}
-
-void* ClassicUIGetKeyBoardFontColor(void *arg, FcitxModuleFunctionArg args)
-{
-    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    return &classicui->skin.skinKeyboard.keyColor;
-}
-
-void* ClassicUIGetFont(void *arg, FcitxModuleFunctionArg args)
-{
-    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    return &classicui->font;
-}
-
 void ReloadConfigClassicUI(void* arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
@@ -624,5 +594,4 @@ void ResizeSurface(cairo_surface_t** surface, int w, int h)
     *surface = newsurface;
 }
 
-
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+#include "fcitx-classic-ui-addfunctions.h"

@@ -64,24 +64,19 @@ typedef struct {
     FcitxPinyinState* pystate;
 } PYCandWordSortContext;
 
-static void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE* fp, boolean isSystem, boolean stripDup);
-static void * LoadPYBaseDictWrapper(void* arg, FcitxModuleFunctionArg args);
-static void * PYGetPYByHZWrapper(void* arg, FcitxModuleFunctionArg args);
-static void * DoPYInputWrapper(void* arg, FcitxModuleFunctionArg args);
-static void * PYGetCandWordsWrapper(void* arg, FcitxModuleFunctionArg args);
-static void * PYGetFindStringWrapper(void* arg, FcitxModuleFunctionArg args);
-static void * PYResetWrapper(void* arg, FcitxModuleFunctionArg args);
+static void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE* fp,
+                             boolean isSystem, boolean stripDup);
 static void ReloadConfigPY(void* arg);
 static void PinyinMigration();
 static int PYCandWordCmp(const void* b, const void* a, void* arg);
-static void* PYSP2QP(void* arg, FcitxModuleFunctionArg args);
-static boolean PYGetPYMapByHZ(FcitxPinyinState*pystate, char *strHZ, char* mapHint, char *strMap);
-static void *PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args);
+static boolean PYGetPYMapByHZ(FcitxPinyinState*pystate, char *strHZ,
+                              char* mapHint, char *strMap);
+
+DECLARE_ADDFUNCTIONS(Pinyin)
 
 void *PYCreate(FcitxInstance* instance)
 {
     FcitxPinyinState *pystate = fcitx_utils_new(FcitxPinyinState);
-    FcitxAddon *pyaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_PINYIN_NAME);
     InitMHPY(&pystate->pyconfig.MHPY_C, MHPY_C_TEMPLATE);
     InitMHPY(&pystate->pyconfig.MHPY_S, MHPY_S_TEMPLATE);
     InitPYTable(&pystate->pyconfig);
@@ -100,48 +95,38 @@ void *PYCreate(FcitxInstance* instance)
     pystate->pool = fcitx_memory_pool_create();
 
     FcitxInstanceRegisterIM(instance,
-                      pystate,
-                      "pinyin",
-                      _("Pinyin"),
-                      "pinyin",
-                      PYInit,
-                      ResetPYStatus,
-                      DoPYInput,
-                      PYGetCandWords,
-                      NULL,
-                      SavePY,
-                      ReloadConfigPY,
-                      NULL,
-                      5,
-                      "zh_CN"
-                     );
+                            pystate,
+                            "pinyin",
+                            _("Pinyin"),
+                            "pinyin",
+                            PYInit,
+                            ResetPYStatus,
+                            DoPYInput,
+                            PYGetCandWords,
+                            NULL,
+                            SavePY,
+                            ReloadConfigPY,
+                            NULL,
+                            5,
+                            "zh_CN");
     FcitxInstanceRegisterIM(instance,
-                      pystate,
-                      "shuangpin",
-                      _("Shuangpin"),
-                      "shuangpin",
-                      SPInit,
-                      ResetPYStatus,
-                      DoPYInput,
-                      PYGetCandWords,
-                      NULL,
-                      SavePY,
-                      ReloadConfigPY,
-                      NULL,
-                      5,
-                      "zh_CN"
-                     );
+                            pystate,
+                            "shuangpin",
+                            _("Shuangpin"),
+                            "shuangpin",
+                            SPInit,
+                            ResetPYStatus,
+                            DoPYInput,
+                            PYGetCandWords,
+                            NULL,
+                            SavePY,
+                            ReloadConfigPY,
+                            NULL,
+                            5,
+                            "zh_CN");
     pystate->owner = instance;
 
-    /* ensure the order! */
-    FcitxModuleAddFunction(pyaddon, LoadPYBaseDictWrapper); // 0
-    FcitxModuleAddFunction(pyaddon, PYGetPYByHZWrapper); // 1
-    FcitxModuleAddFunction(pyaddon, DoPYInputWrapper); // 2
-    FcitxModuleAddFunction(pyaddon, PYGetCandWordsWrapper); // 3
-    FcitxModuleAddFunction(pyaddon, PYGetFindStringWrapper); // 4
-    FcitxModuleAddFunction(pyaddon, PYResetWrapper); // 5
-    FcitxModuleAddFunction(pyaddon, PYSP2QP); // 6
-    FcitxModuleAddFunction(pyaddon, PYAddUserPhraseFromCString); // 6
+    FcitxPinyinAddFunctions(instance);
     return pystate;
 }
 
@@ -2108,55 +2093,6 @@ void SavePY(void *arg)
         SavePYFreq(pystate);
 }
 
-void* LoadPYBaseDictWrapper(void * arg, FcitxModuleFunctionArg args)
-{
-    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    if (!pystate->bPYBaseDictLoaded)
-        LoadPYBaseDict(pystate);
-    return NULL;
-}
-
-void* PYGetPYByHZWrapper(void * arg, FcitxModuleFunctionArg args)
-{
-    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    const char *a = args.args[0];
-    char *b = args.args[1];
-    PYGetPYByHZ(pystate, a, b);
-    return NULL;
-
-}
-void* DoPYInputWrapper(void * arg, FcitxModuleFunctionArg args)
-{
-    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    const FcitxKeySym *a = args.args[0];
-    const unsigned int *b = args.args[1];
-    DoPYInput(pystate, *a, *b);
-    return NULL;
-}
-
-void* PYGetCandWordsWrapper(void * arg, FcitxModuleFunctionArg args)
-{
-    PYGetCandWords(arg);
-    return NULL;
-}
-
-void* PYGetFindStringWrapper(void * arg, FcitxModuleFunctionArg args)
-{
-    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    return pystate->strFindString;
-
-}
-void* PYResetWrapper(void * arg, FcitxModuleFunctionArg args)
-{
-    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-
-    pystate->bSP = false;
-    pystate->strPYAuto[0] = '\0';
-    ResetPYStatus(pystate);
-
-    return NULL;
-}
-
 void ReloadConfigPY(void* arg)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
@@ -2281,20 +2217,17 @@ int PYCandWordCmp(const void* b, const void *a, void* arg)
     return 0;
 }
 
-
-void* PYSP2QP(void* arg, FcitxModuleFunctionArg args)
+static char*
+PYSP2QP(FcitxPinyinState *pystate, const char* strSP)
 {
-    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    const char* strSP = args.args[0];
-    char strQP[MAX_PY_LENGTH + 1];
-    strQP[0] = 0;
-
+    char strQP[MAX_PY_LENGTH + 1] = "";
     SP2QP(&pystate->pyconfig, strSP, strQP);
-
     return strdup(strQP);
 }
 
-boolean PYGetPYMapByHZ(FcitxPinyinState* pystate, char* strHZ, char* mapHint, char* strMap)
+static boolean
+PYGetPYMapByHZ(FcitxPinyinState* pystate, char* strHZ,
+               char* mapHint, char* strMap)
 {
     int i, j;
     PYFA* PYFAList = pystate->PYFAList;
@@ -2313,36 +2246,35 @@ boolean PYGetPYMapByHZ(FcitxPinyinState* pystate, char* strHZ, char* mapHint, ch
     return false;
 }
 
-void*
-PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args)
+static void
+PYAddUserPhraseFromCString(FcitxPinyinState *pystate, const char *strHZ)
 {
-    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    const char *strHZ = args.args[0];
     const char *pivot;
     char *sp;
     char singleHZ[UTF8_MAX_LENGTH + 1];
     char strMap[3];
     if (!fcitx_utf8_check_string(strHZ))
-        return NULL;
+        return;
 
     pivot = strHZ;
     size_t hzCount = fcitx_utf8_strlen(strHZ);
     size_t hzCountLocal = 0;
 
     if (pystate->iPYSelected) {
-        int i = 0;
-        for (i = 0 ; i < pystate->iPYSelected; i ++)
+        int i;
+        for (i = 0 ; i < pystate->iPYSelected; i ++) {
             hzCountLocal += strlen(pystate->pySelected[i].strMap) / 2;
+        }
     }
     hzCountLocal += pystate->findMap.iHZCount;
 
     /* in order not to get a wrong one, use strict check */
     if (hzCountLocal != hzCount || hzCount > MAX_PY_PHRASE_LENGTH)
-        return NULL;
-    char *totalMap = fcitx_utils_malloc0(sizeof(char) * (1 + 2 * hzCount));
+        return;
+    char *totalMap = fcitx_utils_malloc0(1 + 2 * hzCount);
 
     if (pystate->iPYSelected) {
-        int i = 0;
+        int i;
         for (i = 0 ; i < pystate->iPYSelected; i ++)
             strcat(totalMap, pystate->pySelected[i].strMap);
         strHZ = fcitx_utf8_get_nth_char(strHZ, strlen(totalMap) / 2);
@@ -2357,21 +2289,19 @@ PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args)
         strncpy(singleHZ, strHZ, len);
         singleHZ[len] = '\0';
 
-        if (!PYGetPYMapByHZ(pystate, singleHZ, pystate->findMap.strMap[i], strMap)) {
+        if (!PYGetPYMapByHZ(pystate, singleHZ, pystate->findMap.strMap[i],
+                            strMap)) {
             free(totalMap);
-            return NULL;
+            return;
         }
 
         strncat(totalMap, strMap, 2);
-
         strHZ = sp;
         i ++;
     }
 
     PYAddUserPhrase(pystate, pivot, totalMap, true);
     free(totalMap);
-
-    return NULL;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+#include "fcitx-pinyin-addfunctions.h"

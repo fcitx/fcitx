@@ -25,13 +25,12 @@ void XimQueueDestroy(FcitxXimFrontend* xim)
     utarray_free(xim->queue);
 }
 
-void* XimConsumeQueue(void* arg, FcitxModuleFunctionArg args)
+void
+XimConsumeQueue(FcitxXimFrontend *xim)
 {
-    FCITX_UNUSED(args);
-    FcitxXimFrontend* xim = arg;
     if (!xim->ims)
-        return NULL;
-    XimQueue* item;
+        return;
+    XimQueue *item;
 
     size_t len = utarray_len(xim->queue);
 
@@ -68,9 +67,9 @@ void* XimConsumeQueue(void* arg, FcitxModuleFunctionArg args)
     }
 
     utarray_clear(xim->queue);
-    if (len)
+    if (len) {
         FcitxInstanceSetRecheckEvent(xim->owner);
-    return NULL;
+    }
 }
 
 void XimPendingCall(FcitxXimFrontend* xim, XimCallType type, XPointer ptr)

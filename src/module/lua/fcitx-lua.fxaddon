@@ -6,9 +6,11 @@ Include1="fcitx/candidate.h"
 Function0=CallCommand
 Function1=
 Function2=
+Self.Type=LuaModule*
 
 [CallCommand]
 Name=call-command
 Arg0=const char*
 Arg1=FcitxCandidateWordCommitCallback
 Arg2=void*
+Res.WrapFunc=LuaCallCommand
