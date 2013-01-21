@@ -29,13 +29,33 @@
 #include "fcitxqtconfiguiplugin.h"
 
 class FcitxQtConfigUIFactoryPrivate;
+/**
+ * ui plugin factory.
+ **/
 class FCITX_QT_EXPORT_API FcitxQtConfigUIFactory : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * create a plugin factory
+     *
+     * @param parent object parent
+     **/
     explicit FcitxQtConfigUIFactory(QObject* parent = 0);
     virtual ~FcitxQtConfigUIFactory();
+    /**
+     * create widget based on file name, it might return 0 if there is no match
+     *
+     * @param file file name need to be configured
+     * @return FcitxQtConfigUIWidget*
+     **/
     FcitxQtConfigUIWidget* create(const QString& file);
+    /**
+     * a simplified version of create, but it just test if there is a valid entry or not
+     *
+     * @param file file name
+     * @return bool
+     **/
     bool test(const QString& file);
 private:
     FcitxQtConfigUIFactoryPrivate* d_ptr;

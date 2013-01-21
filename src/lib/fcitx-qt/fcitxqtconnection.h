@@ -29,6 +29,9 @@ class QDBusConnection;
 class FcitxQtConnectionPrivate;
 
 
+/**
+ * dbus connection to fcitx
+ **/
 class FCITX_QT_EXPORT_API FcitxQtConnection : public QObject {
     Q_OBJECT
     Q_PROPERTY(bool autoReconnect READ autoReconnect WRITE setAutoReconnect)
@@ -36,19 +39,68 @@ class FCITX_QT_EXPORT_API FcitxQtConnection : public QObject {
     Q_PROPERTY(QDBusConnection* connection READ connection)
     Q_PROPERTY(QString serviceName READ serviceName)
 public:
+    /**
+     * create a new connection
+     *
+     * @param parent
+     **/
     explicit FcitxQtConnection(QObject* parent = 0);
+
+    /**
+     * destroy the connection
+     **/
     virtual ~FcitxQtConnection();
+
+    /**
+     * the connection will not start to work until you call this function
+     * you may want to connect to the signal before you call this function
+     **/
     void startConnection();
     void endConnection();
+    /**
+     * automatically reconnect if fcitx disappeared
+     *
+     * @param a ...
+     * @return void
+     **/
     void setAutoReconnect(bool a);
+
+    /**
+     * check this connection is doing automatical reconnect or not
+     *
+     * default value is true
+     **/
     bool autoReconnect();
 
+    /**
+     * return the current dbus connection to fcitx, notice, the object return
+     * by this function might be deteled if fcitx disappear, or might return 0
+     * if fcitx is not running
+     *
+     * @return QDBusConnection*
+     **/
     QDBusConnection* connection();
+    /**
+     * current fcitx dbus service name, can be used for create DBus proxy
+     *
+     * @return service name
+     **/
     const QString& serviceName();
+    /**
+     * check its connected or not
+     **/
     bool isConnected();
 
 Q_SIGNALS:
+    /**
+     * this signal will be emitted upon fcitx appears
+     **/
     void connected();
+    /**
+     * this signal will be emitted upon fcitx disappears
+     *
+     * it will come with connected in pair
+     **/
     void disconnected();
 
 private:
