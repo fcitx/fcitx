@@ -38,6 +38,9 @@ enum {
 
 static const void *empty_vtable_padding[DESKTOP_PADDING_LEN] = {};
 
+/**
+ * Check if vtable is valid. (Padding has to be zero).
+ **/
 static boolean
 fcitx_desktop_parse_check_vtable(const FcitxDesktopVTable *vtable)
 {
@@ -51,6 +54,9 @@ fcitx_desktop_parse_check_vtable(const FcitxDesktopVTable *vtable)
     return true;
 }
 
+/**
+ * Create a new group with vtable that doesn't belongs to any file.
+ **/
 static FcitxDesktopGroup*
 fcitx_desktop_parse_new_group(const FcitxDesktopVTable *vtable, void *owner)
 {
@@ -67,6 +73,9 @@ fcitx_desktop_parse_new_group(const FcitxDesktopVTable *vtable, void *owner)
     return group;
 }
 
+/**
+ * Create a new entry with vtable that doesn't belongs to any group
+ **/
 static FcitxDesktopEntry*
 fcitx_desktop_parse_new_entry(const FcitxDesktopVTable *vtable, void *owner)
 {
@@ -83,6 +92,9 @@ fcitx_desktop_parse_new_entry(const FcitxDesktopVTable *vtable, void *owner)
     return entry;
 }
 
+/**
+ * Init a file
+ **/
 FCITX_EXPORT_API boolean
 fcitx_desktop_file_init(FcitxDesktopFile *file,
                         const FcitxDesktopVTable *vtable, void *owner)
@@ -102,6 +114,10 @@ _find_none_blank(char *str)
     return str + strspn(str, blank_chars);
 }
 
+/**
+ * Reset Functions:
+ *     Clear comments, flags and link. Ready to be reused.
+ **/
 static void
 fcitx_desktop_entry_reset(FcitxDesktopEntry *entry)
 {
@@ -152,19 +168,16 @@ fcitx_desktop_entry_key_len(const char *str)
     if (str[res] != '=')
         return 0;
     for (;res > 0;res--) {
-        switch (str[res - 1]) {
-        case ' ':
-        case '\r':
-        case '\t':
-        case '\f':
-        case '\v':
+        if (strchr(blank_chars, str[res - 1]))
             continue;
-        }
         break;
     }
     return res;
 }
 
+/**
+ * Free a entry that is already unlinked and removed from the hash table.
+ **/
 static void
 fcitx_desktop_entry_free(FcitxDesktopEntry *entry)
 {
@@ -193,6 +206,9 @@ fcitx_desktop_entry_ref(FcitxDesktopEntry *entry)
     return entry;
 }
 
+/**
+ * Remove a entry from a group and decrease the ref count by 1.
+ **/
 static void
 fcitx_desktop_group_hash_remove_entry(FcitxDesktopGroup *group,
                                       FcitxDesktopEntry *entry)
@@ -204,6 +220,10 @@ fcitx_desktop_group_hash_remove_entry(FcitxDesktopGroup *group,
     fcitx_desktop_entry_unref(entry);
 }
 
+/**
+ * Remove all its entries from group and free it. group should be already
+ * unlinked and removed from the hash table.
+ **/
 static void
 fcitx_desktop_group_free(FcitxDesktopGroup *group)
 {
@@ -237,6 +257,9 @@ fcitx_desktop_group_ref(FcitxDesktopGroup *group)
     return group;
 }
 
+/**
+ * Remove a group from a file and decrease the ref count by 1.
+ **/
 static void
 fcitx_desktop_file_hash_remove_group(FcitxDesktopFile *file,
                                      FcitxDesktopGroup *group)
@@ -248,6 +271,9 @@ fcitx_desktop_file_hash_remove_group(FcitxDesktopFile *file,
     fcitx_desktop_group_unref(group);
 }
 
+/**
+ * Remove all groups from the file and free comments
+ **/
 FCITX_EXPORT_API void
 fcitx_desktop_file_done(FcitxDesktopFile *file)
 {
@@ -260,6 +286,9 @@ fcitx_desktop_file_done(FcitxDesktopFile *file)
     utarray_done(&file->comments);
 }
 
+/**
+ * Check and clear UPDATED flags, remove unused entries.
+ **/
 static void
 fcitx_desktop_group_clean(FcitxDesktopGroup *group)
 {
@@ -275,6 +304,9 @@ fcitx_desktop_group_clean(FcitxDesktopGroup *group)
     }
 }
 
+/**
+ * Check and clear UPDATED flags, remove unused groups.
+ **/
 static void
 fcitx_desktop_file_clean(FcitxDesktopFile *file)
 {
@@ -300,6 +332,9 @@ fcitx_desktop_file_find_group_with_len(const FcitxDesktopFile *file,
     return group;
 }
 
+/**
+ * Create a new group and add it to the hash table of file.
+ **/
 static FcitxDesktopGroup*
 fcitx_desktop_file_hash_new_group(FcitxDesktopFile *file,
                                   const char *name, size_t name_len)
@@ -323,6 +358,9 @@ fcitx_desktop_group_find_entry_with_len(const FcitxDesktopGroup *group,
     return entry;
 }
 
+/**
+ * Create a new entry and add it to the hash table of group.
+ **/
 static FcitxDesktopEntry*
 fcitx_desktop_group_hash_new_entry(FcitxDesktopGroup *group,
                                    const char *name, size_t name_len)
@@ -675,7 +713,7 @@ fcitx_desktop_file_write_fp(const FcitxDesktopFile *file, FILE *fp)
     return true;
 }
 
-boolean
+FCITX_EXPORT_API boolean
 fcitx_desktop_file_write(const FcitxDesktopFile *file, const char *name)
 {
     boolean res;

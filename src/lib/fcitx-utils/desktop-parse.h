@@ -87,18 +87,59 @@ struct _FcitxDesktopEntry {
 extern "C" {
 #endif
 
+    /**
+     * Memory management
+     **/
     boolean fcitx_desktop_file_init(FcitxDesktopFile *file,
                                     const FcitxDesktopVTable *vtable,
                                     void *owner);
+    void fcitx_desktop_file_done(FcitxDesktopFile *file);
+    FcitxDesktopGroup *fcitx_desktop_group_ref(FcitxDesktopGroup *group);
+    void fcitx_desktop_group_unref(FcitxDesktopGroup *group);
+    FcitxDesktopEntry *fcitx_desktop_entry_ref(FcitxDesktopEntry *entry);
+    void fcitx_desktop_entry_unref(FcitxDesktopEntry *entry);
+
+    /**
+     * Read and Write
+     **/
     boolean fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp);
     boolean fcitx_desktop_file_load(FcitxDesktopFile *file, const char *name);
-    void fcitx_desktop_file_done(FcitxDesktopFile *file);
     boolean fcitx_desktop_file_write_fp(const FcitxDesktopFile *file,
                                         FILE *fp);
     boolean fcitx_desktop_file_write(const FcitxDesktopFile *file,
                                      const char *name);
+
+    /**
+     * Operations on FcitxDesktopGroups in a FcitxDesktopFile.
+     **/
     FcitxDesktopGroup *fcitx_desktop_file_find_group_with_len(
         const FcitxDesktopFile *file, const char *name, size_t name_len);
+    FcitxDesktopGroup *fcitx_desktop_file_add_group_after_with_len(
+        FcitxDesktopFile *file, FcitxDesktopGroup *group,
+        const char *name, size_t name_len, boolean move);
+    FcitxDesktopGroup *fcitx_desktop_file_add_group_before_with_len(
+        FcitxDesktopFile *file, FcitxDesktopGroup *group,
+        const char *name, size_t name_len, boolean move);
+    boolean fcitx_desktop_file_delete_group(FcitxDesktopFile *file,
+                                            FcitxDesktopGroup *group);
+
+    /**
+     * Operations on FcitxDesktopEntry's in a FcitxDesktopGroup
+     **/
+    FcitxDesktopEntry *fcitx_desktop_group_find_entry_with_len(
+        const FcitxDesktopGroup *group, const char *name, size_t name_len);
+    FcitxDesktopEntry *fcitx_desktop_group_add_entry_after_with_len(
+        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+        const char *name, size_t name_len, boolean move);
+    FcitxDesktopEntry *fcitx_desktop_group_add_entry_before_with_len(
+        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+        const char *name, size_t name_len, boolean move);
+    boolean fcitx_desktop_group_delete_entry(FcitxDesktopGroup *group,
+                                             FcitxDesktopEntry *entry);
+
+    /**
+     * Simplified inline functions
+     **/
     static inline FcitxDesktopGroup*
     fcitx_desktop_file_find_group(const FcitxDesktopFile *file,
                                   const char *name)
@@ -106,8 +147,6 @@ extern "C" {
         return fcitx_desktop_file_find_group_with_len(file, name,
                                                       strlen(name));
     }
-    FcitxDesktopEntry *fcitx_desktop_group_find_entry_with_len(
-        const FcitxDesktopGroup *group, const char *name, size_t name_len);
     static inline FcitxDesktopEntry*
     fcitx_desktop_group_find_entry(const FcitxDesktopGroup *group,
                                    const char *name)
@@ -115,10 +154,6 @@ extern "C" {
         return fcitx_desktop_group_find_entry_with_len(group, name,
                                                        strlen(name));
     }
-
-    FcitxDesktopGroup *fcitx_desktop_file_add_group_after_with_len(
-        FcitxDesktopFile *file, FcitxDesktopGroup *group,
-        const char *name, size_t name_len, boolean move);
     static inline FcitxDesktopGroup*
     fcitx_desktop_file_ensure_group_with_len(
         FcitxDesktopFile *file, const char *name, size_t name_len)
@@ -155,10 +190,6 @@ extern "C" {
         return fcitx_desktop_file_add_group_after_with_len(
             file, group, name, strlen(name), move);
     }
-
-    FcitxDesktopGroup *fcitx_desktop_file_add_group_before_with_len(
-        FcitxDesktopFile *file, FcitxDesktopGroup *group,
-        const char *name, size_t name_len, boolean move);
     static inline FcitxDesktopGroup*
     fcitx_desktop_file_move_group_before_with_len(
         FcitxDesktopFile *file, FcitxDesktopGroup *group,
@@ -183,10 +214,6 @@ extern "C" {
         return fcitx_desktop_file_add_group_before_with_len(
             file, group, name, strlen(name), move);
     }
-
-    FcitxDesktopEntry *fcitx_desktop_group_add_entry_after_with_len(
-        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
-        const char *name, size_t name_len, boolean move);
     static inline FcitxDesktopEntry*
     fcitx_desktop_group_ensure_entry_with_len(
         FcitxDesktopGroup *group, const char *name, size_t name_len)
@@ -224,10 +251,6 @@ extern "C" {
         return fcitx_desktop_group_add_entry_after_with_len(
             group, entry, name, strlen(name), move);
     }
-
-    FcitxDesktopEntry *fcitx_desktop_group_add_entry_before_with_len(
-        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
-        const char *name, size_t name_len, boolean move);
     static inline FcitxDesktopEntry*
     fcitx_desktop_group_move_entry_before_with_len(
         FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
@@ -251,6 +274,7 @@ extern "C" {
         return fcitx_desktop_group_add_entry_before_with_len(
             group, entry, name, strlen(name), move);
     }
+
     static inline FcitxDesktopEntry*
     fcitx_desktop_entry_set_value_with_len(FcitxDesktopEntry *entry,
                                            const char *value, size_t len)
@@ -264,14 +288,6 @@ extern "C" {
         fcitx_utils_string_swap(&entry->value, value);
         return entry;
     }
-    boolean fcitx_desktop_file_delete_group(FcitxDesktopFile *file,
-                                            FcitxDesktopGroup *group);
-    boolean fcitx_desktop_group_delete_entry(FcitxDesktopGroup *group,
-                                             FcitxDesktopEntry *entry);
-    void fcitx_desktop_entry_unref(FcitxDesktopEntry *entry);
-    FcitxDesktopEntry *fcitx_desktop_entry_ref(FcitxDesktopEntry *entry);
-    void fcitx_desktop_group_unref(FcitxDesktopGroup *group);
-    FcitxDesktopGroup *fcitx_desktop_group_ref(FcitxDesktopGroup *group);
 
 #ifdef __cplusplus
 }
