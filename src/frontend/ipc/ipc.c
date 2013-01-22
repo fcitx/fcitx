@@ -432,8 +432,8 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
 
         DBusError error;
         dbus_error_init(&error);
-        char* appname;
-        int icpid;
+        char* appname = NULL;
+        int icpid = 0;
         if (!dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INT32, &icpid, DBUS_TYPE_INVALID))
             ipcic->appname = NULL;
         else {
