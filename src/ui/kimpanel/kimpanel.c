@@ -312,7 +312,8 @@ void* KimpanelCreate(FcitxInstance* instance)
                            "type='signal',"
                            "interface='" DBUS_INTERFACE_DBUS "',"
                            "path='" DBUS_PATH_DBUS "',"
-                           "member='NameOwnerChanged'",
+                           "member='NameOwnerChanged',"
+                           "arg0='org.kde.impanel'",
                            &err);
 
         dbus_connection_flush(kimpanel->conn);
@@ -1730,7 +1731,8 @@ void KimpanelDestroy(void* arg)
                           "type='signal',"
                           "interface='" DBUS_INTERFACE_DBUS "',"
                           "path='" DBUS_PATH_DBUS "',"
-                          "member='NameOwnerChanged'",
+                          "member='NameOwnerChanged',"
+                          "arg0='org.kde.impanel'",
                           NULL);
 
     dbus_connection_flush(kimpanel->conn);

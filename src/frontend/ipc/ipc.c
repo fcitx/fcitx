@@ -101,9 +101,9 @@ static void IPCSetPropertyIMList(void* arg, DBusMessageIter* iter);
 static void IPCUpdateIMList(void* arg);
 static pid_t IPCGetPid(void* arg, FcitxInputContext* ic);
 
-static void FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMessage* message);
-static void FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusConnection* coon, DBusMessage* message);
-static void FcitxDBusPropertyGetAll(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMessage* message);
+static DBusMessage* FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusMessage* message);
+static DBusMessage* FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusMessage* message);
+static DBusMessage* FcitxDBusPropertyGetAll(FcitxIPCFrontend* ipc, DBusMessage* message);
 
 const FcitxDBusPropertyTable propertTable[] = {
     { FCITX_IM_DBUS_INTERFACE, "IMList", "a(sssb)", IPCGetPropertyIMList, IPCSetPropertyIMList },
@@ -500,10 +500,8 @@ void IPCDestroyIC(void* arg, FcitxInputContext* context)
         if (ipc->_privconn)
             dbus_connection_unregister_object_path(ipc->_privconn, GetIPCIC(context)->path);
     }
-    if (ipcic->appname)
-        free(ipcic->appname);
-    if (ipcic->surroundingText)
-        free(ipcic->surroundingText);
+    fcitx_utils_free(ipcic->appname);
+    fcitx_utils_free(ipcic->surroundingText);
     free(context->privateic);
     context->privateic = NULL;
 }
@@ -590,35 +588,33 @@ void IPCGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, 
     *h = GetIPCIC(ic)->height;
 }
 
-static void IPCDBusUnknownMethod(DBusConnection *connection, DBusMessage *msg)
+static inline DBusMessage* IPCDBusUnknownMethod(DBusMessage *msg)
 {
     DBusMessage* reply = dbus_message_new_error_printf(msg,
                                                        DBUS_ERROR_UNKNOWN_METHOD,
                                                        "No such method with signature (%s)",
                                                        dbus_message_get_signature(msg));
-    dbus_connection_send(connection, reply, NULL);
-    dbus_message_unref(reply);
+    return reply;
 }
 
 static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMessage *msg, void *user_data)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) user_data;
     FcitxInstance* instance = ipc->owner;
+    DBusMessage* reply = NULL;
+    boolean flush = true;
+    DBusHandlerResult result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+
     if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect")) {
-        DBusMessage *reply = dbus_message_new_method_return(msg);
+        reply = dbus_message_new_method_return(msg);
 
         dbus_message_append_args(reply, DBUS_TYPE_STRING, &im_introspection_xml, DBUS_TYPE_INVALID);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, DBUS_INTERFACE_PROPERTIES, "Get")) {
-        FcitxDBusPropertyGet(ipc, connection, msg);
-        return DBUS_HANDLER_RESULT_HANDLED;
+        reply = FcitxDBusPropertyGet(ipc, msg);
     } else if (dbus_message_is_method_call(msg, DBUS_INTERFACE_PROPERTIES, "Set")) {
-        FcitxDBusPropertySet(ipc, connection, msg);
-        return DBUS_HANDLER_RESULT_HANDLED;
+        reply = FcitxDBusPropertySet(ipc, msg);
     } else if (dbus_message_is_method_call(msg, DBUS_INTERFACE_PROPERTIES, "GetAll")) {
-        FcitxDBusPropertyGetAll(ipc, connection, msg);
+        reply = FcitxDBusPropertyGetAll(ipc, msg);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateIC")
             || dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateICv2")
@@ -631,37 +627,27 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Exit")) {
         FcitxLog(INFO, "Receive message ask for quit");
-        DBusMessage *reply = dbus_message_new_method_return(msg);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        dbus_connection_flush(connection);
-        FcitxInstanceEnd(ipc->owner);
-        return DBUS_HANDLER_RESULT_HANDLED;
+        reply = dbus_message_new_method_return(msg);
+        flush = true;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetCurrentIM")) {
-        DBusMessage *reply = dbus_message_new_method_return(msg);
+        reply = dbus_message_new_method_return(msg);
         FcitxIM* im = FcitxInstanceGetCurrentIM(ipc->owner);
         const char* name = "";
         if (im) {
             name = im->uniqueName;
         }
         dbus_message_append_args(reply, DBUS_TYPE_STRING, &name, DBUS_TYPE_INVALID);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "SetCurrentIM")) {
         DBusError error;
         dbus_error_init(&error);
         char* imname = NULL;
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &imname, DBUS_TYPE_INVALID)) {
             FcitxInstanceSwitchIMByName(instance, imname);
-            DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
+            reply = dbus_message_new_method_return(msg);
         } else {
-            IPCDBusUnknownMethod(connection, msg);
+            reply = IPCDBusUnknownMethod(msg);
         }
         dbus_error_free(&error);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetIMAddon")) {
         DBusError error;
         dbus_error_init(&error);
@@ -671,193 +657,144 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             const char* name = "";
             if (im && im->owner)
                 name = im->owner->name;
-            DBusMessage *reply = dbus_message_new_method_return(msg);
+            reply = dbus_message_new_method_return(msg);
             dbus_message_append_args(reply, DBUS_TYPE_STRING, &name, DBUS_TYPE_INVALID);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
         } else {
-            IPCDBusUnknownMethod(connection, msg);
+            reply = IPCDBusUnknownMethod(msg);
         }
         dbus_error_free(&error);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetCurrentUI")) {
         const char* name = "";
         FcitxAddon* uiaddon  = FcitxInstanceGetCurrentUI(instance);
         if (uiaddon) {
             name = uiaddon->name;
         }
-        DBusMessage *reply = dbus_message_new_method_return(msg);
+        reply = dbus_message_new_method_return(msg);
         dbus_message_append_args(reply, DBUS_TYPE_STRING, &name, DBUS_TYPE_INVALID);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Configure")) {
-        DBusMessage *reply = dbus_message_new_method_return(msg);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
+        reply = dbus_message_new_method_return(msg);
         fcitx_utils_launch_configure_tool();
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ActivateIM")) {
         FcitxInstanceEnableIM(ipc->owner, FcitxInstanceGetCurrentIC(ipc->owner), false);
-        DBusMessage *reply = dbus_message_new_method_return(msg);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        return DBUS_HANDLER_RESULT_HANDLED;
+        reply = dbus_message_new_method_return(msg);
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "InactivateIM")) {
         FcitxInstanceCloseIM(ipc->owner, FcitxInstanceGetCurrentIC(ipc->owner));
-        DBusMessage *reply = dbus_message_new_method_return(msg);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        return DBUS_HANDLER_RESULT_HANDLED;
+        reply = dbus_message_new_method_return(msg);
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ToggleIM")) {
         FcitxInstanceChangeIMState(ipc->owner, FcitxInstanceGetCurrentIC(ipc->owner));
-        DBusMessage *reply = dbus_message_new_method_return(msg);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        return DBUS_HANDLER_RESULT_HANDLED;
+        reply = dbus_message_new_method_return(msg);
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetCurrentState")) {
         int r = FcitxInstanceGetCurrentState(ipc->owner);
-        DBusMessage *reply = dbus_message_new_method_return(msg);
+        reply = dbus_message_new_method_return(msg);
         dbus_message_append_args(reply,
                                  DBUS_TYPE_INT32, &r,
                                  DBUS_TYPE_INVALID);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ConfigureAddon")) {
         DBusError error;
         dbus_error_init(&error);
         char* addonname = NULL;
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &addonname, DBUS_TYPE_INVALID)) {
-            DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
             if (addonname) {
                 fcitx_utils_launch_configure_tool_for_addon(addonname);
             }
+            reply = dbus_message_new_method_return(msg);
         } else {
-            IPCDBusUnknownMethod(connection, msg);
+            reply = IPCDBusUnknownMethod(msg);
         }
         dbus_error_free(&error);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ConfigureIM")) {
         DBusError error;
         dbus_error_init(&error);
         char* imname = NULL;
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &imname, DBUS_TYPE_INVALID)) {
-            DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
             if (imname) {
                 fcitx_utils_launch_configure_tool_for_addon(imname);
             }
+            reply = dbus_message_new_method_return(msg);
         } else {
-            IPCDBusUnknownMethod(connection, msg);
+            reply = IPCDBusUnknownMethod(msg);
         }
         dbus_error_free(&error);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ReloadAddonConfig")) {
         DBusError error;
         dbus_error_init(&error);
         char* addonname = NULL;
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &addonname, DBUS_TYPE_INVALID)) {
-            DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
             if (addonname) {
                 FcitxInstanceReloadAddonConfig(instance, addonname);
             }
+            reply = dbus_message_new_method_return(msg);
         } else {
-            IPCDBusUnknownMethod(connection, msg);
+            reply = IPCDBusUnknownMethod(msg);
         }
         dbus_error_free(&error);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ReloadConfig")) {
-        DBusMessage *reply = dbus_message_new_method_return(msg);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        dbus_connection_flush(connection);
         FcitxInstanceReloadConfig(instance);
-        return DBUS_HANDLER_RESULT_HANDLED;
+        reply = dbus_message_new_method_return(msg);
+        flush = true;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Restart")) {
-        DBusMessage *reply = dbus_message_new_method_return(msg);
+        fcitx_utils_launch_restart();
+        reply = dbus_message_new_method_return(msg);
+        flush = true;
+    }
+
+    if (reply) {
         dbus_connection_send(connection, reply, NULL);
         dbus_message_unref(reply);
-        dbus_connection_flush(connection);
-        fcitx_utils_launch_restart();
-        return DBUS_HANDLER_RESULT_HANDLED;
+        if (flush) {
+            dbus_connection_flush(connection);
+        }
+        result = DBUS_HANDLER_RESULT_HANDLED;
     }
-    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+
+    return result;
 }
 
 
 static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusMessage *msg, void *user_data)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) user_data;
-    int id;
+    int id = -1;
     sscanf(dbus_message_get_path(msg), FCITX_IC_DBUS_PATH, &id);
     FcitxInputContext* ic = FcitxInstanceFindIC(ipc->owner, ipc->frontendid, &id);
     DBusHandlerResult result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+    DBusMessage *reply = NULL;
+    boolean flush = false;
 
     if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect")) {
-        DBusMessage *reply = dbus_message_new_method_return(msg);
-
+        reply = dbus_message_new_method_return(msg);
         dbus_message_append_args(reply, DBUS_TYPE_STRING, &ic_introspection_xml, DBUS_TYPE_INVALID);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        result = DBUS_HANDLER_RESULT_HANDLED;
     }
 
     /* ic is not NULL */
-    if (result == DBUS_HANDLER_RESULT_NOT_YET_HANDLED && ic) {
+    if (!reply && ic) {
         DBusError error;
         dbus_error_init(&error);
         if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "EnableIC")) {
             FcitxInstanceEnableIM(ipc->owner, ic, false);
-            DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
-            result = DBUS_HANDLER_RESULT_HANDLED;
+            reply = dbus_message_new_method_return(msg);
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "CloseIC")) {
             FcitxInstanceCloseIM(ipc->owner, ic);
-            DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
-            result = DBUS_HANDLER_RESULT_HANDLED;
+            reply = dbus_message_new_method_return(msg);
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusIn")) {
             IPCICFocusIn(ipc, ic);
-            DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
-            result = DBUS_HANDLER_RESULT_HANDLED;
+            reply = dbus_message_new_method_return(msg);
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusOut")) {
             IPCICFocusOut(ipc, ic);
-            DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
-            result = DBUS_HANDLER_RESULT_HANDLED;
+            reply = dbus_message_new_method_return(msg);
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "Reset")) {
             IPCICReset(ipc, ic);
-            DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
-            result = DBUS_HANDLER_RESULT_HANDLED;
+            reply = dbus_message_new_method_return(msg);
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "MouseEvent")) {
-            DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
-            result = DBUS_HANDLER_RESULT_HANDLED;
+            reply = dbus_message_new_method_return(msg);
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCursorLocation")) {
             int x, y;
             if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &x, DBUS_TYPE_INT32, &y, DBUS_TYPE_INVALID)) {
                 IPCICSetCursorRect(ipc, ic, x, y, 0, 0);
-                DBusMessage *reply = dbus_message_new_method_return(msg);
-                dbus_connection_send(connection, reply, NULL);
-                dbus_message_unref(reply);
+                reply = dbus_message_new_method_return(msg);
             } else {
-                IPCDBusUnknownMethod(connection, msg);
+                reply = IPCDBusUnknownMethod(msg);
             }
-            result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCursorRect")) {
             int x, y, w, h;
             if (dbus_message_get_args(msg, &error,
@@ -865,13 +802,10 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 DBUS_TYPE_INT32, &w, DBUS_TYPE_INT32, &h,
                 DBUS_TYPE_INVALID)) {
                 IPCICSetCursorRect(ipc, ic, x, y, w, h);
-                DBusMessage *reply = dbus_message_new_method_return(msg);
-                dbus_connection_send(connection, reply, NULL);
-                dbus_message_unref(reply);
+                reply = dbus_message_new_method_return(msg);
             } else {
-                IPCDBusUnknownMethod(connection, msg);
+                reply = IPCDBusUnknownMethod(msg);
             }
-            result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCapacity")) {
             uint32_t flags;
             if (dbus_message_get_args(msg, &error, DBUS_TYPE_UINT32, &flags, DBUS_TYPE_INVALID)) {
@@ -881,11 +815,9 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                         free(GetIPCIC(ic)->surroundingText);
                     GetIPCIC(ic)->surroundingText = NULL;
                 }
-                DBusMessage *reply = dbus_message_new_method_return(msg);
-                dbus_connection_send(connection, reply, NULL);
-                dbus_message_unref(reply);
+                reply = dbus_message_new_method_return(msg);
             } else {
-                IPCDBusUnknownMethod(connection, msg);
+                reply = IPCDBusUnknownMethod(msg);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetSurroundingText")) {
@@ -901,11 +833,9 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                     ipcic->anchor = anchor;
                     FcitxInstanceNotifyUpdateSurroundingText(ipc->owner, ic);
                 }
-                DBusMessage *reply = dbus_message_new_method_return(msg);
-                dbus_connection_send(connection, reply, NULL);
-                dbus_message_unref(reply);
+                reply = dbus_message_new_method_return(msg);
             } else {
-                IPCDBusUnknownMethod(connection, msg);
+                reply = IPCDBusUnknownMethod(msg);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetSurroundingTextPosition")) {
@@ -918,18 +848,14 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                     ipcic->anchor = anchor;
                     FcitxInstanceNotifyUpdateSurroundingText(ipc->owner, ic);
                 }
-                DBusMessage *reply = dbus_message_new_method_return(msg);
-                dbus_connection_send(connection, reply, NULL);
-                dbus_message_unref(reply);
+                reply = dbus_message_new_method_return(msg);
             } else {
-                IPCDBusUnknownMethod(connection, msg);
+                reply = IPCDBusUnknownMethod(msg);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "DestroyIC")) {
             FcitxInstanceDestroyIC(ipc->owner, ipc->frontendid, &id);
-            DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
+            reply = dbus_message_new_method_return(msg);
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "ProcessKeyEvent")) {
             uint32_t keyval, keycode, state, t;
@@ -945,20 +871,26 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 type = itype;
                 ret = IPCProcessKey(ipc, ic, keyval, keycode, state, t, type);
 
-                DBusMessage *reply = dbus_message_new_method_return(msg);
+                reply = dbus_message_new_method_return(msg);
 
                 dbus_message_append_args(reply, DBUS_TYPE_INT32, &ret, DBUS_TYPE_INVALID);
-                dbus_connection_send(connection, reply, NULL);
-                dbus_message_unref(reply);
-                dbus_connection_flush(connection);
+                flush = true;
             } else {
-                IPCDBusUnknownMethod(connection, msg);
+                reply = IPCDBusUnknownMethod(msg);
             }
-
-            result = DBUS_HANDLER_RESULT_HANDLED;
         }
         dbus_error_free(&error);
     }
+
+    if (reply) {
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
+        if (flush) {
+            dbus_connection_flush(connection);
+        }
+        result = DBUS_HANDLER_RESULT_HANDLED;
+    }
+
     return result;
 }
 
@@ -1275,7 +1207,7 @@ boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, F
     return strcmp(ipcicToCheck->appname, ipcic->appname) == 0;
 }
 
-void FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMessage* message)
+DBusMessage* FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusMessage* message)
 {
     DBusError error;
     dbus_error_init(&error);
@@ -1307,13 +1239,14 @@ void FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMessa
             reply = dbus_message_new_error_printf(message, DBUS_ERROR_UNKNOWN_PROPERTY, "No such property ('%s.%s')", interface, property);
         }
     }
-    if (reply) {
-        dbus_connection_send(conn, reply, NULL);
-        dbus_message_unref(reply);
+    else {
+        reply = IPCDBusUnknownMethod(message);
     }
+
+    return reply;
 }
 
-void FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMessage* message)
+DBusMessage* FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusMessage* message)
 {
     DBusError error;
     dbus_error_init(&error);
@@ -1350,24 +1283,27 @@ void FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMessa
         propertTable[index].setfunc(ipc, &variant);
         reply = dbus_message_new_method_return(message);
     }
+    else {
+        reply = dbus_message_new_error_printf(message, DBUS_ERROR_UNKNOWN_PROPERTY, "No such property ('%s.%s')", interface, property);
+    }
 
 dbus_property_set_end:
     if (!reply)
-        reply = dbus_message_new_error_printf(message, DBUS_ERROR_UNKNOWN_PROPERTY, "No such property ('%s.%s')", interface, property);
+        reply = IPCDBusUnknownMethod(message);
 
-    dbus_connection_send(conn, reply, NULL);
-    dbus_message_unref(reply);
+    return reply;
 }
 
-void FcitxDBusPropertyGetAll(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMessage* message)
+DBusMessage* FcitxDBusPropertyGetAll(FcitxIPCFrontend* ipc, DBusMessage* message)
 {
     DBusError error;
     dbus_error_init(&error);
     char *interface;
-    DBusMessage* reply = dbus_message_new_method_return(message);
+    DBusMessage* reply = NULL;
     if (dbus_message_get_args(message, &error,
                               DBUS_TYPE_STRING, &interface,
                               DBUS_TYPE_INVALID)) {
+        reply = dbus_message_new_method_return(message);
         int index = 0;
         DBusMessageIter args;
         dbus_message_iter_init_append(reply, &args);
@@ -1391,8 +1327,10 @@ void FcitxDBusPropertyGetAll(FcitxIPCFrontend* ipc, DBusConnection* conn, DBusMe
         }
         dbus_message_iter_close_container(&args, &array);
     }
-    dbus_connection_send(conn, reply, NULL);
-    dbus_message_unref(reply);
+    if (!reply)
+        reply = IPCDBusUnknownMethod(message);
+
+    return reply;
 }
 
 

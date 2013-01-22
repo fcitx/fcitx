@@ -43,6 +43,16 @@ FCITX_DEFINE_PLUGIN(fcitx_xkbdbus, module, FcitxModule) = {
     NULL
 };
 
+
+static inline DBusMessage* FcitxXkbDBusUnknownMethod(DBusMessage *msg)
+{
+    DBusMessage* reply = dbus_message_new_error_printf(msg,
+                                                       DBUS_ERROR_UNKNOWN_METHOD,
+                                                       "No such method with signature (%s)",
+                                                       dbus_message_get_signature(msg));
+    return reply;
+}
+
 static DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
                                                    DBusMessage     *message,
                                                    void            *user_data);
@@ -193,44 +203,36 @@ DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
                                             void            *user_data)
 {
     FcitxXkbDBus* xkbdbus = user_data;
+    DBusHandlerResult result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+    DBusMessage *reply = NULL;
+    boolean flush = false;
     if (dbus_message_is_method_call(message, DBUS_INTERFACE_INTROSPECTABLE, "Introspect")) {
-        DBusMessage *reply = dbus_message_new_method_return(message);
+        reply = dbus_message_new_method_return(message);
 
         dbus_message_append_args(reply, DBUS_TYPE_STRING, &introspection_xml, DBUS_TYPE_INVALID);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(message, FCITX_XKB_INTERFACE, "GetLayouts")) {
-        DBusMessage *reply = dbus_message_new_method_return(message);
+        reply = dbus_message_new_method_return(message);
         FcitxXkbDBusGetLayouts(xkbdbus, reply);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        dbus_connection_flush(connection);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(message, FCITX_XKB_INTERFACE, "SetLayoutForIM")) {
         DBusError error;
         dbus_error_init(&error);
         char* im, *layout, *variant;
         if (dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &im, DBUS_TYPE_STRING, &layout, DBUS_TYPE_STRING, &variant, DBUS_TYPE_INVALID)) {
             FcitxXkbSetLayoutOverride(xkbdbus->owner, im, layout, variant);
+            reply = dbus_message_new_method_return(message);
+        } else {
+            reply = FcitxXkbDBusUnknownMethod(message);
         }
-        DBusMessage *reply = dbus_message_new_method_return(message);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        dbus_connection_flush(connection);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(message, FCITX_XKB_INTERFACE, "SetDefaultLayout")) {
         DBusError error;
         dbus_error_init(&error);
         char *layout, *variant;
         if (dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &layout, DBUS_TYPE_STRING, &variant, DBUS_TYPE_INVALID)) {
             FcitxXkbSetDefaultLayout(xkbdbus->owner, layout, variant);
+            reply = dbus_message_new_method_return(message);
+        } else {
+            reply = FcitxXkbDBusUnknownMethod(message);
         }
-        DBusMessage *reply = dbus_message_new_method_return(message);
-        dbus_connection_send(connection, reply, NULL);
-        dbus_message_unref(reply);
-        dbus_connection_flush(connection);
-        return DBUS_HANDLER_RESULT_HANDLED;
     }  else if (dbus_message_is_method_call(message, FCITX_XKB_INTERFACE, "GetLayoutForIM")) {
         DBusError error;
         dbus_error_init(&error);
@@ -244,13 +246,20 @@ DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
             if (!variant)
                 variant = "";
 
-            DBusMessage *reply = dbus_message_new_method_return(message);
+            reply = dbus_message_new_method_return(message);
             dbus_message_append_args(reply, DBUS_TYPE_STRING, &layout, DBUS_TYPE_STRING, &variant, DBUS_TYPE_INVALID);
-            dbus_connection_send(connection, reply, NULL);
-            dbus_message_unref(reply);
+        } else {
+            reply = FcitxXkbDBusUnknownMethod(message);
+        }
+    }
+
+    if (reply) {
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
+        if (flush) {
             dbus_connection_flush(connection);
         }
-        return DBUS_HANDLER_RESULT_HANDLED;
+        result = DBUS_HANDLER_RESULT_HANDLED;
     }
-    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+    return result;
 }
