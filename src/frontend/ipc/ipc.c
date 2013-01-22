@@ -615,11 +615,11 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         reply = FcitxDBusPropertySet(ipc, msg);
     } else if (dbus_message_is_method_call(msg, DBUS_INTERFACE_PROPERTIES, "GetAll")) {
         reply = FcitxDBusPropertyGetAll(ipc, msg);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateIC")
             || dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateICv2")
             || dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateICv3")
             ) {
+        /* we have no choice here, so just return */
         FcitxIPCCreateICPriv ipcpriv;
         ipcpriv.message = msg;
         ipcpriv.conn = connection;
@@ -628,7 +628,11 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Exit")) {
         FcitxLog(INFO, "Receive message ask for quit");
         reply = dbus_message_new_method_return(msg);
-        flush = true;
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
+        dbus_connection_flush(connection);
+        FcitxInstanceEnd(instance);
+        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetCurrentIM")) {
         reply = dbus_message_new_method_return(msg);
         FcitxIM* im = FcitxInstanceGetCurrentIM(ipc->owner);
