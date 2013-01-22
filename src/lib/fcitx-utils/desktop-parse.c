@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by Yichao Yu                                  *
+ *   Copyright (C) 2012~2013 by Yichao Yu                                  *
  *   yyc1992@gmail.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -332,6 +332,13 @@ fcitx_desktop_file_find_group_with_len(const FcitxDesktopFile *file,
     return group;
 }
 
+static inline void
+fcitx_desktop_file_hash_add(FcitxDesktopFile *file, FcitxDesktopGroup *group,
+                            size_t name_len)
+{
+    HASH_ADD_KEYPTR(hh, file->groups, group->name, name_len, group);
+}
+
 /**
  * Create a new group and add it to the hash table of file.
  **/
@@ -345,7 +352,7 @@ fcitx_desktop_file_hash_new_group(FcitxDesktopFile *file,
     memcpy(new_group->name, name, name_len);
     new_group->name[name_len] = '\0';
     utarray_init(&new_group->comments, fcitx_str_icd);
-    HASH_ADD_KEYPTR(hh, file->groups, new_group->name, name_len, new_group);
+    fcitx_desktop_file_hash_add(file, new_group, name_len);
     return new_group;
 }
 
@@ -356,6 +363,13 @@ fcitx_desktop_group_find_entry_with_len(const FcitxDesktopGroup *group,
     FcitxDesktopEntry *entry = NULL;
     HASH_FIND(hh, group->entries, name, name_len, entry);
     return entry;
+}
+
+static inline void
+fcitx_desktop_group_hash_add(FcitxDesktopGroup *group,
+                             FcitxDesktopEntry *entry, size_t name_len)
+{
+    HASH_ADD_KEYPTR(hh, group->entries, entry->name, name_len, entry);
 }
 
 /**
@@ -371,7 +385,7 @@ fcitx_desktop_group_hash_new_entry(FcitxDesktopGroup *group,
     memcpy(new_entry->name, name, name_len);
     new_entry->name[name_len] = '\0';
     utarray_init(&new_entry->comments, fcitx_str_icd);
-    HASH_ADD_KEYPTR(hh, group->entries, new_entry->name, name_len, new_entry);
+    fcitx_desktop_group_hash_add(group, new_entry, name_len);
     return new_entry;
 }
 
@@ -429,6 +443,17 @@ fcitx_desktop_file_link_group_before(FcitxDesktopFile *file,
     fcitx_desktop_group_set_link(new_group, &file->first, next_p);
 }
 
+static inline void
+fcitx_desktop_file_link_group(FcitxDesktopFile *file, FcitxDesktopGroup *base,
+                              FcitxDesktopGroup *group, boolean before)
+{
+    if (before) {
+        fcitx_desktop_file_link_group_before(file, base, group);
+    } else {
+        fcitx_desktop_file_link_group_after(file, base, group);
+    }
+}
+
 static void
 fcitx_desktop_entry_set_link(FcitxDesktopEntry *new_entry,
                              FcitxDesktopEntry **prev_p,
@@ -481,6 +506,18 @@ fcitx_desktop_group_link_entry_before(FcitxDesktopGroup *group,
         next_p = &next_entry->prev;
     }
     fcitx_desktop_entry_set_link(new_entry, &group->first, next_p);
+}
+
+static inline void
+fcitx_desktop_group_link_entry(FcitxDesktopGroup *group,
+                               FcitxDesktopEntry *base,
+                               FcitxDesktopEntry *entry, boolean before)
+{
+    if (before) {
+        fcitx_desktop_group_link_entry_before(group, base, entry);
+    } else {
+        fcitx_desktop_group_link_entry_after(group, base, entry);
+    }
 }
 
 FCITX_EXPORT_API boolean
@@ -733,6 +770,12 @@ _fcitx_desktop_file_has_group(FcitxDesktopFile *file, FcitxDesktopGroup *group)
 }
 
 FCITX_EXPORT_API boolean
+fcitx_desktop_file_has_group(FcitxDesktopFile *file, FcitxDesktopGroup *group)
+{
+    return _fcitx_desktop_file_has_group(file, group);
+}
+
+FCITX_EXPORT_API boolean
 fcitx_desktop_file_delete_group(FcitxDesktopFile *file,
                                 FcitxDesktopGroup *group)
 {
@@ -743,56 +786,89 @@ fcitx_desktop_file_delete_group(FcitxDesktopFile *file,
     return true;
 }
 
-FCITX_EXPORT_API FcitxDesktopGroup*
-fcitx_desktop_file_add_group_after_with_len(
-    FcitxDesktopFile *file, FcitxDesktopGroup *group,
-    const char *name, size_t name_len, boolean move)
+static FcitxDesktopGroup*
+fcitx_desktop_file_add_group(
+    FcitxDesktopFile *file, FcitxDesktopGroup *base, const char *name,
+    size_t name_len, boolean move, boolean before)
 {
-    FcitxDesktopGroup *new_group;
-    if (group) {
-        if (!_fcitx_desktop_file_has_group(file, group)) {
-            FcitxLog(ERROR,
-                     "The given group doesn't belong to the given file.");
-            return NULL;
-        }
-    } else {
-        group = file->last;
+    if (!base) {
+        base = file->last;
+    } else if (!_fcitx_desktop_file_has_group(file, base)) {
+        FcitxLog(ERROR, "The given group doesn't belong to the given file.");
+        return NULL;
     }
+    FcitxDesktopGroup *new_group;
     new_group =  fcitx_desktop_file_find_group_with_len(file, name, name_len);
     if (!new_group) {
         new_group = fcitx_desktop_file_hash_new_group(file, name, name_len);
-        fcitx_desktop_file_link_group_after(file, group, new_group);
-    } else if (move && !(new_group == group)) {
+    } else if (move && !(new_group == base)) {
         fcitx_desktop_group_unlink(file, new_group);
-        fcitx_desktop_file_link_group_after(file, group, new_group);
+    } else {
+        return new_group;
     }
+    fcitx_desktop_file_link_group(file, base, new_group, before);
     return new_group;
 }
 
 FCITX_EXPORT_API FcitxDesktopGroup*
-fcitx_desktop_file_add_group_before_with_len(
-    FcitxDesktopFile *file, FcitxDesktopGroup *group,
+fcitx_desktop_file_add_group_after_with_len(
+    FcitxDesktopFile *file, FcitxDesktopGroup *base,
     const char *name, size_t name_len, boolean move)
 {
-    FcitxDesktopGroup *new_group;
-    if (group) {
-        if (!_fcitx_desktop_file_has_group(file, group)) {
-            FcitxLog(ERROR,
-                     "The given group doesn't belong to the given file.");
-            return NULL;
-        }
+    return fcitx_desktop_file_add_group(file, base, name, name_len,
+                                        move, false);
+}
+
+FCITX_EXPORT_API FcitxDesktopGroup*
+fcitx_desktop_file_add_group_before_with_len(
+    FcitxDesktopFile *file, FcitxDesktopGroup *base,
+    const char *name, size_t name_len, boolean move)
+{
+    return fcitx_desktop_file_add_group(file, base, name, name_len,
+                                        move, true);
+}
+
+static boolean
+fcitx_desktop_file_insert_group(
+    FcitxDesktopFile *file, FcitxDesktopGroup *base, FcitxDesktopGroup *group,
+    boolean move, boolean before)
+{
+    if (fcitx_unlikely(!group))
+        return false;
+    if (!base) {
+        base = file->last;
+    } else if (!_fcitx_desktop_file_has_group(file, base)) {
+        FcitxLog(ERROR, "The given group doesn't belong to the given file.");
+        return false;
+    }
+    if (!group->hh.tbl) {
+        fcitx_desktop_file_hash_add(file, group, strlen(group->name));
+    } else if (!_fcitx_desktop_file_has_group(file, group)) {
+        FcitxLog(ERROR, "The given group belongs to another file.");
+        return false;
+    } else if (!move || group == base) {
+        return true;
     } else {
-        group = file->first;
+        fcitx_desktop_group_unlink(file, group);
     }
-    new_group =  fcitx_desktop_file_find_group_with_len(file, name, name_len);
-    if (!new_group) {
-        new_group = fcitx_desktop_file_hash_new_group(file, name, name_len);
-        fcitx_desktop_file_link_group_before(file, group, new_group);
-    } else if (move && !(new_group == group)) {
-        fcitx_desktop_group_unlink(file, new_group);
-        fcitx_desktop_file_link_group_before(file, group, new_group);
-    }
-    return new_group;
+    fcitx_desktop_file_link_group(file, base, group, before);
+    return true;
+}
+
+FCITX_EXPORT_API boolean
+fcitx_desktop_file_insert_group_after(
+    FcitxDesktopFile *file, FcitxDesktopGroup *base,
+    FcitxDesktopGroup *group, boolean move)
+{
+    return fcitx_desktop_file_insert_group(file, base, group, move, false);
+}
+
+FCITX_EXPORT_API boolean
+fcitx_desktop_file_insert_group_before(
+    FcitxDesktopFile *file, FcitxDesktopGroup *base,
+    FcitxDesktopGroup *group, boolean move)
+{
+    return fcitx_desktop_file_insert_group(file, base, group, move, true);
 }
 
 static inline boolean
@@ -802,6 +878,13 @@ _fcitx_desktop_group_has_entry(FcitxDesktopGroup *group,
     if (fcitx_unlikely(!group->entries || !entry))
         return false;
     return group->entries->hh.tbl == entry->hh.tbl;
+}
+
+FCITX_EXPORT_API boolean
+fcitx_desktop_group_has_entry(FcitxDesktopGroup *group,
+                              FcitxDesktopEntry *entry)
+{
+    return _fcitx_desktop_group_has_entry(group, entry);
 }
 
 FCITX_EXPORT_API boolean
@@ -815,54 +898,87 @@ fcitx_desktop_group_delete_entry(FcitxDesktopGroup *group,
     return true;
 }
 
-FCITX_EXPORT_API FcitxDesktopEntry*
-fcitx_desktop_group_add_entry_after_with_len(
-    FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
-    const char *name, size_t name_len, boolean move)
+static FcitxDesktopEntry*
+fcitx_desktop_group_add_entry(
+    FcitxDesktopGroup *group, FcitxDesktopEntry *base,
+    const char *name, size_t name_len, boolean move, boolean before)
 {
-    FcitxDesktopEntry *new_entry;
-    if (entry) {
-        if (!_fcitx_desktop_group_has_entry(group, entry)) {
-            FcitxLog(ERROR,
-                     "The given entry doesn't belong to the given group.");
-            return NULL;
-        }
-    } else {
-        entry = group->last;
+    if (!base) {
+        base = group->last;
+    } else if (!_fcitx_desktop_group_has_entry(group, base)) {
+        FcitxLog(ERROR, "The given entry doesn't belong to the given group.");
+        return NULL;
     }
+    FcitxDesktopEntry *new_entry;
     new_entry =  fcitx_desktop_group_find_entry_with_len(group, name, name_len);
     if (!new_entry) {
         new_entry = fcitx_desktop_group_hash_new_entry(group, name, name_len);
-        fcitx_desktop_group_link_entry_after(group, entry, new_entry);
-    } else if (move && !(new_entry == entry)) {
+    } else if (move && !(new_entry == base)) {
         fcitx_desktop_entry_unlink(group, new_entry);
-        fcitx_desktop_group_link_entry_after(group, entry, new_entry);
+    } else {
+        return new_entry;
     }
+    fcitx_desktop_group_link_entry(group, base, new_entry, before);
     return new_entry;
 }
 
 FCITX_EXPORT_API FcitxDesktopEntry*
-fcitx_desktop_group_add_entry_before_with_len(
-    FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+fcitx_desktop_group_add_entry_after_with_len(
+    FcitxDesktopGroup *group, FcitxDesktopEntry *base,
     const char *name, size_t name_len, boolean move)
 {
-    FcitxDesktopEntry *new_entry;
-    if (entry) {
-        if (!_fcitx_desktop_group_has_entry(group, entry)) {
-            FcitxLog(ERROR,
-                     "The given entry doesn't belong to the given group.");
-            return NULL;
-        }
+    return fcitx_desktop_group_add_entry(group, base, name, name_len,
+                                         move, false);
+}
+
+FCITX_EXPORT_API FcitxDesktopEntry*
+fcitx_desktop_group_add_entry_before_with_len(
+    FcitxDesktopGroup *group, FcitxDesktopEntry *base,
+    const char *name, size_t name_len, boolean move)
+{
+    return fcitx_desktop_group_add_entry(group, base, name, name_len,
+                                         move, true);
+}
+
+static boolean
+fcitx_desktop_group_insert_entry(
+    FcitxDesktopGroup *group, FcitxDesktopEntry *base, FcitxDesktopEntry *entry,
+    boolean move, boolean before)
+{
+    if (fcitx_unlikely(!entry))
+        return false;
+    if (!base) {
+        base = group->last;
+    } else if (!_fcitx_desktop_group_has_entry(group, base)) {
+        FcitxLog(ERROR, "The given entry doesn't belong to the given group.");
+        return false;
+    }
+    if (!entry->hh.tbl) {
+        fcitx_desktop_group_hash_add(group, entry, strlen(entry->name));
+    } else if (!_fcitx_desktop_group_has_entry(group, entry)) {
+        FcitxLog(ERROR, "The given entry belongs to another group.");
+        return false;
+    } else if (!move || entry == base) {
+        return true;
     } else {
-        entry = group->first;
+        fcitx_desktop_entry_unlink(group, entry);
     }
-    new_entry =  fcitx_desktop_group_find_entry_with_len(group, name, name_len);
-    if (!new_entry) {
-        new_entry = fcitx_desktop_group_hash_new_entry(group, name, name_len);
-        fcitx_desktop_group_link_entry_before(group, entry, new_entry);
-    } else if (move && !(new_entry == entry)) {
-        fcitx_desktop_entry_unlink(group, new_entry);
-        fcitx_desktop_group_link_entry_before(group, entry, new_entry);
-    }
-    return new_entry;
+    fcitx_desktop_group_link_entry(group, base, entry, before);
+    return true;
+}
+
+FCITX_EXPORT_API boolean
+fcitx_desktop_group_insert_entry_after(
+    FcitxDesktopGroup *group, FcitxDesktopEntry *base,
+    FcitxDesktopEntry *entry, boolean move)
+{
+    return fcitx_desktop_group_insert_entry(group, base, entry, move, false);
+}
+
+FCITX_EXPORT_API boolean
+fcitx_desktop_group_insert_entry_before(
+    FcitxDesktopGroup *group, FcitxDesktopEntry *base,
+    FcitxDesktopEntry *entry, boolean move)
+{
+    return fcitx_desktop_group_insert_entry(group, base, entry, move, true);
 }
