@@ -5,7 +5,6 @@
 #include "fcitx/module.h"
 #include "fcitx/instance.h"
 #include "fcitx-utils/log.h"
-#include "module/x11/fcitx-x11.h"
 #include "ximqueue.h"
 
 struct _XimQueue {

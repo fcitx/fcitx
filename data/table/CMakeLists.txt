@@ -18,17 +18,13 @@ set(TABLE_CONF db.conf erbi.conf qxm.conf wanfeng.conf
 set(TABLE_URL http://fcitx.googlecode.com/files/table.tar.gz)
 set(TABLE_TAR ${CMAKE_CURRENT_SOURCE_DIR}/table.tar.gz)
 
-set(INSTALL_TABLE_CONF "")
 foreach(tableconffile ${TABLE_CONF})
   fcitx_translate_add_apply_source(
     "${CMAKE_CURRENT_SOURCE_DIR}/${tableconffile}.in"
     "${CMAKE_CURRENT_BINARY_DIR}/${tableconffile}")
   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${tableconffile}"
     DESTINATION "${pkgdatadir}/table")
-  set(INSTALL_TABLE_CONF ${INSTALL_TABLE_CONF}
-    ${CMAKE_CURRENT_BINARY_DIR}/${tableconffile})
 endforeach()
-add_custom_target(table_conf ALL DEPENDS ${INSTALL_TABLE_CONF})
 add_custom_target(table_data ALL DEPENDS ${TABLE_DATA})
 
 fcitx_download(table-data-download "${TABLE_URL}" "${TABLE_TAR}"
