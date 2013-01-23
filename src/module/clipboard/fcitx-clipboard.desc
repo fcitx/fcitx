@@ -12,7 +12,7 @@ Description=Length of Clipboard History to Save
 
 [Clipboard/CandidateMaxLength]
 Type=Integer
-DefaultValue=23
+DefaultValue=43
 Min=13
 Max=157
 Advance=True
