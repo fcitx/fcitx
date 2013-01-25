@@ -39,7 +39,7 @@
 #include "fcitx/frontend.h"
 
 struct FcitxQtICData {
-    FcitxQtICData() : proxy(0) {}
+    FcitxQtICData() : capacity(0), proxy(0), surroundingAnchor(-1), surroundingCursor(-1) {}
     ~FcitxQtICData() {
         if (proxy && proxy->isValid()) {
             proxy->DestroyIC();
@@ -49,6 +49,9 @@ struct FcitxQtICData {
     QFlags<FcitxCapacityFlags> capacity;
     QPointer<FcitxQtInputContextProxy> proxy;
     QRect rect;
+    QString surroundingText;
+    int surroundingAnchor;
+    int surroundingCursor;
 };
 
 class FcitxQtConnection;
@@ -163,9 +166,6 @@ private:
     bool m_useSurroundingText;
     bool m_syncMode;
     FcitxQtConnection* m_connection;
-    QString m_lastSurroundingText;
-    int m_lastSurroundingAnchor;
-    int m_lastSurroundingCursor;
     QHash<WId, FcitxQtICData*> m_icMap;
 };
 

@@ -249,25 +249,25 @@ void QFcitxInputContext::update()
                         anchor = var2.toInt();
                     else
                         anchor = cursor;
-                    if (m_lastSurroundingText != text) {
-                        m_lastSurroundingText = text;
+                    if (data->surroundingText != text) {
+                        data->surroundingText = text;
                         proxy->SetSurroundingText(text, cursor, anchor);
                     }
                     else {
-                        if (m_lastSurroundingAnchor != anchor ||
-                            m_lastSurroundingCursor != cursor)
+                        if (data->surroundingAnchor != anchor ||
+                            data->surroundingCursor != cursor)
                             proxy->SetSurroundingTextPosition(cursor, anchor);
                     }
-                    m_lastSurroundingCursor = cursor;
-                    m_lastSurroundingAnchor = anchor;
+                    data->surroundingCursor = cursor;
+                    data->surroundingAnchor = anchor;
                     setSurrounding = true;
                 }
             }
         }
         if (!setSurrounding) {
-            m_lastSurroundingAnchor = -1;
-            m_lastSurroundingCursor = -1;
-            m_lastSurroundingText = QString::null;
+            data->surroundingAnchor = -1;
+            data->surroundingCursor = -1;
+            data->surroundingText = QString::null;
             removeCapacity(data, CAPACITY_SURROUNDING_TEXT);
         }
     }
