@@ -334,7 +334,6 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
         return false;
     clipboard->active = true;
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
-    FcitxGlobalConfig *gconfig = FcitxInstanceGetGlobalConfig(instance);
     FcitxMessages *msg;
     FcitxCandidateWord cand_word = {
         .callback = ClipboardCommitCallback,
@@ -343,7 +342,10 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
     };
     FcitxInstanceCleanInputWindow(instance);
     FcitxCandidateWordSetLayoutHint(cand_list, CLH_Vertical);
-    FcitxCandidateWordSetPageSize(cand_list, gconfig->iMaxCandWord);
+    int page_size = config->cand_max_len;
+    if (page_size > 10)
+        page_size = 10;
+    FcitxCandidateWordSetPageSize(cand_list, page_size);
     FcitxCandidateWordSetChooseAndModifier(
         cand_list, DIGIT_STR_CHOOSE, cmodifiers[config->choose_modifier]);
     if (clipboard->clp_hist_len) {
