@@ -834,7 +834,6 @@ fcitx_desktop_group_add_entry_after_with_len(
     if (!new_entry) {
         new_entry = fcitx_desktop_group_hash_new_entry(group, name, name_len);
         fcitx_desktop_group_link_entry_after(group, entry, new_entry);
-        utarray_init(&new_entry->comments, fcitx_str_icd);
     } else if (move && !(new_entry == entry)) {
         fcitx_desktop_entry_unlink(group, new_entry);
         fcitx_desktop_group_link_entry_after(group, entry, new_entry);
@@ -861,7 +860,6 @@ fcitx_desktop_group_add_entry_before_with_len(
     if (!new_entry) {
         new_entry = fcitx_desktop_group_hash_new_entry(group, name, name_len);
         fcitx_desktop_group_link_entry_before(group, entry, new_entry);
-        utarray_init(&new_entry->comments, fcitx_str_icd);
     } else if (move && !(new_entry == entry)) {
         fcitx_desktop_entry_unlink(group, new_entry);
         fcitx_desktop_group_link_entry_before(group, entry, new_entry);
