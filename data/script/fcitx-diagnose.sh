@@ -686,11 +686,6 @@ check_gtk() {
     check_gtk_immodule 2
     check_gtk_immodule 3
     increase_cur_level -1
-    write_order_list "$(_ 'Gtk IM module cache:')"
-    increase_cur_level 1
-    check_gtk_immodule_cache 2
-    check_gtk_immodule_cache 3
-    increase_cur_level -1
 }
 
 
