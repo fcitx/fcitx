@@ -71,7 +71,7 @@
  * fcitx boolean
  **/
 typedef int32_t boolean;
-#ifndef __cplusplus
+#if !defined(__cplusplus) && !defined(FCITX_DONOT_DEFINE_TRUE_FALSE)
 /**
  * fcitx true
  */

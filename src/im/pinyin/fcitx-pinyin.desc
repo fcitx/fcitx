@@ -136,7 +136,7 @@ Description=Fuzzy z and zh
 
 [Pinyin/Misstype]
 Type=Boolean
-DefaultValue=False
+DefaultValue=True
 Description=Fix misstype gn/ng
 
 [Pinyin/MisstypeVU]
