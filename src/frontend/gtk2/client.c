@@ -31,7 +31,6 @@
 #include "client.h"
 #include "marshall.h"
 
-#define LOG_LEVEL DEBUG
 #define IC_NAME_MAX 64
 
 #define PREEDIT_TYPE_STRING_INT \
@@ -129,7 +128,7 @@ FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIM
 
 static void _changed_cb(DBusGProxy* proxy, char* service, char* old_owner, char* new_owner, gpointer user_data)
 {
-    FcitxLog(LOG_LEVEL, "_changed_cb");
+    FcitxLog(DEBUG, "_changed_cb");
     FcitxIMClient* client = (FcitxIMClient*) user_data;
     if (g_str_equal(service, client->servicename)) {
         gboolean new_owner_good = new_owner && (new_owner[0] != '\0');
@@ -151,7 +150,7 @@ static void _changed_cb(DBusGProxy* proxy, char* service, char* old_owner, char*
 
 static void _destroy_cb(DBusGProxy *proxy, gpointer user_data)
 {
-    FcitxLog(LOG_LEVEL, "_destroy_cb");
+    FcitxLog(DEBUG, "_destroy_cb");
     FcitxIMClient* client = (FcitxIMClient*) user_data;
     if (client->proxy == proxy) {
         g_object_unref(client->proxy);

@@ -28,8 +28,9 @@
 #include "fcitx-utils/utils.h"
 #include <QX11Info>
 #include <QFile>
-#include <qtimer.h>
+#include <QTimer>
 #include <QDir>
+#include <QCoreApplication>
 #include <X11/Xlib.h>
 
 FcitxQtConnection::FcitxQtConnection(QObject* parent): QObject(parent)
