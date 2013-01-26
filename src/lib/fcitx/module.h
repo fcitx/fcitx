@@ -109,7 +109,7 @@ extern "C" {
     void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
 #define FcitxModuleInvokeVaArgs(addon, functionId, ARGV...)             \
     (FcitxModuleInvokeFunction(addon, functionId,                       \
-                               (FcitxModuleFunctionArg){ .args = {ARGV} }))
+                               (FcitxModuleFunctionArg){ {ARGV} }))
 
     /**
      * invoke inter module function with addon name, returns NULL when fails (the function itself can also return NULL)
@@ -133,7 +133,7 @@ extern "C" {
 #define InvokeVaArgs(INST, MODULE, FUNC, ARGV...)                       \
     ((MODULE##_##FUNC##_RETURNTYPE)FcitxModuleInvokeFunctionByName(     \
         INST, MODULE##_NAME, MODULE##_##FUNC,                           \
-        (FcitxModuleFunctionArg){ .args = {ARGV} }))
+        (FcitxModuleFunctionArg){ {ARGV} }))
 
 /** add a function to a addon */
 #define AddFunction(ADDON, Realname)                                    \
@@ -215,7 +215,7 @@ extern "C" {
     }
 
 #define FCITX_DEF_MODULE_ARGS(var, ARGV...)             \
-    FcitxModuleFunctionArg var = { .args = {ARGV} }
+    FcitxModuleFunctionArg var = { {ARGV} }
     /* void *__##var##_array[] = {ARGV};                                   \ */
     /* size_t __##var##_length = sizeof(__##var##_array) / sizeof(void*);  \ */
     /* FcitxModuleFunctionArg var[] = { { .n = __##var##_length,           \ */
