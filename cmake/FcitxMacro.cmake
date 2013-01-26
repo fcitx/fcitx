@@ -122,7 +122,8 @@ function(fcitx_parse_arguments prefix _optionNames
 endfunction()
 
 
-set(FCITX_MACRO_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}")
+get_filename_component(FCITX_MACRO_CMAKE_DIR
+  "${CMAKE_CURRENT_LIST_FILE}" PATH)
 set(FCITX_CMAKE_HELPER_SCRIPT "${FCITX_MACRO_CMAKE_DIR}/fcitx-cmake-helper.sh"
   CACHE INTERNAL "fcitx-cmake-helper" FORCE)
 mark_as_advanced(FORCE FCITX_CMAKE_HELPER_SCRIPT)
