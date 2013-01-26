@@ -16,7 +16,7 @@ fcitx_translate_add_sources(
   ${QUICKPHRASE_EDITOR_HDRS}
   ${QUICKPHRASE_EDITOR_SRCS})
 
-if(NOT ENABLE_QT)
+if(NOT (ENABLE_QT AND ENABLE_QT_GUI))
   return()
 endif()
 

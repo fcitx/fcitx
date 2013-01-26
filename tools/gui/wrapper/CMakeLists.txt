@@ -11,7 +11,7 @@ fcitx_translate_add_sources(
   ${QT_WRAPPER_SRCS}
   ${QT_WRAPPER_HDRS})
 
-if(NOT ENABLE_QT)
+if(NOT (ENABLE_QT AND ENABLE_QT_GUI))
   return()
 endif()
 
