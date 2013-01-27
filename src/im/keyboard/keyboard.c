@@ -140,8 +140,14 @@ void Ucs4ToUtf8(iconv_t conv, uint32_t ucs4, char* utf8)
 
 CONFIG_DESC_DEFINE(GetKeyboardConfigDesc, "fcitx-keyboard.desc")
 
-FCITX_DEFINE_PLUGIN(fcitx_keyboard, ime, FcitxIMClass) = {
+FCITX_DEFINE_PLUGIN(fcitx_keyboard, ime2, FcitxIMClass2) = {
     FcitxKeyboardCreate,
+    NULL,
+    FcitxKeyboardReloadConfig,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
     NULL
 };
 
@@ -261,7 +267,7 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
     iface.DoInput = FcitxKeyboardDoInput;
     iface.GetCandWords = FcitxKeyboardGetCandWords;
     iface.Save = FcitxKeyboardSave;
-    iface.ReloadConfig = FcitxKeyboardReloadConfig;
+    iface.ReloadConfig = NULL;
     iface.OnClose = FcitxKeyboardOnClose;
 
     FcitxInstanceRegisterIMv2(
@@ -824,8 +830,8 @@ void  FcitxKeyboardSave(void *arg)
 
 void  FcitxKeyboardReloadConfig(void *arg)
 {
-    FcitxKeyboardLayout* layout = (FcitxKeyboardLayout*) arg;
-    LoadKeyboardConfig(layout->owner, &layout->owner->config);
+    FcitxKeyboard* keyboard = (FcitxKeyboard*) arg;
+    LoadKeyboardConfig(keyboard, &keyboard->config);
 }
 
 boolean LoadKeyboardConfig(FcitxKeyboard* keyboard, FcitxKeyboardConfig* fs)
