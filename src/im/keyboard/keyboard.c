@@ -493,6 +493,8 @@ boolean FcitxKeyboardInit(void *arg)
                             CONTEXT_DISABLE_QUICKPHRASE, &flag);
     FcitxInstanceSetContext(layout->owner->owner,
                             CONTEXT_DISABLE_FULLWIDTH, &flag);
+    FcitxInstanceSetContext(layout->owner->owner,
+                            CONTEXT_DISABLE_AUTO_FIRST_CANDIDATE_HIGHTLIGHT, &flag);
     if (layout->variantString) {
         char *string;
         fcitx_utils_alloc_cat_str(string, layout->layoutString, ",",
