@@ -53,11 +53,6 @@
 #define PY_INDEX_MAGIC_NUMBER 0xf7462e34
 #define PINYIN_TEMP_FILE "pinyin_XXXXXX"
 
-FCITX_DEFINE_PLUGIN(fcitx_pinyin, ime, FcitxIMClass) = {
-    PYCreate,
-    PYDestroy
-};
-
 typedef struct {
     PY_CAND_WORD_TYPE type;
     ADJUSTORDER order;
@@ -71,6 +66,17 @@ static void PinyinMigration();
 static int PYCandWordCmp(const void* b, const void* a, void* arg);
 static boolean PYGetPYMapByHZ(FcitxPinyinState*pystate, char *strHZ,
                               char* mapHint, char *strMap);
+
+FCITX_DEFINE_PLUGIN(fcitx_pinyin, ime2, FcitxIMClass2) = {
+    PYCreate,
+    PYDestroy,
+    ReloadConfigPY,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
 
 DECLARE_ADDFUNCTIONS(Pinyin)
 
@@ -105,7 +111,7 @@ void *PYCreate(FcitxInstance* instance)
                             PYGetCandWords,
                             NULL,
                             SavePY,
-                            ReloadConfigPY,
+                            NULL,
                             NULL,
                             5,
                             "zh_CN");
@@ -120,7 +126,7 @@ void *PYCreate(FcitxInstance* instance)
                             PYGetCandWords,
                             NULL,
                             SavePY,
-                            ReloadConfigPY,
+                            NULL,
                             NULL,
                             5,
                             "zh_CN");
