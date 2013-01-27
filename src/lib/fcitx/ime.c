@@ -1136,7 +1136,8 @@ void FcitxInstanceReloadAddonConfig(FcitxInstance *instance, const char* addonna
         FcitxInstanceLoadAllIM(instance);
     } else {
         do {
-            FcitxIM* im = FcitxInstanceGetIMByName(instance, addonname);
+            FcitxIM* im;
+            im = FcitxInstanceGetIMByName(instance, addonname);
             if (im && im->ReloadConfig) {
                 im->ReloadConfig(im->klass);
                 break;
@@ -1157,6 +1158,21 @@ void FcitxInstanceReloadAddonConfig(FcitxInstance *instance, const char* addonna
                 case AC_FRONTEND:
                     if (addon->frontend->ReloadConfig)
                         addon->frontend->ReloadConfig(addon->addonInstance);
+                case AC_INPUTMETHOD:
+                    /* imclass and imclass2 are in same union, only check one of them */
+                    if (addon->imclass) {
+                        for (im = (FcitxIM*) utarray_front(&instance->availimes);
+                             im != NULL;
+                             im = (FcitxIM*) utarray_next(&instance->availimes, im)) {
+                            if (im->owner == addon && im->ReloadConfig) {
+                                im->ReloadConfig(im->klass);
+                            }
+                        }
+
+                        if (addon->isIMClass2 && addon->imclass2->ReloadConfig) {
+                            addon->imclass2->ReloadConfig(addon->addonInstance);
+                        }
+                    }
                     break;
                 default:
                     break;
