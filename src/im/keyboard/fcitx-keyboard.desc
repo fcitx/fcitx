@@ -35,7 +35,7 @@ Advance=True
 
 [Keyboard/UseEnterToCommit]
 Type=Boolean
-DefaultValue=True
+DefaultValue=False
 Description=Use enter to commit the existing string
 
 [Keyboard/HotkeyAddToUserDict]
