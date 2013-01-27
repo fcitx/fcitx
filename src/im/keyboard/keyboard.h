@@ -60,7 +60,7 @@ typedef struct _FcitxKeyboard {
     iconv_t iconv;
     char *initialLayout;
     char *initialVariant;
-    char buffer[FCITX_KEYBOARD_MAX_BUFFER + UTF8_MAX_LENGTH + 1];
+    char buffer[2][FCITX_KEYBOARD_MAX_BUFFER + UTF8_MAX_LENGTH + 1];
     int cursorPos;
     uint composeBuffer[FCITX_MAX_COMPOSE_LEN + 1];
     int n_compose;
@@ -68,6 +68,7 @@ typedef struct _FcitxKeyboard {
     int lastLength;
     int dataSlot;
     int enUSRegistered;
+    boolean cursor_moved;
 } FcitxKeyboard;
 
 typedef struct _FcitxKeyboardLayout {
