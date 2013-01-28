@@ -255,6 +255,9 @@ typedef struct {
     } while(0)
 
 #define utarray_remove_quick(a, pos) do {                               \
+        if ((a)->icd->dtor) {                                           \
+            (a)->icd->dtor(utarray_eltptr(a, pos));                     \
+        }                                                               \
         if ((a)->i - 1 != (pos))                                        \
             memcpy(_utarray_eltptr(a, pos), _utarray_eltptr(a, (a)->i - 1), \
                    (a)->icd->sz);                                       \
