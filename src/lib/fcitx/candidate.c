@@ -18,24 +18,7 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include "candidate.h"
-
-struct _FcitxCandidateWordList {
-    UT_array candWords;
-    char strChoose[MAX_CAND_WORD + 1];
-    unsigned int candiateModifier;
-    int currentPage;
-    int wordPerPage;
-    boolean hasGonePrevPage;
-    boolean hasGoneNextPage;
-    FcitxCandidateLayoutHint layoutHint;
-    boolean hasPrev;
-    boolean hasNext;
-    FcitxPaging paging;
-    void* overrideArg;
-    FcitxDestroyNotify overrideDestroyNotify;
-    boolean override;
-};
+#include "candidate-internal.h"
 
 static const UT_icd cand_icd = {
     sizeof(FcitxCandidateWord), NULL, NULL, FcitxCandidateWordFree
@@ -161,6 +144,8 @@ void FcitxCandidateWordReset(FcitxCandidateWordList* candList)
         candList->overrideArg = NULL;
         candList->overrideDestroyNotify = NULL;
     }
+    candList->overrideHighlight = false;
+    candList->overrideHighlightValue = false;
     candList->currentPage = 0;
     candList->hasGonePrevPage = false;
     candList->hasGoneNextPage = false;
@@ -490,6 +475,13 @@ void FcitxCandidateWordSetOverridePaging(FcitxCandidateWordList* candList, boole
     candList->paging = paging;
     candList->overrideArg = arg;
     candList->overrideDestroyNotify = destroyNotify;
+}
+
+FCITX_EXPORT_API
+void FcitxCandidateWordSetOverrideDefaultHighlight(FcitxCandidateWordList* candList, boolean overrideValue)
+{
+    candList->overrideHighlight = true;
+    candList->overrideHighlightValue = overrideValue;
 }
 
 FCITX_EXPORT_API FcitxCandidateWord*

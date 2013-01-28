@@ -37,6 +37,7 @@
 #include "instance-internal.h"
 #include "addon-internal.h"
 #include "ui-internal.h"
+#include "candidate-internal.h"
 
 /**
  * @file ui.c
@@ -764,6 +765,15 @@ void FcitxUIGetMainWindowSize(FcitxInstance* instance, int* x, int* y, int* w, i
         instance->ui->ui->MainWindowSizeHint(instance->ui->addonInstance, x, y, w, h);
 }
 
+static inline boolean FcitxUIUseDefaultHighlight(FcitxInstance* instance, FcitxCandidateWordList* candList)
+{
+    if (candList->overrideHighlight) {
+        return candList->overrideHighlight;
+    } else {
+        return !FcitxInstanceGetContextBoolean(instance, CONTEXT_DISABLE_AUTO_FIRST_CANDIDATE_HIGHTLIGHT);
+    }
+}
+
 FCITX_EXPORT_API
 int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* msgUp, FcitxMessages* msgDown)
 {
@@ -811,7 +821,7 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
         if (i == 0
             && FcitxCandidateWordGetCurrentPage(input->candList) == 0
             && type == MSG_OTHER
-            && !FcitxInstanceGetContextBoolean(instance, CONTEXT_DISABLE_AUTO_FIRST_CANDIDATE_HIGHTLIGHT)
+            && FcitxUIUseDefaultHighlight(instance, input->candList)
         )
             type = MSG_FIRSTCAND;
 

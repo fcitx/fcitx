@@ -559,6 +559,8 @@ extern "C" {
      * @param arg arg
      * @param destroyNotify destroyNotify
      * @return void
+     *
+     * @since 4.2.7
      **/
     void FcitxCandidateWordSetOverridePaging(FcitxCandidateWordList* candList,
                                              boolean hasPrev,
@@ -568,6 +570,15 @@ extern "C" {
                                              FcitxDestroyNotify destroyNotify
                                             );
 
+    /**
+     * override default highlight
+     *
+     * @param candList candidate words
+     * @param overrideValue value
+     *
+     * @since 4.2.8
+     */
+    void FcitxCandidateWordSetOverrideDefaultHighlight(FcitxCandidateWordList* candList, boolean overrideValue);
 
 /** convinient string for candidate word */
 #define DIGIT_STR_CHOOSE "1234567890"
