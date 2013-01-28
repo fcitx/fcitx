@@ -364,6 +364,7 @@ AutoEngCheckSelect(FcitxAutoEngState *autoEngState,
     FcitxMessagesSetMessageCount(preedit, 0);
     FcitxMessagesAddMessageStringsAtLast(preedit, MSG_INPUT,
                                          autoEngState->buf);
+    FcitxInputStateSetCursorPos(input, autoEngState->index);
     FcitxInputStateSetClientCursorPos(input, autoEngState->index);
     return IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
