@@ -768,7 +768,7 @@ void FcitxUIGetMainWindowSize(FcitxInstance* instance, int* x, int* y, int* w, i
 static inline boolean FcitxUIUseDefaultHighlight(FcitxInstance* instance, FcitxCandidateWordList* candList)
 {
     if (candList->overrideHighlight) {
-        return candList->overrideHighlight;
+        return candList->overrideHighlightValue;
     } else {
         return !FcitxInstanceGetContextBoolean(instance, CONTEXT_DISABLE_AUTO_FIRST_CANDIDATE_HIGHTLIGHT);
     }
