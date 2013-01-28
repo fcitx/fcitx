@@ -219,7 +219,7 @@ static void
 FcitxXkbInitDefaultLayout(FcitxXkb* xkb)
 {
     Display* dpy = xkb->dpy;
-        XkbRF_VarDefsRec vd;
+    XkbRF_VarDefsRec vd;
 
     utarray_clear(xkb->defaultLayouts);
     utarray_clear(xkb->defaultModels);
@@ -716,6 +716,13 @@ static void* FcitxXkbCreate(FcitxInstance* instance)
     return NULL;
 }
 
+static void FcitxXkbScheduleRefresh(void* arg) {
+    FcitxXkb* xkb = (FcitxXkb*) arg;
+    FcitxUIUpdateInputWindow(xkb->owner);
+    FcitxXkbInitDefaultLayout(xkb);
+    FcitxXkbApplyCustomScript(xkb);
+}
+
 static boolean FcitxXkbEventHandler(void* arg, XEvent* event)
 {
     FcitxXkb* xkb = (FcitxXkb*) arg;
@@ -739,9 +746,8 @@ static boolean FcitxXkbEventHandler(void* arg, XEvent* event)
         ) {
             xkb->lastSerial = xkbEvent->new_kbd.serial;
             XSync(xkb->dpy, False);
-            FcitxUIUpdateInputWindow(xkb->owner);
-            FcitxXkbInitDefaultLayout(xkb);
-            FcitxXkbApplyCustomScript(xkb);
+            FcitxInstanceRemoveTimeoutByFunc(xkb->owner, FcitxXkbScheduleRefresh);
+            FcitxInstanceAddTimeout(xkb->owner, 10, FcitxXkbScheduleRefresh, xkb);
         }
         return true;
     }
