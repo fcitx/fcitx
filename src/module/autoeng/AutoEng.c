@@ -408,6 +408,17 @@ AutoEngCommit(FcitxAutoEngState *autoEngState)
     AutoEngSetBuffLen(autoEngState, 0);
 }
 
+static void
+AutoEngActivate(FcitxAutoEngState *autoEngState, FcitxInputState* input,
+                INPUT_RETURN_VALUE *retval)
+{
+    FcitxInputStateSetShowCursor(input, false);
+    *retval = IRV_DISPLAY_MESSAGE;
+    autoEngState->active = true;
+    autoEngState->cursor_moved = false;
+    ShowAutoEngMessage(autoEngState, retval);
+}
+
 static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
                                       unsigned int state,
                                       INPUT_RETURN_VALUE *retval)
@@ -425,11 +436,7 @@ static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
             AutoEngSetBuff(autoEngState,
                            FcitxInputStateGetRawInputBuffer(input), keymain);
             if (SwitchToEng(autoEngState, autoEngState->buf)) {
-                *retval = IRV_DISPLAY_MESSAGE;
-                FcitxInputStateSetShowCursor(input, false);
-                autoEngState->active = true;
-                autoEngState->cursor_moved = false;
-                ShowAutoEngMessage(autoEngState, retval);
+                AutoEngActivate(autoEngState, input, retval);
                 return true;
             }
         }
@@ -473,13 +480,9 @@ boolean PostInputProcessAutoEng(void* arg, FcitxKeySym sym, unsigned int state, 
         (FcitxInputStateGetRawInputBufferSize(input) != 0 ||
          (FcitxInputStateGetKeyState(input) & FcitxKeyState_CapsLock) == 0) &&
         AutoEngCheckPreedit(autoEngState)) {
-        *retval = IRV_DISPLAY_MESSAGE;
-        FcitxInputStateSetShowCursor(input, false);
         AutoEngSetBuff(autoEngState, FcitxInputStateGetRawInputBuffer(input),
                        FcitxHotkeyPadToMain(sym));
-        autoEngState->active = true;
-        autoEngState->cursor_moved = false;
-        ShowAutoEngMessage(autoEngState, retval);
+        AutoEngActivate(autoEngState, input, retval);
         return true;
     }
 
@@ -626,6 +629,7 @@ AutoEngGetSpellHint(FcitxAutoEngState *autoEngState)
     if (candList) {
         FcitxInputState *input = FcitxInstanceGetInputState(autoEngState->owner);
         FcitxCandidateWordList *iList = FcitxInputStateGetCandidateList(input);
+        FcitxCandidateWordSetOverrideDefaultHighlight(iList, false);
         FcitxCandidateWordSetChooseAndModifier(
             iList, DIGIT_STR_CHOOSE,
             cmodtable[autoEngState->config.chooseModifier]);

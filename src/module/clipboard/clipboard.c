@@ -348,6 +348,7 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
     FcitxCandidateWordSetPageSize(cand_list, page_size);
     FcitxCandidateWordSetChooseAndModifier(
         cand_list, DIGIT_STR_CHOOSE, cmodifiers[config->choose_modifier]);
+    FcitxCandidateWordSetOverrideDefaultHighlight(cand_list, false);
     if (clipboard->clp_hist_len) {
         ClipboardSetCandWord(clipboard, &cand_word, clipboard->clp_hist_lst);
         FcitxCandidateWordAppend(cand_list, &cand_word);
@@ -378,6 +379,8 @@ skip_primary:
         FcitxCandidateWordAppend(cand_list, &cand_word);
     }
     *ret_val = IRV_FLAG_UPDATE_INPUT_WINDOW;
+    FcitxCandidateWordSetType(FcitxCandidateWordGetFirst(cand_list),
+                              MSG_CANDIATE_CURSOR);
     return true;
 }
 

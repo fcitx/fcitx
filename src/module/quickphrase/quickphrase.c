@@ -525,7 +525,6 @@ QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
     } else {
         return IRV_TO_PROCESS;
     }
-
     FcitxCandidateWordSetType(cand_word, MSG_CANDIATE_CURSOR);
     return IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
@@ -580,6 +579,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
     FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
     FcitxCandidateWordSetChooseAndModifier(
         candList, DIGIT_STR_CHOOSE, cmodtable[qpstate->config.chooseModifier]);
+    FcitxCandidateWordSetOverrideDefaultHighlight(candList, false);
 
     pKey = &searchKey;
 
@@ -629,6 +629,9 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
     } while(0);
 
     QuickPhraseGetSpellHint(qpstate);
+    FcitxCandidateWord *cand_word_p = FcitxCandidateWordGetFirst(candList);
+    if (cand_word_p)
+        FcitxCandidateWordSetType(cand_word_p, MSG_CANDIATE_CURSOR);
     return IRV_DISPLAY_MESSAGE;
 }
 
