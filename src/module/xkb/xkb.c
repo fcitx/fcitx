@@ -460,7 +460,6 @@ FcitxXkbSetLayout(FcitxXkb* xkb, const char *layouts,
 
     char* rulesName = FcitxXkbGetRulesName(xkb);
     if (rulesName) {
-        FcitxLog(INFO, "%s", layouts_line);
         retval = FcitxXkbSetRules(xkb,
                                   rulesName, model_line,
                                   layouts_line, variants_line, options_line);
@@ -661,6 +660,7 @@ FcitxXkbSaveCloseGroup(FcitxXkb *xkb)
     fcitx_utils_free(xkb->closeVariant);
     xkb->closeLayout = tmplayout;
     xkb->closeVariant = tmpvariant;
+    FcitxXkbRetrieveCloseGroup(xkb);
 }
 
 static void
