@@ -512,8 +512,8 @@ static void FcitxXkbAddNewLayout(FcitxXkb* xkb, const char* layoutString,
             return;
         }
         if (index > 0) {
-            utarray_remove_quick(xkb->defaultLayouts, index);
-            utarray_remove_quick(xkb->defaultVariants, index);
+            utarray_remove_quick_full(xkb->defaultLayouts, index);
+            utarray_remove_quick_full(xkb->defaultVariants, index);
         }
         utarray_insert(xkb->defaultLayouts, &layoutString, 0);
         if (variantString)
