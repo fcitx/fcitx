@@ -413,11 +413,20 @@ check_env() {
     write_order_list "DISPLAY:"
     write_quote_str "DISPLAY='${DISPLAY}'"
     write_order_list "$(_ "Keyboard Layout:")"
+    increase_cur_level 1
+    write_order_list "$(code_inline setxkbmap)"
     if type setxkbmap &> /dev/null; then
         write_quote_cmd setxkbmap -print
     else
         write_paragraph "$(print_not_found 'setxkbmap')"
     fi
+    write_order_list "$(code_inline xprop)"
+    if type xprop &> /dev/null; then
+        write_quote_cmd xprop -root _XKB_RULES_NAMES
+    else
+        write_paragraph "$(print_not_found 'xprop')"
+    fi
+    increase_cur_level -1
     write_order_list "$(_ "Locale:")"
     if type locale &> /dev/null; then
         increase_cur_level 1
