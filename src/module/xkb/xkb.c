@@ -528,12 +528,12 @@ static void FcitxXkbAddNewLayout(FcitxXkb* xkb, const char* layoutString,
             utarray_remove_quick_full(xkb->defaultLayouts, index);
             utarray_remove_quick_full(xkb->defaultVariants, index);
         }
-        utarray_insert(xkb->defaultLayouts, &layoutString, 0);
-        if (variantString)
-            utarray_insert(xkb->defaultVariants, &variantString, 0);
-        else {
-            const char* dummy = "";
-            utarray_insert(xkb->defaultVariants, &dummy, 0);
+        utarray_push_front(xkb->defaultLayouts, &layoutString);
+        if (variantString) {
+            utarray_push_front(xkb->defaultVariants, &variantString);
+        } else {
+            const char *dummy = "";
+            utarray_push_front(xkb->defaultVariants, &dummy);
         }
     } else {
         while (utarray_len(xkb->defaultVariants) >= 4) {
@@ -541,10 +541,10 @@ static void FcitxXkbAddNewLayout(FcitxXkb* xkb, const char* layoutString,
             utarray_pop_back(xkb->defaultLayouts);
         }
         utarray_push_back(xkb->defaultLayouts, &layoutString);
-        if (variantString)
+        if (variantString) {
             utarray_push_back(xkb->defaultVariants, &variantString);
-        else {
-            const char* dummy = "";
+        } else {
+            const char *dummy = "";
             utarray_push_back(xkb->defaultVariants, &dummy);
         }
     }
