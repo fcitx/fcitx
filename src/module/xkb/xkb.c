@@ -176,37 +176,50 @@ static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
         } else {
             int count = 0, i = 0;
             const char* base = XLIBDIR;
+            char *parent_to_free = NULL;
             while (base[i]) {
                 if (base[i] == '/')
                     count++;
                 i++;
             }
 
+            /**
+             * guess X11 data base directory.
+             **/
             if (count >= 3) {
                 // .../usr/lib/X11 -> /usr/share/X11/xkb vs
                 // .../usr/X11/lib -> /usr/X11/share/X11/xkb
                 const char* delta = StringEndsWith(base, "X11") ?
                     "/../../share/X11" : "/../share/X11";
-                char *tmppath;
-                fcitx_utils_alloc_cat_str(tmppath, base, delta,
-                                          "/xkb/rules/", rulesName, ".xml");
-                if(fcitx_utils_isreg(tmppath)) {
-                    rulesFile = realpath(tmppath, NULL);
-                    free(tmppath);
-                } else {
-                    fcitx_utils_alloc_cat_str(tmppath, base, "/X11/xkb/rules/",
-                                              rulesName, ".xml");
-                    if(fcitx_utils_isreg(tmppath)) {
-                        rulesFile = realpath(tmppath, NULL);
-                        free(tmppath);
+                fcitx_utils_alloc_cat_str(parent_to_free, base, delta);
+                if(!fcitx_utils_isdir(parent_to_free)) {
+                    // fallback to ${base}/X11
+                    fcitx_utils_set_cat_str(parent_to_free, base, "/X11");
+                    if(!fcitx_utils_isdir(parent_to_free)) {
+                        free(parent_to_free);
+                        parent_to_free = NULL;
                     }
                 }
             }
-            if(!rulesFile) {
-                fcitx_utils_alloc_cat_str(rulesFile,
-                                          "/usr/share/X11/xkb/rules/",
-                                          rulesName, ".xml");
+            const char *parent_path;
+            if (parent_to_free) {
+                /**
+                 * Found a existing dir, simplify it.
+                 * Using realpath() on rules files' name can change the base
+                 * name of the file (due to symlink), so it is only safe
+                 * to do it for directory's name. T-T..
+                 **/
+                char *tmp = realpath(parent_to_free, NULL);
+                parent_path = tmp;
+                free(parent_to_free);
+                parent_to_free = tmp;
+            } else {
+                // last fallback for known rules name.
+                parent_path = "/usr/share/X11";
             }
+            fcitx_utils_alloc_cat_str(rulesFile, parent_path,
+                                      "/xkb/rules/", rulesName, ".xml");
+            fcitx_utils_free(parent_to_free);
         }
         free(rulesName);
     } else {
