@@ -244,11 +244,12 @@ char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char *strHZ)
     switch (transState->engine) {
     case ENGINE_OPENCC:
 #ifdef ENABLE_OPENCC
-        {
+        do {
             if (transState->ods2t == NULL) {
                 OpenCCInit(transState);
                 if (transState->ods2t == NULL) {
-                    return NULL;
+                    /* break to native as fallback */
+                    break;
                 }
             }
 
@@ -259,7 +260,7 @@ char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char *strHZ)
             }
 
             return res;
-        }
+        } while(0);
 #endif
     case ENGINE_NATIVE: {
         FILE           *fp;

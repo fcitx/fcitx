@@ -31,6 +31,7 @@ typedef struct _FcitxChttrans {
     void* ods2t;
     void* odt2s;
     FcitxInstance* owner;
+    boolean openccLoaded;
 } FcitxChttrans;
 
 #endif // CHTTRANS_P_H

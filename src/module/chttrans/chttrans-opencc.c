@@ -41,6 +41,10 @@ OpenCCInit(FcitxChttrans* transState)
 {
     if (transState->ods2t || transState->odt2s)
         return true;
+    if (transState->openccLoaded)
+        return false;
+    transState->openccLoaded = true;
+
     if (!OpenCCLoadLib())
         return false;
     transState->ods2t = _opencc_open(_OPENCC_DEFAULT_CONFIG_SIMP_TO_TRAD);
