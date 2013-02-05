@@ -674,7 +674,9 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, boolean vertical, int
     int currentX = 0;
     int offsetY;
     if (sc->skinFont.respectDPI)
-        offsetY = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos + fontHeight + (FcitxMessagesGetMessageCount(msgdown) ? sc->skinInputBar.iOutputPos : 0);
+        offsetY = sc->skinInputBar.marginTop
+                 + (FcitxMessagesGetMessageCount(msgup) ? (sc->skinInputBar.iInputPos + fontHeight) : 0)
+                 + (FcitxMessagesGetMessageCount(msgdown) ? sc->skinInputBar.iOutputPos : 0);
     else
         offsetY = sc->skinInputBar.marginTop + sc->skinInputBar.iOutputPos - fontHeight;
     for (i = 0; i < FcitxMessagesGetMessageCount(msgdown) ; i++) {
@@ -753,14 +755,16 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, boolean vertical, int
 
     cairo_set_operator(c, CAIRO_OPERATOR_OVER);
 
-
-    if (FcitxInputStateGetShowCursor(input)) {
+    FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
+    if (FcitxCandidateWordHasPrev(candList)
+        || FcitxCandidateWordHasNext(candList)
+    ) {
         //画向前向后箭头
         if (prev && next) {
             cairo_set_source_surface(inputWindow->c_back, prev->image,
                                      newWidth - sc->skinInputBar.iBackArrowX ,
                                      sc->skinInputBar.iBackArrowY);
-            if (FcitxCandidateWordHasPrev(FcitxInputStateGetCandidateList(input)))
+            if (FcitxCandidateWordHasPrev(candList))
                 cairo_paint(inputWindow->c_back);
             else
                 cairo_paint_with_alpha(inputWindow->c_back, 0.5);
@@ -769,7 +773,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, boolean vertical, int
             cairo_set_source_surface(inputWindow->c_back, next->image,
                                      newWidth - sc->skinInputBar.iForwardArrowX ,
                                      sc->skinInputBar.iForwardArrowY);
-            if (FcitxCandidateWordHasNext(FcitxInputStateGetCandidateList(input)))
+            if (FcitxCandidateWordHasNext(candList))
                 cairo_paint(inputWindow->c_back);
             else
                 cairo_paint_with_alpha(inputWindow->c_back, 0.5);
@@ -799,7 +803,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, boolean vertical, int
     }
 
     //画光标
-    if (FcitxInputStateGetShowCursor(input)) {
+    if (FcitxMessagesGetMessageCount(msgup) && FcitxInputStateGetShowCursor(input)) {
         cairo_move_to(inputWindow->c_cursor, cursor_pos, cursorY1);
         cairo_line_to(inputWindow->c_cursor, cursor_pos, cursorY2);
         cairo_stroke(inputWindow->c_cursor);
