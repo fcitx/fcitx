@@ -70,7 +70,7 @@ if(NOT "${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
   set(ENABLE_WAYLAND Off)
 endif()
 if(ENABLE_WAYLAND)
-  find_package(WaylandClient 1.1.0 REQUIRED)
+  find_package(WaylandClient 1.0.0 REQUIRED)
 endif()
 
 if(NOT ENABLE_GETTEXT OR NOT GETTEXTPO_FOUND)
