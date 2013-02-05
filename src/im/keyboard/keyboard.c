@@ -647,11 +647,18 @@ FcitxKeyboardHandleFocus(FcitxKeyboard *keyboard, FcitxKeySym sym,
     } else {
         return IRV_FLAG_UPDATE_INPUT_WINDOW;
     }
+    FcitxInputStateSetShowCursor(input, true);
+    FcitxInstanceCleanInputWindowUp(instance);
     FcitxMessages *client_preedit = FcitxInputStateGetClientPreedit(input);
-    FcitxMessagesSetMessageCount(client_preedit, 0);
     FcitxMessagesAddMessageStringsAtLast(client_preedit, MSG_INPUT,
                                          keyboard->buffer[0]);
     FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);
+
+    if (!FcitxInstanceICSupportPreedit(instance, FcitxInstanceGetCurrentIC(instance))) {
+        FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetPreedit(input),
+                                             MSG_INPUT, keyboard->buffer[0]);
+        FcitxInputStateSetCursorPos(input, keyboard->cursorPos);
+    }
     return IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
 
@@ -830,6 +837,7 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     memcpy(FcitxInputStateGetRawInputBuffer(input),
            keyboard->buffer[0], bufferlen + 1);
     FcitxInputStateSetRawInputBufferSize(input, bufferlen);
+    FcitxInputStateSetShowCursor(input, true);
     FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetClientPreedit(input),
                                          MSG_INPUT, keyboard->buffer[0]);
     FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);

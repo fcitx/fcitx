@@ -174,7 +174,7 @@ extern "C" {
          * this behavior cannot be overrided), it give im a chance to choose remember this
          * word or not.
          *
-         * Input method need to notice, that the commit is already DONE, do not to extra commit.
+         * Input method need to notice, that the commit is already DONE, do not do extra commit.
          */
         CET_LostFocus,
         /**
