@@ -187,11 +187,14 @@ QString QFcitxInputContext::language()
 
 void QFcitxInputContext::commitPreedit()
 {
-    if (m_commitPreedit.length() > 0) {
+    if (m_preeditList.length() > 0) {
         QInputMethodEvent e;
-        e.setCommitString(m_commitPreedit);
-        m_commitPreedit.clear();
+        if (m_commitPreedit.length() > 0) {
+            e.setCommitString(m_commitPreedit);
+            m_commitPreedit.clear();
+        }
         sendEvent(e);
+        m_preeditList.clear();
     }
 }
 
