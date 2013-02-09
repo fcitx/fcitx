@@ -36,9 +36,20 @@ find_package(PkgConfig)
 unset(LUA_LIBRARIES CACHE)
 unset(__pkg_config_checked_LUA CACHE)
 if("${LUA_MODULE_NAME}" STREQUAL "")
-  set(LUA_MODULE_NAME lua)
+  pkg_check_modules(LUA lua5.2)
+  # try best to find lua52
+  if(NOT LUA_FOUND)
+    unset(__pkg_config_checked_LUA CACHE)
+    pkg_check_modules(LUA lua)
+  endif()
+  # Too lazy to increase indentation...
+  if(NOT LUA_FOUND)
+    unset(__pkg_config_checked_LUA CACHE)
+    pkg_check_modules(LUA lua5.1)
+  endif()
+else()
+  pkg_check_modules(LUA "${LUA_MODULE_NAME}")
 endif()
-pkg_check_modules(LUA "${LUA_MODULE_NAME}")
 
 include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set LUA_FOUND to TRUE if
