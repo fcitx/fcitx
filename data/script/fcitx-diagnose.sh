@@ -23,6 +23,23 @@ fi
 # utility
 #############################
 
+str_match_glob() {
+    local pattern=$1
+    local str=$2
+    case "$2" in
+        $pattern)
+            return 0
+            ;;
+    esac
+    return 1
+}
+
+str_match_regex() {
+    local pattern=$1
+    local str=$2
+    [[ $str =~ $pattern ]]
+}
+
 add_and_check_file() {
     local prefix="$1"
     local file="$2"
@@ -51,6 +68,7 @@ repeat_str() {
     echo "${res}"
 }
 
+# require `shopt -s nullglob` and the argument needs to be a glob
 find_in_path() {
     local w="$1"
     local IFS=':'
@@ -91,6 +109,26 @@ get_from_config_file() {
     [ -z "$value" ] && return 1
     echo "${value}"
     return 0
+}
+
+get_locale() {
+    local name=$1
+    str_match_glob 'LC_*' "$name" || str_match_glob 'LANG' "$name" || {
+        name="LC_$name"
+    }
+    [ -z "${LC_ALL}" ] || {
+        echo "${LC_ALL}"
+        return
+    }
+    [ -z "${!name}" ] || {
+        echo "${!name}"
+        return
+    }
+    [ -z "${LANG}" ] || {
+        echo "${LANG}"
+        return
+    }
+    echo "POSIX"
 }
 
 
@@ -555,6 +593,18 @@ check_xim() {
         else
             write_error "$(_ "Cannot find xim_server on root window.")"
         fi
+    fi
+    local _LC_CTYPE=$(get_locale CTYPE)
+    if type emacs &> /dev/null &&
+        ! str_match_regex '^(zh|ja|ko)([._].*|)$' "${_LC_CTYPE}"; then
+        write_order_list "$(_ "XIM for Emacs:")"
+        write_error_eval \
+            "$(_ 'Your LC_CTYPE is set to ${1} instead of one of zh, ja, ko. You may not be able to use input method in emacs because of an really old emacs bug that upstream refuse to fix for years.')" "${_LC_CTYPE}"
+    fi
+    if ! str_match_regex '.[Uu][Tt][Ff]-?8$' "${_LC_CTYPE}"; then
+        write_order_list "$(_ "XIM encoding:")"
+        write_error_eval \
+            "$(_ 'Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have trouble commiting strings using XIM.')" "${_LC_CTYPE}"
     fi
 }
 
