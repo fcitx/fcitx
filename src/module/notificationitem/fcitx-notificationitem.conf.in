@@ -1,0 +1,11 @@
+[Addon]
+Name=fcitx-notificationitem
+_GeneralName=X Keyboard Integration export with DBus
+_Comment=X Keyboard Integration export with DBus
+Category=Module
+Enabled=True
+Library=fcitx-notificationitem.so
+Type=SharedLibrary
+Priority=80
+Dependency=fcitx-dbus
+Advance=True

@@ -166,7 +166,7 @@ static void KimUpdateProperty(FcitxKimpanelUI* kimpanel, char *prop);
 static DBusHandlerResult KimpanelDBusEventHandler(DBusConnection *connection, DBusMessage *message, void *user_data);
 static DBusHandlerResult KimpanelDBusFilter(DBusConnection *connection, DBusMessage *message, void *user_data);
 static int CalKimCursorPos(FcitxKimpanelUI *kimpanel);
-static void KimpanelInputReset(void *arg);
+static void KimpanelInputIMChanged(void *arg);
 static char* Status2String(FcitxUIStatus* status);
 static char* ComplexStatus2String(FcitxUIComplexStatus* status);
 static void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel);
@@ -334,10 +334,10 @@ void* KimpanelCreate(FcitxInstance* instance)
         kimpanel->messageUp = FcitxMessagesNew();
         kimpanel->messageDown = FcitxMessagesNew();
 
-        FcitxIMEventHook resethk;
-        resethk.arg = kimpanel;
-        resethk.func = KimpanelInputReset;
-        FcitxInstanceRegisterResetInputHook(instance, resethk);
+        FcitxIMEventHook imchangehk;
+        imchangehk.arg = kimpanel;
+        imchangehk.func = KimpanelInputIMChanged;
+        FcitxInstanceRegisterIMChangedHook(instance, imchangehk);
 
         const char* kimpanelServiceName = "org.kde.impanel";
         DBusMessage* message = dbus_message_new_method_call(DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, DBUS_INTERFACE_DBUS, "NameHasOwner");
@@ -417,7 +417,7 @@ void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
     free(status);
 }
 
-void KimpanelInputReset(void* arg)
+void KimpanelInputIMChanged(void* arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
     if (kimpanel->addon != FcitxInstanceGetCurrentUI(kimpanel->owner))
@@ -885,17 +885,18 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                                   DBUS_TYPE_STRING, &newowner ,
                                   DBUS_TYPE_INVALID)) {
             /* old die and no new one */
-            if (strcmp(service, "org.kde.impanel") == 0
-                && strlen(oldowner) > 0
-                && strlen(newowner) == 0)
-                FcitxUISwitchToFallback(instance);
-            /*
-             * since if new rise, it will send PanelCreated,
-             * So don't need to re-register here
-             */
+            if (strcmp(service, "org.kde.impanel") == 0) {
+                if (strlen(oldowner) > 0 && strlen(newowner) == 0) {
+                    FcitxUISwitchToFallback(instance);
+                }
+                /*
+                 * since if new rise, it will send PanelCreated,
+                 * So don't need to re-register here
+                 */
+                return DBUS_HANDLER_RESULT_HANDLED;
+            }
         }
         dbus_error_free(&error);
-        return DBUS_HANDLER_RESULT_HANDLED;
     }
 
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;

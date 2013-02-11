@@ -1,7 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2002~2010 by Yuking                                     *
- *   yuking_net@sohu.com                                                   *
- *   Copyright (C) 2010~2010 by CSSlayer                                   *
+ *   Copyright (C) 2012~2012 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -20,42 +18,11 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include "fcitx/fcitx.h"
+#ifndef _FCITX_MODULE_NOTIFICATIONITEM_H
+#define _FCITX_MODULE_NOTIFICATIONITEM_H
 
-#ifndef _TRAY_WINDOW_H
-#define _TRAY_WINDOW_H
+#include <fcitx-utils/utils.h>
 
-#include <X11/Xlib.h>
-#include <string.h>
-#include <cairo.h>
-#include <cairo-xlib.h>
-#include <X11/Xutil.h>
-#include "fcitx-config/fcitx-config.h"
-#include <X11/Xdefs.h>
+typedef void (*FcitxNotificationItemAvailableCallback)(void* arg, boolean enable);
 
-#define INACTIVE_ICON 0
-#define ACTIVE_ICON   1
-struct _FcitxClassicUI;
-
-typedef struct _TrayWindow {
-    Window window;
-    boolean bTrayMapped;
-    XVisualInfo visual;
-    Atom atoms[6];
-
-    cairo_surface_t *cs_x;
-    cairo_surface_t *cs;
-    int size;
-    struct _FcitxClassicUI* owner;
-    Window dockWindow;
-} TrayWindow;
-
-TrayWindow* CreateTrayWindow(struct _FcitxClassicUI *classicui);
-void DrawTrayWindow(TrayWindow* trayWindow);
-void RedrawTrayWindow(TrayWindow* trayWindow);
-/* these two function can be called more than once */
-void ReleaseTrayWindow(TrayWindow* trayWindow);
-void InitTrayWindow(TrayWindow *trayWindow);
-#endif
-
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+#endif // _FCITX_MODULE_NOTIFICATIONITEM_H
