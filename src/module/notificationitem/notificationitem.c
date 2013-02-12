@@ -72,6 +72,9 @@ const char * _notification_item =
 "            to find the icons specified above. -->\n"
 "       <property name=\"IconThemePath\" type=\"s\" access=\"read\" />\n"
 "       <property name=\"Menu\" type=\"o\" access=\"read\" />\n"
+"       <property name=\"XAyatanaLabel\" type=\"s\" access=\"read\" />\n"
+"       <property name=\"XAyatanaLabelGuide\" type=\"s\" access=\"read\" />\n"
+"       <property name=\"XAyatanaOrderingIndex\" type=\"u\" access=\"read\" />\n"
 "\n"
 "<!-- Methods -->\n"
 "       <method name=\"Scroll\">\n"
@@ -97,6 +100,10 @@ const char * _notification_item =
 "           <arg type=\"s\" name=\"status\" direction=\"out\" />\n"
 "       </signal>\n"
 "       <signal name=\"NewTitle\">\n"
+"       </signal>\n"
+"       <signal name=\"XAyatanaNewLabel\">\n"
+"           <arg type=\"s\" name=\"label\" direction=\"out\" />\n"
+"           <arg type=\"s\" name=\"guide\" direction=\"out\" />\n"
 "       </signal>\n"
 "\n"
 "   </interface>\n"
@@ -163,6 +170,9 @@ static void FcitxNotificationItemGetTitle(void* arg, DBusMessageIter* iter);
 static void FcitxNotificationItemGetIconThemePath(void* arg, DBusMessageIter* iter);
 static void FcitxNotificationItemGetMenu(void* arg, DBusMessageIter* iter);
 static void FcitxNotificationItemGetToolTip(void* arg, DBusMessageIter* iter);
+static void FcitxNotificationItemGetXAyatanaLabel(void* arg, DBusMessageIter* iter);
+static void FcitxNotificationItemGetXAyatanaLabelGuide(void* arg, DBusMessageIter* iter);
+static void FcitxNotificationItemGetXAyatanaOrderingIndex(void* arg, DBusMessageIter* iter);
 static void FcitxNotificationItemIMChanged(void* arg);
 static boolean FcitxNotificationItemEnable(FcitxNotificationItem* notificationitem, FcitxNotificationItemAvailableCallback callback, void *data);
 static void FcitxNotificationItemDisable(FcitxNotificationItem* notificationitem);
@@ -180,6 +190,9 @@ const FcitxDBusPropertyTable propertTable[] = {
     { NOTIFICATION_ITEM_DBUS_IFACE, "IconThemePath", "s", FcitxNotificationItemGetIconThemePath, NULL },
     { NOTIFICATION_ITEM_DBUS_IFACE, "Menu", "o", FcitxNotificationItemGetMenu, NULL },
     { NOTIFICATION_ITEM_DBUS_IFACE, "ToolTip", "(sa(iiay)ss)", FcitxNotificationItemGetToolTip, NULL },
+    { NOTIFICATION_ITEM_DBUS_IFACE, "XAyatanaLabel", "s", FcitxNotificationItemGetXAyatanaLabel, NULL },
+    { NOTIFICATION_ITEM_DBUS_IFACE, "XAyatanaLabelGuide", "s", FcitxNotificationItemGetXAyatanaLabelGuide, NULL },
+    { NOTIFICATION_ITEM_DBUS_IFACE, "XAyatanaOrderingIndex", "u", FcitxNotificationItemGetXAyatanaOrderingIndex, NULL },
     { NULL, NULL, NULL, NULL, NULL }
 };
 
@@ -478,8 +491,14 @@ char* FcitxNotificationItemGetIconNameString(FcitxNotificationItem* notification
     char* iconName = NULL;
     FcitxIM* im = FcitxInstanceGetCurrentIM(notificationitem->owner);
     const char* icon = "";
-    if (im)
-        icon = im->strIconName;
+    if (im) {
+        if (strncmp(im->uniqueName, "fcitx-keyboard-",
+                    strlen("fcitx-keyboard-")) != 0) {
+            icon = im->strIconName;
+        } else {
+            return strdup("input-keyboard");
+        }
+    }
     fcitx_utils_alloc_cat_str(iconName, (icon[0] == '\0' || icon[0] == '/') ?
                               "" : "fcitx-", icon);
     return iconName;
@@ -569,6 +588,40 @@ void FcitxNotificationItemGetToolTip(void* arg, DBusMessageIter* iter)
     fcitx_utils_free(iconNameToFree);
 }
 
+const char* FcitxNotificationItemGetLabel(FcitxNotificationItem* notificationitem)
+{
+    const char* label = "";
+#if 0
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(notificationitem->owner);
+    if (ic) {
+        FcitxIM* im = FcitxInstanceGetCurrentIM(notificationitem->owner);
+        if (im) {
+            label = im->strName;
+        }
+    }
+#endif
+    return label;
+}
+
+void FcitxNotificationItemGetXAyatanaLabel(void* arg, DBusMessageIter* iter)
+{
+    FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) arg;
+    const char* label = FcitxNotificationItemGetLabel(notificationitem);
+    dbus_message_iter_append_basic(iter, DBUS_TYPE_STRING, &label);
+}
+
+void FcitxNotificationItemGetXAyatanaLabelGuide(void* arg, DBusMessageIter* iter)
+{
+    const char* label = "XXXXXXXXXXXXXXX";
+    dbus_message_iter_append_basic(iter, DBUS_TYPE_STRING, &label);
+}
+
+void FcitxNotificationItemGetXAyatanaOrderingIndex(void* arg, DBusMessageIter* iter)
+{
+    uint32_t index = 0;
+    dbus_message_iter_append_basic(iter, DBUS_TYPE_UINT32, &index);
+}
+
 void FcitxNotificationItemIMChanged(void* arg)
 {
     FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) arg;
@@ -585,6 +638,22 @@ void FcitxNotificationItemIMChanged(void* arg)
     SEND_SIGNAL("NewIcon");
     SEND_SIGNAL("NewToolTip");
     SEND_SIGNAL("NewTitle");
+#if 0
+    do {
+        DBusMessage* msg = dbus_message_new_signal(NOTIFICATION_ITEM_DEFAULT_OBJ,
+                                                   NOTIFICATION_ITEM_DBUS_IFACE,
+                                                   "XAyatanaNewLabel");
+        if (msg) {
+            const char* label = FcitxNotificationItemGetLabel(notificationitem);
+            const char* guide = "XXXXXXXXXXXXXXX";
+            dbus_message_append_args(msg,
+                                     DBUS_TYPE_STRING, &label,
+                                     DBUS_TYPE_STRING, &guide,
+                                     DBUS_TYPE_INVALID);
+            dbus_connection_send(notificationitem->conn, msg, NULL);
+        }
+    } while(0);
+#endif
 }
 
 boolean FcitxNotificationItemEnable(FcitxNotificationItem* notificationitem, FcitxNotificationItemAvailableCallback callback, void* data)
