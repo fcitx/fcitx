@@ -58,10 +58,10 @@ const char * kimpanel_introspection_xml =
     "<arg name=\"prop\" direction=\"in\" type=\"s\"/>"
     "</signal>"
     "<signal name=\"ExecMenu\">"
-    "<arg name=\"prop\" direction=\"in\" type=\"a\"/>"
+    "<arg name=\"prop\" direction=\"in\" type=\"as\"/>"
     "</signal>"
     "<signal name=\"RegisterProperties\">"
-    "<arg name=\"prop\" direction=\"in\" type=\"a\"/>"
+    "<arg name=\"prop\" direction=\"in\" type=\"as\"/>"
     "</signal>"
     "<signal name=\"UpdateProperty\">"
     "<arg name=\"prop\" direction=\"in\" type=\"s\"/>"
@@ -79,8 +79,8 @@ const char * kimpanel_introspection_xml =
     "<arg name=\"toshow\" direction=\"in\" type=\"b\"/>"
     "</signal>"
     "<signal name=\"UpdateLookupTable\">"
-    "<arg name=\"label\" direction=\"in\" type=\"a\"/>"
-    "<arg name=\"text\" direction=\"in\" type=\"a\"/>"
+    "<arg name=\"label\" direction=\"in\" type=\"as\"/>"
+    "<arg name=\"text\" direction=\"in\" type=\"as\"/>"
     "</signal>"
     "<signal name=\"UpdateLookupTableCursor\">"
     "<arg name=\"cursor\" direction=\"in\" type=\"i\"/>"
@@ -1276,7 +1276,8 @@ void KimUpdateLookupTable(FcitxKimpanelUI* kimpanel, char *labels[], int nLabel,
     dbus_message_iter_init_append(msg, &args);
     dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "s", &subLabel);
     for (i = 0; i < nLabel; i++) {
-        if (!dbus_message_iter_append_basic(&subLabel, DBUS_TYPE_STRING, &labels[i])) {
+        if (!dbus_message_iter_append_basic(&subLabel, DBUS_TYPE_STRING,
+                                            &labels[i])) {
             FcitxLog(DEBUG, "Out Of Memory!");
         }
     }
@@ -1284,7 +1285,8 @@ void KimUpdateLookupTable(FcitxKimpanelUI* kimpanel, char *labels[], int nLabel,
 
     dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "s", &subText);
     for (i = 0; i < nText; i++) {
-        if (!dbus_message_iter_append_basic(&subText, DBUS_TYPE_STRING, &texts[i])) {
+        if (!dbus_message_iter_append_basic(&subText, DBUS_TYPE_STRING,
+                                            &texts[i])) {
             FcitxLog(DEBUG, "Out Of Memory!");
         }
     }
