@@ -266,13 +266,11 @@ char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char *strHZ)
         FILE           *fp;
         char           *ret;
         int             i, len, ret_len;
-        char           *strBuf = NULL;
-        size_t          bufLen = 0;
         const char     *ps;
 
         if (!transState->s2t_table) {
-            len = 0;
-
+            char *strBuf = NULL;
+            size_t bufLen = 0;
             fp = FcitxXDGGetFileWithPrefix("data", TABLE_GBKS2T, "r", NULL);
             if (!fp) {
                 ret = (char *) malloc(sizeof(char) * (strlen(strHZ) + 1));
@@ -293,8 +291,7 @@ char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char *strHZ)
 
                 HASH_ADD_INT(transState->s2t_table, wc, s2t);
             }
-            if (strBuf)
-                free(strBuf);
+            fcitx_utils_free(strBuf);
         }
 
         i = 0;
@@ -366,13 +363,11 @@ char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ)
         FILE           *fp;
         char           *ret;
         int             i, len, ret_len;
-        char           *strBuf = NULL;
-        size_t          bufLen = 0;
         const char     *ps;
 
         if (!transState->t2s_table) {
-            len = 0;
-
+            char *strBuf = NULL;
+            size_t bufLen = 0;
             fp = FcitxXDGGetFileWithPrefix("data", TABLE_GBKS2T, "r", NULL);
             if (!fp) {
                 ret = (char *) malloc(sizeof(char) * (strlen(strHZ) + 1));
@@ -395,8 +390,7 @@ char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ)
 
                 HASH_ADD_INT(transState->t2s_table, wc, t2s);
             }
-            if (strBuf)
-                free(strBuf);
+            fcitx_utils_free(strBuf);
         }
 
         i = 0;

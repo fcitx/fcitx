@@ -139,9 +139,8 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    UT_array* pys = malloc(sizeof(UT_array));
-
-    utarray_init(pys, &py_icd);
+    UT_array pys;
+    utarray_init(&pys, &py_icd);
 
     for (; ;) {
         short index;
@@ -159,7 +158,7 @@ int main(int argc, char **argv)
         outlen = 10;
         iconv(conv, &in, &inlen, &out, &outlen);
 
-        utarray_push_back(pys, &py);
+        utarray_push_back(&pys, &py);
 
         if (strcmp(py.pinyin, "zuo") == 0)
             break;
@@ -186,12 +185,12 @@ int main(int argc, char **argv)
 
         for (s = 0; s < symcount ; s++) {
             ScelPinyin *py = (ScelPinyin*)utarray_eltptr(
-                pys, (unsigned int)pyindex[0]);
+                &pys, (unsigned int)pyindex[0]);
             fprintf(fout, "%s",  py->pinyin);
             int i;
 
             for (i = 1 ; i < wordcount ; i ++) {
-                py = (ScelPinyin*)utarray_eltptr(pys,
+                py = (ScelPinyin*)utarray_eltptr(&pys,
                                                  (unsigned int)pyindex[i]);
                 fprintf(fout, "\'%s", py->pinyin);
             }
@@ -213,8 +212,8 @@ int main(int argc, char **argv)
         }
     }
 
+    utarray_done(&pys);
     fclose(fout);
-
     fclose(fp);
     return 0;
 }

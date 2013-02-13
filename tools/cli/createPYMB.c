@@ -396,8 +396,6 @@ void CreatePYBase(void)
         t = t->next;
     }
 
-    s += iCount;
-
     fclose(fp1);
     fclose(fps);
 }

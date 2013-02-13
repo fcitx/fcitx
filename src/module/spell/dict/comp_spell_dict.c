@@ -59,12 +59,7 @@ compile_dict(int ifd, int ofd)
         ceff_buff = htole16(ceff > UINT16_MAX ? UINT16_MAX : ceff);
         write(ofd, &ceff_buff, sizeof(uint16_t));
         start = ++p;
-        char* temp = p;
-        temp = strchr(p, '\n');
-        if (temp)
-            p = temp;
-        else
-            p = p + strlen(p);
+        p += strcspn(p, "\n");
         write(ofd, start, p - start);
         write(ofd, &null_byte, 1);
         wcount++;

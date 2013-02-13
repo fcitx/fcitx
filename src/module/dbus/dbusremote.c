@@ -31,11 +31,9 @@ _fcitx_get_socket_path()
 static char*
 _fcitx_get_address ()
 {
-    char* address = NULL;
-    char* env = getenv("FCITX_DBUS_ADDRESS");
-    address = env ? strdup (env) : NULL;
-    if (address)
-        return address;
+    char *env = getenv("FCITX_DBUS_ADDRESS");
+    if (env)
+        return strdup(env);
 
     char* path = _fcitx_get_socket_path();
     FILE* fp = fopen(path, "r");
@@ -62,10 +60,7 @@ _fcitx_get_address ()
     if (!fcitx_utils_pid_exists(daemonpid)
         || !fcitx_utils_pid_exists(fcitxpid))
         return NULL;
-
-    address = strdup(buffer);
-
-    return address;
+    return strdup(buffer);
 }
 
 void usage(FILE* fp)
@@ -142,19 +137,17 @@ int main (int argc, char* argv[])
             address = _fcitx_get_address();
             if (address) {
                 printf("%s\n", address);
+                free(address);
                 return 0;
-            }
-            else
+            } else {
                 return 1;
-            break;
-
+            }
         case 'h':
             usage(stdout);
             return 0;
         default:
             usage(stderr);
             return 1;
-            break;
         }
     }
 

@@ -1748,10 +1748,11 @@ void SavePYFreq(FcitxPinyinState *pystate)
 
     fclose(fp);
 
-    fp = FcitxXDGGetFileUserWithPrefix("pinyin", PY_FREQ_FILE, NULL, &pstr);
+    FcitxXDGGetFileUserWithPrefix("pinyin", PY_FREQ_FILE, NULL, &pstr);
     if (access(pstr, 0))
         unlink(pstr);
     rename(tempfile, pstr);
+
     free(pstr);
     free(tempfile);
     pystate->iNewFreqCount = 0;
@@ -1821,7 +1822,7 @@ void SavePYIndex(FcitxPinyinState *pystate)
 
     fclose(fp);
 
-    fp = FcitxXDGGetFileUserWithPrefix("pinyin", PY_INDEX_FILE, NULL, &pstr);
+    FcitxXDGGetFileUserWithPrefix("pinyin", PY_INDEX_FILE, NULL, &pstr);
     if (access(pstr, 0))
         unlink(pstr);
     rename(tempfile, pstr);

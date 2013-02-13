@@ -45,7 +45,8 @@ void FillICData(FcitxInstance* instance, FcitxInputContext* ic)
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
     unsigned int i = utarray_len(ic2->data);
     for (;i < utarray_len(&instance->icdata);i++) {
-        FcitxICDataInfo *info = (FcitxICDataInfo*)utarray_eltptr(&instance->icdata, i);
+        FcitxICDataInfo *info =
+            (FcitxICDataInfo*)_utarray_eltptr(&instance->icdata, i);
         void *data = NULL;
         if (info->allocCallback)
             data = info->allocCallback(info->arg);
@@ -66,8 +67,9 @@ void FreeICData(FcitxInstance* instance, FcitxInputContext* ic)
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
     unsigned int i = 0;
     for (;i < utarray_len(ic2->data);i++) {
-        void** data = (void**)utarray_eltptr(ic2->data, i);
-        FcitxICDataInfo* info = (FcitxICDataInfo*)utarray_eltptr(&instance->icdata, i);
+        void** data = (void**)_utarray_eltptr(ic2->data, i);
+        FcitxICDataInfo* info =
+            (FcitxICDataInfo*)_utarray_eltptr(&instance->icdata, i);
         if (info->freeCallback) {
             info->freeCallback(info->arg, *data);
         }

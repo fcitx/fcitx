@@ -73,7 +73,7 @@ void LoadPYMB(FILE *fi, struct _PYMB **pPYMB, int isUser)
     *pPYMB = PYMB = malloc(sizeof(*PYMB) * (n + 1));
 
     for (i = 0; i < n; ++i) {
-        r = fcitx_utils_read_int32(fi, &(PYMB[i].PYFAIndex));
+        fcitx_utils_read_int32(fi, &(PYMB[i].PYFAIndex));
 
         int8_t clen;
         fread(&clen, sizeof(int8_t), 1, fi);

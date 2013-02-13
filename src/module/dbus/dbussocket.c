@@ -21,15 +21,15 @@ dbus_bool_t DBusAddWatch(DBusWatch *watch, void *data)
 
 void DBusRemoveWatch(DBusWatch *watch, void *data)
 {
-    FcitxDBusWatch **up, *w;
-    FcitxDBusWatch **watches = (FcitxDBusWatch**) data;
+    FcitxDBusWatch *w;
+    FcitxDBusWatch *next;
+    FcitxDBusWatch **watches = (FcitxDBusWatch**)data;
 
-    for (up = watches, w = *watches; w; w = w->next) {
+    for (w = *watches;w;w = next) {
+        next = w->next;
         if (w->watch == watch) {
-            *up = w->next;
             free(w);
-        } else
-            up = &(w->next);
+        }
     }
 }
 

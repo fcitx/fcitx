@@ -370,10 +370,9 @@ size_t fcitx_utf8_strnlen(const char* str, size_t byte)
         if (byte < diff)
             break;
 
-        str += diff;
         byte -= diff;
         str = next;
-        len ++ ;
+        len++;
     }
     return len;
 }
