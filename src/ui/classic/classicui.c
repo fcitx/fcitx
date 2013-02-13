@@ -45,6 +45,7 @@
 #include "MessageWindow.h"
 #include "fcitx/hook.h"
 #include "fcitx-utils/utils.h"
+#include "module/notificationitem/fcitx-notificationitem.h"
 
 struct _FcitxSkin;
 static boolean MainMenuAction(FcitxUIMenu* menu, int index);
@@ -68,6 +69,9 @@ static void ClassicUIInputReset(void *arg);
 static void ReloadConfigClassicUI(void *arg);
 static void ClassicUISuspend(void *arg);
 static void ClassicUIResume(void *arg);
+static void ClassicUIDelayedInitTray(void* arg);
+static void ClassicUIDelayedShowTray(void* arg);
+static void ClassicUINotificationItemAvailable(void* arg, boolean avaiable);
 
 static FcitxConfigFileDesc* GetClassicUIDesc();
 static void ClassicUIMainWindowSizeHint(void *arg, int* x, int* y,
@@ -157,7 +161,38 @@ void* ClassicUICreate(FcitxInstance* instance)
     DisplaySkin(classicui, classicui->skinType);
 
     FcitxClassicUIAddFunctions(instance);
+
+    FcitxInstanceAddTimeout(instance, 0, ClassicUIDelayedInitTray, classicui);
+
     return classicui;
+}
+
+void ClassicUIDelayedInitTray(void* arg) {
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    // FcitxLog(INFO, "yeah we delayed!");
+    if (!classicui->bUseTrayIcon)
+        return;
+    /*
+     * if this return false, something wrong happened and callback
+     * will never be called, show tray directly
+     */
+    if (FcitxNotificationItemEnable(classicui->owner, ClassicUINotificationItemAvailable, classicui)) {
+        if (!classicui->trayTimeout)
+            classicui->trayTimeout = FcitxInstanceAddTimeout(classicui->owner, 100, ClassicUIDelayedShowTray, classicui);
+    } else {
+        ReleaseTrayWindow(classicui->trayWindow);
+        InitTrayWindow(classicui->trayWindow);
+    }
+}
+
+void ClassicUIDelayedShowTray(void* arg)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    classicui->trayTimeout = 0;
+    if (!classicui->bUseTrayIcon)
+        return;
+    ReleaseTrayWindow(classicui->trayWindow);
+    InitTrayWindow(classicui->trayWindow);
 }
 
 void ClassicUISetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle)
@@ -260,13 +295,31 @@ void ClassicUISuspend(void* arg)
     CloseInputWindowInternal(classicui->inputWindow);
     CloseMainWindow(classicui->mainWindow);
     ReleaseTrayWindow(classicui->trayWindow);
+    /* always call this function will not do anything harm */
+    FcitxNotificationItemDisable(classicui->owner);
 }
 
 void ClassicUIResume(void* arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     classicui->isSuspend = false;
-    InitTrayWindow(classicui->trayWindow);
+    ClassicUIDelayedInitTray(classicui);
+}
+
+void ClassicUINotificationItemAvailable(void* arg, boolean avaiable) {
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    /* ClassicUISuspend has already done all clean up */
+    if (classicui->isSuspend)
+        return;
+    if (!avaiable) {
+        ReleaseTrayWindow(classicui->trayWindow);
+        InitTrayWindow(classicui->trayWindow);
+    } else {
+        if (classicui->trayTimeout) {
+            FcitxInstanceRemoveTimeoutById(classicui->owner, classicui->trayTimeout);
+        }
+        ReleaseTrayWindow(classicui->trayWindow);
+    }
 }
 
 void ActivateWindow(Display *dpy, int iScreen, Window window)
@@ -397,7 +450,7 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
             status = (FcitxUIStatus*) utarray_next(uistats, status)
         ) {
         FcitxClassicUIStatus* privstat =  GetPrivateStatus(status);
-        if (privstat == NULL || !status->visible || privstat->avail )
+        if (privstat == NULL || !status->visible)
             continue;
 
         flag = true;
@@ -411,7 +464,7 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
             compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
         ) {
         FcitxClassicUIStatus* privstat =  GetPrivateStatus(compstatus);
-        if (privstat == NULL || !compstatus->visible || privstat->avail)
+        if (privstat == NULL || !compstatus->visible)
             continue;
         if (FcitxUIGetMenuByStatusName(instance, compstatus->name))
             continue;
@@ -440,8 +493,6 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
             FcitxUIComplexStatus* compStatus = FcitxUIGetComplexStatusByName(instance, menup->candStatusBind);
             if (compStatus) {
                 if (!compStatus->visible)
-                    continue;
-                if (GetPrivateStatus(compStatus)->avail)
                     continue;
             }
         }

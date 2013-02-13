@@ -84,6 +84,7 @@ typedef struct _FcitxClassicUI {
     boolean isfallback;
 
     int dpi;
+    uint64_t trayTimeout;
 } FcitxClassicUI;
 
 void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height);

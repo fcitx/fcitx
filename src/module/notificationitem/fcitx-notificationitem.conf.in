@@ -1,0 +1,11 @@
+[Addon]
+Name=fcitx-notificationitem
+_GeneralName=DBus based new Freedesktop.org tray icon
+_Comment=DBus based new Freedesktop.org tray icon
+Category=Module
+Enabled=True
+Library=fcitx-notificationitem.so
+Type=SharedLibrary
+Priority=80
+Dependency=fcitx-dbus
+Advance=True

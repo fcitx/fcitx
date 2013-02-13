@@ -94,7 +94,7 @@ extern "C" {
     /** fcitx menu item type */
     typedef enum _FcitxMenuItemType {
         MENUTYPE_SIMPLE,
-        MENUTYPE_SUBMENU,
+        MENUTYPE_SUBMENU,/**< unfortunately this is only used internal, don't use it in your code */
         MENUTYPE_DIVLINE
     } FcitxMenuItemType;
 

@@ -45,69 +45,69 @@
 #define GetMenuItem(m, i) ((FcitxMenuItem*) utarray_eltptr(&(m)->shell, (i)))
 
 const char * kimpanel_introspection_xml =
-    "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
-    "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
-    "<node name=\"" FCITX_KIMPANEL_PATH "\">\n"
-    "  <interface name=\"org.freedesktop.DBus.Introspectable\">\n"
-    "    <method name=\"Introspect\">\n"
-    "      <arg name=\"data\" direction=\"out\" type=\"s\"/>\n"
-    "    </method>\n"
-    "  </interface>\n"
-    "  <interface name=\"" FCITX_KIMPANEL_INTERFACE "\">\n"
-    "    <signal name=\"ExecDialog\">\n"
-    "      <arg name=\"prop\" direction=\"in\" type=\"s\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"ExecMenu\">\n"
-    "      <arg name=\"prop\" direction=\"in\" type=\"a\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"RegisterProperties\">\n"
-    "      <arg name=\"prop\" direction=\"in\" type=\"a\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"UpdateProperty\">\n"
-    "      <arg name=\"prop\" direction=\"in\" type=\"s\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"RemoveProperty\">\n"
-    "      <arg name=\"prop\" direction=\"in\" type=\"s\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"ShowAux\">\n"
-    "      <arg name=\"toshow\" direction=\"in\" type=\"b\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"ShowPreedit\">\n"
-    "      <arg name=\"toshow\" direction=\"in\" type=\"b\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"ShowLookupTable\">\n"
-    "      <arg name=\"toshow\" direction=\"in\" type=\"b\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"UpdateLookupTable\">\n"
-    "      <arg name=\"label\" direction=\"in\" type=\"a\"/>\n"
-    "      <arg name=\"text\" direction=\"in\" type=\"a\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"UpdateLookupTableCursor\">\n"
-    "      <arg name=\"cursor\" direction=\"in\" type=\"i\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"UpdatePreeditCaret\">\n"
-    "      <arg name=\"position\" direction=\"in\" type=\"i\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"UpdatePreeditText\">\n"
-    "      <arg name=\"text\" direction=\"in\" type=\"s\"/>\n"
-    "      <arg name=\"attr\" direction=\"in\" type=\"s\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"UpdateAux\">\n"
-    "      <arg name=\"text\" direction=\"in\" type=\"s\"/>\n"
-    "      <arg name=\"attr\" direction=\"in\" type=\"s\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"UpdateSpotLocation\">\n"
-    "      <arg name=\"x\" direction=\"in\" type=\"i\"/>\n"
-    "      <arg name=\"y\" direction=\"in\" type=\"i\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"UpdateScreen\">\n"
-    "      <arg name=\"screen\" direction=\"in\" type=\"i\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"Enable\">\n"
-    "      <arg name=\"toenable\" direction=\"in\" type=\"b\"/>\n"
-    "    </signal>\n"
-    "  </interface>\n"
-    "</node>\n";
+    "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\" "
+    "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">"
+    "<node name=\"" FCITX_KIMPANEL_PATH "\">"
+    "<interface name=\"org.freedesktop.DBus.Introspectable\">"
+    "<method name=\"Introspect\">"
+    "<arg name=\"data\" direction=\"out\" type=\"s\"/>"
+    "</method>"
+    "</interface>"
+    "<interface name=\"" FCITX_KIMPANEL_INTERFACE "\">"
+    "<signal name=\"ExecDialog\">"
+    "<arg name=\"prop\" direction=\"in\" type=\"s\"/>"
+    "</signal>"
+    "<signal name=\"ExecMenu\">"
+    "<arg name=\"prop\" direction=\"in\" type=\"a\"/>"
+    "</signal>"
+    "<signal name=\"RegisterProperties\">"
+    "<arg name=\"prop\" direction=\"in\" type=\"a\"/>"
+    "</signal>"
+    "<signal name=\"UpdateProperty\">"
+    "<arg name=\"prop\" direction=\"in\" type=\"s\"/>"
+    "</signal>"
+    "<signal name=\"RemoveProperty\">"
+    "<arg name=\"prop\" direction=\"in\" type=\"s\"/>"
+    "</signal>"
+    "<signal name=\"ShowAux\">"
+    "<arg name=\"toshow\" direction=\"in\" type=\"b\"/>"
+    "</signal>"
+    "<signal name=\"ShowPreedit\">"
+    "<arg name=\"toshow\" direction=\"in\" type=\"b\"/>"
+    "</signal>"
+    "<signal name=\"ShowLookupTable\">"
+    "<arg name=\"toshow\" direction=\"in\" type=\"b\"/>"
+    "</signal>"
+    "<signal name=\"UpdateLookupTable\">"
+    "<arg name=\"label\" direction=\"in\" type=\"a\"/>"
+    "<arg name=\"text\" direction=\"in\" type=\"a\"/>"
+    "</signal>"
+    "<signal name=\"UpdateLookupTableCursor\">"
+    "<arg name=\"cursor\" direction=\"in\" type=\"i\"/>"
+    "</signal>"
+    "<signal name=\"UpdatePreeditCaret\">"
+    "<arg name=\"position\" direction=\"in\" type=\"i\"/>"
+    "</signal>"
+    "<signal name=\"UpdatePreeditText\">"
+    "<arg name=\"text\" direction=\"in\" type=\"s\"/>"
+    "<arg name=\"attr\" direction=\"in\" type=\"s\"/>"
+    "</signal>"
+    "<signal name=\"UpdateAux\">"
+    "<arg name=\"text\" direction=\"in\" type=\"s\"/>"
+    "<arg name=\"attr\" direction=\"in\" type=\"s\"/>"
+    "</signal>"
+    "<signal name=\"UpdateSpotLocation\">"
+    "<arg name=\"x\" direction=\"in\" type=\"i\"/>"
+    "<arg name=\"y\" direction=\"in\" type=\"i\"/>"
+    "</signal>"
+    "<signal name=\"UpdateScreen\">"
+    "<arg name=\"screen\" direction=\"in\" type=\"i\"/>"
+    "</signal>"
+    "<signal name=\"Enable\">"
+    "<arg name=\"toenable\" direction=\"in\" type=\"b\"/>"
+    "</signal>"
+    "</interface>"
+    "</node>";
 
 typedef struct _FcitxKimpanelUI {
     FcitxInstance* owner;
@@ -166,7 +166,7 @@ static void KimUpdateProperty(FcitxKimpanelUI* kimpanel, char *prop);
 static DBusHandlerResult KimpanelDBusEventHandler(DBusConnection *connection, DBusMessage *message, void *user_data);
 static DBusHandlerResult KimpanelDBusFilter(DBusConnection *connection, DBusMessage *message, void *user_data);
 static int CalKimCursorPos(FcitxKimpanelUI *kimpanel);
-static void KimpanelInputReset(void *arg);
+static void KimpanelInputIMChanged(void *arg);
 static char* Status2String(FcitxUIStatus* status);
 static char* ComplexStatus2String(FcitxUIComplexStatus* status);
 static void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel);
@@ -334,10 +334,10 @@ void* KimpanelCreate(FcitxInstance* instance)
         kimpanel->messageUp = FcitxMessagesNew();
         kimpanel->messageDown = FcitxMessagesNew();
 
-        FcitxIMEventHook resethk;
-        resethk.arg = kimpanel;
-        resethk.func = KimpanelInputReset;
-        FcitxInstanceRegisterResetInputHook(instance, resethk);
+        FcitxIMEventHook imchangehk;
+        imchangehk.arg = kimpanel;
+        imchangehk.func = KimpanelInputIMChanged;
+        FcitxInstanceRegisterIMChangedHook(instance, imchangehk);
 
         const char* kimpanelServiceName = "org.kde.impanel";
         DBusMessage* message = dbus_message_new_method_call(DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, DBUS_INTERFACE_DBUS, "NameHasOwner");
@@ -417,7 +417,7 @@ void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
     free(status);
 }
 
-void KimpanelInputReset(void* arg)
+void KimpanelInputIMChanged(void* arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
     if (kimpanel->addon != FcitxInstanceGetCurrentUI(kimpanel->owner))
@@ -885,17 +885,18 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                                   DBUS_TYPE_STRING, &newowner ,
                                   DBUS_TYPE_INVALID)) {
             /* old die and no new one */
-            if (strcmp(service, "org.kde.impanel") == 0
-                && strlen(oldowner) > 0
-                && strlen(newowner) == 0)
-                FcitxUISwitchToFallback(instance);
-            /*
-             * since if new rise, it will send PanelCreated,
-             * So don't need to re-register here
-             */
+            if (strcmp(service, "org.kde.impanel") == 0) {
+                if (strlen(oldowner) > 0 && strlen(newowner) == 0) {
+                    FcitxUISwitchToFallback(instance);
+                }
+                /*
+                 * since if new rise, it will send PanelCreated,
+                 * So don't need to re-register here
+                 */
+                return DBUS_HANDLER_RESULT_HANDLED;
+            }
         }
         dbus_error_free(&error);
-        return DBUS_HANDLER_RESULT_HANDLED;
     }
 
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;

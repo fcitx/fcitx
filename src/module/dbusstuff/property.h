@@ -1,7 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2002~2010 by Yuking                                     *
- *   yuking_net@sohu.com                                                   *
- *   Copyright (C) 2010~2010 by CSSlayer                                   *
+ *   Copyright (C) 2013~2013 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -20,42 +18,30 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include "fcitx/fcitx.h"
+#ifndef FCITX_DBUSSTUFF_PROPERTY_H
+#define FCITX_DBUSSTUFF_PROPERTY_H
 
-#ifndef _TRAY_WINDOW_H
-#define _TRAY_WINDOW_H
+#include <dbus/dbus.h>
 
-#include <X11/Xlib.h>
-#include <string.h>
-#include <cairo.h>
-#include <cairo-xlib.h>
-#include <X11/Xutil.h>
-#include "fcitx-config/fcitx-config.h"
-#include <X11/Xdefs.h>
+typedef struct _FcitxDBusPropertyTable {
+    char* interface;
+    char* name;
+    char* type;
+    void (*getfunc)(void* arg, DBusMessageIter* iter);
+    void (*setfunc)(void* arg, DBusMessageIter* iter);
+} FcitxDBusPropertyTable;
 
-#define INACTIVE_ICON 0
-#define ACTIVE_ICON   1
-struct _FcitxClassicUI;
+DBusMessage* FcitxDBusPropertyGet(void* arg, const FcitxDBusPropertyTable* propertTable, DBusMessage* message);
+DBusMessage* FcitxDBusPropertySet(void* arg, const FcitxDBusPropertyTable* propertTable, DBusMessage* message);
+DBusMessage* FcitxDBusPropertyGetAll(void* arg, const FcitxDBusPropertyTable* propertTable, DBusMessage* message);
 
-typedef struct _TrayWindow {
-    Window window;
-    boolean bTrayMapped;
-    XVisualInfo visual;
-    Atom atoms[6];
+static inline DBusMessage* FcitxDBusPropertyUnknownMethod(DBusMessage *msg)
+{
+    DBusMessage* reply = dbus_message_new_error_printf(msg,
+                                                       DBUS_ERROR_UNKNOWN_METHOD,
+                                                       "No such method with signature (%s)",
+                                                       dbus_message_get_signature(msg));
+    return reply;
+}
 
-    cairo_surface_t *cs_x;
-    cairo_surface_t *cs;
-    int size;
-    struct _FcitxClassicUI* owner;
-    Window dockWindow;
-} TrayWindow;
-
-TrayWindow* CreateTrayWindow(struct _FcitxClassicUI *classicui);
-void DrawTrayWindow(TrayWindow* trayWindow);
-void RedrawTrayWindow(TrayWindow* trayWindow);
-/* these two function can be called more than once */
-void ReleaseTrayWindow(TrayWindow* trayWindow);
-void InitTrayWindow(TrayWindow *trayWindow);
-#endif
-
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+#endif // FCITX_DBUSSTUFF_PROPERTY_H
