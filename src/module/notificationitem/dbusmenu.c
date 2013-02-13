@@ -120,8 +120,8 @@ static DBusMessage* FcitxDBusMenuGetGroupProperties(FcitxNotificationItem* notif
 static DBusMessage* FcitxDBusMenuGetProperty(FcitxNotificationItem* notificationitem, DBusMessage* message);
 static DBusMessage* FcitxDBusMenuAboutToShow(FcitxNotificationItem* notificationitem, DBusMessage* message);
 static DBusMessage* FcitxDBusMenuGetLayout(FcitxNotificationItem* notificationitem, DBusMessage* message);
-static void FcitxDBusMenuFillLayooutItemWrap(FcitxNotificationItem* notificationitem, int32_t id, int depth, UT_array* properties, DBusMessageIter* iter);
-static void FcitxDBusMenuFillLayooutItem(FcitxNotificationItem* notificationitem, int32_t id, int depth, UT_array* properties, DBusMessageIter* iter);
+static void FcitxDBusMenuFillLayooutItemWrap(FcitxNotificationItem* notificationitem, int32_t id, int depth, FcitxStringHashSet* properties, DBusMessageIter* iter);
+static void FcitxDBusMenuFillLayooutItem(FcitxNotificationItem* notificationitem, int32_t id, int depth, FcitxStringHashSet* properties, DBusMessageIter* iter);
 
 const FcitxDBusPropertyTable dbusMenuPropertyTable[] = {
     { DBUS_MENU_IFACE, "Version", "u", FcitxDBusMenuGetVersion, NULL },
@@ -281,7 +281,9 @@ void FcitxDBusMenuEvent(FcitxNotificationItem* notificationitem, DBusMessage* me
     } while(0);
 }
 
-void FcitxDBusMenuAppendProperty(DBusMessageIter* iter, const char* name, int type, const void* data) {
+void FcitxDBusMenuAppendProperty(DBusMessageIter* iter, FcitxStringHashSet* properties, const char* name, int type, const void* data) {
+    if (properties && !fcitx_utils_string_hash_set_contains(properties, name))
+        return;
     DBusMessageIter entry;
     dbus_message_iter_open_container(iter, DBUS_TYPE_DICT_ENTRY, NULL, &entry);
     dbus_message_iter_append_basic(&entry, DBUS_TYPE_STRING, &name);
@@ -294,7 +296,7 @@ void FcitxDBusMenuAppendProperty(DBusMessageIter* iter, const char* name, int ty
     dbus_message_iter_close_container(iter, &entry);
 }
 
-void FcitxDBusMenuFillProperty(FcitxNotificationItem* notificationitem, int32_t id, UT_array* properties, DBusMessageIter* iter)
+void FcitxDBusMenuFillProperty(FcitxNotificationItem* notificationitem, int32_t id, FcitxStringHashSet* properties, DBusMessageIter* iter)
 {
     FcitxInstance* instance = notificationitem->owner;
     /* append a{sv} */
@@ -306,7 +308,7 @@ void FcitxDBusMenuFillProperty(FcitxNotificationItem* notificationitem, int32_t 
     /* index == 0 means it has a sub menu */
     if (index == 0) {
         const char* value = "submenu";
-        FcitxDBusMenuAppendProperty(&sub, "children-display", DBUS_TYPE_STRING, &value);
+        FcitxDBusMenuAppendProperty(&sub, properties, "children-display", DBUS_TYPE_STRING, &value);
     }
     if (menu == 0) {
         if (index <= 8 && index > 0) {
@@ -314,29 +316,29 @@ void FcitxDBusMenuFillProperty(FcitxNotificationItem* notificationitem, int32_t 
             switch(index) {
                 case 1:
                     value = _("Online Help");
-                    FcitxDBusMenuAppendProperty(&sub, "label", DBUS_TYPE_STRING, &value);
+                    FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &value);
                     break;
                 case 2:
                 case 3:
                 case 8:
                     value = "separator";
-                    FcitxDBusMenuAppendProperty(&sub, "type", DBUS_TYPE_STRING, &value);
+                    FcitxDBusMenuAppendProperty(&sub, properties, "type", DBUS_TYPE_STRING, &value);
                     break;
                 case 4:
                     value = _("Configure Current Input Method");
-                    FcitxDBusMenuAppendProperty(&sub, "label", DBUS_TYPE_STRING, &value);
+                    FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &value);
                     break;
                 case 5:
                     value = _("Configure");
-                    FcitxDBusMenuAppendProperty(&sub, "label", DBUS_TYPE_STRING, &value);
+                    FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &value);
                     break;
                 case 6:
                     value = _("Restart");
-                    FcitxDBusMenuAppendProperty(&sub, "label", DBUS_TYPE_STRING, &value);
+                    FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &value);
                     break;
                 case 7:
                     value = _("Exit");
-                    FcitxDBusMenuAppendProperty(&sub, "label", DBUS_TYPE_STRING, &value);
+                    FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &value);
                     break;
             }
         } else {
@@ -365,10 +367,10 @@ void FcitxDBusMenuFillProperty(FcitxNotificationItem* notificationitem, int32_t 
             }
 
             if (name) {
-                FcitxDBusMenuAppendProperty(&sub, "label", DBUS_TYPE_STRING, &name);
+                FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &name);
             }
             if (icon) {
-                FcitxDBusMenuAppendProperty(&sub, "icon-name", DBUS_TYPE_STRING, &icon);
+                FcitxDBusMenuAppendProperty(&sub, properties, "icon-name", DBUS_TYPE_STRING, &icon);
             }
             fcitx_utils_free(needfree);
         }
@@ -378,19 +380,19 @@ void FcitxDBusMenuFillProperty(FcitxNotificationItem* notificationitem, int32_t 
         if (menupp) {
             menup = *menupp;
             if (index == 0) {
-                FcitxDBusMenuAppendProperty(&sub, "label", DBUS_TYPE_STRING, &menup->name);
+                FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &menup->name);
             } else if (index > 0) {
                 FcitxMenuItem* item = (FcitxMenuItem*) utarray_eltptr(&menup->shell, index - 1);
                 if (item) {
-                    FcitxDBusMenuAppendProperty(&sub, "label", DBUS_TYPE_STRING, &item->tipstr);
+                    FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &item->tipstr);
                     if (menup->mark != -1) {
                         const char* radio = "radio";
-                        FcitxDBusMenuAppendProperty(&sub, "toggle-type", DBUS_TYPE_STRING, &radio);
+                        FcitxDBusMenuAppendProperty(&sub, properties, "toggle-type", DBUS_TYPE_STRING, &radio);
                         int32_t toggleState = 0;
                         if (menup->mark == index - 1) {
                             toggleState = 1;
                         }
-                        FcitxDBusMenuAppendProperty(&sub, "toggle-state", DBUS_TYPE_INT32, &toggleState);
+                        FcitxDBusMenuAppendProperty(&sub, properties, "toggle-state", DBUS_TYPE_INT32, &toggleState);
                     }
                 }
             }
@@ -399,7 +401,7 @@ void FcitxDBusMenuFillProperty(FcitxNotificationItem* notificationitem, int32_t 
     dbus_message_iter_close_container(iter, &sub);
 }
 
-void FcitxDBusMenuFillLayooutItemWrap(FcitxNotificationItem* notificationitem, int32_t id, int depth, UT_array* properties, DBusMessageIter* iter)
+void FcitxDBusMenuFillLayooutItemWrap(FcitxNotificationItem* notificationitem, int32_t id, int depth, FcitxStringHashSet* properties, DBusMessageIter* iter)
 {
     DBusMessageIter variant;
     dbus_message_iter_open_container(iter, DBUS_TYPE_VARIANT, "(ia{sv}av)", &variant);
@@ -407,7 +409,7 @@ void FcitxDBusMenuFillLayooutItemWrap(FcitxNotificationItem* notificationitem, i
     dbus_message_iter_close_container(iter, &variant);
 }
 
-void FcitxDBusMenuFillLayooutItem(FcitxNotificationItem* notificationitem, int32_t id, int depth, UT_array* properties, DBusMessageIter* iter)
+void FcitxDBusMenuFillLayooutItem(FcitxNotificationItem* notificationitem, int32_t id, int depth, FcitxStringHashSet* properties, DBusMessageIter* iter)
 {
     FcitxInstance* instance = notificationitem->owner;
     DBusMessageIter sub, array;
@@ -430,7 +432,8 @@ void FcitxDBusMenuFillLayooutItem(FcitxNotificationItem* notificationitem, int32
      *            -> exit (0,7)
      */
 
-    if (depth > 0) {
+    /* using != 0 can make -1 recursive to infinite */
+    if (depth != 0) {
         int32_t menu = ACTION_MENU(id);
         int32_t index = ACTION_INDEX(id);
 
@@ -534,12 +537,14 @@ DBusMessage* FcitxDBusMenuGetLayout(FcitxNotificationItem* notificationitem, DBu
 
         DBusMessageIter sub;
         dbus_message_iter_recurse(&args, &sub);
-        UT_array* properties = fcitx_utils_new_string_list();
+        FcitxStringHashSet* properties = NULL;
         while (dbus_message_iter_get_arg_type(&sub) == DBUS_TYPE_STRING) {
             char* property;
             dbus_message_iter_get_basic(&sub, &property);
 
-            utarray_push_back(properties, &property);
+            if (!fcitx_utils_string_hash_set_contains(properties, property)) {
+                properties = fcitx_utils_string_hash_set_insert(properties, property);
+            }
             dbus_message_iter_next(&sub);
         }
 
@@ -549,9 +554,10 @@ DBusMessage* FcitxDBusMenuGetLayout(FcitxNotificationItem* notificationitem, DBu
         DBusMessageIter iter;
         dbus_message_iter_init_append(reply, &iter);
         dbus_message_iter_append_basic(&iter, DBUS_TYPE_UINT32, &notificationitem->revision);
+        notificationitem->revision++;
         FcitxDBusMenuFillLayooutItem(notificationitem, id, recursionDepth, properties, &iter);
 
-        fcitx_utils_free_string_list(properties);
+        fcitx_utils_free_string_hash_set(properties);
     } while(0);
 
     if (!reply) {
