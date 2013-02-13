@@ -674,7 +674,7 @@ DBusMessage* FcitxDBusMenuAboutToShow(FcitxNotificationItem* notificationitem, D
         dbus_message_append_args(reply, DBUS_TYPE_BOOLEAN, &needUpdate, DBUS_TYPE_INVALID);
         notificationitem->revision++;
         DBusMessage* sig = dbus_message_new_signal("/MenuBar", DBUS_MENU_IFACE, "LayoutUpdated");
-        dbus_message_append_args(sig, DBUS_TYPE_UINT32, &notificationitem->revision, DBUS_TYPE_INT32, id, DBUS_TYPE_INVALID);
+        dbus_message_append_args(sig, DBUS_TYPE_UINT32, &notificationitem->revision, DBUS_TYPE_INT32, &id, DBUS_TYPE_INVALID);
         dbus_connection_send(notificationitem->conn, sig, NULL);
         dbus_message_unref(sig);
     } else {
