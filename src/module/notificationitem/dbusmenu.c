@@ -25,13 +25,22 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx/fcitx.h"
 
+/*
+ * libdbusmenu-gtk have a strange 30000 limitation, in order to leverage this, we need
+ * some more hack
+ *
+ * max bit -> 14bit
+ * lower 5 bit for menu, 0 -> 31 (IMHO it's enough)
+ * higher 9 bit for index, 0 -> 511
+ */
+
 #define DBUS_MENU_IFACE "com.canonical.dbusmenu"
-#define ACTION_ID(ID, IDX) (((IDX) << 16) | (ID))
-#define ACTION_INDEX(ID) (((ID) & 0xffff0000) >> 16)
-#define ACTION_MENU(ID) ((ID) & 0x0000ffff)
-#define STATUS_ID(ISCOMP, IDX) ACTION_ID(0, (((ISCOMP) ? 0x8000 : 0x0000) + IDX + 8 + 1))
-#define STATUS_INDEX(ID) ((ACTION_INDEX(ID) & 0x7fff) - 8 - 1)
-#define STATUS_ISCOMP(ID) (!!(ACTION_INDEX(ID) & 0x8000))
+#define ACTION_ID(ID, IDX) (((IDX) << 5) | (ID))
+#define ACTION_INDEX(ID) (((ID) & 0xffffffe0) >> 5)
+#define ACTION_MENU(ID) ((ID) & 0x0000001f)
+#define STATUS_ID(ISCOMP, IDX) ACTION_ID(0, (((ISCOMP) ? 0x100 : 0x000) + IDX + 8 + 1))
+#define STATUS_INDEX(ID) ((ACTION_INDEX(ID) & 0x1ff) - 8 - 1)
+#define STATUS_ISCOMP(ID) (!!(ACTION_INDEX(ID) & 0x100))
 
 static const UT_icd ut_int32_icd = {
     sizeof(int32_t), NULL, NULL, NULL
@@ -603,6 +612,7 @@ DBusMessage* FcitxDBusMenuGetGroupProperties(FcitxNotificationItem* notification
             dbus_message_iter_get_basic(&sub, &id);
 
             utarray_push_back(&ids, &id);
+            dbus_message_iter_next(&sub);
         }
         dbus_message_iter_next(&args);
 
@@ -633,7 +643,7 @@ DBusMessage* FcitxDBusMenuGetGroupProperties(FcitxNotificationItem* notification
         for (; i < utarray_len(&ids); i ++) {
             int32_t id = *(int32_t*) utarray_eltptr(&ids, i);
             DBusMessageIter ssub;
-            dbus_message_iter_open_container(&sub, DBUS_TYPE_STRUCT, "(ia{sv})", &ssub);
+            dbus_message_iter_open_container(&sub, DBUS_TYPE_STRUCT, NULL, &ssub);
             dbus_message_iter_append_basic(&ssub, DBUS_TYPE_INT32, &id);
             FcitxDBusMenuFillProperty(notificationitem, id, properties, &ssub);
             dbus_message_iter_close_container(&sub, &ssub);

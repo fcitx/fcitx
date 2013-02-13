@@ -487,7 +487,7 @@ void FcitxNotificationItemGetXAyatanaLabel(void* arg, DBusMessageIter* iter)
 
 void FcitxNotificationItemGetXAyatanaLabelGuide(void* arg, DBusMessageIter* iter)
 {
-    const char* label = "XXXXXXXXXXXXXXX";
+    const char* label = "";
     dbus_message_iter_append_basic(iter, DBUS_TYPE_STRING, &label);
 }
 
@@ -512,7 +512,6 @@ void FcitxNotificationItemIMChanged(void* arg)
 
     SEND_SIGNAL("NewIcon");
     SEND_SIGNAL("NewToolTip");
-    SEND_SIGNAL("NewTitle");
 #if 0
     do {
         DBusMessage* msg = dbus_message_new_signal(NOTIFICATION_ITEM_DEFAULT_OBJ,
