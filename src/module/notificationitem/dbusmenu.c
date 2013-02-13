@@ -215,7 +215,6 @@ void FcitxDBusMenuEvent(FcitxNotificationItem* notificationitem, DBusMessage* me
 
         if (menu == 0) {
             if (index <= 8 && index > 0) {
-                const char* value;
                 switch(index) {
                     case 1:
                         {
@@ -242,11 +241,9 @@ void FcitxDBusMenuEvent(FcitxNotificationItem* notificationitem, DBusMessage* me
                         fcitx_utils_launch_configure_tool();
                         break;
                     case 6:
-                        value = _("Restart");
                         fcitx_utils_launch_restart();
                         break;
                     case 7:
-                        value = _("Exit");
                         FcitxInstanceEnd(instance);
                         break;
                 }
