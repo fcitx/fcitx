@@ -567,7 +567,6 @@ DBusMessage* FcitxDBusMenuGetLayout(FcitxNotificationItem* notificationitem, DBu
         DBusMessageIter iter;
         dbus_message_iter_init_append(reply, &iter);
         dbus_message_iter_append_basic(&iter, DBUS_TYPE_UINT32, &notificationitem->revision);
-        notificationitem->revision++;
         FcitxDBusMenuFillLayooutItem(notificationitem, id, recursionDepth, properties, &iter);
 
         fcitx_utils_free_string_hash_set(properties);
@@ -673,6 +672,11 @@ DBusMessage* FcitxDBusMenuAboutToShow(FcitxNotificationItem* notificationitem, D
         /* for fcitx, we always return true */
         dbus_bool_t needUpdate = TRUE;
         dbus_message_append_args(reply, DBUS_TYPE_BOOLEAN, &needUpdate, DBUS_TYPE_INVALID);
+        notificationitem->revision++;
+        DBusMessage* sig = dbus_message_new_signal("/MenuBar", DBUS_MENU_IFACE, "LayoutUpdated");
+        dbus_message_append_args(sig, DBUS_TYPE_UINT32, &notificationitem->revision, DBUS_TYPE_INT32, id, DBUS_TYPE_INVALID);
+        dbus_connection_send(notificationitem->conn, sig, NULL);
+        dbus_message_unref(sig);
     } else {
         reply = FcitxDBusPropertyUnknownMethod(message);
     }
