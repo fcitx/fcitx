@@ -25,13 +25,26 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx/fcitx.h"
 
+/*
+ * libdbusmenu-gtk have a strange 30000 limitation, in order to leverage this, we need
+ * some more hack
+ *
+ * max bit -> 14bit
+ * lower 5 bit for menu, 0 -> 31 (IMHO it's enough)
+ * higher 9 bit for index, 0 -> 511
+ */
+
 #define DBUS_MENU_IFACE "com.canonical.dbusmenu"
-#define ACTION_ID(ID, IDX) (((IDX) << 16) | (ID))
-#define ACTION_INDEX(ID) (((ID) & 0xffff0000) >> 16)
-#define ACTION_MENU(ID) ((ID) & 0x0000ffff)
-#define STATUS_ID(ISCOMP, IDX) ACTION_ID(0, (((ISCOMP) ? 0x8000 : 0x0000) + IDX + 8 + 1))
-#define STATUS_INDEX(ID) ((ACTION_INDEX(ID) & 0x7fff) - 8 - 1)
-#define STATUS_ISCOMP(ID) (!!(ACTION_INDEX(ID) & 0x8000))
+#define ACTION_ID(ID, IDX) (((IDX) << 5) | (ID))
+#define ACTION_INDEX(ID) (((ID) & 0xffffffe0) >> 5)
+#define ACTION_MENU(ID) ((ID) & 0x0000001f)
+#define STATUS_ID(ISCOMP, IDX) ACTION_ID(0, (((ISCOMP) ? 0x100 : 0x000) + IDX + 8 + 1))
+#define STATUS_INDEX(ID) ((ACTION_INDEX(ID) & 0x1ff) - 8 - 1)
+#define STATUS_ISCOMP(ID) (!!(ACTION_INDEX(ID) & 0x100))
+
+static const UT_icd ut_int32_icd = {
+    sizeof(int32_t), NULL, NULL, NULL
+};
 
 const char* dbus_menu_interface =
     "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\""
@@ -569,22 +582,11 @@ DBusMessage* FcitxDBusMenuGetLayout(FcitxNotificationItem* notificationitem, DBu
 
 DBusMessage* FcitxDBusMenuGetProperty(FcitxNotificationItem* notificationitem, DBusMessage* message)
 {
+    /* TODO implement this, document said this only for debug so we ignore it for now */
+
     /* signature is */
     DBusMessage* reply = NULL;
-    int32_t id;
-    DBusError err;
-    dbus_error_init(&err);
-    char* propertyName = NULL;
-    if (dbus_message_get_args(message, &err,
-                              DBUS_TYPE_INT32, &id,
-                              DBUS_TYPE_STRING, &propertyName,
-                              DBUS_TYPE_INVALID)) {
-        reply = dbus_message_new_method_return(message);
-    } else {
-        reply = FcitxDBusPropertyUnknownMethod(message);
-    }
-
-    dbus_error_free(&err);
+    reply = FcitxDBusPropertyUnknownMethod(message);
 
     return reply;
 }
@@ -592,7 +594,71 @@ DBusMessage* FcitxDBusMenuGetProperty(FcitxNotificationItem* notificationitem, D
 DBusMessage* FcitxDBusMenuGetGroupProperties(FcitxNotificationItem* notificationitem, DBusMessage* message)
 {
     /* signature aias */
-    return NULL;
+    DBusMessageIter args;
+    dbus_message_iter_init(message, &args);
+
+    DBusMessage* reply = NULL;
+
+    do {
+        if (dbus_message_iter_get_arg_type(&args) != DBUS_TYPE_ARRAY)
+            break;
+
+        DBusMessageIter sub;
+        dbus_message_iter_recurse(&args, &sub);
+        UT_array ids;
+        utarray_init(&ids, &ut_int32_icd);
+        while (dbus_message_iter_get_arg_type(&sub) == DBUS_TYPE_INT32) {
+            int32_t id;
+            dbus_message_iter_get_basic(&sub, &id);
+
+            utarray_push_back(&ids, &id);
+            dbus_message_iter_next(&sub);
+        }
+        dbus_message_iter_next(&args);
+
+        dbus_message_iter_recurse(&args, &sub);
+        FcitxStringHashSet* properties = NULL;
+        if (dbus_message_iter_get_arg_type(&args) != DBUS_TYPE_ARRAY) {
+            utarray_done(&ids);
+            break;
+        }
+
+        while (dbus_message_iter_get_arg_type(&sub) == DBUS_TYPE_STRING) {
+            char* property;
+            dbus_message_iter_get_basic(&sub, &property);
+
+            if (!fcitx_utils_string_hash_set_contains(properties, property)) {
+                properties = fcitx_utils_string_hash_set_insert(properties, property);
+            }
+            dbus_message_iter_next(&sub);
+        }
+
+        reply = dbus_message_new_method_return(message);
+
+        /* out put is a(ia{sv}) */
+        DBusMessageIter iter;
+        dbus_message_iter_init_append(reply, &iter);
+        dbus_message_iter_open_container(&iter, DBUS_TYPE_ARRAY, "(ia{sv})", &sub);
+        int i = 0;
+        for (; i < utarray_len(&ids); i ++) {
+            int32_t id = *(int32_t*) utarray_eltptr(&ids, i);
+            DBusMessageIter ssub;
+            dbus_message_iter_open_container(&sub, DBUS_TYPE_STRUCT, NULL, &ssub);
+            dbus_message_iter_append_basic(&ssub, DBUS_TYPE_INT32, &id);
+            FcitxDBusMenuFillProperty(notificationitem, id, properties, &ssub);
+            dbus_message_iter_close_container(&sub, &ssub);
+        }
+        dbus_message_iter_close_container(&iter, &sub);
+
+        utarray_done(&ids);
+        fcitx_utils_free_string_hash_set(properties);
+    } while(0);
+
+    if (!reply) {
+        reply = FcitxDBusPropertyUnknownMethod(message);
+    }
+
+    return reply;
 }
 
 DBusMessage* FcitxDBusMenuAboutToShow(FcitxNotificationItem* notificationitem, DBusMessage* message)
