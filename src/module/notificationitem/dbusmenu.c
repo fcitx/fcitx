@@ -341,6 +341,8 @@ void FcitxDBusMenuFillProperty(FcitxNotificationItem* notificationitem, int32_t 
                 case 1:
                     value = _("Online Help");
                     FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &value);
+                    value = "help-contents";
+                    FcitxDBusMenuAppendProperty(&sub, properties, "icon-name", DBUS_TYPE_STRING, &value);
                     break;
                 case 2:
                 case 3:
@@ -355,14 +357,20 @@ void FcitxDBusMenuFillProperty(FcitxNotificationItem* notificationitem, int32_t 
                 case 5:
                     value = _("Configure");
                     FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &value);
+                    value = "preferences-system";
+                    FcitxDBusMenuAppendProperty(&sub, properties, "icon-name", DBUS_TYPE_STRING, &value);
                     break;
                 case 6:
                     value = _("Restart");
                     FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &value);
+                    value = "view-refresh";
+                    FcitxDBusMenuAppendProperty(&sub, properties, "icon-name", DBUS_TYPE_STRING, &value);
                     break;
                 case 7:
                     value = _("Exit");
                     FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &value);
+                    value = "application-exit";
+                    FcitxDBusMenuAppendProperty(&sub, properties, "icon-name", DBUS_TYPE_STRING, &value);
                     break;
             }
         } else {
