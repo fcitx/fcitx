@@ -33,6 +33,7 @@ typedef struct _FcitxNotificationItem {
     int index;
     char* serviceName;
     uint32_t revision;
+    int pendingActionId;
 } FcitxNotificationItem;
 
 boolean FcitxDBusMenuCreate(FcitxNotificationItem* notificationitem);

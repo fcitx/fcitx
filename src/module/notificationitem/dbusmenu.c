@@ -191,10 +191,87 @@ DBusHandlerResult FcitxDBusMenuEventHandler(DBusConnection* connection, DBusMess
     return result;
 }
 
-void FcitxDBusMenuEvent(FcitxNotificationItem* notificationitem, DBusMessage* message)
+void FcitxDBusMenuDoEvent(void* arg)
 {
+    FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) arg;
     FcitxInstance* instance = notificationitem->owner;
 
+    int32_t id = notificationitem->pendingActionId;
+    notificationitem->pendingActionId = -1;
+
+    int32_t menu = ACTION_MENU(id);
+    int32_t index = ACTION_INDEX(id);
+    if (index <= 0)
+        return;
+
+    if (menu == 0) {
+        if (index <= 8 && index > 0) {
+            switch(index) {
+                case 1:
+                    {
+                        char* args[] = {
+                            "xdg-open",
+                            "http://fcitx-im.org/",
+                            0
+                        };
+                        fcitx_utils_start_process(args);
+                    }
+                    break;
+                case 4:
+                    {
+                        FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
+                        if (im && im->owner) {
+                            fcitx_utils_launch_configure_tool_for_addon(im->uniqueName);
+                        }
+                        else {
+                            fcitx_utils_launch_configure_tool();
+                        }
+                    }
+                    break;
+                case 5:
+                    fcitx_utils_launch_configure_tool();
+                    break;
+                case 6:
+                    fcitx_utils_launch_restart();
+                    break;
+                case 7:
+                    FcitxInstanceEnd(instance);
+                    break;
+            }
+        } else {
+            int index = STATUS_INDEX(id);
+            const char* name = NULL;
+            if (STATUS_ISCOMP(id)) {
+                UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
+                FcitxUIComplexStatus* compstatus = (FcitxUIComplexStatus*) utarray_eltptr(uicompstats, index);
+                if (compstatus) {
+                    name = compstatus->name;
+                }
+            } else {
+                UT_array* uistats = FcitxInstanceGetUIStats(instance);
+                FcitxUIStatus* status = (FcitxUIStatus*) utarray_eltptr(uistats, index);
+                if (status) {
+                    name = status->name;
+                }
+            }
+            if (name) {
+                FcitxUIUpdateStatus(instance, name);
+            }
+        }
+    } else if (menu > 0) {
+        UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
+        FcitxUIMenu** menup = (FcitxUIMenu**) utarray_eltptr(uimenus, menu - 1), *menu;
+        if (!menup)
+            return;
+        menu = *menup;
+        if (menu->MenuAction) {
+            menu->MenuAction(menu, index - 1);
+        }
+    }
+}
+
+void FcitxDBusMenuEvent(FcitxNotificationItem* notificationitem, DBusMessage* message)
+{
     /* signature isvu */
     DBusMessageIter args;
     dbus_message_iter_init(message, &args);
@@ -221,76 +298,10 @@ void FcitxDBusMenuEvent(FcitxNotificationItem* notificationitem, DBusMessage* me
             break;
         dbus_message_iter_next(&args);
 
-        int32_t menu = ACTION_MENU(id);
-        int32_t index = ACTION_INDEX(id);
-        if (index <= 0)
-            break;
-
-        if (menu == 0) {
-            if (index <= 8 && index > 0) {
-                switch(index) {
-                    case 1:
-                        {
-                            char* args[] = {
-                                "xdg-open",
-                                "http://fcitx-im.org/",
-                                0
-                            };
-                            fcitx_utils_start_process(args);
-                        }
-                        break;
-                    case 4:
-                        {
-                            FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
-                            if (im && im->owner) {
-                                fcitx_utils_launch_configure_tool_for_addon(im->uniqueName);
-                            }
-                            else {
-                                fcitx_utils_launch_configure_tool();
-                            }
-                        }
-                        break;
-                    case 5:
-                        fcitx_utils_launch_configure_tool();
-                        break;
-                    case 6:
-                        fcitx_utils_launch_restart();
-                        break;
-                    case 7:
-                        FcitxInstanceEnd(instance);
-                        break;
-                }
-            } else {
-                int index = STATUS_INDEX(id);
-                const char* name = NULL;
-                if (STATUS_ISCOMP(id)) {
-                    UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
-                    FcitxUIComplexStatus* compstatus = (FcitxUIComplexStatus*) utarray_eltptr(uicompstats, index);
-                    if (compstatus) {
-                        name = compstatus->name;
-                    }
-                } else {
-                    UT_array* uistats = FcitxInstanceGetUIStats(instance);
-                    FcitxUIStatus* status = (FcitxUIStatus*) utarray_eltptr(uistats, index);
-                    if (status) {
-                        name = status->name;
-                    }
-                }
-                if (name) {
-                    FcitxUIUpdateStatus(instance, name);
-                }
-            }
-        } else if (menu > 0) {
-            UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
-            FcitxUIMenu** menup = (FcitxUIMenu**) utarray_eltptr(uimenus, menu - 1), *menu;
-            if (!menup)
-                break;
-            menu = *menup;
-            if (menu->MenuAction) {
-                menu->MenuAction(menu, index - 1);
-            }
+        if (!FcitxInstanceCheckTimeoutByFunc(notificationitem->owner, FcitxDBusMenuDoEvent)) {
+            notificationitem->pendingActionId = id;
+            FcitxInstanceAddTimeout(notificationitem->owner, 50, FcitxDBusMenuDoEvent, notificationitem);
         }
-
     } while(0);
 }
 
