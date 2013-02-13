@@ -71,6 +71,11 @@ Type=String
 DefaultValue=
 Description=Fallback UI Addon
 
+[Addon/LoadLocal]
+Type=Boolean
+DefaultValue=False
+Description=Use RTLD_GLOBAL to load library
+
 [Addon/Advance]
 Type=Boolean
 DefaultValue=False

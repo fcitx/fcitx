@@ -276,7 +276,7 @@ void FcitxInstanceLoadIM(FcitxInstance* instance, FcitxAddon* addon)
             return;
         }
         fclose(fp);
-        handle = dlopen(modulePath, RTLD_NOW | RTLD_GLOBAL);
+        handle = dlopen(modulePath, RTLD_NOW | (addon->loadLocal ? RTLD_LOCAL : RTLD_GLOBAL));
         if (!handle) {
             FcitxLog(ERROR, _("IM: open %s fail %s") , modulePath , dlerror());
             free(modulePath);

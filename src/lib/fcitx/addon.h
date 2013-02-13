@@ -119,7 +119,12 @@ extern "C" {
             void* dummy2;
         };
 
-        void* padding[8]; /**< padding */
+        union {
+            boolean loadLocal;
+            void* dummy3;
+        };
+
+        void* padding[7]; /**< padding */
     } FcitxAddon;
 
     /**
