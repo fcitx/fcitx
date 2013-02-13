@@ -357,8 +357,11 @@ void FcitxDBusMenuFillProperty(FcitxNotificationItem* notificationitem, int32_t 
                 case 5:
                     value = _("Configure");
                     FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &value);
+                    /* this icon sucks on KDE, why configure doesn't have "configure" */
+#if 0
                     value = "preferences-system";
                     FcitxDBusMenuAppendProperty(&sub, properties, "icon-name", DBUS_TYPE_STRING, &value);
+#endif
                     break;
                 case 6:
                     value = _("Restart");
