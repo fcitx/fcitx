@@ -18,11 +18,30 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef _FCITX_MODULE_NOTIFICATIONITEM_H
-#define _FCITX_MODULE_NOTIFICATIONITEM_H
+#ifndef FCITX_DBUSSTUFF_PROPERTY_H
+#define FCITX_DBUSSTUFF_PROPERTY_H
 
-#include <fcitx-utils/utils.h>
+#include <dbus/dbus.h>
 
-typedef void (*FcitxNotificationItemAvailableCallback)(void* arg, boolean enable);
+typedef struct _FcitxDBusPropertyTable {
+    char* interface;
+    char* name;
+    char* type;
+    void (*getfunc)(void* arg, DBusMessageIter* iter);
+    void (*setfunc)(void* arg, DBusMessageIter* iter);
+} FcitxDBusPropertyTable;
 
-#endif // _FCITX_MODULE_NOTIFICATIONITEM_H
+DBusMessage* FcitxDBusPropertyGet(void* arg, const FcitxDBusPropertyTable* propertTable, DBusMessage* message);
+DBusMessage* FcitxDBusPropertySet(void* arg, const FcitxDBusPropertyTable* propertTable, DBusMessage* message);
+DBusMessage* FcitxDBusPropertyGetAll(void* arg, const FcitxDBusPropertyTable* propertTable, DBusMessage* message);
+
+static inline DBusMessage* FcitxDBusPropertyUnknownMethod(DBusMessage *msg)
+{
+    DBusMessage* reply = dbus_message_new_error_printf(msg,
+                                                       DBUS_ERROR_UNKNOWN_METHOD,
+                                                       "No such method with signature (%s)",
+                                                       dbus_message_get_signature(msg));
+    return reply;
+}
+
+#endif // FCITX_DBUSSTUFF_PROPERTY_H

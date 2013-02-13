@@ -1,7 +1,7 @@
 [Addon]
 Name=fcitx-notificationitem
-_GeneralName=X Keyboard Integration export with DBus
-_Comment=X Keyboard Integration export with DBus
+_GeneralName=DBus based new Freedesktop.org tray icon
+_Comment=DBus based new Freedesktop.org tray icon
 Category=Module
 Enabled=True
 Library=fcitx-notificationitem.so

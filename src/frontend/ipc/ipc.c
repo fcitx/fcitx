@@ -24,6 +24,7 @@
 #include "fcitx/frontend.h"
 #include "fcitx-utils/utils.h"
 #include "module/dbus/fcitx-dbus.h"
+#include "module/dbusstuff/property.h"
 #include "fcitx/instance.h"
 #include "fcitx/module.h"
 #include "fcitx-utils/log.h"
@@ -64,14 +65,6 @@ typedef struct _FcitxIPCFrontend {
     FcitxInstance* owner;
 } FcitxIPCFrontend;
 
-typedef struct _FcitxDBusPropertyTable {
-    char* interface;
-    char* name;
-    char* type;
-    void (*getfunc)(void* arg, DBusMessageIter* iter);
-    void (*setfunc)(void* arg, DBusMessageIter* iter);
-} FcitxDBusPropertyTable;
-
 typedef struct _FcitxIPCKeyEvent {
     FcitxKeySym sym;
     unsigned int state;
@@ -105,208 +98,204 @@ static void IPCSetPropertyIMList(void* arg, DBusMessageIter* iter);
 static void IPCUpdateIMList(void* arg);
 static pid_t IPCGetPid(void* arg, FcitxInputContext* ic);
 
-static DBusMessage* FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusMessage* message);
-static DBusMessage* FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusMessage* message);
-static DBusMessage* FcitxDBusPropertyGetAll(FcitxIPCFrontend* ipc, DBusMessage* message);
-
 const FcitxDBusPropertyTable propertTable[] = {
     { FCITX_IM_DBUS_INTERFACE, "IMList", "a(sssb)", IPCGetPropertyIMList, IPCSetPropertyIMList },
     { NULL, NULL, NULL, NULL, NULL }
 };
 
 const char * im_introspection_xml =
-    "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
-    "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
-    "<node>\n"
-    "  <interface name=\"" DBUS_INTERFACE_INTROSPECTABLE "\">\n"
-    "    <method name=\"Introspect\">\n"
-    "      <arg name=\"data\" direction=\"out\" type=\"s\"/>\n"
-    "    </method>\n"
-    "  </interface>\n"
-    "  <interface name=\"" DBUS_INTERFACE_PROPERTIES "\">\n"
-    "    <method name=\"Get\">\n"
-    "      <arg name=\"interface_name\" direction=\"in\" type=\"s\"/>\n"
-    "      <arg name=\"property_name\" direction=\"in\" type=\"s\"/>\n"
-    "      <arg name=\"value\" direction=\"out\" type=\"v\"/>\n"
-    "    </method>\n"
-    "    <method name=\"Set\">\n"
-    "      <arg name=\"interface_name\" direction=\"in\" type=\"s\"/>\n"
-    "      <arg name=\"property_name\" direction=\"in\" type=\"s\"/>\n"
-    "      <arg name=\"value\" direction=\"in\" type=\"v\"/>\n"
-    "    </method>\n"
-    "    <method name=\"GetAll\">\n"
-    "      <arg name=\"interface_name\" direction=\"in\" type=\"s\"/>\n"
-    "      <arg name=\"values\" direction=\"out\" type=\"a{sv}\"/>\n"
-    "    </method>\n"
-    "    <signal name=\"PropertiesChanged\">\n"
-    "      <arg name=\"interface_name\" type=\"s\"/>\n"
-    "      <arg name=\"changed_properties\" type=\"a{sv}\"/>\n"
-    "      <arg name=\"invalidated_properties\" type=\"as\"/>\n"
-    "    </signal>\n"
-    "  </interface>\n"
-    "  <interface name=\"" FCITX_IM_DBUS_INTERFACE "\">\n"
-    "    <method name=\"CreateIC\">\n"
-    "      <arg name=\"icid\" direction=\"out\" type=\"i\"/>\n"
-    "      <arg name=\"keyval1\" direction=\"out\" type=\"u\"/>\n"
-    "      <arg name=\"state1\" direction=\"out\" type=\"u\"/>\n"
-    "      <arg name=\"keyval2\" direction=\"out\" type=\"u\"/>\n"
-    "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
-    "    </method>\n"
-    "    <method name=\"CreateICv2\">\n"
-    "      <arg name=\"appname\" direction=\"in\" type=\"s\"/>\n"
-    "      <arg name=\"icid\" direction=\"out\" type=\"i\"/>\n"
-    "      <arg name=\"enable\" direction=\"out\" type=\"b\"/>\n"
-    "      <arg name=\"keyval1\" direction=\"out\" type=\"u\"/>\n"
-    "      <arg name=\"state1\" direction=\"out\" type=\"u\"/>\n"
-    "      <arg name=\"keyval2\" direction=\"out\" type=\"u\"/>\n"
-    "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
-    "    </method>\n"
-    "    <method name=\"CreateICv3\">\n"
-    "      <arg name=\"appname\" direction=\"in\" type=\"s\"/>\n"
-    "      <arg name=\"pid\" direction=\"in\" type=\"i\"/>\n"
-    "      <arg name=\"icid\" direction=\"out\" type=\"i\"/>\n"
-    "      <arg name=\"enable\" direction=\"out\" type=\"b\"/>\n"
-    "      <arg name=\"keyval1\" direction=\"out\" type=\"u\"/>\n"
-    "      <arg name=\"state1\" direction=\"out\" type=\"u\"/>\n"
-    "      <arg name=\"keyval2\" direction=\"out\" type=\"u\"/>\n"
-    "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
-    "    </method>\n"
-    "    <method name=\"Exit\">\n"
-    "    </method>\n"
-    "    <method name=\"GetCurrentIM\">\n"
-    "      <arg name=\"im\" direction=\"out\" type=\"s\"/>\n"
-    "    </method>\n"
-    "    <method name=\"SetCurrentIM\">\n"
-    "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
-    "    </method>\n"
-    "    <method name=\"ReloadConfig\">\n"
-    "    </method>\n"
-    "    <method name=\"ReloadAddonConfig\">\n"
-    "      <arg name=\"addon\" direction=\"in\" type=\"s\"/>\n"
-    "    </method>\n"
-    "    <method name=\"Restart\">\n"
-    "    </method>\n"
-    "    <method name=\"Configure\">\n"
-    "    </method>\n"
-    "    <method name=\"ConfigureAddon\">\n"
-    "      <arg name=\"addon\" direction=\"in\" type=\"s\"/>\n"
-    "    </method>\n"
-    "    <method name=\"ConfigureIM\">\n"
-    "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
-    "    </method>\n"
-    "    <method name=\"GetCurrentUI\">\n"
-    "      <arg name=\"addon\" direction=\"out\" type=\"s\"/>\n"
-    "    </method>\n"
-    "    <method name=\"GetIMAddon\">\n"
-    "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
-    "      <arg name=\"addon\" direction=\"out\" type=\"s\"/>\n"
-    "    </method>\n"
-    "    <method name=\"ActivateIM\">\n"
-    "    </method>\n"
-    "    <method name=\"InactivateIM\">\n"
-    "    </method>\n"
-    "    <method name=\"ToggleIM\">\n"
-    "    </method>\n"
-    "    <method name=\"GetCurrentState\">\n"
-    "      <arg name=\"state\" direction=\"out\" type=\"i\"/>\n"
-    "    </method>\n"
-    "    <property access=\"readwrite\" type=\"a(sssb)\" name=\"IMList\">\n"
-    "      <annotation name=\"org.freedesktop.DBus.Property.EmitsChangedSignal\" value=\"true\"/>"
-    "    </property>\n"
-    "  </interface>\n"
-    "</node>\n";
+    "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\" "
+    "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">"
+    "<node>"
+    "<interface name=\"" DBUS_INTERFACE_INTROSPECTABLE "\">"
+    "<method name=\"Introspect\">"
+    "<arg name=\"data\" direction=\"out\" type=\"s\"/>"
+    "</method>"
+    "</interface>"
+    "<interface name=\"" DBUS_INTERFACE_PROPERTIES "\">"
+    "<method name=\"Get\">"
+    "<arg name=\"interface_name\" direction=\"in\" type=\"s\"/>"
+    "<arg name=\"property_name\" direction=\"in\" type=\"s\"/>"
+    "<arg name=\"value\" direction=\"out\" type=\"v\"/>"
+    "</method>"
+    "<method name=\"Set\">"
+    "<arg name=\"interface_name\" direction=\"in\" type=\"s\"/>"
+    "<arg name=\"property_name\" direction=\"in\" type=\"s\"/>"
+    "<arg name=\"value\" direction=\"in\" type=\"v\"/>"
+    "</method>"
+    "<method name=\"GetAll\">"
+    "<arg name=\"interface_name\" direction=\"in\" type=\"s\"/>"
+    "<arg name=\"values\" direction=\"out\" type=\"a{sv}\"/>"
+    "</method>"
+    "<signal name=\"PropertiesChanged\">"
+    "<arg name=\"interface_name\" type=\"s\"/>"
+    "<arg name=\"changed_properties\" type=\"a{sv}\"/>"
+    "<arg name=\"invalidated_properties\" type=\"as\"/>"
+    "</signal>"
+    "</interface>"
+    "<interface name=\"" FCITX_IM_DBUS_INTERFACE "\">"
+    "<method name=\"CreateIC\">"
+    "<arg name=\"icid\" direction=\"out\" type=\"i\"/>"
+    "<arg name=\"keyval1\" direction=\"out\" type=\"u\"/>"
+    "<arg name=\"state1\" direction=\"out\" type=\"u\"/>"
+    "<arg name=\"keyval2\" direction=\"out\" type=\"u\"/>"
+    "<arg name=\"state2\" direction=\"out\" type=\"u\"/>"
+    "</method>"
+    "<method name=\"CreateICv2\">"
+    "<arg name=\"appname\" direction=\"in\" type=\"s\"/>"
+    "<arg name=\"icid\" direction=\"out\" type=\"i\"/>"
+    "<arg name=\"enable\" direction=\"out\" type=\"b\"/>"
+    "<arg name=\"keyval1\" direction=\"out\" type=\"u\"/>"
+    "<arg name=\"state1\" direction=\"out\" type=\"u\"/>"
+    "<arg name=\"keyval2\" direction=\"out\" type=\"u\"/>"
+    "<arg name=\"state2\" direction=\"out\" type=\"u\"/>"
+    "</method>"
+    "<method name=\"CreateICv3\">"
+    "<arg name=\"appname\" direction=\"in\" type=\"s\"/>"
+    "<arg name=\"pid\" direction=\"in\" type=\"i\"/>"
+    "<arg name=\"icid\" direction=\"out\" type=\"i\"/>"
+    "<arg name=\"enable\" direction=\"out\" type=\"b\"/>"
+    "<arg name=\"keyval1\" direction=\"out\" type=\"u\"/>"
+    "<arg name=\"state1\" direction=\"out\" type=\"u\"/>"
+    "<arg name=\"keyval2\" direction=\"out\" type=\"u\"/>"
+    "<arg name=\"state2\" direction=\"out\" type=\"u\"/>"
+    "</method>"
+    "<method name=\"Exit\">"
+    "</method>"
+    "<method name=\"GetCurrentIM\">"
+    "<arg name=\"im\" direction=\"out\" type=\"s\"/>"
+    "</method>"
+    "<method name=\"SetCurrentIM\">"
+    "<arg name=\"im\" direction=\"in\" type=\"s\"/>"
+    "</method>"
+    "<method name=\"ReloadConfig\">"
+    "</method>"
+    "<method name=\"ReloadAddonConfig\">"
+    "<arg name=\"addon\" direction=\"in\" type=\"s\"/>"
+    "</method>"
+    "<method name=\"Restart\">"
+    "</method>"
+    "<method name=\"Configure\">"
+    "</method>"
+    "<method name=\"ConfigureAddon\">"
+    "<arg name=\"addon\" direction=\"in\" type=\"s\"/>"
+    "</method>"
+    "<method name=\"ConfigureIM\">"
+    "<arg name=\"im\" direction=\"in\" type=\"s\"/>"
+    "</method>"
+    "<method name=\"GetCurrentUI\">"
+    "<arg name=\"addon\" direction=\"out\" type=\"s\"/>"
+    "</method>"
+    "<method name=\"GetIMAddon\">"
+    "<arg name=\"im\" direction=\"in\" type=\"s\"/>"
+    "<arg name=\"addon\" direction=\"out\" type=\"s\"/>"
+    "</method>"
+    "<method name=\"ActivateIM\">"
+    "</method>"
+    "<method name=\"InactivateIM\">"
+    "</method>"
+    "<method name=\"ToggleIM\">"
+    "</method>"
+    "<method name=\"GetCurrentState\">"
+    "<arg name=\"state\" direction=\"out\" type=\"i\"/>"
+    "</method>"
+    "<property access=\"readwrite\" type=\"a(sssb)\" name=\"IMList\">"
+    "<annotation name=\"org.freedesktop.DBus.Property.EmitsChangedSignal\" value=\"true\"/>"
+    "</property>"
+    "</interface>"
+    "</node>";
 
 const char * ic_introspection_xml =
-    "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
-    "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
-    "<node>\n"
-    "  <interface name=\"org.freedesktop.DBus.Introspectable\">\n"
-    "    <method name=\"Introspect\">\n"
-    "      <arg name=\"data\" direction=\"out\" type=\"s\"/>\n"
-    "    </method>\n"
-    "  </interface>\n"
-    "  <interface name=\"" FCITX_IC_DBUS_INTERFACE "\">\n"
-    "    <method name=\"EnableIC\">\n"
-    "    </method>\n"
-    "    <method name=\"CloseIC\">\n"
-    "    </method>\n"
-    "    <method name=\"FocusIn\">\n"
-    "    </method>\n"
-    "    <method name=\"FocusOut\">\n"
-    "    </method>\n"
-    "    <method name=\"Reset\">\n"
-    "    </method>\n"
-    "    <method name=\"CommitPreedit\">\n"
-    "    </method>\n"
-    "    <method name=\"MouseEvent\">\n"
-    "      <arg name=\"x\" direction=\"in\" type=\"i\"/>\n"
-    "    </method>\n"
-    "    <method name=\"SetCursorLocation\">\n"
-    "      <arg name=\"x\" direction=\"in\" type=\"i\"/>\n"
-    "      <arg name=\"y\" direction=\"in\" type=\"i\"/>\n"
-    "    </method>\n"
-    "    <method name=\"SetCursorRect\">\n"
-    "      <arg name=\"x\" direction=\"in\" type=\"i\"/>\n"
-    "      <arg name=\"y\" direction=\"in\" type=\"i\"/>\n"
-    "      <arg name=\"w\" direction=\"in\" type=\"i\"/>\n"
-    "      <arg name=\"h\" direction=\"in\" type=\"i\"/>\n"
-    "    </method>\n"
-    "    <method name=\"SetCapacity\">\n"
-    "      <arg name=\"caps\" direction=\"in\" type=\"u\"/>\n"
-    "    </method>\n"
-    "    <method name=\"SetSurroundingText\">\n"
-    "      <arg name=\"text\" direction=\"in\" type=\"s\"/>\n"
-    "      <arg name=\"cursor\" direction=\"in\" type=\"u\"/>\n"
-    "      <arg name=\"anchor\" direction=\"in\" type=\"u\"/>\n"
-    "    </method>\n"
-    "    <method name=\"SetSurroundingTextPosition\">\n"
-    "      <arg name=\"cursor\" direction=\"in\" type=\"u\"/>\n"
-    "      <arg name=\"anchor\" direction=\"in\" type=\"u\"/>\n"
-    "    </method>\n"
-    "    <method name=\"DestroyIC\">\n"
-    "    </method>\n"
-    "    <method name=\"ProcessKeyEvent\">\n"
-    "      <arg name=\"keyval\" direction=\"in\" type=\"u\"/>\n"
-    "      <arg name=\"keycode\" direction=\"in\" type=\"u\"/>\n"
-    "      <arg name=\"state\" direction=\"in\" type=\"u\"/>\n"
-    "      <arg name=\"type\" direction=\"in\" type=\"i\"/>\n"
-    "      <arg name=\"time\" direction=\"in\" type=\"u\"/>\n"
-    "      <arg name=\"ret\" direction=\"out\" type=\"i\"/>\n"
-    "    </method>\n"
-    "    <signal name=\"EnableIM\">\n"
-    "    </signal>\n"
-    "    <signal name=\"CloseIM\">\n"
-    "    </signal>\n"
-    "    <signal name=\"CommitString\">\n"
-    "      <arg name=\"str\" type=\"s\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"UpdatePreedit\">\n"
-    "      <arg name=\"str\" type=\"s\"/>\n"
-    "      <arg name=\"cursorpos\" type=\"i\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"DeleteSurroundingText\">\n"
-    "      <arg name=\"offset\" type=\"i\"/>\n"
-    "      <arg name=\"nchar\" type=\"u\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"UpdateFormattedPreedit\">\n"
-    "      <arg name=\"str\" type=\"a(si)\"/>\n"
-    "      <arg name=\"cursorpos\" type=\"i\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"UpdateClientSideUI\">\n"
-    "      <arg name=\"auxup\" type=\"s\"/>\n"
-    "      <arg name=\"auxdown\" type=\"s\"/>\n"
-    "      <arg name=\"preedit\" type=\"s\"/>\n"
-    "      <arg name=\"candidateword\" type=\"s\"/>\n"
-    "      <arg name=\"imname\" type=\"s\"/>\n"
-    "      <arg name=\"cursorpos\" type=\"i\"/>\n"
-    "    </signal>\n"
-    "    <signal name=\"ForwardKey\">\n"
-    "      <arg name=\"keyval\" type=\"u\"/>\n"
-    "      <arg name=\"state\" type=\"u\"/>\n"
-    "      <arg name=\"type\" type=\"i\"/>\n"
-    "    </signal>\n"
-    "  </interface>\n"
-    "</node>\n";
+    "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\" "
+    "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">"
+    "<node>"
+    "<interface name=\"org.freedesktop.DBus.Introspectable\">"
+    "<method name=\"Introspect\">"
+    "<arg name=\"data\" direction=\"out\" type=\"s\"/>"
+    "</method>"
+    "</interface>"
+    "<interface name=\"" FCITX_IC_DBUS_INTERFACE "\">"
+    "<method name=\"EnableIC\">"
+    "</method>"
+    "<method name=\"CloseIC\">"
+    "</method>"
+    "<method name=\"FocusIn\">"
+    "</method>"
+    "<method name=\"FocusOut\">"
+    "</method>"
+    "<method name=\"Reset\">"
+    "</method>"
+    "<method name=\"CommitPreedit\">"
+    "</method>"
+    "<method name=\"MouseEvent\">"
+    "<arg name=\"x\" direction=\"in\" type=\"i\"/>"
+    "</method>"
+    "<method name=\"SetCursorLocation\">"
+    "<arg name=\"x\" direction=\"in\" type=\"i\"/>"
+    "<arg name=\"y\" direction=\"in\" type=\"i\"/>"
+    "</method>"
+    "<method name=\"SetCursorRect\">"
+    "<arg name=\"x\" direction=\"in\" type=\"i\"/>"
+    "<arg name=\"y\" direction=\"in\" type=\"i\"/>"
+    "<arg name=\"w\" direction=\"in\" type=\"i\"/>"
+    "<arg name=\"h\" direction=\"in\" type=\"i\"/>"
+    "</method>"
+    "<method name=\"SetCapacity\">"
+    "<arg name=\"caps\" direction=\"in\" type=\"u\"/>"
+    "</method>"
+    "<method name=\"SetSurroundingText\">"
+    "<arg name=\"text\" direction=\"in\" type=\"s\"/>"
+    "<arg name=\"cursor\" direction=\"in\" type=\"u\"/>"
+    "<arg name=\"anchor\" direction=\"in\" type=\"u\"/>"
+    "</method>"
+    "<method name=\"SetSurroundingTextPosition\">"
+    "<arg name=\"cursor\" direction=\"in\" type=\"u\"/>"
+    "<arg name=\"anchor\" direction=\"in\" type=\"u\"/>"
+    "</method>"
+    "<method name=\"DestroyIC\">"
+    "</method>"
+    "<method name=\"ProcessKeyEvent\">"
+    "<arg name=\"keyval\" direction=\"in\" type=\"u\"/>"
+    "<arg name=\"keycode\" direction=\"in\" type=\"u\"/>"
+    "<arg name=\"state\" direction=\"in\" type=\"u\"/>"
+    "<arg name=\"type\" direction=\"in\" type=\"i\"/>"
+    "<arg name=\"time\" direction=\"in\" type=\"u\"/>"
+    "<arg name=\"ret\" direction=\"out\" type=\"i\"/>"
+    "</method>"
+    "<signal name=\"EnableIM\">"
+    "</signal>"
+    "<signal name=\"CloseIM\">"
+    "</signal>"
+    "<signal name=\"CommitString\">"
+    "<arg name=\"str\" type=\"s\"/>"
+    "</signal>"
+    "<signal name=\"UpdatePreedit\">"
+    "<arg name=\"str\" type=\"s\"/>"
+    "<arg name=\"cursorpos\" type=\"i\"/>"
+    "</signal>"
+    "<signal name=\"DeleteSurroundingText\">"
+    "<arg name=\"offset\" type=\"i\"/>"
+    "<arg name=\"nchar\" type=\"u\"/>"
+    "</signal>"
+    "<signal name=\"UpdateFormattedPreedit\">"
+    "<arg name=\"str\" type=\"a(si)\"/>"
+    "<arg name=\"cursorpos\" type=\"i\"/>"
+    "</signal>"
+    "<signal name=\"UpdateClientSideUI\">"
+    "<arg name=\"auxup\" type=\"s\"/>"
+    "<arg name=\"auxdown\" type=\"s\"/>"
+    "<arg name=\"preedit\" type=\"s\"/>"
+    "<arg name=\"candidateword\" type=\"s\"/>"
+    "<arg name=\"imname\" type=\"s\"/>"
+    "<arg name=\"cursorpos\" type=\"i\"/>"
+    "</signal>"
+    "<signal name=\"ForwardKey\">"
+    "<arg name=\"keyval\" type=\"u\"/>"
+    "<arg name=\"state\" type=\"u\"/>"
+    "<arg name=\"type\" type=\"i\"/>"
+    "</signal>"
+    "</interface>"
+    "</node>";
 
 FCITX_DEFINE_PLUGIN(fcitx_ipc, frontend, FcitxFrontend) = {
     IPCCreate,
@@ -592,15 +581,6 @@ void IPCGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, 
     *h = GetIPCIC(ic)->height;
 }
 
-static inline DBusMessage* IPCDBusUnknownMethod(DBusMessage *msg)
-{
-    DBusMessage* reply = dbus_message_new_error_printf(msg,
-                                                       DBUS_ERROR_UNKNOWN_METHOD,
-                                                       "No such method with signature (%s)",
-                                                       dbus_message_get_signature(msg));
-    return reply;
-}
-
 static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMessage *msg, void *user_data)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) user_data;
@@ -614,11 +594,11 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
 
         dbus_message_append_args(reply, DBUS_TYPE_STRING, &im_introspection_xml, DBUS_TYPE_INVALID);
     } else if (dbus_message_is_method_call(msg, DBUS_INTERFACE_PROPERTIES, "Get")) {
-        reply = FcitxDBusPropertyGet(ipc, msg);
+        reply = FcitxDBusPropertyGet(ipc, propertTable, msg);
     } else if (dbus_message_is_method_call(msg, DBUS_INTERFACE_PROPERTIES, "Set")) {
-        reply = FcitxDBusPropertySet(ipc, msg);
+        reply = FcitxDBusPropertySet(ipc, propertTable, msg);
     } else if (dbus_message_is_method_call(msg, DBUS_INTERFACE_PROPERTIES, "GetAll")) {
-        reply = FcitxDBusPropertyGetAll(ipc, msg);
+        reply = FcitxDBusPropertyGetAll(ipc, propertTable, msg);
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateIC")
             || dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateICv2")
             || dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateICv3")
@@ -653,7 +633,7 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             FcitxInstanceSwitchIMByName(instance, imname);
             reply = dbus_message_new_method_return(msg);
         } else {
-            reply = IPCDBusUnknownMethod(msg);
+            reply = FcitxDBusPropertyUnknownMethod(msg);
         }
         dbus_error_free(&error);
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetIMAddon")) {
@@ -668,7 +648,7 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             reply = dbus_message_new_method_return(msg);
             dbus_message_append_args(reply, DBUS_TYPE_STRING, &name, DBUS_TYPE_INVALID);
         } else {
-            reply = IPCDBusUnknownMethod(msg);
+            reply = FcitxDBusPropertyUnknownMethod(msg);
         }
         dbus_error_free(&error);
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetCurrentUI")) {
@@ -707,7 +687,7 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             }
             reply = dbus_message_new_method_return(msg);
         } else {
-            reply = IPCDBusUnknownMethod(msg);
+            reply = FcitxDBusPropertyUnknownMethod(msg);
         }
         dbus_error_free(&error);
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ConfigureIM")) {
@@ -720,7 +700,7 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             }
             reply = dbus_message_new_method_return(msg);
         } else {
-            reply = IPCDBusUnknownMethod(msg);
+            reply = FcitxDBusPropertyUnknownMethod(msg);
         }
         dbus_error_free(&error);
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ReloadAddonConfig")) {
@@ -733,7 +713,7 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             }
             reply = dbus_message_new_method_return(msg);
         } else {
-            reply = IPCDBusUnknownMethod(msg);
+            reply = FcitxDBusPropertyUnknownMethod(msg);
         }
         dbus_error_free(&error);
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ReloadConfig")) {
@@ -801,7 +781,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 IPCICSetCursorRect(ipc, ic, x, y, 0, 0);
                 reply = dbus_message_new_method_return(msg);
             } else {
-                reply = IPCDBusUnknownMethod(msg);
+                reply = FcitxDBusPropertyUnknownMethod(msg);
             }
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCursorRect")) {
             int x, y, w, h;
@@ -812,7 +792,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 IPCICSetCursorRect(ipc, ic, x, y, w, h);
                 reply = dbus_message_new_method_return(msg);
             } else {
-                reply = IPCDBusUnknownMethod(msg);
+                reply = FcitxDBusPropertyUnknownMethod(msg);
             }
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCapacity")) {
             uint32_t flags;
@@ -825,7 +805,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 }
                 reply = dbus_message_new_method_return(msg);
             } else {
-                reply = IPCDBusUnknownMethod(msg);
+                reply = FcitxDBusPropertyUnknownMethod(msg);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetSurroundingText")) {
@@ -843,7 +823,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 }
                 reply = dbus_message_new_method_return(msg);
             } else {
-                reply = IPCDBusUnknownMethod(msg);
+                reply = FcitxDBusPropertyUnknownMethod(msg);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetSurroundingTextPosition")) {
@@ -858,7 +838,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 }
                 reply = dbus_message_new_method_return(msg);
             } else {
-                reply = IPCDBusUnknownMethod(msg);
+                reply = FcitxDBusPropertyUnknownMethod(msg);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "DestroyIC")) {
@@ -884,7 +864,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 dbus_message_append_args(reply, DBUS_TYPE_INT32, &ret, DBUS_TYPE_INVALID);
                 flush = true;
             } else {
-                reply = IPCDBusUnknownMethod(msg);
+                reply = FcitxDBusPropertyUnknownMethod(msg);
             }
         }
         dbus_error_free(&error);
@@ -1214,133 +1194,6 @@ boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, F
         return false;
     return strcmp(ipcicToCheck->appname, ipcic->appname) == 0;
 }
-
-DBusMessage* FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusMessage* message)
-{
-    DBusError error;
-    dbus_error_init(&error);
-    char *interface;
-    char *property;
-    DBusMessage* reply = NULL;
-    if (dbus_message_get_args(message, &error,
-                              DBUS_TYPE_STRING, &interface,
-                              DBUS_TYPE_STRING, &property,
-                              DBUS_TYPE_INVALID)) {
-        int index = 0;
-        while (propertTable[index].interface != NULL) {
-            if (strcmp(propertTable[index].interface, interface) == 0
-                    && strcmp(propertTable[index].name, property) == 0)
-                break;
-            index ++;
-        }
-
-        if (propertTable[index].interface) {
-            DBusMessageIter args, variant;
-            reply = dbus_message_new_method_return(message);
-            dbus_message_iter_init_append(reply, &args);
-            dbus_message_iter_open_container(&args, DBUS_TYPE_VARIANT, propertTable[index].type, &variant);
-            if (propertTable[index].getfunc)
-                propertTable[index].getfunc(ipc, &variant);
-            dbus_message_iter_close_container(&args, &variant);
-        }
-        else {
-            reply = dbus_message_new_error_printf(message, DBUS_ERROR_UNKNOWN_PROPERTY, "No such property ('%s.%s')", interface, property);
-        }
-    }
-    else {
-        reply = IPCDBusUnknownMethod(message);
-    }
-
-    return reply;
-}
-
-DBusMessage* FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusMessage* message)
-{
-    DBusError error;
-    dbus_error_init(&error);
-    char *interface;
-    char *property;
-    DBusMessage* reply = NULL;
-
-    DBusMessageIter args, variant;
-    dbus_message_iter_init(message, &args);
-
-    if (dbus_message_iter_get_arg_type(&args) != DBUS_TYPE_STRING)
-        goto dbus_property_set_end;
-
-    dbus_message_iter_get_basic(&args, &interface);
-    dbus_message_iter_next(&args);
-
-    if (dbus_message_iter_get_arg_type(&args) != DBUS_TYPE_STRING)
-        goto dbus_property_set_end;
-    dbus_message_iter_get_basic(&args, &property);
-    dbus_message_iter_next(&args);
-
-    if (dbus_message_iter_get_arg_type(&args) != DBUS_TYPE_VARIANT)
-        goto dbus_property_set_end;
-
-    dbus_message_iter_recurse(&args, &variant);
-    int index = 0;
-    while (propertTable[index].interface != NULL) {
-        if (strcmp(propertTable[index].interface, interface) == 0
-                && strcmp(propertTable[index].name, property) == 0)
-            break;
-        index ++;
-    }
-    if (propertTable[index].setfunc) {
-        propertTable[index].setfunc(ipc, &variant);
-        reply = dbus_message_new_method_return(message);
-    }
-    else {
-        reply = dbus_message_new_error_printf(message, DBUS_ERROR_UNKNOWN_PROPERTY, "No such property ('%s.%s')", interface, property);
-    }
-
-dbus_property_set_end:
-    if (!reply)
-        reply = IPCDBusUnknownMethod(message);
-
-    return reply;
-}
-
-DBusMessage* FcitxDBusPropertyGetAll(FcitxIPCFrontend* ipc, DBusMessage* message)
-{
-    DBusError error;
-    dbus_error_init(&error);
-    char *interface;
-    DBusMessage* reply = NULL;
-    if (dbus_message_get_args(message, &error,
-                              DBUS_TYPE_STRING, &interface,
-                              DBUS_TYPE_INVALID)) {
-        reply = dbus_message_new_method_return(message);
-        int index = 0;
-        DBusMessageIter args;
-        dbus_message_iter_init_append(reply, &args);
-        DBusMessageIter array, entry;
-        dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "{sv}", &array);
-
-        while (propertTable[index].interface != NULL) {
-            if (strcmp(propertTable[index].interface, interface) == 0 && propertTable[index].getfunc) {
-                dbus_message_iter_open_container(&array, DBUS_TYPE_DICT_ENTRY,
-                                                 NULL, &entry);
-
-                dbus_message_iter_append_basic(&entry, DBUS_TYPE_STRING, &propertTable[index].name);
-                DBusMessageIter variant;
-                dbus_message_iter_open_container(&entry, DBUS_TYPE_VARIANT, propertTable[index].type, &variant);
-                propertTable[index].getfunc(ipc, &variant);
-                dbus_message_iter_close_container(&entry, &variant);
-
-                dbus_message_iter_close_container(&array, &entry);
-            }
-            index ++;
-        }
-        dbus_message_iter_close_container(&args, &array);
-    }
-    if (!reply)
-        reply = IPCDBusUnknownMethod(message);
-
-    return reply;
-}
-
 
 void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
 {

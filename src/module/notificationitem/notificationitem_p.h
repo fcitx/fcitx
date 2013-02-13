@@ -1,6 +1,5 @@
 /***************************************************************************
  *   Copyright (C) 2013~2013 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,11 +17,24 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef _FCITX_MODULE_NOTIFICATIONITEM_H
-#define _FCITX_MODULE_NOTIFICATIONITEM_H
+#ifndef NOTIFICATIONITEM_P_H
+#define NOTIFICATIONITEM_P_H
 
-#include <fcitx-utils/utils.h>
+#include <dbus/dbus.h>
+#include "fcitx/instance.h"
+#include "notificationitem.h"
 
-typedef void (*FcitxNotificationItemAvailableCallback)(void* arg, boolean enable);
+typedef struct _FcitxNotificationItem {
+    FcitxInstance* owner;
+    DBusConnection* conn;
+    FcitxNotificationItemAvailableCallback callback;
+    void* data;
+    boolean available;
+    int index;
+    char* serviceName;
+    uint32_t revision;
+} FcitxNotificationItem;
 
-#endif // _FCITX_MODULE_NOTIFICATIONITEM_H
+boolean FcitxDBusMenuCreate(FcitxNotificationItem* notificationitem);
+
+#endif // NOTIFICATIONITEM_P_H

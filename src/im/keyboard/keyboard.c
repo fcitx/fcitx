@@ -611,27 +611,6 @@ FcitxKeyboardHandleFocus(FcitxKeyboard *keyboard, FcitxKeySym sym,
                                                           cand_word));
             }
         }
-    } else if (FcitxHotkeyIsHotKey(sym, state,
-                                   FcitxConfigPrevPageKey(instance, fc))) {
-        boolean has_prev_page;
-        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
-        has_prev_page = FcitxCandidateWordGoPrevPage(cand_list);
-        if (!keyboard->cursor_moved) {
-            cand_word = NULL;
-        } else if (has_prev_page) {
-            cand_word = FcitxCandidateWordGetCurrentWindow(cand_list) +
-                FcitxCandidateWordGetCurrentWindowSize(cand_list) - 1;
-        }
-    } else if (FcitxHotkeyIsHotKey(sym, state,
-                                   FcitxConfigNextPageKey(instance, fc))) {
-        boolean has_next_page;
-        cand_word = FcitxCandidateWordGetFocus(cand_list, true);
-        has_next_page = FcitxCandidateWordGoNextPage(cand_list);
-        if (!keyboard->cursor_moved) {
-            cand_word = NULL;
-        } else if (has_next_page) {
-            cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
-        }
     } else {
         return IRV_TO_PROCESS;
     }

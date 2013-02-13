@@ -169,7 +169,7 @@ void* ClassicUICreate(FcitxInstance* instance)
 
 void ClassicUIDelayedInitTray(void* arg) {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    FcitxLog(INFO, "yeah we delayed!");
+    // FcitxLog(INFO, "yeah we delayed!");
     if (!classicui->bUseTrayIcon)
         return;
     /*
@@ -450,7 +450,7 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
             status = (FcitxUIStatus*) utarray_next(uistats, status)
         ) {
         FcitxClassicUIStatus* privstat =  GetPrivateStatus(status);
-        if (privstat == NULL || !status->visible || privstat->avail )
+        if (privstat == NULL || !status->visible)
             continue;
 
         flag = true;
@@ -464,7 +464,7 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
             compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
         ) {
         FcitxClassicUIStatus* privstat =  GetPrivateStatus(compstatus);
-        if (privstat == NULL || !compstatus->visible || privstat->avail)
+        if (privstat == NULL || !compstatus->visible)
             continue;
         if (FcitxUIGetMenuByStatusName(instance, compstatus->name))
             continue;
@@ -493,8 +493,6 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
             FcitxUIComplexStatus* compStatus = FcitxUIGetComplexStatusByName(instance, menup->candStatusBind);
             if (compStatus) {
                 if (!compStatus->visible)
-                    continue;
-                if (GetPrivateStatus(compStatus)->avail)
                     continue;
             }
         }

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by CSSlayer                                   *
+ *   Copyright (C) 2013~2013 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -24,90 +24,87 @@
 
 #include "libintl.h"
 #include "module/dbus/fcitx-dbus.h"
+#include "module/dbusstuff/property.h"
 #include "notificationitem.h"
+#include "notificationitem_p.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/module.h"
 #include "fcitx/hook.h"
 
 const char * _notification_item =
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-"<node name=\"/StatusNotifierItem\">\n"
-"  <interface name=\"" DBUS_INTERFACE_INTROSPECTABLE "\">\n"
-"    <method name=\"Introspect\">\n"
-"      <arg name=\"data\" direction=\"out\" type=\"s\"/>\n"
-"    </method>\n"
-"  </interface>\n"
-"  <interface name=\"" DBUS_INTERFACE_PROPERTIES "\">\n"
-"    <method name=\"Get\">\n"
-"      <arg name=\"interface_name\" direction=\"in\" type=\"s\"/>\n"
-"      <arg name=\"property_name\" direction=\"in\" type=\"s\"/>\n"
-"      <arg name=\"value\" direction=\"out\" type=\"v\"/>\n"
-"    </method>\n"
-"    <method name=\"Set\">\n"
-"      <arg name=\"interface_name\" direction=\"in\" type=\"s\"/>\n"
-"      <arg name=\"property_name\" direction=\"in\" type=\"s\"/>\n"
-"      <arg name=\"value\" direction=\"in\" type=\"v\"/>\n"
-"    </method>\n"
-"    <method name=\"GetAll\">\n"
-"      <arg name=\"interface_name\" direction=\"in\" type=\"s\"/>\n"
-"      <arg name=\"values\" direction=\"out\" type=\"a{sv}\"/>\n"
-"    </method>\n"
-"    <signal name=\"PropertiesChanged\">\n"
-"      <arg name=\"interface_name\" type=\"s\"/>\n"
-"      <arg name=\"changed_properties\" type=\"a{sv}\"/>\n"
-"      <arg name=\"invalidated_properties\" type=\"as\"/>\n"
-"    </signal>\n"
-"  </interface>\n"
-"   <interface name=\"org.kde.StatusNotifierItem\">\n"
-"\n"
-"<!-- Properties -->\n"
-"       <property name=\"Id\" type=\"s\" access=\"read\" />\n"
-"       <property name=\"Category\" type=\"s\" access=\"read\" />\n"
-"       <property name=\"Status\" type=\"s\" access=\"read\" />\n"
-"       <property name=\"IconName\" type=\"s\" access=\"read\" />\n"
-"       <property name=\"AttentionIconName\" type=\"s\" access=\"read\" />\n"
-"       <property name=\"Title\" type=\"s\" access=\"read\" />\n"
-"       <property access=\"read\" type=\"(sa(iiay)ss)\" name=\"ToolTip\" />\n"
-"       <!-- An additional path to add to the theme search path\n"
-"            to find the icons specified above. -->\n"
-"       <property name=\"IconThemePath\" type=\"s\" access=\"read\" />\n"
-"       <property name=\"Menu\" type=\"o\" access=\"read\" />\n"
-"       <property name=\"XAyatanaLabel\" type=\"s\" access=\"read\" />\n"
-"       <property name=\"XAyatanaLabelGuide\" type=\"s\" access=\"read\" />\n"
-"       <property name=\"XAyatanaOrderingIndex\" type=\"u\" access=\"read\" />\n"
-"\n"
-"<!-- Methods -->\n"
-"       <method name=\"Scroll\">\n"
-"           <arg type=\"i\" name=\"delta\" direction=\"in\" />\n"
-"           <arg type=\"s\" name=\"orientation\" direction=\"in\" />\n"
-"       </method>\n"
-"       <method name=\"SecondaryActivate\">\n"
-"           <arg type=\"i\" name=\"x\" direction=\"in\" />\n"
-"           <arg type=\"i\" name=\"y\" direction=\"in\" />\n"
-"       </method>\n"
-"\n"
-"<!-- Signals -->\n"
-"       <signal name=\"NewIcon\">\n"
-"       </signal>\n"
-"       <signal name=\"NewToolTip\">\n"
-"       </signal>\n"
-"       <signal name=\"NewIconThemePath\">\n"
-"           <arg type=\"s\" name=\"icon_theme_path\" direction=\"out\" />\n"
-"       </signal>\n"
-"       <signal name=\"NewAttentionIcon\">\n"
-"       </signal>\n"
-"       <signal name=\"NewStatus\">\n"
-"           <arg type=\"s\" name=\"status\" direction=\"out\" />\n"
-"       </signal>\n"
-"       <signal name=\"NewTitle\">\n"
-"       </signal>\n"
-"       <signal name=\"XAyatanaNewLabel\">\n"
-"           <arg type=\"s\" name=\"label\" direction=\"out\" />\n"
-"           <arg type=\"s\" name=\"guide\" direction=\"out\" />\n"
-"       </signal>\n"
-"\n"
-"   </interface>\n"
-"</node>\n"
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+"<node name=\"/StatusNotifierItem\">"
+"<interface name=\"" DBUS_INTERFACE_INTROSPECTABLE "\">"
+"<method name=\"Introspect\">"
+"<arg name=\"data\" direction=\"out\" type=\"s\"/>"
+"</method>"
+"</interface>"
+"<interface name=\"" DBUS_INTERFACE_PROPERTIES "\">"
+"<method name=\"Get\">"
+"<arg name=\"interface_name\" direction=\"in\" type=\"s\"/>"
+"<arg name=\"property_name\" direction=\"in\" type=\"s\"/>"
+"<arg name=\"value\" direction=\"out\" type=\"v\"/>"
+"</method>"
+"<method name=\"Set\">"
+"<arg name=\"interface_name\" direction=\"in\" type=\"s\"/>"
+"<arg name=\"property_name\" direction=\"in\" type=\"s\"/>"
+"<arg name=\"value\" direction=\"in\" type=\"v\"/>"
+"</method>"
+"<method name=\"GetAll\">"
+"<arg name=\"interface_name\" direction=\"in\" type=\"s\"/>"
+"<arg name=\"values\" direction=\"out\" type=\"a{sv}\"/>"
+"</method>"
+"<signal name=\"PropertiesChanged\">"
+"<arg name=\"interface_name\" type=\"s\"/>"
+"<arg name=\"changed_properties\" type=\"a{sv}\"/>"
+"<arg name=\"invalidated_properties\" type=\"as\"/>"
+"</signal>"
+"</interface>"
+"<interface name=\"org.kde.StatusNotifierItem\">"
+"<property name=\"Id\" type=\"s\" access=\"read\" />"
+"<property name=\"Category\" type=\"s\" access=\"read\" />"
+"<property name=\"Status\" type=\"s\" access=\"read\" />"
+"<property name=\"IconName\" type=\"s\" access=\"read\" />"
+"<property name=\"AttentionIconName\" type=\"s\" access=\"read\" />"
+"<property name=\"Title\" type=\"s\" access=\"read\" />"
+"<property access=\"read\" type=\"(sa(iiay)ss)\" name=\"ToolTip\" />"
+"<property name=\"IconThemePath\" type=\"s\" access=\"read\" />"
+"<property name=\"Menu\" type=\"o\" access=\"read\" />"
+"<property name=\"XAyatanaLabel\" type=\"s\" access=\"read\" />"
+"<property name=\"XAyatanaLabelGuide\" type=\"s\" access=\"read\" />"
+"<property name=\"XAyatanaOrderingIndex\" type=\"u\" access=\"read\" />"
+"<method name=\"Scroll\">"
+"<arg type=\"i\" name=\"delta\" direction=\"in\" />"
+"<arg type=\"s\" name=\"orientation\" direction=\"in\" />"
+"</method>"
+"<method name=\"Activate\">"
+"<arg type=\"i\" name=\"x\" direction=\"in\" />"
+"<arg type=\"i\" name=\"y\" direction=\"in\" />"
+"</method>"
+"<method name=\"SecondaryActivate\">"
+"<arg type=\"i\" name=\"x\" direction=\"in\" />"
+"<arg type=\"i\" name=\"y\" direction=\"in\" />"
+"</method>"
+"<signal name=\"NewIcon\">"
+"</signal>"
+"<signal name=\"NewToolTip\">"
+"</signal>"
+"<signal name=\"NewIconThemePath\">"
+"<arg type=\"s\" name=\"icon_theme_path\" direction=\"out\" />"
+"</signal>"
+"<signal name=\"NewAttentionIcon\">"
+"</signal>"
+"<signal name=\"NewStatus\">"
+"<arg type=\"s\" name=\"status\" direction=\"out\" />"
+"</signal>"
+"<signal name=\"NewTitle\">"
+"</signal>"
+"<signal name=\"XAyatanaNewLabel\">"
+"<arg type=\"s\" name=\"label\" direction=\"out\" />"
+"<arg type=\"s\" name=\"guide\" direction=\"out\" />"
+"</signal>"
+"</interface>"
+"</node>"
 ;
 
 #define NOTIFICATION_WATCHER_DBUS_ADDR    "org.kde.StatusNotifierWatcher"
@@ -118,33 +115,15 @@ const char * _notification_item =
 #define NOTIFICATION_ITEM_DEFAULT_OBJ     "/StatusNotifierItem"
 
 static void* FcitxNotificationItemCreate(struct _FcitxInstance* instance);
-typedef struct _FcitxNotificationItem {
-    FcitxInstance* owner;
-    DBusConnection* conn;
-    FcitxNotificationItemAvailableCallback callback;
-    void* data;
-    boolean available;
-    int index;
-    char* serviceName;
-} FcitxNotificationItem;
+static void FcitxNotificationItemDestroy(void* arg);
 
 FCITX_DEFINE_PLUGIN(fcitx_notificationitem, module, FcitxModule) = {
     FcitxNotificationItemCreate,
-    NULL,
+    FcitxNotificationItemDestroy,
     NULL,
     NULL,
     NULL
 };
-
-
-static inline DBusMessage* FcitxNotificationItemUnknownMethod(DBusMessage *msg)
-{
-    DBusMessage* reply = dbus_message_new_error_printf(msg,
-                                                       DBUS_ERROR_UNKNOWN_METHOD,
-                                                       "No such method with signature (%s)",
-                                                       dbus_message_get_signature(msg));
-    return reply;
-}
 
 static DBusHandlerResult FcitxNotificationItemEventHandler (DBusConnection  *connection,
                                                             DBusMessage     *message,
@@ -152,14 +131,6 @@ static DBusHandlerResult FcitxNotificationItemEventHandler (DBusConnection  *con
 
 static void NotificationWatcherServiceExistCallback(DBusPendingCall *call, void *data);
 static void FcitxNotificationItemRegisterSuccess(DBusPendingCall *call, void *data);
-
-typedef struct _FcitxDBusPropertyTable {
-    char* interface;
-    char* name;
-    char* type;
-    void (*getfunc)(void* arg, DBusMessageIter* iter);
-    void (*setfunc)(void* arg, DBusMessageIter* iter);
-} FcitxDBusPropertyTable;
 
 static void FcitxNotificationItemGetId(void* arg, DBusMessageIter* iter);
 static void FcitxNotificationItemGetCategory(void* arg, DBusMessageIter* iter);
@@ -219,7 +190,15 @@ void* FcitxNotificationItemCreate(FcitxInstance* instance)
         }
 
         DBusObjectPathVTable fcitxIPCVTable = {NULL, &FcitxNotificationItemEventHandler, NULL, NULL, NULL, NULL };
-        dbus_connection_register_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ, &fcitxIPCVTable, notificationitem);
+        if (!dbus_connection_register_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ, &fcitxIPCVTable, notificationitem)) {
+            FcitxLog(ERROR, "No memory");
+            break;
+        }
+
+        if (!FcitxDBusMenuCreate(notificationitem)) {
+            FcitxLog(ERROR, "No memory");
+            break;
+        }
 
         dbus_bus_add_match(notificationitem->conn,
                            "type='signal',"
@@ -266,9 +245,29 @@ void* FcitxNotificationItemCreate(FcitxInstance* instance)
     } while(0);
 
     dbus_error_free(&err);
-    free(notificationitem);
+    FcitxNotificationItemDestroy(notificationitem);
 
     return NULL;
+}
+
+void FcitxNotificationItemDestroy(void* arg)
+{
+    FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) arg;
+    if (notificationitem->conn) {
+        dbus_connection_unregister_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ);
+        dbus_connection_unregister_object_path(notificationitem->conn, "/MenuBar");
+        dbus_connection_remove_filter(notificationitem->conn, FcitxNotificationItemDBusFilter, notificationitem);
+
+        dbus_bus_remove_match(notificationitem->conn,
+                           "type='signal',"
+                           "interface='" DBUS_INTERFACE_DBUS "',"
+                           "path='" DBUS_PATH_DBUS "',"
+                           "member='NameOwnerChanged',"
+                           "arg0='" NOTIFICATION_WATCHER_DBUS_ADDR "'",
+                           NULL);
+    }
+
+    free(notificationitem);
 }
 
 void FcitxNotificationItemRegister(FcitxNotificationItem* notificationitem)
@@ -324,133 +323,6 @@ void NotificationWatcherServiceExistCallback(DBusPendingCall *call, void *data)
     dbus_pending_call_unref(call);
 }
 
-DBusMessage* FcitxDBusPropertyGet(FcitxNotificationItem* notificationitem, DBusMessage* message)
-{
-    DBusError error;
-    dbus_error_init(&error);
-    char *interface;
-    char *property;
-    DBusMessage* reply = NULL;
-    if (dbus_message_get_args(message, &error,
-                              DBUS_TYPE_STRING, &interface,
-                              DBUS_TYPE_STRING, &property,
-                              DBUS_TYPE_INVALID)) {
-        int index = 0;
-        while (propertTable[index].interface != NULL) {
-            if (strcmp(propertTable[index].interface, interface) == 0
-                    && strcmp(propertTable[index].name, property) == 0)
-                break;
-            index ++;
-        }
-
-        if (propertTable[index].interface) {
-            DBusMessageIter args, variant;
-            reply = dbus_message_new_method_return(message);
-            dbus_message_iter_init_append(reply, &args);
-            dbus_message_iter_open_container(&args, DBUS_TYPE_VARIANT, propertTable[index].type, &variant);
-            if (propertTable[index].getfunc)
-                propertTable[index].getfunc(notificationitem, &variant);
-            dbus_message_iter_close_container(&args, &variant);
-        }
-        else {
-            reply = dbus_message_new_error_printf(message, DBUS_ERROR_UNKNOWN_PROPERTY, "No such property ('%s.%s')", interface, property);
-        }
-    }
-    else {
-        reply = FcitxNotificationItemUnknownMethod(message);
-    }
-
-    return reply;
-}
-
-DBusMessage* FcitxDBusPropertySet(FcitxNotificationItem* notificationitem, DBusMessage* message)
-{
-    DBusError error;
-    dbus_error_init(&error);
-    char *interface;
-    char *property;
-    DBusMessage* reply = NULL;
-
-    DBusMessageIter args, variant;
-    dbus_message_iter_init(message, &args);
-
-    if (dbus_message_iter_get_arg_type(&args) != DBUS_TYPE_STRING)
-        goto dbus_property_set_end;
-
-    dbus_message_iter_get_basic(&args, &interface);
-    dbus_message_iter_next(&args);
-
-    if (dbus_message_iter_get_arg_type(&args) != DBUS_TYPE_STRING)
-        goto dbus_property_set_end;
-    dbus_message_iter_get_basic(&args, &property);
-    dbus_message_iter_next(&args);
-
-    if (dbus_message_iter_get_arg_type(&args) != DBUS_TYPE_VARIANT)
-        goto dbus_property_set_end;
-
-    dbus_message_iter_recurse(&args, &variant);
-    int index = 0;
-    while (propertTable[index].interface != NULL) {
-        if (strcmp(propertTable[index].interface, interface) == 0
-                && strcmp(propertTable[index].name, property) == 0)
-            break;
-        index ++;
-    }
-    if (propertTable[index].setfunc) {
-        propertTable[index].setfunc(notificationitem, &variant);
-        reply = dbus_message_new_method_return(message);
-    }
-    else {
-        reply = dbus_message_new_error_printf(message, DBUS_ERROR_UNKNOWN_PROPERTY, "No such property ('%s.%s')", interface, property);
-    }
-
-dbus_property_set_end:
-    if (!reply)
-        reply = FcitxNotificationItemUnknownMethod(message);
-
-    return reply;
-}
-
-DBusMessage* FcitxDBusPropertyGetAll(FcitxNotificationItem* notificationitem, DBusMessage* message)
-{
-    DBusError error;
-    dbus_error_init(&error);
-    char *interface;
-    DBusMessage* reply = NULL;
-    if (dbus_message_get_args(message, &error,
-                              DBUS_TYPE_STRING, &interface,
-                              DBUS_TYPE_INVALID)) {
-        reply = dbus_message_new_method_return(message);
-        int index = 0;
-        DBusMessageIter args;
-        dbus_message_iter_init_append(reply, &args);
-        DBusMessageIter array, entry;
-        dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "{sv}", &array);
-
-        while (propertTable[index].interface != NULL) {
-            if (strcmp(propertTable[index].interface, interface) == 0 && propertTable[index].getfunc) {
-                dbus_message_iter_open_container(&array, DBUS_TYPE_DICT_ENTRY,
-                                                 NULL, &entry);
-
-                dbus_message_iter_append_basic(&entry, DBUS_TYPE_STRING, &propertTable[index].name);
-                DBusMessageIter variant;
-                dbus_message_iter_open_container(&entry, DBUS_TYPE_VARIANT, propertTable[index].type, &variant);
-                propertTable[index].getfunc(notificationitem, &variant);
-                dbus_message_iter_close_container(&entry, &variant);
-
-                dbus_message_iter_close_container(&array, &entry);
-            }
-            index ++;
-        }
-        dbus_message_iter_close_container(&args, &array);
-    }
-    if (!reply)
-        reply = FcitxNotificationItemUnknownMethod(message);
-
-    return reply;
-}
-
-
 DBusHandlerResult FcitxNotificationItemEventHandler (DBusConnection  *connection,
                                             DBusMessage     *message,
                                             void            *user_data)
@@ -465,14 +337,17 @@ DBusHandlerResult FcitxNotificationItemEventHandler (DBusConnection  *connection
         dbus_message_append_args(reply, DBUS_TYPE_STRING, &_notification_item, DBUS_TYPE_INVALID);
     } else if (dbus_message_is_method_call(message, NOTIFICATION_ITEM_DBUS_IFACE, "Scroll")) {
         reply = dbus_message_new_method_return(message);
+    } else if (dbus_message_is_method_call(message, NOTIFICATION_ITEM_DBUS_IFACE, "Activate")) {
+        FcitxInstanceChangeIMState(notificationitem->owner, FcitxInstanceGetCurrentIC(notificationitem->owner));
+        reply = dbus_message_new_method_return(message);
     } else if (dbus_message_is_method_call(message, NOTIFICATION_ITEM_DBUS_IFACE, "SecondaryActivate")) {
         reply = dbus_message_new_method_return(message);
     } else if (dbus_message_is_method_call(message, DBUS_INTERFACE_PROPERTIES, "Get")) {
-        reply = FcitxDBusPropertyGet(notificationitem, message);
+        reply = FcitxDBusPropertyGet(notificationitem, propertTable, message);
     } else if (dbus_message_is_method_call(message, DBUS_INTERFACE_PROPERTIES, "Set")) {
-        reply = FcitxDBusPropertySet(notificationitem, message);
+        reply = FcitxDBusPropertySet(notificationitem, propertTable, message);
     } else if (dbus_message_is_method_call(message, DBUS_INTERFACE_PROPERTIES, "GetAll")) {
-        reply = FcitxDBusPropertyGetAll(notificationitem, message);
+        reply = FcitxDBusPropertyGetAll(notificationitem, propertTable, message);
     }
 
     if (reply) {
@@ -556,7 +431,7 @@ void FcitxNotificationItemGetIconThemePath(void* arg, DBusMessageIter* iter)
 
 void FcitxNotificationItemGetMenu(void* arg, DBusMessageIter* iter)
 {
-    const char* menu = "/NO_DBUS_MENU";
+    const char* menu = "/MenuBar";
     dbus_message_iter_append_basic(iter, DBUS_TYPE_OBJECT_PATH, &menu);
 }
 

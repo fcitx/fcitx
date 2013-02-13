@@ -10,6 +10,7 @@ endif()
 
 set(FCITX_IPC_SOURCES
   ipc.c
+  ../../module/dbusstuff/property.c
   )
 
 fcitx_add_addon_full(ipc ${ipc_noinstall}
