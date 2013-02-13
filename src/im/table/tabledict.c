@@ -237,12 +237,10 @@ table_load_error:
         if (error) {
             fcitx_memory_pool_destroy(tableDict->pool);
             tableDict->pool = NULL;
-            error = false;
             reload++;
-        }
-        else
+        } else {
             break;
-
+        }
     } while(reload < 2);
 
     if (!tableDict->pool)

@@ -247,7 +247,7 @@ py_enhance_stroke_get_match_keys(
     for (i = 0;i < key_l;i++) {
         key_buff[i] = py_enhance_stroke_sym_to_num(key_s[i]);
         if (fcitx_unlikely(key_buff[i] == (uint8_t)-1)) {
-            return 0;
+            goto out;
         }
     }
     const PyEnhanceStrokeTree *tree = &pyenhance->stroke_tree;

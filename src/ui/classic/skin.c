@@ -520,9 +520,10 @@ void DrawResizableBackground(cairo_t *c,
 
 void DestroyImage(cairo_surface_t ** png)
 {
-    if (png != NULL)
+    if (png != NULL) {
         cairo_surface_destroy(*png);
-    *png = NULL;
+        *png = NULL;
+    }
 }
 
 /**
