@@ -44,7 +44,7 @@ EnumCount=3
 Enum0=Show
 Enum1=Auto
 Enum2=Hide
-DefaultValue=Auto
+DefaultValue=Hide
 Description=Status Panel Hide Mode
 
 [ClassicUI/VerticalList]
