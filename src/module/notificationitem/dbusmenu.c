@@ -517,7 +517,22 @@ void FcitxDBusMenuFillLayooutItem(FcitxNotificationItem* notificationitem, int32
                     for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
                          menupp != NULL;
                          menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)) {
-                        FcitxDBusMenuFillLayooutItemWrap(notificationitem, ACTION_ID(i,0), depth - 1, properties, &array);
+                        do {
+                            if (!menupp) {
+                                break;
+                            }
+                            FcitxUIMenu* menup = *menupp;
+                            if (!menup->visible) {
+                                break;
+                            }
+                            if (menup->candStatusBind) {
+                                FcitxUIComplexStatus* compStatus = FcitxUIGetComplexStatusByName(instance, menup->candStatusBind);
+                                if (compStatus && !compStatus->visible) {
+                                    break;
+                                }
+                            }
+                            FcitxDBusMenuFillLayooutItemWrap(notificationitem, ACTION_ID(i,0), depth - 1, properties, &array);
+                        } while(0);
                         i ++;
                     }
                     FcitxDBusMenuFillLayooutItemWrap(notificationitem, ACTION_ID(0,3), depth - 1, properties, &array);
