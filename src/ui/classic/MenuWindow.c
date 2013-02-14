@@ -38,7 +38,7 @@
 
 static boolean ReverseColor(XlibMenu * Menu, int shellIndex);
 static void MenuMark(XlibMenu* menu, int y, int i);
-static void DrawArrow(XlibMenu* menu, int line_y);
+static void DrawArrow(XlibMenu* menu, int line_y, int i);
 static void MoveSubMenu(XlibMenu *sub, XlibMenu *parent, int offseth);
 static void DisplayText(XlibMenu* menu, int shellindex, int line_y, int fontHeight);
 static void DrawDivLine(XlibMenu * menu, int line_y);
@@ -330,7 +330,7 @@ void DrawXlibMenu(XlibMenu * menu)
                 MenuMark(menu, iPosY, i);
 
             if (GetMenuItem(menu->menushell, i)->type == MENUTYPE_SUBMENU)
-                DrawArrow(menu, iPosY);
+                DrawArrow(menu, iPosY, i);
             iPosY = iPosY + 6 + fontheight;
         } else if (GetMenuItem(menu->menushell, i)->type == MENUTYPE_DIVLINE) {
             DrawDivLine(menu, iPosY);
@@ -424,13 +424,18 @@ void DisplayText(XlibMenu * menu, int shellindex, int line_y, int fontHeight)
     cairo_destroy(cr);
 }
 
-void DrawArrow(XlibMenu *menu, int line_y)
+void DrawArrow(XlibMenu* menu, int line_y, int i)
 {
     FcitxSkin *sc = &menu->owner->skin;
     int marginRight = sc->skinMenu.marginRight;
     cairo_t* cr = cairo_create(menu->menu_cs);
     double size = sc->skinFont.menuFontSize * 0.4;
     double offset = (sc->skinFont.menuFontSize - size) / 2;
+    if (GetMenuItem(menu->menushell, i)->isselect == 0) {
+        fcitx_cairo_set_color(cr, &sc->skinFont.menuFontColor[MENU_INACTIVE]);
+    } else {
+        fcitx_cairo_set_color(cr, &sc->skinFont.menuFontColor[MENU_ACTIVE]);
+    }
     cairo_move_to(cr, menu->width - marginRight - 1 - size, line_y + offset);
     cairo_line_to(cr, menu->width - marginRight - 1 - size, line_y + size * 2 + offset);
     cairo_line_to(cr, menu->width - marginRight - 1, line_y + size + offset);
