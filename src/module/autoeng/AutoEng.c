@@ -567,13 +567,19 @@ void LoadAutoEng(FcitxAutoEngState* autoEngState)
     fclose(fp);
 }
 
-void FreeAutoEng(void* arg)
+static void
+AutoEngFreeList(FcitxAutoEngState* autoEngState)
 {
-    FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
     if (autoEngState->autoEng) {
         utarray_free(autoEngState->autoEng);
         autoEngState->autoEng = NULL;
     }
+}
+
+void FreeAutoEng(void* arg)
+{
+    FcitxAutoEngState *autoEngState = (FcitxAutoEngState*)arg;
+    AutoEngFreeList(autoEngState);
     fcitx_utils_free(autoEngState->buf);
     fcitx_utils_free(autoEngState->back_buff);
 }
@@ -684,8 +690,8 @@ ShowAutoEngMessage(FcitxAutoEngState *autoEngState, INPUT_RETURN_VALUE *retval)
 
 void ReloadAutoEng(void* arg)
 {
-    FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
-    FreeAutoEng(autoEngState);
+    FcitxAutoEngState *autoEngState = (FcitxAutoEngState*)arg;
+    AutoEngFreeList(autoEngState);
     LoadAutoEng(autoEngState);
 }
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
