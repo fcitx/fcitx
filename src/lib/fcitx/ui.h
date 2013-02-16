@@ -270,7 +270,7 @@ extern "C" {
         MSG_TYPE_LAST = 6,
         MSG_TIPS = 0,           /**< Hint Text */
         MSG_INPUT = 1,          /**< User Input */
-        MSG_INDEX = 2,          /**< Index Number */
+        MSG_INDEX = 2,          /**< Index Number, only for use internally */
         MSG_CANDIATE_CURSOR = 3,/**< candidate cursor */
         MSG_FIRSTCAND = MSG_CANDIATE_CURSOR,      /**< deprecated */
         MSG_USERPHR = 4,        /**< User Phrase */

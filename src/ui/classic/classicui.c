@@ -42,7 +42,6 @@
 #include "MainWindow.h"
 #include "TrayWindow.h"
 #include "MenuWindow.h"
-#include "MessageWindow.h"
 #include "fcitx/hook.h"
 #include "fcitx-utils/utils.h"
 #include "module/notificationitem/fcitx-notificationitem.h"
@@ -64,7 +63,6 @@ static void ClassicUIOnInputFocus(void *arg);
 static void ClassicUIOnInputUnFocus(void *arg);
 static void ClassicUIOnTriggerOn(void *arg);
 static void ClassicUIOnTriggerOff(void *arg);
-static void ClassicUIDisplayMessage(void *arg, char *title, char **msg, int length);
 static void ClassicUIInputReset(void *arg);
 static void ReloadConfigClassicUI(void *arg);
 static void ClassicUISuspend(void *arg);
@@ -91,7 +89,7 @@ FCITX_DEFINE_PLUGIN(fcitx_classic_ui, ui, FcitxUI) = {
     ClassicUIOnInputUnFocus,
     ClassicUIOnTriggerOn,
     ClassicUIOnTriggerOff,
-    ClassicUIDisplayMessage,
+    NULL,
     ClassicUIMainWindowSizeHint,
     ReloadConfigClassicUI,
     ClassicUISuspend,
@@ -147,11 +145,10 @@ void* ClassicUICreate(FcitxInstance* instance)
     classicui->mainMenu.priv = classicui;
     classicui->mainMenu.mark = -1;
 
-    classicui->inputWindow = CreateInputWindow(classicui);
-    classicui->mainWindow = CreateMainWindow(classicui);
-    classicui->trayWindow = CreateTrayWindow(classicui);
-    classicui->messageWindow = CreateMessageWindow(classicui);
-    classicui->mainMenuWindow = CreateMainMenuWindow(classicui);
+    classicui->inputWindow = InputWindowCreate(classicui);
+    classicui->mainWindow = MainWindowCreate(classicui);
+    classicui->trayWindow = TrayWindowCreate(classicui);
+    classicui->mainMenuWindow = MainMenuWindowCreate(classicui);
 
     FcitxIMEventHook resethk;
     resethk.arg = classicui;
@@ -180,8 +177,8 @@ void ClassicUIDelayedInitTray(void* arg) {
         if (!classicui->trayTimeout)
             classicui->trayTimeout = FcitxInstanceAddTimeout(classicui->owner, 100, ClassicUIDelayedShowTray, classicui);
     } else {
-        ReleaseTrayWindow(classicui->trayWindow);
-        InitTrayWindow(classicui->trayWindow);
+        TrayWindowRelease(classicui->trayWindow);
+        TrayWindowInit(classicui->trayWindow);
     }
 }
 
@@ -191,8 +188,8 @@ void ClassicUIDelayedShowTray(void* arg)
     classicui->trayTimeout = 0;
     if (!classicui->bUseTrayIcon)
         return;
-    ReleaseTrayWindow(classicui->trayWindow);
-    InitTrayWindow(classicui->trayWindow);
+    TrayWindowRelease(classicui->trayWindow);
+    TrayWindowInit(classicui->trayWindow);
 }
 
 void ClassicUISetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle)
@@ -205,38 +202,39 @@ static void ClassicUIInputReset(void *arg)
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     if (classicui->isSuspend)
         return;
-    DrawMainWindow(classicui->mainWindow);
-    DrawTrayWindow(classicui->trayWindow);
+    MainWindowShow(classicui->mainWindow);
+    TrayWindowDraw(classicui->trayWindow);
+    classicui->inputWindow->highlight = 0;
 }
 
 static void ClassicUICloseInputWindow(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    CloseInputWindowInternal(classicui->inputWindow);
+    InputWindowClose(classicui->inputWindow);
 }
 
 static void ClassicUIShowInputWindow(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    ShowInputWindowInternal(classicui->inputWindow);
+    InputWindowShow(classicui->inputWindow);
 }
 
 static void ClassicUIMoveInputWindow(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    MoveInputWindowInternal(classicui->inputWindow);
+    classicui->inputWindow->parent.MoveWindow(&classicui->inputWindow->parent);
 }
 
 static void ClassicUIUpdateStatus(void *arg, FcitxUIStatus* status)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    DrawMainWindow(classicui->mainWindow);
+    MainWindowShow(classicui->mainWindow);
 }
 
 void ClassicUIUpdateComplexStatus(void* arg, FcitxUIComplexStatus* status)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    DrawMainWindow(classicui->mainWindow);
+    MainWindowShow(classicui->mainWindow);
 }
 
 void ClassicUIRegisterComplexStatus(void* arg, FcitxUIComplexStatus* status)
@@ -249,7 +247,7 @@ void ClassicUIRegisterComplexStatus(void* arg, FcitxUIComplexStatus* status)
 static void ClassicUIRegisterMenu(void *arg, FcitxUIMenu* menu)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    XlibMenu* xlibMenu = CreateXlibMenu(classicui);
+    XlibMenu* xlibMenu = XlibMenuCreate(classicui);
     menu->uipriv[classicui->isfallback] = xlibMenu;
     xlibMenu->menushell = menu;
 }
@@ -275,8 +273,8 @@ static void ClassicUIOnInputFocus(void *arg)
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     if (classicui->isSuspend)
         return;
-    DrawMainWindow(classicui->mainWindow);
-    DrawTrayWindow(classicui->trayWindow);
+    MainWindowShow(classicui->mainWindow);
+    TrayWindowDraw(classicui->trayWindow);
 }
 
 static void ClassicUIOnInputUnFocus(void *arg)
@@ -284,8 +282,8 @@ static void ClassicUIOnInputUnFocus(void *arg)
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     if (classicui->isSuspend)
         return;
-    DrawMainWindow(classicui->mainWindow);
-    DrawTrayWindow(classicui->trayWindow);
+    MainWindowShow(classicui->mainWindow);
+    TrayWindowDraw(classicui->trayWindow);
 }
 
 void ClassicUISuspend(void* arg)
@@ -293,9 +291,9 @@ void ClassicUISuspend(void* arg)
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     classicui->isSuspend = true;
     classicui->notificationItemAvailable = false;
-    CloseInputWindowInternal(classicui->inputWindow);
-    CloseMainWindow(classicui->mainWindow);
-    ReleaseTrayWindow(classicui->trayWindow);
+    InputWindowClose(classicui->inputWindow);
+    MainWindowClose(classicui->mainWindow);
+    TrayWindowRelease(classicui->trayWindow);
     /* always call this function will not do anything harm */
     FcitxNotificationItemDisable(classicui->owner);
 }
@@ -314,13 +312,14 @@ void ClassicUINotificationItemAvailable(void* arg, boolean avaiable) {
         return;
     classicui->notificationItemAvailable = avaiable;
     if (!avaiable) {
-        ReleaseTrayWindow(classicui->trayWindow);
-        InitTrayWindow(classicui->trayWindow);
+        TrayWindowRelease(classicui->trayWindow);
+        TrayWindowInit(classicui->trayWindow);
     } else {
         if (classicui->trayTimeout) {
             FcitxInstanceRemoveTimeoutById(classicui->owner, classicui->trayTimeout);
+            classicui->trayTimeout = 0;
         }
-        ReleaseTrayWindow(classicui->trayWindow);
+        TrayWindowRelease(classicui->trayWindow);
     }
 }
 
@@ -413,27 +412,16 @@ ClassicUIMouseClick(FcitxClassicUI* classicui, Window window, int *x, int *y)
 void ClassicUIOnTriggerOn(void* arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    FcitxInstance *instance = classicui->owner;
-    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
-        DrawMainWindow(classicui->mainWindow);
-    }
-    DrawTrayWindow(classicui->trayWindow);
+    MainWindowShow(classicui->mainWindow);
+    TrayWindowDraw(classicui->trayWindow);
 }
 
 void ClassicUIOnTriggerOff(void* arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    DrawMainWindow(classicui->mainWindow);
-    DrawTrayWindow(classicui->trayWindow);
+    MainWindowShow(classicui->mainWindow);
+    TrayWindowDraw(classicui->trayWindow);
 }
-
-void ClassicUIDisplayMessage(void* arg, char* title, char** msg, int length)
-{
-    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    XMapRaised(classicui->dpy, classicui->messageWindow->window);
-    DrawMessageWindow(classicui->messageWindow, title, msg, length);
-}
-
 
 static void UpdateMainMenu(FcitxUIMenu* menu)
 {
@@ -544,15 +532,6 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
     return true;
 }
 
-void
-ClassicUIInitWindowAttribute(FcitxClassicUI *classicui, Visual **vs,
-                             Colormap *cmap, XSetWindowAttributes *attrib,
-                             unsigned long *attribmask, int *depth)
-{
-    FcitxX11InitWindowAttribute(classicui->owner, vs, cmap, attrib,
-                                attribmask, depth);
-}
-
 Visual * ClassicUIFindARGBVisual(FcitxClassicUI* classicui)
 {
     return FcitxX11FindARGBVisual(classicui->owner);
@@ -569,7 +548,7 @@ void ClassicUIMainWindowSizeHint(void* arg, int* x, int* y, int* w, int* h)
     }
 
     XWindowAttributes attr;
-    XGetWindowAttributes(classicui->dpy, classicui->mainWindow->window, &attr);
+    XGetWindowAttributes(classicui->dpy, classicui->mainWindow->parent.wId, &attr);
     if (w) {
         *w = attr.width;
     }

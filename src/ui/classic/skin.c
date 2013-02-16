@@ -176,9 +176,13 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
         color = sc->skinFont.menuFontColor[1];
 
     int textw, texth;
-    StringSizeStrict(iconText, classicui->font, min, false, &textw, &texth);
+    FcitxCairoTextContext* ctc = FcitxCairoTextContextCreate(c);
+    FcitxCairoTextContextSet(ctc, classicui->font, min, false);
+    FcitxCairoTextContextStringSizeStrict(ctc, iconText, &textw, &texth);
 
-    OutputString(c, iconText, classicui->font, min, false, (w - textw) * 0.5, 0, &color);
+    FcitxCairoTextContextOutputString(ctc, iconText, (w - textw) * 0.5, 0, &color);
+
+    FcitxCairoTextContextFree(ctc);
 
     cairo_destroy(c);
     SkinImage* image = fcitx_utils_malloc0(sizeof(SkinImage));
@@ -271,8 +275,8 @@ SkinImage* LoadImage(FcitxSkin* sc, const char* name, int flag)
 
 void DrawResizableBackground(cairo_t *c,
                              cairo_surface_t *background,
-                             int height,
                              int width,
+                             int height,
                              int marginLeft,
                              int marginTop,
                              int marginRight,
@@ -526,53 +530,6 @@ void DestroyImage(cairo_surface_t ** png)
     }
 }
 
-/**
-*输入条的绘制非常注重效率,画笔在绘图过程中不释放
-*/
-void LoadInputMessage(FcitxSkin* sc, InputWindow* inputWindow, const char* font)
-{
-    int i = 0;
-
-    FcitxConfigColor cursorColor = sc->skinInputBar.cursorColor;
-
-    if (inputWindow->c_back) {
-        cairo_destroy(inputWindow->c_back);
-        inputWindow->c_back = NULL;
-    }
-
-    for (i = 0; i < 7 ; i ++) {
-        if (inputWindow->c_font[i]) {
-            cairo_destroy(inputWindow->c_font[i]);
-            inputWindow->c_font[i] = NULL;
-        }
-    }
-    inputWindow->c_font[7] = NULL;
-    if (inputWindow->c_cursor) {
-        cairo_destroy(inputWindow->c_cursor);
-        inputWindow->c_cursor = NULL;
-    }
-
-    //输入条背景图画笔
-    inputWindow->c_back = cairo_create(inputWindow->cs_input_bar);
-
-    for (i = 0; i < 7 ; i ++) {
-        inputWindow->c_font[i] = cairo_create(inputWindow->cs_input_bar);
-        fcitx_cairo_set_color(inputWindow->c_font[i], &sc->skinFont.fontColor[i]);
-#ifndef _ENABLE_PANGO
-        SetFontContext(inputWindow->c_font[i],
-                       font,
-                       inputWindow->owner->fontSize > 0 ? inputWindow->owner->fontSize : sc->skinFont.fontSize,
-                       dpi);
-#endif
-    }
-    inputWindow->c_font[7] = inputWindow->c_font[0];
-
-    //光标画笔
-    inputWindow->c_cursor = cairo_create(inputWindow->cs_input_bar);
-    fcitx_cairo_set_color(inputWindow->c_cursor, &cursorColor);
-    cairo_set_line_width(inputWindow->c_cursor, 1);
-}
-
 void DrawImage(cairo_t *c, cairo_surface_t * png, int x, int y, MouseE mouse)
 {
     if (!png)
@@ -598,225 +555,6 @@ void DrawImage(cairo_t *c, cairo_surface_t * png, int x, int y, MouseE mouse)
     cairo_restore(c);
 }
 
-void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, boolean vertical, int iCursorPos, FcitxMessages * msgup, FcitxMessages *msgdown , unsigned int * iheight, unsigned int *iwidth)
-{
-    int i;
-    char *strUp[MAX_MESSAGE_COUNT];
-    char *strDown[MAX_MESSAGE_COUNT];
-    int posUpX[MAX_MESSAGE_COUNT], posUpY[MAX_MESSAGE_COUNT];
-    int posDownX[MAX_MESSAGE_COUNT], posDownY[MAX_MESSAGE_COUNT];
-    int oldHeight = *iheight, oldWidth = *iwidth;
-    int newHeight = 0, newWidth = 0;
-    int cursor_pos = 0;
-    int inputWidth = 0, outputWidth = 0;
-    int outputHeight = 0;
-    cairo_t *c = NULL;
-    FcitxInputState* input = FcitxInstanceGetInputState(inputWindow->owner->owner);
-    FcitxInstance* instance = inputWindow->owner->owner;
-    FcitxClassicUI* classicui = inputWindow->owner;
-    int iChar = iCursorPos;
-    int strWidth = 0, strHeight = 0;
-
-    SkinImage *inputimg, *prev, *next;
-    inputimg = LoadImage(sc, sc->skinInputBar.backImg, false);
-    prev = LoadImage(sc, sc->skinInputBar.backArrow, false);
-    next = LoadImage(sc, sc->skinInputBar.forwardArrow, false);
-
-    if (!FcitxMessagesIsMessageChanged(msgup) && !FcitxMessagesIsMessageChanged(msgdown))
-        return;
-
-    inputWidth = 0;
-    int dpi = sc->skinFont.respectDPI? classicui->dpi : 0;
-    FCITX_UNUSED(dpi);
-#ifdef _ENABLE_PANGO /* special case which only macro unable to handle */
-    SetFontContext(dummy, inputWindow->owner->font, inputWindow->owner->fontSize > 0 ? inputWindow->owner->fontSize : sc->skinFont.fontSize, dpi);
-#endif
-
-    int fontHeight = FontHeightWithContext(inputWindow->c_font[0], dpi);
-    for (i = 0; i < FcitxMessagesGetMessageCount(msgup) ; i++) {
-        char *trans = FcitxInstanceProcessOutputFilter(instance, FcitxMessagesGetMessageString(msgup, i));
-        if (trans)
-            strUp[i] = trans;
-        else
-            strUp[i] = FcitxMessagesGetMessageString(msgup, i);
-        posUpX[i] = sc->skinInputBar.marginLeft + inputWidth;
-
-        StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgup, i)], dpi, strUp[i], &strWidth, &strHeight);
-
-        if (sc->skinFont.respectDPI)
-            posUpY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos;
-        else
-            posUpY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - strHeight;
-        inputWidth += strWidth;
-        if (FcitxInputStateGetShowCursor(input)) {
-            int length = strlen(FcitxMessagesGetMessageString(msgup, i));
-            if (iChar >= 0) {
-                if (iChar < length) {
-                    char strTemp[MESSAGE_MAX_LENGTH];
-                    char *strGBKT = NULL;
-                    strncpy(strTemp, strUp[i], iChar);
-                    strTemp[iChar] = '\0';
-                    strGBKT = strTemp;
-                    StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgup, i)], dpi, strGBKT, &strWidth, &strHeight);
-                    cursor_pos = posUpX[i]
-                                 + strWidth + 2;
-                }
-                iChar -= length;
-            }
-        }
-
-    }
-
-    if (iChar >= 0)
-        cursor_pos = inputWidth + sc->skinInputBar.marginLeft;
-
-    outputWidth = 0;
-    outputHeight = 0;
-    int currentX = 0;
-    int offsetY;
-    if (sc->skinFont.respectDPI)
-        offsetY = sc->skinInputBar.marginTop
-                 + (FcitxMessagesGetMessageCount(msgup) ? (sc->skinInputBar.iInputPos + fontHeight) : 0)
-                 + (FcitxMessagesGetMessageCount(msgdown) ? sc->skinInputBar.iOutputPos : 0);
-    else
-        offsetY = sc->skinInputBar.marginTop + sc->skinInputBar.iOutputPos - fontHeight;
-    for (i = 0; i < FcitxMessagesGetMessageCount(msgdown) ; i++) {
-        char *trans = FcitxInstanceProcessOutputFilter(instance, FcitxMessagesGetMessageString(msgdown, i));
-        if (trans)
-            strDown[i] = trans;
-        else
-            strDown[i] = FcitxMessagesGetMessageString(msgdown, i);
-
-        if (vertical) { /* vertical */
-            if (FcitxMessagesGetMessageType(msgdown, i) == MSG_INDEX) {
-                if (currentX > outputWidth)
-                    outputWidth = currentX;
-                if (i != 0) {
-                    currentX = 0;
-                }
-            }
-            posDownX[i] = sc->skinInputBar.marginLeft + currentX;
-            StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgdown, i)], dpi, strDown[i], &strWidth, &strHeight);
-            if (FcitxMessagesGetMessageType(msgdown, i) == MSG_INDEX && i != 0)
-                outputHeight += fontHeight + 2;
-            currentX += strWidth;
-        } else { /* horizontal */
-            posDownX[i] = sc->skinInputBar.marginLeft + outputWidth;
-            StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgdown, i)], dpi, strDown[i], &strWidth, &strHeight);
-            outputWidth += strWidth;
-        }
-        posDownY[i] = offsetY + outputHeight;
-    }
-    if (vertical && currentX > outputWidth)
-        outputWidth = currentX;
-
-    newHeight = offsetY + outputHeight + sc->skinInputBar.marginBottom + (FcitxMessagesGetMessageCount(msgdown) || !sc->skinFont.respectDPI ? fontHeight : 0);
-
-    newWidth = (inputWidth < outputWidth) ? outputWidth : inputWidth;
-    newWidth += sc->skinInputBar.marginLeft + sc->skinInputBar.marginRight;
-
-    /* round to ROUND_SIZE in order to decrease resize */
-    newWidth = (newWidth / ROUND_SIZE) * ROUND_SIZE + ROUND_SIZE;
-
-    if (vertical) { /* vertical */
-        newWidth = (newWidth < INPUT_BAR_VMIN_WIDTH) ? INPUT_BAR_VMIN_WIDTH : newWidth;
-    } else {
-        newWidth = (newWidth < INPUT_BAR_HMIN_WIDTH) ? INPUT_BAR_HMIN_WIDTH : newWidth;
-    }
-
-    *iwidth = newWidth;
-    *iheight = newHeight;
-
-    EnlargeCairoSurface(&inputWindow->cs_input_back, newWidth, newHeight);
-    if (EnlargeCairoSurface(&inputWindow->cs_input_bar, newWidth, newHeight)) {
-        LoadInputMessage(&classicui->skin, classicui->inputWindow, classicui->font);
-    }
-
-    if (oldHeight != newHeight || oldWidth != newWidth) {
-        c = cairo_create(inputWindow->cs_input_back);
-        DrawResizableBackground(c, inputimg->image, newHeight, newWidth,
-                                sc->skinInputBar.marginLeft,
-                                sc->skinInputBar.marginTop,
-                                sc->skinInputBar.marginRight,
-                                sc->skinInputBar.marginBottom,
-                                sc->skinInputBar.fillV,
-                                sc->skinInputBar.fillH
-                               );
-        cairo_destroy(c);
-    }
-
-    c = cairo_create(inputWindow->cs_input_bar);
-    cairo_set_source_surface(c, inputWindow->cs_input_back, 0, 0);
-    cairo_save(c);
-    cairo_rectangle(c, 0, 0, newWidth, newHeight);
-    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-    cairo_clip(c);
-    cairo_paint(c);
-    cairo_restore(c);
-
-    cairo_set_operator(c, CAIRO_OPERATOR_OVER);
-
-    FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
-    if (FcitxCandidateWordHasPrev(candList)
-        || FcitxCandidateWordHasNext(candList)
-    ) {
-        //画向前向后箭头
-        if (prev && next) {
-            cairo_set_source_surface(inputWindow->c_back, prev->image,
-                                     newWidth - sc->skinInputBar.iBackArrowX ,
-                                     sc->skinInputBar.iBackArrowY);
-            if (FcitxCandidateWordHasPrev(candList))
-                cairo_paint(inputWindow->c_back);
-            else
-                cairo_paint_with_alpha(inputWindow->c_back, 0.5);
-
-            //画向前箭头
-            cairo_set_source_surface(inputWindow->c_back, next->image,
-                                     newWidth - sc->skinInputBar.iForwardArrowX ,
-                                     sc->skinInputBar.iForwardArrowY);
-            if (FcitxCandidateWordHasNext(candList))
-                cairo_paint(inputWindow->c_back);
-            else
-                cairo_paint_with_alpha(inputWindow->c_back, 0.5);
-        }
-    }
-
-    for (i = 0; i < FcitxMessagesGetMessageCount(msgup) ; i++) {
-        OutputStringWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgup, i)], dpi, strUp[i], posUpX[i], posUpY[i]);
-        if (strUp[i] != FcitxMessagesGetMessageString(msgup, i))
-            free(strUp[i]);
-    }
-
-    for (i = 0; i < FcitxMessagesGetMessageCount(msgdown) ; i++) {
-        OutputStringWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgdown, i)], dpi, strDown[i], posDownX[i], posDownY[i]);
-        if (strDown[i] != FcitxMessagesGetMessageString(msgdown, i))
-            free(strDown[i]);
-    }
-
-    int cursorY1, cursorY2;
-    if (sc->skinFont.respectDPI) {
-        cursorY1 = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos;
-        cursorY2 = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos + fontHeight;
-    }
-    else {
-        cursorY1 = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - fontHeight;
-        cursorY2 = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos;
-    }
-
-    //画光标
-    if (FcitxMessagesGetMessageCount(msgup) && FcitxInputStateGetShowCursor(input)) {
-        cairo_move_to(inputWindow->c_cursor, cursor_pos, cursorY1);
-        cairo_line_to(inputWindow->c_cursor, cursor_pos, cursorY2);
-        cairo_stroke(inputWindow->c_cursor);
-    }
-
-    ResetFontContext();
-
-    cairo_destroy(c);
-    FcitxMessagesSetMessageChanged(msgup, false);
-    FcitxMessagesSetMessageChanged(msgdown, false);
-}
-
 void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
 {
     char *pivot = classicui->skinType;
@@ -832,13 +570,13 @@ void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
     GetValidFont(classicui->strUserLocale, &classicui->menuFont);
 #endif
 
-    LoadInputMessage(&classicui->skin, classicui->inputWindow, classicui->font);
-
-    DrawMainWindow(classicui->mainWindow);
-    DrawInputWindow(classicui->inputWindow);
-    DrawTrayWindow(classicui->trayWindow);
+    FcitxXlibWindowPaint(&classicui->mainWindow->parent);
+    FcitxXlibWindowPaint(&classicui->inputWindow->parent);
+    TrayWindowDraw(classicui->trayWindow);
 
     SaveClassicUIConfig(classicui);
+
+    classicui->epoch ++;
 }
 
 void FreeImageTable(SkinImage* table)

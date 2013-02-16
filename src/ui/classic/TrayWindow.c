@@ -42,7 +42,7 @@
 
 static boolean TrayEventHandler(void *arg, XEvent* event);
 
-void InitTrayWindow(TrayWindow *trayWindow)
+void TrayWindowInit(TrayWindow *trayWindow)
 {
     FcitxClassicUI *classicui = trayWindow->owner;
     Display *dpy = classicui->dpy;
@@ -98,7 +98,7 @@ void InitTrayWindow(TrayWindow *trayWindow)
     TrayFindDock(dpy, trayWindow);
 }
 
-TrayWindow* CreateTrayWindow(FcitxClassicUI *classicui)
+TrayWindow* TrayWindowCreate(FcitxClassicUI *classicui)
 {
     TrayWindow *trayWindow = fcitx_utils_malloc0(sizeof(TrayWindow));
     trayWindow->owner = classicui;
@@ -107,7 +107,7 @@ TrayWindow* CreateTrayWindow(FcitxClassicUI *classicui)
     return trayWindow;
 }
 
-void ReleaseTrayWindow(TrayWindow *trayWindow)
+void TrayWindowRelease(TrayWindow *trayWindow)
 {
     FcitxClassicUI *classicui = trayWindow->owner;
     Display *dpy = classicui->dpy;
@@ -122,7 +122,7 @@ void ReleaseTrayWindow(TrayWindow *trayWindow)
     trayWindow->bTrayMapped = false;
 }
 
-void DrawTrayWindow(TrayWindow* trayWindow)
+void TrayWindowDraw(TrayWindow* trayWindow)
 {
     FcitxClassicUI *classicui = trayWindow->owner;
     FcitxSkin *sc = &classicui->skin;
@@ -222,8 +222,9 @@ boolean TrayEventHandler(void *arg, XEvent* event)
                 && event->xclient.data.l[1] == trayWindow->atoms[ATOM_SELECTION]) {
             if (classicui->notificationItemAvailable)
                 return true;
-            if (trayWindow->window == None)
-                InitTrayWindow(trayWindow);
+            if (trayWindow->window == None) {
+                TrayWindowInit(trayWindow);
+            }
             TrayFindDock(dpy, trayWindow);
             return true;
         }
@@ -231,7 +232,7 @@ boolean TrayEventHandler(void *arg, XEvent* event)
 
     case Expose:
         if (event->xexpose.window == trayWindow->window) {
-            DrawTrayWindow(trayWindow);
+            TrayWindowDraw(trayWindow);
         }
         break;
     case ConfigureNotify:
@@ -246,7 +247,7 @@ boolean TrayEventHandler(void *arg, XEvent* event)
                 XSetWMNormalHints(dpy, trayWindow->window, &size_hints);
             }
 
-            DrawTrayWindow(trayWindow);
+            TrayWindowDraw(trayWindow);
             return true;
         }
         break;
@@ -258,11 +259,10 @@ boolean TrayEventHandler(void *arg, XEvent* event)
                 break;
             case Button3: {
                 XlibMenu *mainMenuWindow = classicui->mainMenuWindow;
-                FcitxMenuUpdate(mainMenuWindow->menushell);
-                GetMenuSize(mainMenuWindow);
-                CalMenuWindowPosition(mainMenuWindow, event->xbutton.x_root - event->xbutton.x, event->xbutton.y_root - event->xbutton.y, trayWindow->size);
-                DrawXlibMenu(mainMenuWindow);
-                DisplayXlibMenu(mainMenuWindow);
+                mainMenuWindow->anchor = MA_Tray;
+                mainMenuWindow->trayX = event->xbutton.x_root - event->xbutton.x;
+                mainMenuWindow->trayY = event->xbutton.y_root - event->xbutton.y;
+                XlibMenuShow(mainMenuWindow);
             }
             break;
             }
@@ -274,7 +274,7 @@ boolean TrayEventHandler(void *arg, XEvent* event)
         if (event->xdestroywindow.window == trayWindow->dockWindow) {
             trayWindow->dockWindow = None;
             trayWindow->bTrayMapped = False;
-            ReleaseTrayWindow(trayWindow);
+            TrayWindowRelease(trayWindow);
             return true;
         }
         break;
@@ -282,7 +282,7 @@ boolean TrayEventHandler(void *arg, XEvent* event)
     case ReparentNotify:
         if (event->xreparent.parent == DefaultRootWindow(dpy) && event->xreparent.window == trayWindow->window) {
             trayWindow->bTrayMapped = False;
-            ReleaseTrayWindow(trayWindow);
+            TrayWindowRelease(trayWindow);
             return true;
         }
         break;

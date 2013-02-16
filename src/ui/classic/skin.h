@@ -53,6 +53,40 @@ typedef enum _MouseE {
     MOTION//鼠标停留
 } MouseE;
 
+typedef enum _OverlayDock {
+    OD_TopLeft = 0,
+    OD_TopCenter = 1,
+    OD_TopRight = 2,
+    OD_CenterLeft = 3,
+    OD_Center = 4,
+    OD_CenterRight = 5,
+    OD_BottomLeft = 6,
+    OD_BottomCenter = 7,
+    OD_BottomRight = 8,
+} OverlayDock;
+
+typedef struct _FcitxWindowBackground {
+    char* background;
+
+    char* overlay;
+    OverlayDock dock;
+    int overlayOffsetX;
+    int overlayOffsetY;
+
+    int marginTop;
+    int marginBottom;
+    int marginLeft;
+    int marginRight;
+
+    int clickMarginTop;
+    int clickMarginBottom;
+    int clickMarginLeft;
+    int clickMarginRight;
+
+    FillRule fillV;
+    FillRule fillH;
+} FcitxWindowBackground;
+
 typedef struct _SkinImage {
     char *name;
     cairo_surface_t *image;
@@ -76,44 +110,32 @@ typedef struct _SkinFont {
 } SkinFont;
 
 typedef struct _SkinMenu {
-    char* backImg;
-    int marginTop;
-    int marginBottom;
-    int marginLeft;
-    int marginRight;
+    FcitxWindowBackground background;
     FcitxConfigColor activeColor;
     FcitxConfigColor lineColor;
-    FillRule fillV;
-    FillRule fillH;
 } SkinMenu;
 
 /**
  * The Main Window Skin description
  **/
 typedef struct _SkinMainBar {
-    char* backImg;
     char* logo;
     char* eng;
     char* active;
-    int marginTop;
-    int marginBottom;
-    int marginLeft;
-    int marginRight;
+
+    FcitxWindowBackground background;
+
     char *placement;
     UT_array skinPlacement;
-    FillRule fillV;
-    FillRule fillH;
     boolean bUseCustomTextIconColor;
     FcitxConfigColor textIconColor[2];
 } SkinMainBar;
 
 typedef struct _SkinInputBar {
-    char* backImg;
     FcitxConfigColor cursorColor;
-    int marginTop;
-    int marginBottom;
-    int marginLeft;
-    int marginRight;
+
+    FcitxWindowBackground background;
+
     char* backArrow;
     char* forwardArrow;
     int iBackArrowX;
@@ -122,8 +144,6 @@ typedef struct _SkinInputBar {
     int iForwardArrowY;
     int iInputPos;
     int iOutputPos;
-    FillRule fillV;
-    FillRule fillH;
 } SkinInputBar;
 
 typedef struct _SkinPlacement {
@@ -175,18 +195,17 @@ typedef struct _FcitxSkin {
 FcitxConfigFileDesc* GetSkinDesc();
 int LoadSkinConfig(FcitxSkin* sc, char** skinType);
 void DrawImage(cairo_t* c, cairo_surface_t* png, int x, int y, MouseE mouse);
-void DrawInputBar(FcitxSkin* sc, struct _InputWindow* inputWindow, boolean vertical, int iCursorPos, FcitxMessages* msgup, FcitxMessages* msgdown, unsigned int* iheight, unsigned int* iwidth);
+void DrawInputBar(struct _InputWindow* inputWindow, boolean vertical, int iCursorPos);
 SkinImage* LoadImage(FcitxSkin* sc, const char* name, int fallback);
 SkinImage* LoadImageWithText(struct _FcitxClassicUI *classicui, FcitxSkin* sc, const char* name, const char* text, int w, int h, boolean active);
-void LoadInputMessage(FcitxSkin* sc, struct _InputWindow* inputWindow, const char* font);
 void InitSkinMenu(struct _FcitxClassicUI* classicui);
 void DisplaySkin(struct _FcitxClassicUI* classicui, char * skinname);
 void ParsePlacement(UT_array* sps, char* placment);
 SkinImage* GetIMIcon(struct _FcitxClassicUI* classicui, FcitxSkin* sc, const char* fallbackIcon, int flag, boolean fallbackToDefault);
 void DrawResizableBackground(cairo_t *c,
                              cairo_surface_t *background,
-                             int height,
                              int width,
+                             int height,
                              int marginLeft,
                              int marginTop,
                              int marginRight,

@@ -96,6 +96,56 @@ Description=Resize Margin Top
 Type=Integer
 Description=Resize Margin Bottom
 
+[SkinMainBar/ClickMarginLeft]
+Type=Integer
+DefaultValue=0
+Description=Margin Left for clickable region
+
+[SkinMainBar/ClickMarginRight]
+Type=Integer
+DefaultValue=0
+Description=Margin Right for clickable region
+
+[SkinMainBar/ClickMarginTop]
+Type=Integer
+DefaultValue=0
+Description=Margin Left for clickable region
+
+[SkinMainBar/ClickMarginBottom]
+Type=Integer
+DefaultValue=0
+Description=Margin Bottom for clickable region
+
+[SkinMainBar/Overlay]
+Type=String
+DefaultValue=
+Description=Overlay image
+
+[SkinMainBar/OverlayDock]
+Type=Enum
+DefaultValue=TopLeft
+EnumCount=9
+Enum0=TopLeft
+Enum1=TopCenter
+Enum2=TopRight
+Enum3=CenterLeft
+Enum4=Center
+Enum5=CenterRight
+Enum6=BottomLeft
+Enum7=BottomCenter
+Enum8=BottomRight
+Description=Overlay dock position
+
+[SkinMainBar/OverlayOffsetX]
+Type=Integer
+DefaultValue=0
+Description=Overlay X offset
+
+[SkinMainBar/OverlayOffsetY]
+Type=Integer
+DefaultValue=0
+Description=Overlay X offset
+
 [SkinMainBar/FillVertical]
 Type=Enum
 Description=Fill Background Vertical rule
@@ -151,6 +201,56 @@ Description=Resize Margin Top
 [SkinInputBar/MarginBottom]
 Type=Integer
 Description=Resize Margin Bottom
+
+[SkinInputBar/ClickMarginLeft]
+Type=Integer
+DefaultValue=0
+Description=Margin Left for clickable region
+
+[SkinInputBar/ClickMarginRight]
+Type=Integer
+DefaultValue=0
+Description=Margin Right for clickable region
+
+[SkinInputBar/ClickMarginTop]
+Type=Integer
+DefaultValue=0
+Description=Margin Left for clickable region
+
+[SkinInputBar/ClickMarginBottom]
+Type=Integer
+DefaultValue=0
+Description=Margin Bottom for clickable region
+
+[SkinInputBar/Overlay]
+Type=String
+DefaultValue=
+Description=Overlay image
+
+[SkinInputBar/OverlayDock]
+Type=Enum
+DefaultValue=TopLeft
+EnumCount=9
+Enum0=TopLeft
+Enum1=TopCenter
+Enum2=TopRight
+Enum3=CenterLeft
+Enum4=Center
+Enum5=CenterRight
+Enum6=BottomLeft
+Enum7=BottomCenter
+Enum8=BottomRight
+Description=Overlay dock position
+
+[SkinInputBar/OverlayOffsetX]
+Type=Integer
+DefaultValue=0
+Description=Overlay X offset
+
+[SkinInputBar/OverlayOffsetY]
+Type=Integer
+DefaultValue=0
+Description=Overlay X offset
 
 [SkinInputBar/CursorColor]
 Type=Color
@@ -231,6 +331,36 @@ Description=Resize Margin Left
 [SkinMenu/MarginRight]
 Type=Integer
 Description=Resize Margin Right
+
+[SkinMenu/Overlay]
+Type=String
+DefaultValue=
+Description=Overlay image
+
+[SkinMenu/OverlayDock]
+Type=Enum
+DefaultValue=TopLeft
+EnumCount=9
+Enum0=TopLeft
+Enum1=TopCenter
+Enum2=TopRight
+Enum3=CenterLeft
+Enum4=Center
+Enum5=CenterRight
+Enum6=BottomLeft
+Enum7=BottomCenter
+Enum8=BottomRight
+Description=Overlay dock position
+
+[SkinMenu/OverlayOffsetX]
+Type=Integer
+DefaultValue=0
+Description=Overlay X offset
+
+[SkinMenu/OverlayOffsetY]
+Type=Integer
+DefaultValue=0
+Description=Overlay X offset
 
 [SkinMenu/ActiveColor]
 Type=Color

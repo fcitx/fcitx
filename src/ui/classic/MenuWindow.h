@@ -26,31 +26,37 @@
 #include <cairo.h>
 #include "fcitx-utils/utarray.h"
 #include "fcitx-config/fcitx-config.h"
+#include "classicui.h"
+#include "XlibWindow.h"
 
 struct _FcitxClassicUI;
 struct _FcitxUIMenu;
 
+typedef enum _MenuAnchor {
+    MA_None,
+    MA_MainWindow,
+    MA_Menu,
+    MA_Tray
+} MenuAnchor;
+
 typedef struct _XlibMenu {
+    FcitxXlibWindow parent;
     int iPosX;
     int iPosY;
-    int width;
-    int height;
-    Window menuWindow;
-    cairo_surface_t *menu_x_cs;
-    cairo_surface_t *menu_cs;
-    XColor bgcolor;
-    XColor bgselectcolor;
-    XColor charcolor;
-    XColor charselectcolor;
     struct _FcitxUIMenu *menushell;
-    struct _FcitxClassicUI* owner;
+    int fontheight;
+
+    MenuAnchor anchor;
+    struct _XlibMenu* anchorMenu;
+    int offseth;
+    boolean visible;
+    int trayY;
+    int trayX;
 } XlibMenu;
 
-XlibMenu* CreateMainMenuWindow(struct _FcitxClassicUI *classicui);
-XlibMenu* CreateXlibMenu(struct _FcitxClassicUI* classicui);
-void GetMenuSize(XlibMenu * menu);
-void DrawXlibMenu(XlibMenu * menu);
-void DisplayXlibMenu(XlibMenu * menu);
+XlibMenu* MainMenuWindowCreate(struct _FcitxClassicUI *classicui);
+XlibMenu* XlibMenuCreate(struct _FcitxClassicUI* classicui);
+void XlibMenuShow(XlibMenu * menu);
 void CalMenuWindowPosition(XlibMenu *menu, int x, int y, int dodgeHeight);
 
 #endif

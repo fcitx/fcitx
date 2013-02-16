@@ -50,12 +50,12 @@ typedef struct _TrayWindow {
     Window dockWindow;
 } TrayWindow;
 
-TrayWindow* CreateTrayWindow(struct _FcitxClassicUI *classicui);
-void DrawTrayWindow(TrayWindow* trayWindow);
-void RedrawTrayWindow(TrayWindow* trayWindow);
+TrayWindow* TrayWindowCreate(struct _FcitxClassicUI *classicui);
+void TrayWindowDraw(TrayWindow* trayWindow);
+void TrayWindowRedraw(TrayWindow* trayWindow);
 /* these two function can be called more than once */
-void ReleaseTrayWindow(TrayWindow* trayWindow);
-void InitTrayWindow(TrayWindow *trayWindow);
+void TrayWindowRelease(TrayWindow* trayWindow);
+void TrayWindowInit(TrayWindow *trayWindow);
 #endif
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -385,37 +385,40 @@ void DrawVKWindow(VKWindow* vkWindow)
     cairo_surface_t* vkimage = LoadVKImage(vkWindow);
     cairo_set_source_surface(cr, vkimage, 0, 0);
     cairo_paint(cr);
+
+    FcitxCairoTextContext* ctc = FcitxCairoTextContextCreate(cr);
+    FcitxCairoTextContextSet(ctc, *font, vkWindow->fontSize, 0);
     /* 显示字符 */
     /* 名称 */
-    OutputString(cr, vks[vkstate->iCurrentVK].strName, *font, vkWindow->fontSize, false , (VK_WINDOW_WIDTH - StringWidth(vks[vkstate->iCurrentVK].strName, *font, vkWindow->fontSize, false)) / 2, 6, fontColor);
+    FcitxCairoTextContextOutputString(ctc, vks[vkstate->iCurrentVK].strName, (VK_WINDOW_WIDTH - FcitxCairoTextContextStringWidth(ctc, vks[vkstate->iCurrentVK].strName)) / 2, 6, fontColor);
 
     /* 第一排 */
     iPos = 13;
     for (i = 0; i < 13; i++) {
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *font, vkWindow->fontSize, false, iPos, 27, fontColor);
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *font, vkWindow->fontSize, false, iPos - 5, 40, fontColor);
+        FcitxCairoTextContextOutputString(ctc, vks[vkstate->iCurrentVK].strSymbol[i][1], iPos, 27, fontColor);
+        FcitxCairoTextContextOutputString(ctc, vks[vkstate->iCurrentVK].strSymbol[i][0], iPos - 5, 40, fontColor);
         iPos += 24;
     }
     /* 第二排 */
     iPos = 48;
     for (i = 13; i < 26; i++) {
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *font, vkWindow->fontSize, false, iPos, 55, fontColor);
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *font, vkWindow->fontSize, false, iPos - 5, 68, fontColor);
+        FcitxCairoTextContextOutputString(ctc, vks[vkstate->iCurrentVK].strSymbol[i][1], iPos, 55, fontColor);
+        FcitxCairoTextContextOutputString(ctc, vks[vkstate->iCurrentVK].strSymbol[i][0], iPos - 5, 68, fontColor);
         iPos += 24;
     }
     /* 第三排 */
     iPos = 55;
     for (i = 26; i < 37; i++) {
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *font, vkWindow->fontSize, false, iPos, 83, fontColor);
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *font, vkWindow->fontSize, false, iPos - 5, 96, fontColor);
+        FcitxCairoTextContextOutputString(ctc, vks[vkstate->iCurrentVK].strSymbol[i][1], iPos, 83, fontColor);
+        FcitxCairoTextContextOutputString(ctc, vks[vkstate->iCurrentVK].strSymbol[i][0], iPos - 5, 96, fontColor);
         iPos += 24;
     }
 
     /* 第四排 */
     iPos = 72;
     for (i = 37; i < 47; i++) {
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *font, vkWindow->fontSize, false, iPos, 111, fontColor);
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *font, vkWindow->fontSize, false, iPos - 5, 124, fontColor);
+        FcitxCairoTextContextOutputString(ctc, vks[vkstate->iCurrentVK].strSymbol[i][1], iPos, 111, fontColor);
+        FcitxCairoTextContextOutputString(ctc, vks[vkstate->iCurrentVK].strSymbol[i][0], iPos - 5, 124, fontColor);
         iPos += 24;
     }
 

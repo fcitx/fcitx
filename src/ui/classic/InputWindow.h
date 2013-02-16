@@ -33,6 +33,8 @@
 #include <cairo.h>
 
 #include "fcitx/fcitx.h"
+#include "classicui.h"
+#include "XlibWindow.h"
 
 #define ROUND_SIZE 80
 #define INPUTWND_WIDTH  50
@@ -46,33 +48,32 @@ struct _FcitxSkin;
 struct _FcitxClassicUI;
 
 typedef struct _InputWindow {
-    Window window;
-
-    uint            iInputWindowHeight;
-    uint            iInputWindowWidth;
+    FcitxXlibWindow parent;
 
     //这两个变量是GTK+ OverTheSpot光标跟随的临时解决方案
     int     iOffsetX;
     int     iOffsetY;
 
-    cairo_surface_t* cs_x_input_bar;
-    cairo_surface_t *cs_input_bar;
-    cairo_surface_t *cs_input_back;
-    cairo_t *c_back, *c_cursor;
-    cairo_t *c_font[8];
-    Display* dpy;
-    int iScreen;
     FcitxMessages* msgUp;
     FcitxMessages* msgDown;
-    struct _FcitxSkin* skin;
-    struct _FcitxClassicUI *owner;
+    int cursorPos;
+    boolean vertical;
+
+    /* cached data */
+    char *strUp[MAX_MESSAGE_COUNT];
+    char *strDown[MAX_MESSAGE_COUNT];
+    int posUpX[MAX_MESSAGE_COUNT], posUpY[MAX_MESSAGE_COUNT];
+    FcitxRect candRect[10];
+    int posDownX[MAX_MESSAGE_COUNT], posDownY[MAX_MESSAGE_COUNT];
+    int fontHeight;
+    int pixelCursorPos;
+    FcitxRect prevRect, nextRect;
+    uint32_t highlight;
 } InputWindow;
 
-InputWindow* CreateInputWindow(struct _FcitxClassicUI* classicui);
-void MoveInputWindowInternal(InputWindow* inputWindow);
-void CloseInputWindowInternal(InputWindow* inputWindow);
-void DrawInputWindow(InputWindow* inputWindow);
-void ShowInputWindowInternal(InputWindow* inputWindow);
+InputWindow* InputWindowCreate(struct _FcitxClassicUI* classicui);
+void InputWindowClose(InputWindow* inputWindow);
+void InputWindowShow(InputWindow* inputWindow);
 
 #endif
 

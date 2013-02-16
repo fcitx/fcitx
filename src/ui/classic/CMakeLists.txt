@@ -2,7 +2,7 @@ set(FCITX_CLASSIC_UI_LINK_LIBS)
 if(_ENABLE_CAIRO)
   include_directories(${CAIRO_XLIB_INCLUDE_DIRS})
   link_directories(${CAIRO_XLIB_LIBRARY_DIRS})
-  set(FCITX_CLASSIC_UI_LINK_LIBS ${FCITX_CLASSIC_UI_LINK_LIBS}
+  set(FCITX_CLASSIC_UI_LINK_LIBS ${FCITX_CLASSIC_UI_LINK_LIBS} ${X11_Xext_LIB}
     ${X11_LIBRARIES} ${CAIRO_XLIB_LIBRARIES})
   if(_ENABLE_PANGO)
     include_directories(${PANGOCAIRO_INCLUDE_DIRS})
@@ -15,6 +15,7 @@ if(_ENABLE_CAIRO)
     set(FCITX_CLASSIC_UI_LINK_LIBS ${FCITX_CLASSIC_UI_LINK_LIBS}
       ${FONTCONFIG_LIBRARIES})
   endif()
+  include_directories(${X11_Xshape_INCLUDE_PATH})
   add_custom_target(installer-desktopfile ALL
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/fcitx-skin-installer.desktop")
 
@@ -34,18 +35,18 @@ else()
 endif()
 
 set(FCITX_CLASSIC_UI_SOURCES
+  ../cairostuff/font.c
+  ../cairostuff/cairostuff.c
   classicui.c
   classicuiconfig.c
+  XlibWindow.c
   InputWindow.c
   MainWindow.c
   MenuWindow.c
-  MessageWindow.c
   TrayWindow.c
   tray.c
   skinconfig.c
   skin.c
-  ../cairostuff/font.c
-  ../cairostuff/cairostuff.c
   )
 
 fcitx_add_addon_full(classic-ui DESC SCAN SCAN_PRIV ${classicui_noinstall}

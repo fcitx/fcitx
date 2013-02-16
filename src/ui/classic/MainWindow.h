@@ -33,6 +33,7 @@
 #include <cairo.h>
 #include "fcitx-config/fcitx-config.h"
 #include "classicui.h"
+#include "XlibWindow.h"
 
 struct _FcitxSkin;
 struct _FcitxClassicUI;
@@ -45,22 +46,15 @@ typedef struct _FcitxClassicUIStatus {
 } FcitxClassicUIStatus;
 
 typedef struct _MainWindow {
-    Display* dpy;
-    Window window;
-    cairo_surface_t* cs_main_bar;
-    cairo_surface_t* cs_x_main_bar;
+    FcitxXlibWindow parent;
     FcitxClassicUIStatus logostat;
     FcitxClassicUIStatus imiconstat;
-    struct _FcitxSkin* skin;
-
-    struct _FcitxClassicUI* owner;
 } MainWindow;
 
-MainWindow* CreateMainWindow(struct _FcitxClassicUI* classicui);
-void CloseMainWindow(MainWindow *mainWindow);
-void DrawMainWindow(MainWindow* mainWindow);
-void ShowMainWindow(MainWindow* mainWindow);
-boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, MouseE other);
+MainWindow* MainWindowCreate(FcitxClassicUI* classicui);
+void MainWindowClose(MainWindow *mainWindow);
+void MainWindowShow(MainWindow* mainWindow);
+boolean MainWindowSetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, MouseE other);
 
 #endif
 

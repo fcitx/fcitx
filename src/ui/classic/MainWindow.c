@@ -45,78 +45,57 @@
 #include "MenuWindow.h"
 #include "fcitx-utils/utils.h"
 
-#define FCITX_MAX(a,b) ((a) > (b)?(a) : (b))
-
 #define MAIN_BAR_MAX_WIDTH 2
 #define MAIN_BAR_MAX_HEIGHT 2
 
 static boolean MainWindowEventHandler(void *arg, XEvent* event);
-static void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y);
+static void MainWindowUpdateStatusGeometry(MainWindow* mainWindow, FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y);
 static void ReloadMainWindow(void* arg, boolean enabled);
-static void InitMainWindow(MainWindow* mainWindow);
-static void UpdateMenuGeometry(MainWindow* mainWindow, XlibMenu* menuWindow);
+static void MainWindowInit(MainWindow* mainWindow);
+static void MainWindowMoveWindow(FcitxXlibWindow* window);
+static void MainWindowCalculateContentSize(FcitxXlibWindow* window, unsigned int* width, unsigned int* height);
+static void MainWindowPaint(FcitxXlibWindow* window, cairo_t* c);
 
-void InitMainWindow(MainWindow* mainWindow)
+void MainWindowInit(MainWindow* mainWindow)
 {
-    FcitxClassicUI* classicui = mainWindow->owner;
-    int depth;
-    Colormap cmap;
-    Visual * vs;
-    XSetWindowAttributes attrib;
-    unsigned long   attribmask;
-    char        strWindowName[] = "Fcitx Main Window";
-    int swidth, sheight;
-    Display* dpy = classicui->dpy;
-    int iScreen = classicui->iScreen;
-    FcitxSkin *sc = &classicui->skin;
-    mainWindow->dpy = dpy;
+    FcitxXlibWindow* window = &mainWindow->parent;
+    FcitxClassicUI* classicui = window->owner;
+    FcitxSkin* sc = &classicui->skin;
+    int swidth = 0, sheight = 0;
 
     GetScreenSize(classicui, &swidth, &sheight);
-    SkinImage *back = LoadImage(sc, sc->skinMainBar.backImg, false);
+    SkinImage *back = LoadImage(sc, sc->skinMainBar.background.background, false);
+    int w = MAIN_BAR_MAX_WIDTH, h = MAIN_BAR_MAX_HEIGHT;
+    if (back) {
+        w = cairo_image_surface_get_width(back->image);
+        h = cairo_image_surface_get_height(back->image);
+    }
 
-    vs = ClassicUIFindARGBVisual(classicui);
+    if (classicui->iMainWindowOffsetX + w > swidth)
+        classicui->iMainWindowOffsetX = swidth - w;
 
-    if (classicui->iMainWindowOffsetX + cairo_image_surface_get_width(back->image) > swidth)
-        classicui->iMainWindowOffsetX = swidth - cairo_image_surface_get_width(back->image);
+    if (classicui->iMainWindowOffsetY + h > sheight)
+        classicui->iMainWindowOffsetY = sheight - h;
 
-    if (classicui->iMainWindowOffsetY + cairo_image_surface_get_height(back->image) > sheight)
-        classicui->iMainWindowOffsetY = sheight - cairo_image_surface_get_height(back->image);
-
-    ClassicUIInitWindowAttribute(classicui, &vs, &cmap, &attrib, &attribmask, &depth);
-    mainWindow->window = XCreateWindow(dpy,
-                                       RootWindow(dpy, iScreen),
-                                       classicui->iMainWindowOffsetX,
-                                       classicui->iMainWindowOffsetY,
-                                       cairo_image_surface_get_width(back->image),
-                                       cairo_image_surface_get_height(back->image),
-                                       0, depth, InputOutput, vs, attribmask, &attrib);
-
-    if (mainWindow->window == None)
-        return;
-
-    mainWindow->cs_x_main_bar = cairo_xlib_surface_create(
-                                    dpy,
-                                    mainWindow->window,
-                                    vs,
-                                    MAIN_BAR_MAX_WIDTH,
-                                    MAIN_BAR_MAX_HEIGHT);
-    mainWindow->cs_main_bar = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                                                         MAIN_BAR_MAX_WIDTH,
-                                                         MAIN_BAR_MAX_HEIGHT);
-
-    XChangeWindowAttributes(dpy, mainWindow->window, attribmask, &attrib);
-    XSelectInput(dpy, mainWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
-
-    ClassicUISetWindowProperty(classicui, mainWindow-> window, FCITX_WINDOW_DOCK, strWindowName);
+    FcitxXlibWindowInit(&mainWindow->parent,
+                        MAIN_BAR_MAX_WIDTH, MAIN_BAR_MAX_HEIGHT,
+                        classicui->iMainWindowOffsetX, classicui->iMainWindowOffsetY,
+                        "Fcitx Main Window",
+                        FCITX_WINDOW_DOCK,
+                        &sc->skinMainBar.background,
+                        ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask,
+                        MainWindowMoveWindow,
+                        MainWindowCalculateContentSize,
+                        MainWindowPaint
+    );
 }
 
-MainWindow* CreateMainWindow(FcitxClassicUI* classicui)
+MainWindow* MainWindowCreate(FcitxClassicUI* classicui)
 {
     MainWindow *mainWindow;
 
-    mainWindow = fcitx_utils_malloc0(sizeof(MainWindow));
-    mainWindow->owner = classicui;
-    InitMainWindow(mainWindow);
+    mainWindow = FcitxXlibWindowCreate(classicui, sizeof(MainWindow));
+    MainWindowInit(mainWindow);
 
     FcitxX11AddXEventHandler(classicui->owner,
                              MainWindowEventHandler, mainWindow);
@@ -125,20 +104,27 @@ MainWindow* CreateMainWindow(FcitxClassicUI* classicui)
     return mainWindow;
 }
 
-void DisplayMainWindow(Display* dpy, MainWindow* mainWindow)
+void MainWindowShow(MainWindow* mainWindow)
 {
-    FcitxLog(DEBUG, _("DISPLAY MainWindow"));
-    XMapRaised(dpy, mainWindow->window);
+    FcitxXlibWindow* window = &mainWindow->parent;
+    FcitxClassicUI* classicui = window->owner;
+    FcitxInstance *instance = window->owner->owner;
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) FcitxInstanceGetCurrentIC(instance);
+    if (window->owner->hideMainWindow == HM_SHOW
+        || (window->owner->hideMainWindow == HM_AUTO && ((ic2 && ic2->switchBySwitchKey) || FcitxInstanceGetCurrentState(window->owner->owner) == IS_ACTIVE))) {
+        FcitxXlibWindowPaint(&mainWindow->parent);
+        XMapRaised(classicui->dpy, window->wId);
+    } else {
+        MainWindowClose(mainWindow);
+    }
 }
 
-void DrawMainWindow(MainWindow* mainWindow)
+void MainWindowCalculateContentSize(FcitxXlibWindow* window, unsigned int* width, unsigned int* height)
 {
-    FcitxClassicUI* classicui = mainWindow->owner;
-    FcitxSkin *sc = &mainWindow->owner->skin;
-    FcitxInstance *instance = mainWindow->owner->owner;
-    FcitxInputContext2* ic2 = (FcitxInputContext2*) FcitxInstanceGetCurrentIC(classicui->owner);
-
-    FcitxLog(DEBUG, _("DRAW MainWindow"));
+    FcitxClassicUI* classicui = window->owner;
+    FcitxSkin *sc = &window->owner->skin;
+    FcitxInstance *instance = window->owner->owner;
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) FcitxInstanceGetCurrentIC(instance);
 
     FcitxUIStatus* status;
     UT_array* uistats = FcitxInstanceGetUIStats(instance);
@@ -170,354 +156,337 @@ void DrawMainWindow(MainWindow* mainWindow)
         privstat->avail = false;
     }
 
-    if (mainWindow->owner->hideMainWindow == HM_SHOW
-        || (mainWindow->owner->hideMainWindow == HM_AUTO && ((ic2 && ic2->switchBySwitchKey) || FcitxInstanceGetCurrentState(mainWindow->owner->owner) == IS_ACTIVE))) {
-        SkinImage* activeIcon = LoadImage(sc, sc->skinMainBar.active, false);
-        cairo_t *c;
-
-        c = cairo_create(mainWindow->cs_main_bar);
-        //把背景清空
-        cairo_save(c);
-        cairo_set_source_rgba(c, 0, 0, 0, 0);
-        cairo_rectangle(c, 0, 0, SIZEX, SIZEY);
-        cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-        cairo_fill(c);
-        cairo_restore(c);
-
-        cairo_set_operator(c, CAIRO_OPERATOR_OVER);
-        int width = 0, height = 0;
-        /* Check placement */
-        if (utarray_len(&mainWindow->owner->skin.skinMainBar.skinPlacement) != 0) {
-            SkinImage* back = LoadImage(sc, sc->skinMainBar.backImg, false);
-            if (back == NULL)
-                return;
-            width = cairo_image_surface_get_width(back->image);
-            height = cairo_image_surface_get_height(back->image);
-            EnlargeCairoSurface(&mainWindow->cs_main_bar, width, height);
-            XResizeWindow(mainWindow->dpy, mainWindow->window, width, height);
-            DrawResizableBackground(c, back->image, height, width, 0, 0, 0, 0, F_RESIZE, F_COPY);
-
-
-            SkinPlacement* sp;
-            for (sp = (SkinPlacement*) utarray_front(&sc->skinMainBar.skinPlacement);
-                    sp != NULL;
-                    sp = (SkinPlacement*) utarray_next(&sc->skinMainBar.skinPlacement, sp)) {
-                if (strcmp(sp->name, "logo") == 0) {
-                    SkinImage* logo = LoadImage(sc, sc->skinMainBar.logo, false);
-                    if (logo) {
-                        DrawImage(c, logo->image, sp->x, sp->y, mainWindow->logostat.mouse);
-                        UpdateStatusGeometry(&mainWindow->logostat, logo, sp->x, sp->y);
-                    }
-                } else if (strcmp(sp->name, "im") == 0) {
-                    SkinImage* imicon = NULL;
-                    if (FcitxInstanceGetCurrentStatev2(instance) != IS_ACTIVE || FcitxInstanceGetCurrentIM(instance) == NULL)
-                        imicon = LoadImage(sc, sc->skinMainBar.eng, false);
-                    else {
-                        imicon = GetIMIcon(classicui, sc, sc->skinMainBar.active, 3, false);
-                    }
-
-                    if (imicon) {
-                        DrawImage(c, imicon->image, sp->x, sp->y, mainWindow->imiconstat.mouse);
-                        UpdateStatusGeometry(&mainWindow->imiconstat, imicon, sp->x, sp->y);
-                    }
-                } else {
-                    status = FcitxUIGetStatusByName(instance, sp->name);
-                    if (status && status->visible) {
-                        FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
-                        if (privstat == NULL)
-                            continue;
-
-                        boolean active = status->getCurrentStatus(status->arg);
-                        char *path;
-                        fcitx_utils_alloc_cat_str(path, status->name, active ?
-                                                  "_active.png" :
-                                                  "_inactive.png");
-                        SkinImage* statusicon = LoadImage(sc, path, false);
-                        free(path);
-                        if (statusicon == NULL)
-                            continue;
-                        privstat->avail = true;
-                        DrawImage(c, statusicon->image, sp->x, sp->y,
-                                  privstat->mouse);
-                        UpdateStatusGeometry(privstat, statusicon, sp->x, sp->y);
-                    }
-
-                    compstatus = FcitxUIGetComplexStatusByName(instance, sp->name);
-                    if (compstatus && compstatus->visible) {
-                        FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
-                        if (privstat == NULL)
-                            continue;
-
-                        const char* icon = compstatus->getIconName(
-                            compstatus->arg);
-                        const char *path;
-                        char *tmpstr = NULL;
-                        if (icon[0] != '/') {
-                            fcitx_utils_alloc_cat_str(tmpstr,
-                                                      compstatus->name, ".png");
-                            path = tmpstr;
-                        } else {
-                            path = icon;
-                        }
-                        SkinImage *statusicon = LoadImage(sc, path, false);
-                        fcitx_utils_free(tmpstr);
-                        if (statusicon == NULL)
-                            continue;
-                        privstat->avail = true;
-                        DrawImage(c, statusicon->image, sp->x, sp->y,
-                                  privstat->mouse);
-                        UpdateStatusGeometry(privstat, statusicon, sp->x, sp->y);
-                    }
-                }
-            }
-        } else {
-            /* Only logo and input status is hard-code, other should be status */
-            int currentX = sc->skinMainBar.marginLeft;
-            height = 0;
-            SkinImage* back = LoadImage(sc, sc->skinMainBar.backImg, false);
-            SkinImage* logo = LoadImage(sc, sc->skinMainBar.logo, false);
-            SkinImage* imicon;
-            int imageheight;
-            if (logo) {
-                currentX += cairo_image_surface_get_width(logo->image);
-                imageheight = cairo_image_surface_get_height(logo->image);
-                if (imageheight > height)
-                    height = imageheight;
-            }
-
-            if (FcitxInstanceGetCurrentStatev2(instance) != IS_ACTIVE || FcitxInstanceGetCurrentIM(instance) == NULL)
-                imicon = LoadImage(sc, sc->skinMainBar.eng, false);
-            else {
-                imicon = GetIMIcon(classicui, sc, sc->skinMainBar.active, 3, false);
-            }
-
-            if (imicon) {
-                currentX += cairo_image_surface_get_width(imicon->image);
-                imageheight = cairo_image_surface_get_height(imicon->image);
-                if (imageheight > height)
-                    height = imageheight;
-            }
-
-
-            FcitxUIComplexStatus* compstatus;
-            UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
-            for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
-                 compstatus != NULL;
-                 compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
-                ) {
-                if (!compstatus->visible)
-                    continue;
-                const char *icon = compstatus->getIconName(compstatus->arg);
-                char *tmpstr = NULL;
-                const char *path;
-                if (icon[0] != '/') {
-                    if (icon[0] == '\0') {
-                        path = compstatus->shortDescription;
-                    } else {
-                        fcitx_utils_alloc_cat_str(tmpstr, icon, ".png");
-                        path = tmpstr;
-                    }
-                } else {
-                    path = icon;
-                }
-                SkinImage* statusicon = NULL;
-                if (icon[0] != '\0')
-                    statusicon = LoadImage(sc, path, false);
-                if (statusicon == NULL || statusicon->textIcon) {
-                    if (activeIcon && icon[0] == '\0') {
-                        statusicon = LoadImageWithText(
-                            classicui, sc, path, compstatus->shortDescription,
-                            cairo_image_surface_get_width(activeIcon->image),
-                            cairo_image_surface_get_height(activeIcon->image),
-                            true);
-                    }
-                } else {
-                    if (icon[0] == '/' && activeIcon) {
-                        ResizeSurface(
-                            &statusicon->image,
-                            cairo_image_surface_get_width(activeIcon->image),
-                            cairo_image_surface_get_height(activeIcon->image));
-                    }
-                }
-                fcitx_utils_free(tmpstr);
-                if (statusicon == NULL)
-                    continue;
-
-                currentX += cairo_image_surface_get_width(statusicon->image);
-                imageheight = cairo_image_surface_get_height(statusicon->image);
-                if (imageheight > height)
-                    height = imageheight;
-            }
-            FcitxUIStatus* status;
-            UT_array* uistats = FcitxInstanceGetUIStats(instance);
-            for (status = (FcitxUIStatus*) utarray_front(uistats);
-                    status != NULL;
-                    status = (FcitxUIStatus*) utarray_next(uistats, status)
-                ) {
-                if (!status->visible)
-                    continue;
-                boolean active = status->getCurrentStatus(status->arg);
-                char *path;
-                fcitx_utils_alloc_cat_str(path, status->name, active ?
-                                          "_active.png" : "_inactive.png");
-                SkinImage* statusicon = LoadImage(sc, path, false);
-                if (statusicon == NULL || statusicon->textIcon) {
-                    if (activeIcon) {
-                        statusicon = LoadImageWithText(classicui, sc, path, status->shortDescription,
-                                                       cairo_image_surface_get_width(activeIcon->image),
-                                                       cairo_image_surface_get_height(activeIcon->image),
-                                                       active
-                                                      );
-                    }
-                }
-                free(path);
-                if (statusicon == NULL)
-                    continue;
-                currentX += cairo_image_surface_get_width(statusicon->image);
-                imageheight = cairo_image_surface_get_height(statusicon->image);
-                if (imageheight > height)
-                    height = imageheight;
-            }
-            width = currentX + sc->skinMainBar.marginRight;
-            height += sc->skinMainBar.marginTop + sc->skinMainBar.marginBottom;
-
-            EnlargeCairoSurface(&mainWindow->cs_main_bar, width, height);
-            XResizeWindow(mainWindow->dpy, mainWindow->window, width, height);
-            DrawResizableBackground(c,
-                                    back->image,
-                                    height,
-                                    width,
-                                    sc->skinMainBar.marginLeft,
-                                    sc->skinMainBar.marginTop,
-                                    sc->skinMainBar.marginRight,
-                                    sc->skinMainBar.marginBottom,
-                                    sc->skinMainBar.fillV,
-                                    sc->skinMainBar.fillH
-                                   );
-
-            currentX = sc->skinMainBar.marginLeft;
-            if (logo) {
-                DrawImage(c, logo->image, currentX, sc->skinMainBar.marginTop, mainWindow->logostat.mouse);
-                UpdateStatusGeometry(&mainWindow->logostat, logo, currentX, sc->skinMainBar.marginTop);
-                currentX += cairo_image_surface_get_width(logo->image);
-            }
-
-            if (imicon) {
-                DrawImage(c, imicon->image, currentX, sc->skinMainBar.marginTop, mainWindow->imiconstat.mouse);
-                UpdateStatusGeometry(&mainWindow->imiconstat, imicon, currentX, sc->skinMainBar.marginTop);
-                currentX += cairo_image_surface_get_width(imicon->image);
-            }
-
-            for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
-                 compstatus != NULL;
-                 compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
-                ) {
-                FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
-                if (privstat == NULL)
-                    continue;
-                if (!compstatus->visible)
-                    continue;
-                const char *icon = compstatus->getIconName(compstatus->arg);
-                const char *path;
-                char *tmpstr = NULL;
-                if (icon[0] != '/') {
-                    if (icon[0] == '\0') {
-                        path = compstatus->shortDescription;
-                    } else {
-                        fcitx_utils_alloc_cat_str(tmpstr,
-                                                  compstatus->name, ".png");
-                        path = tmpstr;
-                    }
-                } else {
-                    path = icon;
-                }
-                SkinImage *statusicon = LoadImage(sc, path, false);
-                fcitx_utils_free(tmpstr);
-                if (statusicon == NULL)
-                    continue;
-                privstat->avail = true;
-                DrawImage(c, statusicon->image, currentX, sc->skinMainBar.marginTop, privstat->mouse);
-                UpdateStatusGeometry(privstat, statusicon, currentX, sc->skinMainBar.marginTop);
-                currentX += cairo_image_surface_get_width(statusicon->image);
-            }
-
-            for (status = (FcitxUIStatus*) utarray_front(uistats);
-                 status != NULL;
-                 status = (FcitxUIStatus*) utarray_next(uistats, status)) {
-                FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
-                if (privstat == NULL)
-                    continue;
-                if (!status->visible)
-                    continue;
-                /* reset status */
-                boolean active =  status->getCurrentStatus(status->arg);
-                char *path;
-                fcitx_utils_alloc_cat_str(path, status->name, active ?
-                                          "_active.png" : "_inactive.png");
-                SkinImage* statusicon = LoadImage(sc, path, false);
-                free(path);
-                if (statusicon == NULL)
-                    continue;
-                privstat->avail = true;
-                DrawImage(c, statusicon->image, currentX, sc->skinMainBar.marginTop, privstat->mouse);
-                UpdateStatusGeometry(privstat, statusicon, currentX, sc->skinMainBar.marginTop);
-                currentX += cairo_image_surface_get_width(statusicon->image);
-            }
+    if (!(window->owner->hideMainWindow == HM_SHOW
+        || (window->owner->hideMainWindow == HM_AUTO && ((ic2 && ic2->switchBySwitchKey) || FcitxInstanceGetCurrentState(window->owner->owner) == IS_ACTIVE)))) {
+        return;
+    }
+    SkinImage* activeIcon = LoadImage(sc, sc->skinMainBar.active, false);
+    int newWidth = 0, newHeight = 0;
+    /* Check placement */
+    if (utarray_len(&window->owner->skin.skinMainBar.skinPlacement) != 0) {
+        SkinImage* back = LoadImage(sc, window->background->background, false);
+        if (back == NULL)
+            return;
+        newWidth = cairo_image_surface_get_width(back->image);
+        newHeight = cairo_image_surface_get_height(back->image);
+    } else {
+        /* Only logo and input status is hard-code, other should be status */
+        int currentX = 0;
+        newHeight = 0;
+        SkinImage* logo = LoadImage(sc, sc->skinMainBar.logo, false);
+        SkinImage* imicon;
+        int imageheight;
+        if (logo) {
+            currentX += cairo_image_surface_get_width(logo->image);
+            imageheight = cairo_image_surface_get_height(logo->image);
+            if (imageheight > newHeight)
+                newHeight = imageheight;
         }
 
-        cairo_destroy(c);
-        _CAIRO_SETSIZE(mainWindow->cs_x_main_bar, width, height);
+        if (FcitxInstanceGetCurrentStatev2(instance) != IS_ACTIVE || FcitxInstanceGetCurrentIM(instance) == NULL)
+            imicon = LoadImage(sc, sc->skinMainBar.eng, false);
+        else {
+            imicon = GetIMIcon(classicui, sc, sc->skinMainBar.active, 3, false);
+        }
 
-        c = cairo_create(mainWindow->cs_x_main_bar);
-        cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-        cairo_set_source_surface(c, mainWindow->cs_main_bar, 0, 0);
-        cairo_rectangle(c, 0, 0, width, height);
-        cairo_clip(c);
-        cairo_paint(c);
-        cairo_destroy(c);
-        cairo_surface_flush(mainWindow->cs_x_main_bar);
+        if (imicon) {
+            currentX += cairo_image_surface_get_width(imicon->image);
+            imageheight = cairo_image_surface_get_height(imicon->image);
+            if (imageheight > newHeight)
+                newHeight = imageheight;
+        }
 
-        XMapRaised(mainWindow->dpy, mainWindow->window);
-    } else
-        XUnmapWindow(mainWindow->dpy, mainWindow->window);
+
+        FcitxUIComplexStatus* compstatus;
+        UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
+        for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
+                compstatus != NULL;
+                compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
+            ) {
+            if (!compstatus->visible)
+                continue;
+            const char *icon = compstatus->getIconName(compstatus->arg);
+            char *tmpstr = NULL;
+            const char *path;
+            if (icon[0] != '/') {
+                if (icon[0] == '\0') {
+                    path = compstatus->shortDescription;
+                } else {
+                    fcitx_utils_alloc_cat_str(tmpstr, icon, ".png");
+                    path = tmpstr;
+                }
+            } else {
+                path = icon;
+            }
+            SkinImage* statusicon = NULL;
+            if (icon[0] != '\0')
+                statusicon = LoadImage(sc, path, false);
+            if (statusicon == NULL || statusicon->textIcon) {
+                if (activeIcon && icon[0] == '\0') {
+                    statusicon = LoadImageWithText(
+                        classicui, sc, path, compstatus->shortDescription,
+                        cairo_image_surface_get_width(activeIcon->image),
+                        cairo_image_surface_get_height(activeIcon->image),
+                        true);
+                }
+            } else {
+                if (icon[0] == '/' && activeIcon) {
+                    ResizeSurface(
+                        &statusicon->image,
+                        cairo_image_surface_get_width(activeIcon->image),
+                        cairo_image_surface_get_height(activeIcon->image));
+                }
+            }
+            fcitx_utils_free(tmpstr);
+            if (statusicon == NULL)
+                continue;
+
+            currentX += cairo_image_surface_get_width(statusicon->image);
+            imageheight = cairo_image_surface_get_height(statusicon->image);
+            if (imageheight > newHeight)
+                newHeight = imageheight;
+        }
+        FcitxUIStatus* status;
+        UT_array* uistats = FcitxInstanceGetUIStats(instance);
+        for (status = (FcitxUIStatus*) utarray_front(uistats);
+                status != NULL;
+                status = (FcitxUIStatus*) utarray_next(uistats, status)
+            ) {
+            if (!status->visible)
+                continue;
+            boolean active = status->getCurrentStatus(status->arg);
+            char *path;
+            fcitx_utils_alloc_cat_str(path, status->name, active ?
+                                        "_active.png" : "_inactive.png");
+            SkinImage* statusicon = LoadImage(sc, path, false);
+            if (statusicon == NULL || statusicon->textIcon) {
+                if (activeIcon) {
+                    statusicon = LoadImageWithText(classicui, sc, path, status->shortDescription,
+                                                    cairo_image_surface_get_width(activeIcon->image),
+                                                    cairo_image_surface_get_height(activeIcon->image),
+                                                    active
+                                                    );
+                }
+            }
+            free(path);
+            if (statusicon == NULL)
+                continue;
+            currentX += cairo_image_surface_get_width(statusicon->image);
+            imageheight = cairo_image_surface_get_height(statusicon->image);
+            if (imageheight > newHeight)
+                newHeight = imageheight;
+        }
+        newWidth = currentX;
+    }
+
+    *width = newWidth;
+    *height = newHeight;
+}
+
+void MainWindowPaint(FcitxXlibWindow* window, cairo_t* c)
+{
+    MainWindow* mainWindow = (MainWindow*) window;
+    FcitxClassicUI* classicui = window->owner;
+    FcitxSkin *sc = &window->owner->skin;
+    FcitxInstance *instance = window->owner->owner;
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) FcitxInstanceGetCurrentIC(classicui->owner);
+
+    if (!(window->owner->hideMainWindow == HM_SHOW
+        || (window->owner->hideMainWindow == HM_AUTO && ((ic2 && ic2->switchBySwitchKey) || FcitxInstanceGetCurrentState(window->owner->owner) == IS_ACTIVE)))) {
+        return;
+    }
+
+    FcitxUIStatus* status;
+    FcitxUIComplexStatus* compstatus;
+    /* Check placement */
+    if (utarray_len(&window->owner->skin.skinMainBar.skinPlacement) != 0) {
+        SkinPlacement* sp;
+        for (sp = (SkinPlacement*) utarray_front(&sc->skinMainBar.skinPlacement);
+                sp != NULL;
+                sp = (SkinPlacement*) utarray_next(&sc->skinMainBar.skinPlacement, sp)) {
+            if (strcmp(sp->name, "logo") == 0) {
+                SkinImage* logo = LoadImage(sc, sc->skinMainBar.logo, false);
+                if (logo) {
+                    DrawImage(c, logo->image, sp->x, sp->y, mainWindow->logostat.mouse);
+                    MainWindowUpdateStatusGeometry(mainWindow, &mainWindow->logostat, logo, sp->x, sp->y);
+                }
+            } else if (strcmp(sp->name, "im") == 0) {
+                SkinImage* imicon = NULL;
+                if (FcitxInstanceGetCurrentStatev2(instance) != IS_ACTIVE || FcitxInstanceGetCurrentIM(instance) == NULL)
+                    imicon = LoadImage(sc, sc->skinMainBar.eng, false);
+                else {
+                    imicon = GetIMIcon(classicui, sc, sc->skinMainBar.active, 3, false);
+                }
+
+                if (imicon) {
+                    DrawImage(c, imicon->image, sp->x, sp->y, mainWindow->imiconstat.mouse);
+                    MainWindowUpdateStatusGeometry(mainWindow, &mainWindow->imiconstat, imicon, sp->x, sp->y);
+                }
+            } else {
+                status = FcitxUIGetStatusByName(instance, sp->name);
+                if (status && status->visible) {
+                    FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
+                    if (privstat == NULL)
+                        continue;
+
+                    boolean active = status->getCurrentStatus(status->arg);
+                    char *path;
+                    fcitx_utils_alloc_cat_str(path, status->name, active ?
+                                                "_active.png" :
+                                                "_inactive.png");
+                    SkinImage* statusicon = LoadImage(sc, path, false);
+                    free(path);
+                    if (statusicon == NULL)
+                        continue;
+                    privstat->avail = true;
+                    DrawImage(c, statusicon->image, sp->x, sp->y,
+                                privstat->mouse);
+                    MainWindowUpdateStatusGeometry(mainWindow, privstat, statusicon, sp->x, sp->y);
+                }
+
+                compstatus = FcitxUIGetComplexStatusByName(instance, sp->name);
+                if (compstatus && compstatus->visible) {
+                    FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
+                    if (privstat == NULL)
+                        continue;
+
+                    const char* icon = compstatus->getIconName(
+                        compstatus->arg);
+                    const char *path;
+                    char *tmpstr = NULL;
+                    if (icon[0] != '/') {
+                        fcitx_utils_alloc_cat_str(tmpstr,
+                                                    compstatus->name, ".png");
+                        path = tmpstr;
+                    } else {
+                        path = icon;
+                    }
+                    SkinImage *statusicon = LoadImage(sc, path, false);
+                    fcitx_utils_free(tmpstr);
+                    if (statusicon == NULL)
+                        continue;
+                    privstat->avail = true;
+                    DrawImage(c, statusicon->image, sp->x, sp->y,
+                                privstat->mouse);
+                    MainWindowUpdateStatusGeometry(mainWindow, privstat, statusicon, sp->x, sp->y);
+                }
+            }
+        }
+    } else {
+        /* Only logo and input status is hard-code, other should be status */
+        int currentX = 0;
+        SkinImage* logo = LoadImage(sc, sc->skinMainBar.logo, false);
+        SkinImage* imicon;
+
+        if (FcitxInstanceGetCurrentStatev2(instance) != IS_ACTIVE || FcitxInstanceGetCurrentIM(instance) == NULL)
+            imicon = LoadImage(sc, sc->skinMainBar.eng, false);
+        else {
+            imicon = GetIMIcon(classicui, sc, sc->skinMainBar.active, 3, false);
+        }
+
+        if (logo) {
+            DrawImage(c, logo->image, currentX, 0, mainWindow->logostat.mouse);
+            MainWindowUpdateStatusGeometry(mainWindow, &mainWindow->logostat, logo, currentX, 0);
+            currentX += cairo_image_surface_get_width(logo->image);
+        }
+
+        if (imicon) {
+            DrawImage(c, imicon->image, currentX, 0, mainWindow->imiconstat.mouse);
+            MainWindowUpdateStatusGeometry(mainWindow, &mainWindow->imiconstat, imicon, currentX, 0);
+            currentX += cairo_image_surface_get_width(imicon->image);
+        }
+
+        UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
+        for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
+                compstatus != NULL;
+                compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
+            ) {
+            FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
+            if (privstat == NULL)
+                continue;
+            if (!compstatus->visible)
+                continue;
+            const char *icon = compstatus->getIconName(compstatus->arg);
+            const char *path;
+            char *tmpstr = NULL;
+            if (icon[0] != '/') {
+                if (icon[0] == '\0') {
+                    path = compstatus->shortDescription;
+                } else {
+                    fcitx_utils_alloc_cat_str(tmpstr,
+                                                compstatus->name, ".png");
+                    path = tmpstr;
+                }
+            } else {
+                path = icon;
+            }
+            SkinImage *statusicon = LoadImage(sc, path, false);
+            fcitx_utils_free(tmpstr);
+            if (statusicon == NULL)
+                continue;
+            privstat->avail = true;
+            DrawImage(c, statusicon->image, currentX, 0, privstat->mouse);
+            MainWindowUpdateStatusGeometry(mainWindow, privstat, statusicon, currentX, 0);
+            currentX += cairo_image_surface_get_width(statusicon->image);
+        }
+
+        UT_array* uistats = FcitxInstanceGetUIStats(instance);
+        for (status = (FcitxUIStatus*) utarray_front(uistats);
+                status != NULL;
+                status = (FcitxUIStatus*) utarray_next(uistats, status)) {
+            FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
+            if (privstat == NULL)
+                continue;
+            if (!status->visible)
+                continue;
+            /* reset status */
+            boolean active =  status->getCurrentStatus(status->arg);
+            char *path;
+            fcitx_utils_alloc_cat_str(path, status->name, active ?
+                                        "_active.png" : "_inactive.png");
+            SkinImage* statusicon = LoadImage(sc, path, false);
+            free(path);
+            if (statusicon == NULL)
+                continue;
+            privstat->avail = true;
+            DrawImage(c, statusicon->image, currentX, 0, privstat->mouse);
+            MainWindowUpdateStatusGeometry(mainWindow, privstat, statusicon, currentX, 0);
+            currentX += cairo_image_surface_get_width(statusicon->image);
+        }
+    }
 }
 
 void ReloadMainWindow(void *arg, boolean enabled)
 {
     MainWindow* mainWindow = (MainWindow*) arg;
-    boolean visable = WindowIsVisable(mainWindow->dpy, mainWindow->window);
-    cairo_surface_destroy(mainWindow->cs_main_bar);
-    cairo_surface_destroy(mainWindow->cs_x_main_bar);
-    XDestroyWindow(mainWindow->dpy, mainWindow->window);
+    boolean visable = WindowIsVisable(mainWindow->parent.owner->dpy, mainWindow->parent.wId);
+    FcitxXlibWindowDestroy(&mainWindow->parent);
 
-    mainWindow->cs_main_bar = NULL;
-    mainWindow->cs_x_main_bar = NULL;
-    mainWindow->window = None;
-
-    InitMainWindow(mainWindow);
+    MainWindowInit(mainWindow);
 
     if (visable)
-        DrawMainWindow(mainWindow);
+        FcitxXlibWindowPaint(&mainWindow->parent);
 }
 
-void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y)
+void MainWindowUpdateStatusGeometry(MainWindow* mainWindow, FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y)
 {
-    privstat->x = x;
-    privstat->y = y;
+    FcitxXlibWindow* window = (FcitxXlibWindow*) mainWindow;
+    privstat->x = x + window->contentX;
+    privstat->y = y + window->contentY;
     privstat->w = cairo_image_surface_get_width(image->image);
     privstat->h = cairo_image_surface_get_height(image->image);
 }
 
-void CloseMainWindow(MainWindow *mainWindow)
+void MainWindowClose(MainWindow *mainWindow)
 {
-    if (mainWindow->owner->hideMainWindow != HM_SHOW || mainWindow->owner->isSuspend)
-        XUnmapWindow(mainWindow->dpy, mainWindow->window);
+    if (mainWindow->parent.owner->hideMainWindow != HM_SHOW || mainWindow->parent.owner->isSuspend)
+        XUnmapWindow(mainWindow->parent.owner->dpy, mainWindow->parent.wId);
 }
 
-boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, MouseE other)
+boolean MainWindowSetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, MouseE other)
 {
-    FcitxClassicUI* classicui = mainWindow->owner;
-    FcitxInstance *instance = mainWindow->owner->owner;
+    FcitxClassicUI* classicui = mainWindow->parent.owner;
+    FcitxInstance *instance = classicui->owner;
     boolean changed = false;
     if (mouseE != &mainWindow->logostat.mouse) {
         if (mainWindow->logostat.mouse != other) {
@@ -570,14 +539,15 @@ boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, Mou
 boolean MainWindowEventHandler(void *arg, XEvent* event)
 {
     MainWindow* mainWindow = arg;
-    FcitxInstance *instance = mainWindow->owner->owner;
-    FcitxClassicUI *classicui = mainWindow->owner;
+    FcitxXlibWindow* window = arg;
+    FcitxClassicUI* classicui = mainWindow->parent.owner;
+    FcitxInstance *instance = classicui->owner;
     MouseE *mouse;
 
-    if (event->xany.window == mainWindow->window) {
+    if (event->xany.window == window->wId) {
         switch (event->type) {
         case Expose:
-            DrawMainWindow(mainWindow);
+            FcitxXlibWindowPaint(&mainWindow->parent);
             break;
         case MotionNotify:
             mouse = NULL;
@@ -607,12 +577,12 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                         mouse = &privstat->mouse;
                 }
             }
-            if (SetMouseStatus(mainWindow, mouse, MOTION, RELEASE))
-                DrawMainWindow(mainWindow);
+            if (MainWindowSetMouseStatus(mainWindow, mouse, MOTION, RELEASE))
+                FcitxXlibWindowPaint(&mainWindow->parent);
             break;
         case LeaveNotify:
-            if (SetMouseStatus(mainWindow, NULL, RELEASE, RELEASE))
-                DrawMainWindow(mainWindow);
+            if (MainWindowSetMouseStatus(mainWindow, NULL, RELEASE, RELEASE))
+                FcitxXlibWindowPaint(&mainWindow->parent);
             break;
         case ButtonPress:
             switch (event->xbutton.button) {
@@ -624,7 +594,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                     classicui->iMainWindowOffsetX = event->xbutton.x;
                     classicui->iMainWindowOffsetY = event->xbutton.y;
 
-                    if (!ClassicUIMouseClick(mainWindow->owner, mainWindow->window, &classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY)) {
+                    if (!ClassicUIMouseClick(classicui, window->wId, &classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY)) {
                         FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
                     }
                     SaveClassicUIConfig(classicui);
@@ -645,9 +615,8 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                                 FcitxUIMenu* menu = FcitxUIGetMenuByStatusName(instance, compstatus->name);
                                 if (menu) {
                                     XlibMenu *menuWindow = (XlibMenu*) menu->uipriv[classicui->isfallback];
-                                    UpdateMenuGeometry(mainWindow, menuWindow);
-                                    DrawXlibMenu(menuWindow);
-                                    DisplayXlibMenu(menuWindow);
+                                    menuWindow->anchor = MA_MainWindow;
+                                    XlibMenuShow(menuWindow);
                                 }
                             }
                             else
@@ -667,22 +636,20 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                         }
                     }
                 }
-                if (SetMouseStatus(mainWindow, mouse, PRESS, RELEASE))
-                    DrawMainWindow(mainWindow);
+                if (MainWindowSetMouseStatus(mainWindow, mouse, PRESS, RELEASE))
+                    FcitxXlibWindowPaint(&mainWindow->parent);
                 if (mouse == NULL) {
                     classicui->iMainWindowOffsetX = event->xbutton.x;
                     classicui->iMainWindowOffsetY = event->xbutton.y;
-                    ClassicUIMouseClick(mainWindow->owner, mainWindow->window, &classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY);
+                    ClassicUIMouseClick(classicui, window->wId, &classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY);
                     SaveClassicUIConfig(classicui);
                 }
             }
             break;
             case Button3: {
                 XlibMenu *mainMenuWindow = classicui->mainMenuWindow;
-                UpdateMenuGeometry(mainWindow, mainMenuWindow);
-                DrawXlibMenu(mainMenuWindow);
-                DisplayXlibMenu(mainMenuWindow);
-
+                mainMenuWindow->anchor = MA_MainWindow;
+                XlibMenuShow(mainMenuWindow);
             }
             break;
 
@@ -691,8 +658,8 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
         case ButtonRelease:
             switch (event->xbutton.button) {
             case Button1:
-                if (SetMouseStatus(mainWindow, NULL, RELEASE, RELEASE))
-                    DrawMainWindow(mainWindow);
+                if (MainWindowSetMouseStatus(mainWindow, NULL, RELEASE, RELEASE))
+                    FcitxXlibWindowPaint(&mainWindow->parent);
                 break;
             }
             break;
@@ -702,26 +669,9 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
     return false;
 }
 
-static void UpdateMenuGeometry(MainWindow* mainWindow, XlibMenu* menuWindow)
+void MainWindowMoveWindow(FcitxXlibWindow* window)
 {
-    FcitxClassicUI* classicui = mainWindow->owner;
 
-    unsigned int height;
-    int sheight;
-    XWindowAttributes attr;
-    FcitxMenuUpdate(menuWindow->menushell);
-    GetMenuSize(menuWindow);
-    GetScreenSize(classicui, NULL, &sheight);
-    XGetWindowAttributes(classicui->dpy, mainWindow->window, &attr);
-    height = attr.height;
-
-    menuWindow->iPosX = classicui->iMainWindowOffsetX;
-    menuWindow->iPosY =
-        classicui->iMainWindowOffsetY +
-        height;
-    if ((menuWindow->iPosY + menuWindow->height) >
-            sheight)
-        menuWindow->iPosY = classicui->iMainWindowOffsetY - 5 - menuWindow->height;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

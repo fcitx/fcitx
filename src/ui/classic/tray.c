@@ -135,7 +135,7 @@ TrayFindDock(Display *dpy, TrayWindow* tray)
         return 1;
     } else {
         tray->bTrayMapped = False;
-        ReleaseTrayWindow(tray);
+        TrayWindowRelease(tray);
     }
 
     return 0;
