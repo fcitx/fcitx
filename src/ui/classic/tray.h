@@ -28,7 +28,6 @@
 #include "TrayWindow.h"
 
 int InitTray(Display* dpy, TrayWindow* win);
-void TrayHandleClientMessage(Display *dpy, Window win, XEvent *an_event);
 int TrayFindDock(Display *dpy, TrayWindow* tray);
 XVisualInfo* TrayGetVisual(Display* dpy, TrayWindow* tray);
 Window TrayGetDock(Display* dpy, TrayWindow* tray);

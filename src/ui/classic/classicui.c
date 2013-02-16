@@ -292,6 +292,7 @@ void ClassicUISuspend(void* arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     classicui->isSuspend = true;
+    classicui->notificationItemAvailable = false;
     CloseInputWindowInternal(classicui->inputWindow);
     CloseMainWindow(classicui->mainWindow);
     ReleaseTrayWindow(classicui->trayWindow);
@@ -311,6 +312,7 @@ void ClassicUINotificationItemAvailable(void* arg, boolean avaiable) {
     /* ClassicUISuspend has already done all clean up */
     if (classicui->isSuspend)
         return;
+    classicui->notificationItemAvailable = avaiable;
     if (!avaiable) {
         ReleaseTrayWindow(classicui->trayWindow);
         InitTrayWindow(classicui->trayWindow);
