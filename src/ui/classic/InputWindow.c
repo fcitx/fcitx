@@ -453,14 +453,15 @@ void InputWindowPaint(FcitxXlibWindow* window, cairo_t* c)
         || FcitxCandidateWordHasNext(candList)
     ) {
         if (prev && next) {
-            cairo_set_source_surface(c, prev->image,
-                                     window->contentWidth - sc->skinInputBar.iBackArrowX + window->background->marginRight - window->background->marginLeft,
-                                     sc->skinInputBar.iBackArrowY);
+            int x, y;
+            x = window->contentWidth - sc->skinInputBar.iBackArrowX + window->background->marginRight - window->background->marginLeft;
+            y = sc->skinInputBar.iBackArrowY - window->background->marginTop;
+            cairo_set_source_surface(c, prev->image, x, y);
             if (FcitxCandidateWordHasPrev(candList)) {
-                inputWindow->prevRect.x1 = window->contentWidth - sc->skinInputBar.iBackArrowX + window->background->marginRight - window->background->marginLeft;
-                inputWindow->prevRect.y1 = sc->skinInputBar.iBackArrowY;
-                inputWindow->prevRect.x2 = inputWindow->prevRect.x1 + cairo_image_surface_get_width(prev->image);
-                inputWindow->prevRect.y2 = inputWindow->prevRect.y1 + cairo_image_surface_get_height(prev->image);
+                inputWindow->prevRect.x1 = x;
+                inputWindow->prevRect.y1 = y;
+                inputWindow->prevRect.x2 = x + cairo_image_surface_get_width(prev->image);
+                inputWindow->prevRect.y2 = y + cairo_image_surface_get_height(prev->image);
 
                 if (inputWindow->highlight == PREVNEXT_HIGHLIGHT(true)) {
                     cairo_paint_with_alpha(c, 0.7);
@@ -472,14 +473,14 @@ void InputWindowPaint(FcitxXlibWindow* window, cairo_t* c)
                 cairo_paint_with_alpha(c, 0.3);
             }
 
-            cairo_set_source_surface(c, next->image,
-                                     window->contentWidth - sc->skinInputBar.iForwardArrowX + window->background->marginRight - window->background->marginLeft,
-                                     sc->skinInputBar.iForwardArrowY);
+            x = window->contentWidth - sc->skinInputBar.iForwardArrowX + window->background->marginRight - window->background->marginLeft;
+            y = sc->skinInputBar.iForwardArrowY - window->background->marginTop;
+            cairo_set_source_surface(c, next->image, x, y);
             if (FcitxCandidateWordHasNext(candList)) {
-                inputWindow->nextRect.x1 = window->contentWidth - sc->skinInputBar.iForwardArrowX + window->background->marginRight - window->background->marginLeft;
-                inputWindow->nextRect.y1 = sc->skinInputBar.iForwardArrowY;
-                inputWindow->nextRect.x2 = inputWindow->nextRect.x1 + cairo_image_surface_get_width(next->image);
-                inputWindow->nextRect.y2 = inputWindow->nextRect.y1 + cairo_image_surface_get_height(next->image);
+                inputWindow->prevRect.x1 = x;
+                inputWindow->prevRect.y1 = y;
+                inputWindow->prevRect.x2 = x + cairo_image_surface_get_width(prev->image);
+                inputWindow->prevRect.y2 = y + cairo_image_surface_get_height(prev->image);
                 if (inputWindow->highlight == PREVNEXT_HIGHLIGHT(false)) {
                     cairo_paint_with_alpha(c, 0.7);
                 } else {
