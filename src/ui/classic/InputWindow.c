@@ -477,10 +477,10 @@ void InputWindowPaint(FcitxXlibWindow* window, cairo_t* c)
             y = sc->skinInputBar.iForwardArrowY - window->background->marginTop;
             cairo_set_source_surface(c, next->image, x, y);
             if (FcitxCandidateWordHasNext(candList)) {
-                inputWindow->prevRect.x1 = x;
-                inputWindow->prevRect.y1 = y;
-                inputWindow->prevRect.x2 = x + cairo_image_surface_get_width(prev->image);
-                inputWindow->prevRect.y2 = y + cairo_image_surface_get_height(prev->image);
+                inputWindow->nextRect.x1 = x;
+                inputWindow->nextRect.y1 = y;
+                inputWindow->nextRect.x2 = x + cairo_image_surface_get_width(prev->image);
+                inputWindow->nextRect.y2 = y + cairo_image_surface_get_height(prev->image);
                 if (inputWindow->highlight == PREVNEXT_HIGHLIGHT(false)) {
                     cairo_paint_with_alpha(c, 0.7);
                 } else {
