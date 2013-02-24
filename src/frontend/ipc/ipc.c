@@ -569,7 +569,7 @@ void IPCSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
 {
     FCITX_UNUSED(arg);
     ic->offset_x = x;
-    ic->offset_y = y;
+    ic->offset_y = y - GetIPCIC(ic)->height;
 }
 
 void IPCGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, int* h)
