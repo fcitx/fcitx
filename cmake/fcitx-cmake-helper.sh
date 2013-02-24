@@ -68,7 +68,7 @@ download_cmake() {
             break
         fi
     done
-    if [[ -z "${stdin_file}" ]]; then
+    if [ -z "${stdin_file}" ]; then
         tmpdir="${FCITX_CMAKE_CACHE_BASE}/cmake_download"
         "${FCITX_HELPER_CMAKE_CMD}" -E make_directory "${tmpdir}"
         fname="$(mktemp "${tmpdir}/tmp.XXXXXX")" || return 1
