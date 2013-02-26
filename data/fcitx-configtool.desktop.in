@@ -1,5 +1,5 @@
 [Desktop Entry]
-_Name=Fcitx Config Tool
+_Name=Fcitx Config
 _Comment=Fcitx GUI Config Tool
 Exec=fcitx-configtool
 Icon=fcitx
