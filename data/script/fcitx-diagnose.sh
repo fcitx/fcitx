@@ -785,7 +785,7 @@ check_xim() {
     if ! str_match_regex '.[Uu][Tt][Ff]-?8$' "${_LC_CTYPE}"; then
         write_order_list "$(_ "XIM encoding:")"
         write_error_eval \
-            "$(_ 'Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have trouble commiting strings using XIM.')" "${_LC_CTYPE}"
+            "$(_ 'Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have trouble committing strings using XIM.')" "${_LC_CTYPE}"
     fi
 }
 
