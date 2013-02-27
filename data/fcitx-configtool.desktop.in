@@ -1,6 +1,7 @@
 [Desktop Entry]
-_Name=Fcitx Config Tool
-_Comment=Fcitx GUI Config Tool
+_Name=Fcitx Configuration
+_GenericName=Input Method Configuration
+_Comment=Change Fcitx Configuration
 Exec=fcitx-configtool
 Icon=fcitx
 MimeType=

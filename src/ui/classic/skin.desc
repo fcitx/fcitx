@@ -109,7 +109,7 @@ Description=Margin Right for clickable region
 [SkinMainBar/ClickMarginTop]
 Type=Integer
 DefaultValue=0
-Description=Margin Left for clickable region
+Description=Margin Top for clickable region
 
 [SkinMainBar/ClickMarginBottom]
 Type=Integer
@@ -215,7 +215,7 @@ Description=Margin Right for clickable region
 [SkinInputBar/ClickMarginTop]
 Type=Integer
 DefaultValue=0
-Description=Margin Left for clickable region
+Description=Margin Top for clickable region
 
 [SkinInputBar/ClickMarginBottom]
 Type=Integer
@@ -331,6 +331,26 @@ Description=Resize Margin Left
 [SkinMenu/MarginRight]
 Type=Integer
 Description=Resize Margin Right
+
+[SkinMenu/ClickMarginLeft]
+Type=Integer
+DefaultValue=0
+Description=Margin Left for clickable region
+
+[SkinMenu/ClickMarginRight]
+Type=Integer
+DefaultValue=0
+Description=Margin Right for clickable region
+
+[SkinMenu/ClickMarginTop]
+Type=Integer
+DefaultValue=0
+Description=Margin Top for clickable region
+
+[SkinMenu/ClickMarginBottom]
+Type=Integer
+DefaultValue=0
+Description=Margin Bottom for clickable region
 
 [SkinMenu/Overlay]
 Type=String

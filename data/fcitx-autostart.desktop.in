@@ -1,6 +1,7 @@
 [Desktop Entry]
 _Name=Fcitx
-_Comment=Input Method
+_GenericName=Input Method
+_Comment=Start Input Method
 Exec=fcitx-autostart
 Icon=fcitx
 Terminal=false
