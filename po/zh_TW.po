@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-02-27 09:59-0500\n"
+"POT-Creation-Date: 2013-02-27 10:04-0500\n"
 "PO-Revision-Date: 2013-02-27 09:21-0500\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-china@kde.org>\n"
@@ -26,11 +26,11 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr " 用 Ctrl+Delete 刪除"
 
-#: data/script/fcitx-diagnose.sh:217
+#: data/script/fcitx-diagnose.sh:305
 msgid "${1} not found."
 msgstr "找不到 ${1}。"
 
-#: data/script/fcitx-diagnose.sh:527
+#: data/script/fcitx-diagnose.sh:622
 msgid "${1} works properly."
 msgstr "${1} 運作正常。"
 
@@ -66,23 +66,23 @@ msgstr "儲存 (&S)"
 msgid "(Unavailable)"
 msgstr "(不可用)"
 
-#: data/script/fcitx-diagnose.sh:355
+#: data/script/fcitx-diagnose.sh:443
 msgid "/Beginner%27s_Guide"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:388
+#: data/script/fcitx-diagnose.sh:476
 msgid "/Hall_of_Shame_for_Linux_IME_Support"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:366
+#: data/script/fcitx-diagnose.sh:454
 msgid "/Input_method_related_environment_variables"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:375
+#: data/script/fcitx-diagnose.sh:463
 msgid "/Note_for_GNOME_Later_than_3.6"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:392
+#: data/script/fcitx-diagnose.sh:480
 msgid "/XIM"
 msgstr ""
 
@@ -208,11 +208,11 @@ msgstr "附加元件"
 msgid "Addon Config %s is %s"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:763
+#: data/script/fcitx-diagnose.sh:944
 msgid "Addon Config Dir:"
 msgstr "附加元件設定目錄："
 
-#: data/script/fcitx-diagnose.sh:774
+#: data/script/fcitx-diagnose.sh:955
 msgid "Addon List:"
 msgstr "附加元件清單："
 
@@ -239,7 +239,7 @@ msgstr "不調整"
 msgid "All"
 msgstr "所有"
 
-#: data/script/fcitx-diagnose.sh:473
+#: data/script/fcitx-diagnose.sh:568
 msgid "All locale:"
 msgstr "全部地區設定："
 
@@ -348,7 +348,7 @@ msgstr ""
 msgid "Background Image"
 msgstr "背景圖片"
 
-#: data/script/fcitx-diagnose.sh:354
+#: data/script/fcitx-diagnose.sh:442
 msgid "Beginner's Guide"
 msgstr "新手指南"
 
@@ -436,31 +436,45 @@ msgstr "無法保存拼音索引：%s"
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "無法保存使用者拼音字庫：%s"
 
-#: data/script/fcitx-diagnose.sh:525
+#: data/script/fcitx-diagnose.sh:620
 msgid "Cannot connect to fcitx correctly."
 msgstr "無法正確連接 fcitx。"
 
-#: data/script/fcitx-diagnose.sh:765
+#: data/script/fcitx-diagnose.sh:537
+msgid "Cannot determine desktop environment."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:710
+msgid ""
+"Cannot find a GUI config tool, please install one of ${1}, ${2}, or ${3}."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:946
 msgid "Cannot find fcitx addon config directory."
 msgstr "找不到附加元件設定目錄。"
 
-#: data/script/fcitx-diagnose.sh:486
+#: data/script/fcitx-diagnose.sh:581
 msgid "Cannot find fcitx executable!"
 msgstr "找不到 fcitx 可執行檔！"
 
-#: data/script/fcitx-diagnose.sh:735
+#: data/script/fcitx-diagnose.sh:916
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:703
+#: data/script/fcitx-diagnose.sh:884
 msgid "Cannot find fcitx im module for gtk ${1}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:668
+#: data/script/fcitx-diagnose.sh:849
 msgid "Cannot find fcitx input method module for qt."
 msgstr "找不到 fcitx 的Qt 輸入法模組。"
 
-#: data/script/fcitx-diagnose.sh:594
+#: data/script/fcitx-diagnose.sh:700
+#, fuzzy
+msgid "Cannot find fcitx-configtool executable!"
+msgstr "找不到 fcitx 可執行檔！"
+
+#: data/script/fcitx-diagnose.sh:775
 msgid "Cannot find xim_server on root window."
 msgstr ""
 
@@ -468,11 +482,11 @@ msgstr ""
 msgid "Cannot found Pinyin"
 msgstr "找不到拼音"
 
-#: data/script/fcitx-diagnose.sh:568
+#: data/script/fcitx-diagnose.sh:749
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "無法解析 XMODIFIERS：${1}。"
 
-#: data/script/fcitx-diagnose.sh:813
+#: data/script/fcitx-diagnose.sh:994
 msgid "Cannot read im list from fcitx profile."
 msgstr "無法從 fcitx 設定檔中讀取輸入法清單。"
 
@@ -645,11 +659,23 @@ msgstr "切換狀態時提交"
 msgid "Commit with extra space when choose candidate word"
 msgstr "選擇候選詞時加入額外空格"
 
+#: data/script/fcitx-diagnose.sh:662
+msgid "Config GUI for gtk${1}:"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:682
+msgid "Config GUI for kde:"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:698
+msgid "Config Tool Wrapper:"
+msgstr ""
+
 #: data/addon.desc:62
 msgid "ConfigFile"
 msgstr "設定檔"
 
-#: data/script/fcitx-diagnose.sh:921
+#: data/script/fcitx-diagnose.sh:1103
 msgid "Configuration."
 msgstr "設定。"
 
@@ -700,7 +726,7 @@ msgstr "目前輸入法名稱"
 msgid "Current local input method is "
 msgstr "目前輸入法為 "
 
-#: data/script/fcitx-diagnose.sh:471
+#: data/script/fcitx-diagnose.sh:566
 msgid "Current locale:"
 msgstr "目前地區設定："
 
@@ -737,7 +763,7 @@ msgstr "預設雙拼方案"
 msgid "Default Spell Hint Backends Order"
 msgstr "拼寫提示後端的使用順序"
 
-#: data/script/fcitx-diagnose.sh:839
+#: data/script/fcitx-diagnose.sh:1020
 msgid "Default input methods:"
 msgstr "預設輸入法："
 
@@ -752,6 +778,15 @@ msgstr "相依性"
 #: src/ui/classic/skin.desc:15
 msgid "Description of Skin"
 msgstr "佈景說明"
+
+#: data/script/fcitx-diagnose.sh:535
+#, fuzzy
+msgid "Desktop Environment."
+msgstr "環境。"
+
+#: data/script/fcitx-diagnose.sh:539
+msgid "Desktop environment is ${1}."
+msgstr ""
 
 #: data/table/db.conf.in:3
 msgid "Dianbaoma"
@@ -871,17 +906,17 @@ msgstr ""
 msgid "Enum option number must larger than 0"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:548
+#: data/script/fcitx-diagnose.sh:729
 msgid ""
 "Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
 "you have exported it incorrectly in any of your init files."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:542
+#: data/script/fcitx-diagnose.sh:723
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
 msgstr "環境變數 ${1} 正確地設定為「${2}」。"
 
-#: data/script/fcitx-diagnose.sh:450
+#: data/script/fcitx-diagnose.sh:545
 msgid "Environment."
 msgstr "環境。"
 
@@ -937,7 +972,7 @@ msgstr ""
 msgid "Fcitx"
 msgstr "Fcitx"
 
-#: data/script/fcitx-diagnose.sh:762
+#: data/script/fcitx-diagnose.sh:943
 msgid "Fcitx Addons:"
 msgstr "Fcitx 附加元件："
 
@@ -948,6 +983,11 @@ msgstr "Fcitx 的剪貼簿訪問支援"
 #: data/fcitx-configtool.desktop.in:2
 msgid "Fcitx Configuration"
 msgstr "Fcitx 設定"
+
+#: data/script/fcitx-diagnose.sh:697
+#, fuzzy
+msgid "Fcitx Configure UI."
+msgstr "Fcitx GUI 設定工具"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -965,7 +1005,7 @@ msgstr "Fcitx 佈景安裝程式"
 msgid "Fcitx Spelling Hint/Completion Support"
 msgstr "Fcitx 的拼寫提示與補全支援"
 
-#: data/script/fcitx-diagnose.sh:483
+#: data/script/fcitx-diagnose.sh:578
 msgid "Fcitx State."
 msgstr "Fcitx 狀態。"
 
@@ -977,11 +1017,11 @@ msgstr "Fcitx 的 Unicode 輸入支援"
 msgid "Fcitx XIM Frontend"
 msgstr "Fcitx XIM 前端"
 
-#: data/script/fcitx-diagnose.sh:510
+#: data/script/fcitx-diagnose.sh:605
 msgid "Fcitx is not running."
 msgstr "Fcitx 未執行。"
 
-#: data/script/fcitx-diagnose.sh:497
+#: data/script/fcitx-diagnose.sh:592
 #, sh-format
 msgid "Fcitx version: ${version}"
 msgstr "Fcitx 版本：${version}"
@@ -1032,55 +1072,70 @@ msgstr "字型大小"
 msgid "Font size repect dpi setting"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:800
+#: data/script/fcitx-diagnose.sh:675
+#, fuzzy
+msgid "Found ${1} at ${2}."
+msgstr "在 ${1} 找到 fcitx。"
+
+#: data/script/fcitx-diagnose.sh:981
 msgid "Found ${1} disabled addons:"
 msgstr "找到 ${1} 停用附加元件："
 
-#: data/script/fcitx-diagnose.sh:795
+#: data/script/fcitx-diagnose.sh:976
 msgid "Found ${1} enabled addons:"
 msgstr "找到 ${1} 啟用附加元件："
 
-#: data/script/fcitx-diagnose.sh:834
+#: data/script/fcitx-diagnose.sh:1015
 msgid "Found ${1} enabled input methods:"
 msgstr "找到 ${1} 啟用輸入法："
 
-#: data/script/fcitx-diagnose.sh:519
+#: data/script/fcitx-diagnose.sh:614
 msgid "Found ${1} fcitx process:"
 msgstr "找到 ${1} fcitx 行程："
 
-#: data/script/fcitx-diagnose.sh:517
+#: data/script/fcitx-diagnose.sh:612
 msgid "Found ${1} fcitx processes:"
 msgstr "找到 ${1} fcitx 行程："
 
-#: data/script/fcitx-diagnose.sh:772
+#: data/script/fcitx-diagnose.sh:953
 msgid "Found fcitx addon config directory: ${1}."
 msgstr "找到 fcitx 附加元件設定目錄：${1}。"
 
-#: data/script/fcitx-diagnose.sh:492
+#: data/script/fcitx-diagnose.sh:587
 msgid "Found fcitx at ${1}."
 msgstr "在 ${1} 找到 fcitx。"
 
-#: data/script/fcitx-diagnose.sh:695
+#: data/script/fcitx-diagnose.sh:876
 msgid "Found fcitx im modules for gtk ${1}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:727
+#: data/script/fcitx-diagnose.sh:908
 msgid "Found fcitx in cache file ${1}:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:652
+#: data/script/fcitx-diagnose.sh:688
+#, fuzzy
+msgid "Found fcitx kcm module."
+msgstr "找到 fcitx Qt 輸入法模組：${1}。"
+
+#: data/script/fcitx-diagnose.sh:833
 msgid "Found fcitx qt im module: ${1}."
 msgstr "找到 fcitx Qt 輸入法模組：${1}。"
 
-#: data/script/fcitx-diagnose.sh:690
+#: data/script/fcitx-diagnose.sh:702
+#, fuzzy
+msgid "Found fcitx-configtool at ${1}."
+msgstr "在 ${1} 找到 fcitx。"
+
+#: data/script/fcitx-diagnose.sh:871
 msgid "Found gtk-query-immodules for gtk ${1} at ${2}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:722
+#: data/script/fcitx-diagnose.sh:903
 msgid "Found immodules cache for gtk ${1} ${2}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:660
+#: data/script/fcitx-diagnose.sh:841
 msgid "Found unknown fcitx qt module: ${1}."
 msgstr "找到未知的 fcitx Qt 模組：${1}。"
 
@@ -1101,7 +1156,7 @@ msgstr "前端：有問題的前端"
 msgid "Frontend: open %s fail %s"
 msgstr "前端：開啟 %s 失敗 %s"
 
-#: data/script/fcitx-diagnose.sh:914
+#: data/script/fcitx-diagnose.sh:1096
 msgid "Frontends setup."
 msgstr "前端設定。"
 
@@ -1194,11 +1249,11 @@ msgstr "反引號"
 msgid "Greek"
 msgstr "希臘字母"
 
-#: data/script/fcitx-diagnose.sh:748
+#: data/script/fcitx-diagnose.sh:929
 msgid "Gtk IM module cache:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:743
+#: data/script/fcitx-diagnose.sh:924
 msgid "Gtk IM module files:"
 msgstr ""
 
@@ -1207,7 +1262,7 @@ msgstr ""
 msgid "Half width Character"
 msgstr "半形字元"
 
-#: data/script/fcitx-diagnose.sh:387
+#: data/script/fcitx-diagnose.sh:475
 msgid "Hall of Shame for Linux IME Support"
 msgstr "Linux 程式的輸入法支援問題"
 
@@ -1278,7 +1333,7 @@ msgstr "圖示名稱"
 msgid "IconName"
 msgstr "圖示名稱"
 
-#: data/script/fcitx-diagnose.sh:377
+#: data/script/fcitx-diagnose.sh:465
 msgid ""
 "If you are using ${1}, you may want to uninstall ${2} or remove ${3} to be "
 "able to use any input method other than ${2}. See ${link} for more detail as "
@@ -1355,11 +1410,11 @@ msgstr "停用輸入法"
 msgid "Input Method Hint will be only shown when state is active"
 msgstr "輸入法提示只在啟用狀態顯示"
 
-#: data/script/fcitx-diagnose.sh:365
+#: data/script/fcitx-diagnose.sh:453
 msgid "Input Method Related Environment Variables: "
 msgstr "輸入法相關環境變數："
 
-#: data/script/fcitx-diagnose.sh:809
+#: data/script/fcitx-diagnose.sh:990
 msgid "Input Methods:"
 msgstr "輸入法："
 
@@ -1390,7 +1445,7 @@ msgstr "輸入間隔"
 msgid "Invalid Entry: line %d missing '='"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:778
+#: data/script/fcitx-diagnose.sh:959
 msgid "Invalid addon config file ${1}."
 msgstr ""
 
@@ -1404,7 +1459,7 @@ msgstr ""
 msgid "Invalid group name line @ line %d %s"
 msgstr "非法組名出現在第 %d 行：%s"
 
-#: data/script/fcitx-diagnose.sh:823
+#: data/script/fcitx-diagnose.sh:1004
 msgid "Invalid item ${1} in im list."
 msgstr ""
 
@@ -1448,7 +1503,7 @@ msgstr "鍵盤配置"
 msgid "Keyboard Layout to be used"
 msgstr "鍵盤配置"
 
-#: data/script/fcitx-diagnose.sh:453
+#: data/script/fcitx-diagnose.sh:548
 msgid "Keyboard Layout:"
 msgstr "鍵盤配置："
 
@@ -1556,11 +1611,11 @@ msgstr "局部輸入法選擇鍵"
 msgid "LocalSelector"
 msgstr "局部選擇"
 
-#: data/script/fcitx-diagnose.sh:468
+#: data/script/fcitx-diagnose.sh:563
 msgid "Locale:"
 msgstr "地區設定："
 
-#: data/script/fcitx-diagnose.sh:927
+#: data/script/fcitx-diagnose.sh:1109
 msgid "Log."
 msgstr "日誌。"
 
@@ -1751,7 +1806,7 @@ msgstr ""
 msgid "None"
 msgstr "無"
 
-#: data/script/fcitx-diagnose.sh:374
+#: data/script/fcitx-diagnose.sh:462
 msgid "Note for GNOME Later than 3.6"
 msgstr ""
 
@@ -1880,11 +1935,11 @@ msgstr "拼音："
 msgid "PinyinJiaJia"
 msgstr "拼音加加"
 
-#: data/script/fcitx-diagnose.sh:488
+#: data/script/fcitx-diagnose.sh:583
 msgid "Please check ${1} for how to install fcitx."
 msgstr "如何安裝 fcitx 請查閱 ${1}。"
 
-#: data/script/fcitx-diagnose.sh:512
+#: data/script/fcitx-diagnose.sh:607
 msgid ""
 "Please check the Configure link of your distribution in ${1} for how to "
 "setup fcitx autostart."
@@ -1894,7 +1949,7 @@ msgstr "請在 ${1} 檢查您的發行版的設定連結是如何設定 fcitx �
 msgid "Please set XMODIFIERS."
 msgstr "請設定環境變數 XMOIFIERS。"
 
-#: data/script/fcitx-diagnose.sh:362
+#: data/script/fcitx-diagnose.sh:450
 msgid ""
 "Please set environment variable ${env_name} to \"${value}\" using the tool "
 "your distribution provides or add ${1} to your ${2}. See ${link}."
@@ -2006,7 +2061,7 @@ msgstr "標點符號轉換支援"
 msgid "Punctuation Support"
 msgstr "標點支援"
 
-#: data/script/fcitx-diagnose.sh:643
+#: data/script/fcitx-diagnose.sh:824
 msgid "Qt IM module files:"
 msgstr "Qt 輸入法模組檔案："
 
@@ -2469,7 +2524,7 @@ msgstr "符號"
 msgid "Symbol File"
 msgstr "符號檔案"
 
-#: data/script/fcitx-diagnose.sh:419
+#: data/script/fcitx-diagnose.sh:507
 msgid "System Info."
 msgstr "系統資訊。"
 
@@ -2511,7 +2566,7 @@ msgstr "這將在一些模組和輸入法中移至前一個候選字"
 msgid "Tip Message Color"
 msgstr "提示訊息顏色"
 
-#: data/script/fcitx-diagnose.sh:384
+#: data/script/fcitx-diagnose.sh:472
 #, sh-format
 msgid ""
 "To see some application specific problems you may have when using xim, check "
@@ -2792,15 +2847,15 @@ msgstr "給其他附加元件使用的 X11 工具"
 msgid "X11 not initialized"
 msgstr "X11 無法初始化"
 
-#: data/script/fcitx-diagnose.sh:605
+#: data/script/fcitx-diagnose.sh:786
 msgid "XIM encoding:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:600
+#: data/script/fcitx-diagnose.sh:781
 msgid "XIM for Emacs:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:578
+#: data/script/fcitx-diagnose.sh:759
 msgid "XIM_SERVERS on root window:"
 msgstr ""
 
@@ -2816,39 +2871,39 @@ msgstr "小鶴"
 msgid "Xim"
 msgstr "Xim"
 
-#: data/script/fcitx-diagnose.sh:576
+#: data/script/fcitx-diagnose.sh:757
 msgid "Xim Server Name from Environment variable is ${1}."
 msgstr "環境變數中 XIM 伺服器名稱為 ${1}。"
 
-#: data/script/fcitx-diagnose.sh:588
+#: data/script/fcitx-diagnose.sh:769
 msgid "Xim server name is the same with that set in the environment variable."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:590
+#: data/script/fcitx-diagnose.sh:771
 msgid ""
 "Xim server name: \"${1}\" is different from that set in the environment "
 "variable: \"${2}\"."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:623
+#: data/script/fcitx-diagnose.sh:804
 msgid "You are using xim in ${1} programs."
 msgstr "你在 ${1} 程式使用 xim。"
 
-#: data/script/fcitx-diagnose.sh:842
+#: data/script/fcitx-diagnose.sh:1023
 msgid "You don't have any input methods enabled."
 msgstr "你沒有啟用任何輸入法。"
 
-#: data/script/fcitx-diagnose.sh:850
+#: data/script/fcitx-diagnose.sh:1031
 msgid ""
 "You have a keyboard input method \"${1}\" correctly added as your default "
 "input method."
 msgstr "您使用鍵盤輸入法 ${1}，正確加入作為您的預設輸入法。"
 
-#: data/script/fcitx-diagnose.sh:628
+#: data/script/fcitx-diagnose.sh:809
 msgid "You may have trouble using fcitx in ${1} programs."
 msgstr "在 ${1} 程式使用 fcitx 你可能會遇到一些問題。"
 
-#: data/script/fcitx-diagnose.sh:845
+#: data/script/fcitx-diagnose.sh:1026
 msgid ""
 "You only have one input method enabled, please add a keyboard input method "
 "as the first one and your main input method as the second one."
@@ -2856,20 +2911,20 @@ msgstr ""
 "您只有啟用一個輸入法。請加入一個鍵盤輸入法作為第一個輸入法，以及將你主要的輸"
 "入法作為第二個輸入法。"
 
-#: data/script/fcitx-diagnose.sh:602
+#: data/script/fcitx-diagnose.sh:783
 msgid ""
 "Your LC_CTYPE is set to ${1} instead of one of zh, ja, ko. You may not be "
 "able to use input method in emacs because of an really old emacs bug that "
 "upstream refuse to fix for years."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:607
+#: data/script/fcitx-diagnose.sh:788
 msgid ""
 "Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have "
-"trouble commiting strings using XIM."
+"trouble committing strings using XIM."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:854
+#: data/script/fcitx-diagnose.sh:1035
 msgid ""
 "Your first (default) input method is ${1} instead of a keyboard input "
 "method. You may have trouble deactivate fcitx."
@@ -2889,11 +2944,11 @@ msgstr "紫光"
 msgid "Ziranma"
 msgstr "自然碼"
 
-#: data/script/fcitx-diagnose.sh:484
+#: data/script/fcitx-diagnose.sh:579
 msgid "executable:"
 msgstr "可執行檔："
 
-#: data/script/fcitx-diagnose.sh:391
+#: data/script/fcitx-diagnose.sh:479
 msgid "here"
 msgstr "在此"
 
@@ -2910,7 +2965,7 @@ msgstr ""
 msgid "no valid font."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:498
+#: data/script/fcitx-diagnose.sh:593
 msgid "process:"
 msgstr "行程："
 
@@ -2918,7 +2973,7 @@ msgstr "行程："
 msgid "pthread mutex init failed"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:494
+#: data/script/fcitx-diagnose.sh:589
 msgid "version:"
 msgstr "版本："
 
@@ -2947,10 +3002,6 @@ msgstr ""
 
 #~ msgid "DRAW MainWindow"
 #~ msgstr "DRAW MainWindow"
-
-#, fuzzy
-#~ msgid "Fcitx GUI Configure Tool"
-#~ msgstr "Fcitx GUI 設定工具"
 
 #, fuzzy
 #~ msgid "Start Fcitx Input Method Framework"
