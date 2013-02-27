@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-02-27 09:19-0500\n"
-"PO-Revision-Date: 2013-02-27 09:19-0500\n"
+"POT-Creation-Date: 2013-02-27 09:59-0500\n"
+"PO-Revision-Date: 2013-02-27 09:59-0500\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-china@kde.org>\n"
 "Language: zh_CN\n"
@@ -542,8 +542,8 @@ msgstr "带皮肤支持的经典界面"
 #: src/ui/classic/fcitx-classic-ui.desc:30
 #: src/ui/classic/fcitx-classic-ui.desc:36
 #: src/ui/classic/fcitx-classic-ui.desc:41
-#: src/ui/classic/fcitx-classic-ui.desc:50
-#: src/ui/classic/fcitx-classic-ui.desc:55
+#: src/ui/classic/fcitx-classic-ui.desc:51
+#: src/ui/classic/fcitx-classic-ui.desc:56
 msgid "ClassicUI"
 msgstr "经典界面"
 
@@ -1213,9 +1213,13 @@ msgstr "半角字符"
 msgid "Hall of Shame for Linux IME Support"
 msgstr "Linux 输入法支持耻辱堂"
 
-#: src/ui/classic/fcitx-classic-ui.desc:46
+#: src/ui/classic/fcitx-classic-ui.desc:47
 msgid "Hide"
 msgstr "隐藏"
+
+#: src/ui/classic/fcitx-classic-ui.desc:46
+msgid "Hide when tray icon is available"
+msgstr "托盘图标可用时隐藏"
 
 #: src/module/vk/vk.c:59
 msgid "Hiragana"
@@ -2266,7 +2270,7 @@ msgstr "皮肤"
 msgid "Skin Author"
 msgstr "皮肤作者"
 
-#: src/ui/classic/fcitx-classic-ui.desc:58 src/ui/classic/skin.desc:3
+#: src/ui/classic/fcitx-classic-ui.desc:59 src/ui/classic/skin.desc:3
 msgid "Skin Name"
 msgstr "皮肤名称"
 
@@ -2371,7 +2375,7 @@ msgstr "启动输入法"
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
 
-#: src/ui/classic/fcitx-classic-ui.desc:48
+#: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
 msgstr "状态栏隐藏模式"
 
@@ -2727,7 +2731,7 @@ msgstr "用户定义"
 msgid "User Phrase Color"
 msgstr "用户词组颜色"
 
-#: src/ui/classic/fcitx-classic-ui.desc:53
+#: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
 msgstr "竖排候选词列表"
 

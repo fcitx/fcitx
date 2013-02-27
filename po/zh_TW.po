@@ -10,15 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-02-27 09:19-0500\n"
+"POT-Creation-Date: 2013-02-27 09:59-0500\n"
 "PO-Revision-Date: 2013-02-27 09:21-0500\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-china@kde.org>\n"
-"language/zh_TW/)\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"language/zh_TW/)\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 1.5\n"
 
@@ -542,8 +542,8 @@ msgstr "支援皮膚的經典介面"
 #: src/ui/classic/fcitx-classic-ui.desc:30
 #: src/ui/classic/fcitx-classic-ui.desc:36
 #: src/ui/classic/fcitx-classic-ui.desc:41
-#: src/ui/classic/fcitx-classic-ui.desc:50
-#: src/ui/classic/fcitx-classic-ui.desc:55
+#: src/ui/classic/fcitx-classic-ui.desc:51
+#: src/ui/classic/fcitx-classic-ui.desc:56
 msgid "ClassicUI"
 msgstr "經典介面"
 
@@ -1211,9 +1211,13 @@ msgstr "半形字元"
 msgid "Hall of Shame for Linux IME Support"
 msgstr "Linux 程式的輸入法支援問題"
 
-#: src/ui/classic/fcitx-classic-ui.desc:46
+#: src/ui/classic/fcitx-classic-ui.desc:47
 msgid "Hide"
 msgstr "隱藏"
+
+#: src/ui/classic/fcitx-classic-ui.desc:46
+msgid "Hide when tray icon is available"
+msgstr ""
 
 #: src/module/vk/vk.c:59
 msgid "Hiragana"
@@ -2262,7 +2266,7 @@ msgstr "皮膚"
 msgid "Skin Author"
 msgstr "佈景作者"
 
-#: src/ui/classic/fcitx-classic-ui.desc:58 src/ui/classic/skin.desc:3
+#: src/ui/classic/fcitx-classic-ui.desc:59 src/ui/classic/skin.desc:3
 msgid "Skin Name"
 msgstr "皮膚名稱"
 
@@ -2367,7 +2371,7 @@ msgstr "啓動輸入法"
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "啟動 XIM 錯誤。是否有另一個名為 %s 的 XIM 守護程式正在執行？"
 
-#: src/ui/classic/fcitx-classic-ui.desc:48
+#: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
 msgstr "狀態面板隱藏模式"
 
@@ -2721,7 +2725,7 @@ msgstr "使用者定義"
 msgid "User Phrase Color"
 msgstr ""
 
-#: src/ui/classic/fcitx-classic-ui.desc:53
+#: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
 msgstr "垂直候選字清單"
 

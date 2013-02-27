@@ -43,6 +43,7 @@
 #include "classicui.h"
 #include "skin.h"
 #include "MenuWindow.h"
+#include "TrayWindow.h"
 #include "fcitx-utils/utils.h"
 
 #define MAIN_BAR_MAX_WIDTH 2
@@ -55,6 +56,18 @@ static void MainWindowInit(MainWindow* mainWindow);
 static void MainWindowMoveWindow(FcitxXlibWindow* window);
 static void MainWindowCalculateContentSize(FcitxXlibWindow* window, unsigned int* width, unsigned int* height);
 static void MainWindowPaint(FcitxXlibWindow* window, cairo_t* c);
+
+static inline boolean MainWindowShouldShow(MainWindow* mainWindow)
+{
+    FcitxXlibWindow* window = &mainWindow->parent;
+    FcitxClassicUI* classicui = window->owner;
+    FcitxInstance *instance = window->owner->owner;
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) FcitxInstanceGetCurrentIC(instance);
+    return (window->owner->hideMainWindow == HM_SHOW)
+        || (window->owner->hideMainWindow == HM_AUTO && ((ic2 && ic2->switchBySwitchKey) || FcitxInstanceGetCurrentState(window->owner->owner) == IS_ACTIVE))
+        || (window->owner->hideMainWindow == HM_HIDE_WHEN_TRAY_AVAILABLE && !(classicui->notificationItemAvailable || classicui->trayWindow->bTrayMapped));
+}
+
 
 void MainWindowInit(MainWindow* mainWindow)
 {
@@ -108,10 +121,7 @@ void MainWindowShow(MainWindow* mainWindow)
 {
     FcitxXlibWindow* window = &mainWindow->parent;
     FcitxClassicUI* classicui = window->owner;
-    FcitxInstance *instance = window->owner->owner;
-    FcitxInputContext2* ic2 = (FcitxInputContext2*) FcitxInstanceGetCurrentIC(instance);
-    if (window->owner->hideMainWindow == HM_SHOW
-        || (window->owner->hideMainWindow == HM_AUTO && ((ic2 && ic2->switchBySwitchKey) || FcitxInstanceGetCurrentState(window->owner->owner) == IS_ACTIVE))) {
+    if (MainWindowShouldShow(mainWindow)) {
         FcitxXlibWindowPaint(&mainWindow->parent);
         XMapRaised(classicui->dpy, window->wId);
     } else {
@@ -124,7 +134,6 @@ void MainWindowCalculateContentSize(FcitxXlibWindow* window, unsigned int* width
     FcitxClassicUI* classicui = window->owner;
     FcitxSkin *sc = &window->owner->skin;
     FcitxInstance *instance = window->owner->owner;
-    FcitxInputContext2* ic2 = (FcitxInputContext2*) FcitxInstanceGetCurrentIC(instance);
 
     FcitxUIStatus* status;
     UT_array* uistats = FcitxInstanceGetUIStats(instance);
@@ -156,8 +165,7 @@ void MainWindowCalculateContentSize(FcitxXlibWindow* window, unsigned int* width
         privstat->avail = false;
     }
 
-    if (!(window->owner->hideMainWindow == HM_SHOW
-        || (window->owner->hideMainWindow == HM_AUTO && ((ic2 && ic2->switchBySwitchKey) || FcitxInstanceGetCurrentState(window->owner->owner) == IS_ACTIVE)))) {
+    if (!MainWindowShouldShow((MainWindow*) window)) {
         return;
     }
     SkinImage* activeIcon = LoadImage(sc, sc->skinMainBar.active, false);
@@ -289,10 +297,8 @@ void MainWindowPaint(FcitxXlibWindow* window, cairo_t* c)
     FcitxClassicUI* classicui = window->owner;
     FcitxSkin *sc = &window->owner->skin;
     FcitxInstance *instance = window->owner->owner;
-    FcitxInputContext2* ic2 = (FcitxInputContext2*) FcitxInstanceGetCurrentIC(classicui->owner);
 
-    if (!(window->owner->hideMainWindow == HM_SHOW
-        || (window->owner->hideMainWindow == HM_AUTO && ((ic2 && ic2->switchBySwitchKey) || FcitxInstanceGetCurrentState(window->owner->owner) == IS_ACTIVE)))) {
+    if (!MainWindowShouldShow(mainWindow)) {
         return;
     }
 

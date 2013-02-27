@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-02-27 09:19-0500\n"
+"POT-Creation-Date: 2013-02-27 09:59-0500\n"
 "PO-Revision-Date: 2013-01-17 15:29+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/fcitx/"
@@ -541,8 +541,8 @@ msgstr "CLASSIC mit Unterstützung von Skins"
 #: src/ui/classic/fcitx-classic-ui.desc:30
 #: src/ui/classic/fcitx-classic-ui.desc:36
 #: src/ui/classic/fcitx-classic-ui.desc:41
-#: src/ui/classic/fcitx-classic-ui.desc:50
-#: src/ui/classic/fcitx-classic-ui.desc:55
+#: src/ui/classic/fcitx-classic-ui.desc:51
+#: src/ui/classic/fcitx-classic-ui.desc:56
 msgid "ClassicUI"
 msgstr "Klassik Oberfläche"
 
@@ -1214,8 +1214,12 @@ msgstr ""
 msgid "Hall of Shame for Linux IME Support"
 msgstr ""
 
-#: src/ui/classic/fcitx-classic-ui.desc:46
+#: src/ui/classic/fcitx-classic-ui.desc:47
 msgid "Hide"
+msgstr ""
+
+#: src/ui/classic/fcitx-classic-ui.desc:46
+msgid "Hide when tray icon is available"
 msgstr ""
 
 #: src/module/vk/vk.c:59
@@ -2267,7 +2271,7 @@ msgstr "Oberfläche"
 msgid "Skin Author"
 msgstr ""
 
-#: src/ui/classic/fcitx-classic-ui.desc:58 src/ui/classic/skin.desc:3
+#: src/ui/classic/fcitx-classic-ui.desc:59 src/ui/classic/skin.desc:3
 msgid "Skin Name"
 msgstr ""
 
@@ -2373,7 +2377,7 @@ msgstr "Eingabemethode"
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "Fehler beim Starten von XIM. Läuft bereits ein anderer XIM Deamon %s?"
 
-#: src/ui/classic/fcitx-classic-ui.desc:48
+#: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
 msgstr ""
 
@@ -2726,7 +2730,7 @@ msgstr ""
 msgid "User Phrase Color"
 msgstr "Farbe nutzerdefinierter Phrasen"
 
-#: src/ui/classic/fcitx-classic-ui.desc:53
+#: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
 msgstr ""
 

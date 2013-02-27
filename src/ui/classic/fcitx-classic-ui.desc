@@ -40,11 +40,12 @@ Description=Use System Tray Icon
 
 [ClassicUI/MainWindowHideMode]
 Type=Enum
-EnumCount=3
+EnumCount=4
 Enum0=Show
 Enum1=Auto
-Enum2=Hide
-DefaultValue=Hide
+Enum2=Hide when tray icon is available
+Enum3=Hide
+DefaultValue=Hide when tray icon is available
 Description=Status Panel Hide Mode
 
 [ClassicUI/VerticalList]

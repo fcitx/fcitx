@@ -43,7 +43,8 @@ struct _FcitxClassicUIStatus;
 typedef enum _HIDE_MAINWINDOW {
     HM_SHOW = 0,
     HM_AUTO = 1,
-    HM_HIDE = 2
+    HM_HIDE_WHEN_TRAY_AVAILABLE = 2,
+    HM_HIDE = 3
 } HIDE_MAINWINDOW;
 
 /**

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-02-27 09:19-0500\n"
+"POT-Creation-Date: 2013-02-27 09:59-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2528,8 +2528,8 @@ msgstr ""
 #: src/ui/classic/fcitx-classic-ui.desc:30
 #: src/ui/classic/fcitx-classic-ui.desc:36
 #: src/ui/classic/fcitx-classic-ui.desc:41
-#: src/ui/classic/fcitx-classic-ui.desc:50
-#: src/ui/classic/fcitx-classic-ui.desc:55
+#: src/ui/classic/fcitx-classic-ui.desc:51
+#: src/ui/classic/fcitx-classic-ui.desc:56
 msgid "ClassicUI"
 msgstr ""
 
@@ -2574,18 +2574,22 @@ msgid "Auto"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:46
+msgid "Hide when tray icon is available"
+msgstr ""
+
+#: src/ui/classic/fcitx-classic-ui.desc:47
 msgid "Hide"
 msgstr ""
 
-#: src/ui/classic/fcitx-classic-ui.desc:48
+#: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
 msgstr ""
 
-#: src/ui/classic/fcitx-classic-ui.desc:53
+#: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
 msgstr ""
 
-#: src/ui/classic/fcitx-classic-ui.desc:58 src/ui/classic/skin.desc:3
+#: src/ui/classic/fcitx-classic-ui.desc:59 src/ui/classic/skin.desc:3
 msgid "Skin Name"
 msgstr ""
 
