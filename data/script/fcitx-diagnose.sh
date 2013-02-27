@@ -131,6 +131,94 @@ get_locale() {
     echo "POSIX"
 }
 
+_detectDE_XDG_CURRENT() {
+    case "${XDG_CURRENT_DESKTOP}" in
+        GNOME)
+            DE=gnome
+            ;;
+        KDE)
+            DE=kde
+            ;;
+        LXDE)
+            DE=lxde
+            ;;
+        XFCE)
+            DE=xfce
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+_detectDE_classic() {
+    if [ x"$KDE_FULL_SESSION" = x"true" ]; then
+        DE=kde
+    elif xprop -root KDE_FULL_SESSION 2> /dev/null | \
+        grep ' = \"true\"$' > /dev/null 2>&1; then
+        DE=kde
+    elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then
+        DE=gnome
+    elif [ x"$MATE_DESKTOP_SESSION_ID" != x"" ]; then
+        DE=mate
+    elif $(dbus-send --print-reply --dest=org.freedesktop.DBus \
+        /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner \
+        string:org.gnome.SessionManager > /dev/null 2>&1); then
+        DE=gnome
+    elif xprop -root _DT_SAVE_MODE 2> /dev/null | \
+        grep ' = \"xfce4\"$' >/dev/null 2>&1; then
+        DE=xfce
+    elif xprop -root 2> /dev/null | \
+        grep -i '^xfce_desktop_window' >/dev/null 2>&1; then
+        DE=xfce
+    else
+        return 1
+    fi
+}
+
+_detectDE_SESSION() {
+    case "$DESKTOP_SESSION" in
+        gnome)
+            DE=gnome
+            ;;
+        LXDE|Lubuntu)
+            DE=lxde
+            ;;
+        xfce|xfce4|'Xfce Session')
+            DE=xfce
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+_detectDE_uname() {
+    case "$(uname 2>/dev/null)" in
+        Darwin)
+            DE=darwin
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+detectDE() {
+    # see https://bugs.freedesktop.org/show_bug.cgi?id=34164
+    unset GREP_OPTIONS
+
+    _detectDE_XDG_CURRENT || _detectDE_classic || \
+        _detectDE_SESSION || _detectDE_uname
+    if [ x"$DE" = x"gnome" ]; then
+        # gnome-default-applications-properties is only available in GNOME 2.x
+        # but not in GNOME 3.x
+        which gnome-default-applications-properties > /dev/null 2>&1 || \
+            DE="gnome3"
+    fi
+}
+
+detectDE
 
 #############################
 # print
@@ -444,6 +532,13 @@ check_system() {
     else
         write_paragraph "$(print_not_found '/etc/os-release')"
     fi
+    write_order_list "$(_ "Desktop Environment.")"
+    if [ -z "$DE" ]; then
+        write_eval "$(_ 'Cannot determine desktop environment.')"
+    else
+        write_eval "$(_ 'Desktop environment is ${1}.')" \
+            "$(code_inline "${DE}")"
+    fi
 }
 
 check_env() {
@@ -532,6 +627,92 @@ EOF
     fi
 }
 
+_find_config_gtk() {
+    [ -n "${_config_tool_gtk_exe}" ] && {
+        echo "${_config_tool_gtk_exe}"
+        return 0
+    }
+    local config_gtk
+    config_gtk="$(which "fcitx-config-gtk" 2> /dev/null)" || return 1
+    echo "${config_gtk}"
+    _config_tool_gtk_exe="${config_gtk}"
+}
+
+_check_config_gtk_version() {
+    local version=$1
+    local config_gtk
+    [ -z "${_config_tool_gtk_version}" ] && {
+        config_gtk="$(_find_config_gtk)" || return 1
+        ld_info="$(ldd "$config_gtk" 2> /dev/null)" ||
+        ld_info="$(objdump -p "$config_gtk" 2> /dev/null)" || return 1
+        if [[ $ld_info =~ libgtk[-._a-zA-Z0-9]*3[-._a-zA-Z0-9]*\.so ]]; then
+            _config_tool_gtk_version=3
+        elif [[ $ld_info =~ libgtk[-._a-zA-Z0-9]*2[-._a-zA-Z0-9]*\.so ]]; then
+            _config_tool_gtk_version=2
+        else
+            return 1
+        fi
+    }
+    [ "${_config_tool_gtk_version}" = "$version" ]
+}
+
+_check_config_gtk() {
+    local version=$1
+    local config_gtk config_gtk_name
+    write_order_list_eval "$(_ 'Config GUI for gtk${1}:')" "${version}"
+    if ! config_gtk="$(which "fcitx-config-gtk${version}" 2> /dev/null)"; then
+        if ! _check_config_gtk_version "${version}"; then
+            write_error_eval \
+                "$(_ "Config GUI for gtk${1} not found.")" "${version}"
+            return 1
+        else
+            config_gtk=$(_find_config_gtk)
+            config_gtk_name="fcitx-config-gtk"
+        fi
+    else
+        config_gtk_name="fcitx-config-gtk${version}"
+    fi
+    write_eval "$(_ 'Found ${1} at ${2}.')" \
+        "$(code_inline "${config_gtk_name}")" \
+        "$(code_inline "${config_gtk}")"
+}
+
+_check_config_kcm() {
+    local kcm_shell config_kcm
+    write_order_list "$(_ 'Config GUI for kde:')"
+    if ! kcm_shell="$(which "kcmshell4" 2> /dev/null)"; then
+        write_error "$(print_not_found 'kcmshell4')"
+        return 1
+    fi
+    config_kcm="$(kcmshell4 --list 2> /dev/null | grep -i fcitx)" && {
+        write_paragraph "$(_ 'Found fcitx kcm module.')"
+        write_quote_str "${config_kcm}"
+        return 0
+    }
+    return 1
+}
+
+check_config_ui() {
+    local IFS=$'\n'
+    write_title 1 "$(_ "Fcitx Configure UI.")"
+    write_order_list "$(_ 'Config Tool Wrapper:')"
+    if ! fcitx_configtool="$(which fcitx-configtool 2> /dev/null)"; then
+        write_error "$(_ "Cannot find fcitx-configtool executable!")"
+    else
+        write_eval "$(_ 'Found fcitx-configtool at ${1}.')" \
+            "$(code_inline "${fcitx_configtool}")"
+    fi
+    local config_backend_found=0
+    _check_config_gtk 2 && config_backend_found=1
+    _check_config_gtk 3 && config_backend_found=1
+    _check_config_kcm && config_backend_found=1
+    if ((!config_backend_found)) && [[ -n "$DISPLAY$WAYLAND_DISPLAY" ]]; then
+        write_error_eval "$(_ 'Cannot find a GUI config tool, please install one of ${1}, ${2}, or ${3}.')" \
+            "$(code_inline kcm-fcitx)" "$(code_inline fcitx-config-gtk2)" \
+            "$(code_inline fcitx-config-gtk3)"
+    fi
+}
+
 
 #############################
 # front end
@@ -604,7 +785,7 @@ check_xim() {
     if ! str_match_regex '.[Uu][Tt][Ff]-?8$' "${_LC_CTYPE}"; then
         write_order_list "$(_ "XIM encoding:")"
         write_error_eval \
-            "$(_ 'Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have trouble commiting strings using XIM.')" "${_LC_CTYPE}"
+            "$(_ 'Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have trouble committing strings using XIM.')" "${_LC_CTYPE}"
     fi
 }
 
@@ -626,7 +807,7 @@ _check_toolkit_env() {
         else
             write_error_eval \
                 "$(_ 'You may have trouble using fcitx in ${1} programs.')" \
-                 "${name}"
+                "${name}"
             if [ "${!env_name}" = "ibus" ] && [ "${name}" = 'qt' ]; then
                 __need_blank_line=0
                 gnome_36_link
@@ -909,6 +1090,7 @@ check_istty
 check_system
 check_env
 check_fcitx
+check_config_ui
 
 ((_check_frontend)) && {
     write_title 1 "$(_ "Frontends setup.")"
