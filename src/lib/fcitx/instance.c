@@ -102,7 +102,7 @@ void Usage()
            "\t-d\t\t\trun as daemon(default)\n"
            "\t-D\t\t\tdon't run as daemon\n"
            "\t-s[sleep time]\t\toverride delay start time in config file, 0 for immediate start\n"
-           "\t-v\t\t\tdisplay the version information and exit\n"
+           "\t-v, --version\t\tdisplay the version information and exit\n"
            "\t-u, --ui\t\tspecify the user interface to use\n"
            "\t--enable\t\tspecify a comma separated list for addon that will override the enable option\n"
            "\t--disable\t\tspecify a comma separated list for addon that will explicitly disabled,\n"
@@ -476,6 +476,7 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
         {"replace", 0, 0, 0},
         {"enable", 1, 0, 0},
         {"disable", 1, 0, 0},
+        {"version", 0, 0, 0},
         {"help", 0, 0, 0},
         {NULL, 0, 0, 0}
     };
@@ -509,6 +510,11 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
                     instance->disableList = fcitx_utils_split_string(optarg, ',');
                 }
                 break;
+            case 4:
+                instance->quietQuit = true;
+                Version();
+                return false;
+                break;
             default:
                 instance->quietQuit = true;
                 Usage();
@@ -532,13 +538,16 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
             overrideDelay = atoi(optarg);
             break;
         case 'h':
+            instance->quietQuit = true;
             Usage();
             return false;
         case 'v':
+            instance->quietQuit = true;
             Version();
             return false;
             break;
         default:
+            instance->quietQuit = true;
             Usage();
             return false;
         }
