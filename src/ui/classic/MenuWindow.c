@@ -304,9 +304,9 @@ void XlibMenunPaintDivLine(XlibMenu * menu, cairo_t* cr, int line_y)
     FcitxSkin *sc = &classicui->skin;
     cairo_save(cr);
     fcitx_cairo_set_color(cr, &sc->skinMenu.lineColor);
-    cairo_set_line_width(cr, 2);
-    cairo_move_to(cr, 3, line_y + 3);
-    cairo_line_to(cr, window->contentWidth - 3, line_y + 3);
+    cairo_set_line_width(cr, 1);
+    cairo_move_to(cr, 3, line_y + 2.5);
+    cairo_line_to(cr, window->contentWidth - 3, line_y + 2.5);
     cairo_stroke(cr);
     cairo_restore(cr);
 }

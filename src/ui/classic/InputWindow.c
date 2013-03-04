@@ -531,10 +531,10 @@ void InputWindowPaint(FcitxXlibWindow* window, cairo_t* c)
     FcitxCairoTextContextFree(ctc);
 
     cairo_restore(c);
-    cairo_save(c);
 
     // draw cursor
     if (FcitxMessagesGetMessageCount(msgup) && FcitxInputStateGetShowCursor(input)) {
+        cairo_save(c);
         int cursorY1, cursorY2;
         if (sc->skinFont.respectDPI) {
             cursorY1 = sc->skinInputBar.iInputPos;
@@ -546,12 +546,13 @@ void InputWindowPaint(FcitxXlibWindow* window, cairo_t* c)
         }
 
         fcitx_cairo_set_color(c, &sc->skinInputBar.cursorColor);
-        cairo_move_to(c, inputWindow->pixelCursorPos, cursorY1);
-        cairo_line_to(c, inputWindow->pixelCursorPos, cursorY2);
+        cairo_set_line_width(c, 1);
+        cairo_move_to(c, inputWindow->pixelCursorPos + 0.5, cursorY1);
+        cairo_line_to(c, inputWindow->pixelCursorPos + 0.5, cursorY2);
         cairo_stroke(c);
-    }
 
-    cairo_restore(c);
+        cairo_restore(c);
+    }
 
     FcitxMessagesSetMessageChanged(msgup, false);
     FcitxMessagesSetMessageChanged(msgdown, false);
