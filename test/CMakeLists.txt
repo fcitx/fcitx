@@ -54,6 +54,16 @@ add_executable(testdbuslaunch testdbuslaunch.c
                ../src/module/dbus/dbuslauncher.c
                )
 
+if(_ENABLE_DBUS)
+  include_directories(${DBUS_INCLUDE_DIRS})
+  link_directories(${DBUS_LIBRARY_DIRS})
+  add_executable(testdbussocket testdbussocket.c
+                 ../src/module/dbus/dbussocket.c)
+  target_link_libraries(testdbussocket ${DBUS_LIBRARIES} fcitx-utils)
+  add_test(NAME testdbussocket COMMAND testdbussocket)
+endif()
+
+
 target_link_libraries(testdbuslaunch fcitx-utils)
 
 add_test(NAME testconfig

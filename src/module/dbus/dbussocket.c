@@ -6,9 +6,11 @@ dbus_bool_t DBusAddWatch(DBusWatch *watch, void *data)
     FcitxDBusWatch *w;
     FcitxDBusWatch **watches = (FcitxDBusWatch**) data;
 
-    for (w = *watches; w; w = w->next)
-        if (w->watch == watch)
+    for (w = *watches; w; w = w->next) {
+        if (w->watch == watch) {
             return TRUE;
+        }
+    }
 
     if (!(w = fcitx_utils_new(FcitxDBusWatch)))
         return FALSE;
@@ -22,13 +24,21 @@ dbus_bool_t DBusAddWatch(DBusWatch *watch, void *data)
 void DBusRemoveWatch(DBusWatch *watch, void *data)
 {
     FcitxDBusWatch *w;
-    FcitxDBusWatch *next;
+    FcitxDBusWatch *next, *prev;
     FcitxDBusWatch **watches = (FcitxDBusWatch**)data;
 
+    prev = NULL;
     for (w = *watches;w;w = next) {
         next = w->next;
         if (w->watch == watch) {
             free(w);
+            if (prev) {
+                prev->next = next;
+            } else {
+                *watches = next;
+            }
+        } else {
+            prev = w;
         }
     }
 }
