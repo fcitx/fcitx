@@ -336,7 +336,7 @@ boolean MapPY(FcitxPinyinConfig* pyconfig, const char* strPYorigin, char strMap[
 
     size_t          len = strlen(strPY);
 
-    if (pyconfig->bMisstypeNGGN && strPY[len - 1] == 'n' && strPY[len - 2] == 'g') {
+    if (pyconfig->bMisstypeNGGN && len > 2 && strPY[len - 1] == 'n' && strPY[len - 2] == 'g') {
         strPY[len - 2] = 'n';
         strPY[len - 1] = 'g';
     }
