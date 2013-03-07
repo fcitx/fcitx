@@ -694,6 +694,23 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
             }
 
             retVal = FcitxCandidateWordChooseByIndex(candList, 0);
+        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
+            if (FcitxInputStateGetRawInputBufferSize(input)) {
+                char* outputString = FcitxInputStateGetOutputString(input);
+                strcpy(outputString, "");
+                if (pystate->iPYSelected) {
+                    for (i = 0; i < pystate->iPYSelected; i++) {
+                        strcat(outputString, pystate->pySelected[i].strHZ);
+                    }
+                }
+
+                for (i = 0; i < pystate->findMap.iHZCount; i++) {
+                    strcat(outputString, pystate->findMap.strPYParsed[i]);
+                }
+                return IRV_COMMIT_STRING;
+            } else {
+                return IRV_TO_PROCESS;
+            }
         } else if (FcitxHotkeyIsHotKey(sym, state, pystate->pyconfig.hkPYDelUserPhr)) {
             if (!pystate->bIsPYDelUserPhr) {
                 int i;
