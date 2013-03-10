@@ -18,6 +18,7 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+#include "fcitx-utils/log.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/mman.h>
@@ -78,11 +79,17 @@ main(int argc, char *argv[])
 {
     int ifd;
     int ofd;
-    if (argc != 3)
-        exit(1);
-    ifd = open(argv[1], O_RDONLY);
-    ofd = open(argv[2], O_WRONLY | O_TRUNC | O_CREAT, 0644);
-    if (ifd < 0 || ofd < 0)
-        return 1;
-    return compile_dict(ifd, ofd);
+    const char *action = argv[1];
+    if (strcmp(action, "--comp-dict") == 0) {
+        if (argc != 4) {
+            FcitxLog(ERROR, "Wrong number of arguments.");
+            exit(1);
+        }
+        ifd = open(argv[2], O_RDONLY);
+        ofd = open(argv[3], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+        if (ifd < 0 || ofd < 0)
+            return 1;
+        return compile_dict(ifd, ofd);
+    }
+    return 1;
 }

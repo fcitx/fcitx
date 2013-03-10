@@ -136,6 +136,7 @@ set(COMP_SPELL_DICT
 add_custom_command(
   OUTPUT "${SPELL_EN_DICT}"
   DEPENDS "${SPELL_EN_DICT_SRC}" "${COMP_SPELL_DICT}" spell-en-extract
-  COMMAND "${COMP_SPELL_DICT}" "${SPELL_EN_DICT_SRC}" "${SPELL_EN_DICT}")
+  COMMAND "${COMP_SPELL_DICT}" --comp-dict
+  "${SPELL_EN_DICT_SRC}" "${SPELL_EN_DICT}")
 add_custom_target(spell_en_dict ALL DEPENDS "${SPELL_EN_DICT}")
 install(FILES "${SPELL_EN_DICT}" DESTINATION "${pkgdatadir}/spell")
