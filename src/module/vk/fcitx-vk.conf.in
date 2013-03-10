@@ -8,3 +8,4 @@ Library=fcitx-vk.so
 Type=SharedLibrary
 Dependency=fcitx-x11
 SubConfig=Virtual Key Board:native:data/vk.conf,fcitx:domain
+Priority=90
