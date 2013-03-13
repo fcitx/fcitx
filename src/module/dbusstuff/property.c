@@ -23,6 +23,10 @@
 #include <dbus/dbus.h>
 #include "property.h"
 
+#ifndef DBUS_ERROR_UNKNOWN_PROPERTY
+#define DBUS_ERROR_UNKNOWN_PROPERTY           "org.freedesktop.DBus.Error.UnknownProperty"
+#endif
+
 DBusMessage* FcitxDBusPropertyGet(void* arg, const FcitxDBusPropertyTable* propertTable, DBusMessage* message)
 {
     DBusError error;

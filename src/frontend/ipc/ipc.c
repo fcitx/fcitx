@@ -34,10 +34,6 @@
 
 #define GetIPCIC(ic) ((FcitxIPCIC*) (ic)->privateic)
 
-#ifndef DBUS_ERROR_UNKNOWN_PROPERTY
-#define DBUS_ERROR_UNKNOWN_PROPERTY           "org.freedesktop.DBus.Error.UnknownProperty"
-#endif
-
 typedef struct _FcitxIPCCreateICPriv {
     DBusMessage* message;
     DBusConnection* conn;
