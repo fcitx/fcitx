@@ -52,7 +52,19 @@ typedef struct {
     struct wl_shm *shm;
     uint32_t shm_formats;
     struct wl_data_device_manager *data_device_manager;
+    struct wl_list input_list;
 } FcitxWayland;
+
+typedef struct {
+    FcitxWayland *wl;
+    struct wl_list link;
+    uint32_t seat_id;
+    struct wl_seat *seat;
+    struct wl_pointer *pointer;
+    struct wl_keyboard *keyboard;
+    struct wl_touch *touch;
+    struct wl_data_device *data_device;
+} FcitxWaylandInput;
 
 typedef struct {
     FcitxWaylandHandleGlobalAdded added;
