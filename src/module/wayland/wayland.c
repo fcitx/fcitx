@@ -52,35 +52,41 @@ typedef struct {
     size_t limit;
 } FxWaylandReadData;
 
+static inline void
+FxWaylandReadDataEnsureSize(FxWaylandReadData *read_data, size_t size)
+{
+    size_t whole_len = read_data->len + size;
+    if (whole_len < read_data->alloc)
+        return;
+    read_data->alloc = fcitx_utils_align_to(whole_len + 1, 4096);
+    read_data->buff = realloc(read_data->buff, read_data->alloc);
+}
+
+#define READ_SIZE (4096)
+
 static void
 FxWaylandReadTaskHandler(FcitxWaylandTask *task, uint32_t events)
 {
     FxWaylandReadData *read_data;
     read_data = fcitx_container_of(task, FxWaylandReadData, task);
-    if (events & EPOLLERR || events & EPOLLHUP)
-        goto done;
     size_t len;
-    char buff[4096];
-    len = read(task->fd, buff, sizeof(buff));
-    if (len <= 0)
-        goto done;
+    boolean first_time = true;
 
-    size_t whole_len = len + read_data->len;
-    if (read_data->limit && whole_len > read_data->limit) {
-        whole_len = read_data->limit;
-        len = whole_len - read_data->len;
-    }
-    if (whole_len >= read_data->alloc) {
-        read_data->alloc = fcitx_utils_align_to(whole_len + 1, 4096);
-        read_data->buff = realloc(read_data->buff, read_data->alloc);
-    }
-    memcpy(read_data->buff + read_data->len, buff, len);
-    read_data->len = whole_len;
-    read_data->buff[whole_len] = '\0';
-    if (!read_data->limit || whole_len < read_data->limit) {
-        return;
+    while (true) {
+        FxWaylandReadDataEnsureSize(read_data, READ_SIZE);
+        len = read(task->fd, read_data->buff + read_data->len, READ_SIZE);
+        read_data->len += len;
+        if (first_time && (len <= 0 || events & EPOLLERR || events & EPOLLHUP))
+            goto done;
+        if (len <= 0) {
+            if (!read_data->limit || read_data->len < read_data->limit) {
+                return;
+            }
+            break;
+        }
     }
 done:
+    read_data->buff[read_data->len] = '\0';
     fx_epoll_del_task(read_data->wl->epoll_fd, task);
     close(task->fd);
     read_data->cb(read_data->data, read_data->buff, read_data->len);
@@ -207,9 +213,11 @@ typedef struct {
     struct wl_proxy **ret;
     void (*destroy)(struct wl_proxy *proxy);
     boolean failed;
+    uint32_t ver;
 } FxWaylandSingletonListener;
 
-#define FXWL_DEF_SINGLETON(_wl, field, name, _iface, _listener, _destroy) { \
+#define FXWL_DEF_SINGLETON(_wl, field, name, _iface, _listener,         \
+                           _destroy, _ver) {                            \
         .id = -1,                                                       \
         .iface_name = name,                                             \
         .iface = &_iface,                                               \
@@ -218,6 +226,7 @@ typedef struct {
         .listener = (void (**)())_listener,                             \
         .destroy = (void (*)(struct wl_proxy*))_destroy,                \
         .failed = true,                                                 \
+        .ver = _ver                                                     \
     }
 
 static void
@@ -230,8 +239,8 @@ FxWaylandHandleSingletonAdded(void *data, uint32_t name, const char *iface,
         singleton->failed = true;
         return;
     }
-    struct wl_proxy *proxy = wl_registry_bind(wl->registry, name,
-                                              singleton->iface, ver);
+    struct wl_proxy *proxy =
+        wl_registry_bind(wl->registry, name, singleton->iface, singleton->ver);
     printf("%s, %s, %s, %x\n", __func__, iface, singleton->iface_name, name);
     *singleton->ret = proxy;
     singleton->failed = false;
@@ -281,14 +290,14 @@ FxWaylandCreate(FcitxInstance *instance)
     FxWaylandSingletonListener singleton_listeners[] = {
         FXWL_DEF_SINGLETON(wl, compositor, "wl_compositor",
                            wl_compositor_interface, NULL,
-                           wl_compositor_destroy),
+                           wl_compositor_destroy, 2),
         FXWL_DEF_SINGLETON(wl, shell, "wl_shell", wl_shell_interface, NULL,
-                           wl_shell_destroy),
+                           wl_shell_destroy, 1),
         FXWL_DEF_SINGLETON(wl, shm, "wl_shm", wl_shm_interface,
-                           &fx_shm_listenr, wl_shm_destroy),
+                           &fx_shm_listenr, wl_shm_destroy, 1),
         FXWL_DEF_SINGLETON(wl, data_device_manager, "wl_data_device_manager",
                            wl_data_device_manager_interface, NULL,
-                           wl_data_device_manager_destroy),
+                           wl_data_device_manager_destroy, 1),
     };
 
     const int singleton_count =
