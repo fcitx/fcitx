@@ -76,6 +76,8 @@ typedef struct _HookStack {
 
 DEFINE_HOOK(PreInputFilter, FcitxKeyFilterHook, keyfilter)
 DEFINE_HOOK(PostInputFilter, FcitxKeyFilterHook, keyfilter)
+DEFINE_HOOK(PreReleaseInputFilter, FcitxKeyFilterHook, keyfilter)
+DEFINE_HOOK(PostReleaseInputFilter, FcitxKeyFilterHook, keyfilter)
 DEFINE_HOOK(OutputFilter, FcitxStringFilterHook, stringfilter)
 DEFINE_HOOK(CommitFilter, FcitxStringFilterHook, stringfilter)
 DEFINE_HOOK(HotkeyFilter, FcitxHotkeyHook, hotkey)
@@ -104,6 +106,29 @@ void FcitxInstanceProcessPreInputFilter(FcitxInstance* instance, FcitxKeySym sym
 void FcitxInstanceProcessPostInputFilter(FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
 {
     HookStack* stack = GetPostInputFilter(instance);
+    stack = stack->next;
+    while (stack) {
+        if (stack->keyfilter.func(stack->keyfilter.arg, sym, state, retval))
+            break;
+        stack = stack->next;
+    }
+}
+
+void FcitxInstanceProcessPreReleaseInputFilter(FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
+{
+    HookStack* stack = GetPreReleaseInputFilter(instance);
+    stack = stack->next;
+    *retval = IRV_TO_PROCESS;
+    while (stack) {
+        if (stack->keyfilter.func(stack->keyfilter.arg, sym, state, retval))
+            break;
+        stack = stack->next;
+    }
+}
+
+void FcitxInstanceProcessPostReleaseInputFilter(FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
+{
+    HookStack* stack = GetPostReleaseInputFilter(instance);
     stack = stack->next;
     while (stack) {
         if (stack->keyfilter.func(stack->keyfilter.arg, sym, state, retval))
@@ -270,4 +295,17 @@ INPUT_RETURN_VALUE FcitxInstanceProcessHotkey(FcitxInstance* instance, FcitxKeyS
     }
     return out;
 }
+
+FCITX_EXPORT_API
+boolean FcitxDummyReleaseInputHook(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
+{
+    boolean* flag = arg;
+    if (!(*flag))
+        return false;
+    if (*retval == IRV_TO_PROCESS)
+        *retval = IRV_DO_NOTHING;
+    return true;
+}
+
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

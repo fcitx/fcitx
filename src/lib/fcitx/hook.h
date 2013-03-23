@@ -142,6 +142,26 @@ extern "C" {
      **/
     void FcitxInstanceRegisterPostInputFilter(struct _FcitxInstance* instance, FcitxKeyFilterHook hook);
     /**
+     * register pre release input filter
+     *
+     * @param instance fcitx instance
+     * @param hook new hook
+     * @return void
+     *
+     * @since 4.2.8
+     **/
+    void FcitxInstanceRegisterPreReleaseInputFilter(struct _FcitxInstance* instance, FcitxKeyFilterHook hook) ;
+    /**
+     * register post release input filter
+     *
+     * @param instance fcitx instance
+     * @param hook new hook
+     * @return void
+     *
+     * @since 4.2.8
+     **/
+    void FcitxInstanceRegisterPostReleaseInputFilter(struct _FcitxInstance* instance, FcitxKeyFilterHook hook);
+    /**
      * register ouput string filter
      *
      * @param instance fcitx instance
@@ -263,6 +283,11 @@ extern "C" {
      * @since 4.2.6
      **/
     void FcitxInstanceRegisterICStateChangedHook(struct _FcitxInstance* instance, FcitxICEventHook hook);
+
+    boolean FcitxDummyReleaseInputHook(void* arg, FcitxKeySym sym,
+                                        unsigned int state,
+                                        INPUT_RETURN_VALUE *retval);
+
 
 #ifdef __cplusplus
 }

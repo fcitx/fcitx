@@ -700,13 +700,19 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     }
 
     if (retVal == IRV_TO_PROCESS && event == FCITX_RELEASE_KEY) {
-         if (currentIM && currentIM->DoReleaseInput) {
+        FcitxInstanceProcessPreReleaseInputFilter(instance, sym, state, &retVal);
+
+         if (retVal == IRV_TO_PROCESS && currentIM && currentIM->DoReleaseInput) {
             retVal = currentIM->DoReleaseInput(currentIM->klass, sym, state);
-            if (retVal == IRV_TO_PROCESS)
-                retVal = IRV_DONOT_PROCESS;
+         }
+
+        if (retVal == IRV_TO_PROCESS) {
+            FcitxInstanceProcessPostReleaseInputFilter(instance, sym, state, &retVal);
         }
-        else
+
+        if (retVal == IRV_TO_PROCESS) {
             retVal = IRV_DONOT_PROCESS;
+        }
     }
 
     /* the key processed before this phase is very important,

@@ -160,6 +160,10 @@ void *VKCreate(FcitxInstance* instance)
     hk.func = VKPreFilter;
     FcitxInstanceRegisterPreInputFilter(instance, hk);
 
+    hk.arg = &vkstate->bVK;
+    hk.func = FcitxDummyReleaseInputHook;
+    FcitxInstanceRegisterPreReleaseInputFilter(instance, hk);
+
     FcitxIMEventHook resethk;
     resethk.arg = vkstate;
     resethk.func = VKReset;

@@ -116,6 +116,10 @@ void* IMSelectorCreate(FcitxInstance* instance)
     hk.func = IMSelectorPreFilter;
     FcitxInstanceRegisterPreInputFilter(instance, hk);
 
+    hk.arg = &imselector->triggered;
+    hk.func = FcitxDummyReleaseInputHook;
+    FcitxInstanceRegisterPreReleaseInputFilter(instance, hk);
+
     FcitxHotkeyHook hkhk;
     hkhk.arg = imselector;
     hkhk.hotkeyhandle = IMSelectorLocalTrigger;

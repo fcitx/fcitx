@@ -289,7 +289,6 @@ void *AutoEngCreate(FcitxInstance *instance)
     FcitxKeyFilterHook khk;
     khk.arg = autoEngState;
     khk.func = PreInputProcessAutoEng;
-
     FcitxInstanceRegisterPreInputFilter(instance, khk);
 
     khk.func = PostInputProcessAutoEng;

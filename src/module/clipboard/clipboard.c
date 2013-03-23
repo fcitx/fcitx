@@ -407,14 +407,18 @@ ClipboardCreate(FcitxInstance *instance)
 /* #endif */
     ApplyClipboardConfig(clipboard);
 
-    FcitxKeyFilterHook key_hook = {
-        .arg = clipboard,
-        .func = ClipboardPreHook
-    };
+    FcitxKeyFilterHook key_hook;
+
+    key_hook.arg = clipboard;
+    key_hook.func = ClipboardPreHook;
     FcitxInstanceRegisterPreInputFilter(instance, key_hook);
 
     key_hook.func = ClipboardPostHook;
     FcitxInstanceRegisterPostInputFilter(instance, key_hook);
+
+    key_hook.arg = &clipboard->active;
+    key_hook.func = FcitxDummyReleaseInputHook;
+    FcitxInstanceRegisterPreReleaseInputFilter(instance, key_hook);
 
     FcitxIMEventHook reset_hook = {
         .arg = clipboard,

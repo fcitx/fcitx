@@ -92,6 +92,8 @@ struct _FcitxInstance {
 
     struct _HookStack* hookPreInputFilter;
     struct _HookStack* hookPostInputFilter;
+    struct _HookStack* hookPreReleaseInputFilter;
+    struct _HookStack* hookPostReleaseInputFilter;
     struct _HookStack* hookOutputFilter;
     struct _HookStack* hookHotkeyFilter;
     struct _HookStack* hookResetInputHook;

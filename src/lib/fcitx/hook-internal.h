@@ -46,6 +46,27 @@ void FcitxInstanceProcessPreInputFilter(struct _FcitxInstance* instance, FcitxKe
  * @return void
  **/
 void FcitxInstanceProcessPostInputFilter(struct _FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
+/**
+ * do the preinput phase
+ *
+ * @param instance fcitx instance
+ * @param sym keysym
+ * @param state keystate
+ * @param retval input return val
+ * @return void
+ **/
+void FcitxInstanceProcessPreReleaseInputFilter(struct _FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
+
+/**
+ * do the postinput phase
+ *
+ * @param instance fcitx instance
+ * @param sym keysym
+ * @param state keystate
+ * @param retval input return val
+ * @return void
+ **/
+void FcitxInstanceProcessPostReleaseInputFilter(struct _FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
 
 /**
  * process hotkey phase

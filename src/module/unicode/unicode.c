@@ -79,6 +79,10 @@ void* UnicodeCreate(FcitxInstance* instance)
     kfhk.func = UnicodePreFilter;
     FcitxInstanceRegisterPreInputFilter(instance, kfhk);
 
+    kfhk.arg = &uni->enable;
+    kfhk.func = FcitxDummyReleaseInputHook;
+    FcitxInstanceRegisterPreReleaseInputFilter(instance, kfhk);
+
     FcitxHotkeyHook hkhk;
     hkhk.arg = uni;
     hkhk.hotkey = uni->key;

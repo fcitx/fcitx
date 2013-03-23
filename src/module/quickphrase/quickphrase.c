@@ -186,6 +186,10 @@ void *QuickPhraseCreate(FcitxInstance *instance)
     hk.func = QuickPhrasePreFilter;
     FcitxInstanceRegisterPreInputFilter(instance, hk);
 
+    hk.arg = &qpstate->enabled;
+    hk.func = FcitxDummyReleaseInputHook;
+    FcitxInstanceRegisterPreReleaseInputFilter(instance, hk);
+
     FcitxIMEventHook resethk;
     resethk.arg = qpstate;
     resethk.func = QuickPhraseReset;
