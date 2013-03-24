@@ -67,7 +67,7 @@ EnumCount=3
 Enum0=AdjustNo
 Enum1=AdjustFast
 Enum2=AdjustFreq
-DefaultValue=AdjustFast
+DefaultValue=AdjustFreq
 Description=Rule of Candidate Phrase Order
 
 [Pinyin/FreqOrder]
