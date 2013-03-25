@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-02-27 10:04-0500\n"
-"PO-Revision-Date: 2013-01-17 15:29+0000\n"
+"POT-Creation-Date: 2013-03-25 18:23-0400\n"
+"PO-Revision-Date: 2013-02-28 14:22+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -84,7 +84,7 @@ msgstr ""
 msgid "/XIM"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1601
+#: src/lib/fcitx/ime.c:1607
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -420,17 +420,17 @@ msgstr "候補単語番号"
 msgid "Cangjie"
 msgstr "Cangjie"
 
-#: src/im/pinyin/py.c:1719
+#: src/im/pinyin/py.c:1736
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: src/im/pinyin/py.c:1782
+#: src/im/pinyin/py.c:1799
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
 
-#: src/im/pinyin/py.c:1656
+#: src/im/pinyin/py.c:1673
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
@@ -508,9 +508,8 @@ msgid "CenterRight"
 msgstr ""
 
 #: data/fcitx-configtool.desktop.in:4
-#, fuzzy
 msgid "Change Fcitx Configuration"
-msgstr "Fcitx設定ツール"
+msgstr ""
 
 #: src/im/table/table.desc:127
 msgid "Choose"
@@ -572,7 +571,7 @@ msgstr ""
 msgid "Clear local Input Method"
 msgstr ""
 
-#: src/module/imselector/imselector.c:318
+#: src/module/imselector/imselector.c:322
 msgid "Clear local input method"
 msgstr ""
 
@@ -587,7 +586,7 @@ msgstr ""
 msgid "Clipboard"
 msgstr ""
 
-#: src/module/vk/vk.c:208
+#: src/module/vk/vk.c:212
 msgid "Close virtual keyboard"
 msgstr ""
 
@@ -678,11 +677,11 @@ msgstr "設定ファイル"
 msgid "Configuration."
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:494
+#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:497
 msgid "Configure"
 msgstr "設定"
 
-#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:493
+#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:496
 #: src/ui/kimpanel/kimpanel.c:754
 msgid "Configure Current Input Method"
 msgstr ""
@@ -721,7 +720,7 @@ msgstr "現在使えるIMのリスト"
 msgid "Current Input Method Name"
 msgstr "現在のIM"
 
-#: src/module/imselector/imselector.c:303
+#: src/module/imselector/imselector.c:307
 msgid "Current local input method is "
 msgstr ""
 
@@ -953,7 +952,7 @@ msgstr ""
 msgid "Exec"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:496
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:499
 msgid "Exit"
 msgstr "閉じる"
 
@@ -979,14 +978,12 @@ msgid "Fcitx Clipboard access"
 msgstr ""
 
 #: data/fcitx-configtool.desktop.in:2
-#, fuzzy
 msgid "Fcitx Configuration"
-msgstr "Fcitx設定ツール"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:697
-#, fuzzy
 msgid "Fcitx Configure UI."
-msgstr "Fcitx GUI 設定ツール"
+msgstr ""
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -1388,15 +1385,14 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1507 data/fcitx-autostart.desktop.in:3
+#: src/lib/fcitx/ime.c:1513 data/fcitx-autostart.desktop.in:3
 #: data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "入力メソッド"
 
 #: data/fcitx-configtool.desktop.in:3
-#, fuzzy
 msgid "Input Method Configuration"
-msgstr "入力メソッド"
+msgstr ""
 
 #: src/module/notificationitem/notificationitem.c:454
 #: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:260
@@ -1415,7 +1411,7 @@ msgstr ""
 msgid "Input Methods:"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1598
+#: src/lib/fcitx/ime.c:1604
 msgid "Input Speed: "
 msgstr "入力スピード"
 
@@ -1698,7 +1694,7 @@ msgstr "メニューのフォント"
 msgid "Menu Font Size"
 msgstr "メニューのフォントの大きさ"
 
-#: src/im/pinyin/py.c:2123
+#: src/im/pinyin/py.c:2140
 msgid "Migrate the old file path to the new one"
 msgstr ""
 
@@ -1782,7 +1778,7 @@ msgstr "フロントエンドが見つかりません"
 msgid "No input window"
 msgstr "入力ウィンドウなし"
 
-#: src/module/imselector/imselector.c:307
+#: src/module/imselector/imselector.c:311
 msgid "No local input method"
 msgstr ""
 
@@ -1815,7 +1811,7 @@ msgstr "なし"
 msgid "Number"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:432
+#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:435
 msgid "Online Help"
 msgstr "オンラインヘルプ"
 
@@ -1968,17 +1964,17 @@ msgstr ""
 msgid "Preferred Enchant provider"
 msgstr ""
 
-#: src/im/pinyin/py.c:763
+#: src/im/pinyin/py.c:780
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:765
+#: src/im/pinyin/py.c:782
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/module/autoeng/AutoEng.c:687 src/module/quickphrase/quickphrase.c:409
+#: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:413
 msgid "Press Enter to input text"
 msgstr ""
 
@@ -1986,11 +1982,11 @@ msgstr ""
 msgid "Press Switch Key twice to Change Mode"
 msgstr ""
 
-#: src/im/pinyin/py.c:722
+#: src/im/pinyin/py.c:739
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:735
+#: src/im/pinyin/py.c:752
 msgid "Press number to make word in frequent list"
 msgstr ""
 
@@ -2068,7 +2064,7 @@ msgstr ""
 msgid "Quick Phrase List"
 msgstr ""
 
-#: src/module/quickphrase/quickphrase.c:331
+#: src/module/quickphrase/quickphrase.c:335
 msgid "Quick Phrase: "
 msgstr ""
 
@@ -2116,7 +2112,7 @@ msgstr ""
 msgid "Remind:"
 msgstr ""
 
-#: src/im/pinyin/py.c:2038
+#: src/im/pinyin/py.c:2055
 msgid "Remind: "
 msgstr ""
 
@@ -2154,7 +2150,7 @@ msgstr ""
 msgid "Resize Margin Top"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:495
+#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:498
 #: src/ui/kimpanel/kimpanel.c:759
 msgid "Restart"
 msgstr ""
@@ -2209,7 +2205,7 @@ msgstr ""
 msgid "Scroll between Input Method"
 msgstr ""
 
-#: src/module/unicode/unicode.c:226
+#: src/module/unicode/unicode.c:230
 msgid "Search unicode"
 msgstr ""
 
@@ -2217,11 +2213,11 @@ msgstr ""
 msgid "Seconds sleep before fcitx really start"
 msgstr "fcitxが本当に起動するまでのスリープ時間(秒)"
 
-#: src/module/imselector/imselector.c:296
+#: src/module/imselector/imselector.c:300
 msgid "Select global input method: "
 msgstr ""
 
-#: src/module/imselector/imselector.c:297
+#: src/module/imselector/imselector.c:301
 msgid "Select local input method: "
 msgstr ""
 
@@ -2391,7 +2387,7 @@ msgstr "スキントレイアイコン"
 msgid "Space Line Color"
 msgstr ""
 
-#: src/module/quickphrase/quickphrase.c:240
+#: src/module/quickphrase/quickphrase.c:244
 #, c-format
 msgid "Space for %s Enter for %s"
 msgstr ""
@@ -2413,9 +2409,8 @@ msgid "Spell Hint"
 msgstr ""
 
 #: data/fcitx-autostart.desktop.in:4 data/fcitx.desktop.in:4
-#, fuzzy
 msgid "Start Input Method"
-msgstr "入力メソッド"
+msgstr ""
 
 #: src/frontend/xim/xim.c:245
 #, c-format
@@ -2423,19 +2418,16 @@ msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:49
-#, fuzzy
 msgid "Status Panel Hide Mode"
-msgstr "メインウインドウを非表示"
+msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:2
-#, fuzzy
 msgid "Status Panel Position X"
-msgstr "メインウインドウのX方向の位置"
+msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:8
-#, fuzzy
 msgid "Status Panel Position Y"
-msgstr "メインウインドウのY方向の位置"
+msgstr ""
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
@@ -2606,7 +2598,7 @@ msgstr "有効無効を切り替え"
 msgid "Toggle the word hint"
 msgstr ""
 
-#: src/module/autoeng/AutoEng.c:558
+#: src/module/autoeng/AutoEng.c:557
 msgid "Too long item for AutoEng"
 msgstr ""
 
@@ -2789,7 +2781,7 @@ msgstr "仮想キーボード"
 msgid "Virtual Key Board in order to input special character"
 msgstr ""
 
-#: src/module/vk/vk.c:175
+#: src/module/vk/vk.c:179
 msgid "Virtual Keyboard"
 msgstr "仮想キーボード"
 
@@ -2827,7 +2819,7 @@ msgstr ""
 msgid "X Keyboard Integration export with DBus"
 msgstr ""
 
-#: src/ui/classic/tray.c:164
+#: src/ui/classic/tray.c:159
 #, c-format
 msgid "X error %i on opcode send"
 msgstr ""
@@ -2945,7 +2937,7 @@ msgstr ""
 msgid "here"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1604
+#: src/lib/fcitx/ime.c:1610
 msgid "min Num of Characters: "
 msgstr ""
 
@@ -2978,15 +2970,3 @@ msgstr ""
 #, c-format
 msgid "your current font is: %s"
 msgstr "あなたの現在のフォントは %s です"
-
-#, fuzzy
-#~ msgid "Configure Fcitx"
-#~ msgstr "設定"
-
-#, fuzzy
-#~ msgid "Configure Input Method"
-#~ msgstr "現在のIM"
-
-#, fuzzy
-#~ msgid "Start Fcitx Input Method Framework"
-#~ msgstr "現在のIM"
