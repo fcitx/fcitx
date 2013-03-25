@@ -39,7 +39,7 @@
 #define ACTION_INDEX(ID) (((ID) & 0xffffffe0) >> 5)
 #define ACTION_MENU(ID) ((ID) & 0x0000001f)
 #define STATUS_ID(ISCOMP, IDX) ACTION_ID(0, (((ISCOMP) ? 0x100 : 0x000) + IDX + 8 + 1))
-#define STATUS_INDEX(ID) ((ACTION_INDEX(ID) & 0x1ff) - 8 - 1)
+#define STATUS_INDEX(ID) ((ACTION_INDEX(ID) & 0x0ff) - 8 - 1)
 #define STATUS_ISCOMP(ID) (!!(ACTION_INDEX(ID) & 0x100))
 
 static const UT_icd ut_int32_icd = {
