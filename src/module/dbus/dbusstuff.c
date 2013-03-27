@@ -266,7 +266,7 @@ void* DBusCreate(FcitxInstance* instance)
 
         dbusmodule->privconn = privconn;
 
-        char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-dbus-watcher");
+        char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "fcitx-dbus-watcher");
         char* pidstring = NULL;
         asprintf(&pidstring, "%d", dbusmodule->daemon.pid);
         char* args[] = {
