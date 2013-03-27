@@ -52,6 +52,7 @@ static void X11InitAtoms(FcitxX11 *x11priv);
 static void X11HandlerComposite(FcitxX11* x11priv, boolean enable);
 static boolean X11GetCompositeManager(FcitxX11* x11priv);
 static void X11InitScreen(FcitxX11* x11priv);
+static void X11DelayedCompositeTest(void* arg);
 
 static inline boolean RectIntersects(FcitxRect rt1, FcitxRect rt2);
 static inline int RectWidth(FcitxRect r);
@@ -112,6 +113,11 @@ void* X11Create(FcitxInstance* instance)
     }
 
     InitXErrorHandler(x11priv);
+
+    X11DelayedCompositeTest(x11priv);
+
+    FcitxInstanceAddTimeout(x11priv->owner, 5000,
+                            X11DelayedCompositeTest, x11priv);
     return x11priv;
 }
 
@@ -170,11 +176,6 @@ X11CompManagerSelectionNotify(FcitxX11 *x11priv, Atom selection, int subtype,
 static void
 X11ProcessEventRealInternal(FcitxX11 *x11priv)
 {
-    if (!x11priv->firstRun) {
-        x11priv->firstRun = true;
-        FcitxInstanceAddTimeout(x11priv->owner, 5000,
-                                X11DelayedCompositeTest, x11priv);
-    }
     XEvent event;
     while (XPending(x11priv->dpy)) {
         XNextEvent(x11priv->dpy, &event);

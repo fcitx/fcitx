@@ -60,7 +60,6 @@ typedef struct {
     int defaultScreen;
     double dpif;
     int dpi;
-    boolean firstRun;
 #ifdef HAVE_XFIXES
     boolean hasXfixes;
     int xfixesEventBase;

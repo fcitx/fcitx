@@ -79,10 +79,6 @@ void XlibMenuInit(XlibMenu* menu)
     FcitxCairoTextContextSet(ctc, classicui->menuFont, sc->skinFont.menuFontSize, dpi);
     menu->fontheight = FcitxCairoTextContextFontHeight(ctc);
     FcitxCairoTextContextFree(ctc);
-
-
-    menu->iPosX = 100;
-    menu->iPosY = 100;
 }
 
 
