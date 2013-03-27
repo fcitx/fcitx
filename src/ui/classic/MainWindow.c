@@ -65,7 +65,9 @@ static inline boolean MainWindowShouldShow(MainWindow* mainWindow)
     FcitxInputContext2* ic2 = (FcitxInputContext2*) FcitxInstanceGetCurrentIC(instance);
     return (window->owner->hideMainWindow == HM_SHOW)
         || (window->owner->hideMainWindow == HM_AUTO && ((ic2 && ic2->switchBySwitchKey) || FcitxInstanceGetCurrentState(window->owner->owner) == IS_ACTIVE))
-        || (window->owner->hideMainWindow == HM_HIDE_WHEN_TRAY_AVAILABLE && !(classicui->notificationItemAvailable || classicui->trayWindow->bTrayMapped));
+        || (window->owner->hideMainWindow == HM_HIDE_WHEN_TRAY_AVAILABLE
+            && !(classicui->notificationItemAvailable || classicui->trayWindow->bTrayMapped)
+            && classicui->waitDelayed == 0 && classicui->trayTimeout == 0);
 }
 
 

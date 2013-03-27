@@ -27,11 +27,11 @@
 
 #include "TrayWindow.h"
 
-int InitTray(Display* dpy, TrayWindow* win);
-int TrayFindDock(Display *dpy, TrayWindow* tray);
-XVisualInfo* TrayGetVisual(Display* dpy, TrayWindow* tray);
-Window TrayGetDock(Display* dpy, TrayWindow* tray);
-void TraySendOpcode(Display* dpy, Window dock,  TrayWindow* tray, long message,
+int TrayInitAtom(TrayWindow* win);
+int TrayFindDock(TrayWindow* tray);
+XVisualInfo* TrayGetVisual(TrayWindow* tray);
+Window TrayGetDock(TrayWindow* tray);
+void TraySendOpcode(TrayWindow* tray, long message,
                     long data1, long data2, long data3);
 
 #define SYSTEM_TRAY_REQUEST_DOCK    0

@@ -159,7 +159,7 @@ void* ClassicUICreate(FcitxInstance* instance)
 
     FcitxClassicUIAddFunctions(instance);
 
-    FcitxInstanceAddTimeout(instance, 0, ClassicUIDelayedInitTray, classicui);
+    classicui->waitDelayed = FcitxInstanceAddTimeout(instance, 0, ClassicUIDelayedInitTray, classicui);
 
     return classicui;
 }
@@ -188,8 +188,11 @@ void ClassicUIDelayedShowTray(void* arg)
     classicui->trayTimeout = 0;
     if (!classicui->bUseTrayIcon)
         return;
-    TrayWindowRelease(classicui->trayWindow);
-    TrayWindowInit(classicui->trayWindow);
+
+    if (!classicui->trayWindow->bTrayMapped) {
+        TrayWindowRelease(classicui->trayWindow);
+        TrayWindowInit(classicui->trayWindow);
+    }
 }
 
 void ClassicUISetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle)

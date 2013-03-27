@@ -88,6 +88,7 @@ typedef struct _FcitxClassicUI {
     boolean notificationItemAvailable;
 
     unsigned int epoch;
+    uint64_t waitDelayed;
 } FcitxClassicUI;
 
 void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height);
