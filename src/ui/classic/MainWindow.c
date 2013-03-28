@@ -608,7 +608,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                     SaveClassicUIConfig(classicui);
                 } else if (IsInRspArea(event->xbutton.x, event->xbutton.y, &mainWindow->imiconstat)) {
                     mouse = &mainWindow->imiconstat.mouse;
-                    FcitxInstanceSwitchIMByIndex(instance, -1);
+                    FcitxInstanceSwitchIMByIndex(instance, classicui->hideMainWindow == HM_SHOW ? -1 : -3);
                 } else {
                     FcitxUIComplexStatus *compstatus;
                     UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
