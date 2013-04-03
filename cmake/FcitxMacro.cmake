@@ -541,7 +541,7 @@ function(fcitx_translate_add_sources)
   foreach(source ${sources})
     get_filename_component(full_name "${source}" ABSOLUTE)
     if(FCITX_ADD_SOURCES_EXTRACT_TYPE)
-      fcitx_translate_get_extract_type(type "${full_name}")
+      _fcitx_translate_get_extract_type(type "${full_name}")
       if(NOT type)
         fcitx_translate_set_extract_type(
           "${FCITX_ADD_SOURCES_EXTRACT_TYPE}" "${full_name}")
