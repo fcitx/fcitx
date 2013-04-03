@@ -183,8 +183,12 @@ function(__fcitx_cmake_init)
     set(FCITX4_FCITX_INCLUDEDIR "${CMAKE_INSTALL_PREFIX}/include"
       CACHE INTERNAL "include dir" FORCE)
   else()
-    find_program(FCITX_SCANNER_EXECUTABLE fcitx-scanner)
-    find_program(FCITX_PO_PARSER_EXECUTABLE fcitx-po-parser)
+    set(FCITX_SCANNER_EXECUTABLE
+      "${FCITX_MACRO_CMAKE_DIR}/fcitx-scanner"
+      CACHE INTERNAL "fcitx-scanner" FORCE)
+    set(FCITX_PO_PARSER_EXECUTABLE
+      "${FCITX_MACRO_CMAKE_DIR}/fcitx-po-parser"
+      CACHE INTERNAL "fcitx-po-parser" FORCE)
     execute_process(COMMAND env ${FCITX_PO_PARSER_EXECUTABLE}
       --gettext-support RESULT_VARIABLE result)
     if(result)
@@ -537,7 +541,7 @@ function(fcitx_translate_add_sources)
   foreach(source ${sources})
     get_filename_component(full_name "${source}" ABSOLUTE)
     if(FCITX_ADD_SOURCES_EXTRACT_TYPE)
-      fcitx_translate_get_extract_type(type "${full_name}")
+      _fcitx_translate_get_extract_type(type "${full_name}")
       if(NOT type)
         fcitx_translate_set_extract_type(
           "${FCITX_ADD_SOURCES_EXTRACT_TYPE}" "${full_name}")
