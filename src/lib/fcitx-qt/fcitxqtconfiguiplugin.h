@@ -26,11 +26,40 @@
 #include <QStringList>
 
 class FcitxQtConfigUIWidget;
+
+/**
+ * interface for qt config ui
+ */
 struct FCITX_QT_EXPORT_API FcitxQtConfigUIFactoryInterface
 {
+    /**
+     *  return the name for plugin
+     */
     virtual QString name() = 0;
+
+    /**
+     * create new widget based on key
+     *
+     * @see FcitxQtConfigUIPlugin::files
+     *
+     * @return plugin name
+     */
     virtual FcitxQtConfigUIWidget *create( const QString &key ) = 0;
+
+    /**
+     * return a list that this plugin will handle, need to be consist with
+     * the file path in config file
+     *
+     * @return support file list
+     */
     virtual QStringList files() = 0;
+
+    /**
+     * return gettext domain, due to some reason, fcitx doesn't use qt's i18n feature
+     * but gettext
+     *
+     * @return domain of gettext
+     */
     virtual QString domain() = 0;
 
 };
@@ -38,6 +67,9 @@ struct FCITX_QT_EXPORT_API FcitxQtConfigUIFactoryInterface
 #define FcitxQtConfigUIFactoryInterface_iid "org.fcitx.Fcitx.FcitxQtConfigUIFactoryInterface"
 Q_DECLARE_INTERFACE(FcitxQtConfigUIFactoryInterface, FcitxQtConfigUIFactoryInterface_iid)
 
+/**
+ * base class for qt config ui
+ */
 class FCITX_QT_EXPORT_API FcitxQtConfigUIPlugin : public QObject, public FcitxQtConfigUIFactoryInterface {
     Q_OBJECT
     Q_INTERFACES(FcitxQtConfigUIFactoryInterface)
