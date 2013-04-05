@@ -19,4 +19,5 @@ if(NOT _FCITX_DISABLE_GETTEXT)
   target_link_libraries(fcitx-po-parser fcitx-utils ${GETTEXTPO_LIBRARIES})
 endif()
 
-install(TARGETS fcitx-scanner fcitx-po-parser DESTINATION ${bindir})
+install(TARGETS fcitx-scanner fcitx-po-parser
+  DESTINATION "${prefix}/share/cmake/fcitx/")
