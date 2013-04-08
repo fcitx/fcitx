@@ -10,7 +10,6 @@ Dependency
 =====================
 LibX11, Cairo-Xlib for GUI
 Wget for download data file (if it a full tarball, no need for this)
-Intltool for internationalize
 
 Optional Dependency
 =====================
@@ -18,3 +17,6 @@ pango-cairo for better font rendering (recommended)
 opencc for new Simplified Chinese to Traditional Chinese engine
 dbus for kimpanel support
 doxygen for build doc
+qt for qt im module, and qt based config plugin
+gtk for gtk im module.
+gir for gobject introspection support for fcitx-gclient

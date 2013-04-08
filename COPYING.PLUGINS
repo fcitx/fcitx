@@ -1,0 +1,8 @@
+== License exception for plugins ==
+
+All source code in Fcitx is released under GNU General Public License version
+2 or higher, but for run-time loadable add-ons that run within Fcitx's plugin
+framework (which means the add-on is directly loaded by libfcitx), Fcitx's
+copyright holders grant you additional permission to use the header of libfcitx,
+libfcitx-config, libfcitx-utils, and access to the data structure of libfcitx,
+libfcitx-config, and libfcitx-utils. 
