@@ -23,48 +23,18 @@
 #include <stdlib.h>
 #include "fcitx/fcitx.h"
 #include "utarray.h"
+#include "sort_common.h"
 
 /* damn it, freebsd and linux don't have the same interface for qsort_r,
  * and old glibc don't have qsort_r, force it to use third party version.
  */
-
-/* swap size bytes between a_ and b_ */
-static void swap(void *a_, void *b_, size_t size)
-{
-    if (a_ == b_) return;
-    {
-        size_t i, nlong = size / sizeof(long);
-        long *a = (long *) a_, *b = (long *) b_;
-        for (i = 0; i < nlong; ++i) {
-            long c = a[i];
-            a[i] = b[i];
-            b[i] = c;
-        }
-        a_ = (void*)(a + nlong);
-        b_ = (void*)(b + nlong);
-    }
-    {
-        size_t i;
-        char *a = (char *) a_, *b = (char *) b_;
-        size = size % sizeof(long);
-        for (i = 0; i < size; ++i) {
-            char c = a[i];
-            a[i] = b[i];
-            b[i] = c;
-        }
-    }
-}
 
 FCITX_EXPORT_API
 void fcitx_qsort_r(void *base_, size_t nmemb, size_t size, int (*compar)(const void *, const void *, void *), void *thunk)
 {
     char *base = (char *) base_;
     if (nmemb < 10) { /* use O(nmemb^2) algorithm for small enough nmemb */
-        size_t i, j;
-        for (i = 0; i + 1 < nmemb; ++i)
-            for (j = i + 1; j < nmemb; ++j)
-                if (compar(base + i * size, base + j * size, thunk) > 0)
-                    swap(base + i * size, base + j * size, size);
+        insertion_sort(base, nmemb, size, compar, thunk);
     } else {
         size_t i, pivot, npart;
         /* pick median of first/middle/last elements as pivot */
