@@ -4,6 +4,9 @@ include_directories(${PROJECT_SOURCE_DIR}/src/im/pinyin)
 include_directories(${PROJECT_SOURCE_DIR}/src/module/unicode)
 include_directories(${PROJECT_SOURCE_DIR}/src/module/dbus)
 
+add_executable(testsort testsort.c)
+target_link_libraries(testsort fcitx-utils)
+
 add_executable(testbacktrace testbacktrace.c)
 target_link_libraries(testbacktrace fcitx-utils)
 
@@ -107,3 +110,6 @@ add_test(NAME testdbuslaunch
 
 add_test(NAME testhotkey
          COMMAND testhotkey)
+
+add_test(NAME testsort
+         COMMAND testsort)
