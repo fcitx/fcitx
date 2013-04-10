@@ -221,7 +221,7 @@ extern "C" {
 #define FCITX_DEF_MODULE_ARGS_LONG(var, arg0, arg1, arg2, arg3, arg4,   \
                                    arg5, arg6, arg7, ARGV...)           \
     const void *__fcitx_def_mod_arg_long_##var##_extras[] = {ARGV};     \
-    const size_t __fcitx_def_mod_arg_long_##var##_n[] =                 \
+    const size_t __fcitx_def_mod_arg_long_##var##_n =                   \
         sizeof(__fcitx_def_mod_arg_long_##var##_extras) / sizeof(void*); \
     FcitxModuleFunctionArg var =                                        \
     { {arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7,                  \

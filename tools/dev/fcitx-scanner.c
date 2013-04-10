@@ -57,6 +57,9 @@ static const char *fxscanner_header_str =
 
 #define FXSCANNER_BLANK " \b\f\v\r\t"
 
+#define FX_ARG_LEN (10)
+#define FX_ARG_LEN_STR "(10)"
+
 /**
  * typedefs
  **/
@@ -467,8 +470,7 @@ fxscanner_func_loader(UT_array *array, const char *value, FcitxAddonBuff *buff,
     func_desc.is_static = fxscanner_group_get_boolean(grp, "Static", false);
     utarray_init(&func_desc.args, &fxaddon_arg_icd);
     if (!fxscanner_load_entry_list(&func_desc.args, grp, "Arg", true,
-                                   fxscanner_arg_loader, grp) ||
-        utarray_len(&func_desc.args) > 10) {
+                                   fxscanner_arg_loader, grp)) {
         utarray_done(&func_desc.args);
         return false;
     }
@@ -634,7 +636,11 @@ fxscanner_function_write_public(FcitxAddonFuncDesc *func_desc,
         fprintf(ofp, "%d", i);
         _write_str(ofp, ");\n");
     }
-    _write_str(ofp, "    FCITX_DEF_MODULE_ARGS(args");
+    if (utarray_len(&func_desc->args) <= FX_ARG_LEN) {
+        _write_str(ofp, "    FCITX_DEF_MODULE_ARGS(args");
+    } else {
+        _write_str(ofp, "    FCITX_DEF_MODULE_ARGS_LONG(args");
+    }
     for (i = 0;i < utarray_len(&func_desc->args);i++) {
         _write_str(ofp, ", arg");
         fprintf(ofp, "%d", i);
@@ -933,20 +939,38 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
     /**
      * casting arguments to correct types
      **/
-    if (!utarray_len(&func_desc->args))
+    const size_t arg_len = utarray_len(&func_desc->args);
+    if (!arg_len) {
         _write_strings(ofp, "    FCITX_UNUSED(_args);\n");
+    } else if (arg_len > FX_ARG_LEN) {
+        _write_strings(ofp,
+                       "    if (fcitx_utils_ptr_to_size(_args.args["
+                       FX_ARG_LEN_STR " - 2]) != ");
+        fprintf(ofp, "%d", (int)(arg_len - FX_ARG_LEN + 2));
+        _write_strings(ofp,
+                       ")\n"
+                       "        return NULL;\n"
+                       "    void **__arg_extras = (void**)_args.args["
+                       FX_ARG_LEN_STR " - 1];\n");
+    }
     unsigned int i;
     FcitxAddonArgDesc *arg_desc;
-    for (i = 0;i < utarray_len(&func_desc->args);i++) {
+    for (i = 0;i < arg_len;i++) {
         arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&func_desc->args, i);
         if (!fxscanner_arg_check_private(arg_desc))
             return false;
         _write_strings(ofp, "    FCITX_DEF_CAST_FROM_PTR(", arg_desc->type,
                        arg_desc->deref ? ", _arg" : ", arg");
         fprintf(ofp, "%d", i);
-        _write_strings(ofp, ", _args.args[");
-        fprintf(ofp, "%d", i);
-        _write_strings(ofp, "]);\n");
+        if (i < FX_ARG_LEN - 2 || arg_len <= FX_ARG_LEN) {
+            _write_strings(ofp, ", _args.args[");
+            fprintf(ofp, "%d", i);
+            _write_strings(ofp, "]);\n");
+        } else {
+            _write_strings(ofp, ", __arg_extras[");
+            fprintf(ofp, "%d", i - FX_ARG_LEN + 2);
+            _write_strings(ofp, "]);\n");
+        }
     }
 
     /**
@@ -964,7 +988,7 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
     /**
      * deref arguments
      **/
-    for (i = 0;i < utarray_len(&func_desc->args);i++) {
+    for (i = 0;i < arg_len;i++) {
         arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&func_desc->args, i);
         if (arg_desc->deref) {
             if (!arg_desc->deref_type && func_desc->res_wrapfunc) {
@@ -1004,13 +1028,13 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
     if (func_desc->res_wrapfunc) {
         _write_strings(ofp, func_desc->res_wrapfunc, "(");
         if (!func_desc->is_static) {
-            if (utarray_len(&func_desc->args)) {
+            if (arg_len) {
                 _write_strings(ofp, "self, ");
             } else {
                 _write_strings(ofp, "self");
             }
         }
-        for (i = 0;i < utarray_len(&func_desc->args);i++) {
+        for (i = 0;i < arg_len;i++) {
             if (i != 0)
                 _write_strings(ofp, ", ");
             _write_strings(ofp, "arg");
