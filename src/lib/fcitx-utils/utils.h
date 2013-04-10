@@ -942,11 +942,14 @@ extern "C" {
     __FCITX_DEF_CAST_TO_PTR_FUNC(int8, int8_t)
     __FCITX_DEF_CAST_TO_PTR_FUNC(int16, int16_t)
     __FCITX_DEF_CAST_TO_PTR_FUNC(int32, int32_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(ssize, ssize_t)
     __FCITX_DEF_CAST_TO_PTR_FUNC(uint, unsigned int)
     __FCITX_DEF_CAST_TO_PTR_FUNC(uintptr, uintptr_t)
     __FCITX_DEF_CAST_TO_PTR_FUNC(uint8, uint8_t)
     __FCITX_DEF_CAST_TO_PTR_FUNC(uint16, uint16_t)
     __FCITX_DEF_CAST_TO_PTR_FUNC(uint32, uint32_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(size, size_t)
+    __FCITX_DEF_CAST_TO_PTR_FUNC(constptr, const void*)
 
 #define _FCITX_CAST_FROM_INT(new_type, new_val, old_type, old_val) do { \
         if (sizeof(new_type) <= 1) {                                    \
@@ -999,11 +1002,13 @@ extern "C" {
     __FCITX_DEF_CAST_FROM_PTR_FUNC(int8, int8_t)
     __FCITX_DEF_CAST_FROM_PTR_FUNC(int16, int16_t)
     __FCITX_DEF_CAST_FROM_PTR_FUNC(int32, int32_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(ssize, ssize_t)
     __FCITX_DEF_CAST_FROM_PTR_FUNC(uint, unsigned int)
     __FCITX_DEF_CAST_FROM_PTR_FUNC(uintptr, uintptr_t)
     __FCITX_DEF_CAST_FROM_PTR_FUNC(uint8, uint8_t)
     __FCITX_DEF_CAST_FROM_PTR_FUNC(uint16, uint16_t)
     __FCITX_DEF_CAST_FROM_PTR_FUNC(uint32, uint32_t)
+    __FCITX_DEF_CAST_FROM_PTR_FUNC(size, size_t)
 
 #ifdef __cplusplus
 }
