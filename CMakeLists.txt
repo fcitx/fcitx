@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(fcitx)
 
-set(version 4.2.7)
+set(version 4.2.8)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 set_property(GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD" On)
