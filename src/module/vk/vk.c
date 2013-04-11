@@ -351,7 +351,9 @@ cairo_surface_t* LoadVKImage(VKWindow* vkWindow)
 
     if (!vkWindow->keyboard) {
         char* path = fcitx_utils_get_fcitx_path_with_filename("pkgdatadir", "skin/default/keyboard.png");
-        vkWindow->keyboard = cairo_image_surface_create_from_png(path);
+        if (fcitx_utils_isreg(path)) {
+            vkWindow->keyboard = cairo_image_surface_create_from_png(path);
+        }
         free(path);
     }
     return vkWindow->keyboard;
@@ -387,7 +389,11 @@ void DrawVKWindow(VKWindow* vkWindow)
 
     cr = cairo_create(vkWindow->surface);
     cairo_surface_t* vkimage = LoadVKImage(vkWindow);
-    cairo_set_source_surface(cr, vkimage, 0, 0);
+    if (vkimage) {
+        cairo_set_source_surface(cr, vkimage, 0, 0);
+    } else {
+        cairo_set_source_rgb(cr, 1, 1, 1);
+    }
     cairo_paint(cr);
 
     FcitxCairoTextContext* ctc = FcitxCairoTextContextCreate(cr);

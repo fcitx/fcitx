@@ -757,8 +757,8 @@ SkinImage* GetIMIcon(FcitxClassicUI* classicui, FcitxSkin *sc, const char* fallb
         }
         imicon = LoadImageWithText(
             classicui, sc, path, iconText,
-            cairo_image_surface_get_width(activeIcon->image),
-            cairo_image_surface_get_height(activeIcon->image), true);
+            activeIcon ? cairo_image_surface_get_width(activeIcon->image) : 22,
+            activeIcon ? cairo_image_surface_get_height(activeIcon->image) : 22, true);
     }
 
     if (imicon == NULL)
