@@ -363,7 +363,7 @@ extern "C" {
         void (*Destroy)(void*); /**< destroy user interface addon */
         void (*RegisterComplexStatus)(void*, FcitxUIComplexStatus*); /**< register complex status */
         void (*UpdateComplexStatus)(void *arg, FcitxUIComplexStatus*); /**< register complext status */
-        void (*padding3)(void*); /**< padding */
+        void (*UnRegisterMenu)(void *arg, FcitxUIMenu*);
     } FcitxUI;
 
     /**
@@ -669,6 +669,8 @@ extern "C" {
      **/
     void FcitxUIRegisterMenu(struct _FcitxInstance* instance, FcitxUIMenu* menu);
 
+    void FcitxUIUnRegisterMenu(struct _FcitxInstance* instance, FcitxUIMenu* menu);
+
     /**
      * process focus in event
      *
@@ -883,6 +885,8 @@ extern "C" {
      * @return void
      **/
     void FcitxMenuInit(FcitxUIMenu* menu);
+
+    void FcitxMenuFinalize(FcitxUIMenu* menu);
 
 #ifdef __cplusplus
 }

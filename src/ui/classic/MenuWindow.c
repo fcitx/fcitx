@@ -531,5 +531,15 @@ void XlibMenuPaint(FcitxXlibWindow* window, cairo_t* c)
     }
 }
 
+void XlibMenuDestroy(XlibMenu* menu)
+{
+    FcitxXlibWindow* window = (FcitxXlibWindow*) menu;
+    FcitxClassicUI* classicui = window->owner;
+    FcitxX11RemoveXEventHandler(classicui->owner, menu);
+    FcitxX11RemoveCompositeHandler(classicui->owner, menu);
+    FcitxXlibWindowDestroy(window);
+    free(window);
+}
+
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

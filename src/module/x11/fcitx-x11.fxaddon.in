@@ -19,7 +19,7 @@ Function12=RegSelectNotify
 Function13=RemoveSelectNotify
 Function14=DefaultEventWindow
 Function15=RequestConvertSelect
-Function16=
+Function16=RemoveCompositeHandler
 Function17=
 Function18=
 Function19=
@@ -154,6 +154,11 @@ Arg5=FcitxDestroyNotify
 Res.WrapFunc=X11RequestConvertSelection
 Res.Deref=$@ + 1
 Res.DerefType=int
+
+[RemoveCompositeHandler]
+Name=remove-composite-handler
+Arg0=void*
+Res.WrapFunc=X11RemoveCompositeHandler
 
 [FCITX_DISABLE_X11]
 Undefine=@ENABLE_X11@

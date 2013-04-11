@@ -256,7 +256,21 @@ X11RemoveEventHandler(FcitxX11 *x11priv, void *data)
     for (i = 0;i < utarray_len(&x11priv->handlers);i++) {
         handler = (FcitxXEventHandler*)utarray_eltptr(&x11priv->handlers, i);
         if (handler->instance == data) {
-            utarray_erase(&x11priv->handlers, i, 1);
+            utarray_remove_quick(&x11priv->handlers, i);
+            return;
+        }
+    }
+}
+
+static void
+X11RemoveCompositeHandler(FcitxX11 *x11priv, void *data)
+{
+    FcitxXEventHandler *handler;
+    int i;
+    for (i = 0;i < utarray_len(&x11priv->comphandlers);i++) {
+        handler = (FcitxXEventHandler*)utarray_eltptr(&x11priv->comphandlers, i);
+        if (handler->instance == data) {
+            utarray_remove_quick(&x11priv->comphandlers, i);
             return;
         }
     }

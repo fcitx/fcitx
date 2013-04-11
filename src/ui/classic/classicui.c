@@ -55,6 +55,7 @@ static void ClassicUICloseInputWindow(void* arg);
 static void ClassicUIShowInputWindow(void* arg);
 static void ClassicUIMoveInputWindow(void* arg);
 static void ClassicUIRegisterMenu(void *arg, FcitxUIMenu* menu);
+static void ClassicUIUnRegisterMenu(void *arg, FcitxUIMenu* menu);
 static void ClassicUIUpdateStatus(void *arg, FcitxUIStatus* status);
 static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status);
 static void ClassicUIUpdateComplexStatus(void *arg, FcitxUIComplexStatus* status);
@@ -97,7 +98,7 @@ FCITX_DEFINE_PLUGIN(fcitx_classic_ui, ui, FcitxUI) = {
     NULL,
     ClassicUIRegisterComplexStatus,
     ClassicUIUpdateComplexStatus,
-    NULL
+    ClassicUIUnRegisterMenu,
 };
 
 void* ClassicUICreate(FcitxInstance* instance)
@@ -253,6 +254,12 @@ static void ClassicUIRegisterMenu(void *arg, FcitxUIMenu* menu)
     XlibMenu* xlibMenu = XlibMenuCreate(classicui);
     menu->uipriv[classicui->isfallback] = xlibMenu;
     xlibMenu->menushell = menu;
+}
+
+static void ClassicUIUnRegisterMenu(void *arg, FcitxUIMenu* menu)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    XlibMenuDestroy((XlibMenu*) menu->uipriv[classicui->isfallback]);
 }
 
 static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)

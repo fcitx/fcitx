@@ -297,6 +297,9 @@ void FcitxXlibWindowPaint(FcitxXlibWindow* window)
 
 void FcitxXlibWindowDestroy(FcitxXlibWindow* window)
 {
+    if (window->wId == None)
+        return;
+
     cairo_surface_destroy(window->contentSurface);
     cairo_surface_destroy(window->backgroundSurface);
     cairo_surface_destroy(window->xlibSurface);

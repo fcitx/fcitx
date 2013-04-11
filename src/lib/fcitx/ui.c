@@ -592,6 +592,34 @@ void FcitxUIRegisterMenu(FcitxInstance* instance, FcitxUIMenu* menu)
 }
 
 FCITX_EXPORT_API
+void FcitxUIUnRegisterMenu(FcitxInstance* instance, FcitxUIMenu* menu)
+{
+    UT_array* uimenus = &instance->uimenus;
+
+    if (!menu)
+        return;
+
+    utarray_foreach(menup, uimenus, FcitxUIMenu*) {
+        if (*menup == menu) {
+            utarray_remove_quick(uimenus, utarray_eltidx(uimenus, menup));
+
+            if (UI_FUNC_IS_VALID(UnRegisterMenu))
+                instance->ui->ui->UnRegisterMenu(instance->ui->addonInstance, menu);
+            if (UI_FUNC_IS_VALID_FALLBACK(UnRegisterMenu))
+                instance->uifallback->ui->UnRegisterMenu(instance->uifallback->addonInstance, menu);
+            break;
+        }
+    }
+
+}
+
+FCITX_EXPORT_API
+void FcitxMenuFinalize(FcitxUIMenu* menu)
+{
+    utarray_done(&menu->shell);
+}
+
+FCITX_EXPORT_API
 void FcitxMenuAddMenuItemWithData(FcitxUIMenu* menu, const char* string, FcitxMenuItemType type, FcitxUIMenu* subMenu, void* arg)
 {
     FcitxMenuItem shell;
@@ -1064,11 +1092,11 @@ FcitxUIMenu* FcitxUIGetMenuByStatusName(FcitxInstance* instance, const char* nam
             return NULL;
     }
 
-    UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
+    UT_array* uimenus = &instance->uimenus;
     FcitxUIMenu** menupp, *menup = NULL;
     for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
-            menupp != NULL;
-            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
+         menupp != NULL;
+         menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
         ) {
         if ((*menupp)->candStatusBind && strcmp((*menupp)->candStatusBind, name) == 0) {
             menup = *menupp;

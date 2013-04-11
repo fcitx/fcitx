@@ -58,6 +58,7 @@ XlibMenu* MainMenuWindowCreate(struct _FcitxClassicUI *classicui);
 XlibMenu* XlibMenuCreate(struct _FcitxClassicUI* classicui);
 void XlibMenuShow(XlibMenu * menu);
 void CalMenuWindowPosition(XlibMenu *menu, int x, int y, int dodgeHeight);
+void XlibMenuDestroy(XlibMenu* menu);
 
 #endif
 
