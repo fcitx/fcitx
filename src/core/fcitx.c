@@ -75,16 +75,11 @@ int main(int argc, char* argv[])
     FcitxXDGGetFileUserWithPrefix("log", "crash.log", NULL, &crashlog);
     SetMyExceptionHandler();
 
-    sem_t sem;
-    sem_init(&sem, 0, 0);
-
-    instance = FcitxInstanceCreateWithFD(&sem, argc, argv, selfpipe[0]);
-    sem_wait(&sem);
-    FcitxInstanceWaitForEnd(instance);
+    boolean result = FcitxInstanceRun(argc, argv, selfpipe[0]);
 
     free(crashlog);
     crashlog = NULL;
-    if (instance->loadingFatalError) {
+    if (result) {
         return 1;
     }
     return 0;

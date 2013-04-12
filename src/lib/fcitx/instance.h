@@ -210,16 +210,72 @@ extern "C" {
 
     FcitxInputState* FcitxInstanceGetInputState(FcitxInstance* instance);
 
+    /**
+     * add a timeout function
+     *
+     * @param instance fcitx instance
+     * @param milli milli seconds
+     * @param callback callback function
+     * @param arg argument
+     * @return callback id
+     **/
     uint64_t FcitxInstanceAddTimeout(FcitxInstance* instance, long int milli, FcitxTimeoutCallback callback , void* arg);
 
+    /**
+     * check if there is a timeout already exists
+     *
+     * @param instance fcitx instance
+     * @param callback callback function
+     * @return boolean
+     **/
     boolean FcitxInstanceCheckTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback);
+
+    /**
+     * check if an callback id is not called
+     *
+     * @param instance ...
+     * @param id ...
+     * @return boolean
+     **/
     boolean FcitxInstanceCheckTimeoutById(FcitxInstance *instance, uint64_t id);
 
+    /**
+     * remove one timeout function matched by provided callback
+     *
+     * @param instance instance
+     * @param callback callback function
+     * @return true if there is a callback removed
+     **/
     boolean FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback);
 
+    /**
+     * remove one timeout function by id
+     *
+     * @param instance ...
+     * @param id ...
+     * @return boolean
+     **/
     boolean FcitxInstanceRemoveTimeoutById(FcitxInstance* instance, uint64_t id);
 
+    /**
+     * wait for instance to end, it simple join with a started fcitx thread
+     *
+     * @param instance instance
+     * @return int
+     **/
     int FcitxInstanceWaitForEnd(FcitxInstance* instance);
+
+    /**
+     * run a fcitx instance in current thread, this function will not return until fcitx finishes.
+     *
+     * @param argc argument number
+     * @param argv argument vector
+     * @param fd outside file descriptor
+     * @return true if there some error happened during loading
+     *
+     * @since 4.2.8
+     **/
+    boolean FcitxInstanceRun(int argc, char* argv[], int fd);
 
 #ifdef __cplusplus
 }

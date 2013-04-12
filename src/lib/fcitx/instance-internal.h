@@ -85,6 +85,8 @@ struct _FcitxInstance {
     struct _FcitxInputContext *ic_list;
     struct _FcitxInputContext *free_list;
     sem_t* sem;
+    sem_t startUpSem;
+    sem_t notifySem;
     pthread_t pid;
     fd_set rfds, wfds, efds;
     int maxfd;
@@ -140,14 +142,15 @@ struct _FcitxInstance {
     UT_array* enableList;
 
     UT_array timeout;
-    boolean initialized;
+    volatile boolean initialized;
     uint64_t timeoutIdx;
 
     UT_array icdata;
-    boolean loadingFatalError;
-    boolean quietQuit;
-    boolean destroy;
+    volatile boolean loadingFatalError;
+    volatile boolean quietQuit;
+    volatile boolean destroy;
     int fd;
+    int overrideDelay;
 };
 
 static inline FcitxAddon**

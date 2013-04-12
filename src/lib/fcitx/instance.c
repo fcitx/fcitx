@@ -125,9 +125,101 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
 }
 
 FCITX_EXPORT_API
+boolean FcitxInstanceRun(int argc, char* argv[], int fd)
+{
+    FcitxInstance* instance = fcitx_utils_new(FcitxInstance);
+
+    do {
+        if (!ProcessOption(instance, argc, argv))
+            break;
+
+        instance->fd = fd;
+
+        RunInstance(instance);
+    } while(0);
+    boolean result = instance->loadingFatalError;
+    free(instance);
+
+    return result;
+}
+
+FCITX_EXPORT_API
 FcitxInstance* FcitxInstanceCreatePause(sem_t *sem, int argc, char* argv[], int fd)
 {
-    FcitxInstance* instance = fcitx_utils_malloc0(sizeof(FcitxInstance));
+    if (!sem) {
+        return NULL;
+    }
+
+    FcitxInstance* instance = fcitx_utils_new(FcitxInstance);
+
+    if (!ProcessOption(instance, argc, argv))
+        goto create_error_exit_1;
+
+    instance->sem = sem;
+    instance->fd = fd;
+
+    if (sem_init(&instance->startUpSem, 0, 0) != 0) {
+        goto create_error_exit_1;
+    }
+
+    if (sem_init(&instance->notifySem, 0, 0) != 0) {
+        goto create_error_exit_2;
+    }
+
+    if (pthread_create(&instance->pid, NULL, RunInstance, instance) != 0) {
+        goto create_error_exit_3;
+    }
+
+    sem_wait(&instance->notifySem);
+
+    return instance;
+
+create_error_exit_3:
+    sem_destroy(&instance->notifySem);
+create_error_exit_2:
+    sem_destroy(&instance->startUpSem);
+create_error_exit_1:
+    free(instance);
+    return NULL;
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceStart(FcitxInstance* instance)
+{
+    if (!instance->loadingFatalError) {
+        instance->initialized = true;
+
+        if (sem_post(&instance->startUpSem))
+            instance->initialized = false;
+    }
+}
+
+
+FCITX_EXPORT_API
+FcitxInstance* FcitxInstanceCreateWithFD(sem_t *sem, int argc, char* argv[], int fd)
+{
+    FcitxInstance* instance = FcitxInstanceCreatePause(sem, argc, argv, fd);
+
+    if (instance) {
+        FcitxInstanceStart(instance);
+    }
+
+    return instance;
+
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceSetRecheckEvent(FcitxInstance* instance)
+{
+    instance->uiflag |= UI_EVENT_CHECK;
+}
+
+FCITX_EXPORT_API
+jmp_buf FcitxRecover;
+
+void* RunInstance(void* arg)
+{
+    FcitxInstance* instance = (FcitxInstance*) arg;
     FcitxAddonsInit(&instance->addons);
     FcitxInstanceInitIM(instance);
     FcitxFrontendsInit(&instance->frontends);
@@ -139,14 +231,13 @@ FcitxInstance* FcitxInstanceCreatePause(sem_t *sem, int argc, char* argv[], int 
     utarray_init(&instance->timeout, &timeout_icd);
     utarray_init(&instance->icdata, &icdata_icd);
     instance->input = FcitxInputStateCreate();
-    instance->sem = sem;
     instance->config = fcitx_utils_malloc0(sizeof(FcitxGlobalConfig));
     instance->profile = fcitx_utils_malloc0(sizeof(FcitxProfile));
     instance->globalIMName = strdup("");
-    instance->fd = -1;
-    if (fd >= 0) {
-        fcntl(fd, F_SETFL, O_NONBLOCK);
-        instance->fd = fd;
+    if (instance->fd >= 0) {
+        fcntl(instance->fd, F_SETFL, O_NONBLOCK);
+    } else {
+        instance->fd = -1;
     }
 
     if (!FcitxGlobalConfigLoad(instance->config))
@@ -154,8 +245,13 @@ FcitxInstance* FcitxInstanceCreatePause(sem_t *sem, int argc, char* argv[], int 
 
     FcitxCandidateWordSetPageSize(instance->input->candList, instance->config->iMaxCandWord);
 
-    if (!ProcessOption(instance, argc, argv))
-        goto error_exit;
+    int overrideDelay = instance->overrideDelay;
+
+    if (overrideDelay < 0)
+        overrideDelay = instance->config->iDelayStart;
+
+    if (overrideDelay > 0)
+        sleep(overrideDelay);
 
     instance->timeStart = time(NULL);
     instance->globalState = instance->config->defaultIMState;
@@ -176,10 +272,9 @@ FcitxInstance* FcitxInstanceCreatePause(sem_t *sem, int argc, char* argv[], int 
     FcitxInstanceInitBuiltContext(instance);
     FcitxModuleLoad(instance);
     if (instance->loadingFatalError)
-        return instance;
+        return NULL;
     if (!FcitxInstanceLoadAllIM(instance)) {
-        FcitxInstanceEnd(instance);
-        return instance;
+        goto error_exit;
     }
 
     FcitxInstanceInitIMMenu(instance);
@@ -196,52 +291,17 @@ FcitxInstance* FcitxInstanceCreatePause(sem_t *sem, int argc, char* argv[], int 
     FcitxInstanceSwitchIMByIndex(instance, instance->iIMIndex);
 
     if (!FcitxInstanceLoadFrontend(instance)) {
-        FcitxInstanceEnd(instance);
-        return instance;
+        goto error_exit;
     }
 
-    return instance;
-
-error_exit:
-    FcitxInstanceEnd(instance);
-    return instance;
-}
-
-FCITX_EXPORT_API
-void FcitxInstanceStart(FcitxInstance* instance)
-{
-    if (!instance->loadingFatalError) {
+    /* fcitx is running in a standalone thread or not */
+    if (instance->sem) {
+        sem_post(&instance->notifySem);
+        sem_wait(&instance->startUpSem);
+    } else {
         instance->initialized = true;
-        /* make in order to use block X, query is not good here */
-        if (pthread_create(&instance->pid, NULL, RunInstance, instance) != 0)
-            instance->initialized = false;
     }
-}
 
-
-FCITX_EXPORT_API
-FcitxInstance* FcitxInstanceCreateWithFD(sem_t *sem, int argc, char* argv[], int fd)
-{
-    FcitxInstance* instance = FcitxInstanceCreatePause(sem, argc, argv, fd);
-
-    FcitxInstanceStart(instance);
-
-    return instance;
-
-}
-
-FCITX_EXPORT_API
-void FcitxInstanceSetRecheckEvent(FcitxInstance* instance)
-{
-    instance->uiflag |= UI_EVENT_CHECK;
-}
-
-FCITX_EXPORT_API
-jmp_buf FcitxRecover;
-
-void* RunInstance(void* arg)
-{
-    FcitxInstance* instance = (FcitxInstance*) arg;
     uint64_t curtime = 0;
     while (1) {
         FcitxAddon** pmodule;
@@ -339,6 +399,11 @@ void* RunInstance(void* arg)
                &instance->efds, ptval);
     }
     return NULL;
+
+error_exit:
+    sem_post(&instance->startUpSem);
+    FcitxInstanceEnd(instance);
+    return NULL;
 }
 
 FCITX_EXPORT_API
@@ -353,7 +418,10 @@ void FcitxInstanceEnd(FcitxInstance* instance)
             if (!instance->quietQuit)
                 FcitxLog(ERROR, "Exiting.");
             instance->loadingFatalError = true;
-            sem_post(instance->sem);
+
+            if (instance->sem) {
+                sem_post(instance->sem);
+            }
         }
         return;
     }
@@ -426,7 +494,9 @@ void FcitxInstanceRealEnd(FcitxInstance* instance) {
             module->Destroy((*pmodule)->addonInstance);
     }
 
-    sem_post(instance->sem);
+    if (instance->sem) {
+        sem_post(instance->sem);
+    }
 }
 
 void FcitxInitThread(FcitxInstance* inst)
@@ -561,11 +631,7 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
     if (runasdaemon)
         fcitx_utils_init_as_daemon();
 
-    if (overrideDelay < 0)
-        overrideDelay = instance->config->iDelayStart;
-
-    if (overrideDelay > 0)
-        sleep(overrideDelay);
+    instance->overrideDelay = overrideDelay;
 
     return true;
 }
@@ -649,11 +715,7 @@ uint64_t FcitxInstanceAddTimeout(FcitxInstance* instance, long int milli, FcitxT
 FCITX_EXPORT_API
 boolean FcitxInstanceCheckTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback)
 {
-    TimeoutItem* ti;
-    for (ti = (TimeoutItem*) utarray_front(&instance->timeout);
-         ti != NULL;
-         ti = (TimeoutItem*) utarray_next(&instance->timeout, ti))
-    {
+    utarray_foreach(ti, &instance->timeout, TimeoutItem) {
         if (ti->callback == callback)
             return true;
     }
@@ -663,9 +725,7 @@ boolean FcitxInstanceCheckTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCal
 FCITX_EXPORT_API
 boolean FcitxInstanceCheckTimeoutById(FcitxInstance *instance, uint64_t id)
 {
-    TimeoutItem *ti;
-    for (ti = (TimeoutItem*)utarray_front(&instance->timeout);ti;
-         ti = (TimeoutItem*)utarray_next(&instance->timeout, ti)) {
+    utarray_foreach(ti, &instance->timeout, TimeoutItem) {
         if (ti->idx == id)
             return true;
     }
@@ -676,10 +736,7 @@ FCITX_EXPORT_API boolean
 FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance,
                                  FcitxTimeoutCallback callback)
 {
-    TimeoutItem* ti;
-    for (ti = (TimeoutItem*) utarray_front(&instance->timeout);
-         ti != NULL;
-         ti = (TimeoutItem*) utarray_next(&instance->timeout, ti)) {
+    utarray_foreach(ti, &instance->timeout, TimeoutItem) {
         if (ti->callback == callback) {
             unsigned int idx = utarray_eltidx(&instance->timeout, ti);
             utarray_remove_quick(&instance->timeout, idx);
@@ -694,10 +751,7 @@ boolean FcitxInstanceRemoveTimeoutById(FcitxInstance* instance, uint64_t id)
 {
     if (id == 0)
         return false;
-    TimeoutItem* ti;
-    for (ti = (TimeoutItem*) utarray_front(&instance->timeout);
-         ti != NULL;
-         ti = (TimeoutItem*) utarray_next(&instance->timeout, ti)) {
+    utarray_foreach(ti, &instance->timeout, TimeoutItem) {
         if (ti->idx == id) {
             unsigned int idx = utarray_eltidx(&instance->timeout, ti);
             utarray_remove_quick(&instance->timeout, idx);
@@ -709,10 +763,7 @@ boolean FcitxInstanceRemoveTimeoutById(FcitxInstance* instance, uint64_t id)
 
 FCITX_EXPORT_API
 int FcitxInstanceWaitForEnd(FcitxInstance* instance) {
-    if (instance->initialized) {
-        return pthread_join(instance->pid, NULL);
-    }
-    return 0;
+    return pthread_join(instance->pid, NULL);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
