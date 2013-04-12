@@ -103,7 +103,7 @@ LuaCallCommand(LuaModule *luamodule, const char *input,
             }
             candWord.priv = p->help ? strdup(p->help) : NULL;
             if (p->help || p->tip) {
-                fcitx_utils_alloc_cat_str(candWord.strExtra, p->help,
+                fcitx_utils_alloc_cat_str(candWord.strExtra, " ", p->help,
                                           p->help && p->tip ? " " : "",
                                           p->tip);
             } else {
