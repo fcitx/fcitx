@@ -57,7 +57,7 @@ boolean         MapPY(struct _FcitxPinyinConfig* pyconfig, const char* strPYorig
 boolean         MapToPY(char strMap[3], char *strPY);
 int             CmpMap(struct _FcitxPinyinConfig* pyconfig, const char* strMap1,
                        const char* strMap2, int* iMatchedLength, boolean bSP);
-int             Cmp1Map(struct _FcitxPinyinConfig* pyconfig, char map1, char map2, boolean b, boolean bUseMH, boolean bSP);
+int             Cmp1Map(struct _FcitxPinyinConfig* pyconfig, char map1, char map2, boolean is_S, boolean bUseMH, boolean bSP);
 int             Cmp2Map(struct _FcitxPinyinConfig* pyconfig, char map1[3], char map2[3], boolean bSP);
 void            InitPYSplitData(struct _FcitxPinyinConfig* pyconfig);
 void            FreePYSplitData(struct _FcitxPinyinConfig* pyconfig);

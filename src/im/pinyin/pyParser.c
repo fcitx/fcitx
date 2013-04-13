@@ -446,7 +446,11 @@ boolean MapToPY(char strMap[3], char *strPY)
  * 0表示相等
  * b指示是声母还是韵母，true表示声母
  */
-int Cmp1Map(FcitxPinyinConfig* pyconfig, char map1, char map2, boolean b, boolean bUseMH, boolean bSP)
+int Cmp1Map(FcitxPinyinConfig* pyconfig,
+            char map1, char map2,
+            boolean is_S,
+            boolean bUseMH,
+            boolean bSP)
 {
     int             iVal;
 
@@ -457,10 +461,14 @@ int Cmp1Map(FcitxPinyinConfig* pyconfig, char map1, char map2, boolean b, boolea
         if (map1 == map2)
             return 0;
 
-        if (b) {
+        if (is_S) {
             iVal = GetMHIndex_S2(pyconfig->MHPY_S, map1, map2, bUseMH);
         } else {
             iVal = GetMHIndex_C2(pyconfig->MHPY_C, map1, map2);
+            // check V U only for j,q,x
+            if (!bUseMH && iVal == 6) {
+                iVal = -1;
+            }
         }
 
         if (iVal >= 0)
@@ -488,7 +496,7 @@ int Cmp2Map(FcitxPinyinConfig* pyconfig, char map1[3], char map2[3], boolean bSP
     if (i)
         return i;
 
-    return Cmp1Map(pyconfig, map1[1], map2[1], false, false, bSP);
+    return Cmp1Map(pyconfig, map1[1], map2[1], false, IsJ_Q_X(map2[0]), bSP);
 }
 
 /*

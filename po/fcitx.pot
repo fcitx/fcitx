@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-03-25 18:23-0400\n"
+"POT-Creation-Date: 2013-04-13 11:29-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -715,19 +715,19 @@ msgstr ""
 msgid "min Num of Characters: "
 msgstr ""
 
-#: src/lib/fcitx/instance.c:188 src/lib/fcitx/instance.c:461
+#: src/lib/fcitx/instance.c:283 src/lib/fcitx/instance.c:531
 msgid "Use remind"
 msgstr ""
 
-#: src/lib/fcitx/instance.c:188 src/lib/fcitx/instance.c:461
+#: src/lib/fcitx/instance.c:283 src/lib/fcitx/instance.c:531
 msgid "No remind"
 msgstr ""
 
-#: src/lib/fcitx/instance.c:189 src/lib/fcitx/instance.c:462
+#: src/lib/fcitx/instance.c:284 src/lib/fcitx/instance.c:532
 msgid "Toggle Remind"
 msgstr ""
 
-#: src/lib/fcitx/instance.c:437
+#: src/lib/fcitx/instance.c:507
 msgid "pthread mutex init failed"
 msgstr ""
 
@@ -814,45 +814,45 @@ msgstr ""
 msgid "Toggle Half/Full width Character"
 msgstr ""
 
-#: src/module/imselector/imselector.c:300
+#: src/module/imselector/imselector.c:304
 msgid "Select global input method: "
 msgstr ""
 
-#: src/module/imselector/imselector.c:301
+#: src/module/imselector/imselector.c:305
 msgid "Select local input method: "
 msgstr ""
 
-#: src/module/imselector/imselector.c:307
+#: src/module/imselector/imselector.c:311
 msgid "Current local input method is "
 msgstr ""
 
-#: src/module/imselector/imselector.c:311
+#: src/module/imselector/imselector.c:315
 msgid "No local input method"
 msgstr ""
 
-#: src/module/imselector/imselector.c:322
+#: src/module/imselector/imselector.c:325
 msgid "Clear local input method"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:435
+#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:442
 msgid "Online Help"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:496
+#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:503
 #: src/ui/kimpanel/kimpanel.c:754
 msgid "Configure Current Input Method"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:497
+#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:504
 msgid "Configure"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:498
+#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:505
 #: src/ui/kimpanel/kimpanel.c:759
 msgid "Restart"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:499
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:506
 msgid "Exit"
 msgstr ""
 
@@ -2042,7 +2042,7 @@ msgid "Fix misstype gn/ng"
 msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:145
-msgid "Fix misstype v/u"
+msgid "Fix misstype v/u like jv, qv, xv"
 msgstr ""
 
 #: src/im/table/fcitx-table.desc:1 src/im/table/fcitx-table.desc:6

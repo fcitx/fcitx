@@ -141,8 +141,8 @@ Description=Fix misstype gn/ng
 
 [Pinyin/MisstypeVU]
 Type=Boolean
-DefaultValue=False
-Description=Fix misstype v/u
+DefaultValue=True
+Description=Fix misstype v/u like jv, qv, xv
 
 [DescriptionFile]
 LocaleDomain=fcitx

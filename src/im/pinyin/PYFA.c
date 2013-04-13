@@ -1234,6 +1234,13 @@ boolean IsZ_C_S(char map)
     return false;
 }
 
+boolean IsJ_Q_X(char map)
+{
+    if (map == 'S' || map == 'J' || map == 'X')
+        return true;
+    return false;
+}
+
 void InitMHPY(MHPY** pMHPY, const MHPY_TEMPLATE* MHPYtemplate)
 {
     int iBaseCount = 0;

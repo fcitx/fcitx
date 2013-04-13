@@ -1,4 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
@@ -12,15 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-03-25 18:23-0400\n"
-"PO-Revision-Date: 2013-03-16 18:29+0000\n"
-"Last-Translator: marguerite su <i@marguerite.su>\n"
-"Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
+"POT-Creation-Date: 2013-04-13 11:29-0400\n"
+"PO-Revision-Date: 2013-04-13 11:30-0400\n"
+"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
+"Language-Team: Chinese Simplified <kde-china@kde.org>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: src/im/table/table.c:1410
 msgid " Ctrl+Delete To Delete"
@@ -572,7 +572,7 @@ msgstr "清除输入频率"
 msgid "Clear local Input Method"
 msgstr "清除局部输入法"
 
-#: src/module/imselector/imselector.c:322
+#: src/module/imselector/imselector.c:325
 msgid "Clear local input method"
 msgstr "清除局部输入法"
 
@@ -678,11 +678,11 @@ msgstr "配置文件"
 msgid "Configuration."
 msgstr "配置"
 
-#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:497
+#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:504
 msgid "Configure"
 msgstr "配置"
 
-#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:496
+#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:503
 #: src/ui/kimpanel/kimpanel.c:754
 msgid "Configure Current Input Method"
 msgstr "配置当前输入法"
@@ -721,7 +721,7 @@ msgstr "当前启用的输入法列表"
 msgid "Current Input Method Name"
 msgstr "当前输入法名称"
 
-#: src/module/imselector/imselector.c:307
+#: src/module/imselector/imselector.c:311
 msgid "Current local input method is "
 msgstr "当前局部输入法为 "
 
@@ -955,7 +955,7 @@ msgstr "精确匹配"
 msgid "Exec"
 msgstr "Exec"
 
-#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:499
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:506
 msgid "Exit"
 msgstr "退出"
 
@@ -1048,8 +1048,8 @@ msgid "Fix misstype gn/ng"
 msgstr "忽略拼音中ng->gn的输入错误"
 
 #: src/im/pinyin/fcitx-pinyin.desc:145
-msgid "Fix misstype v/u"
-msgstr "忽略拼音中u->v的输入错误"
+msgid "Fix misstype v/u like jv, qv, xv"
+msgstr "忽略拼音jv，qv，xv中u->v的输入错误"
 
 #: src/im/pinyin/fcitx-pinyin.desc:18
 msgid "Fix preedit cursor at head"
@@ -1783,11 +1783,11 @@ msgstr "无可用前端"
 msgid "No input window"
 msgstr "无输入窗口"
 
-#: src/module/imselector/imselector.c:311
+#: src/module/imselector/imselector.c:315
 msgid "No local input method"
 msgstr "无局部输入法"
 
-#: src/lib/fcitx/instance.c:188 src/lib/fcitx/instance.c:461
+#: src/lib/fcitx/instance.c:283 src/lib/fcitx/instance.c:531
 msgid "No remind"
 msgstr "无联想"
 
@@ -1816,7 +1816,7 @@ msgstr "无操作"
 msgid "Number"
 msgstr "数字"
 
-#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:435
+#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:442
 msgid "Online Help"
 msgstr "在线帮助"
 
@@ -2157,7 +2157,7 @@ msgstr "右边距"
 msgid "Resize Margin Top"
 msgstr "上边距"
 
-#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:498
+#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:505
 #: src/ui/kimpanel/kimpanel.c:759
 msgid "Restart"
 msgstr "重新启动"
@@ -2220,11 +2220,11 @@ msgstr "搜索 unicode"
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx真正启动前延迟的秒数"
 
-#: src/module/imselector/imselector.c:300
+#: src/module/imselector/imselector.c:304
 msgid "Select global input method: "
 msgstr "选择全局输入法："
 
-#: src/module/imselector/imselector.c:301
+#: src/module/imselector/imselector.c:305
 msgid "Select local input method: "
 msgstr "选择局部输入法："
 
@@ -2589,7 +2589,7 @@ msgstr "切换半/全角字符"
 msgid "Toggle Input Method"
 msgstr "切换输入法"
 
-#: src/lib/fcitx/instance.c:189 src/lib/fcitx/instance.c:462
+#: src/lib/fcitx/instance.c:284 src/lib/fcitx/instance.c:532
 msgid "Toggle Remind"
 msgstr "切换联想"
 
@@ -2760,7 +2760,7 @@ msgstr "使用回车确认已输入字符串"
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr "只在用额外切换键取消激活后才使用它进行切换"
 
-#: src/lib/fcitx/instance.c:188 src/lib/fcitx/instance.c:461
+#: src/lib/fcitx/instance.c:283 src/lib/fcitx/instance.c:531
 msgid "Use remind"
 msgstr "联想"
 
@@ -2973,7 +2973,7 @@ msgstr "无可用字体"
 msgid "process:"
 msgstr "进程:"
 
-#: src/lib/fcitx/instance.c:437
+#: src/lib/fcitx/instance.c:507
 msgid "pthread mutex init failed"
 msgstr "pthread mutex init failed"
 
@@ -2989,3 +2989,4 @@ msgstr "xmodmap 命令"
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
+
