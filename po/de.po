@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-13 11:29-0400\n"
+"POT-Creation-Date: 2013-04-13 11:41-0400\n"
 "PO-Revision-Date: 2013-02-28 14:22+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/fcitx/"
@@ -1047,7 +1047,7 @@ msgid "Fix misstype gn/ng"
 msgstr "Autokorrektur gn/ng"
 
 #: src/im/pinyin/fcitx-pinyin.desc:145
-msgid "Fix misstype v/u like jv, qv, xv"
+msgid "Fix misstype v/u like jv, qv, xv, yv"
 msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:18

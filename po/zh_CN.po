@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-13 11:29-0400\n"
-"PO-Revision-Date: 2013-04-13 11:30-0400\n"
+"POT-Creation-Date: 2013-04-13 11:41-0400\n"
+"PO-Revision-Date: 2013-04-13 11:41-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-china@kde.org>\n"
 "Language: zh_CN\n"
@@ -1048,8 +1048,8 @@ msgid "Fix misstype gn/ng"
 msgstr "忽略拼音中ng->gn的输入错误"
 
 #: src/im/pinyin/fcitx-pinyin.desc:145
-msgid "Fix misstype v/u like jv, qv, xv"
-msgstr "忽略拼音jv，qv，xv中u->v的输入错误"
+msgid "Fix misstype v/u like jv, qv, xv, yv"
+msgstr "忽略拼音jv，qv，xv，yv中u->v的输入错误"
 
 #: src/im/pinyin/fcitx-pinyin.desc:18
 msgid "Fix preedit cursor at head"

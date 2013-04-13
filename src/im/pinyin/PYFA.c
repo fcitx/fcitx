@@ -186,6 +186,8 @@ const PYTABLE_TEMPLATE  PYTable_template[] = {
     ,
     {"yu", PYTABLE_NONE}
     ,
+    {"yv", PYTABLE_V_U}
+    ,
     {"you", PYTABLE_NONE}
     ,
     {"yogn", PYTABLE_NG_GN}
@@ -1234,9 +1236,9 @@ boolean IsZ_C_S(char map)
     return false;
 }
 
-boolean IsJ_Q_X(char map)
+boolean IsJ_Q_X_Y(char map)
 {
-    if (map == 'S' || map == 'J' || map == 'X')
+    if (map == 'S' || map == 'J' || map == 'X' || map == 'C')
         return true;
     return false;
 }

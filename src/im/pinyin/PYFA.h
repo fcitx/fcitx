@@ -67,7 +67,7 @@ int GetMHIndex_C2(MHPY* MHPY_C, char map1, char map2);
 //在输入词组时，比如，当用户输入“jiu's”时，应该可以出现“就是”这个词，而无论是否打开了模糊拼音
 int GetMHIndex_S2(MHPY* MHPY_S, char map1, char map2, boolean bMode);
 boolean IsZ_C_S(char map);
-boolean IsJ_Q_X(char map);
+boolean IsJ_Q_X_Y(char map);
 void InitMHPY(MHPY** pMHPY, const MHPY_TEMPLATE* MHPYtemplate);
 void InitPYTable(struct _FcitxPinyinConfig* pyconfig);
 

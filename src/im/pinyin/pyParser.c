@@ -496,7 +496,7 @@ int Cmp2Map(FcitxPinyinConfig* pyconfig, char map1[3], char map2[3], boolean bSP
     if (i)
         return i;
 
-    return Cmp1Map(pyconfig, map1[1], map2[1], false, IsJ_Q_X(map2[0]), bSP);
+    return Cmp1Map(pyconfig, map1[1], map2[1], false, IsJ_Q_X_Y(map2[0]), bSP);
 }
 
 /*
