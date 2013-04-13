@@ -283,13 +283,17 @@ void IMSelectorGetCands(IMSelector* imselector)
 {
     FcitxInstance* instance = imselector->owner;
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
-    FcitxIM* pim;
     UT_array* imes = FcitxInstanceGetIMEs(instance);
     FcitxInstanceCleanInputWindow(instance);
-    FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), 10);
-    FcitxCandidateWordSetChoose(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE);
-    FcitxInputStateSetShowCursor(input, false);
 
+    FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
+    FcitxCandidateWordSetPageSize(candList, 10);
+    FcitxCandidateWordSetChoose(candList, DIGIT_STR_CHOOSE);
+    FcitxInputStateSetShowCursor(input, false);
+    FcitxCandidateWordSetOverrideDefaultHighlight(candList, false);
+    FcitxCandidateWordSetLayoutHint(candList, CLH_Vertical);
+
+    FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
     if (!ic)
@@ -310,9 +314,8 @@ void IMSelectorGetCands(IMSelector* imselector)
         FcitxMessagesAddMessageStringsAtLast(aux_up, MSG_TIPS,
                                              _("No local input method"));
     }
-    for (pim = (FcitxIM *) utarray_front(imes);
-            pim != NULL;
-            pim = (FcitxIM *) utarray_next(imes, pim)) {
+
+    utarray_foreach(pim, imes, FcitxIM) {
         FcitxCandidateWord candWord;
         candWord.callback = IMSelectorGetCand;
         candWord.owner = imselector;
@@ -325,8 +328,14 @@ void IMSelectorGetCands(IMSelector* imselector)
             candWord.priv = strdup(pim->uniqueName);
             candWord.strWord = strdup(pim->strName);
         }
-        candWord.wordType = MSG_OTHER;
-        FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+
+        if (im && strcmp(im->uniqueName, pim->uniqueName) == 0) {
+            candWord.wordType = MSG_CANDIATE_CURSOR;
+        } else {
+            candWord.wordType = MSG_OTHER;
+        }
+
+        FcitxCandidateWordAppend(candList, &candWord);
     }
 }
 
