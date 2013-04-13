@@ -301,7 +301,7 @@ char** FcitxXDGGetPathWithPrefix(size_t* len, const char* prefix)
 
 
 FCITX_EXPORT_API
-FcitxStringHashSet* FcitxXDGGetFiles(char *path, char *prefix, char *suffix)
+FcitxStringHashSet* FcitxXDGGetFiles(const char *path, const char *prefix, const char *suffix)
 {
     char **xdgPath;
     size_t len;

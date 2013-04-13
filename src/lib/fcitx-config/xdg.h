@@ -188,8 +188,8 @@ extern "C"
      *
      * @since 4.2.0
      **/
-    FcitxStringHashSet *FcitxXDGGetFiles(char *path, char *prefix,
-                                         char *suffix);
+    FcitxStringHashSet *FcitxXDGGetFiles(const char *path, const char *prefix,
+                                         const char *suffix);
 
 #ifdef __cplusplus
 }
