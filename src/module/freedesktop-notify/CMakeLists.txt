@@ -11,6 +11,7 @@ set(FCITX_FREEDESKTOP_NOTIFY_SOURCES
   )
 
 fcitx_add_addon_full(freedesktop-notify ${freedesktop_notify_noinstall}
-    SCAN
+    SCAN SCAN_PRIV
+    HEADERS freedesktop-notify.h
     SOURCES ${FCITX_FREEDESKTOP_NOTIFY_SOURCES}
     LINK_LIBS ${DBUS_LIBRARIES})

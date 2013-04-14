@@ -1,3 +1,25 @@
+/***************************************************************************
+ *   Copyright (C) 2012~2013 by CSSlayer                                   *
+ *   wengxt@gmail.com                                                      *
+ *   Copyright (C) 2013~2013 by Yichao Yu                                  *
+ *   yyc1992@gmail.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
+ ***************************************************************************/
+
 #include <dbus/dbus.h>
 
 #include "fcitx/module.h"
@@ -12,6 +34,8 @@
 void* FcitxNotifyCreate(FcitxInstance* instance);
 void FcitxNotifyDestroy(void* arg);
 
+DECLARE_ADDFUNCTIONS(FreeDesktopNotify)
+
 FCITX_DEFINE_PLUGIN(fcitx_freedesktop_notify, module, FcitxModule) = {
     FcitxNotifyCreate,
     NULL,
@@ -20,21 +44,22 @@ FCITX_DEFINE_PLUGIN(fcitx_freedesktop_notify, module, FcitxModule) = {
     NULL
 };
 
-typedef struct _FcitxNotify
-{
+typedef struct {
     boolean filterAdded;
     DBusConnection* conn;
     FcitxInstance* owner;
 } FcitxNotify;
 
-typedef struct _FcitxNotifyStruct {
+typedef struct {
     FcitxNotify* owner;
     FcitxFreedesktopNotifyCallback callback;
     FcitxDestroyNotify freeFunc;
     void* data;
 } FcitxNotifyStruct;
 
-static DBusHandlerResult FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message, void *user_data);
+static DBusHandlerResult
+FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message,
+                      void *user_data);
 
 static void FcitxNotifySendNotification(
     FcitxNotify* notify,
@@ -54,7 +79,6 @@ static void FcitxNotifySendNotification(
 void* FcitxNotifyCreate(FcitxInstance* instance)
 {
     FcitxNotify* notify = fcitx_utils_new(FcitxNotify);
-    FcitxAddon* addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-freedesktop-notify");
     notify->owner = instance;
     notify->conn = FcitxDBusGetConnection(notify->owner);
     if (!notify->conn)
@@ -91,7 +115,7 @@ void* FcitxNotifyCreate(FcitxInstance* instance)
 
     dbus_error_free(&err);
 
-    FcitxModuleAddFunction(addon, FcitxNotifySendNotification);
+    FcitxFreeDesktopNotifyAddFunctions(instance);
 
     return notify;
 _notify_create_error:
@@ -116,14 +140,15 @@ static void FcitxNotifyCallback(DBusPendingCall *call, void *data)
     }
 }
 
-void FcitxNotifyCallbackFree(void* arg)
+static void FcitxNotifyCallbackFree(void* arg)
 {
     FcitxNotifyStruct* s = (FcitxNotifyStruct*) arg;
     s->freeFunc(s->data);
     free(s);
 }
 
-void FcitxNotifySendNotification(
+static void
+FcitxNotifySendNotification(
     FcitxNotify* notify,
     const char* appName,
     uint32_t replaceId,
@@ -135,8 +160,8 @@ void FcitxNotifySendNotification(
     int32_t timeout,
     FcitxFreedesktopNotifyCallback callback,
     void* userData,
-    FcitxDestroyNotify freeFunc
-) {
+    FcitxDestroyNotify freeFunc)
+{
     if (actionsCount % 2 != 0)
         return;
 
@@ -198,9 +223,10 @@ void FcitxNotifySendNotification(
     dbus_message_unref(msg);
 }
 
-static DBusHandlerResult FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message, void *user_data)
+static DBusHandlerResult
+FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message, void *user_data)
 {
-    FcitxNotify* notify = (FcitxNotify*) user_data;
+    // FcitxNotify* notify = (FcitxNotify*)user_data;
     if (dbus_message_is_signal(message, "org.freedesktop.Notifications", "ActionInvoked")) {
         DBusError error;
         uint32_t id = 0;
@@ -241,3 +267,5 @@ void FcitxNotifyDestroy(void* arg)
                           NULL);
     free(arg);
 }
+
+#include "fcitx-freedesktop-notify-addfunctions.h"
