@@ -186,6 +186,7 @@ X11TextConvertSelectionHelper(
     if (!buff) {
         Atom new_tgt;
         if (target == x11priv->utf8Atom) {
+            /* compound text also looks fine here, need more info.. */
             new_tgt = x11priv->compTextAtom;
         } else if (target == x11priv->compTextAtom) {
             new_tgt = x11priv->stringAtom;
@@ -204,7 +205,31 @@ X11TextConvertSelectionHelper(
     X11ConvertSelectionCallback cb;
     cb = (X11ConvertSelectionCallback)convert->func;
     char *tgt_str = XGetAtomName(x11priv->dpy, target);
-    /* compound text also looks fine here, need more info.. */
+    if (nitems > UTF8_MAX_LENGTH * 2) {
+        /* test last few bytes for valid utf8, this is added because of
+         * the length limit in XGetWindowProperty. The threshod of `nitems`
+         * is chosen randomly just to make sure the string is long enough
+         * for the testing. */
+        int i;
+        for (i = 0;i <= UTF8_MAX_LENGTH;i++) {
+            int len = nitems - i;
+            int utf8_type = fcitx_utf8_type(((char*)buff)[len - 1]);
+            switch (utf8_type) {
+            case 0:
+                continue;
+            default:
+                if (utf8_type <= i + 1) {
+                    nitems = len + i;
+                    break;
+                }
+            case -1:
+                nitems = len - 1;
+                break;
+            }
+            ((char*)buff)[nitems] = '\0';
+            break;
+        }
+    }
     cb(convert->owner, sel_str, tgt_str, format, nitems, buff, convert->data);
     XFree(tgt_str);
 out:
