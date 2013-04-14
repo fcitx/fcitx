@@ -31,8 +31,8 @@
 #define NOTIFICATIONS_INTERFACE_NAME "org.freedesktop.Notifications"
 #define NOTIFICATIONS_PATH "/org/freedesktop/Notifications"
 
-void* FcitxNotifyCreate(FcitxInstance* instance);
-void FcitxNotifyDestroy(void* arg);
+static void *FcitxNotifyCreate(FcitxInstance *instance);
+static void FcitxNotifyDestroy(void *arg);
 
 DECLARE_ADDFUNCTIONS(FreeDesktopNotify)
 
@@ -46,15 +46,15 @@ FCITX_DEFINE_PLUGIN(fcitx_freedesktop_notify, module, FcitxModule) = {
 
 typedef struct {
     boolean filterAdded;
-    DBusConnection* conn;
-    FcitxInstance* owner;
+    DBusConnection *conn;
+    FcitxInstance *owner;
 } FcitxNotify;
 
 typedef struct {
-    FcitxNotify* owner;
+    FcitxNotify *owner;
     FcitxFreedesktopNotifyCallback callback;
     FcitxDestroyNotify freeFunc;
-    void* data;
+    void *data;
 } FcitxNotifyStruct;
 
 static DBusHandlerResult
@@ -62,23 +62,23 @@ FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message,
                       void *user_data);
 
 static void FcitxNotifySendNotification(
-    FcitxNotify* notify,
-    const char* appName,
+    FcitxNotify *notify,
+    const char *appName,
     uint32_t replaceId,
-    const char* appIcon,
-    const char* summary,
-    const char* body,
-    const char** actions,
+    const char *appIcon,
+    const char *summary,
+    const char *body,
+    const char **actions,
     int actionsCount,
     int32_t timeout,
     FcitxFreedesktopNotifyCallback callback,
-    void* userData,
-    FcitxDestroyNotify freeFunc
-);
+    void *userData,
+    FcitxDestroyNotify freeFunc);
 
-void* FcitxNotifyCreate(FcitxInstance* instance)
+static void*
+FcitxNotifyCreate(FcitxInstance *instance)
 {
-    FcitxNotify* notify = fcitx_utils_new(FcitxNotify);
+    FcitxNotify *notify = fcitx_utils_new(FcitxNotify);
     notify->owner = instance;
     notify->conn = FcitxDBusGetConnection(notify->owner);
     if (!notify->conn)
@@ -87,31 +87,33 @@ void* FcitxNotifyCreate(FcitxInstance* instance)
     DBusError err;
     dbus_error_init(&err);
     dbus_bus_add_match(notify->conn,
-                        "type='signal',"
-                        "sender='" NOTIFICATIONS_SERVICE_NAME "',"
-                        "interface='" NOTIFICATIONS_INTERFACE_NAME "',"
-                        "path='" NOTIFICATIONS_PATH "',"
-                        "member='ActionInvoked'",
-                        &err);
+                       "type='signal',"
+                       "sender='" NOTIFICATIONS_SERVICE_NAME "',"
+                       "interface='" NOTIFICATIONS_INTERFACE_NAME "',"
+                       "path='" NOTIFICATIONS_PATH "',"
+                       "member='ActionInvoked'",
+                       &err);
 
     if (dbus_error_is_set(&err))
         goto _notify_create_error;
 
     dbus_bus_add_match(notify->conn,
-                        "type='signal',"
-                        "sender='" NOTIFICATIONS_SERVICE_NAME "',"
-                        "interface='" NOTIFICATIONS_INTERFACE_NAME "',"
-                        "path='" NOTIFICATIONS_PATH "',"
-                        "member='NotificationClosed'",
-                        &err);
+                       "type='signal',"
+                       "sender='" NOTIFICATIONS_SERVICE_NAME "',"
+                       "interface='" NOTIFICATIONS_INTERFACE_NAME "',"
+                       "path='" NOTIFICATIONS_PATH "',"
+                       "member='NotificationClosed'",
+                       &err);
 
     if (dbus_error_is_set(&err))
         goto _notify_create_error;
 
-    if (dbus_connection_add_filter(notify->conn, FcitxNotifyDBusFilter, notify, NULL))
+    if (dbus_connection_add_filter(notify->conn, FcitxNotifyDBusFilter,
+                                   notify, NULL)) {
         notify->filterAdded = true;
-    else
+    } else {
         goto _notify_create_error;
+    }
 
     dbus_error_free(&err);
 
@@ -126,49 +128,53 @@ _notify_create_error:
 }
 
 
-static void FcitxNotifyCallback(DBusPendingCall *call, void *data)
+static void
+FcitxNotifyCallback(DBusPendingCall *call, void *data)
 {
-    FcitxNotifyStruct* s = (FcitxNotifyStruct*) data;
+    FcitxNotifyStruct *s = (FcitxNotifyStruct*)data;
 
-    DBusMessage* msg = dbus_pending_call_steal_reply(call);
+    DBusMessage *msg = dbus_pending_call_steal_reply(call);
     if (msg) {
         uint32_t id;
         DBusError error;
         dbus_error_init(&error);
-        dbus_message_get_args(msg, &error, DBUS_TYPE_UINT32, &id , DBUS_TYPE_INVALID);
+        dbus_message_get_args(msg, &error, DBUS_TYPE_UINT32,
+                              &id , DBUS_TYPE_INVALID);
         s->callback(s->data, id);
     }
 }
 
-static void FcitxNotifyCallbackFree(void* arg)
+static void
+FcitxNotifyCallbackFree(void *arg)
 {
-    FcitxNotifyStruct* s = (FcitxNotifyStruct*) arg;
+    FcitxNotifyStruct *s = (FcitxNotifyStruct*)arg;
     s->freeFunc(s->data);
     free(s);
 }
 
 static void
 FcitxNotifySendNotification(
-    FcitxNotify* notify,
-    const char* appName,
+    FcitxNotify *notify,
+    const char *appName,
     uint32_t replaceId,
-    const char* appIcon,
-    const char* summary,
-    const char* body,
-    const char** actions,
+    const char *appIcon,
+    const char *summary,
+    const char *body,
+    const char **actions,
     int actionsCount,
     int32_t timeout,
     FcitxFreedesktopNotifyCallback callback,
-    void* userData,
+    void *userData,
     FcitxDestroyNotify freeFunc)
 {
     if (actionsCount % 2 != 0)
         return;
 
-    DBusMessage* msg = dbus_message_new_method_call(NOTIFICATIONS_SERVICE_NAME,
-                                                    NOTIFICATIONS_PATH,
-                                                    NOTIFICATIONS_INTERFACE_NAME,
-                                                    "Notify");
+    DBusMessage *msg =
+        dbus_message_new_method_call(NOTIFICATIONS_SERVICE_NAME,
+                                     NOTIFICATIONS_PATH,
+                                     NOTIFICATIONS_INTERFACE_NAME,
+                                     "Notify");
     dbus_message_append_args(
         msg,
         DBUS_TYPE_STRING, &appName,
@@ -177,7 +183,7 @@ FcitxNotifySendNotification(
         DBUS_TYPE_STRING, &summary,
         DBUS_TYPE_STRING, &body,
         DBUS_TYPE_INVALID
-    );
+        );
 
     // append arguments onto signal
     DBusMessageIter args;
@@ -199,24 +205,22 @@ FcitxNotifySendNotification(
     dbus_message_iter_close_container(&args, &sub);
 
     dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &timeout);
-    DBusPendingCall* call = NULL;
-    dbus_bool_t reply = dbus_connection_send_with_reply(notify->conn, msg,
-                                                        &call,
-                                                        0);
+    DBusPendingCall *call = NULL;
+    dbus_bool_t reply =
+        dbus_connection_send_with_reply(notify->conn, msg, &call, 0);
 
     if (callback) {
         if (reply) {
-            FcitxNotifyStruct* s = fcitx_utils_new(FcitxNotifyStruct);
+            FcitxNotifyStruct *s = fcitx_utils_new(FcitxNotifyStruct);
             s->owner = notify;
             s->callback = callback;
             s->data = userData;
 
             dbus_pending_call_set_notify(call,
-                                        FcitxNotifyCallback,
-                                        s,
-                                        FcitxNotifyCallbackFree);
-        }
-        else {
+                                         FcitxNotifyCallback,
+                                         s,
+                                         FcitxNotifyCallbackFree);
+        } else {
             freeFunc(userData);
         }
     }
@@ -224,15 +228,20 @@ FcitxNotifySendNotification(
 }
 
 static DBusHandlerResult
-FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message, void *user_data)
+FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message,
+                      void *user_data)
 {
-    // FcitxNotify* notify = (FcitxNotify*)user_data;
-    if (dbus_message_is_signal(message, "org.freedesktop.Notifications", "ActionInvoked")) {
+    // FcitxNotify *notify = (FcitxNotify*)user_data;
+    if (dbus_message_is_signal(message, "org.freedesktop.Notifications",
+                               "ActionInvoked")) {
         DBusError error;
         uint32_t id = 0;
-        const char* key = NULL;
+        const char *key = NULL;
         dbus_error_init(&error);
-        if (dbus_message_get_args(message, &error, DBUS_TYPE_UINT32, &id, DBUS_TYPE_STRING, &key,  DBUS_TYPE_INVALID)) {
+        if (dbus_message_get_args(message, &error, DBUS_TYPE_UINT32,
+                                  &id, DBUS_TYPE_STRING, &key,
+                                  DBUS_TYPE_INVALID)) {
+            // TODO
             FcitxLog(INFO, "action invoked %u %s", id, key);
         }
         dbus_error_free(&error);
@@ -242,14 +251,16 @@ FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message, void *us
 }
 
 
-void FcitxNotifyDestroy(void* arg)
+static void
+FcitxNotifyDestroy(void *arg)
 {
-    FcitxNotify* notify = (FcitxNotify*) arg;
+    FcitxNotify *notify = (FcitxNotify*)arg;
     if (!notify->conn)
         return;
 
     if (notify->filterAdded)
-        dbus_connection_remove_filter(notify->conn, FcitxNotifyDBusFilter, notify);
+        dbus_connection_remove_filter(notify->conn, FcitxNotifyDBusFilter,
+                                      notify);
 
     dbus_bus_remove_match(notify->conn,
                           "type='signal',"
