@@ -15,4 +15,3 @@ fcitx_add_addon_full(notificationitem ${notificationitem_noinstall}
   HEADERS notificationitem.h
   SOURCES ${FCITX_NOTIFICATIONITEM_SOURCES}
   LINK_LIBS ${DBUS_LIBRARIES})
-
