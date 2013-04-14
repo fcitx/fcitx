@@ -209,13 +209,22 @@ detectDE() {
     unset GREP_OPTIONS
 
     _detectDE_XDG_CURRENT || _detectDE_classic || \
-        _detectDE_SESSION || _detectDE_uname
+        _detectDE_SESSION || _detectDE_uname || {
+        DE=generic
+    }
     if [ x"$DE" = x"gnome" ]; then
         # gnome-default-applications-properties is only available in GNOME 2.x
         # but not in GNOME 3.x
         which gnome-default-applications-properties > /dev/null 2>&1 || \
             DE="gnome3"
+        which gnome-shell &> /dev/null && DE="gnome3"
     fi
+}
+
+maybe_gnome3() {
+    [[ $DE = gnome3 ]] && return 0
+    [[ $DE = generic ]] && which gnome-shell &> /dev/null && return 0
+    return 1
 }
 
 detectDE
@@ -456,13 +465,27 @@ set_env_link() {
         "$(code_inline '~/.xprofile')"
 }
 
+gnome_36_check_gsettings() {
+    gsettings get org.gnome.settings-daemon.plugins.keyboard \
+        active 2> /dev/null || return 1
+}
+
 gnome_36_link() {
-    local link
+    # Do nothing if the DE is not gnome3
+    maybe_gnome3 || return 1
+    local link ibus_activated fmt
     link=$(print_link \
         "$(_ "Note for GNOME Later than 3.6")" \
         "${wiki_url}$(_ "/Note_for_GNOME_Later_than_3.6")")
-    local fmt
-    fmt=$(_ 'If you are using ${1}, you may want to uninstall ${2} or remove ${3} to be able to use any input method other than ${2}. See ${link} for more detail as well as alternative solutions.')
+
+    # Check if the gsettings key exists
+    if ibus_activated=$(gnome_36_check_gsettings); then
+        [[ $ibus_activated = 'false' ]] && return 1
+        g36_disable_ibus=$(code_inline 'gsettings set org.gnome.settings-daemon.plugins.keyboard active false')
+        fmt=$(_ 'If you are using ${1}, you may want to uninstall ${2}, remove ${3} or use the command ${g36_disable_ibus} to disable IBus integration in order to use any input method other than ${2}. See ${link} for more detail.')
+    else
+        fmt=$(_ 'If you are using ${1}, you may want to uninstall ${2} or remove ${3} in order to use any input method other than ${2}. See ${link} for more detail as well as alternative solutions.')
+    fi
     write_error_eval "${fmt}" "$(code_inline 'gnome>=3.6')" \
         "$(code_inline 'ibus')" "$(code_inline 'ibus-daemon')"
 }
@@ -751,7 +774,7 @@ check_xim() {
         fi
         if [ "${xim_name}" = "ibus" ]; then
             __need_blank_line=0
-            gnome_36_link
+            gnome_36_link || __need_blank_line=1
         fi
     fi
     write_eval "$(_ 'Xim Server Name from Environment variable is ${1}.')" \
@@ -810,7 +833,7 @@ _check_toolkit_env() {
                 "${name}"
             if [ "${!env_name}" = "ibus" ] && [ "${name}" = 'qt' ]; then
                 __need_blank_line=0
-                gnome_36_link
+                gnome_36_link || __need_blank_line=1
             fi
         fi
         set_env_link "${env_name}" 'fcitx'
