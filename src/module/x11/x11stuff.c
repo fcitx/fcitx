@@ -279,22 +279,35 @@ X11RemoveCompositeHandler(FcitxX11 *x11priv, void *data)
 static void
 X11InitAtoms(FcitxX11 *x11priv)
 {
-    char *atom_names;
-    x11priv->windowTypeAtom = XInternAtom(x11priv->dpy, "_NET_WM_WINDOW_TYPE",
-                                          False);
-    x11priv->typeMenuAtom = XInternAtom(x11priv->dpy,
-                                        "_NET_WM_WINDOW_TYPE_MENU", False);
-    x11priv->typeDialogAtom = XInternAtom(x11priv->dpy,
-                                          "_NET_WM_WINDOW_TYPE_DIALOG", False);
-    x11priv->typeDockAtom = XInternAtom(x11priv->dpy,
-                                        "_NET_WM_WINDOW_TYPE_DOCK", False);
-    x11priv->pidAtom = XInternAtom(x11priv->dpy, "_NET_WM_PID", False);
-    x11priv->utf8Atom = XInternAtom(x11priv->dpy, "UTF8_STRING", False);
-    x11priv->stringAtom = XInternAtom(x11priv->dpy, "STRING", False);
-    x11priv->compTextAtom = XInternAtom(x11priv->dpy, "COMPOUND_TEXT", False);
-    asprintf(&atom_names, "_NET_WM_CM_S%d", x11priv->iScreen);
-    x11priv->compManagerAtom = XInternAtom(x11priv->dpy, atom_names, False);
-    free(atom_names);
+#define CMPMGR_PREFIX "_NET_WM_CM_S"
+    char atom_name[sizeof(CMPMGR_PREFIX) + FCITX_INT64_LEN] = CMPMGR_PREFIX;
+    sprintf(atom_name + strlen(CMPMGR_PREFIX), "%d", x11priv->iScreen);
+#undef CMPMGR_PREFIX
+    char *atom_names[] = {
+        "_NET_WM_WINDOW_TYPE",
+        "_NET_WM_WINDOW_TYPE_MENU",
+        "_NET_WM_WINDOW_TYPE_DIALOG",
+        "_NET_WM_WINDOW_TYPE_DOCK",
+        "_NET_WM_PID",
+        "UTF8_STRING",
+        "STRING",
+        "COMPOUND_TEXT",
+        atom_name,
+    };
+#define ATOMS_COUNT (sizeof(atom_names) / sizeof(char*))
+    Atom atoms_return[ATOMS_COUNT];
+    XInternAtoms(x11priv->dpy, atom_names, ATOMS_COUNT, False, atoms_return);
+#undef ATOMS_COUNT
+
+    x11priv->windowTypeAtom = atoms_return[0];
+    x11priv->typeMenuAtom = atoms_return[1];
+    x11priv->typeDialogAtom = atoms_return[2];
+    x11priv->typeDockAtom = atoms_return[3];
+    x11priv->pidAtom = atoms_return[4];
+    x11priv->utf8Atom = atoms_return[5];
+    x11priv->stringAtom = atoms_return[6];
+    x11priv->compTextAtom = atoms_return[7];
+    x11priv->compManagerAtom = atoms_return[8];
 }
 
 static boolean
