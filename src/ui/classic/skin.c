@@ -240,12 +240,22 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
             const char* skintype = fallbackChain[i];
 
             FILE* fp = FcitxXDGGetFileWithPrefix(skintype, name, "r", &filename);
-            if (fp) {
+            do {
+                if (!fp) {
+                    break;
+                }
+                fclose(fp);
+
                 png = cairo_image_surface_create_from_png(filename);
+                if (!png) {
+                    break;
+                }
+
                 if (cairo_surface_status (png)) {
+                    cairo_surface_destroy(png);
                     png = NULL;
                 }
-            }
+            } while(0);
 
             free(filename);
             if (png)
