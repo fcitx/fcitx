@@ -308,9 +308,11 @@ void DBusDestroy(void* arg) {
     FcitxDBus* dbusmodule = (FcitxDBus*)arg;
     if (dbusmodule->conn) {
         dbus_bus_release_name(dbusmodule->conn, dbusmodule->serviceName, NULL);
+        dbus_connection_unref(dbusmodule->conn);
     }
     if (dbusmodule->privconn) {
         dbus_bus_release_name(dbusmodule->privconn, dbusmodule->serviceName, NULL);
+        dbus_connection_unref(dbusmodule->privconn);
     }
     DBusKill(&dbusmodule->daemon);
     free(dbusmodule->serviceName);

@@ -29,17 +29,20 @@
 #include "im/keyboard/isocodes.h"
 
 static void* FcitxXkbDBusCreate(struct _FcitxInstance* instance);
+static void FcitxXkbDBusDestroy(void* arg);
 typedef struct _FcitxXkbDBus {
     FcitxInstance* owner;
     FcitxXkbRules* rules;
     FcitxIsoCodes* isocodes;
+    DBusConnection* conn;
+    DBusConnection* privconn;
 } FcitxXkbDBus;
 
 FCITX_DEFINE_PLUGIN(fcitx_xkbdbus, module, FcitxModule) = {
     FcitxXkbDBusCreate,
     NULL,
     NULL,
-    NULL,
+    FcitxXkbDBusDestroy,
     NULL
 };
 
@@ -109,6 +112,9 @@ void* FcitxXkbDBusCreate(FcitxInstance* instance)
             dbus_connection_register_object_path(privconn, FCITX_XKB_PATH, &fcitxIPCVTable, xkbdbus);
         }
 
+        xkbdbus->conn = conn;
+        xkbdbus->privconn = privconn;
+
         FcitxXkbRules *rules = FcitxXkbGetRules(instance);
 
         if (!rules)
@@ -122,6 +128,23 @@ void* FcitxXkbDBusCreate(FcitxInstance* instance)
     free(xkbdbus);
 
     return NULL;
+}
+
+void FcitxXkbDBusDestroy(void* arg)
+{
+    FcitxXkbDBus* xkbdbus = arg;
+
+    if (xkbdbus->conn) {
+        dbus_connection_unregister_object_path(xkbdbus->conn, FCITX_XKB_PATH);
+    }
+
+    if (xkbdbus->privconn) {
+        dbus_connection_unregister_object_path(xkbdbus->privconn, FCITX_XKB_PATH);
+    }
+
+    FcitxIsoCodesFree(xkbdbus->isocodes);
+
+    free(xkbdbus);
 }
 
 void FcitxXkbDBusAppendLayout(DBusMessageIter* sub, const char* layout,

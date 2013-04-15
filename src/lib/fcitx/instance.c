@@ -484,9 +484,9 @@ void FcitxInstanceRealEnd(FcitxInstance* instance) {
     }
 
     FcitxAddon** pmodule;
-    for (pmodule = (FcitxAddon**) utarray_front(&instance->modules);
+    for (pmodule = (FcitxAddon**) utarray_back(&instance->modules);
          pmodule != NULL;
-         pmodule = (FcitxAddon**) utarray_next(&instance->modules, pmodule)) {
+         pmodule = (FcitxAddon**) utarray_prev(&instance->modules, pmodule)) {
         if (pmodule == NULL)
             return;
         FcitxModule* module = (*pmodule)->module;
