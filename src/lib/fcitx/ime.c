@@ -60,11 +60,22 @@ static const FcitxHotkey* switchKey1[] = {
     FCITX_LCTRL,
     FCITX_ALT_LSHIFT,
     FCITX_ALT_RSHIFT,
+
     FCITX_RCTRL,
     FCITX_RSHIFT,
+
     FCITX_LALT,
     FCITX_RALT,
     FCITX_LALT,
+
+    FCITX_LSUPER,
+    FCITX_RSUPER,
+    FCITX_LSUPER,
+
+    FCITX_CTRL_LSUPER,
+    FCITX_CTRL_RSUPER,
+    FCITX_SUPER_LCTRL,
+    FCITX_SUPER_RCTRL,
     FCITX_NONE_KEY,
 };
 
@@ -75,11 +86,22 @@ static const FcitxHotkey* switchKey2[] = {
     FCITX_NONE_KEY,
     FCITX_NONE_KEY,
     FCITX_NONE_KEY,
+
     FCITX_LCTRL,
     FCITX_LSHIFT,
+
     FCITX_NONE_KEY,
     FCITX_NONE_KEY,
     FCITX_RALT,
+
+    FCITX_NONE_KEY,
+    FCITX_NONE_KEY,
+    FCITX_RSUPER,
+
+    FCITX_NONE_KEY,
+    FCITX_NONE_KEY,
+    FCITX_NONE_KEY,
+    FCITX_NONE_KEY,
     FCITX_NONE_KEY
 };
 

@@ -278,6 +278,30 @@ FcitxHotkey FCITX_ALT_RSHIFT[2] = {
 };
 
 FCITX_EXPORT_API
+FcitxHotkey FCITX_CTRL_LSUPER[2] = {
+    {NULL, FcitxKey_Super_L, FcitxKeyState_Ctrl | FcitxKeyState_Super},
+    {NULL, FcitxKey_Super_L, FcitxKeyState_Ctrl},
+};
+
+FCITX_EXPORT_API
+FcitxHotkey FCITX_CTRL_RSUPER[2] = {
+    {NULL, FcitxKey_Super_R, FcitxKeyState_Ctrl | FcitxKeyState_Super},
+    {NULL, FcitxKey_Super_R, FcitxKeyState_Ctrl},
+};
+
+FCITX_EXPORT_API
+FcitxHotkey FCITX_SUPER_LCTRL[2] = {
+    {NULL, FcitxKey_Control_L, FcitxKeyState_Ctrl | FcitxKeyState_Super},
+    {NULL, FcitxKey_Control_L, FcitxKeyState_Super},
+};
+
+FCITX_EXPORT_API
+FcitxHotkey FCITX_SUPER_RCTRL[2] = {
+    {NULL, FcitxKey_Control_R, FcitxKeyState_Ctrl | FcitxKeyState_Super},
+    {NULL, FcitxKey_Control_R, FcitxKeyState_Super},
+};
+
+FCITX_EXPORT_API
 FcitxHotkey FCITX_LALT[2] = {
     {NULL, FcitxKey_Alt_L, FcitxKeyState_None},
     {NULL, FcitxKey_Alt_L, FcitxKeyState_Alt},
