@@ -346,13 +346,13 @@ boolean InputWindowEventHandler(void *arg, XEvent* event)
                     } else if (IsInRect(x - window->contentX, y - window->contentY, &inputWindow->nextRect)) {
                         FcitxCandidateWordGoNextPage(candList);
                         FcitxInstanceProcessInputReturnValue(window->owner->owner, IRV_DISPLAY_CANDWORDS);
-                    } else {
-                        ClassicUIMouseClick(window->owner, window->wId, &x, &y);
+                    } else if (ClassicUIMouseClick(window->owner, window->wId, &x, &y)) {
 
                         FcitxInputContext* ic = FcitxInstanceGetCurrentIC(window->owner->owner);
 
-                        if (ic)
-                            FcitxInstanceSetWindowOffset(window->owner->owner, ic, x - inputWindow->iOffsetX, y - inputWindow->iOffsetY);
+                        if (ic) {
+                            FcitxInstanceSetWindowOffset(window->owner->owner, ic, x - inputWindow->iOffsetX, y  - inputWindow->iOffsetY);
+                        }
 
                         FcitxXlibWindowPaint(&inputWindow->parent);
                     }

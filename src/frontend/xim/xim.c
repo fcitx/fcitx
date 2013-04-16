@@ -427,19 +427,10 @@ void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, Fc
 
 void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
 {
-    FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
-    FcitxXimIC* ximic = GetXimIC(ic);
-    Window window, dst;
-    if (!(window = ximic->focus_win))
-        window = ximic->client_win;
+    FCITX_UNUSED(arg);
 
-    if (window != None) {
-        XTranslateCoordinates(xim->display, RootWindow(xim->display, xim->iScreen), window,
-                              x, y,
-                              &ic->offset_x, &ic->offset_y,
-                              &dst
-                             );
-    }
+    ic->offset_x = x;
+    ic->offset_y = y;
 }
 
 void XimGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, int* h)
