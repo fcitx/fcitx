@@ -75,8 +75,10 @@ FcitxCairoTextContext* FcitxCairoTextContextCreate(cairo_t* cr)
 
 void FcitxCairoTextContextFree(FcitxCairoTextContext* ctc)
 {
+#ifdef _ENABLE_PANGO
     g_object_unref(ctc->pangoLayout);
     g_object_unref(ctc->pangoContext);
+#endif
 
     if (ctc->ownSurface) {
         cairo_destroy(ctc->cr);
