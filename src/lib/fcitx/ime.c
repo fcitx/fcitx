@@ -1140,6 +1140,14 @@ INPUT_RETURN_VALUE ImProcessReload(void *arg)
     return IRV_DO_NOTHING;
 }
 
+void FcitxInstanceReloadAddon(FcitxInstance* instance)
+{
+    FcitxAddon* addonHead = FcitxAddonsLoadInternal(&instance->addons, true);
+    FcitxInstanceFillAddonOwner(instance, addonHead);
+    FcitxInstanceResolveAddonDependencyInternal(instance, addonHead);
+    FcitxInstanceLoadAllIM(instance);
+}
+
 FCITX_EXPORT_API
 void FcitxInstanceReloadAddonConfig(FcitxInstance *instance, const char* addonname)
 {
@@ -1158,10 +1166,7 @@ void FcitxInstanceReloadAddonConfig(FcitxInstance *instance, const char* addonna
         if (instance->ui && instance->ui->ui->ReloadConfig)
             instance->ui->ui->ReloadConfig(instance->ui->addonInstance);
     } else if (strcmp(addonname, "addon") == 0) {
-        FcitxAddon* addonHead = FcitxAddonsLoadInternal(&instance->addons, true);
-        FcitxInstanceFillAddonOwner(instance, addonHead);
-        FcitxInstanceResolveAddonDependencyInternal(instance, addonHead);
-        FcitxInstanceLoadAllIM(instance);
+        instance->eventflag |= FEF_RELOAD_ADDON;
     } else {
         do {
             FcitxIM* im;
@@ -1270,11 +1275,8 @@ void FcitxInstanceReloadConfig(FcitxInstance *instance)
 
     if (instance->ui && instance->ui->ui->ReloadConfig)
         instance->ui->ui->ReloadConfig(instance->ui->addonInstance);
-
-    FcitxAddon* addonHead = FcitxAddonsLoadInternal(&instance->addons, true);
-    FcitxInstanceFillAddonOwner(instance, addonHead);
-    FcitxInstanceResolveAddonDependencyInternal(instance, addonHead);
-    FcitxInstanceLoadAllIM(instance);
+    
+    instance->eventflag |= FEF_RELOAD_ADDON;
 }
 
 static inline void FcitxInstanceSetICStatus(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState state)

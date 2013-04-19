@@ -58,6 +58,15 @@ typedef struct _FcitxICDataInfo {
     void* arg;
 } FcitxICDataInfo;
 
+typedef enum _FcitxEventFlag {
+    FEF_NONE = 0,
+    FEF_UI_MOVE = (1 << 1),
+    FEF_UI_UPDATE = (1 << 2),
+    FEF_EVENT_CHECK = (1 << 3),
+    FEF_RELOAD_ADDON = (1 << 4),
+    FEF_PROCESS_EVENT_MASK = ( FEF_UI_MOVE | FEF_UI_UPDATE | FEF_EVENT_CHECK )
+} FcitxUIFlag;
+
 struct _FcitxInstance {
     pthread_mutex_t fcitxMutex;
     UT_array uistats;
@@ -109,7 +118,7 @@ struct _FcitxInstance {
     struct _HookStack* hookICStateChangedHook;
     struct _HookStack* hookIMChangedHook;
 
-    FcitxUIFlag uiflag;
+    uint32_t eventflag;
 
     FcitxContextState globalState;
 
@@ -151,6 +160,8 @@ struct _FcitxInstance {
     volatile boolean destroy;
     int fd;
     int overrideDelay;
+    
+    UT_array eventQueue;
 };
 
 static inline FcitxAddon**

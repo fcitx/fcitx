@@ -351,13 +351,13 @@ FCITX_EXPORT_API
 void FcitxUICloseInputWindow(FcitxInstance* instance)
 {
     FcitxInstanceCleanInputWindow(instance);
-    instance->uiflag |= UI_UPDATE;
+    instance->eventflag |= FEF_UI_UPDATE;
 }
 
 FCITX_EXPORT_API
 void FcitxUIUpdateInputWindow(FcitxInstance *instance)
 {
-    instance->uiflag |= UI_UPDATE;
+    instance->eventflag |= FEF_UI_UPDATE;
 }
 
 void FcitxUIShowInputWindow(FcitxInstance* instance)
@@ -369,7 +369,7 @@ void FcitxUIShowInputWindow(FcitxInstance* instance)
 FCITX_EXPORT_API
 void FcitxUIMoveInputWindow(FcitxInstance* instance)
 {
-    instance->uiflag |= UI_MOVE;
+    instance->eventflag |= FEF_UI_MOVE;
 }
 
 FCITX_EXPORT_API

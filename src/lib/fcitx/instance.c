@@ -211,7 +211,7 @@ FcitxInstance* FcitxInstanceCreateWithFD(sem_t *sem, int argc, char* argv[], int
 FCITX_EXPORT_API
 void FcitxInstanceSetRecheckEvent(FcitxInstance* instance)
 {
-    instance->uiflag |= UI_EVENT_CHECK;
+    instance->eventflag |= FEF_EVENT_CHECK;
 }
 
 FCITX_EXPORT_API
@@ -317,10 +317,10 @@ void* RunInstance(void* arg)
             }
         }
         do {
-            instance->uiflag = UI_NONE;
+            instance->eventflag &= (~FEF_PROCESS_EVENT_MASK);
             for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
-                    pmodule != NULL;
-                    pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule)) {
+                  pmodule != NULL;
+                  pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule)) {
                 FcitxModule* module = (*pmodule)->module;
                 module->ProcessEvent((*pmodule)->addonInstance);
             }
@@ -349,18 +349,23 @@ void* RunInstance(void* arg)
                 }
             }
 
-            if (instance->uiflag & UI_MOVE)
+            if (instance->eventflag & FEF_UI_MOVE)
                 FcitxUIMoveInputWindowReal(instance);
 
-            if (instance->uiflag & UI_UPDATE)
+            if (instance->eventflag & FEF_UI_UPDATE)
                 FcitxUIUpdateInputWindowReal(instance);
-        } while (instance->uiflag != UI_NONE);
+        } while ((instance->eventflag & FEF_PROCESS_EVENT_MASK) != FEF_NONE);
 
         setjmp(FcitxRecover);
 
         if (instance->destroy) {
             FcitxInstanceRealEnd(instance);
             break;
+        }
+        
+        if (instance->eventflag & FEF_RELOAD_ADDON) {
+            instance->eventflag &= ~(FEF_RELOAD_ADDON);
+            FcitxInstanceReloadAddon(instance);
         }
 
         FD_ZERO(&instance->rfds);
@@ -373,8 +378,8 @@ void* RunInstance(void* arg)
             FD_SET(instance->fd, &instance->rfds);
         }
         for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
-                pmodule != NULL;
-                pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule)) {
+              pmodule != NULL;
+              pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule)) {
             FcitxModule* module = (*pmodule)->module;
             module->SetFD((*pmodule)->addonInstance);
         }

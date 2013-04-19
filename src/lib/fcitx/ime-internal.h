@@ -130,6 +130,8 @@ void HideInputSpeed(void* arg);
 
 boolean FcitxInstanceCheckICFromSameApplication (struct  _FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic);
 
+void FcitxInstanceReloadAddon(struct _FcitxInstance* instance);
+
 #endif
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

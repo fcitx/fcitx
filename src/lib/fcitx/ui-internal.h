@@ -55,11 +55,4 @@ void FcitxUIMoveInputWindowReal(FcitxInstance *instance);
  **/
 char* FcitxUIMessagesToCStringForCommit(FcitxMessages* messages);
 
-typedef enum _FcitxUIFlag {
-    UI_NONE = 0,
-    UI_MOVE = (1 << 1),
-    UI_UPDATE = (1 << 2),
-    UI_EVENT_CHECK = (1 << 3),
-} FcitxUIFlag;
-
 #endif
