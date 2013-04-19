@@ -369,6 +369,12 @@ void fcitx_utils_free_string_hash_set(FcitxStringHashSet* sset)
 }
 
 FCITX_EXPORT_API
+int fcitx_utils_string_hash_set_compare(FcitxStringHashSet* sseta, FcitxStringHashSet* ssetb)
+{
+    return strcmp(sseta->name, ssetb->name);
+}
+
+FCITX_EXPORT_API
 void* fcitx_utils_malloc0(size_t bytes)
 {
     void *p = malloc(bytes);

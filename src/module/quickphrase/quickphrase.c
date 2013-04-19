@@ -31,6 +31,7 @@
 #include "fcitx-utils/utarray.h"
 #include "fcitx/instance.h"
 #include "fcitx-utils/utils.h"
+#include "fcitx-utils/memory.h"
 #include "fcitx/module.h"
 #include "fcitx/hook.h"
 #include "fcitx/keys.h"
@@ -47,8 +48,8 @@
 #define QUICKPHRASE_PHRASE_LEN  40
 
 typedef struct {
-    char strCode[QUICKPHRASE_CODE_LEN + 1];
-    char strPhrase[QUICKPHRASE_PHRASE_LEN * UTF8_MAX_LENGTH + 1];
+    char *strCode;
+    char *strPhrase;
 } QUICK_PHRASE;
 
 typedef enum {
@@ -76,6 +77,7 @@ typedef struct {
 typedef struct {
     QuickPhraseConfig config;
     unsigned int uQuickPhraseCount;
+    FcitxMemoryPool* memPool;
     UT_array *quickPhrases ;
     boolean enabled;
     FcitxInstance* owner;
@@ -170,6 +172,7 @@ void *QuickPhraseCreate(FcitxInstance *instance)
     QuickPhraseState *qpstate = fcitx_utils_new(QuickPhraseState);
     qpstate->owner = instance;
     qpstate->enabled = false;
+    qpstate->memPool = fcitx_memory_pool_create();
 
     if (!LoadQuickPhraseConfig(&qpstate->config)) {
         free(qpstate);
@@ -247,31 +250,13 @@ void _QuickPhraseLaunch(QuickPhraseState* qpstate)
     qpstate->enabled = true;
 }
 
-/**
- * 加载快速输入词典
- * @param void
- * @return void
- * @note 快速输入是在;的行为定义为2,并且输入;以后才可以使用的。
- * 加载快速输入词典.如：输入“zg”就直接出现“中华人民共和国”等等。
- * 文件中每一行数据的定义为：<字符组合> <短语>
- * 如：“zg 中华人民共和国”
- */
-void LoadQuickPhrase(QuickPhraseState * qpstate)
+void LoadQuickPhraseFromFile(QuickPhraseState* qpstate, FILE* fp)
 {
-    FILE *fp;
     char *buf = NULL;
     size_t len = 0;
     char *buf1 = NULL;
 
     QUICK_PHRASE tempQuickPhrase;
-
-    qpstate->uQuickPhraseCount = 0;
-
-    fp =  FcitxXDGGetFileWithPrefix("data", "QuickPhrase.mb", "r", NULL);
-    if (!fp)
-        return;
-
-    utarray_new(qpstate->quickPhrases, &qp_icd);
     while (getline(&buf, &len, fp) != -1) {
         if (buf1)
             free(buf1);
@@ -289,11 +274,19 @@ void LoadQuickPhrase(QuickPhraseState * qpstate)
             p ++;
         }
 
+        size_t keylen = strlen(buf1);
         if (strlen(buf1) >= QUICKPHRASE_CODE_LEN)
             continue;
 
+        size_t phraselen = strlen(p);
         if (strlen(p) >= QUICKPHRASE_PHRASE_LEN * UTF8_MAX_LENGTH)
             continue;
+        
+        if (!fcitx_utf8_check_string(p))
+            continue;
+        
+        tempQuickPhrase.strCode = fcitx_memory_pool_alloc(qpstate->memPool, keylen + 1);
+        tempQuickPhrase.strPhrase = fcitx_memory_pool_alloc(qpstate->memPool, phraselen + 1);
 
         strcpy(tempQuickPhrase.strCode, buf1);
         strcpy(tempQuickPhrase.strPhrase, p);
@@ -305,12 +298,51 @@ void LoadQuickPhrase(QuickPhraseState * qpstate)
         free(buf);
     if (buf1)
         free(buf1);
+}
+
+/**
+ * 加载快速输入词典
+ * @param void
+ * @return void
+ * @note 快速输入是在;的行为定义为2,并且输入;以后才可以使用的。
+ * 加载快速输入词典.如：输入“zg”就直接出现“中华人民共和国”等等。
+ * 文件中每一行数据的定义为：<字符组合> <短语>
+ * 如：“zg 中华人民共和国”
+ */
+void LoadQuickPhrase(QuickPhraseState * qpstate)
+{
+    FILE *fp;
+
+    qpstate->uQuickPhraseCount = 0;
+    utarray_new(qpstate->quickPhrases, &qp_icd);
+
+    fp =  FcitxXDGGetFileWithPrefix("data", "QuickPhrase.mb", "r", NULL);
+    if (fp) {
+        LoadQuickPhraseFromFile(qpstate, fp);
+        fclose(fp);
+    }
+    
+    FcitxStringHashSet* additionalFile = FcitxXDGGetFiles("data/quickphrase.d", NULL, ".mb");
+    HASH_SORT(additionalFile, fcitx_utils_string_hash_set_compare);
+    
+    HASH_FOREACH(fileName, additionalFile, FcitxStringHashSet) {
+        FILE* f = FcitxXDGGetFileWithPrefix("data/quickphrase.d", fileName->name, "r", NULL);
+        
+        if (!f) {
+            continue;
+        }
+        
+        LoadQuickPhraseFromFile(qpstate, f);
+        
+        fclose(f);
+    }
+    
+    fcitx_utils_free_string_hash_set(additionalFile);
+
 
     if (qpstate->quickPhrases) {
         utarray_sort(qpstate->quickPhrases, PhraseCmp);
     }
-
-    fclose(fp);
 }
 
 void FreeQuickPhrase(void *arg)
@@ -318,6 +350,8 @@ void FreeQuickPhrase(void *arg)
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     if (!qpstate->quickPhrases)
         return;
+    
+    fcitx_memory_pool_clear(qpstate->memPool);
 
     utarray_free(qpstate->quickPhrases);
     qpstate->quickPhrases = NULL;
@@ -599,7 +633,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
         if (iInputLen > QUICKPHRASE_CODE_LEN)
             break;
 
-        strcpy(searchKey.strCode, qpstate->buffer);
+        searchKey.strCode = qpstate->buffer;
 
         currentQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmp);
         iFirstQuickPhrase = utarray_eltidx(qpstate->quickPhrases, currentQuickPhrase);

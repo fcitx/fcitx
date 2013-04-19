@@ -230,6 +230,17 @@ extern "C" {
     void fcitx_utils_free_string_hash_set(FcitxStringHashSet* sset);
     
     /**
+     * compare two string with strcmp
+     *
+     * @param sseta left
+     * @param ssetb right
+     * @return same as strcmp
+     * 
+     * @since 4.2.8
+     **/
+    int fcitx_utils_string_hash_set_compare(FcitxStringHashSet* sseta, FcitxStringHashSet* ssetb);
+    
+    /**
      * insert to a string hash set
      *
      * @param sset string hash set

@@ -68,6 +68,13 @@ FCITX_EXPORT_API
 void FcitxAddonsInit(UT_array* addons)
 {
     utarray_init(addons, &addon_icd);
+    /*
+     * FIXME: this is a workaround since everyone is using "FcitxAddon*" everywhere,
+     * so realloc will really do some evil things.
+     * 
+     * We might better use UT_hash for fcitx addon in the future
+     */
+    utarray_reserve(addons, 512);
 }
 
 void* FcitxGetSymbol(void* handle, const char* addonName, const char* symbolName)
@@ -110,6 +117,11 @@ FcitxAddon* FcitxAddonsLoadInternal(UT_array* addons, boolean reloadIM)
     addonPath = FcitxXDGGetPathWithPrefix(&len, "addon");
     char *paths[len];
     HASH_FOREACH(string, sset, FcitxStringHashSet) {
+        // FIXME: if it will cause realloc, then it's evil for fcitx 4.2 series
+        if (reloadIM && addons->i == addons->n) {
+            break;
+        }
+        
         int i;
         for (i = len - 1; i >= 0; i--) {
             fcitx_utils_alloc_cat_str(paths[i], addonPath[len - i - 1],
