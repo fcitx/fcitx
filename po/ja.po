@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-18 15:36-0400\n"
-"PO-Revision-Date: 2013-04-14 14:36+0000\n"
-"Last-Translator: しろう <>\n"
+"POT-Creation-Date: 2013-04-19 00:00-0400\n"
+"PO-Revision-Date: 2013-04-18 19:40+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
 "Language: ja\n"
@@ -86,7 +86,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1629
+#: src/lib/fcitx/ime.c:1631
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -1411,7 +1411,7 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1535 data/fcitx-autostart.desktop.in:3
+#: src/lib/fcitx/ime.c:1537 data/fcitx-autostart.desktop.in:3
 #: data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "入力メソッド"
@@ -1437,7 +1437,7 @@ msgstr "入力メソッド関連の環境変数:"
 msgid "Input Methods:"
 msgstr "入力メソッド:"
 
-#: src/lib/fcitx/ime.c:1626
+#: src/lib/fcitx/ime.c:1628
 msgid "Input Speed: "
 msgstr "入力スピード"
 
@@ -1812,7 +1812,7 @@ msgstr "入力ウィンドウなし"
 msgid "No local input method"
 msgstr "ローカル入力メソッドがありません"
 
-#: src/lib/fcitx/instance.c:283 src/lib/fcitx/instance.c:531
+#: src/lib/fcitx/instance.c:283 src/lib/fcitx/instance.c:536
 msgid "No remind"
 msgstr "リマインドなし"
 
@@ -2481,9 +2481,8 @@ msgid "Successfully Installed skin"
 msgstr "スキンをインストールしました"
 
 #: data/config.desc:28
-#, fuzzy
 msgid "Super Both"
-msgstr "2つのShift"
+msgstr ""
 
 #: data/config.desc:31
 msgid "Super+Left Ctrl"
@@ -2633,7 +2632,7 @@ msgstr "全角/半角文字の切り替え"
 msgid "Toggle Input Method"
 msgstr "入力メソッドの切り替え"
 
-#: src/lib/fcitx/instance.c:284 src/lib/fcitx/instance.c:532
+#: src/lib/fcitx/instance.c:284 src/lib/fcitx/instance.c:537
 msgid "Toggle Remind"
 msgstr "リマインドの切り替え"
 
@@ -2804,7 +2803,7 @@ msgstr "既存の文字列を確定するときに Enter を使う"
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr "アクティブでない時だけその他のトリガーキーを使用する"
 
-#: src/lib/fcitx/instance.c:283 src/lib/fcitx/instance.c:531
+#: src/lib/fcitx/instance.c:283 src/lib/fcitx/instance.c:536
 msgid "Use remind"
 msgstr "リマインドを使用"
 
@@ -3000,7 +2999,7 @@ msgstr "実行可能:"
 msgid "here"
 msgstr "ここ"
 
-#: src/lib/fcitx/ime.c:1632
+#: src/lib/fcitx/ime.c:1634
 msgid "min Num of Characters: "
 msgstr ""
 
@@ -3017,7 +3016,7 @@ msgstr "正しいフォントではありません"
 msgid "process:"
 msgstr "プロセス:"
 
-#: src/lib/fcitx/instance.c:507
+#: src/lib/fcitx/instance.c:512
 msgid "pthread mutex init failed"
 msgstr "pthread の mutex 初期化に失敗しました"
 

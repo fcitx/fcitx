@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-18 15:36-0400\n"
-"PO-Revision-Date: 2013-04-14 09:56+0000\n"
-"Last-Translator: pellaeon <nfsmwlin@gmail.com>\n"
+"POT-Creation-Date: 2013-04-19 00:00-0400\n"
+"PO-Revision-Date: 2013-04-18 19:40+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -87,7 +87,7 @@ msgstr ""
 msgid "/XIM"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1629
+#: src/lib/fcitx/ime.c:1631
 msgid "/min  Time Used: "
 msgstr "/分 經過時間："
 
@@ -1399,7 +1399,7 @@ msgstr "輸入字體尺寸"
 msgid "Input Message Color"
 msgstr "輸入訊息顏色"
 
-#: src/lib/fcitx/ime.c:1535 data/fcitx-autostart.desktop.in:3
+#: src/lib/fcitx/ime.c:1537 data/fcitx-autostart.desktop.in:3
 #: data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "輸入法"
@@ -1425,7 +1425,7 @@ msgstr "輸入法相關環境變數："
 msgid "Input Methods:"
 msgstr "輸入法："
 
-#: src/lib/fcitx/ime.c:1626
+#: src/lib/fcitx/ime.c:1628
 msgid "Input Speed: "
 msgstr "輸入速度："
 
@@ -1800,7 +1800,7 @@ msgstr "沒有輸入視窗"
 msgid "No local input method"
 msgstr "沒有局部輸入法"
 
-#: src/lib/fcitx/instance.c:283 src/lib/fcitx/instance.c:531
+#: src/lib/fcitx/instance.c:283 src/lib/fcitx/instance.c:536
 msgid "No remind"
 msgstr "沒有聯想"
 
@@ -2466,9 +2466,8 @@ msgid "Successfully Installed skin"
 msgstr ""
 
 #: data/config.desc:28
-#, fuzzy
 msgid "Super Both"
-msgstr "兩側 Shift"
+msgstr ""
 
 #: data/config.desc:31
 msgid "Super+Left Ctrl"
@@ -2619,7 +2618,7 @@ msgstr "切換全形半形字元"
 msgid "Toggle Input Method"
 msgstr "切換輸入法"
 
-#: src/lib/fcitx/instance.c:284 src/lib/fcitx/instance.c:532
+#: src/lib/fcitx/instance.c:284 src/lib/fcitx/instance.c:537
 msgid "Toggle Remind"
 msgstr "切換聯想"
 
@@ -2790,7 +2789,7 @@ msgstr "使用 enter 鍵確認輸入字串"
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr "只在用額外切換鍵取消啟動後才使用它進行切換"
 
-#: src/lib/fcitx/instance.c:283 src/lib/fcitx/instance.c:531
+#: src/lib/fcitx/instance.c:283 src/lib/fcitx/instance.c:536
 msgid "Use remind"
 msgstr "使用聯想"
 
@@ -2982,7 +2981,7 @@ msgstr "可執行檔："
 msgid "here"
 msgstr "在此"
 
-#: src/lib/fcitx/ime.c:1632
+#: src/lib/fcitx/ime.c:1634
 msgid "min Num of Characters: "
 msgstr "分 字元數："
 
@@ -2999,7 +2998,7 @@ msgstr ""
 msgid "process:"
 msgstr "行程："
 
-#: src/lib/fcitx/instance.c:507
+#: src/lib/fcitx/instance.c:512
 msgid "pthread mutex init failed"
 msgstr ""
 
