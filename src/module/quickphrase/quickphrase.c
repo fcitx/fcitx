@@ -326,6 +326,15 @@ void LoadQuickPhrase(QuickPhraseState * qpstate)
     HASH_SORT(additionalFile, fcitx_utils_string_hash_set_compare);
     
     HASH_FOREACH(fileName, additionalFile, FcitxStringHashSet) {
+        char* disableTest;
+        asprintf(&disableTest, "%s.disable", fileName->name);
+        FILE* ftest = FcitxXDGGetFileWithPrefix("data/quickphrase.d", disableTest, "r", NULL);
+        free(disableTest);
+        if (ftest) {
+            fclose(ftest);
+            continue;
+        }
+        
         FILE* f = FcitxXDGGetFileWithPrefix("data/quickphrase.d", fileName->name, "r", NULL);
         
         if (!f) {
