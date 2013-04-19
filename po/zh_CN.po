@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-19 00:00-0400\n"
+"POT-Creation-Date: 2013-04-19 03:30-0400\n"
 "PO-Revision-Date: 2013-04-18 19:40+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
@@ -203,7 +203,7 @@ msgstr "当前输入内容加入用户词典"
 msgid "Addon"
 msgstr "附加组件"
 
-#: src/lib/fcitx/addon.c:126
+#: src/lib/fcitx/addon.c:138
 #, c-format
 msgid "Addon Config %s is %s"
 msgstr "Addon Config %s is %s"
@@ -806,7 +806,7 @@ msgstr "联想模式禁用翻页"
 msgid "Disable Pinyin Symbol"
 msgstr "禁用拼音符号"
 
-#: src/lib/fcitx/addon.c:286
+#: src/lib/fcitx/addon.c:298
 #, c-format
 msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr "禁用插件 %s，依赖 %s 无法满足。"
@@ -1579,7 +1579,7 @@ msgstr "简码级别"
 msgid "Library"
 msgstr "库"
 
-#: src/lib/fcitx/addon.c:139
+#: src/lib/fcitx/addon.c:151
 #, c-format
 msgid "Load Addon Config File:%s"
 msgstr "加载附加组件配置文件: %s"
@@ -1993,7 +1993,7 @@ msgstr "按下 1 删除常用字表中的 %s (ESC 取消)"
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
 
-#: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:413
+#: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:456
 msgid "Press Enter to input text"
 msgstr "按下回车输入文本"
 
@@ -2083,7 +2083,7 @@ msgstr "快速输入编辑器"
 msgid "Quick Phrase List"
 msgstr "快速输入列表"
 
-#: src/module/quickphrase/quickphrase.c:335
+#: src/module/quickphrase/quickphrase.c:378
 msgid "Quick Phrase: "
 msgstr "快速输入: "
 
@@ -2410,7 +2410,7 @@ msgstr "皮肤托盘图标设置"
 msgid "Space Line Color"
 msgstr "分隔线颜色"
 
-#: src/module/quickphrase/quickphrase.c:244
+#: src/module/quickphrase/quickphrase.c:247
 #, c-format
 msgid "Space for %s Enter for %s"
 msgstr "空格输入 %s 回车输入 %s"
