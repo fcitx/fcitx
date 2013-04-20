@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-19 03:30-0400\n"
+"POT-Creation-Date: 2013-04-20 00:00-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -595,21 +595,6 @@ msgstr ""
 msgid "Rename OK"
 msgstr ""
 
-#: src/lib/fcitx/addon.c:138
-#, c-format
-msgid "Addon Config %s is %s"
-msgstr ""
-
-#: src/lib/fcitx/addon.c:151
-#, c-format
-msgid "Load Addon Config File:%s"
-msgstr ""
-
-#: src/lib/fcitx/addon.c:298
-#, c-format
-msgid "Disable addon %s, dependency %s can not be satisfied."
-msgstr ""
-
 #: src/lib/fcitx-config/fcitx-config.c:366
 msgid "Enum option duplicated."
 msgstr ""
@@ -669,6 +654,47 @@ msgstr ""
 #: src/lib/fcitx-config/fcitx-config.c:1192
 #, c-format
 msgid "no default option for %s/%s"
+msgstr ""
+
+#: src/lib/fcitx-utils/desktop-parse.c:513
+#, c-format
+msgid "Invalid group name line @ line %d %s"
+msgstr ""
+
+#: src/lib/fcitx-utils/desktop-parse.c:525
+#, c-format
+msgid ""
+"Duplicate group %s in a desktop file,@ line %d, merge with previous one."
+msgstr ""
+
+#: src/lib/fcitx-utils/desktop-parse.c:549
+#, c-format
+msgid "Non-comment doesn't belongs to any group @ %d %s"
+msgstr ""
+
+#: src/lib/fcitx-utils/desktop-parse.c:555
+#, c-format
+msgid "Invalid entry line @ line %d %s"
+msgstr ""
+
+#: src/lib/fcitx-utils/desktop-parse.c:565
+#, c-format
+msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
+msgstr ""
+
+#: src/lib/fcitx/addon.c:138
+#, c-format
+msgid "Addon Config %s is %s"
+msgstr ""
+
+#: src/lib/fcitx/addon.c:151
+#, c-format
+msgid "Load Addon Config File:%s"
+msgstr ""
+
+#: src/lib/fcitx/addon.c:298
+#, c-format
+msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr ""
 
 #: src/lib/fcitx/frontend.c:511
@@ -747,32 +773,6 @@ msgstr ""
 
 #: src/lib/fcitx/ui.c:205
 msgid "UI: bad ui"
-msgstr ""
-
-#: src/lib/fcitx-utils/desktop-parse.c:513
-#, c-format
-msgid "Invalid group name line @ line %d %s"
-msgstr ""
-
-#: src/lib/fcitx-utils/desktop-parse.c:525
-#, c-format
-msgid ""
-"Duplicate group %s in a desktop file,@ line %d, merge with previous one."
-msgstr ""
-
-#: src/lib/fcitx-utils/desktop-parse.c:549
-#, c-format
-msgid "Non-comment doesn't belongs to any group @ %d %s"
-msgstr ""
-
-#: src/lib/fcitx-utils/desktop-parse.c:555
-#, c-format
-msgid "Invalid entry line @ line %d %s"
-msgstr ""
-
-#: src/lib/fcitx-utils/desktop-parse.c:565
-#, c-format
-msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
 msgstr ""
 
 #: src/module/autoeng/AutoEng.c:557
@@ -1350,13 +1350,13 @@ msgstr ""
 msgid "X11 Utilitiy used by other Addon"
 msgstr ""
 
+#: src/module/xkb/fcitx-xkb.conf.in:3 src/module/xkb/fcitx-xkb.conf.in:4
+msgid "X Keyboard Integration"
+msgstr ""
+
 #: src/module/xkbdbus/fcitx-xkbdbus.conf.in:3
 #: src/module/xkbdbus/fcitx-xkbdbus.conf.in:4
 msgid "X Keyboard Integration export with DBus"
-msgstr ""
-
-#: src/module/xkb/fcitx-xkb.conf.in:3 src/module/xkb/fcitx-xkb.conf.in:4
-msgid "X Keyboard Integration"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:3
