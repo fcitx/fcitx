@@ -627,6 +627,9 @@ char* FcitxHotkeyGetKeyString(FcitxKeySym sym, unsigned int state)
     if (state & FcitxKeyState_Super)
         len += strlen("SUPER_");
 
+    if (sym == FcitxKey_ISO_Left_Tab)
+        sym = FcitxKey_Tab;
+
     char *key = FcitxHotkeyGetKeyListString(sym);
 
     if (!key)
@@ -647,6 +650,7 @@ char* FcitxHotkeyGetKeyString(FcitxKeySym sym, unsigned int state)
 
     if (state & FcitxKeyState_Super)
         strcat(str, "SUPER_");
+    
 
     strcat(str, key);
 
