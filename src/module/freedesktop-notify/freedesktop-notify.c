@@ -24,12 +24,27 @@
 
 #include "fcitx/module.h"
 #include "fcitx/instance.h"
+#include "fcitx-utils/utils.h"
+#include "fcitx-utils/uthash.h"
 #include "module/dbus/fcitx-dbus.h"
 #include "freedesktop-notify.h"
 
 #define NOTIFICATIONS_SERVICE_NAME "org.freedesktop.Notifications"
 #define NOTIFICATIONS_INTERFACE_NAME "org.freedesktop.Notifications"
 #define NOTIFICATIONS_PATH "/org/freedesktop/Notifications"
+#define NOTIFICATIONS_MATCH_NAMES                   \
+    "sender='" NOTIFICATIONS_SERVICE_NAME "',"      \
+    "interface='" NOTIFICATIONS_INTERFACE_NAME "'," \
+    "path='" NOTIFICATIONS_PATH "'"
+#define NOTIFICATIONS_MATCH_SIGNAL              \
+    "type='signal',"                            \
+    NOTIFICATIONS_MATCH_NAMES
+#define NOTIFICATIONS_MATCH_ACTION              \
+    NOTIFICATIONS_MATCH_SIGNAL ","              \
+    "member='ActionInvoked'"
+#define NOTIFICATIONS_MATCH_CLOSED              \
+    NOTIFICATIONS_MATCH_SIGNAL ","              \
+    "member='NotificationClosed'"
 
 static void *FcitxNotifyCreate(FcitxInstance *instance);
 static void FcitxNotifyDestroy(void *arg);
@@ -45,9 +60,9 @@ FCITX_DEFINE_PLUGIN(fcitx_freedesktop_notify, module, FcitxModule) = {
 };
 
 typedef struct {
-    boolean filterAdded;
-    DBusConnection *conn;
     FcitxInstance *owner;
+    DBusConnection *conn;
+    int notify_counter;
 } FcitxNotify;
 
 typedef struct {
@@ -81,52 +96,37 @@ FcitxNotifyCreate(FcitxInstance *instance)
     FcitxNotify *notify = fcitx_utils_new(FcitxNotify);
     notify->owner = instance;
     notify->conn = FcitxDBusGetConnection(notify->owner);
-    if (!notify->conn)
-        goto _notify_create_error;
+    if (fcitx_unlikely(!notify->conn))
+        goto connect_error;
 
     DBusError err;
     dbus_error_init(&err);
-    dbus_bus_add_match(notify->conn,
-                       "type='signal',"
-                       "sender='" NOTIFICATIONS_SERVICE_NAME "',"
-                       "interface='" NOTIFICATIONS_INTERFACE_NAME "',"
-                       "path='" NOTIFICATIONS_PATH "',"
-                       "member='ActionInvoked'",
-                       &err);
 
-    if (dbus_error_is_set(&err))
-        goto _notify_create_error;
+    dbus_bus_add_match(notify->conn, NOTIFICATIONS_MATCH_ACTION, &err);
+    if (fcitx_unlikely(dbus_error_is_set(&err)))
+        goto filter_error;
 
-    dbus_bus_add_match(notify->conn,
-                       "type='signal',"
-                       "sender='" NOTIFICATIONS_SERVICE_NAME "',"
-                       "interface='" NOTIFICATIONS_INTERFACE_NAME "',"
-                       "path='" NOTIFICATIONS_PATH "',"
-                       "member='NotificationClosed'",
-                       &err);
+    dbus_bus_add_match(notify->conn, NOTIFICATIONS_MATCH_CLOSED, &err);
+    if (fcitx_unlikely(dbus_error_is_set(&err)))
+        goto filter_error;
 
-    if (dbus_error_is_set(&err))
-        goto _notify_create_error;
-
-    if (dbus_connection_add_filter(notify->conn, FcitxNotifyDBusFilter,
-                                   notify, NULL)) {
-        notify->filterAdded = true;
-    } else {
-        goto _notify_create_error;
-    }
-
+    if (fcitx_unlikely(!dbus_connection_add_filter(notify->conn,
+                                                   FcitxNotifyDBusFilter,
+                                                   notify, NULL)))
+        goto filter_error;
     dbus_error_free(&err);
 
     FcitxFreeDesktopNotifyAddFunctions(instance);
 
     return notify;
-_notify_create_error:
-    if (notify->conn)
-        dbus_error_free(&err);
-    FcitxNotifyDestroy(notify);
+filter_error:
+    dbus_bus_remove_match(notify->conn, NOTIFICATIONS_MATCH_ACTION, NULL);
+    dbus_bus_remove_match(notify->conn, NOTIFICATIONS_MATCH_CLOSED, NULL);
+    dbus_error_free(&err);
+connect_error:
+    free(notify);
     return NULL;
 }
-
 
 static void
 FcitxNotifyCallback(DBusPendingCall *call, void *data)
@@ -255,27 +255,9 @@ static void
 FcitxNotifyDestroy(void *arg)
 {
     FcitxNotify *notify = (FcitxNotify*)arg;
-    if (!notify->conn)
-        return;
-
-    if (notify->filterAdded)
-        dbus_connection_remove_filter(notify->conn, FcitxNotifyDBusFilter,
-                                      notify);
-
-    dbus_bus_remove_match(notify->conn,
-                          "type='signal',"
-                          "sender='" NOTIFICATIONS_SERVICE_NAME "',"
-                          "interface='" NOTIFICATIONS_INTERFACE_NAME "',"
-                          "path='" NOTIFICATIONS_PATH "',"
-                          "member='ActionInvoked'",
-                          NULL);
-    dbus_bus_remove_match(notify->conn,
-                          "type='signal',"
-                          "sender='" NOTIFICATIONS_SERVICE_NAME "',"
-                          "interface='" NOTIFICATIONS_INTERFACE_NAME "',"
-                          "path='" NOTIFICATIONS_PATH "',"
-                          "member='NotificationClosed'",
-                          NULL);
+    dbus_connection_remove_filter(notify->conn, FcitxNotifyDBusFilter, notify);
+    dbus_bus_remove_match(notify->conn, NOTIFICATIONS_MATCH_ACTION, NULL);
+    dbus_bus_remove_match(notify->conn, NOTIFICATIONS_MATCH_CLOSED, NULL);
     free(arg);
 }
 
