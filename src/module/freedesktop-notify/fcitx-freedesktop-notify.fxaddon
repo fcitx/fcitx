@@ -2,6 +2,7 @@
 Name=fcitx-freeedesktop-notify
 Prefix=FreeDesktopNotify
 Function0=SendNotification
+Function1=CloseNotification
 Include0="freedesktop-notify.h"
 Self.Type=FcitxNotify*
 
@@ -17,5 +18,10 @@ Arg6=int32_t
 Arg7=FcitxFreedesktopNotifyActionCallback
 Arg8=void*
 Arg9=FcitxDestroyNotify
-Resule=uint32_t
+Return=uint32_t
 Res.WrapFunc=FcitxNotifySendNotification
+
+[CloseNotification]
+Name=close-notification
+Arg0=uint32_t
+Res.WrapFunc=FcitxNotifyCloseNotification

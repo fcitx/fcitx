@@ -60,6 +60,11 @@ FCITX_DEFINE_PLUGIN(fcitx_freedesktop_notify, module, FcitxModule) = {
     NULL
 };
 
+typedef enum {
+    NOTIFY_SENT,
+    NOTIFY_TO_BE_REMOVE,
+} FcitxNotifyState;
+
 typedef struct _FcitxNotify FcitxNotify;
 
 typedef struct {
@@ -70,6 +75,7 @@ typedef struct {
     time_t time;
     int32_t ref_count;
     FcitxNotify *owner;
+    FcitxNotifyState state;
 
     FcitxDestroyNotify free_func;
     FcitxFreedesktopNotifyActionCallback callback;
@@ -85,9 +91,91 @@ struct _FcitxNotify {
     boolean timeout_added;
 };
 
+#define TIMEOUT_REAL_TIME (100)
+#define TIMEOUT_ADD_TIME (TIMEOUT_REAL_TIME + 10)
+
+static time_t
+FcitxNotifyGetTime()
+{
+    struct timespec t;
+    clock_gettime(CLOCK_MONOTONIC, &t);
+    return t.tv_sec;
+}
+
+static void
+FcitxNotifyItemUnref(FcitxNotifyItem *item)
+{
+    if (fcitx_utils_atomic_add(&item->ref_count, -1) >= 0)
+        return;
+    FcitxNotify *notify = item->owner;
+    HASH_DELETE(intern_hh, notify->intern_table, item);
+    if (item->global_id)
+        HASH_DELETE(global_hh, notify->global_table, item);
+    if (item->free_func)
+        item->free_func(item->data);
+    free(item);
+}
+
+static FcitxNotifyItem*
+FcitxNotifyFindByGlobalId(FcitxNotify *notify, uint32_t global_id)
+{
+    FcitxNotifyItem *res = NULL;
+    if (!global_id)
+        return NULL;
+    HASH_FIND(global_hh, notify->global_table, &global_id,
+              sizeof(uint32_t), res);
+    return res;
+}
+
+static FcitxNotifyItem*
+FcitxNotifyFindByInternId(FcitxNotify *notify, uint32_t intern_id)
+{
+    FcitxNotifyItem *res = NULL;
+    if (!intern_id)
+        return NULL;
+    HASH_FIND(intern_hh, notify->intern_table, &intern_id,
+              sizeof(uint32_t), res);
+    return res;
+}
+
 static DBusHandlerResult
 FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message,
-                      void *user_data);
+                      void *user_data)
+{
+    FcitxNotify *notify = (FcitxNotify*)user_data;
+    if (dbus_message_is_signal(message, "org.freedesktop.Notifications",
+                               "ActionInvoked")) {
+        DBusError error;
+        uint32_t id = 0;
+        const char *key = NULL;
+        dbus_error_init(&error);
+        if (dbus_message_get_args(message, &error, DBUS_TYPE_UINT32,
+                                  &id, DBUS_TYPE_STRING, &key,
+                                  DBUS_TYPE_INVALID)) {
+            FcitxNotifyItem *item = FcitxNotifyFindByGlobalId(notify, id);
+            if (item && item->callback) {
+                item->callback(item->data, item->intern_id, key);
+            }
+        }
+        dbus_error_free(&error);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_signal(message, "org.freedesktop.Notifications",
+                                      "NotificationClosed")) {
+        DBusError error;
+        uint32_t id = 0;
+        uint32_t reason = 0;
+        dbus_error_init(&error);
+        if (dbus_message_get_args(message, &error, DBUS_TYPE_UINT32,
+                                  &id, DBUS_TYPE_UINT32, &reason,
+                                  DBUS_TYPE_INVALID)) {
+            FcitxNotifyItem *item = FcitxNotifyFindByGlobalId(notify, id);
+            FcitxNotifyItemUnref(item);
+        }
+        dbus_error_free(&error);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    }
+    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+}
 
 static void*
 FcitxNotifyCreate(FcitxInstance *instance)
@@ -129,17 +217,38 @@ connect_error:
 }
 
 static void
-FcitxNotifyItemUnref(FcitxNotifyItem *item)
+_FcitxNotifyMarkNotifyRemove(FcitxNotify *notify, FcitxNotifyItem *item)
 {
-    if (fcitx_utils_atomic_add(&item->ref_count, -1) >= 0)
+    item->state = NOTIFY_TO_BE_REMOVE;
+}
+
+static void
+_FcitxNotifyCloseNotification(FcitxNotify *notify, FcitxNotifyItem *item)
+{
+    DBusMessage *msg =
+        dbus_message_new_method_call(NOTIFICATIONS_SERVICE_NAME,
+                                     NOTIFICATIONS_PATH,
+                                     NOTIFICATIONS_INTERFACE_NAME,
+                                     "CloseNotification");
+    dbus_message_append_args(msg,
+                             DBUS_TYPE_UINT32, &item->global_id,
+                             DBUS_TYPE_INVALID);
+    dbus_connection_send(notify->conn, msg, NULL);
+    dbus_message_unref(msg);
+    FcitxNotifyItemUnref(item);
+}
+
+static void
+FcitxNotifyCloseNotification(FcitxNotify *notify, uint32_t intern_id)
+{
+    FcitxNotifyItem *item = FcitxNotifyFindByInternId(notify, intern_id);
+    if (!item)
         return;
-    FcitxNotify *notify = item->owner;
-    HASH_DELETE(intern_hh, notify->intern_table, item);
-    if (item->global_id)
-        HASH_DELETE(global_hh, notify->global_table, item);
-    if (item->free_func)
-        item->free_func(item->data);
-    free(item);
+    if (!item->global_id) {
+        _FcitxNotifyMarkNotifyRemove(notify, item);
+    } else {
+        _FcitxNotifyCloseNotification(notify, item);
+    }
 }
 
 static void
@@ -159,42 +268,10 @@ FcitxNotifyCallback(DBusPendingCall *call, void *data)
         item->global_id = id;
         HASH_ADD(global_hh, notify->global_table, global_id,
                  sizeof(uint32_t), item);
+        if (item->state == NOTIFY_TO_BE_REMOVE) {
+            _FcitxNotifyCloseNotification(notify, item);
+        }
     }
-}
-
-static FcitxNotifyItem*
-FcitxNotifyFindByGlobalId(FcitxNotify *notify, uint32_t global_id)
-{
-    FcitxNotifyItem *res = NULL;
-    if (!global_id)
-        return NULL;
-    HASH_FIND(global_hh, notify->global_table, &global_id,
-              sizeof(uint32_t), res);
-    return res;
-}
-
-static uint32_t
-FcitxNotifyGetGlobalId(FcitxNotify *notify, uint32_t intern_id)
-{
-    FcitxNotifyItem *res = NULL;
-    if (!intern_id)
-        return 0;
-    HASH_FIND(intern_hh, notify->intern_table, &intern_id,
-              sizeof(uint32_t), res);
-    if (res)
-        return res->global_id;
-    return 0;
-}
-
-#define TIMEOUT_REAL_TIME (100)
-#define TIMEOUT_ADD_TIME (TIMEOUT_REAL_TIME + 10)
-
-static time_t
-FcitxNotifyGetTime()
-{
-    struct timespec t;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-    return t.tv_sec;
 }
 
 static void FcitxNotifyCheckTimeout(FcitxNotify *notify);
@@ -253,7 +330,15 @@ FcitxNotifySendNotification(FcitxNotify *notify, const char *appName,
                                      "Notify");
     if (!appName)
         appName = "fcitx";
-    replaceId = FcitxNotifyGetGlobalId(notify, replaceId);
+    FcitxNotifyItem *replace_item =
+        FcitxNotifyFindByInternId(notify, replaceId);
+    if (!replace_item) {
+        replaceId = 0;
+    } else {
+        if (!replace_item->global_id)
+            _FcitxNotifyMarkNotifyRemove(notify, replace_item);
+        replaceId = replace_item->global_id;
+    }
     if (!appIcon)
         appIcon = "fcitx";
     dbus_message_append_args(msg,
@@ -311,45 +396,6 @@ FcitxNotifySendNotification(FcitxNotify *notify, const char *appName,
                                  (DBusFreeFunction)FcitxNotifyItemUnref);
     FcitxNotifyCheckTimeout(notify);
     return intern_id;
-}
-
-static DBusHandlerResult
-FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message,
-                      void *user_data)
-{
-    FcitxNotify *notify = (FcitxNotify*)user_data;
-    if (dbus_message_is_signal(message, "org.freedesktop.Notifications",
-                               "ActionInvoked")) {
-        DBusError error;
-        uint32_t id = 0;
-        const char *key = NULL;
-        dbus_error_init(&error);
-        if (dbus_message_get_args(message, &error, DBUS_TYPE_UINT32,
-                                  &id, DBUS_TYPE_STRING, &key,
-                                  DBUS_TYPE_INVALID)) {
-            FcitxNotifyItem *item = FcitxNotifyFindByGlobalId(notify, id);
-            if (item && item->callback) {
-                item->callback(item->data, item->intern_id, key);
-            }
-        }
-        dbus_error_free(&error);
-        return DBUS_HANDLER_RESULT_HANDLED;
-    } else if (dbus_message_is_signal(message, "org.freedesktop.Notifications",
-                                      "NotificationClosed")) {
-        DBusError error;
-        uint32_t id = 0;
-        uint32_t reason = 0;
-        dbus_error_init(&error);
-        if (dbus_message_get_args(message, &error, DBUS_TYPE_UINT32,
-                                  &id, DBUS_TYPE_UINT32, &reason,
-                                  DBUS_TYPE_INVALID)) {
-            FcitxNotifyItem *item = FcitxNotifyFindByGlobalId(notify, id);
-            FcitxNotifyItemUnref(item);
-        }
-        dbus_error_free(&error);
-        return DBUS_HANDLER_RESULT_HANDLED;
-    }
-    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
 
 static void
