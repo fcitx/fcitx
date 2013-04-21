@@ -1,5 +1,5 @@
 [FcitxAddon]
-Name=fcitx-freeedesktop-notify
+Name=fcitx-freedesktop-notify
 Prefix=FreeDesktopNotify
 Function0=SendNotification
 Function1=CloseNotification

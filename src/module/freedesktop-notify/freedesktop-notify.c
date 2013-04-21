@@ -181,11 +181,11 @@ static void*
 FcitxNotifyCreate(FcitxInstance *instance)
 {
     FcitxNotify *notify = fcitx_utils_new(FcitxNotify);
+    notify->owner = instance;
+    notify->notify_counter = 1;
     notify->conn = FcitxDBusGetConnection(notify->owner);
     if (fcitx_unlikely(!notify->conn))
         goto connect_error;
-    notify->owner = instance;
-    notify->notify_counter = 1;
 
     DBusError err;
     dbus_error_init(&err);
