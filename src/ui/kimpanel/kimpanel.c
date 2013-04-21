@@ -177,6 +177,9 @@ static void KimpanelIntrospect(FcitxKimpanelUI* kimpanel);
 static void KimpanelIntrospectCallback(DBusPendingCall *call, void *data);
 
 #define KIMPANEL_BUFFER_SIZE 4096
+#ifndef DBUS_TIMEOUT_USE_DEFAULT
+#  define DBUS_TIMEOUT_USE_DEFAULT (-1)
+#endif
 
 FCITX_DEFINE_PLUGIN(fcitx_kimpanel_ui, ui, FcitxUI) = {
     KimpanelCreate,
@@ -344,15 +347,16 @@ void* KimpanelCreate(FcitxInstance* instance)
         DBusMessage* message = dbus_message_new_method_call(DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, DBUS_INTERFACE_DBUS, "NameHasOwner");
         dbus_message_append_args(message, DBUS_TYPE_STRING, &kimpanelServiceName, DBUS_TYPE_INVALID);
 
-        DBusPendingCall* call = NULL;
-        dbus_bool_t reply = dbus_connection_send_with_reply(kimpanel->conn, message,
-                                                            &call,
-                                                            0);
+        DBusPendingCall *call = NULL;
+        dbus_bool_t reply =
+            dbus_connection_send_with_reply(kimpanel->conn, message,
+                                            &call, DBUS_TIMEOUT_USE_DEFAULT);
         if (reply == TRUE) {
             dbus_pending_call_set_notify(call,
                                          KimpanelServiceExistCallback,
                                          kimpanel,
                                          NULL);
+            dbus_pending_call_unref(call);
         }
         dbus_connection_flush(kimpanel->conn);
         dbus_message_unref(message);
@@ -1642,27 +1646,24 @@ int CalKimCursorPos(FcitxKimpanelUI *kimpanel)
 
 void KimpanelServiceExistCallback(DBusPendingCall *call, void *data)
 {
-    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) data;
+    FcitxKimpanelUI *kimpanel = (FcitxKimpanelUI*)data;
 
-    DBusMessage* msg = dbus_pending_call_steal_reply(call);
+    DBusMessage *msg = dbus_pending_call_steal_reply(call);
 
     if (msg) {
-        dbus_bool_t has;
+        dbus_bool_t has = FALSE;
         DBusError error;
         dbus_error_init(&error);
-        dbus_message_get_args(msg, &error, DBUS_TYPE_BOOLEAN, &has , DBUS_TYPE_INVALID);
-        if (!has) {
-            FcitxUISwitchToFallback(kimpanel->owner);
-        }
-        else {
-            KimpanelIntrospect(kimpanel);
-        }
+        dbus_message_get_args(msg, &error,
+                              DBUS_TYPE_BOOLEAN, &has, DBUS_TYPE_INVALID);
         dbus_message_unref(msg);
         dbus_error_free(&error);
+        if (!has) {
+            FcitxUISwitchToFallback(kimpanel->owner);
+        } else {
+            KimpanelIntrospect(kimpanel);
+        }
     }
-
-    dbus_pending_call_cancel(call);
-    dbus_pending_call_unref(call);
 }
 
 void KimpanelIntrospect(FcitxKimpanelUI* kimpanel)
@@ -1670,43 +1671,40 @@ void KimpanelIntrospect(FcitxKimpanelUI* kimpanel)
     const char* kimpanelServiceName = "org.kde.impanel";
     DBusMessage* message = dbus_message_new_method_call(kimpanelServiceName, "/org/kde/impanel", DBUS_INTERFACE_INTROSPECTABLE, "Introspect");
 
-    DBusPendingCall* call = NULL;
-    dbus_bool_t reply = dbus_connection_send_with_reply(kimpanel->conn, message,
-                                                        &call,
-                                                        0);
+    DBusPendingCall *call = NULL;
+    dbus_bool_t reply =
+        dbus_connection_send_with_reply(kimpanel->conn, message,
+                                        &call, DBUS_TIMEOUT_USE_DEFAULT);
+    dbus_message_unref(message);
     if (reply == TRUE) {
-        dbus_pending_call_set_notify(call,
-                                     KimpanelIntrospectCallback,
-                                     kimpanel,
-                                     NULL);
+        dbus_pending_call_set_notify(call, KimpanelIntrospectCallback,
+                                     kimpanel, NULL);
+        dbus_pending_call_unref(call);
     }
     dbus_connection_flush(kimpanel->conn);
-    dbus_message_unref(message);
 }
 
-void KimpanelIntrospectCallback(DBusPendingCall* call, void* data)
+void KimpanelIntrospectCallback(DBusPendingCall *call, void *data)
 {
-    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) data;
-
-    DBusMessage* msg = dbus_pending_call_steal_reply(call);
+    FcitxKimpanelUI *kimpanel = (FcitxKimpanelUI*)data;
+    DBusMessage *msg = dbus_pending_call_steal_reply(call);
 
     if (msg) {
-        const char* s;
+        const char *s;
         DBusError error;
         dbus_error_init(&error);
-        if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &s , DBUS_TYPE_INVALID)) {
+        if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &s,
+                                  DBUS_TYPE_INVALID)) {
             if (strstr(s, "org.kde.impanel2")) {
                 kimpanel->version = 2;
-                if (strstr(s, "SetLookupTable"))
+                if (strstr(s, "SetLookupTable")) {
                     kimpanel->hasSetLookupTable = true;
+                }
             }
         }
         dbus_message_unref(msg);
         dbus_error_free(&error);
     }
-
-    dbus_pending_call_cancel(call);
-    dbus_pending_call_unref(call);
 }
 
 

@@ -315,6 +315,8 @@ FcitxNotifyCallback(DBusPendingCall *call, void *data)
         dbus_error_init(&error);
         dbus_message_get_args(msg, &error, DBUS_TYPE_UINT32,
                               &id , DBUS_TYPE_INVALID);
+        dbus_message_unref(msg);
+        dbus_error_free(&error);
         item->global_id = id;
         FcitxNotifyItemAddGlobal(notify, item);
         if (item->state == NOTIFY_TO_BE_REMOVE) {
