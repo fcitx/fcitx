@@ -102,20 +102,6 @@ FcitxNotifyGetTime()
     return t.tv_sec;
 }
 
-static void
-FcitxNotifyItemUnref(FcitxNotifyItem *item)
-{
-    if (fcitx_utils_atomic_add(&item->ref_count, -1) >= 0)
-        return;
-    FcitxNotify *notify = item->owner;
-    HASH_DELETE(intern_hh, notify->intern_table, item);
-    if (item->global_id)
-        HASH_DELETE(global_hh, notify->global_table, item);
-    if (item->free_func)
-        item->free_func(item->data);
-    free(item);
-}
-
 static FcitxNotifyItem*
 FcitxNotifyFindByGlobalId(FcitxNotify *notify, uint32_t global_id)
 {
@@ -136,6 +122,66 @@ FcitxNotifyFindByInternId(FcitxNotify *notify, uint32_t intern_id)
     HASH_FIND(intern_hh, notify->intern_table, &intern_id,
               sizeof(uint32_t), res);
     return res;
+}
+
+static void
+FcitxNotifyItemRemoveInternal(FcitxNotify *notify, FcitxNotifyItem *item)
+{
+    if (item->intern_id) {
+        HASH_DELETE(intern_hh, notify->intern_table, item);
+        item->intern_id = 0;
+    }
+}
+
+static void
+FcitxNotifyItemRemoveGlobal(FcitxNotify *notify, FcitxNotifyItem *item)
+{
+    if (item->global_id) {
+        HASH_DELETE(global_hh, notify->global_table, item);
+        item->global_id = 0;
+    }
+}
+
+static void
+FcitxNotifyItemUnref(FcitxNotifyItem *item)
+{
+    if (fcitx_utils_atomic_add(&item->ref_count, -1) > 1)
+        return;
+    FcitxNotify *notify = item->owner;
+    FcitxNotifyItemRemoveInternal(notify, item);
+    FcitxNotifyItemRemoveGlobal(notify, item);
+    if (item->free_func)
+        item->free_func(item->data);
+    free(item);
+}
+
+static void
+FcitxNotifyItemAddInternal(FcitxNotify *notify, FcitxNotifyItem *item)
+{
+    if (item->intern_id) {
+        FcitxNotifyItem *old_item =
+            FcitxNotifyFindByInternId(notify, item->intern_id);
+        // VERY VERY unlikely.
+        if (fcitx_unlikely(old_item)) {
+            FcitxNotifyItemRemoveInternal(notify, old_item);
+            FcitxNotifyItemUnref(old_item);
+        }
+        HASH_ADD(intern_hh, notify->intern_table, intern_id,
+                 sizeof(uint32_t), item);
+    }
+}
+
+static void
+FcitxNotifyItemAddGlobal(FcitxNotify *notify, FcitxNotifyItem *item)
+{
+    if (item->intern_id) {
+        FcitxNotifyItem *old_item =
+            FcitxNotifyFindByGlobalId(notify, item->global_id);
+        if (fcitx_unlikely(old_item))
+            FcitxNotifyItemRemoveGlobal(notify, old_item);
+        HASH_ADD(global_hh, notify->global_table, global_id,
+                 sizeof(uint32_t), item);
+    }
 }
 
 static DBusHandlerResult
@@ -169,7 +215,10 @@ FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message,
                                   &id, DBUS_TYPE_UINT32, &reason,
                                   DBUS_TYPE_INVALID)) {
             FcitxNotifyItem *item = FcitxNotifyFindByGlobalId(notify, id);
-            FcitxNotifyItemUnref(item);
+            if (fcitx_likely(item)) {
+                FcitxNotifyItemRemoveGlobal(notify, item);
+                FcitxNotifyItemUnref(item);
+            }
         }
         dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
@@ -235,6 +284,7 @@ _FcitxNotifyCloseNotification(FcitxNotify *notify, FcitxNotifyItem *item)
                              DBUS_TYPE_INVALID);
     dbus_connection_send(notify->conn, msg, NULL);
     dbus_message_unref(msg);
+    FcitxNotifyItemRemoveGlobal(notify, item);
     FcitxNotifyItemUnref(item);
 }
 
@@ -266,8 +316,7 @@ FcitxNotifyCallback(DBusPendingCall *call, void *data)
         dbus_message_get_args(msg, &error, DBUS_TYPE_UINT32,
                               &id , DBUS_TYPE_INVALID);
         item->global_id = id;
-        HASH_ADD(global_hh, notify->global_table, global_id,
-                 sizeof(uint32_t), item);
+        FcitxNotifyItemAddGlobal(notify, item);
         if (item->state == NOTIFY_TO_BE_REMOVE) {
             _FcitxNotifyCloseNotification(notify, item);
         }
@@ -295,6 +344,11 @@ FcitxNotifyCheckTimeout(FcitxNotify *notify)
     for (item = notify->intern_table;item;item = next) {
         next = item->intern_hh.next;
         if ((int64_t)(cur - item->time) > TIMEOUT_REAL_TIME) {
+            /**
+             * Remove from internal id table first so that it will not be
+             * unref'ed here if it has not been unref'ed by libdbus.
+             **/
+            FcitxNotifyItemRemoveInternal(notify, item);
             FcitxNotifyItemUnref(item);
         } else {
             if (!left) {
@@ -335,9 +389,13 @@ FcitxNotifySendNotification(FcitxNotify *notify, const char *appName,
     if (!replace_item) {
         replaceId = 0;
     } else {
-        if (!replace_item->global_id)
-            _FcitxNotifyMarkNotifyRemove(notify, replace_item);
         replaceId = replace_item->global_id;
+        if (!replace_item->global_id) {
+            _FcitxNotifyMarkNotifyRemove(notify, replace_item);
+        } else {
+            FcitxNotifyItemRemoveGlobal(notify, replace_item);
+            FcitxNotifyItemUnref(replace_item);
+        }
     }
     if (!appIcon)
         appIcon = "fcitx";
@@ -372,14 +430,17 @@ FcitxNotifySendNotification(FcitxNotify *notify, const char *appName,
     dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &timeout);
     DBusPendingCall *call = NULL;
     dbus_bool_t reply =
-        dbus_connection_send_with_reply(notify->conn, msg, &call, 0);
+        dbus_connection_send_with_reply(notify->conn, msg, &call,
+                                        TIMEOUT_REAL_TIME * 1000 / 2);
     dbus_message_unref(msg);
 
     if (!reply)
         return 0;
 
-    uint32_t intern_id =
-        fcitx_utils_atomic_add((int32_t*)&notify->notify_counter, 1);
+    uint32_t intern_id;
+    while (fcitx_unlikely((intern_id = fcitx_utils_atomic_add(
+                               (int32_t*)&notify->notify_counter, 1)) == 0)) {
+    }
     FcitxNotifyItem *item = fcitx_utils_new(FcitxNotifyItem);
     item->intern_id = intern_id;
     item->time = FcitxNotifyGetTime();
@@ -390,10 +451,10 @@ FcitxNotifySendNotification(FcitxNotify *notify, const char *appName,
     item->ref_count = 2;
     item->owner = notify;
 
-    HASH_ADD(intern_hh, notify->intern_table, intern_id,
-             sizeof(uint32_t), item);
+    FcitxNotifyItemAddInternal(notify, item);
     dbus_pending_call_set_notify(call, FcitxNotifyCallback, item,
                                  (DBusFreeFunction)FcitxNotifyItemUnref);
+    dbus_pending_call_unref(call);
     FcitxNotifyCheckTimeout(notify);
     return intern_id;
 }
