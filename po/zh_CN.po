@@ -5,6 +5,7 @@
 # Translators:
 # Christopher Meng <cickumqt@gmail.com>, 2012
 # marguerite su <i@marguerite.su>, 2012-2013
+# Xuetian Weng <wengxt@gmail.com>, 2013
 # Xuetian Weng <wengxt@gmail.com>, 2010-2012
 # Xuetian Weng <wengxt@gmail.com>, 2013
 # Yichao Yu <yyc1992@gmail.com>, 2012
@@ -12,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-20 14:00-0400\n"
-"PO-Revision-Date: 2013-04-18 19:40+0000\n"
+"POT-Creation-Date: 2013-04-21 20:16-0400\n"
+"PO-Revision-Date: 2013-04-22 00:05+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -715,11 +716,11 @@ msgstr "Ctrl"
 
 #: data/config.desc:29
 msgid "Ctrl+Left Super"
-msgstr ""
+msgstr "Ctrl+左 Super"
 
 #: data/config.desc:30
 msgid "Ctrl+Right Super"
-msgstr ""
+msgstr "Ctrl+右 Super"
 
 #: data/profile.desc:22
 msgid "Current Enabled Input Method List"
@@ -1559,7 +1560,7 @@ msgstr "英文标点"
 
 #: data/config.desc:26
 msgid "Left Super"
-msgstr ""
+msgstr "左 Super"
 
 #: src/im/table/table.c:604
 msgid ""
@@ -2176,7 +2177,7 @@ msgstr "重新启动"
 
 #: data/config.desc:27
 msgid "Right Super"
-msgstr ""
+msgstr "右 Super"
 
 #: src/module/clipboard/fcitx-clipboard.desc:20
 msgid ""
@@ -2466,15 +2467,15 @@ msgstr "成功安装皮肤"
 
 #: data/config.desc:28
 msgid "Super Both"
-msgstr ""
+msgstr "两侧 Super"
 
 #: data/config.desc:31
 msgid "Super+Left Ctrl"
-msgstr ""
+msgstr "Super+左 Ctrl"
 
 #: data/config.desc:32
 msgid "Super+Right Ctrl"
-msgstr ""
+msgstr "Super+右 Ctrl"
 
 #: data/config.desc:137
 msgid "Switch Embeded Preedit"
