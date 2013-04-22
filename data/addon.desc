@@ -74,7 +74,7 @@ Description=Fallback UI Addon
 [Addon/LoadLocal]
 Type=Boolean
 DefaultValue=False
-Description=Use RTLD_GLOBAL to load library
+Description=Use RTLD_LOCAL to load library
 
 [Addon/Advance]
 Type=Boolean
