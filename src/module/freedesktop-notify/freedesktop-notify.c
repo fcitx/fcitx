@@ -174,7 +174,7 @@ FcitxNotifyItemAddInternal(FcitxNotify *notify, FcitxNotifyItem *item)
 static void
 FcitxNotifyItemAddGlobal(FcitxNotify *notify, FcitxNotifyItem *item)
 {
-    if (item->intern_id) {
+    if (item->global_id) {
         FcitxNotifyItem *old_item =
             FcitxNotifyFindByGlobalId(notify, item->global_id);
         if (fcitx_unlikely(old_item))
