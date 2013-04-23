@@ -29,3 +29,7 @@ add_subdirectory(dbus)
 add_subdirectory(lua)
 add_subdirectory(unicode)
 add_subdirectory(notificationitem)
+
+if (_ENABLE_PANGO OR ENABLE_GLIB2)
+add_subdirectory(glib-linker)
+endif (_ENABLE_PANGO OR ENABLE_GLIB2)
