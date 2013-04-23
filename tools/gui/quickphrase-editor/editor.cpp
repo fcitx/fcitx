@@ -212,6 +212,7 @@ void ListEditor::exportFileSelected()
 
 void ListEditor::startEditor(bool )
 {
+    qDebug() << "start editor...";
     load();
     itemFocusChanged();
     show();
