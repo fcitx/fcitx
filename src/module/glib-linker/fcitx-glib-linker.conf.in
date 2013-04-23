@@ -1,0 +1,10 @@
+[Addon]
+Name=fcitx-glib-linker
+_GeneralName=Link Glib
+_Comment=Link Glib
+Category=Module
+Enabled=True
+Library=fcitx-glib-linker.so
+Type=SharedLibrary
+Priority=20
+Advance=True
