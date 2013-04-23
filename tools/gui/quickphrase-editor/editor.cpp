@@ -62,8 +62,10 @@ ListEditor::ListEditor(fcitx::QuickPhraseModel* model, QWidget* parent)
     m_ui->macroTableView->setModel(m_model);
     connect(m_ui->macroTableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(itemFocusChanged()));
     connect(m_model, SIGNAL(needSaveChanged(bool)), this, SIGNAL(changed(bool)));
-    load();
-    itemFocusChanged();
+    hide();
+    fileSelectingThread = new SelectorThread();
+    connect(fileSelectingThread,SIGNAL(finished(bool)),this,SLOT(startEditor(bool)));
+    fileSelectingThread->run();
 }
 
 void ListEditor::load()
@@ -208,7 +210,12 @@ void ListEditor::exportFileSelected()
     save(file);
 }
 
-
-
+void ListEditor::startEditor(bool )
+{
+    load();
+    itemFocusChanged();
+    show();
+    delete fileSelectingThread;
+}
 
 }

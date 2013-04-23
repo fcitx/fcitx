@@ -23,6 +23,7 @@
 #include <QMainWindow>
 #include "fcitx-qt/fcitxqtconfiguiwidget.h"
 #include "model.h"
+#include "fileselector.h"
 
 class QAbstractItemModel;
 class CMacroTable;
@@ -60,7 +61,9 @@ private:
     void save(const QString& file);
     Ui::Editor* m_ui;
     QuickPhraseModel* m_model;
+    SelectorThread* fileSelectingThread;
 public slots:
+    void startEditor(bool);
     void batchEditAccepted();
 };
 }
