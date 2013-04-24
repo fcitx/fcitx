@@ -62,8 +62,9 @@ private:
     Ui::Editor* m_ui;
     QuickPhraseModel* m_model;
     SelectorThread* fileSelectingThread;
+    QString m_filename;
 public slots:
-    void startEditor(bool);
+    void startEditor(QString filename);
     void batchEditAccepted();
 };
 }

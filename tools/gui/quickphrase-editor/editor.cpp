@@ -64,13 +64,14 @@ ListEditor::ListEditor(fcitx::QuickPhraseModel* model, QWidget* parent)
     connect(m_model, SIGNAL(needSaveChanged(bool)), this, SIGNAL(changed(bool)));
     hide();
     fileSelectingThread = new SelectorThread();
-    connect(fileSelectingThread,SIGNAL(finished(bool)),this,SLOT(startEditor(bool)));
+    connect(fileSelectingThread,SIGNAL(finished(QString)),this,SLOT(startEditor(QString)));
     fileSelectingThread->run();
 }
 
 void ListEditor::load()
 {
-    m_model->load("data/QuickPhrase.mb", false);
+    //m_model->load("data/QuickPhrase.mb", false);
+    m_model->load(m_filename,false);
 }
 
 void ListEditor::load(const QString& file)
@@ -85,7 +86,8 @@ void ListEditor::save(const QString& file)
 
 void ListEditor::save()
 {
-    QFutureWatcher< bool >* futureWatcher = m_model->save("data/QuickPhrase.mb");
+    //QFutureWatcher< bool >* futureWatcher = m_model->save("data/QuickPhrase.mb");
+    QFutureWatcher< bool >* futureWatcher = m_model->save(m_filename);
     connect(futureWatcher, SIGNAL(finished()), this, SIGNAL(saveFinished()));
 }
 
@@ -210,9 +212,10 @@ void ListEditor::exportFileSelected()
     save(file);
 }
 
-void ListEditor::startEditor(bool )
+void ListEditor::startEditor(QString filename)
 {
-    qDebug() << "start editor...";
+    qDebug() << "start editor with filename : " << filename;
+    m_filename = filename;
     load();
     itemFocusChanged();
     show();
