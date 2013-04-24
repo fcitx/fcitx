@@ -52,6 +52,8 @@ FcitxIsoCodes* FcitxXkbReadIsoCodes(const char* iso639, const char* iso3166)
     handle.startElement = IsoCodes3166HandlerStartElement;
     xmlSAXUserParseFile(&handle, isocodes, iso3166);
 
+    /* DO NOT Call xmlCleanupParser() */
+
     return isocodes;
 }
 
