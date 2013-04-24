@@ -119,9 +119,6 @@ FcitxXkbRules* FcitxXkbReadRules(const char* file)
         MergeRules(rules, rulesextra);
     }
 
-
-    xmlCleanupParser();
-
     return rules;
 }
 
