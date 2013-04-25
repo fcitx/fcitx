@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-24 00:01-0400\n"
-"PO-Revision-Date: 2013-04-23 04:03+0000\n"
+"POT-Creation-Date: 2013-04-25 00:01-0400\n"
+"PO-Revision-Date: 2013-04-24 04:03+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/fcitx/language/"
 "es/)\n"
@@ -1573,11 +1573,6 @@ msgstr ""
 #: data/addon.desc:31
 msgid "Library"
 msgstr "Biblioteca"
-
-#: src/module/glib-linker/fcitx-glib-linker.conf.in:3
-#: src/module/glib-linker/fcitx-glib-linker.conf.in:4
-msgid "Link Glib"
-msgstr ""
 
 #: src/lib/fcitx/addon.c:151
 #, c-format

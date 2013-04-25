@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-24 00:01-0400\n"
+"POT-Creation-Date: 2013-04-25 00:01-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1254,11 +1254,6 @@ msgstr ""
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
 msgid "Provides Fullwidth Character Input Support"
-msgstr ""
-
-#: src/module/glib-linker/fcitx-glib-linker.conf.in:3
-#: src/module/glib-linker/fcitx-glib-linker.conf.in:4
-msgid "Link Glib"
 msgstr ""
 
 #: src/module/imselector/fcitx-imselector.conf.in:3
