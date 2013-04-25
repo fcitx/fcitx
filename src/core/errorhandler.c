@@ -180,12 +180,12 @@ void OnException(int signo)
     case SIGBUS:
     case SIGILL:
     case SIGFPE:
-        exit(1);
+        _exit(1);
         break;
     default:
         {
             if (!instance || !instance->initialized) {
-                exit(1);
+                _exit(1);
                 break;
             }
 
