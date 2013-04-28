@@ -469,7 +469,7 @@ gnome_36_link() {
 
 no_xim_link() {
     local fmt
-    fmt=$(_ 'To see some application specific problems you may have when using xim, check ${link1}. For other more general problems of using XIM including application freezing, see ${link2}.')
+    fmt=$(_ 'To see some application specific problems you may have when using XIM, check ${link1}. For other more general problems of using XIM including application freezing, see ${link2}.')
     local link1
     link1=$(print_link \
         "$(_ "Hall of Shame for Linux IME Support")" \
@@ -565,7 +565,7 @@ check_env() {
         increase_cur_level 1
         write_order_list "$(_ "Current locale:")"
         write_quote_cmd locale
-        write_order_list "$(_ "All locale:")"
+        write_order_list "$(_ "All locales:")"
         write_quote_cmd locale -a
         increase_cur_level -1
     else
@@ -754,7 +754,7 @@ check_xim() {
             gnome_36_link
         fi
     fi
-    write_eval "$(_ 'Xim Server Name from Environment variable is ${1}.')" \
+    write_eval "$(_ 'XIM Server Name from Environment variable is ${1}.')" \
         "${xim_name}"
     write_order_list "$(_ 'XIM_SERVERS on root window:')"
     local atom_name=XIM_SERVERS
@@ -766,9 +766,9 @@ check_xim() {
         if [[ ${xprop} =~ ^${atom_name}\ @server=(.*)$ ]]; then
             xim_server_name="${BASH_REMATCH[1]}"
             if [ "${xim_server_name}" = "${xim_name}" ]; then
-                write_paragraph "$(_ "Xim server name is the same with that set in the environment variable.")"
+                write_paragraph "$(_ "XIM server name is the same with that set in the environment variable.")"
             else
-                write_error_eval "$(_ 'Xim server name: "${1}" is different from that set in the environment variable: "${2}".')" \
+                write_error_eval "$(_ 'XIM server name: "${1}" is different from that set in the environment variable: "${2}".')" \
                     "${xim_server_name}" "${xim_name}"
             fi
         else
@@ -801,7 +801,7 @@ _check_toolkit_env() {
         _env_incorrect "${env_name}" 'fcitx' "${!env_name}"
         __need_blank_line=0
         if [ "${!env_name}" = 'xim' ]; then
-            write_error_eval "$(_ 'You are using xim in ${1} programs.')" \
+            write_error_eval "$(_ 'You are using XIM in ${1} programs.')" \
                 "${name}"
             no_xim_link
         else

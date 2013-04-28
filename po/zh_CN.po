@@ -30,11 +30,11 @@ msgstr " Ctrl+Delete 删除"
 
 #: data/script/fcitx-diagnose.sh:305
 msgid "${1} not found."
-msgstr "${1} 未找到."
+msgstr "${1} 未找到。"
 
 #: data/script/fcitx-diagnose.sh:622
 msgid "${1} works properly."
-msgstr "${1} 工作正常."
+msgstr "${1} 工作正常。"
 
 #: tools/gui/quickphrase-editor/editor.cpp:43
 msgid "&Add"
@@ -94,7 +94,7 @@ msgstr "/分  经过时间: "
 
 #: src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
-msgstr "0 代表立即提交, -1 代表保留全部已选单词."
+msgstr "0 代表立即提交, -1 代表保留全部已选单词"
 
 #: src/module/unicode/charselectdata.c:251
 msgid "<Low Surrogate>"
@@ -242,14 +242,14 @@ msgid "All"
 msgstr "所有"
 
 #: data/script/fcitx-diagnose.sh:568
-msgid "All locale:"
+msgid "All locales:"
 msgstr "全部可用 locale:"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:11
 msgid ""
 "Allow Pinyin Enhance to replace the first candidate word when the input "
 "string is very closed to English."
-msgstr "允许在输入字符串十分接近英文的时候替换第一个候选词"
+msgstr "允许在输入字符串十分接近英文的时候替换第一个候选词。"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
 msgid "Allow replacing the first candidate"
@@ -404,7 +404,7 @@ msgstr "无法创建输入法窗口"
 
 #: src/module/punc/punc.c:397
 msgid "Can't open punc file."
-msgstr "无法打开标点文件"
+msgstr "无法打开标点文件。"
 
 #: src/module/remote/remote.c:70
 #, c-format
@@ -440,7 +440,7 @@ msgstr "无法保存用户拼音词库: %s"
 
 #: data/script/fcitx-diagnose.sh:620
 msgid "Cannot connect to fcitx correctly."
-msgstr "无法连接到 fcitx."
+msgstr "无法连接到 fcitx。"
 
 #: data/script/fcitx-diagnose.sh:537
 msgid "Cannot determine desktop environment."
@@ -453,7 +453,7 @@ msgstr "无法找到一个图形界面的配置工具，请安装 ${1}，${2}，
 
 #: data/script/fcitx-diagnose.sh:946
 msgid "Cannot find fcitx addon config directory."
-msgstr "无法找到插件配置目录."
+msgstr "无法找到插件配置目录。"
 
 #: data/script/fcitx-diagnose.sh:581
 msgid "Cannot find fcitx executable!"
@@ -461,15 +461,15 @@ msgstr "无法找到 fcitx 可执行文件!"
 
 #: data/script/fcitx-diagnose.sh:916
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
-msgstr "无法在缓存中找到 gtk ${1} 的 fcitx 输入法模块."
+msgstr "无法在缓存中找到 gtk ${1} 的 fcitx 输入法模块。"
 
 #: data/script/fcitx-diagnose.sh:884
 msgid "Cannot find fcitx im module for gtk ${1}."
-msgstr "无法找到 gtk ${1} 的 fcitx 输入法模块."
+msgstr "无法找到 gtk ${1} 的 fcitx 输入法模块。"
 
 #: data/script/fcitx-diagnose.sh:849
 msgid "Cannot find fcitx input method module for qt."
-msgstr "无法找到 qt 的 fcitx 输入法模块."
+msgstr "无法找到 qt 的 fcitx 输入法模块。"
 
 #: data/script/fcitx-diagnose.sh:700
 msgid "Cannot find fcitx-configtool executable!"
@@ -477,7 +477,7 @@ msgstr "无法找到 fcitx-configtool 的可执行文件！"
 
 #: data/script/fcitx-diagnose.sh:775
 msgid "Cannot find xim_server on root window."
-msgstr "无法在根窗口找到 xim_server."
+msgstr "无法在根窗口找到 xim_server。"
 
 #: src/im/table/table.c:653
 msgid "Cannot found Pinyin"
@@ -485,11 +485,11 @@ msgstr "无法找到拼音"
 
 #: data/script/fcitx-diagnose.sh:749
 msgid "Cannot interpret XMODIFIERS: ${1}."
-msgstr "无法解析 XMODIFIERS: ${1}."
+msgstr "无法解析 XMODIFIERS: ${1}。"
 
 #: data/script/fcitx-diagnose.sh:994
 msgid "Cannot read im list from fcitx profile."
-msgstr "无法从 fcitx 配置文件中读取输入法列表."
+msgstr "无法从 fcitx 配置文件中读取输入法列表。"
 
 #: data/addon.desc:22
 msgid "Category"
@@ -678,7 +678,7 @@ msgstr "配置文件"
 
 #: data/script/fcitx-diagnose.sh:1103
 msgid "Configuration."
-msgstr "配置"
+msgstr "配置。"
 
 #: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:504
 msgid "Configure"
@@ -848,13 +848,13 @@ msgstr "比此级别短的码不进行排序"
 #: src/lib/fcitx-utils/desktop-parse.c:565
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
-msgstr "重复的键 %s 出现在组 %s 中, @第 %d 行, 覆盖之前的值."
+msgstr "重复的键 %s 出现在组 %s 中, @第 %d 行, 覆盖之前的值。"
 
 #: src/lib/fcitx-utils/desktop-parse.c:525
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
-msgstr "重复的组名 %s, @第 %d 行, 与之前的组合并."
+msgstr "重复的组名 %s, @第 %d 行, 与之前的组合并。"
 
 #: src/lib/fcitx-config/fcitx-config.c:891
 #, c-format
@@ -908,7 +908,7 @@ msgstr "枚举选项不合法，将类型作为字符串处理"
 
 #: src/lib/fcitx-config/fcitx-config.c:366
 msgid "Enum option duplicated."
-msgstr "枚举选项重复"
+msgstr "枚举选项重复。"
 
 #: src/lib/fcitx-config/fcitx-config.c:376
 msgid "Enum option number must larger than 0"
@@ -920,15 +920,15 @@ msgid ""
 "you have exported it incorrectly in any of your init files."
 msgstr ""
 "环境变量 ${1} 的值被设为了 \"${2}\" 而不是 \"${3}\". 请检查您是否在某个初始化"
-"文件中错误的设置了它的值."
+"文件中错误的设置了它的值。"
 
 #: data/script/fcitx-diagnose.sh:723
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
-msgstr "环境变量 ${1} 已经正确地设为了 \"${2}\"."
+msgstr "环境变量 ${1} 已经正确地设为了 \"${2}\"。"
 
 #: data/script/fcitx-diagnose.sh:545
 msgid "Environment."
-msgstr "环境."
+msgstr "环境。"
 
 #: data/table/erbi.conf.in:3
 msgid "Erbi"
@@ -951,11 +951,11 @@ msgstr "错误：皮肤安装失败"
 
 #: src/ui/classic/fcitx-skin-installer.sh:55
 msgid "Error: skin file doesn't contain skin config."
-msgstr "错误：皮肤文件不包含皮肤配置"
+msgstr "错误：皮肤文件不包含皮肤配置。"
 
 #: src/ui/classic/fcitx-skin-installer.sh:50
 msgid "Error: skin file should only contain one directory."
-msgstr "错误：皮肤文件应只包括一个目录"
+msgstr "错误：皮肤文件应只包括一个目录。"
 
 #: src/im/table/table.desc:84
 msgid "Exact Match"
@@ -1016,7 +1016,7 @@ msgstr "Fcitx 的拼写提示/补全支持"
 
 #: data/script/fcitx-diagnose.sh:578
 msgid "Fcitx State."
-msgstr "Fcitx 状态."
+msgstr "Fcitx 状态。"
 
 #: src/module/unicode/fcitx-unicode.conf.in:3
 msgid "Fcitx Unicode Typing Support"
@@ -1028,7 +1028,7 @@ msgstr "Fcitx XIM 前端"
 
 #: data/script/fcitx-diagnose.sh:605
 msgid "Fcitx is not running."
-msgstr "Fcitx 没有在运行."
+msgstr "Fcitx 没有在运行。"
 
 #: data/script/fcitx-diagnose.sh:592
 #, sh-format
@@ -1107,15 +1107,15 @@ msgstr "找到了 ${1} 个 fcitx 进程:"
 
 #: data/script/fcitx-diagnose.sh:953
 msgid "Found fcitx addon config directory: ${1}."
-msgstr "找到了 fcitx 插件配置目录: ${1}."
+msgstr "找到了 fcitx 插件配置目录: ${1}。"
 
 #: data/script/fcitx-diagnose.sh:587
 msgid "Found fcitx at ${1}."
-msgstr "在 ${1} 找到了 fcitx."
+msgstr "在 ${1} 找到了 fcitx。"
 
 #: data/script/fcitx-diagnose.sh:876
 msgid "Found fcitx im modules for gtk ${1}."
-msgstr "已找到 gtk ${1} 的 fcitx 输入法模块."
+msgstr "已找到 gtk ${1} 的 fcitx 输入法模块。"
 
 #: data/script/fcitx-diagnose.sh:908
 msgid "Found fcitx in cache file ${1}:"
@@ -1127,7 +1127,7 @@ msgstr "找到了 fcitx 的 kcm 模块。"
 
 #: data/script/fcitx-diagnose.sh:833
 msgid "Found fcitx qt im module: ${1}."
-msgstr "找到了 qt 的 fcitx 输入法模块: ${1}."
+msgstr "找到了 qt 的 fcitx 输入法模块: ${1}。"
 
 #: data/script/fcitx-diagnose.sh:702
 msgid "Found fcitx-configtool at ${1}."
@@ -1135,15 +1135,15 @@ msgstr "在 ${1} 找到了 fcitx-configtool。"
 
 #: data/script/fcitx-diagnose.sh:871
 msgid "Found gtk-query-immodules for gtk ${1} at ${2}."
-msgstr "在 ${2} 找到了 gtk ${1} 的 gtk-query-immodules"
+msgstr "在 ${2} 找到了 gtk ${1} 的 gtk-query-immodules。"
 
 #: data/script/fcitx-diagnose.sh:903
 msgid "Found immodules cache for gtk ${1} ${2}."
-msgstr "在 ${2} 找到了 gtk ${1} 的输入法模块缓存."
+msgstr "在 ${2} 找到了 gtk ${1} 的输入法模块缓存。"
 
 #: data/script/fcitx-diagnose.sh:841
 msgid "Found unknown fcitx qt module: ${1}."
-msgstr "找到了未知的 fcitx qt 模块: ${1}."
+msgstr "找到了未知的 fcitx qt 模块: ${1}。"
 
 #: data/addon.desc:19
 msgid "Frontend"
@@ -1164,7 +1164,7 @@ msgstr "前端: 打开 %s 失败 %s"
 
 #: data/script/fcitx-diagnose.sh:1096
 msgid "Frontends setup."
-msgstr "前端设置."
+msgstr "前端设置。"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1346,7 +1346,7 @@ msgid ""
 "well as alternative solutions."
 msgstr ""
 "如果您正在使用 ${1}, 您可能需要卸载 ${2} 或者删除 ${3} 已使用除 ${2} 之外的任"
-"何输入法. 更多细节和其它的解决方法参见 ${link}."
+"何输入法. 更多细节和其它的解决方法参见 ${link}。"
 
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Ignore Input Method Layout Request"
@@ -1382,7 +1382,7 @@ msgstr "输入法间切换时包含未激活状态"
 
 #: src/module/clipboard/fcitx-clipboard.desc:31
 msgid "Include the text currently selected in clipboard history."
-msgstr "当前选中文字加入剪切板历史"
+msgstr "当前选中文字加入剪切板历史。"
 
 #: src/ui/classic/skin.desc:313
 msgid "Inctive Tray Icon"
@@ -1455,7 +1455,7 @@ msgstr "配置项不合法:  行%d 缺少'='"
 
 #: data/script/fcitx-diagnose.sh:959
 msgid "Invalid addon config file ${1}."
-msgstr "无效的插件配置文件: ${1}."
+msgstr "无效的插件配置文件: ${1}。"
 
 #: src/lib/fcitx-utils/desktop-parse.c:555
 #, c-format
@@ -1469,7 +1469,7 @@ msgstr "非法组名出现在第 %d 行: %s"
 
 #: data/script/fcitx-diagnose.sh:1004
 msgid "Invalid item ${1} in im list."
-msgstr "输入法列表中无效的项目: ${1}."
+msgstr "输入法列表中无效的项目: ${1}。"
 
 #: src/module/vk/vk.c:60
 msgid "Katakana"
@@ -1601,7 +1601,7 @@ msgstr "加载额外码表：%s"
 
 #: src/im/table/tabledict.c:286
 msgid "Loading Autophrase."
-msgstr "加载自动组词信息中"
+msgstr "加载自动组词信息中。"
 
 #: src/im/table/tabledict.c:41
 msgid "Loading Table Dict"
@@ -1629,7 +1629,7 @@ msgstr "Locale:"
 
 #: data/script/fcitx-diagnose.sh:1109
 msgid "Log."
-msgstr "日志."
+msgstr "日志。"
 
 #: src/ui/classic/skin.desc:73
 msgid "Logo Icon"
@@ -1699,7 +1699,7 @@ msgstr "快速输入的拼写提示候选词最大个数"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
 msgid "Maximum results from stroke input."
-msgstr "笔画输入结果的最大个数"
+msgstr "笔画输入结果的最大个数。"
 
 #: src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
@@ -1846,7 +1846,7 @@ msgstr "配置项%s不合法，使用默认值%s"
 #: src/lib/fcitx-config/fcitx-config.c:1134
 #, c-format
 msgid "Option %s is Invalid."
-msgstr "配置项%s不合法"
+msgstr "配置项%s不合法。"
 
 #: src/im/table/table.desc:34
 msgid "Order of Code Table"
@@ -1949,17 +1949,17 @@ msgstr "拼音加加"
 
 #: data/script/fcitx-diagnose.sh:583
 msgid "Please check ${1} for how to install fcitx."
-msgstr "请访问 ${1} 查看如何安装 fcitx."
+msgstr "请访问 ${1} 查看如何安装 fcitx。"
 
 #: data/script/fcitx-diagnose.sh:607
 msgid ""
 "Please check the Configure link of your distribution in ${1} for how to "
 "setup fcitx autostart."
-msgstr "请访问 ${1} 页面上对应您发行版的配置链接查看如何配置 fcitx 的自动启动."
+msgstr "请访问 ${1} 页面上对应您发行版的配置链接查看如何配置 fcitx 的自动启动。"
 
 #: src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
-msgstr "请设置环境变量XMODIFIERS"
+msgstr "请设置环境变量 XMODIFIERS。"
 
 #: data/script/fcitx-diagnose.sh:450
 msgid ""
@@ -1967,7 +1967,7 @@ msgid ""
 "your distribution provides or add ${1} to your ${2}. See ${link}."
 msgstr ""
 "请使用您发行版提供的工具将环境变量 ${env_name} 设为 \"${value}\" 或者将 ${1} "
-"添加到您的 ${2} 中. 参见 ${link}."
+"添加到您的 ${2} 中. 参见 ${link}。"
 
 #: src/ui/classic/skin.desc:265
 msgid "Position or offset of LookupTable"
@@ -2440,7 +2440,7 @@ msgstr "启动输入法"
 #: src/frontend/xim/xim.c:245
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
-msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
+msgstr "XIM 启动错误。是否有另一个名为 %s 的 XIM 守护程序正在运行？"
 
 #: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
@@ -2554,7 +2554,7 @@ msgstr "符号文件"
 
 #: data/script/fcitx-diagnose.sh:507
 msgid "System Info."
-msgstr "系统信息."
+msgstr "系统信息。"
 
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
 msgid "Table"
@@ -2578,7 +2578,7 @@ msgid ""
 "larger than this when multiple characters have the same order of strokes."
 msgstr ""
 "这仅仅是个软性限制. 当有多个字的笔顺相同时, 实际的笔画输入结果个数可能多于这"
-"个值."
+"个值。"
 
 #: data/config.desc:151
 msgid ""
@@ -2599,12 +2599,12 @@ msgstr "提示信息颜色"
 #: data/script/fcitx-diagnose.sh:472
 #, sh-format
 msgid ""
-"To see some application specific problems you may have when using xim, check "
+"To see some application specific problems you may have when using XIM, check "
 "${link1}. For other more general problems of using XIM including application "
 "freezing, see ${link2}."
 msgstr ""
-"您可以在 ${link1} 找到一些会在使用 xim 时出现问题的应用程序. 包括应用程序卡死"
-"在内的更多使用 xim 可能出现的普遍问题请参见 ${link2}."
+"您可以在 ${link1} 找到一些会在使用 XIM 时出现问题的应用程序. 包括应用程序卡死"
+"在内的更多使用 XIM 可能出现的普遍问题请参见 ${link2}。"
 
 #: src/module/punc/punc.c:149 src/module/punc/punc.c:556
 msgid "Toggle Full Width Punctuation"
@@ -2756,7 +2756,7 @@ msgstr "使用模糊键"
 
 #: src/frontend/xim/fcitx-xim.desc:4
 msgid "Use On The Spot Style for XIM (Can not change during running)"
-msgstr "对XIM使用On The Spot风格（无法在运行时切换）"
+msgstr "对 XIM 使用 On The Spot 风格（无法在运行时切换）"
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
@@ -2800,7 +2800,7 @@ msgstr "fcitx-remote 通过它来从命令行改变 Fcitx 的状态"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
 msgid "Useful when you hardly ever use abbreviated pinyin."
-msgstr "适用于很少使用简拼的情况"
+msgstr "适用于很少使用简拼的情况。"
 
 #: src/im/pinyin/fcitx-pinyin.desc:11
 msgid "User Defined"
@@ -2891,7 +2891,7 @@ msgstr "根窗口上的 XIM_SERVERS:"
 
 #: src/frontend/xim/xim.c:157
 msgid "XMODIFIERS Error."
-msgstr "XMODIFIERS 错误."
+msgstr "XMODIFIERS 错误。"
 
 #: src/im/pinyin/fcitx-pinyin.desc:10
 msgid "XiaoHe"
@@ -2902,36 +2902,36 @@ msgid "Xim"
 msgstr "Xim"
 
 #: data/script/fcitx-diagnose.sh:757
-msgid "Xim Server Name from Environment variable is ${1}."
-msgstr "从环境变量中获取的 Xim 服务名称为 ${1}."
+msgid "XIM Server Name from Environment variable is ${1}."
+msgstr "从环境变量中获取的 XIM 服务名称为 ${1}。"
 
 #: data/script/fcitx-diagnose.sh:769
-msgid "Xim server name is the same with that set in the environment variable."
-msgstr "Xim 服务的名称与环境变量中设置的相同."
+msgid "XIM server name is the same with that set in the environment variable."
+msgstr "XIM 服务的名称与环境变量中设置的相同。"
 
 #: data/script/fcitx-diagnose.sh:771
 msgid ""
-"Xim server name: \"${1}\" is different from that set in the environment "
+"XIM server name: \"${1}\" is different from that set in the environment "
 "variable: \"${2}\"."
-msgstr "Xim 服务名称: \"${1}\" 与环境变量中设置的值 \"${2}\" 不同."
+msgstr "XIM 服务名称: \"${1}\" 与环境变量中设置的值 \"${2}\" 不同。"
 
 #: data/script/fcitx-diagnose.sh:804
-msgid "You are using xim in ${1} programs."
-msgstr "您正在 ${1} 程序中使用 xim."
+msgid "You are using XIM in ${1} programs."
+msgstr "您正在 ${1} 程序中使用 XIM。"
 
 #: data/script/fcitx-diagnose.sh:1023
 msgid "You don't have any input methods enabled."
-msgstr "您没有任何启用的输入法."
+msgstr "您没有任何启用的输入法。"
 
 #: data/script/fcitx-diagnose.sh:1031
 msgid ""
 "You have a keyboard input method \"${1}\" correctly added as your default "
 "input method."
-msgstr "您已经正确的将一个键盘输入法 \"${1}\" 设为默认."
+msgstr "您已经正确的将一个键盘输入法“${1}”设为默认。"
 
 #: data/script/fcitx-diagnose.sh:809
 msgid "You may have trouble using fcitx in ${1} programs."
-msgstr "您可能会在 ${1} 程序中使用 fcitx 时遇到问题."
+msgstr "您可能会在 ${1} 程序中使用 fcitx 时遇到问题。"
 
 #: data/script/fcitx-diagnose.sh:1026
 msgid ""
@@ -2939,7 +2939,7 @@ msgid ""
 "as the first one and your main input method as the second one."
 msgstr ""
 "您仅仅启用了一个输入法, 请将一个键盘输入法设为第一个并将您的主要输入法设为第"
-"二个."
+"二个。"
 
 #: data/script/fcitx-diagnose.sh:783
 msgid ""
@@ -2964,7 +2964,7 @@ msgid ""
 "method. You may have trouble deactivate fcitx."
 msgstr ""
 "您的第一个 (默认) 输入法是 ${1} 而不是一个键盘输入法. 您可能无法禁用 fcitx 输"
-"入法."
+"入法。"
 
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"
@@ -2997,7 +2997,7 @@ msgstr "选项%s/%s没有默认选项"
 
 #: src/ui/cairostuff/font.c:106
 msgid "no valid font."
-msgstr "无可用字体"
+msgstr "无可用字体。"
 
 #: data/script/fcitx-diagnose.sh:593
 msgid "process:"
@@ -3005,7 +3005,7 @@ msgstr "进程:"
 
 #: src/lib/fcitx/instance.c:512
 msgid "pthread mutex init failed"
-msgstr "pthread mutex init failed"
+msgstr "pthread mutex 初始化失败"
 
 #: data/script/fcitx-diagnose.sh:589
 msgid "version:"
