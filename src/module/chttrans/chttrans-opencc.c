@@ -7,7 +7,7 @@
 #include <dlfcn.h>
 
 #define _OPENCC_DEFAULT_CONFIG_SIMP_TO_TRAD "zhs2zht.ini"
-#define _OPENCC_DEFAULT_CONFIG_TRAD_TO_SIMP "zhs2zht.ini"
+#define _OPENCC_DEFAULT_CONFIG_TRAD_TO_SIMP "zht2zhs.ini"
 static void* _opencc_handle = NULL;
 static void* (*_opencc_open)(const char* config_file) = NULL;
 static char* (*_opencc_convert_utf8)(void* opencc, const char* inbuf, size_t length) = NULL;
