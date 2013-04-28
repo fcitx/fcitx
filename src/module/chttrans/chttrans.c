@@ -342,22 +342,22 @@ char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ)
     switch (transState->engine) {
     case ENGINE_OPENCC:
 #ifdef ENABLE_OPENCC
-        {
+        do {
             if (transState->odt2s == NULL) {
                 OpenCCInit(transState);
                 if (transState->odt2s == NULL) {
-                    return NULL;
+                    break;
                 }
             }
 
             char * res = OpenCCConvert(transState->odt2s, strHZ, (size_t) - 1);
 
-            if (res == (char *) - 1) {
+            if (!res || res == (char *) - 1) {
                 return NULL;
             }
 
             return res;
-        }
+        } while(0);
 #endif
     case ENGINE_NATIVE: {
         FILE           *fp;

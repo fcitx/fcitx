@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-25 00:01-0400\n"
-"PO-Revision-Date: 2013-04-24 04:03+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2013-04-26 00:44-0400\n"
+"PO-Revision-Date: 2013-04-25 14:08+0000\n"
+"Last-Translator: しろう <>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
 "Language: ja\n"
@@ -304,7 +304,7 @@ msgstr "自動"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:4
 msgid "Auto Change to English Mode while Input Specific String"
-msgstr "特定の文字列を入力するときに英語モードに自動的に切り替え"
+msgstr "特定の文字列を入力すると、英語モードに自動的に切り替える"
 
 #: src/im/pinyin/fcitx-pinyin.desc:33
 msgid "Auto Create Phrase"
@@ -316,15 +316,15 @@ msgstr "フレーズを自動生成"
 #: src/module/autoeng/fcitx-autoeng.desc:26
 #: src/module/autoeng/fcitx-autoeng.desc:34
 msgid "Auto English"
-msgstr "自動英語"
+msgstr "自動的に英語モードに"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:3
 msgid "Auto English Mode"
-msgstr "自動英語モード"
+msgstr "自動的に英語モードに切り替え"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:9
 msgid "Auto English Trigger Word"
-msgstr "自動英語モードにする単語"
+msgstr "自動的に英語モードにする単語"
 
 #: src/im/table/table.desc:88
 msgid "Auto Phrase"
@@ -1698,7 +1698,7 @@ msgstr "最大スペルヒントリスト数"
 
 #: src/module/autoeng/fcitx-autoeng.desc:23
 msgid "Maximum length of spell hint list for Auto English"
-msgstr "自動英語での最大スペルヒントリスト数"
+msgstr "自動的に英語にする最大スペルヒントリスト数"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 msgid "Maximum length of spell hint list for Pinyin Enhance"
@@ -1985,11 +1985,11 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:265
 msgid "Position or offset of LookupTable"
-msgstr "検索テーブルの場所かオフセット"
+msgstr "位置あるいは検索テーブルのオフセット"
 
 #: src/ui/classic/skin.desc:261
 msgid "Position or offset of Preedit"
-msgstr "プレエディットの場所かオフセット"
+msgstr "位置あるいはプレエディットのオフセット"
 
 #: src/module/spell/fcitx-spell.desc:14
 msgid "Possible Providers: presage, custom, enchant (separate with comma)"
@@ -2654,7 +2654,7 @@ msgstr "サジェストの表示"
 
 #: src/module/autoeng/AutoEng.c:557
 msgid "Too long item for AutoEng"
-msgstr "自動英語にするには長過ぎます"
+msgstr "自動的に英語にするには長過ぎます"
 
 #: src/ui/classic/skin.desc:129 src/ui/classic/skin.desc:235
 #: src/ui/classic/skin.desc:365
@@ -2777,7 +2777,7 @@ msgstr "Pinyinを使用"
 
 #: data/addon.desc:77
 msgid "Use RTLD_LOCAL to load library"
-msgstr ""
+msgstr "ライブラリの読み込みに RTLD_LOCAL を使う"
 
 #: src/module/clipboard/fcitx-clipboard.desc:30
 msgid "Use Selection Text"
@@ -2978,6 +2978,8 @@ msgid ""
 "Your first (default) input method is ${1} instead of a keyboard input "
 "method. You may have trouble deactivate fcitx."
 msgstr ""
+"あなたの最初の(既定の)入力メソッドがキーボード入力メソッドではなく ${1} で"
+"す。fcitxを無効化する場合に問題が生じる場合があります。"
 
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"
