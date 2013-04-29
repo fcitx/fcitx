@@ -106,7 +106,7 @@ boolean UnicodePreFilter(void* arg, FcitxKeySym sym, unsigned int state,
         FcitxCandidateWordList *candList;
         candList = FcitxInputStateGetCandidateList(input);
 
-        FcitxCandidateWordSetPageSize(candList, 4);
+        FcitxCandidateWordSetPageSize(candList, fc->iMaxCandWord);
         FcitxCandidateWordSetChooseAndModifier(candList, DIGIT_STR_CHOOSE,
                                                FcitxKeyState_Alt);
         if (FcitxHotkeyIsHotKey(sym, state,
