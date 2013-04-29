@@ -22,9 +22,9 @@
 
 #include <QMainWindow>
 #include <QDir>
+#include <QMutex>
 #include "fcitx-qt/fcitxqtconfiguiwidget.h"
 #include "model.h"
-#include "fileselector.h"
 
 class QAbstractItemModel;
 class CMacroTable;
@@ -66,12 +66,13 @@ private:
     QString currentFile();
     Ui::Editor* m_ui;
     QuickPhraseModel* m_model;
-    QDir m_dir;
+    QMutex fileListMutex;
+    QDir quickPhraseDir,fcitxDir;
     
     typedef enum {
-        AddFile = 0,
-        RemoveFile = 1,
-        RefreshList = 2
+        AddFile = 1,
+        RemoveFile = 2,
+        RefreshList = 3
     } FileOperationType;
 public slots:
     void batchEditAccepted();

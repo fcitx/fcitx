@@ -69,13 +69,18 @@ ListEditor::ListEditor(fcitx::QuickPhraseModel* model, QWidget* parent)
     size_t pathSize;
     char** path = FcitxXDGGetPathUserWithPrefix(&pathSize,"data/QuickPhrase.mb.d/");
     assert(pathSize>=1);
-    m_dir.setPath(path[0]);
+    quickPhraseDir.setPath(path[0]);
+    path = FcitxXDGGetPathUserWithPrefix(&pathSize,"");
+    assert(pathSize>=1);
+    fcitxDir.setPath(path[0]);
+    
+    fileListMutex.unlockInline();
 
     loadFileList();
     load();
     itemFocusChanged();
     
-    connect(m_ui->fileListComboBox,SIGNAL(activated(int)),this,SLOT(fileSelected()));
+    connect(m_ui->fileListComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fileSelected()));
     connect(m_ui->fileOperateCombox,SIGNAL(activated(int)),this,SLOT(fileOperation(int)));
 }
 
@@ -231,15 +236,19 @@ void ListEditor::loadFileList()
 
 void ListEditor::_loadFileList()
 {
-    for (int i=1;i<m_ui->fileListComboBox->count();i++)
-        m_ui->fileListComboBox->removeItem(i);
+    fileListMutex.lock();
+//    for (int i=1;i<=m_ui->fileListComboBox->count();i++)
+//        m_ui->fileListComboBox->removeItem(i);
+    m_ui->fileListComboBox->clear();
+    m_ui->fileListComboBox->addItem("Please select a file to edit...");
     QFileInfoList list;
-    list = m_dir.entryInfoList(QDir::Files | QDir::Readable | QDir::Writable);
+    list = quickPhraseDir.entryInfoList(QDir::Files | QDir::Readable | QDir::Writable);
     qDebug() << "starting adding file item...";
     Q_FOREACH(QFileInfo i,list){
         m_ui->fileListComboBox->addItem(i.fileName());
         qDebug() << "added file item : " << i.fileName();
     }
+    fileListMutex.unlockInline();
 }
 
 QString ListEditor::currentFile()
@@ -252,6 +261,8 @@ QString ListEditor::currentFile()
 
 void ListEditor::fileSelected()
 {
+    qDebug() << "file list count : " << m_ui->fileListComboBox->count();
+    qDebug() << m_ui->fileListComboBox->currentIndex() << " " << m_ui->fileListComboBox->currentText();
     load();
 }
 
@@ -266,9 +277,11 @@ void ListEditor::fileOperation(int type)
         ,QLineEdit::Normal
         ,"newfile",&ok
         );
-        QFile file(m_dir.filePath(filename));
+        QFile file(quickPhraseDir.filePath(filename));
         file.open(QIODevice::ReadWrite);
         file.close();
+        loadFileList();
+        m_ui->fileListComboBox->setCurrentIndex(m_ui->fileListComboBox->findText(filename));
     }
     else if (m_type==RemoveFile){
         QString filename = currentFile();
@@ -278,7 +291,7 @@ void ListEditor::fileOperation(int type)
         ,QMessageBox::Ok | QMessageBox::Cancel);
         qDebug() << ret;
         if (ret==QMessageBox::Ok){
-            bool ok = m_dir.remove(filename);
+            bool ok = fcitxDir.remove(filename);
             if (!ok){
                 QMessageBox::warning(this
                 ,"File Operation Failed"
@@ -286,9 +299,11 @@ void ListEditor::fileOperation(int type)
                 );
             }
         } 
+        loadFileList();
+        m_ui->fileListComboBox->setCurrentIndex(0);
     }
-    loadFileList();
     m_ui->fileOperateCombox->setCurrentIndex(0);
+    qDebug() << m_ui->fileListComboBox->currentText();
 }
 
 

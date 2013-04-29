@@ -4,14 +4,12 @@ set(QUICKPHRASE_EDITOR_SRCS
   editor.cpp
   editordialog.cpp
   batchdialog.cpp
-  fileselector.cpp 
   )
 set(QUICKPHRASE_EDITOR_HDRS main.h
   model.h
   editor.h
   editordialog.h
   batchdialog.h
-  fileselector.h
   )
 fcitx_translate_add_sources(
   ${QUICKPHRASE_EDITOR_HDRS}
