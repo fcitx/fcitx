@@ -21,6 +21,7 @@
 #define FCITX_TOOLS_GUI_EDITOR_H
 
 #include <QMainWindow>
+#include <QDir>
 #include "fcitx-qt/fcitxqtconfiguiwidget.h"
 #include "model.h"
 #include "fileselector.h"
@@ -44,6 +45,8 @@ public:
     virtual QString title();
     virtual QString addon();
     virtual bool asyncSave();
+    
+    void loadFileList();
 
 private slots:
     void addWord();
@@ -59,13 +62,21 @@ private slots:
 private:
     void load(const QString& file);
     void save(const QString& file);
+    void _loadFileList();
+    QString currentFile();
     Ui::Editor* m_ui;
     QuickPhraseModel* m_model;
-    SelectorThread* fileSelectingThread;
-    QString m_filename;
+    QDir m_dir;
+    
+    typedef enum {
+        AddFile = 0,
+        RemoveFile = 1,
+        RefreshList = 2
+    } FileOperationType;
 public slots:
-    void startEditor(QString filename);
     void batchEditAccepted();
+    void fileSelected();
+    void fileOperation(int);
 };
 }
 

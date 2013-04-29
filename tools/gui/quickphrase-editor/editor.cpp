@@ -24,6 +24,9 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QDebug>
+#include <QInputDialog>
+#include <qtconcurrentrun.h>
+#include <cassert>
 
 #include "common.h"
 #include "editor.h"
@@ -62,16 +65,23 @@ ListEditor::ListEditor(fcitx::QuickPhraseModel* model, QWidget* parent)
     m_ui->macroTableView->setModel(m_model);
     connect(m_ui->macroTableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(itemFocusChanged()));
     connect(m_model, SIGNAL(needSaveChanged(bool)), this, SIGNAL(changed(bool)));
-    hide();
-    fileSelectingThread = new SelectorThread();
-    connect(fileSelectingThread,SIGNAL(finished(QString)),this,SLOT(startEditor(QString)));
-    fileSelectingThread->run();
+    
+    size_t pathSize;
+    char** path = FcitxXDGGetPathUserWithPrefix(&pathSize,"data/QuickPhrase.mb.d/");
+    assert(pathSize>=1);
+    m_dir.setPath(path[0]);
+
+    loadFileList();
+    load();
+    itemFocusChanged();
+    
+    connect(m_ui->fileListComboBox,SIGNAL(activated(int)),this,SLOT(fileSelected()));
+    connect(m_ui->fileOperateCombox,SIGNAL(activated(int)),this,SLOT(fileOperation(int)));
 }
 
 void ListEditor::load()
 {
-    //m_model->load("data/QuickPhrase.mb", false);
-    m_model->load(m_filename,false);
+    m_model->load(currentFile(), false);
 }
 
 void ListEditor::load(const QString& file)
@@ -87,7 +97,7 @@ void ListEditor::save(const QString& file)
 void ListEditor::save()
 {
     //QFutureWatcher< bool >* futureWatcher = m_model->save("data/QuickPhrase.mb");
-    QFutureWatcher< bool >* futureWatcher = m_model->save(m_filename);
+    QFutureWatcher< bool >* futureWatcher = m_model->save(currentFile());
     connect(futureWatcher, SIGNAL(finished()), this, SIGNAL(saveFinished()));
 }
 
@@ -212,14 +222,74 @@ void ListEditor::exportFileSelected()
     save(file);
 }
 
-void ListEditor::startEditor(QString filename)
+void ListEditor::loadFileList()
 {
-    qDebug() << "start editor with filename : " << filename;
-    m_filename = filename;
-    load();
-    itemFocusChanged();
-    show();
-    delete fileSelectingThread;
+    QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
+    watcher->setFuture(QtConcurrent::run<void>(this,&ListEditor::_loadFileList));
+    connect(watcher,SIGNAL(finished()),watcher,SLOT(deleteLater()));
 }
+
+void ListEditor::_loadFileList()
+{
+    for (int i=1;i<m_ui->fileListComboBox->count();i++)
+        m_ui->fileListComboBox->removeItem(i);
+    QFileInfoList list;
+    list = m_dir.entryInfoList(QDir::Files | QDir::Readable | QDir::Writable);
+    qDebug() << "starting adding file item...";
+    Q_FOREACH(QFileInfo i,list){
+        m_ui->fileListComboBox->addItem(i.fileName());
+        qDebug() << "added file item : " << i.fileName();
+    }
+}
+
+QString ListEditor::currentFile()
+{
+    if (m_ui->fileListComboBox->currentIndex()!=0)
+        return (QDir("data/QuickPhrase.mb.d/").filePath(m_ui->fileListComboBox->currentText()));
+    else
+        return QString("data/QuickPhrase.mb");
+}
+
+void ListEditor::fileSelected()
+{
+    load();
+}
+
+void ListEditor::fileOperation(int type)
+{
+    FileOperationType m_type = FileOperationType(type);
+    if (m_type==AddFile){
+        bool ok;
+        QString filename = QInputDialog::getText(this
+        ,tr("create new file")
+        ,tr("Please input a filename for newfile")
+        ,QLineEdit::Normal
+        ,"newfile",&ok
+        );
+        QFile file(m_dir.filePath(filename));
+        file.open(QIODevice::ReadWrite);
+        file.close();
+    }
+    else if (m_type==RemoveFile){
+        QString filename = currentFile();
+        int ret = QMessageBox::question(this
+        ,tr("Confirm deleting")
+        ,tr("Are you sure to delete this file :%1 ?").arg(filename)
+        ,QMessageBox::Ok | QMessageBox::Cancel);
+        qDebug() << ret;
+        if (ret==QMessageBox::Ok){
+            bool ok = m_dir.remove(filename);
+            if (!ok){
+                QMessageBox::warning(this
+                ,"File Operation Failed"
+                ,QString("Error while deleting file %1").arg(filename)
+                );
+            }
+        } 
+    }
+    loadFileList();
+    m_ui->fileOperateCombox->setCurrentIndex(0);
+}
+
 
 }

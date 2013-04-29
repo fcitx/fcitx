@@ -10,12 +10,49 @@
     <height>389</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout_6">
    <item>
-    <widget class="QTableView" name="macroTableView"/>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QComboBox" name="fileListComboBox">
+       <item>
+        <property name="text">
+         <string>Please select a file to edit...</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTableView" name="macroTableView"/>
+     </item>
+    </layout>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QComboBox" name="fileOperateCombox">
+       <item>
+        <property name="text">
+         <string>Operations...</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Add File</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Remove File</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Refresh List</string>
+        </property>
+       </item>
+      </widget>
+     </item>
      <item>
       <widget class="QPushButton" name="addButton">
        <property name="text">
