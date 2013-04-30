@@ -24,7 +24,7 @@ include_directories(
   ${QT_QTGUI_INCLUDE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
   )
-qt4_wrap_ui(QUICKPHRASE_EDITOR_SRCS editordialog.ui batchdialog.ui editor.ui fileselector.ui)
+qt4_wrap_ui(QUICKPHRASE_EDITOR_SRCS editordialog.ui batchdialog.ui editor.ui)
 qt4_wrap_cpp(QUICKPHRASE_EDITOR_MOCS ${QUICKPHRASE_EDITOR_HDRS})
 add_library(fcitx-quickphrase-editor
   MODULE ${QUICKPHRASE_EDITOR_SRCS} ${QUICKPHRASE_EDITOR_MOCS})

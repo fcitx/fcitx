@@ -67,17 +67,19 @@ private:
     Ui::Editor* m_ui;
     QuickPhraseModel* m_model;
     QMutex fileListMutex;
+    QFileInfoList fileList;
     QDir quickPhraseDir,fcitxDir;
     
-    typedef enum {
+    enum FileOperationType {
         AddFile = 1,
         RemoveFile = 2,
         RefreshList = 3
-    } FileOperationType;
+    } ;
 public slots:
     void batchEditAccepted();
     void fileSelected();
     void fileOperation(int);
+    void showFileList();
 };
 }
 

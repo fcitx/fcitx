@@ -231,6 +231,7 @@ void ListEditor::loadFileList()
 {
     QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
     watcher->setFuture(QtConcurrent::run<void>(this,&ListEditor::_loadFileList));
+    connect(watcher,SIGNAL(finished()),this,SLOT(showFileList()));
     connect(watcher,SIGNAL(finished()),watcher,SLOT(deleteLater()));
 }
 
@@ -239,15 +240,7 @@ void ListEditor::_loadFileList()
     fileListMutex.lock();
 //    for (int i=1;i<=m_ui->fileListComboBox->count();i++)
 //        m_ui->fileListComboBox->removeItem(i);
-    m_ui->fileListComboBox->clear();
-    m_ui->fileListComboBox->addItem("Please select a file to edit...");
-    QFileInfoList list;
-    list = quickPhraseDir.entryInfoList(QDir::Files | QDir::Readable | QDir::Writable);
-    qDebug() << "starting adding file item...";
-    Q_FOREACH(QFileInfo i,list){
-        m_ui->fileListComboBox->addItem(i.fileName());
-        qDebug() << "added file item : " << i.fileName();
-    }
+    fileList = quickPhraseDir.entryInfoList(QDir::Files | QDir::Readable | QDir::Writable);
     fileListMutex.unlockInline();
 }
 
@@ -281,7 +274,7 @@ void ListEditor::fileOperation(int type)
         file.open(QIODevice::ReadWrite);
         file.close();
         loadFileList();
-        m_ui->fileListComboBox->setCurrentIndex(m_ui->fileListComboBox->findText(filename));
+        //m_ui->fileListComboBox->setCurrentIndex(m_ui->fileListComboBox->findText(filename));
     }
     else if (m_type==RemoveFile){
         QString filename = currentFile();
@@ -300,11 +293,21 @@ void ListEditor::fileOperation(int type)
             }
         } 
         loadFileList();
-        m_ui->fileListComboBox->setCurrentIndex(0);
+        //m_ui->fileListComboBox->setCurrentIndex(0);
     }
     m_ui->fileOperateCombox->setCurrentIndex(0);
     qDebug() << m_ui->fileListComboBox->currentText();
 }
 
+void ListEditor::showFileList()
+{
+    m_ui->fileListComboBox->clear();
+    m_ui->fileListComboBox->addItem("Please select a file to edit...");
+    qDebug() << "starting adding file item...";
+    Q_FOREACH(QFileInfo i,fileList){
+        m_ui->fileListComboBox->addItem(i.fileName());
+        qDebug() << "added file item : " << i.fileName();
+    }
+}
 
 }
