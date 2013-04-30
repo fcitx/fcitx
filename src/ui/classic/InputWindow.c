@@ -145,7 +145,7 @@ void InputWindowCalculateContentSize(FcitxXlibWindow* window, unsigned int* widt
         FcitxCairoTextContextStringSize(ctc, strUp[i], &strWidth, &strHeight);
 
         if (sc->skinFont.respectDPI)
-            posUpY[i] = sc->skinInputBar.iInputPos;
+            posUpY[i] = sc->skinInputBar.iInputPos + fontHeight - strHeight;
         else
             posUpY[i] = sc->skinInputBar.iInputPos - strHeight;
         inputWidth += strWidth;
