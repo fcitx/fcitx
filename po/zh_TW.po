@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-25 00:01-0400\n"
-"PO-Revision-Date: 2013-04-24 04:03+0000\n"
+"POT-Creation-Date: 2013-04-30 23:38-0400\n"
+"PO-Revision-Date: 2013-04-29 08:24+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
@@ -2939,6 +2939,20 @@ msgid ""
 msgstr ""
 "您只有啟用一個輸入法。請加入一個鍵盤輸入法作為第一個輸入法，以及將你主要的輸"
 "入法作為第二個輸入法。"
+
+#: data/script/fcitx-configtool.sh:136
+msgid ""
+"You're currently Fcitx with GUI, but fcitx-configtool couldn't be found, the "
+"package name is usually fcitx-config-gtk, fcitx-config-gtk3 or fcitx-"
+"configtool. Now it will open config file with default text editor."
+msgstr ""
+
+#: data/script/fcitx-configtool.sh:133
+msgid ""
+"You're currently running KDE, but KCModule for fcitx couldn't be found, the "
+"package name of this KCModule is usually kcm-fcitx or kde-config-fcitx. Now "
+"it will open config file with default text editor."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:783
 msgid ""
