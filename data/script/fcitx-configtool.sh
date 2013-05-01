@@ -196,7 +196,7 @@ detectDE
 # xdg/editor is never a prefered solution
 case "$DE" in
     kde)
-        order="xdg kde gtk3 gtk xdg editor"
+        order="kde gtk3 gtk xdg editor"
         ;;
     *)
         order="gtk3 gtk kde xdg editor"
