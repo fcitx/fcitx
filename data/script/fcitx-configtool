@@ -3,6 +3,8 @@
 # fcitx-config
 #
 
+export TEXTDOMAIN=fcitx
+
 if which kdialog > /dev/null 2>&1; then
     message() {
         kdialog --msgbox "$1"
