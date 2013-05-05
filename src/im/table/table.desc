@@ -198,5 +198,10 @@ Description=Ignore Punctuation
 Type=Boolean
 DefaultValue=False
 
+[CodeTable/IgnorePuncList]
+Description=Ignore some Punctuation, if it is empty, then ignore all punctuation
+Type=String
+DefaultValue=
+
 [DescriptionFile]
 LocaleDomain=fcitx

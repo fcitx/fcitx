@@ -487,7 +487,11 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 
                         retVal = TableGetCandWords(table);
                         int key = FcitxInputStateGetRawInputBuffer(input)[0];
-                        if (!table->bIgnorePunc) {
+                        if (!table->bIgnorePunc
+                            || (table->bIgnorePunc
+                                && table->ignorePuncList
+                                && table->ignorePuncList[0]
+                                && strchr(table->ignorePuncList, key))) {
                             strTemp = FcitxPuncGetPunc(instance, &key);
                         } else {
                             strTemp = NULL;
