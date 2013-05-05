@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-30 23:38-0400\n"
+"POT-Creation-Date: 2013-05-05 14:09-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -543,45 +543,45 @@ msgstr ""
 msgid "Quwei"
 msgstr ""
 
-#: src/im/table/table.c:604
+#: src/im/table/table.c:610
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:629
+#: src/im/table/table.c:635
 msgid "Pinyin: "
 msgstr ""
 
-#: src/im/table/table.c:653
+#: src/im/table/table.c:659
 msgid "Cannot found Pinyin"
 msgstr ""
 
-#: src/im/table/table.c:713
+#: src/im/table/table.c:719
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:721
+#: src/im/table/table.c:727
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:729
+#: src/im/table/table.c:735
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:1294
+#: src/im/table/table.c:1300
 msgid "Remind:"
 msgstr ""
 
-#: src/im/table/table.c:1402
+#: src/im/table/table.c:1408
 msgid "Phrase is already in Dict "
 msgstr ""
 
-#: src/im/table/table.c:1406
+#: src/im/table/table.c:1412
 msgid "Code is "
 msgstr ""
 
-#: src/im/table/table.c:1410
+#: src/im/table/table.c:1416
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -2132,7 +2132,7 @@ msgstr ""
 #: src/im/table/table.desc:166 src/im/table/table.desc:171
 #: src/im/table/table.desc:176 src/im/table/table.desc:181
 #: src/im/table/table.desc:186 src/im/table/table.desc:191
-#: src/im/table/table.desc:196
+#: src/im/table/table.desc:196 src/im/table/table.desc:201
 msgid "CodeTable"
 msgstr ""
 
@@ -2281,6 +2281,10 @@ msgstr ""
 
 #: src/im/table/table.desc:197
 msgid "Ignore Punctuation"
+msgstr ""
+
+#: src/im/table/table.desc:202
+msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
 msgstr ""
 
 #: src/module/autoeng/fcitx-autoeng.desc:1

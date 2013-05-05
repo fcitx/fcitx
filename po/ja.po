@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-30 23:38-0400\n"
-"PO-Revision-Date: 2013-04-29 08:24+0000\n"
+"POT-Creation-Date: 2013-05-05 14:09-0400\n"
+"PO-Revision-Date: 2013-05-01 03:40+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/im/table/table.c:1410
+#: src/im/table/table.c:1416
 msgid " Ctrl+Delete To Delete"
 msgstr "Ctrl+Delete で削除"
 
@@ -483,7 +483,7 @@ msgstr "fcitx-configtoolが実行可能な状態で見つかりませんでし�
 msgid "Cannot find xim_server on root window."
 msgstr "ルートウィンドウで xim_server が見つかりません。"
 
-#: src/im/table/table.c:653
+#: src/im/table/table.c:659
 msgid "Cannot found Pinyin"
 msgstr "Pinyin が見つかりません"
 
@@ -533,15 +533,15 @@ msgstr "二番目と三番目の候補を選択"
 msgid "Choose key modifier"
 msgstr "修飾キーを選択"
 
-#: src/im/table/table.c:721
+#: src/im/table/table.c:727
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:713
+#: src/im/table/table.c:719
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:729
+#: src/im/table/table.c:735
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "入力履歴を削除するフレーズを選択、Escapeでキャンセル"
 
@@ -605,7 +605,7 @@ msgstr "コードテーブルファイル"
 msgid "Code Table Name"
 msgstr "コードテーブル名"
 
-#: src/im/table/table.c:1406
+#: src/im/table/table.c:1412
 msgid "Code is "
 msgstr "コードは"
 
@@ -628,7 +628,7 @@ msgstr "コードは"
 #: src/im/table/table.desc:166 src/im/table/table.desc:171
 #: src/im/table/table.desc:176 src/im/table/table.desc:181
 #: src/im/table/table.desc:186 src/im/table/table.desc:191
-#: src/im/table/table.desc:196
+#: src/im/table/table.desc:196 src/im/table/table.desc:201
 msgid "CodeTable"
 msgstr "コードテーブル"
 
@@ -1371,6 +1371,10 @@ msgstr "句読点を無視"
 msgid "Ignore blank selections"
 msgstr "空白の選択を無視"
 
+#: src/im/table/table.desc:202
+msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
+msgstr ""
+
 #: data/config.desc:46
 msgid "Inactivate Input Method"
 msgstr "入力メソッドをオフに"
@@ -1574,7 +1578,7 @@ msgstr "英数句読点"
 msgid "Left Super"
 msgstr ""
 
-#: src/im/table/table.c:604
+#: src/im/table/table.c:610
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1905,7 +1909,7 @@ msgstr "プログラムごと"
 msgid "Phrase"
 msgstr "フレーズ"
 
-#: src/im/table/table.c:1402
+#: src/im/table/table.c:1408
 msgid "Phrase is already in Dict "
 msgstr "フレーズは既に辞書にあります"
 
@@ -1950,7 +1954,7 @@ msgstr ""
 msgid "Pinyin Key"
 msgstr "Pinyinキー"
 
-#: src/im/table/table.c:629
+#: src/im/table/table.c:635
 msgid "Pinyin: "
 msgstr "Pinyin: "
 
@@ -2143,7 +2147,7 @@ msgstr "IM登録"
 msgid "Reload configuration"
 msgstr "設定の再読み込み"
 
-#: src/im/table/table.c:1294
+#: src/im/table/table.c:1300
 msgid "Remind:"
 msgstr "リマインド:"
 
