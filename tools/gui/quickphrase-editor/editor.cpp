@@ -40,7 +40,9 @@ namespace fcitx {
 ListEditor::ListEditor(fcitx::QuickPhraseModel* model, QWidget* parent)
     : FcitxQtConfigUIWidget(parent),
       m_ui(new Ui::Editor),
-      m_model(model)
+      m_model(model),
+      m_modified(false),
+      lastFileIndex(0)
 {
     m_ui->setupUi(this);
     m_ui->addButton->setText(_("&Add"));
@@ -80,22 +82,29 @@ ListEditor::ListEditor(fcitx::QuickPhraseModel* model, QWidget* parent)
     load();
     itemFocusChanged();
     
-    connect(m_ui->fileListComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fileSelected()));
+    //connect(m_ui->fileListComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fileSelected()));
+    connect(m_ui->fileListComboBox,SIGNAL(activated(int)),this,SLOT(fileSelected()));
     connect(m_ui->fileOperateCombox,SIGNAL(activated(int)),this,SLOT(fileOperation(int)));
+    
+    connect(m_model,SIGNAL(needSaveChanged(bool)),this,SLOT(fileModified()));
 }
 
 void ListEditor::load()
 {
     m_model->load(currentFile(), false);
+    m_modified = false;
+    qDebug() << "recover modify status to false";
 }
 
 void ListEditor::load(const QString& file)
 {
     m_model->load(file.isEmpty() ? "data/QuickPhrase.mb" : file, true);
+    m_modified = false;
 }
 
 void ListEditor::save(const QString& file)
 {
+    qDebug() << "saving " << file << " " ;
     m_model->save(file.isEmpty() ? "data/QuickPhrase.mb" : file);
 }
 
@@ -244,19 +253,50 @@ void ListEditor::_loadFileList()
     fileListMutex.unlockInline();
 }
 
-QString ListEditor::currentFile()
+QString ListEditor::currentFile(int index) 
 {
-    if (m_ui->fileListComboBox->currentIndex()!=0)
-        return (QDir("data/QuickPhrase.mb.d/").filePath(m_ui->fileListComboBox->currentText()));
+    if (index == -1)
+        index = m_ui->fileListComboBox->currentIndex();
+    if (index!=0)
+        return (QDir("data/QuickPhrase.mb.d/").filePath(m_ui->fileListComboBox->itemText(index)));
     else
         return QString("data/QuickPhrase.mb");
 }
 
 void ListEditor::fileSelected()
 {
+    int currentIndex = m_ui->fileListComboBox->currentIndex();
+    if (currentIndex==lastFileIndex)
+        return ;
     qDebug() << "file list count : " << m_ui->fileListComboBox->count();
-    qDebug() << m_ui->fileListComboBox->currentIndex() << " " << m_ui->fileListComboBox->currentText();
-    load();
+    qDebug() << currentIndex << " " << m_ui->fileListComboBox->currentText();
+    if (m_modified){
+        qDebug() << "File " << currentIndex << " modified. ";
+        int ret = QMessageBox::question(this
+        ,tr("Save Changes")
+        ,tr("The content of QuickPhrase has changed.\n\
+        Do you want to save the changes or discard them?")
+        ,QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel
+        );
+        if (ret==QMessageBox::Save){
+            //save(m_ui->fileListComboBox->itemText(lastFileIndex));
+            qDebug() << "preparing to save file " << lastFileIndex << " " << currentFile(lastFileIndex);
+            save(currentFile(lastFileIndex));
+            load();
+            lastFileIndex = currentIndex;
+        }
+        else if (ret==QMessageBox::Discard){
+            load();
+            lastFileIndex = currentIndex;
+        }
+        else {
+            return ;
+        }
+    }
+    else{
+        load();
+        lastFileIndex = currentIndex;
+    }
 }
 
 void ListEditor::fileOperation(int type)
@@ -308,6 +348,12 @@ void ListEditor::showFileList()
         m_ui->fileListComboBox->addItem(i.fileName());
         qDebug() << "added file item : " << i.fileName();
     }
+}
+
+void ListEditor::fileModified()
+{
+    m_modified = true;
+    qDebug() << "file modified.";
 }
 
 }

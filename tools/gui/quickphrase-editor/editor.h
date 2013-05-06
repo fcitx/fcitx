@@ -63,12 +63,15 @@ private:
     void load(const QString& file);
     void save(const QString& file);
     void _loadFileList();
-    QString currentFile();
+    QString currentFile(int index = -1);
     Ui::Editor* m_ui;
     QuickPhraseModel* m_model;
     QMutex fileListMutex;
     QFileInfoList fileList;
     QDir quickPhraseDir,fcitxDir;
+    
+    bool m_modified;
+    int lastFileIndex;
     
     enum FileOperationType {
         AddFile = 1,
@@ -77,6 +80,7 @@ private:
     } ;
 public slots:
     void batchEditAccepted();
+    void fileModified();
     void fileSelected();
     void fileOperation(int);
     void showFileList();
