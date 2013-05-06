@@ -586,7 +586,7 @@ fxscanner_function_write_public(FcitxAddonFuncDesc *func_desc,
     }
     if (func_desc->err_ret && !func_desc->type) {
         FcitxLog(WARNING, "Cannot set error return of type void.");
-        func_desc->err_ret = false;
+        func_desc->err_ret = NULL;
     }
     if (!func_desc->err_ret) {
         _write_strings(ofp, "DEFINE_GET_AND_INVOKE_FUNC(",
