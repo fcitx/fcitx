@@ -3,6 +3,7 @@ Name=fcitx-freedesktop-notify
 Prefix=FreeDesktopNotify
 Function0=SendNotification
 Function1=CloseNotification
+Function2=ShowTip
 Include0="freedesktop-notify.h"
 Self.Type=FcitxNotify*
 
@@ -25,3 +26,13 @@ Res.WrapFunc=FcitxNotifySendNotification
 Name=close-notification
 Arg0=uint32_t
 Res.WrapFunc=FcitxNotifyCloseNotification
+
+[ShowTip]
+Name=show-tip
+Arg0=const char*
+Arg1=const char*
+Arg2=const char*
+Arg3=const char*
+Arg4=int32_t
+Arg5=const char*
+Res.WrapFunc=FcitxNotifyShowTip

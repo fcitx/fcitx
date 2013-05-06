@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-typedef void (*FcitxFreedesktopNotifyActionCallback)(void* arg,
+typedef void (*FcitxFreedesktopNotifyActionCallback)(void *arg,
                                                      uint32_t id,
                                                      const char *action_id);
 typedef struct {

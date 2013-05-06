@@ -46,14 +46,14 @@ void fcitx_string_map_from_string(FcitxStringMap* map, const char* str, char del
     fcitx_utils_free_string_list(list);
 }
 
-FCITX_EXPORT_API
-boolean fcitx_string_map_get(FcitxStringMap* map, const char* key, boolean value)
+FCITX_EXPORT_API boolean
+fcitx_string_map_get(FcitxStringMap* map, const char* key, boolean _default)
 {
     FcitxStringMapItem* item = NULL;
     HASH_FIND_STR(map->items, key, item);
     if (item)
         return item->value;
-    return value;
+    return _default;
 }
 
 FCITX_EXPORT_API

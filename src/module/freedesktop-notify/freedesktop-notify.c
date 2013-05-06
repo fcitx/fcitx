@@ -22,11 +22,14 @@
 
 #include <dbus/dbus.h>
 #include <time.h>
+#include <libintl.h>
 
 #include "fcitx/module.h"
 #include "fcitx/instance.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx-utils/uthash.h"
+#include "fcitx-utils/stringmap.h"
+#include "fcitx-utils/desktop-parse.h"
 #include "module/dbus/fcitx-dbus.h"
 #include "freedesktop-notify.h"
 
@@ -89,6 +92,8 @@ struct _FcitxNotify {
     FcitxNotifyItem *global_table;
     FcitxNotifyItem *intern_table;
     boolean timeout_added;
+    FcitxDesktopFile dconfig;
+    FcitxStringMap *hide_notify;
 };
 
 #define TIMEOUT_REAL_TIME (100)
@@ -226,6 +231,49 @@ FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message,
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
 
+static void
+FcitxNotifyLoadDConfig(FcitxNotify *notify)
+{
+    FILE *fp;
+    fcitx_string_map_clear(notify->hide_notify);
+    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-notify.config",
+                                       "r", NULL);
+    if (fp) {
+        if (fcitx_desktop_file_load_fp(&notify->dconfig, fp)) {
+            FcitxDesktopGroup *grp;
+            grp = fcitx_desktop_file_ensure_group(&notify->dconfig,
+                                                  "Notify/Notify");
+            FcitxDesktopEntry *ety;
+            ety = fcitx_desktop_group_ensure_entry(grp, "HiddenNotify");
+            if (ety->value) {
+                fcitx_string_map_from_string(notify->hide_notify,
+                                             ety->value, ';');
+            }
+        }
+        fclose(fp);
+    }
+}
+
+static void
+FcitxNotifySaveDConfig(FcitxNotify *notify)
+{
+    FILE *fp;
+    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-notify.config",
+                                       "w", NULL);
+    if (fp) {
+        FcitxDesktopGroup *grp;
+        grp = fcitx_desktop_file_ensure_group(&notify->dconfig,
+                                              "Notify/Notify");
+        FcitxDesktopEntry *ety;
+        ety = fcitx_desktop_group_ensure_entry(grp, "HiddenNotify");
+        char *val = fcitx_string_map_to_string(notify->hide_notify, ';');
+        fcitx_desktop_entry_set_value(ety, val);
+        free(val);
+        fcitx_desktop_file_write_fp(&notify->dconfig, fp);
+        fclose(fp);
+    }
+}
+
 static void*
 FcitxNotifyCreate(FcitxInstance *instance)
 {
@@ -252,6 +300,10 @@ FcitxNotifyCreate(FcitxInstance *instance)
                                                    notify, NULL)))
         goto filter_error;
     dbus_error_free(&err);
+
+    notify->hide_notify = fcitx_string_map_new(NULL, '\0');
+    fcitx_desktop_file_init(&notify->dconfig, NULL, NULL);
+    FcitxNotifyLoadDConfig(notify);
 
     FcitxFreeDesktopNotifyAddFunctions(instance);
 
@@ -461,13 +513,61 @@ FcitxNotifySendNotification(FcitxNotify *notify, const char *appName,
     return intern_id;
 }
 
+typedef struct {
+    FcitxNotify *notify;
+    char tip_id[0];
+} FcitxNotifyShowTipData;
+
+static void
+FcitxNotifyShowTipCallback(void *arg, uint32_t id, const char *action)
+{
+    FcitxNotifyShowTipData *data = arg;
+    FCITX_UNUSED(id);
+    if (!strcmp(action, "dont-show")) {
+        fcitx_string_map_set(data->notify->hide_notify,
+                             data->tip_id, true);
+    }
+}
+
+static void
+FcitxNotifyShowTip(FcitxNotify *notify, const char *appName,
+                   const char *appIcon, const char *summary, const char *body,
+                   int32_t timeout, const char *tip_id)
+{
+    if (fcitx_unlikely(!tip_id) ||
+        fcitx_string_map_get(notify->hide_notify, tip_id, false))
+        return;
+    fcitx_string_map_set(notify->hide_notify, tip_id, false);
+    const FcitxFreedesktopNotifyAction actions[] = {
+        {
+            .id = "dont-show",
+            .name = _("Do not show again."),
+        }, {
+            NULL, NULL
+        }
+    };
+    size_t len = strlen(tip_id);
+    FcitxNotifyShowTipData *data =
+        malloc(sizeof(FcitxNotifyShowTipData) + len + 1);
+    data->notify = notify;
+    memcpy(data->tip_id, tip_id, len + 1);
+    FcitxNotifySendNotification(notify, appName, 0, appIcon, summary,
+                                body, actions, timeout,
+                                FcitxNotifyShowTipCallback,
+                                data, free);
+}
+
 static void
 FcitxNotifyDestroy(void *arg)
 {
     FcitxNotify *notify = (FcitxNotify*)arg;
+
+    FcitxNotifySaveDConfig(notify);
     dbus_connection_remove_filter(notify->conn, FcitxNotifyDBusFilter, notify);
     dbus_bus_remove_match(notify->conn, NOTIFICATIONS_MATCH_ACTION, NULL);
     dbus_bus_remove_match(notify->conn, NOTIFICATIONS_MATCH_CLOSED, NULL);
+    fcitx_string_map_free(notify->hide_notify);
+    fcitx_desktop_file_done(&notify->dconfig);
     free(arg);
 }
 
