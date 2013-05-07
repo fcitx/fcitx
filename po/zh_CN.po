@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-05-05 14:09-0400\n"
-"PO-Revision-Date: 2013-05-01 03:44+0000\n"
+"POT-Creation-Date: 2013-05-07 00:02-0400\n"
+"PO-Revision-Date: 2013-05-05 18:13+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -1362,7 +1362,7 @@ msgstr "忽略空白的剪贴板内容"
 
 #: src/im/table/table.desc:202
 msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
-msgstr ""
+msgstr "忽略部分标点，若为空则忽略所有标点"
 
 #: data/config.desc:46
 msgid "Inactivate Input Method"
