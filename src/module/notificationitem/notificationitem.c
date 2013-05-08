@@ -409,7 +409,7 @@ void FcitxNotificationItemGetStatus(void* arg, DBusMessageIter* iter)
 
 void FcitxNotificationItemGetTitle(void* arg, DBusMessageIter* iter)
 {
-    const char* title = "Fcitx";
+    const char* title = _("Input Method");
     dbus_message_iter_append_basic(iter, DBUS_TYPE_STRING, &title);
 }
 
