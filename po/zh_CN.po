@@ -10,13 +10,14 @@
 # Xuetian Weng <wengxt@gmail.com>, 2010-2012
 # Xuetian Weng <wengxt@gmail.com>, 2013
 # Yichao Yu <yyc1992@gmail.com>, 2012
+# Yichao Yu <yyc1992@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-05-07 00:02-0400\n"
-"PO-Revision-Date: 2013-05-05 18:13+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2013-05-08 00:02-0400\n"
+"PO-Revision-Date: 2013-05-07 04:05+0000\n"
+"Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -1345,7 +1346,7 @@ msgid ""
 "able to use any input method other than ${2}. See ${link} for more detail as "
 "well as alternative solutions."
 msgstr ""
-"如果您正在使用 ${1}, 您可能需要卸载 ${2} 或者删除 ${3} 已使用除 ${2} 之外的任"
+"如果您正在使用 ${1}, 您可能需要卸载 ${2} 或者删除 ${3} 以使用除 ${2} 之外的任"
 "何输入法. 更多细节和其它的解决方法参见 ${link}."
 
 #: src/module/xkb/fcitx-xkb.desc:9
