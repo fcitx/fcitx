@@ -398,6 +398,9 @@ void FcitxNotificationItemGetCategory(void* arg, DBusMessageIter* iter)
 void FcitxNotificationItemGetStatus(void* arg, DBusMessageIter* iter)
 {
     const char* active = "Active";
+    dbus_message_iter_append_basic(iter, DBUS_TYPE_STRING, &active);
+#if 0
+    const char* active = "Active";
     const char* passive = "Passive";
 
     FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) arg;
@@ -405,6 +408,7 @@ void FcitxNotificationItemGetStatus(void* arg, DBusMessageIter* iter)
     const char* status = (utarray_len(imes) > 1) ? active : passive;
 
     dbus_message_iter_append_basic(iter, DBUS_TYPE_STRING, &status);
+#endif
 }
 
 void FcitxNotificationItemGetTitle(void* arg, DBusMessageIter* iter)
@@ -544,12 +548,16 @@ void FcitxNotificationItemIMChanged(void* arg)
 
 void FcitxNotificationItemUpdateIMList(void* arg)
 {
-    FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) arg;
-
     DBusMessage* msg = dbus_message_new_signal(NOTIFICATION_ITEM_DEFAULT_OBJ,
                                                NOTIFICATION_ITEM_DBUS_IFACE,
                                                "NewStatus");
     if (msg) {
+        const char* active = "Active";
+        dbus_message_append_args(msg, DBUS_TYPE_STRING, &active, DBUS_TYPE_INVALID);
+#if 0
+        FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) arg;
+
+        dbus_message_iter_append_basic(iter, DBUS_TYPE_STRING, &active);
         const char* active = "Active";
         const char* passive = "Passive";
 
@@ -558,6 +566,7 @@ void FcitxNotificationItemUpdateIMList(void* arg)
         dbus_message_append_args(msg, DBUS_TYPE_STRING, &status, DBUS_TYPE_INVALID);
         dbus_connection_send(notificationitem->conn, msg, NULL);
         dbus_message_unref(msg);
+#endif
     }
 }
 
