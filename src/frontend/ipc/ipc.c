@@ -499,15 +499,13 @@ void IPCSendSignal(FcitxIPCFrontend* ipc, FcitxIPCIC* ipcic, DBusMessage* msg)
 {
     if (!ipcic || !ipcic->isPriv) {
         if (ipc->_conn) {
-            dbus_uint32_t serial = 0; // unique number to associate replies with requests
-            dbus_connection_send(ipc->_conn, msg, &serial);
+            dbus_connection_send(ipc->_conn, msg, NULL);
             dbus_connection_flush(ipc->_conn);
         }
     }
     if (!ipcic || ipcic->isPriv) {
         if (ipc->_privconn) {
-            dbus_uint32_t serial = 0; // unique number to associate replies with requests
-            dbus_connection_send(ipc->_privconn, msg, &serial);
+            dbus_connection_send(ipc->_privconn, msg, NULL);
             dbus_connection_flush(ipc->_privconn);
         }
     }
