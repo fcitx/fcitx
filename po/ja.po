@@ -5,15 +5,15 @@
 # Translators:
 # しろう <>, 2013
 # いくや あわしろ <ikunya@gmail.com>, 2013
-# いくや あわしろ <ikunya@gmail.com>, 2012
+# いくや あわしろ <ikunya@gmail.com>, 2012-2013
 # mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-05-05 14:09-0400\n"
-"PO-Revision-Date: 2013-05-01 03:40+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2013-05-11 00:01-0400\n"
+"PO-Revision-Date: 2013-05-11 03:49+0000\n"
+"Last-Translator: いくや あわしろ <ikunya@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
 "Language: ja\n"
@@ -721,11 +721,11 @@ msgstr "Ctrl"
 
 #: data/config.desc:29
 msgid "Ctrl+Left Super"
-msgstr ""
+msgstr "Ctrl+左Super"
 
 #: data/config.desc:30
 msgid "Ctrl+Right Super"
-msgstr ""
+msgstr "Ctrl+右Super"
 
 #: data/profile.desc:22
 msgid "Current Enabled Input Method List"
@@ -817,7 +817,7 @@ msgstr "Pinyin 記号を無効にする"
 msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr "アドオン %s を無効にしました。依存性 %s が解決されていません。"
 
-#: src/module/notificationitem/notificationitem.c:453
+#: src/module/notificationitem/notificationitem.c:467
 #: src/ui/kimpanel/kimpanel.c:254 src/ui/kimpanel/kimpanel.c:259
 #: data/config.desc:33
 msgid "Disabled"
@@ -1187,7 +1187,7 @@ msgstr "全角句読点"
 
 #: src/module/vk/vk.c:52
 msgid "Fullwidth"
-msgstr "全角"
+msgstr "全角英数字"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:3
 msgid "Fullwidth Character"
@@ -1263,7 +1263,7 @@ msgstr "Grave"
 
 #: src/module/vk/vk.c:53
 msgid "Greek"
-msgstr "ギリシャ語"
+msgstr "ギリシャ文字"
 
 #: data/script/fcitx-diagnose.sh:929
 msgid "Gtk IM module cache:"
@@ -1405,7 +1405,7 @@ msgstr "無効なトレイアイコン"
 
 #: src/module/vk/vk.c:55
 msgid "Index"
-msgstr "先頭数字"
+msgstr "リスト数字"
 
 #: src/ui/classic/skin.desc:19
 msgid "Input Font Size"
@@ -1415,8 +1415,8 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1537 data/fcitx-autostart.desktop.in:3
-#: data/fcitx.desktop.in:3
+#: src/lib/fcitx/ime.c:1537 src/module/notificationitem/notificationitem.c:416
+#: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "入力メソッド"
 
@@ -1424,7 +1424,7 @@ msgstr "入力メソッド"
 msgid "Input Method Configuration"
 msgstr "入力メソッドの設定"
 
-#: src/module/notificationitem/notificationitem.c:454
+#: src/module/notificationitem/notificationitem.c:468
 #: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:260
 msgid "Input Method Disabled"
 msgstr "入力メソッドが無効"
@@ -1568,7 +1568,7 @@ msgstr "このテーブルへの言語コード"
 
 #: src/module/vk/vk.c:51
 msgid "Latin"
-msgstr "ラテン"
+msgstr "半角英数字"
 
 #: src/module/punc/punc.c:148 src/module/punc/punc.c:555
 msgid "Latin punct"
@@ -1576,7 +1576,7 @@ msgstr "英数句読点"
 
 #: data/config.desc:26
 msgid "Left Super"
-msgstr ""
+msgstr "左Super"
 
 #: src/im/table/table.c:610
 msgid ""
@@ -1612,7 +1612,7 @@ msgstr "テーブル辞書の読み込み完了"
 #: src/im/pinyin/py.c:409
 #, c-format
 msgid "Load extra dict: %s"
-msgstr "拡張辞書を読み込み: %s"
+msgstr "拡張辞書の読み込み: %s"
 
 #: src/im/table/tabledict.c:286
 msgid "Loading Autophrase."
@@ -1684,7 +1684,7 @@ msgstr "マッチングキー"
 
 #: src/module/vk/vk.c:56
 msgid "Math"
-msgstr "数学"
+msgstr "数学記号"
 
 #: src/module/autoeng/fcitx-autoeng.desc:22
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:23
@@ -1807,7 +1807,7 @@ msgstr "有効な入力メソッドがありません"
 msgid "No available frontend"
 msgstr "フロントエンドが見つかりません"
 
-#: src/module/notificationitem/notificationitem.c:447
+#: src/module/notificationitem/notificationitem.c:461
 #: src/ui/kimpanel/kimpanel.c:227 src/ui/kimpanel/kimpanel.c:228
 msgid "No input window"
 msgstr "入力ウィンドウなし"
@@ -1843,7 +1843,7 @@ msgstr "なし"
 
 #: src/module/vk/vk.c:57
 msgid "Number"
-msgstr "番号"
+msgstr "漢数字"
 
 #: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:442
 msgid "Online Help"
@@ -1899,7 +1899,7 @@ msgstr "スキンのフォントサイズを上書きする"
 
 #: data/inputmethod.desc:23
 msgid "Parent"
-msgstr ""
+msgstr "親"
 
 #: data/config.desc:166
 msgid "PerProgram"
@@ -2196,7 +2196,7 @@ msgstr "再起動"
 
 #: data/config.desc:27
 msgid "Right Super"
-msgstr ""
+msgstr "右Super"
 
 #: src/module/clipboard/fcitx-clipboard.desc:20
 msgid ""
@@ -2218,7 +2218,7 @@ msgstr "よく使う単語の表示順序ルール"
 
 #: src/module/vk/vk.c:54
 msgid "Russian"
-msgstr "ロシア語"
+msgstr "ロシア文字"
 
 #: data/config.desc:22
 msgid "SHIFT Both"
@@ -2270,7 +2270,7 @@ msgstr "キーボードで指定の入力メソッドを選択"
 
 #: src/module/clipboard/clipboard.c:372
 msgid "Select to paste"
-msgstr ""
+msgstr "貼り付けを選択"
 
 #: data/addon.desc:60
 msgid "Self"
@@ -2341,7 +2341,7 @@ msgstr "Fcitx の簡単な Pinyin サポート"
 
 #: src/module/chttrans/chttrans.c:150 src/module/chttrans/chttrans.c:185
 msgid "Simplified Chinese"
-msgstr "簡体字中国語"
+msgstr "中国語簡体字"
 
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
@@ -2437,7 +2437,7 @@ msgstr ""
 
 #: src/module/vk/vk.c:58
 msgid "Special"
-msgstr "特殊"
+msgstr "特殊文字"
 
 #: src/ui/classic/skin.desc:182
 msgid "Special Icon position"
@@ -2486,19 +2486,19 @@ msgstr "スキンをインストールしました"
 
 #: data/config.desc:28
 msgid "Super Both"
-msgstr ""
+msgstr "２つのSuper"
 
 #: data/config.desc:31
 msgid "Super+Left Ctrl"
-msgstr ""
+msgstr "Super+左Ctrl"
 
 #: data/config.desc:32
 msgid "Super+Right Ctrl"
-msgstr ""
+msgstr "Super+右Ctrl"
 
 #: data/config.desc:137
 msgid "Switch Embeded Preedit"
-msgstr ""
+msgstr "組み込みプレエディットに切り替え"
 
 #: data/config.desc:109
 msgid "Switch Full Width Punc Mode"
@@ -2588,7 +2588,7 @@ msgstr "Fcitx用のテーブル入力メソッド"
 
 #: src/module/vk/vk.c:61
 msgid "Table Symbol"
-msgstr "表の記号"
+msgstr "罫線文字"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
 msgid ""
@@ -2965,6 +2965,9 @@ msgid ""
 "package name is usually fcitx-config-gtk, fcitx-config-gtk3 or fcitx-"
 "configtool. Now it will open config file with default text editor."
 msgstr ""
+"現在fcitxをGUIで使用していますが、fcitx-configtoolが見つかりません。パッケー"
+"ジ名は、たいていの場合fcitx-config-gtk、fcitx-config-gtk3あるいはfcitx-"
+"configtoolです。今は既定のテキストエディターで設定ファイルを開きます。"
 
 #: data/script/fcitx-configtool.sh:133
 msgid ""
@@ -2972,6 +2975,9 @@ msgid ""
 "package name of this KCModule is usually kcm-fcitx or kde-config-fcitx. Now "
 "it will open config file with default text editor."
 msgstr ""
+"現在KDEを使用していますが、fcitx用のKCModuleが見つかりません。KCModuleのパッ"
+"ケージ名は、たいていの場合kcm-fcitxかkde-config-fcitxです。今は既定のテキスト"
+"エディターで設定ファイルを開きます。"
 
 #: data/script/fcitx-diagnose.sh:783
 msgid ""
