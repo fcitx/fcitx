@@ -39,6 +39,7 @@ typedef struct _UnicodeSet {
 } UnicodeSet;
 
 static const UT_icd uint32_icd = { sizeof(uint32_t), NULL, NULL, NULL };
+static const UT_icd uint16_icd = { sizeof(uint16_t), NULL, NULL, NULL };
 
 static const char JAMO_L_TABLE[][4] = {
         "G", "GG", "N", "D", "DD", "R", "M", "B", "BB",
@@ -481,7 +482,7 @@ UnicodeSet* CharSelectDataGetMatchingChars(CharSelectData* charselect, const cha
     if (!last)
         last = (CharSelectDataIndex**)utarray_back(charselect->indexList);
     while (pos != last && strncasecmp(s, (*pos)->key, s_l) == 0) {
-        utarray_foreach (c, (*pos)->items, uint32_t) {
+        utarray_foreach (c, (*pos)->items, uint16_t) {
             result = InsertResult(result, *c);
         }
         ++pos;
@@ -644,11 +645,11 @@ CharSelectDataIndex* CharSelectDataIndexNew(const char* key)
 {
     CharSelectDataIndex* idx = fcitx_utils_new(CharSelectDataIndex);
     idx->key = strdup(key);
-    utarray_new(idx->items, &uint32_icd);
+    utarray_new(idx->items, &uint16_icd);
     return idx;
 }
 
-void CharSelectDataAppendToIndex(CharSelectData* charselect, uint32_t unicode, const char* str)
+void CharSelectDataAppendToIndex(CharSelectData* charselect, uint16_t unicode, const char* str)
 {
     UT_array* strings = SplitString(str);
     utarray_foreach(s, strings, char*) {
@@ -689,7 +690,7 @@ void CharSelectDataCreateIndex(CharSelectData* charselect)
     int pos, j;
 
     for (pos = 0; pos <= max; pos++) {
-        const uint32_t unicode = FromLittleEndian16(data + nameOffsetBegin + pos*6);
+        const uint16_t unicode = FromLittleEndian16(data + nameOffsetBegin + pos*6);
         uint32_t offset = FromLittleEndian32(data + nameOffsetBegin + pos*6 + 2);
         // TODO
         CharSelectDataAppendToIndex(charselect, unicode, (data + offset + 1));
@@ -701,7 +702,7 @@ void CharSelectDataCreateIndex(CharSelectData* charselect)
 
     max = ((detailsOffsetEnd - detailsOffsetBegin) / 27) - 1;
     for (pos = 0; pos <= max; pos++) {
-        const uint32_t unicode = FromLittleEndian16(data + detailsOffsetBegin + pos*27);
+        const uint16_t unicode = FromLittleEndian16(data + detailsOffsetBegin + pos*27);
 
         // aliases
         const uint8_t aliasCount = * (uint8_t *)(data + detailsOffsetBegin + pos*27 + 6);
@@ -759,7 +760,7 @@ void CharSelectDataCreateIndex(CharSelectData* charselect)
      max = ((unihanOffsetEnd - unihanOffsetBegin) / 30) - 1;
 
      for (pos = 0; pos <= max; pos++) {
-         const uint32_t unicode = FromLittleEndian16(data + unihanOffsetBegin + pos*30);
+         const uint16_t unicode = FromLittleEndian16(data + unihanOffsetBegin + pos*30);
          for(j = 0; j < 7; j++) {
              uint32_t offset = FromLittleEndian32(data + unihanOffsetBegin + pos*30 + 2 + j*4);
              if(offset != 0) {
