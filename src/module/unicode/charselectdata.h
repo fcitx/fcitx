@@ -39,15 +39,15 @@ typedef struct _CharSelectData {
 CharSelectData* CharSelectDataCreate();
 void CharSelectDataCreateIndex(CharSelectData* charselect);
 void CharSelectDataDump(CharSelectData* charselect);
-UT_array* CharSelectDataUnihanInfo(CharSelectData* charselect, uint16_t unicode);
-uint32_t CharSelectDataGetDetailIndex(CharSelectData* charselect, uint16_t unicode);
-UT_array* CharSelectDataAliases(CharSelectData* charselect, uint16_t unicode);
-UT_array* CharSelectDataNotes(CharSelectData* charselect, uint16_t unicode);
-UT_array* CharSelectDataSeeAlso(CharSelectData* charselect, uint16_t unicode);
-UT_array* CharSelectDataEquivalents(CharSelectData* charselect, uint16_t unicode);
-UT_array* CharSelectDataApproximateEquivalents(CharSelectData* charselect, uint16_t unicode);
+UT_array* CharSelectDataUnihanInfo(CharSelectData* charselect, uint32_t unicode);
+uint32_t CharSelectDataGetDetailIndex(CharSelectData* charselect, uint32_t unicode);
+UT_array* CharSelectDataAliases(CharSelectData* charselect, uint32_t unicode);
+UT_array* CharSelectDataNotes(CharSelectData* charselect, uint32_t unicode);
+UT_array* CharSelectDataSeeAlso(CharSelectData* charselect, uint32_t unicode);
+UT_array* CharSelectDataEquivalents(CharSelectData* charselect, uint32_t unicode);
+UT_array* CharSelectDataApproximateEquivalents(CharSelectData* charselect, uint32_t unicode);
 UT_array* CharSelectDataFind(CharSelectData* charselect, const char* needle);
-char* CharSelectDataName(CharSelectData* charselect, uint16_t unicode);
+char* CharSelectDataName(CharSelectData* charselect, uint32_t unicode);
 void CharSelectDataFree(CharSelectData* charselect);
 
 #endif
