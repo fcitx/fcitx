@@ -28,7 +28,7 @@
 class QFile;
 namespace fcitx {
     
-typedef QList< QPair<QString, QString> > QStringPairList;
+typedef QList< QPair< QString , QString> > QStringPairList;
 
 class QuickPhraseModel : public QAbstractTableModel {
     Q_OBJECT
@@ -60,7 +60,7 @@ private slots:
 
 private:
     void parse(const QString& file);
-    bool saveData(const QString& file,QStringPairList* list);
+    bool saveData(const QString& file,QStringPairList list);
     void setNeedSave(bool needSave);
     bool m_needSave;
     QStringPairList m_list;

@@ -25,6 +25,7 @@
 #include <QCloseEvent>
 #include <QDebug>
 #include <QInputDialog>
+#include <QMenu>
 #include <qtconcurrentrun.h>
 #include <cassert>
 
@@ -34,6 +35,9 @@
 #include "model.h"
 #include "batchdialog.h"
 #include "ui_editor.h"
+
+#define QUICK_PHRASE_CONFIG_DIR "data/quickphrase.mb.d/"
+#define QUICK_PHRASE_CONFIG_FILE "data/QuickPhrase.mb"
 
 namespace fcitx {
 
@@ -69,7 +73,7 @@ ListEditor::ListEditor(fcitx::QuickPhraseModel* model, QWidget* parent)
     connect(m_model, SIGNAL(needSaveChanged(bool)), this, SIGNAL(changed(bool)));
     
     size_t pathSize;
-    char** path = FcitxXDGGetPathUserWithPrefix(&pathSize,"data/QuickPhrase.mb.d/");
+    char** path = FcitxXDGGetPathUserWithPrefix(&pathSize,QUICK_PHRASE_CONFIG_DIR);
     assert(pathSize>=1);
     quickPhraseDir.setPath(path[0]);
     path = FcitxXDGGetPathUserWithPrefix(&pathSize,"");
@@ -83,10 +87,14 @@ ListEditor::ListEditor(fcitx::QuickPhraseModel* model, QWidget* parent)
     itemFocusChanged();
     
     //connect(m_ui->fileListComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fileSelected()));
+    operationMenu = new QMenu(this);
+    operationMenu->addAction("Add File",this,SLOT(addFileTriggered()));
+    operationMenu->addAction("Remove File",this,SLOT(removeFileTriggered()));
+    operationMenu->addAction("Refresh List",this,SLOT(refreshListTriggered()));
+    m_ui->operationButton->setMenu(operationMenu);
     connect(m_ui->fileListComboBox,SIGNAL(activated(int)),this,SLOT(fileSelected()));
-    connect(m_ui->fileOperateCombox,SIGNAL(activated(int)),this,SLOT(fileOperation(int)));
     
-    connect(m_model,SIGNAL(needSaveChanged(bool)),this,SLOT(fileModified()));
+    connect(m_model,SIGNAL(needSaveChanged(bool)),this,SLOT(fileModified(bool)));
 }
 
 void ListEditor::load()
@@ -98,14 +106,17 @@ void ListEditor::load()
 
 void ListEditor::load(const QString& file)
 {
-    m_model->load(file.isEmpty() ? "data/QuickPhrase.mb" : file, true);
+    m_model->load(file.isEmpty() ? QUICK_PHRASE_CONFIG_FILE : file, true);
     m_modified = false;
+    qDebug() << "recover modify status to false";
 }
 
 void ListEditor::save(const QString& file)
 {
     qDebug() << "saving " << file << " " ;
-    m_model->save(file.isEmpty() ? "data/QuickPhrase.mb" : file);
+    m_model->save(file.isEmpty() ? QUICK_PHRASE_CONFIG_FILE : file);
+    m_modified = false;
+    qDebug() << "recover modify status to false";
 }
 
 void ListEditor::save()
@@ -113,6 +124,8 @@ void ListEditor::save()
     //QFutureWatcher< bool >* futureWatcher = m_model->save("data/QuickPhrase.mb");
     QFutureWatcher< bool >* futureWatcher = m_model->save(currentFile());
     connect(futureWatcher, SIGNAL(finished()), this, SIGNAL(saveFinished()));
+    m_modified = false;
+    qDebug() << "recover modify status to false";
 }
 
 QString ListEditor::addon()
@@ -258,9 +271,9 @@ QString ListEditor::currentFile(int index)
     if (index == -1)
         index = m_ui->fileListComboBox->currentIndex();
     if (index!=0)
-        return (QDir("data/QuickPhrase.mb.d/").filePath(m_ui->fileListComboBox->itemText(index)));
+        return (QDir(QUICK_PHRASE_CONFIG_DIR).filePath(m_ui->fileListComboBox->itemText(index)));
     else
-        return QString("data/QuickPhrase.mb");
+        return QString(QUICK_PHRASE_CONFIG_FILE);
 }
 
 void ListEditor::fileSelected()
@@ -271,7 +284,7 @@ void ListEditor::fileSelected()
     qDebug() << "file list count : " << m_ui->fileListComboBox->count();
     qDebug() << currentIndex << " " << m_ui->fileListComboBox->currentText();
     if (m_modified){
-        qDebug() << "File " << currentIndex << " modified. ";
+        qDebug() << "File " << lastFileIndex << " modified. ";
         int ret = QMessageBox::question(this
         ,tr("Save Changes")
         ,tr("The content of QuickPhrase has changed.\n\
@@ -299,50 +312,10 @@ void ListEditor::fileSelected()
     }
 }
 
-void ListEditor::fileOperation(int type)
-{
-    FileOperationType m_type = FileOperationType(type);
-    if (m_type==AddFile){
-        bool ok;
-        QString filename = QInputDialog::getText(this
-        ,tr("create new file")
-        ,tr("Please input a filename for newfile")
-        ,QLineEdit::Normal
-        ,"newfile",&ok
-        );
-        QFile file(quickPhraseDir.filePath(filename));
-        file.open(QIODevice::ReadWrite);
-        file.close();
-        loadFileList();
-        //m_ui->fileListComboBox->setCurrentIndex(m_ui->fileListComboBox->findText(filename));
-    }
-    else if (m_type==RemoveFile){
-        QString filename = currentFile();
-        int ret = QMessageBox::question(this
-        ,tr("Confirm deleting")
-        ,tr("Are you sure to delete this file :%1 ?").arg(filename)
-        ,QMessageBox::Ok | QMessageBox::Cancel);
-        qDebug() << ret;
-        if (ret==QMessageBox::Ok){
-            bool ok = fcitxDir.remove(filename);
-            if (!ok){
-                QMessageBox::warning(this
-                ,"File Operation Failed"
-                ,QString("Error while deleting file %1").arg(filename)
-                );
-            }
-        } 
-        loadFileList();
-        //m_ui->fileListComboBox->setCurrentIndex(0);
-    }
-    m_ui->fileOperateCombox->setCurrentIndex(0);
-    qDebug() << m_ui->fileListComboBox->currentText();
-}
-
 void ListEditor::showFileList()
 {
     m_ui->fileListComboBox->clear();
-    m_ui->fileListComboBox->addItem("Please select a file to edit...");
+    m_ui->fileListComboBox->addItem("QuickPhrase.mb");
     qDebug() << "starting adding file item...";
     Q_FOREACH(QFileInfo i,fileList){
         m_ui->fileListComboBox->addItem(i.fileName());
@@ -350,10 +323,52 @@ void ListEditor::showFileList()
     }
 }
 
-void ListEditor::fileModified()
+void ListEditor::fileModified(bool modified)
 {
+    if (!modified)
+        return ;
     m_modified = true;
     qDebug() << "file modified.";
+}
+
+void ListEditor::addFileTriggered()
+{
+    bool ok;
+    QString filename = QInputDialog::getText(this
+    ,tr("create new file")
+    ,tr("Please input a filename for newfile")
+    ,QLineEdit::Normal
+    ,"newfile",&ok
+    );
+    QFile file(quickPhraseDir.filePath(filename));
+    file.open(QIODevice::ReadWrite);
+    file.close();
+    loadFileList();
+}
+
+void ListEditor::refreshListTriggered()
+{
+    loadFileList();
+}
+
+void ListEditor::removeFileTriggered()
+{
+    QString filename = currentFile();
+    int ret = QMessageBox::question(this
+    ,tr("Confirm deleting")
+    ,tr("Are you sure to delete this file :%1 ?").arg(filename)
+    ,QMessageBox::Ok | QMessageBox::Cancel);
+    qDebug() << ret;
+    if (ret==QMessageBox::Ok){
+        bool ok = fcitxDir.remove(filename);
+        if (!ok){
+            QMessageBox::warning(this
+            ,"File Operation Failed"
+            ,QString("Error while deleting file %1").arg(filename)
+            );
+        }
+    } 
+    loadFileList();
 }
 
 }

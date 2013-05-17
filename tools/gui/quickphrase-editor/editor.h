@@ -73,17 +73,15 @@ private:
     bool m_modified;
     int lastFileIndex;
     
-    enum FileOperationType {
-        AddFile = 1,
-        RemoveFile = 2,
-        RefreshList = 3
-    } ;
+    QMenu* operationMenu;
 public slots:
     void batchEditAccepted();
-    void fileModified();
+    void fileModified(bool);
     void fileSelected();
-    void fileOperation(int);
     void showFileList();
+    void removeFileTriggered();
+    void addFileTriggered();
+    void refreshListTriggered();
 };
 }
 

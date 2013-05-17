@@ -190,9 +190,7 @@ void QuickPhraseModel::loadFinished()
 QFutureWatcher< bool >* QuickPhraseModel::save(const QString& file)
 {
     QFutureWatcher< bool >* futureWatcher = new QFutureWatcher< bool >(this);
-    QStringPairList* list;
-    list = new QStringPairList(m_list);
-    futureWatcher->setFuture(QtConcurrent::run<bool>(this, &QuickPhraseModel::saveData,file,list));
+    futureWatcher->setFuture(QtConcurrent::run<bool>(this, &QuickPhraseModel::saveData,file,m_list));
     connect(futureWatcher, SIGNAL(finished()), this, SLOT(saveFinished()));
     connect(futureWatcher, SIGNAL(finished()), futureWatcher, SLOT(deleteLater()));
     return futureWatcher;
@@ -224,25 +222,20 @@ void QuickPhraseModel::loadData(QTextStream& stream)
     endResetModel();
 }
 
-bool QuickPhraseModel::saveData(const QString& file,QStringPairList* list = NULL)
+bool QuickPhraseModel::saveData(const QString& file,QStringPairList list)
 {
-    if (list==NULL)
-        list = (&m_list);
     char* name = NULL;
     FcitxXDGGetFileWithPrefix("", file.toLocal8Bit().constData(), NULL, &name);
     QString fileName = QString::fromLocal8Bit(name);
     QTemporaryFile tempFile(fileName);
     free(name);
-    if (!tempFile.open()){
-        if (list!=(&m_list))
-            delete list;
+    if (!tempFile.open())
         return false;
-    }
 
-    for (int i = 0; i < list->size(); i ++) {
-        tempFile.write((*list)[i].first.toUtf8());
+    for (int i = 0; i < list.size(); i ++) {
+        tempFile.write(list[i].first.toUtf8());
         tempFile.write("\t");
-        tempFile.write((*list)[i].second.toUtf8());
+        tempFile.write(list[i].second.toUtf8());
         tempFile.write("\n");
     }
 
@@ -251,8 +244,6 @@ bool QuickPhraseModel::saveData(const QString& file,QStringPairList* list = NULL
     if (!tempFile.rename(fileName))
         tempFile.remove();
 
-    if (list!=(&m_list))
-        delete list;
     return true;
 }
 

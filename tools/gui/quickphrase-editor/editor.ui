@@ -17,7 +17,7 @@
       <widget class="QComboBox" name="fileListComboBox">
        <item>
         <property name="text">
-         <string>Please select a file to edit...</string>
+         <string>QuickPhrase.mb</string>
         </property>
        </item>
       </widget>
@@ -30,27 +30,10 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QComboBox" name="fileOperateCombox">
-       <item>
-        <property name="text">
-         <string>Operations...</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Add File</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Remove File</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Refresh List</string>
-        </property>
-       </item>
+      <widget class="QPushButton" name="operationButton">
+       <property name="text">
+        <string>Operations</string>
+       </property>
       </widget>
      </item>
      <item>
