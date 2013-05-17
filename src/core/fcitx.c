@@ -28,7 +28,6 @@
 
 #include <locale.h>
 #include <libintl.h>
-#include <unistd.h>
 #include <semaphore.h>
 #include <fcntl.h>
 

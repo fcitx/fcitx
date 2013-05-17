@@ -487,7 +487,11 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 
                         retVal = TableGetCandWords(table);
                         int key = FcitxInputStateGetRawInputBuffer(input)[0];
-                        if (!table->bIgnorePunc) {
+                        if (!table->bIgnorePunc
+                            || (table->bIgnorePunc
+                                && table->ignorePuncList
+                                && table->ignorePuncList[0]
+                                && strchr(table->ignorePuncList, key))) {
                             strTemp = FcitxPuncGetPunc(instance, &key);
                         } else {
                             strTemp = NULL;
@@ -528,8 +532,10 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                              * 如果第一个字母是标点，并且没有候选字/词
                              * 则当做标点处理──适用于二笔这样的输入
                              **/
-                            strcpy(output_str, strTemp);
-                            retVal = IRV_PUNC;
+                            FcitxInputStateGetRawInputBuffer(input)[0] = '\0';
+                            FcitxInputStateSetRawInputBufferSize(input, 0);
+                            TableResetStatus(table);
+                            return IRV_TO_PROCESS;
                         }
                     }
                 } else {

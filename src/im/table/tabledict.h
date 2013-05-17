@@ -147,6 +147,7 @@ typedef struct {
     boolean         bCommitAndPassByInvalidKey;
     boolean         bCommitKeyCommitWhenNoMatch;
     boolean         bIgnorePunc;
+    char*           ignorePuncList;
     FcitxHotkey     hkAlternativePrevPage[2];
     FcitxHotkey     hkAlternativeNextPage[2];
     FcitxHotkey     hkCommitKey[2];

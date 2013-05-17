@@ -10,13 +10,14 @@
 # Xuetian Weng <wengxt@gmail.com>, 2010-2012
 # Xuetian Weng <wengxt@gmail.com>, 2013
 # Yichao Yu <yyc1992@gmail.com>, 2012
+# Yichao Yu <yyc1992@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-25 00:01-0400\n"
-"PO-Revision-Date: 2013-04-24 04:03+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2013-05-08 00:02-0400\n"
+"PO-Revision-Date: 2013-05-07 04:05+0000\n"
+"Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/im/table/table.c:1410
+#: src/im/table/table.c:1416
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
@@ -479,7 +480,7 @@ msgstr "无法找到 fcitx-configtool 的可执行文件！"
 msgid "Cannot find xim_server on root window."
 msgstr "无法在根窗口找到 xim_server."
 
-#: src/im/table/table.c:653
+#: src/im/table/table.c:659
 msgid "Cannot found Pinyin"
 msgstr "无法找到拼音"
 
@@ -529,15 +530,15 @@ msgstr "选择第二第三候选词"
 msgid "Choose key modifier"
 msgstr "选词修饰键"
 
-#: src/im/table/table.c:721
+#: src/im/table/table.c:727
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr "选择要删除的词组，按Escape 取消"
 
-#: src/im/table/table.c:713
+#: src/im/table/table.c:719
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "选择放在前面的词组，按Escape 取消"
 
-#: src/im/table/table.c:729
+#: src/im/table/table.c:735
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "选择要清理输入频率的词组，按Escape 取消"
 
@@ -601,7 +602,7 @@ msgstr "码表文件"
 msgid "Code Table Name"
 msgstr "码表名称"
 
-#: src/im/table/table.c:1406
+#: src/im/table/table.c:1412
 msgid "Code is "
 msgstr "编码为 "
 
@@ -624,7 +625,7 @@ msgstr "编码为 "
 #: src/im/table/table.desc:166 src/im/table/table.desc:171
 #: src/im/table/table.desc:176 src/im/table/table.desc:181
 #: src/im/table/table.desc:186 src/im/table/table.desc:191
-#: src/im/table/table.desc:196
+#: src/im/table/table.desc:196 src/im/table/table.desc:201
 msgid "CodeTable"
 msgstr "码表"
 
@@ -1345,7 +1346,7 @@ msgid ""
 "able to use any input method other than ${2}. See ${link} for more detail as "
 "well as alternative solutions."
 msgstr ""
-"如果您正在使用 ${1}, 您可能需要卸载 ${2} 或者删除 ${3} 已使用除 ${2} 之外的任"
+"如果您正在使用 ${1}, 您可能需要卸载 ${2} 或者删除 ${3} 以使用除 ${2} 之外的任"
 "何输入法. 更多细节和其它的解决方法参见 ${link}."
 
 #: src/module/xkb/fcitx-xkb.desc:9
@@ -1359,6 +1360,10 @@ msgstr "忽略标点"
 #: src/module/clipboard/fcitx-clipboard.desc:45
 msgid "Ignore blank selections"
 msgstr "忽略空白的剪贴板内容"
+
+#: src/im/table/table.desc:202
+msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
+msgstr "忽略部分标点，若为空则忽略所有标点"
 
 #: data/config.desc:46
 msgid "Inactivate Input Method"
@@ -1563,7 +1568,7 @@ msgstr "英文标点"
 msgid "Left Super"
 msgstr "左 Super"
 
-#: src/im/table/table.c:604
+#: src/im/table/table.c:610
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1894,7 +1899,7 @@ msgstr "按程序"
 msgid "Phrase"
 msgstr "词组"
 
-#: src/im/table/table.c:1402
+#: src/im/table/table.c:1408
 msgid "Phrase is already in Dict "
 msgstr "词组已在码表中"
 
@@ -1939,7 +1944,7 @@ msgstr "拼音索引的Magic Number不匹配"
 msgid "Pinyin Key"
 msgstr "拼音键"
 
-#: src/im/table/table.c:629
+#: src/im/table/table.c:635
 msgid "Pinyin: "
 msgstr "拼音："
 
@@ -2129,7 +2134,7 @@ msgstr "注册输入法方法"
 msgid "Reload configuration"
 msgstr "重新载入配置"
 
-#: src/im/table/table.c:1294
+#: src/im/table/table.c:1300
 msgid "Remind:"
 msgstr "联想："
 
@@ -2940,6 +2945,25 @@ msgid ""
 msgstr ""
 "您仅仅启用了一个输入法, 请将一个键盘输入法设为第一个并将您的主要输入法设为第"
 "二个."
+
+#: data/script/fcitx-configtool.sh:136
+msgid ""
+"You're currently Fcitx with GUI, but fcitx-configtool couldn't be found, the "
+"package name is usually fcitx-config-gtk, fcitx-config-gtk3 or fcitx-"
+"configtool. Now it will open config file with default text editor."
+msgstr ""
+"您正在图形界面下运行 fcitx，但是 fcitx-configtool 未被找到，软件包名通常为 "
+"fcitx-config-gtk，fcitx-config-gtk3，或者 fcitx-configtool。现在将用默认文本"
+"编辑器打开配置文件。"
+
+#: data/script/fcitx-configtool.sh:133
+msgid ""
+"You're currently running KDE, but KCModule for fcitx couldn't be found, the "
+"package name of this KCModule is usually kcm-fcitx or kde-config-fcitx. Now "
+"it will open config file with default text editor."
+msgstr ""
+"您正在运行 KDE，但是 fcitx 的 KCModule 未被找到，此 KCModule 的软件包名通常"
+"为 kcm-fcitx 或 kde-config-fcitx。现在将用默认文本编辑器打开配置文件。"
 
 #: data/script/fcitx-diagnose.sh:783
 msgid ""

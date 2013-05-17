@@ -113,8 +113,6 @@ static const uint fcitx_compose_ignore[] = {
 
 typedef QInputMethodEvent::Attribute QAttribute;
 
-static bool key_filtered = false;
-
 QFcitxInputContext::QFcitxInputContext()
     : m_improxy(0),
       m_n_compose(0),
@@ -308,9 +306,6 @@ bool QFcitxInputContext::filterEvent(const QEvent* event)
 #if not (defined(Q_WS_X11) && defined(ENABLE_X11))
     QWidget* keywidget = validFocusWidget();
 
-    if (key_filtered)
-        return false;
-
     if (!keywidget || !keywidget->testAttribute(Qt::WA_WState_Created))
         return false;
 
@@ -465,9 +460,6 @@ void QFcitxInputContext::widgetDestroyed(QWidget* w)
 
 bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
 {
-    if (key_filtered)
-        return false;
-
     if (!keywidget || !keywidget->testAttribute(Qt::WA_WState_Created))
         return false;
 
@@ -533,9 +525,13 @@ void QFcitxInputContext::x11ProcessKeyEventCallback(QDBusPendingCallWatcher* wat
     if (result.isError() || result.value() <= 0) {
         r = x11FilterEventFallback(pkwatcher->event, pkwatcher->sym);
     } else {
-        update();
         r = true;
     }
+
+    if (!result.isError()) {
+        update();
+    }
+
     if (r)
         delete pkwatcher;
     else {
@@ -713,7 +709,6 @@ void QFcitxInputContext::forwardKey(uint keyval, uint state, int type)
 {
     QWidget* widget = focusWidget();
     if (Q_LIKELY(widget != 0)) {
-        key_filtered = true;
 #if defined(Q_WS_X11) && defined(ENABLE_X11)
         const WId window_id = widget->winId();
         Display* x11_display = QX11Info::display();
@@ -726,7 +721,6 @@ void QFcitxInputContext::forwardKey(uint keyval, uint state, int type)
         QApplication::sendEvent(widget, keyevent);
         delete keyevent;
 #endif
-        key_filtered = false;
     }
 }
 

@@ -70,6 +70,7 @@ CONFIG_BINDING_REGISTER("CodeTable", "CommitAndPassByInvalidKey", bCommitAndPass
 CONFIG_BINDING_REGISTER("CodeTable", "CommitKey", hkCommitKey)
 CONFIG_BINDING_REGISTER("CodeTable", "CommitKeyCommitWhenNoMatch", bCommitKeyCommitWhenNoMatch)
 CONFIG_BINDING_REGISTER("CodeTable", "IgnorePunc", bIgnorePunc)
+CONFIG_BINDING_REGISTER("CodeTable", "IgnorePuncList", ignorePuncList)
 CONFIG_BINDING_REGISTER("CodeTable", "Enabled", bEnabled)
 CONFIG_BINDING_END()
 

@@ -3,6 +3,43 @@
 # fcitx-config
 #
 
+export TEXTDOMAIN=fcitx
+
+if which kdialog > /dev/null 2>&1; then
+    message() {
+        kdialog --msgbox "$1"
+    }
+    error() {
+        kdialog --error "$1"
+    }
+elif which zenity > /dev/null 2>&1; then
+    message() {
+        zenity --info --text="$1"
+    }
+    error() {
+        zenity --error --text="$1"
+    }
+else
+    message() {
+        echo "$1"
+    }
+    error() {
+        echo "$1" >&2
+    }
+fi
+
+if type gettext > /dev/null 2>&1; then
+    _() {
+        gettext "$@"
+    }
+else
+    _() {
+        echo "$@"
+    }
+fi
+
+
+
 # from xdg-open
 
 detectDE() {
@@ -91,6 +128,15 @@ run_gtk3() {
 }
 
 run_xdg() {
+    case "$DE" in
+        kde)
+            message "$(_ "You're currently running KDE, but KCModule for fcitx couldn't be found, the package name of this KCModule is usually kcm-fcitx or kde-config-fcitx. Now it will open config file with default text editor.")"
+            ;;
+        *)
+            message "$(_ "You're currently Fcitx with GUI, but fcitx-configtool couldn't be found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or fcitx-configtool. Now it will open config file with default text editor.")"
+            ;;
+    esac
+
     if command="$(which xdg-open 2>/dev/null)"; then
         detect_im_addon $1
         if [ x"$filename" != x ]; then

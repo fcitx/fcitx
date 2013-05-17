@@ -178,7 +178,7 @@ INPUT_RETURN_VALUE UnicodeGetCandWords(UnicodeModule* uni)
     FcitxCandidateWordSetLayoutHint(candList, CLH_Vertical);
 
     UT_array* result = CharSelectDataFind(uni->charselectdata, uni->buffer);
-    utarray_foreach(c, result, uint16_t) {
+    utarray_foreach(c, result, uint32_t) {
         char* s = fcitx_utils_malloc0(sizeof(char) * (UTF8_MAX_LENGTH + 1));
         fcitx_ucs4_to_utf8(*c, s);
         FcitxCandidateWord candWord;

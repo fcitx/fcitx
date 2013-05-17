@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-25 00:01-0400\n"
-"PO-Revision-Date: 2013-04-24 04:03+0000\n"
+"POT-Creation-Date: 2013-05-05 14:09-0400\n"
+"PO-Revision-Date: 2013-05-01 03:40+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/im/table/table.c:1410
+#: src/im/table/table.c:1416
 msgid " Ctrl+Delete To Delete"
 msgstr " 用 Ctrl+Delete 刪除"
 
@@ -478,7 +478,7 @@ msgstr ""
 msgid "Cannot find xim_server on root window."
 msgstr "在 root 視窗找不到 xim_server。"
 
-#: src/im/table/table.c:653
+#: src/im/table/table.c:659
 msgid "Cannot found Pinyin"
 msgstr "找不到拼音"
 
@@ -528,15 +528,15 @@ msgstr "選擇第二第三候選詞"
 msgid "Choose key modifier"
 msgstr "選詞修飾鍵"
 
-#: src/im/table/table.c:721
+#: src/im/table/table.c:727
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr "選擇要刪除的字詞，Escape 鍵取消"
 
-#: src/im/table/table.c:713
+#: src/im/table/table.c:719
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "選擇放在前面的字詞，Escape 鍵取消"
 
-#: src/im/table/table.c:729
+#: src/im/table/table.c:735
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "選擇要清理輸入頻率的字詞，Escape 鍵取消"
 
@@ -600,7 +600,7 @@ msgstr "碼表檔案"
 msgid "Code Table Name"
 msgstr "碼表名稱"
 
-#: src/im/table/table.c:1406
+#: src/im/table/table.c:1412
 msgid "Code is "
 msgstr "編碼為 "
 
@@ -623,7 +623,7 @@ msgstr "編碼為 "
 #: src/im/table/table.desc:166 src/im/table/table.desc:171
 #: src/im/table/table.desc:176 src/im/table/table.desc:181
 #: src/im/table/table.desc:186 src/im/table/table.desc:191
-#: src/im/table/table.desc:196
+#: src/im/table/table.desc:196 src/im/table/table.desc:201
 msgid "CodeTable"
 msgstr "碼表"
 
@@ -1359,6 +1359,10 @@ msgstr "忽略標點"
 msgid "Ignore blank selections"
 msgstr "忽略空白的剪貼簿內容"
 
+#: src/im/table/table.desc:202
+msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
+msgstr ""
+
 #: data/config.desc:46
 msgid "Inactivate Input Method"
 msgstr "不啟用輸入法"
@@ -1562,7 +1566,7 @@ msgstr "英文標點符號"
 msgid "Left Super"
 msgstr ""
 
-#: src/im/table/table.c:604
+#: src/im/table/table.c:610
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1893,7 +1897,7 @@ msgstr "按程式"
 msgid "Phrase"
 msgstr "字詞"
 
-#: src/im/table/table.c:1402
+#: src/im/table/table.c:1408
 msgid "Phrase is already in Dict "
 msgstr "字詞已在碼表中"
 
@@ -1938,7 +1942,7 @@ msgstr "拼音索引的Magic Number不相符"
 msgid "Pinyin Key"
 msgstr "拼音鍵"
 
-#: src/im/table/table.c:629
+#: src/im/table/table.c:635
 msgid "Pinyin: "
 msgstr "拼音："
 
@@ -2128,7 +2132,7 @@ msgstr "註冊輸入法方法"
 msgid "Reload configuration"
 msgstr "重新載入設定"
 
-#: src/im/table/table.c:1294
+#: src/im/table/table.c:1300
 msgid "Remind:"
 msgstr "聯想："
 
@@ -2939,6 +2943,20 @@ msgid ""
 msgstr ""
 "您只有啟用一個輸入法。請加入一個鍵盤輸入法作為第一個輸入法，以及將你主要的輸"
 "入法作為第二個輸入法。"
+
+#: data/script/fcitx-configtool.sh:136
+msgid ""
+"You're currently Fcitx with GUI, but fcitx-configtool couldn't be found, the "
+"package name is usually fcitx-config-gtk, fcitx-config-gtk3 or fcitx-"
+"configtool. Now it will open config file with default text editor."
+msgstr ""
+
+#: data/script/fcitx-configtool.sh:133
+msgid ""
+"You're currently running KDE, but KCModule for fcitx couldn't be found, the "
+"package name of this KCModule is usually kcm-fcitx or kde-config-fcitx. Now "
+"it will open config file with default text editor."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:783
 msgid ""

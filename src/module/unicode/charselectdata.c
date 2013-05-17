@@ -29,16 +29,17 @@
 #define NCount (VCount * TCount)
 #define SCount (LCount * NCount)
 #define HASH_FIND_UNICODE(head,findint,out)                                         \
-    HASH_FIND(hh,head,findint,sizeof(uint16_t),out)
+    HASH_FIND(hh,head,findint,sizeof(uint32_t),out)
 #define HASH_ADD_UNICODE(head,intfield,add)                                         \
-    HASH_ADD(hh,head,intfield,sizeof(uint16_t),add)
+    HASH_ADD(hh,head,intfield,sizeof(uint32_t),add)
 
 typedef struct _UnicodeSet {
-    uint16_t unicode;
+    uint32_t unicode;
     UT_hash_handle hh;
 } UnicodeSet;
 
-static const UT_icd int16_icd = { sizeof(int16_t), NULL, NULL, NULL };
+static const UT_icd uint32_icd = { sizeof(uint32_t), NULL, NULL, NULL };
+static const UT_icd uint16_icd = { sizeof(uint16_t), NULL, NULL, NULL };
 
 static const char JAMO_L_TABLE[][4] = {
         "G", "GG", "N", "D", "DD", "R", "M", "B", "BB",
@@ -92,7 +93,7 @@ int index_search_a_cmp(const void* a, const void* b) {
 
 UT_array* SplitString(const char* s);
 
-char* FormatCode(uint16_t code, int length, const char* prefix);
+char* FormatCode(uint32_t code, int length, const char* prefix);
 UnicodeSet* CharSelectDataGetMatchingChars(CharSelectData* charselect, const char* s);
 
 uint32_t FromLittleEndian32(const char* d)
@@ -140,7 +141,7 @@ CharSelectData* CharSelectDataCreate()
     return NULL;
 }
 
-UT_array* CharSelectDataUnihanInfo(CharSelectData* charselect, uint16_t unicode)
+UT_array* CharSelectDataUnihanInfo(CharSelectData* charselect, uint32_t unicode)
 {
     UT_array* res = fcitx_utils_new_string_list();
 
@@ -154,7 +155,7 @@ UT_array* CharSelectDataUnihanInfo(CharSelectData* charselect, uint16_t unicode)
 
     while (max >= min) {
         mid = (min + max) / 2;
-        const uint16_t midUnicode = FromLittleEndian16(data + offsetBegin + mid*30);
+        const uint32_t midUnicode = FromLittleEndian16(data + offsetBegin + mid*30);
         if (unicode > midUnicode)
             min = mid + 1;
         else if (unicode < midUnicode)
@@ -178,7 +179,7 @@ UT_array* CharSelectDataUnihanInfo(CharSelectData* charselect, uint16_t unicode)
     return res;
 }
 
-uint32_t CharSelectDataGetDetailIndex(CharSelectData* charselect, uint16_t unicode)
+uint32_t CharSelectDataGetDetailIndex(CharSelectData* charselect, uint32_t unicode)
 {
     const char* data = charselect->dataFile;
     // Convert from little-endian, so that this code works on PPC too.
@@ -190,7 +191,7 @@ uint32_t CharSelectDataGetDetailIndex(CharSelectData* charselect, uint16_t unico
     int mid;
     int max = ((offsetEnd - offsetBegin) / 27) - 1;
 
-    static uint16_t most_recent_searched;
+    static uint32_t most_recent_searched;
     static uint32_t most_recent_result;
 
 
@@ -201,7 +202,7 @@ uint32_t CharSelectDataGetDetailIndex(CharSelectData* charselect, uint16_t unico
 
     while (max >= min) {
         mid = (min + max) / 2;
-        const uint16_t midUnicode = FromLittleEndian16(data + offsetBegin + mid*27);
+        const uint32_t midUnicode = FromLittleEndian16(data + offsetBegin + mid*27);
         if (unicode > midUnicode)
             min = mid + 1;
         else if (unicode < midUnicode)
@@ -217,7 +218,7 @@ uint32_t CharSelectDataGetDetailIndex(CharSelectData* charselect, uint16_t unico
     return 0;
 }
 
-char* CharSelectDataName(CharSelectData* charselect, uint16_t unicode)
+char* CharSelectDataName(CharSelectData* charselect, uint32_t unicode)
 {
     char* result = NULL;
     do {
@@ -263,7 +264,7 @@ char* CharSelectDataName(CharSelectData* charselect, uint16_t unicode)
 
             while (max >= min) {
                 mid = (min + max) / 2;
-                const uint16_t midUnicode = FromLittleEndian16(data + offsetBegin + mid*6);
+                const uint32_t midUnicode = FromLittleEndian16(data + offsetBegin + mid*6);
                 if (unicode > midUnicode)
                     min = mid + 1;
                 else if (unicode < midUnicode)
@@ -312,7 +313,7 @@ char* Simplified(const char* src)
 int IsHexString(const char* s)
 {
     size_t l = strlen(s);
-    if (l != 6)
+    if (l < 6)
         return 0;
     if (!((s[0] == '0' && s[1] == 'x')
       || (s[0] == '0' && s[1] == 'X')
@@ -382,7 +383,7 @@ UT_array* CharSelectDataFind(CharSelectData* charselect, const char* needle)
     UnicodeSet *result = NULL;
 
     UT_array* returnRes;
-    utarray_new(returnRes, &int16_icd);
+    utarray_new(returnRes, &uint32_icd);
     char* simplified = Simplified(needle);
     UT_array* searchStrings = SplitString(simplified);
 
@@ -403,7 +404,7 @@ UT_array* CharSelectDataFind(CharSelectData* charselect, const char* needle)
         char* end = NULL;
         if(IsHexString(*s)) {
             end = NULL;
-            uint16_t uni = (uint16_t) strtol(*s + 2, &end, 16);
+            uint32_t uni = (uint32_t) strtoul(*s + 2, &end, 16);
             utarray_push_back(returnRes, &uni);
 
             // search for "1234" instead of "0x1234"
@@ -413,8 +414,8 @@ UT_array* CharSelectDataFind(CharSelectData* charselect, const char* needle)
         }
         // try to parse string as decimal number
         end = NULL;
-        int unicode = strtol(*s, &end, 10);
-        if (end == NULL && unicode >= 0 && unicode <= 0xFFFF) {
+        uint32_t unicode = (uint32_t) strtoul(*s, &end, 10);
+        if (end == NULL) {
             utarray_push_back(returnRes, &unicode);
         }
     }
@@ -434,7 +435,7 @@ UT_array* CharSelectDataFind(CharSelectData* charselect, const char* needle)
 
     // remove results found by matching the code point to prevent duplicate results
     // while letting these characters stay at the beginning
-    utarray_foreach(c, returnRes, uint16_t) {
+    utarray_foreach(c, returnRes, uint32_t) {
         UnicodeSet* dup = NULL;
         HASH_FIND_UNICODE(result, c, dup);
         if (dup)
@@ -446,7 +447,8 @@ UT_array* CharSelectDataFind(CharSelectData* charselect, const char* needle)
     while (result) {
         UnicodeSet* p = result;
         HASH_DEL(result, p);
-        utarray_push_back(returnRes, &p->unicode);
+        uint32_t unicode = p->unicode;
+        utarray_push_back(returnRes, &unicode);
         free(p);
     }
 
@@ -455,7 +457,7 @@ UT_array* CharSelectDataFind(CharSelectData* charselect, const char* needle)
     return returnRes;
 }
 
-UnicodeSet* InsertResult(UnicodeSet* set, uint16_t unicode) {
+UnicodeSet* InsertResult(UnicodeSet* set, uint32_t unicode) {
     UnicodeSet* find = NULL;
     HASH_FIND_UNICODE(set, &unicode, find);
     if (!find) {
@@ -489,7 +491,7 @@ UnicodeSet* CharSelectDataGetMatchingChars(CharSelectData* charselect, const cha
     return result;
 }
 
-UT_array* CharSelectDataAliases(CharSelectData* charselect, uint16_t unicode)
+UT_array* CharSelectDataAliases(CharSelectData* charselect, uint32_t unicode)
 {
     const char* data = charselect->dataFile;
     const int detailIndex = CharSelectDataGetDetailIndex(charselect, unicode);
@@ -512,7 +514,7 @@ UT_array* CharSelectDataAliases(CharSelectData* charselect, uint16_t unicode)
 }
 
 
-UT_array* CharSelectDataNotes(CharSelectData* charselect, uint16_t unicode)
+UT_array* CharSelectDataNotes(CharSelectData* charselect, uint32_t unicode)
 {
     const int detailIndex = CharSelectDataGetDetailIndex(charselect, unicode);
     if(detailIndex == 0) {
@@ -535,10 +537,10 @@ UT_array* CharSelectDataNotes(CharSelectData* charselect, uint16_t unicode)
     return notes;
 }
 
-UT_array* CharSelectDataSeeAlso(CharSelectData* charselect, uint16_t unicode)
+UT_array* CharSelectDataSeeAlso(CharSelectData* charselect, uint32_t unicode)
 {
     UT_array* seeAlso;
-    utarray_new(seeAlso, &int16_icd);
+    utarray_new(seeAlso, &uint32_icd);
     const int detailIndex = CharSelectDataGetDetailIndex(charselect, unicode);
     if(detailIndex == 0) {
         return seeAlso;
@@ -550,7 +552,7 @@ UT_array* CharSelectDataSeeAlso(CharSelectData* charselect, uint16_t unicode)
 
     int i;
     for (i = 0;  i < count;  i++) {
-        uint16_t c = FromLittleEndian16 (data + offset);
+        uint32_t c = FromLittleEndian16 (data + offset);
         utarray_push_back(seeAlso, &c);
         offset += 2;
     }
@@ -558,7 +560,7 @@ UT_array* CharSelectDataSeeAlso(CharSelectData* charselect, uint16_t unicode)
     return seeAlso;
 }
 
-UT_array* CharSelectDataEquivalents(CharSelectData* charselect, uint16_t unicode)
+UT_array* CharSelectDataEquivalents(CharSelectData* charselect, uint32_t unicode)
 {
     const int detailIndex = CharSelectDataGetDetailIndex(charselect, unicode);
     if(detailIndex == 0) {
@@ -581,7 +583,7 @@ UT_array* CharSelectDataEquivalents(CharSelectData* charselect, uint16_t unicode
     return equivalents;
 }
 
-UT_array* CharSelectDataApproximateEquivalents(CharSelectData* charselect, uint16_t unicode)
+UT_array* CharSelectDataApproximateEquivalents(CharSelectData* charselect, uint32_t unicode)
 {
     const int detailIndex = CharSelectDataGetDetailIndex(charselect, unicode);
     if(detailIndex == 0) {
@@ -605,7 +607,7 @@ UT_array* CharSelectDataApproximateEquivalents(CharSelectData* charselect, uint1
 }
 
 
-char* FormatCode(uint16_t code, int length, const char* prefix)
+char* FormatCode(uint32_t code, int length, const char* prefix)
 {
     char* s = NULL;
     char* fmt = NULL;
@@ -643,7 +645,7 @@ CharSelectDataIndex* CharSelectDataIndexNew(const char* key)
 {
     CharSelectDataIndex* idx = fcitx_utils_new(CharSelectDataIndex);
     idx->key = strdup(key);
-    utarray_new(idx->items, &int16_icd);
+    utarray_new(idx->items, &uint16_icd);
     return idx;
 }
 
@@ -743,7 +745,7 @@ void CharSelectDataCreateIndex(CharSelectData* charselect)
         uint32_t seeAlsoOffset = FromLittleEndian32(data + detailsOffsetBegin + pos*27 + 22);
 
         for (j = 0;  j < seeAlsoCount;  j++) {
-            uint16_t seeAlso = FromLittleEndian16 (data + seeAlsoOffset);
+            uint32_t seeAlso = FromLittleEndian16 (data + seeAlsoOffset);
             char* code = FormatCode(seeAlso, 4, "");
             CharSelectDataAppendToIndex(charselect, unicode, code);
             free(code);

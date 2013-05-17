@@ -1,4 +1,4 @@
-install(FILES fcitx-configtool DESTINATION "${bindir}"
+install(FILES fcitx-configtool.sh DESTINATION "${bindir}" RENAME fcitx-configtool
   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
   GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
@@ -13,7 +13,7 @@ if(_ENABLE_DBUS AND ENABLE_XDGAUTOSTART)
     GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif()
 
-fcitx_translate_add_sources(fcitx-diagnose.sh)
+fcitx_translate_add_sources(fcitx-diagnose.sh fcitx-configtool.sh)
 install(FILES fcitx-diagnose.sh DESTINATION "${bindir}" RENAME fcitx-diagnose
   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
   GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
