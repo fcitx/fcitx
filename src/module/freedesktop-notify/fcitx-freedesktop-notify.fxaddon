@@ -1,14 +1,15 @@
 [FcitxAddon]
 Name=fcitx-freedesktop-notify
 Prefix=FreeDesktopNotify
-Function0=SendNotification
-Function1=CloseNotification
+Function0=Show
+Function1=Close
 Function2=ShowTip
+Function3=ShowSimple
 Include0="freedesktop-notify.h"
 Self.Type=FcitxNotify*
 
-[SendNotification]
-Name=send-notification
+[Show]
+Name=show
 Arg0=const char*
 Arg1=uint32_t
 Arg2=const char*
@@ -22,8 +23,18 @@ Arg9=FcitxDestroyNotify
 Return=uint32_t
 Res.WrapFunc=FcitxNotifySendNotification
 
-[CloseNotification]
-Name=close-notification
+[ShowSimple]
+Name=show-simple
+Arg0=const char*
+Arg1=const char*
+Arg2=const char*
+Arg3=const char*
+Arg4=int32_t
+Return=uint32_t
+Res.Exp=FcitxNotifySendNotification($<, $0, 0, $1, $2, $3, NULL, $4, NULL, NULL, NULL)
+
+[Close]
+Name=close
 Arg0=uint32_t
 Res.WrapFunc=FcitxNotifyCloseNotification
 
