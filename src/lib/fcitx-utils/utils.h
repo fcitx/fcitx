@@ -233,25 +233,25 @@ extern "C" {
      * @since 4.2.0
      **/
     void fcitx_utils_free_string_hash_set(FcitxStringHashSet* sset);
-    
+
     /**
      * compare two string with strcmp
      *
      * @param sseta left
      * @param ssetb right
      * @return same as strcmp
-     * 
+     *
      * @since 4.2.8
      **/
     int fcitx_utils_string_hash_set_compare(FcitxStringHashSet* sseta, FcitxStringHashSet* ssetb);
-    
+
     /**
      * insert to a string hash set
      *
      * @param sset string hash set
      * @param str string
      * @return FcitxStringHashSet*
-     * 
+     *
      * @since 4.2.7
      **/
     FcitxStringHashSet* fcitx_utils_string_hash_set_insert(FcitxStringHashSet* sset, const char* str);
@@ -263,29 +263,29 @@ extern "C" {
      * @param str string
      * @param len length
      * @return FcitxStringHashSet*
-     * 
+     *
      * @since 4.2.7
      **/
     FcitxStringHashSet* fcitx_utils_string_hash_set_insert_len(FcitxStringHashSet* sset, const char* str, size_t len);
-    
+
     /**
      * check a string contains in string hash set or not
      *
      * @param sset string hash set
      * @param str string
      * @return boolean
-     * 
+     *
      * @since 4.2.7
      **/
     boolean fcitx_utils_string_hash_set_contains(FcitxStringHashSet* sset, const char* str);
-    
+
     /**
      * remove a string from string hash set
      *
      * @param sset string hash set
      * @param str string
      * @return FcitxStringHashSet*
-     * 
+     *
      * @since 4.2.7
      **/
     FcitxStringHashSet* fcitx_util_string_hash_set_remove(FcitxStringHashSet* sset, const char* str);
@@ -296,22 +296,22 @@ extern "C" {
      * @param sset string hash set
      * @param delim delimeter
      * @return char*
-     * 
+     *
      * @since 4.2.7
      **/
     char* fcitx_utils_string_hash_set_join(FcitxStringHashSet* sset, char delim);
-    
+
     /**
      * parse a string with delimiter
      *
      * @param str string
      * @param delim delimiter
      * @return FcitxStringHashSet*
-     * 
+     *
      * @since 4.2.7
      **/
     FcitxStringHashSet* fcitx_utils_string_hash_set_parse(const char* str, char delim);
-    
+
     /**
      * Trim the input string's white space
      *
@@ -329,6 +329,29 @@ extern "C" {
     void* fcitx_utils_malloc0(size_t bytes);
 
 #define fcitx_utils_new(TYPE) ((TYPE*) fcitx_utils_malloc0(sizeof(TYPE)))
+
+    static inline void*
+    _fcitx_utils_new_with_data(size_t base_size, const void *extra_data,
+                               size_t extra_size)
+    {
+        void *res = fcitx_utils_malloc0(base_size + extra_size);
+        memcpy(((char*)res) + base_size, extra_data, extra_size);
+        return res;
+    }
+    static inline void*
+    _fcitx_utils_new_with_str(size_t base_size, const char *extra_str)
+    {
+        return _fcitx_utils_new_with_data(base_size, (const void*)extra_str,
+                                          strlen(extra_str) + 1);
+    }
+#define fcitx_utils_new_with_data(TYPE, data, size)                     \
+    ((TYPE*)_fcitx_utils_new_with_data(sizeof(TYPE), data, size))
+#define fcitx_utils_new_with_str(TYPE, str)                     \
+    ((TYPE*)_fcitx_utils_new_with_str(sizeof(TYPE), str))
+#define fcitx_utils_new_with_data_member(TYPE, member, data, size)      \
+    ((TYPE*)_fcitx_utils_new_with_data(offsetof(TYPE, member), data, size))
+#define fcitx_utils_new_with_str_member(TYPE, member, str)              \
+    ((TYPE*)_fcitx_utils_new_with_str(offsetof(TYPE, member), str))
 
     /**
      * Get Display number, Fcitx DBus and Socket are identified by display number.
@@ -907,11 +930,11 @@ extern "C" {
         }                                                               \
     } while (0)
 
-#define _FCITX_CAST_TO_PTR(new_val, old_type, old_val) do {             \
-        intptr_t __fx_cast_to_ptr_tmp;                                  \
-        _FCITX_CAST_TO_INT(intptr_t, __fx_cast_to_ptr_tmp,              \
-                           old_type, old_val);                          \
-        new_val = (void*)__fx_cast_to_ptr_tmp;                          \
+#define _FCITX_CAST_TO_PTR(new_val, old_type, old_val) do {     \
+        intptr_t __fx_cast_to_ptr_tmp;                          \
+        _FCITX_CAST_TO_INT(intptr_t, __fx_cast_to_ptr_tmp,      \
+                           old_type, old_val);                  \
+        new_val = (void*)__fx_cast_to_ptr_tmp;                  \
     } while (0)
 
 #define FCITX_DEF_CAST_TO_INT(new_type, new_val, old_type, old_val)     \
@@ -928,17 +951,17 @@ extern "C" {
         return __fx_return_as_int_tmp;                          \
     } while (0)
 
-#define FCITX_RETURN_AS_PTR(old_type, old_val) do {   \
-        FCITX_DEF_CAST_TO_PTR(__fx_return_as_ptr_tmp, \
-                              old_type, old_val);     \
-        return __fx_return_as_ptr_tmp;                \
+#define FCITX_RETURN_AS_PTR(old_type, old_val) do {     \
+        FCITX_DEF_CAST_TO_PTR(__fx_return_as_ptr_tmp,   \
+                              old_type, old_val);       \
+        return __fx_return_as_ptr_tmp;                  \
     } while (0)
 
-#define __FCITX_DEF_CAST_TO_PTR_FUNC(name, type)     \
-    static inline void*                              \
-    fcitx_utils_##name##_to_ptr(type value)          \
-    {                                                \
-        FCITX_RETURN_AS_PTR(type, value);            \
+#define __FCITX_DEF_CAST_TO_PTR_FUNC(name, type)        \
+    static inline void*                                 \
+    fcitx_utils_##name##_to_ptr(type value)             \
+    {                                                   \
+        FCITX_RETURN_AS_PTR(type, value);               \
     }
 
     __FCITX_DEF_CAST_TO_PTR_FUNC(float, float)

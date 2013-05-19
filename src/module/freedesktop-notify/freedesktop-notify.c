@@ -546,11 +546,9 @@ FcitxNotifyShowTip(FcitxNotify *notify, const char *appName,
             NULL, NULL
         }
     };
-    size_t len = strlen(tip_id);
     FcitxNotifyShowTipData *data =
-        malloc(sizeof(FcitxNotifyShowTipData) + len + 1);
+        fcitx_utils_new_with_str(FcitxNotifyShowTipData, tip_id);
     data->notify = notify;
-    memcpy(data->tip_id, tip_id, len + 1);
     FcitxNotifySendNotification(notify, appName, 0, appIcon, summary,
                                 body, actions, timeout,
                                 FcitxNotifyShowTipCallback,
