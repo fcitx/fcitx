@@ -156,7 +156,8 @@ void QuickPhraseModel::load(const QString& file, bool append)
 }
 
 void QuickPhraseModel::parse(const QString& filename) {
-    FILE* fp = FcitxXDGGetFileWithPrefix("", filename.toLocal8Bit().constData(), "r", NULL);
+    QByteArray fileNameArray = filename.toLocal8Bit();
+    FILE* fp = FcitxXDGGetFileWithPrefix("", fileNameArray.constData(), "r", NULL);
     if (!fp)
         return;
 
@@ -190,7 +191,7 @@ void QuickPhraseModel::loadFinished()
 QFutureWatcher< bool >* QuickPhraseModel::save(const QString& file)
 {
     QFutureWatcher< bool >* futureWatcher = new QFutureWatcher< bool >(this);
-    futureWatcher->setFuture(QtConcurrent::run<bool>(this, &QuickPhraseModel::saveData,file,m_list));
+    futureWatcher->setFuture(QtConcurrent::run<bool>(this,&QuickPhraseModel::saveData,file,m_list));
     connect(futureWatcher, SIGNAL(finished()), this, SLOT(saveFinished()));
     connect(futureWatcher, SIGNAL(finished()), futureWatcher, SLOT(deleteLater()));
     return futureWatcher;
@@ -222,10 +223,11 @@ void QuickPhraseModel::loadData(QTextStream& stream)
     endResetModel();
 }
 
-bool QuickPhraseModel::saveData(const QString& file,QStringPairList list)
+bool QuickPhraseModel::saveData(const QString& file,const QStringPairList& list)
 {
     char* name = NULL;
-    FcitxXDGGetFileWithPrefix("", file.toLocal8Bit().constData(), NULL, &name);
+    QByteArray filenameArray = file.toLocal8Bit();
+    FcitxXDGGetFileWithPrefix("", filenameArray.constData(), NULL, &name);
     QString fileName = QString::fromLocal8Bit(name);
     QTemporaryFile tempFile(fileName);
     free(name);

@@ -28,6 +28,7 @@
 #include <QMenu>
 #include <qtconcurrentrun.h>
 #include <cassert>
+#include <cstdio>
 
 #include "common.h"
 #include "editor.h"
@@ -286,8 +287,8 @@ void ListEditor::fileSelected()
     if (m_modified){
         qDebug() << "File " << lastFileIndex << " modified. ";
         int ret = QMessageBox::question(this
-        ,tr("Save Changes")
-        ,tr("The content of QuickPhrase has changed.\n\
+        ,gettext("Save Changes")
+        ,gettext("The content of QuickPhrase has changed.\n\
         Do you want to save the changes or discard them?")
         ,QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel
         );
@@ -335,14 +336,14 @@ void ListEditor::addFileTriggered()
 {
     bool ok;
     QString filename = QInputDialog::getText(this
-    ,tr("create new file")
-    ,tr("Please input a filename for newfile")
+    ,gettext("create new file")
+    ,gettext("Please input a filename for newfile")
     ,QLineEdit::Normal
     ,"newfile",&ok
     );
-    QFile file(quickPhraseDir.filePath(filename));
-    file.open(QIODevice::ReadWrite);
-    file.close();
+    QByteArray fileNameArray = filename.toLocal8Bit();
+    std::FILE* file = FcitxXDGGetFileUserWithPrefix(QUICK_PHRASE_CONFIG_DIR,fileNameArray.constData(),"w",NULL);
+    fclose(file);
     loadFileList();
 }
 
@@ -354,17 +355,19 @@ void ListEditor::refreshListTriggered()
 void ListEditor::removeFileTriggered()
 {
     QString filename = currentFile();
+    QByteArray array = QString("Are you sure to delete this file :%1 ?").arg(filename).toLocal8Bit();
     int ret = QMessageBox::question(this
-    ,tr("Confirm deleting")
-    ,tr("Are you sure to delete this file :%1 ?").arg(filename)
+    ,gettext("Confirm deleting")
+    ,gettext(array.constData())
     ,QMessageBox::Ok | QMessageBox::Cancel);
     qDebug() << ret;
+    array = QString("Error while deleting file %1").arg(filename).toLocal8Bit();
     if (ret==QMessageBox::Ok){
         bool ok = fcitxDir.remove(filename);
         if (!ok){
             QMessageBox::warning(this
-            ,"File Operation Failed"
-            ,QString("Error while deleting file %1").arg(filename)
+            ,gettext("File Operation Failed")
+            ,gettext(array.constData())
             );
         }
     } 

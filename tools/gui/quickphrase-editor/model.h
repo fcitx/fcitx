@@ -60,7 +60,7 @@ private slots:
 
 private:
     void parse(const QString& file);
-    bool saveData(const QString& file,QStringPairList list);
+    bool saveData(const QString& file, const fcitx::QStringPairList& list);
     void setNeedSave(bool needSave);
     bool m_needSave;
     QStringPairList m_list;
