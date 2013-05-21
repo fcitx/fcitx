@@ -23,6 +23,22 @@ fi
 # utility
 #############################
 
+_find_file() {
+    local "${1}"
+    eval "${2}"'=()'
+    while IFS= read -r -d '' "${1}"; do
+        eval "${2}"'=("${'"${2}"'[@]}" "${'"${1}"'}")'
+    done < <(find "${@:3}" -print0)
+}
+
+find_file() {
+    if [[ ${1} = __find_file_line ]]; then
+        _find_file __find_file_line2 "$@"
+    else
+        _find_file __find_file_line "$@"
+    fi
+}
+
 str_match_glob() {
     local pattern=$1
     local str=$2
