@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# mar well <marwell.1980@freenet.de>, 2012
+# mar well <marwell.1980@freenet.de>, 2012-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-05-05 14:09-0400\n"
-"PO-Revision-Date: 2013-05-01 03:40+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2013-05-22 00:02-0400\n"
+"PO-Revision-Date: 2013-05-22 04:01+0000\n"
+"Last-Translator: mar well <marwell.1980@freenet.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
 "Language: de\n"
@@ -91,23 +91,23 @@ msgstr "/min Verwendete Zeit:"
 msgid "0 for commit immediately, -1 for keep all words"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:251
+#: src/module/unicode/charselectdata.c:252
 msgid "<Low Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:247
+#: src/module/unicode/charselectdata.c:248
 msgid "<Non Private Use High Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:249
+#: src/module/unicode/charselectdata.c:250
 msgid "<Private Use High Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:253
+#: src/module/unicode/charselectdata.c:254
 msgid "<Private Use>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:281
+#: src/module/unicode/charselectdata.c:282
 msgid "<not assigned>"
 msgstr ""
 
@@ -151,11 +151,11 @@ msgstr ""
 
 #: data/config.desc:174
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: src/ui/classic/skin.desc:387
 msgid "Active Menu Color"
-msgstr ""
+msgstr "Farbe des aktiven Menüs"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -215,7 +215,7 @@ msgstr ""
 
 #: src/im/table/fcitx-table.desc:14 src/im/table/table.desc:19
 msgid "Adjust Order"
-msgstr ""
+msgstr "Reihenfolge anpassen"
 
 #: src/im/pinyin/fcitx-pinyin.desc:59 src/im/pinyin/fcitx-pinyin.desc:68
 #: src/im/pinyin/fcitx-pinyin.desc:77 src/im/table/table.desc:24
@@ -234,7 +234,7 @@ msgstr ""
 
 #: data/config.desc:165
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: data/script/fcitx-diagnose.sh:568
 msgid "All locale:"
@@ -277,7 +277,7 @@ msgstr ""
 #: data/config.desc:243 data/config.desc:249 data/config.desc:255
 #: data/config.desc:261
 msgid "Appearance"
-msgstr ""
+msgstr "Aussehen"
 
 #: src/module/xkb/fcitx-xkb.desc:19
 msgid "Apply this custom xmodmap script after layout change"
@@ -293,7 +293,7 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:45
 msgid "Auto"
-msgstr ""
+msgstr "Automatisch"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:4
 msgid "Auto Change to English Mode while Input Specific String"
@@ -302,7 +302,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:33
 msgid "Auto Create Phrase"
-msgstr ""
+msgstr "Phrasen selbst vorschlagen"
 
 #: src/module/autoeng/fcitx-autoeng.desc:1
 #: src/module/autoeng/fcitx-autoeng.desc:11
@@ -322,11 +322,11 @@ msgstr "Wortliste für automatischen Wechsel zur Englisch-Eingabe"
 
 #: src/im/table/table.desc:88
 msgid "Auto Phrase"
-msgstr ""
+msgstr "Automatische Phrase"
 
 #: src/im/table/table.desc:98
 msgid "Auto Phrase Length"
-msgstr ""
+msgstr "Länge der automatischen Phrase"
 
 #: src/im/table/table.desc:103
 msgid "Auto Phrase Phrase"
@@ -512,7 +512,7 @@ msgstr ""
 
 #: src/im/table/table.desc:127
 msgid "Choose"
-msgstr ""
+msgstr "Auswählen"
 
 #: data/config.desc:125
 msgid "Choose Second and Third Candidate Word"
@@ -702,7 +702,7 @@ msgstr "Konvertieren Kurz- zu Langzeichen"
 #: src/ui/classic/skin.desc:295 src/ui/classic/skin.desc:303
 #: src/ui/classic/skin.desc:397 src/ui/classic/skin.desc:405
 msgid "Copy"
-msgstr ""
+msgstr "Kopieren"
 
 #: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:138
 #: src/module/autoeng/fcitx-autoeng.desc:8
@@ -721,11 +721,11 @@ msgstr ""
 
 #: data/profile.desc:22
 msgid "Current Enabled Input Method List"
-msgstr ""
+msgstr "Liste der aktivierten Eingabemethoden"
 
 #: data/profile.desc:17
 msgid "Current Input Method Name"
-msgstr ""
+msgstr "Name der aktivierten Eingabemethode"
 
 #: src/module/imselector/imselector.c:311
 msgid "Current local input method is "
@@ -782,7 +782,7 @@ msgstr "Abhängigkeit"
 
 #: src/ui/classic/skin.desc:15
 msgid "Description of Skin"
-msgstr ""
+msgstr "Beschreibung Skin"
 
 #: data/script/fcitx-diagnose.sh:535
 msgid "Desktop Environment."
@@ -810,11 +810,11 @@ msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr ""
 "Deaktiviere Addon %s. Abhängigkeiten von %s können nicht erfüllt werden"
 
-#: src/module/notificationitem/notificationitem.c:453
+#: src/module/notificationitem/notificationitem.c:467
 #: src/ui/kimpanel/kimpanel.c:254 src/ui/kimpanel/kimpanel.c:259
 #: data/config.desc:33
 msgid "Disabled"
-msgstr ""
+msgstr "Ausgeschaltet"
 
 #: data/config.desc:222
 msgid "Do not commit preedit text when unfocus a window"
@@ -830,7 +830,7 @@ msgstr ""
 
 #: data/config.desc:258
 msgid "Do not show input window if there is only preedit string"
-msgstr ""
+msgstr "Fcitx Fenster nicht anzeigen, wenn es nur einen Vorschlag gibt"
 
 #: src/module/autoeng/fcitx-autoeng.desc:12
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
@@ -877,7 +877,7 @@ msgstr ""
 
 #: data/addon.desc:27
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiviert"
 
 #: src/module/chttrans/fcitx-chttrans.desc:17
 msgid "Enabled state for im"
@@ -889,7 +889,7 @@ msgstr ""
 
 #: src/im/table/table.desc:69
 msgid "End Key"
-msgstr ""
+msgstr "Taste ENDE"
 
 #: src/module/xkbdbus/xkbdbus.c:218
 msgid "English (US)"
@@ -956,7 +956,7 @@ msgstr "Fehler: Skin Datei sollte nur ein Verzeichnis enthalten"
 
 #: src/im/table/table.desc:84
 msgid "Exact Match"
-msgstr ""
+msgstr "Genaue Übereinstimmung"
 
 #: data/addon.desc:61
 msgid "Exec"
@@ -1064,7 +1064,7 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:23
 msgid "Font"
-msgstr ""
+msgstr "Font"
 
 #: src/ui/classic/fcitx-classic-ui.desc:33
 msgid "Font Locale to display"
@@ -1226,7 +1226,7 @@ msgstr "Fuzzy Pinyin z/zh"
 
 #: data/config.desc:216
 msgid "Give the tips of Phrase"
-msgstr ""
+msgstr "Phrasenvorschläge aktivieren"
 
 #: src/module/imselector/fcitx-imselector.desc:9
 msgid "Global Input Method SelectKey"
@@ -1271,7 +1271,7 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:47
 msgid "Hide"
-msgstr ""
+msgstr "Verstecken"
 
 #: src/ui/classic/fcitx-classic-ui.desc:46
 msgid "Hide when tray icon is available"
@@ -1330,7 +1330,7 @@ msgstr ""
 
 #: src/im/table/table.desc:11
 msgid "Icon Name"
-msgstr ""
+msgstr "Name des Icons"
 
 #: data/inputmethod.desc:11
 msgid "IconName"
@@ -1365,7 +1365,7 @@ msgstr ""
 
 #: data/config.desc:173
 msgid "Inactive"
-msgstr ""
+msgstr "Inaktiv"
 
 #: src/ui/classic/skin.desc:65
 msgid "Inactive Menu Item Character Color"
@@ -1397,10 +1397,10 @@ msgstr "Schriftgröße Eingabe"
 
 #: src/ui/classic/skin.desc:37
 msgid "Input Message Color"
-msgstr ""
+msgstr "Farbe der Pinyineingabe"
 
-#: src/lib/fcitx/ime.c:1537 data/fcitx-autostart.desktop.in:3
-#: data/fcitx.desktop.in:3
+#: src/lib/fcitx/ime.c:1537 src/module/notificationitem/notificationitem.c:416
+#: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Eingabemethode"
 
@@ -1408,7 +1408,7 @@ msgstr "Eingabemethode"
 msgid "Input Method Configuration"
 msgstr ""
 
-#: src/module/notificationitem/notificationitem.c:454
+#: src/module/notificationitem/notificationitem.c:468
 #: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:260
 msgid "Input Method Disabled"
 msgstr ""
@@ -1437,7 +1437,7 @@ msgstr ""
 #: data/inputmethod.desc:9 data/inputmethod.desc:13 data/inputmethod.desc:17
 #: data/inputmethod.desc:21
 msgid "InputMethod"
-msgstr ""
+msgstr "Eingabemethode"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:4
 msgid "Installer Script for Fcitx Skin"
@@ -1537,11 +1537,11 @@ msgstr ""
 
 #: data/config.desc:18
 msgid "L_CTRL"
-msgstr ""
+msgstr "L_CTRL"
 
 #: data/config.desc:17
 msgid "L_SHIFT"
-msgstr ""
+msgstr "L_SHIFT"
 
 #: data/inputmethod.desc:19
 msgid "LangCode"
@@ -1549,7 +1549,7 @@ msgstr "LangCode"
 
 #: src/im/table/table.desc:142
 msgid "Language Code for this table"
-msgstr ""
+msgstr "Sprachcode für Tabelle"
 
 #: src/module/vk/vk.c:51
 msgid "Latin"
@@ -1633,7 +1633,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:73
 msgid "Logo Icon"
-msgstr ""
+msgstr "Icon Logo"
 
 #: src/im/table/fcitx-table.desc:24
 msgid "Lookup Pinyin"
@@ -1665,7 +1665,7 @@ msgstr ""
 
 #: src/im/table/table.desc:79
 msgid "Matching Key"
-msgstr ""
+msgstr "Passende Taste"
 
 #: src/module/vk/vk.c:56
 msgid "Math"
@@ -1707,7 +1707,7 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
-msgstr ""
+msgstr "Font Menu"
 
 #: src/ui/classic/skin.desc:23
 msgid "Menu Font Size"
@@ -1792,7 +1792,7 @@ msgstr "Keine verfügbare Eingabemethode"
 msgid "No available frontend"
 msgstr "Keine Schnittstelle verfügbar"
 
-#: src/module/notificationitem/notificationitem.c:447
+#: src/module/notificationitem/notificationitem.c:461
 #: src/ui/kimpanel/kimpanel.c:227 src/ui/kimpanel/kimpanel.c:228
 msgid "No input window"
 msgstr ""
@@ -1854,7 +1854,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:57
 msgid "Other Color"
-msgstr ""
+msgstr "Farbe Andere"
 
 #: data/config.desc:178 data/config.desc:184 data/config.desc:194
 #: data/config.desc:200 data/config.desc:206 data/config.desc:213
@@ -1937,7 +1937,7 @@ msgstr "Die \"Pinyin Index Magic Number\" stimmt nicht überein!"
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
-msgstr ""
+msgstr "Taste PINYIN"
 
 #: src/im/table/table.c:635
 msgid "Pinyin: "
@@ -2030,7 +2030,7 @@ msgstr "Priorität"
 
 #: data/addon.desc:48
 msgid "Priority of addon"
-msgstr ""
+msgstr "Priorität des Addons"
 
 #: data/profile.desc:1 data/profile.desc:6 data/profile.desc:11
 #: data/profile.desc:16 data/profile.desc:21 data/profile.desc:26
@@ -2208,11 +2208,11 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:38
 msgid "Save Auto Created Phrase"
-msgstr ""
+msgstr "Von Fcitx vorgeschlagene Phrasen speichern"
 
 #: src/im/table/table.desc:108
 msgid "Save Auto Phrase"
-msgstr ""
+msgstr "Automatische Phrase speichern"
 
 #: src/module/clipboard/fcitx-clipboard.desc:4
 msgid "Save Clipboard History To File"
@@ -2303,7 +2303,7 @@ msgstr "Eingabegeschwindigkeit zeigen"
 
 #: data/profile.desc:29
 msgid "Show Preedit String in Client Window"
-msgstr ""
+msgstr "Eingabe im Programmfenster integrieren"
 
 #: data/config.desc:252
 msgid "Show Version"
@@ -2335,15 +2335,15 @@ msgstr "Oberfläche"
 
 #: src/ui/classic/skin.desc:11
 msgid "Skin Author"
-msgstr ""
+msgstr "Skin Autor"
 
 #: src/ui/classic/fcitx-classic-ui.desc:59 src/ui/classic/skin.desc:3
 msgid "Skin Name"
-msgstr ""
+msgstr "Name Skin"
 
 #: src/ui/classic/skin.desc:7
 msgid "Skin Version"
-msgstr ""
+msgstr "Skin Version"
 
 #: src/ui/classic/skin.desc:17 src/ui/classic/skin.desc:21
 #: src/ui/classic/skin.desc:26 src/ui/classic/skin.desc:31
@@ -2423,7 +2423,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:182
 msgid "Special Icon position"
-msgstr ""
+msgstr "Position des Icons verschieben"
 
 #: src/module/spell/fcitx-spell.conf.in:3
 msgid "Spell"
@@ -2460,7 +2460,7 @@ msgstr ""
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
-msgstr ""
+msgstr "Unterkonfiguration für das Modul"
 
 #: src/ui/classic/fcitx-skin-installer.sh:74
 msgid "Successfully Installed skin"
@@ -2546,11 +2546,11 @@ msgstr ""
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:9
 #: src/im/table/table.desc:117
 msgid "Symbol"
-msgstr ""
+msgstr "Symbol"
 
 #: src/im/table/table.desc:122
 msgid "Symbol File"
-msgstr ""
+msgstr "Symbol > Datei"
 
 #: data/script/fcitx-diagnose.sh:507
 msgid "System Info."
@@ -2562,7 +2562,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:53
 msgid "Table Code Color"
-msgstr ""
+msgstr "Farbe Eingabe Tabelle"
 
 #: src/im/table/fcitx-table.conf.in:4
 msgid "Table Input Method for Fcitx"
@@ -2592,7 +2592,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:33
 msgid "Tip Message Color"
-msgstr ""
+msgstr "Farbe Tooltips"
 
 #: data/script/fcitx-diagnose.sh:472
 #, sh-format
@@ -2629,7 +2629,7 @@ msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:12
 msgid "Toggle for enable or disable"
-msgstr ""
+msgstr "Drücken zum an- und ausschalten"
 
 #: src/im/keyboard/fcitx-keyboard.desc:19
 msgid "Toggle the word hint"
@@ -2660,7 +2660,7 @@ msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
-msgstr ""
+msgstr "Übersetzungsmaschine für Traditionelles Chinesisch"
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
@@ -2711,7 +2711,7 @@ msgstr ""
 
 #: src/im/table/table.desc:2
 msgid "Unique Name for Table"
-msgstr ""
+msgstr "Eindeutiger Name für Tabellen-Eingabemethoden"
 
 #: data/inputmethod.desc:3
 msgid "UniqueName"
@@ -2748,15 +2748,15 @@ msgstr ""
 
 #: src/im/table/table.desc:74
 msgid "Use Matching Key"
-msgstr ""
+msgstr "Passende Taste benutzen"
 
 #: src/frontend/xim/fcitx-xim.desc:4
 msgid "Use On The Spot Style for XIM (Can not change during running)"
-msgstr ""
+msgstr "Eingabe im Programm für XIM (Neustart Fcitx erforderlich)"
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
-msgstr ""
+msgstr "Pinyin benutzen"
 
 #: data/addon.desc:77
 msgid "Use RTLD_LOCAL to load library"
@@ -2768,7 +2768,7 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:39
 msgid "Use System Tray Icon"
-msgstr ""
+msgstr "Systemtray benutzen"
 
 #: src/im/pinyin/fcitx-pinyin.desc:23
 msgid "Use V to trigger quickphrase"
@@ -2809,7 +2809,7 @@ msgstr "Farbe nutzerdefinierter Phrasen"
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
-msgstr ""
+msgstr "Senkrechte Kandidatenliste"
 
 #: src/module/vk/fcitx-vk.conf.in:3 src/module/vk/fcitx-vk.conf.in:10
 msgid "Virtual Key Board"
@@ -2825,7 +2825,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:411
 msgid "Virtual Keyboard Image"
-msgstr ""
+msgstr "Bild für \"Virtuelle Tastatur\""
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
