@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by CSSlayer                                   *
+ *   Copyright (C) 2013~2013 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -17,67 +17,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef FCITX_TOOLS_GUI_EDITOR_H
-#define FCITX_TOOLS_GUI_EDITOR_H
+#ifndef FCITX_TOOLS_GUI_FILE_LIST_MODEL_H_
+#define FCITX_TOOLS_GUI_FILE_LIST_MODEL_H_
 
-#include <QMainWindow>
-#include <QDir>
-#include <QMutex>
-#include "fcitx-qt/fcitxqtconfiguiwidget.h"
-#include "model.h"
+#include <QAbstractListModel>
+#include <QStringList>
 
-class QAbstractItemModel;
-class CMacroTable;
-namespace Ui {
-class Editor;
-}
+
+#define QUICK_PHRASE_CONFIG_DIR "data/quickphrase.d/"
+#define QUICK_PHRASE_CONFIG_FILE "data/QuickPhrase.mb"
 
 namespace fcitx {
 
-class FileListModel;
-
-class ListEditor : public FcitxQtConfigUIWidget {
+class FileListModel : public QAbstractListModel {
     Q_OBJECT
 public:
-    explicit ListEditor(QWidget* parent = 0);
-    virtual ~ListEditor();
+    explicit FileListModel(QObject* parent = 0);
+    virtual ~FileListModel();
 
-    virtual void load();
-    virtual void save();
-    virtual QString title();
-    virtual QString addon();
-    virtual bool asyncSave();
-    
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+
     void loadFileList();
+    int findFile(const QString& lastFileName);
 
-public slots:
-    void batchEditAccepted();
-    void removeFileTriggered();
-    void addFileTriggered();
-    void refreshListTriggered();
-    void changeFile(int);
-
-private slots:
-    void addWord();
-    void batchEditWord();
-    void deleteWord();
-    void deleteAllWord();
-    void itemFocusChanged();
-    void addWordAccepted();
-    void importData();
-    void exportData();
-    void importFileSelected();
-    void exportFileSelected();
 private:
-    void load(const QString& file);
-    void save(const QString& file);
-    QString currentFile();
-    Ui::Editor* m_ui;
-    QuickPhraseModel* m_model;
-    FileListModel* m_fileListModel;
-    QMenu* m_operationMenu;
-    QString m_lastFile;
+    QStringList m_fileList;
 };
+
 }
 
-#endif // FCITX_TOOLS_GUI_EDITOR_H
+#endif // FCITX_TOOLS_GUI_FILE_LIST_MODEL_H_

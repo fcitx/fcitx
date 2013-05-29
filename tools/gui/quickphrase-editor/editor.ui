@@ -14,13 +14,7 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QComboBox" name="fileListComboBox">
-       <item>
-        <property name="text">
-         <string>QuickPhrase.mb</string>
-        </property>
-       </item>
-      </widget>
+      <widget class="QComboBox" name="fileListComboBox"/>
      </item>
      <item>
       <widget class="QTableView" name="macroTableView"/>
@@ -32,7 +26,7 @@
      <item>
       <widget class="QPushButton" name="operationButton">
        <property name="text">
-        <string>Operations</string>
+        <string/>
        </property>
       </widget>
      </item>

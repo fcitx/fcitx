@@ -59,11 +59,12 @@ private slots:
     void saveFinished();
 
 private:
-    void parse(const QString& file);
+    QStringPairList parse(const QString& file);
     bool saveData(const QString& file, const fcitx::QStringPairList& list);
     void setNeedSave(bool needSave);
     bool m_needSave;
     QStringPairList m_list;
+    QFutureWatcher< QStringPairList >* m_futureWatcher;
 };
 
 }

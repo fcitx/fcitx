@@ -33,6 +33,8 @@ namespace fcitx {
 typedef QPair<QString, QString> ItemType;
 
 QuickPhraseModel::QuickPhraseModel(QObject* parent): QAbstractTableModel(parent)
+    ,m_needSave(false)
+    ,m_futureWatcher(0)
 {
 }
 
@@ -142,6 +144,10 @@ bool QuickPhraseModel::setData(const QModelIndex& index, const QVariant& value, 
 
 void QuickPhraseModel::load(const QString& file, bool append)
 {
+    if (m_futureWatcher) {
+        return;
+    }
+
     beginResetModel();
     if (!append) {
         m_list.clear();
@@ -149,51 +155,58 @@ void QuickPhraseModel::load(const QString& file, bool append)
     }
     else
         setNeedSave(true);
-    QFutureWatcher< void >* futureWatcher = new QFutureWatcher< void >(this);
-    futureWatcher->setFuture(QtConcurrent::run<void>(this, &QuickPhraseModel::parse, file));
-    connect(futureWatcher, SIGNAL(finished()), this, SLOT(loadFinished()));
-    connect(futureWatcher, SIGNAL(finished()), futureWatcher, SLOT(deleteLater()));
+    m_futureWatcher = new QFutureWatcher< QStringPairList >(this);
+    m_futureWatcher->setFuture(QtConcurrent::run<QStringPairList>(this, &QuickPhraseModel::parse, file));
+    connect(m_futureWatcher, SIGNAL(finished()), this, SLOT(loadFinished()));
 }
 
-void QuickPhraseModel::parse(const QString& filename) {
-    QByteArray fileNameArray = filename.toLocal8Bit();
-    FILE* fp = FcitxXDGGetFileWithPrefix("", fileNameArray.constData(), "r", NULL);
-    if (!fp)
-        return;
+QStringPairList QuickPhraseModel::parse(const QString& file) {
+    QByteArray fileNameArray = file.toLocal8Bit();
+    QStringPairList list;
 
-    QFile file;
-    if (!file.open(fp, QFile::ReadOnly)) {
+    do {
+        FILE* fp = FcitxXDGGetFileWithPrefix("", fileNameArray.constData(), "r", NULL);
+        if (!fp)
+            break;
+
+        QFile file;
+        if (!file.open(fp, QFile::ReadOnly)) {
+            fclose(fp);
+            break;
+        }
+        QByteArray line;
+        while (!(line = file.readLine()).isNull()) {
+            QString s = QString::fromUtf8(line);
+            s = s.simplified();
+            if (s.isEmpty())
+                continue;
+            QString key = s.section(" ", 0, 0, QString::SectionSkipEmpty);
+            QString value = s.section(" ", 1, -1, QString::SectionSkipEmpty);
+            if (key.isEmpty() || value.isEmpty())
+                continue;
+            list.append(QPair<QString, QString>(key, value));
+        }
+
+        file.close();
         fclose(fp);
-        return;
-    }
-    QByteArray line;
-    while (!(line = file.readLine()).isNull()) {
-        QString s = QString::fromUtf8(line);
-        s = s.simplified();
-        if (s.isEmpty())
-            continue;
-        QString key = s.section(" ", 0, 0, QString::SectionSkipEmpty);
-        QString value = s.section(" ", 1, -1, QString::SectionSkipEmpty);
-        if (key.isEmpty() || value.isEmpty())
-            continue;
-        m_list.append(QPair<QString, QString>(key, value));
-    }
+    } while(0);
 
-    file.close();
-    fclose(fp);
+    return list;
 }
 
 void QuickPhraseModel::loadFinished()
 {
+    m_list.append(m_futureWatcher->future().result());
     endResetModel();
+    m_futureWatcher->deleteLater();
+    m_futureWatcher = 0;
 }
 
 QFutureWatcher< bool >* QuickPhraseModel::save(const QString& file)
 {
     QFutureWatcher< bool >* futureWatcher = new QFutureWatcher< bool >(this);
-    futureWatcher->setFuture(QtConcurrent::run<bool>(this,&QuickPhraseModel::saveData,file,m_list));
+    futureWatcher->setFuture(QtConcurrent::run<bool>(this,&QuickPhraseModel::saveData, file, m_list));
     connect(futureWatcher, SIGNAL(finished()), this, SLOT(saveFinished()));
-    connect(futureWatcher, SIGNAL(finished()), futureWatcher, SLOT(deleteLater()));
     return futureWatcher;
 }
 
@@ -227,7 +240,8 @@ bool QuickPhraseModel::saveData(const QString& file,const QStringPairList& list)
 {
     char* name = NULL;
     QByteArray filenameArray = file.toLocal8Bit();
-    FcitxXDGGetFileWithPrefix("", filenameArray.constData(), NULL, &name);
+    FILE* fp = FcitxXDGGetFileUserWithPrefix("", filenameArray.constData(), "w", &name);
+    fclose(fp);
     QString fileName = QString::fromLocal8Bit(name);
     QTemporaryFile tempFile(fileName);
     free(name);
@@ -256,6 +270,7 @@ void QuickPhraseModel::saveFinished()
     if (future.result()) {
         setNeedSave(false);
     }
+    watcher->deleteLater();
 }
 
 void QuickPhraseModel::setNeedSave(bool needSave)
