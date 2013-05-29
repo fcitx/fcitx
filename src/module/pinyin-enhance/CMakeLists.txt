@@ -10,3 +10,5 @@ set(FCITX_PYENHANCE_SOURCES
 fcitx_add_addon_full(pinyin-enhance DESC SCAN SCAN_PRIV
   HEADERS pinyin-enhance.h
   SOURCES ${FCITX_PYENHANCE_SOURCES})
+
+add_subdirectory(data)

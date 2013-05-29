@@ -18,3 +18,5 @@ fcitx_add_addon_full(table DESC ${table_noinstall}
   SOURCES ${FCITX_TABLE_SOURCES}
   EXTRA_DESC table.desc
   EXTRA_PO ${FCITX_TABLE_HEADERS})
+
+add_subdirectory(data)
