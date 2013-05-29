@@ -21,6 +21,8 @@
 #define FCITX_TOOLS_GUI_EDITOR_H
 
 #include <QMainWindow>
+#include <QDir>
+#include <QMutex>
 #include "fcitx-qt/fcitxqtconfiguiwidget.h"
 #include "model.h"
 
@@ -43,6 +45,8 @@ public:
     virtual QString title();
     virtual QString addon();
     virtual bool asyncSave();
+    
+    void loadFileList();
 
 private slots:
     void addWord();
@@ -58,10 +62,26 @@ private slots:
 private:
     void load(const QString& file);
     void save(const QString& file);
+    void _loadFileList();
+    QString currentFile(int index = -1);
     Ui::Editor* m_ui;
     QuickPhraseModel* m_model;
+    QMutex fileListMutex;
+    QFileInfoList fileList;
+    QDir quickPhraseDir,fcitxDir;
+    
+    bool m_modified;
+    int lastFileIndex;
+    
+    QMenu* operationMenu;
 public slots:
     void batchEditAccepted();
+    void fileModified(bool);
+    void fileSelected();
+    void showFileList();
+    void removeFileTriggered();
+    void addFileTriggered();
+    void refreshListTriggered();
 };
 }
 

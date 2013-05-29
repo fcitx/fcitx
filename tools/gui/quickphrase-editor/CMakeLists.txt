@@ -1,12 +1,11 @@
-set(QUICKPHRASE_EDITOR_SRCS
+set(QUICKPHRASE_EDITOR_SRCS 
   main.cpp
   model.cpp
   editor.cpp
   editordialog.cpp
   batchdialog.cpp
   )
-set(QUICKPHRASE_EDITOR_HDRS
-  main.h
+set(QUICKPHRASE_EDITOR_HDRS main.h
   model.h
   editor.h
   editordialog.h
