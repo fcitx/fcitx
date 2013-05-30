@@ -1,15 +1,3 @@
-
-fcitx_translate_add_sources(
-  table/qxm.conf.in
-  table/wbx.conf.in
-  table/wanfeng.conf.in
-  table/db.conf.in
-  table/wbpy.conf.in
-  table/erbi.conf.in
-  table/zrm.conf.in
-  table/cangjie.conf.in
-  )
-
 add_subdirectory(script)
 add_subdirectory(icon)
 

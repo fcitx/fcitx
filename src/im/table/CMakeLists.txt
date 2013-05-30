@@ -1,3 +1,14 @@
+fcitx_translate_add_sources(
+  data/qxm.conf.in
+  data/wbx.conf.in
+  data/wanfeng.conf.in
+  data/db.conf.in
+  data/wbpy.conf.in
+  data/erbi.conf.in
+  data/zrm.conf.in
+  data/cangjie.conf.in
+  )
+
 set(FCITX_TABLE_SOURCES
   tabledict.c
   table.c
