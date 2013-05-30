@@ -17,6 +17,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "common.h"
 #include "filelistmodel.h"
 #include "fcitx-config/xdg.h"
 
@@ -42,8 +43,13 @@ QVariant fcitx::FileListModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
         case Qt::DisplayRole:
-            return m_fileList[index.row()];
-            //return m_fileList[index.row()].left(strlen("data/"));
+            if (m_fileList[index.row()] == QUICK_PHRASE_CONFIG_FILE) {
+                return _("Default");
+            } else {
+                // remove "data/quickphrase.d/"
+                const size_t length = strlen(QUICK_PHRASE_CONFIG_DIR);
+                return m_fileList[index.row()].mid(length + 1, m_fileList[index.row()].size() - length - strlen(".mb") - 1);
+            }
         case Qt::UserRole:
             return m_fileList[index.row()];
         default:
@@ -58,12 +64,12 @@ void fcitx::FileListModel::loadFileList()
     m_fileList.clear();
     m_fileList.append(QUICK_PHRASE_CONFIG_FILE);
     FcitxStringHashSet* files = FcitxXDGGetFiles(QUICK_PHRASE_CONFIG_DIR, NULL, ".mb");
+
+    HASH_SORT(files, fcitx_utils_string_hash_set_compare);
     HASH_FOREACH(f, files, FcitxStringHashSet) {
-        m_fileList.append(QString::fromLocal8Bit(f->name).prepend(QUICK_PHRASE_CONFIG_DIR));
+        m_fileList.append(QString::fromLocal8Bit(f->name).prepend(QUICK_PHRASE_CONFIG_DIR "/"));
     }
     fcitx_utils_free_string_hash_set(files);
-
-    qSort(m_fileList);
 
     endResetModel();
 }

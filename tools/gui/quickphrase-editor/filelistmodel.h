@@ -24,7 +24,7 @@
 #include <QStringList>
 
 
-#define QUICK_PHRASE_CONFIG_DIR "data/quickphrase.d/"
+#define QUICK_PHRASE_CONFIG_DIR "data/quickphrase.d"
 #define QUICK_PHRASE_CONFIG_FILE "data/QuickPhrase.mb"
 
 namespace fcitx {
@@ -43,6 +43,7 @@ public:
 
 private:
     QStringList m_fileList;
+    size_t len;
 };
 
 }

@@ -72,6 +72,7 @@ private:
     void load(const QString& file);
     void save(const QString& file);
     QString currentFile();
+    QString currentName();
     Ui::Editor* m_ui;
     QuickPhraseModel* m_model;
     FileListModel* m_fileListModel;

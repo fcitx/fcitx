@@ -254,7 +254,6 @@ void ListEditor::loadFileList()
     int row = m_ui->fileListComboBox->currentIndex();
     int col = m_ui->fileListComboBox->modelColumn();
     QString lastFileName = m_fileListModel->data(m_fileListModel->index(row, col), Qt::UserRole).toString();
-    m_ui->fileListComboBox->currentIndex();
     m_fileListModel->loadFileList();
     m_ui->fileListComboBox->setCurrentIndex(m_fileListModel->findFile(lastFileName));
     load();
@@ -267,6 +266,13 @@ QString ListEditor::currentFile()
     return m_fileListModel->data(m_fileListModel->index(row, col), Qt::UserRole).toString();
 }
 
+QString ListEditor::currentName()
+{
+    int row = m_ui->fileListComboBox->currentIndex();
+    int col = m_ui->fileListComboBox->modelColumn();
+    return m_fileListModel->data(m_fileListModel->index(row, col), Qt::DisplayRole).toString();
+}
+
 void ListEditor::addFileTriggered()
 {
     bool ok;
@@ -275,10 +281,28 @@ void ListEditor::addFileTriggered()
                                              _("Please input a filename for newfile"),
                                              QLineEdit::Normal, "newfile", &ok
     );
-    QByteArray fileNameArray = filename.toLocal8Bit();
-    std::FILE* file = FcitxXDGGetFileUserWithPrefix(QUICK_PHRASE_CONFIG_DIR, fileNameArray.append(".mb"), "w" ,NULL);
-    fclose(file);
-    loadFileList();
+
+    if (filename.contains('/')) {
+        QMessageBox::warning(this, _("Invalid filename"), _("File name should not contain '/'."));
+        return;
+    }
+
+    std::FILE* file = FcitxXDGGetFileUserWithPrefix(QUICK_PHRASE_CONFIG_DIR, filename.append(".mb").toLocal8Bit(), "w", NULL);
+
+    if (file) {
+        fclose(file);
+    } else {
+        QMessageBox::warning(this,
+                             _("File Operation Failed"),
+                             _("Cannot create file %1.").arg(filename)
+                            );
+        return;
+    }
+
+    m_fileListModel->loadFileList();
+    m_ui->fileListComboBox->setCurrentIndex(m_fileListModel->findFile(filename.prepend(QUICK_PHRASE_CONFIG_DIR "/")));
+    load();
+
 }
 
 void ListEditor::refreshListTriggered()
@@ -289,21 +313,35 @@ void ListEditor::refreshListTriggered()
 void ListEditor::removeFileTriggered()
 {
     QString filename = currentFile();
+    QString curName = currentName();
+    char* fullname = NULL;
+    FcitxXDGGetFileUserWithPrefix(NULL, filename.toLocal8Bit(), NULL, &fullname);
+    QFile f(fullname);
+    free(fullname);
+    if (!f.exists()) {
+        int ret = QMessageBox::question(this,
+                                        _("Cannot remove system file"),
+                                        _("%1 is a system file, do you want to delete all phrases instead?").arg(curName),
+                                        QMessageBox::Yes | QMessageBox::No,
+                                        QMessageBox::Yes
+                                       );
+        if (ret == QMessageBox::Yes) {
+            deleteAllWord();
+        }
+        return;
+    }
+
     int ret = QMessageBox::question(this,
                                     _("Confirm deleting"),
-                                    _("Are you sure to delete this file: %1?").arg(filename),
+                                    _("Are you sure to delete %1?").arg(curName),
                                     QMessageBox::Ok | QMessageBox::Cancel);
 
-    if (ret==QMessageBox::Ok){
-        char* name = NULL;
-        FcitxXDGGetFileUserWithPrefix(NULL, filename.toLocal8Bit(), NULL, &name);
-        QFile f(name);
+    if (ret == QMessageBox::Ok){
         bool ok = f.remove();
-        free(name);
         if (!ok){
             QMessageBox::warning(this,
                                  _("File Operation Failed"),
-                                 _("Error while deleting file %1").arg(filename)
+                                 _("Error while deleting %1.").arg(curName)
             );
         }
     } 
