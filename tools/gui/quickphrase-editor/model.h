@@ -26,11 +26,13 @@
 #include <QFutureWatcher>
 
 class QFile;
-namespace fcitx {
-    
+namespace fcitx
+{
+
 typedef QList< QPair< QString , QString> > QStringPairList;
 
-class QuickPhraseModel : public QAbstractTableModel {
+class QuickPhraseModel : public QAbstractTableModel
+{
     Q_OBJECT
 public:
     explicit QuickPhraseModel(QObject* parent = 0);

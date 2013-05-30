@@ -38,7 +38,8 @@
 #include "filelistmodel.h"
 #include "ui_editor.h"
 
-namespace fcitx {
+namespace fcitx
+{
 
 ListEditor::ListEditor(QWidget* parent)
     : FcitxQtConfigUIWidget(parent),
@@ -64,9 +65,9 @@ ListEditor::ListEditor(QWidget* parent)
     m_ui->fileListComboBox->setModel(m_fileListModel);
 
     m_operationMenu = new QMenu(this);
-    m_operationMenu->addAction(_("Add File"),this,SLOT(addFileTriggered()));
-    m_operationMenu->addAction(_("Remove File"),this,SLOT(removeFileTriggered()));
-    m_operationMenu->addAction(_("Refresh List"),this,SLOT(refreshListTriggered()));
+    m_operationMenu->addAction(_("Add File"), this, SLOT(addFileTriggered()));
+    m_operationMenu->addAction(_("Remove File"), this, SLOT(removeFileTriggered()));
+    m_operationMenu->addAction(_("Refresh List"), this, SLOT(refreshListTriggered()));
     m_ui->operationButton->setMenu(m_operationMenu);
 
     loadFileList();
@@ -79,9 +80,9 @@ ListEditor::ListEditor(QWidget* parent)
     connect(m_ui->importButton, SIGNAL(clicked(bool)), this, SLOT(importData()));
     connect(m_ui->exportButton, SIGNAL(clicked(bool)), this, SLOT(exportData()));
 
-    connect(m_ui->fileListComboBox, SIGNAL(activated(int)),this,SLOT(changeFile(int)));
+    connect(m_ui->fileListComboBox, SIGNAL(activated(int)), this, SLOT(changeFile(int)));
 
-    connect(m_ui->macroTableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(itemFocusChanged()));
+    connect(m_ui->macroTableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(itemFocusChanged()));
     connect(m_model, SIGNAL(needSaveChanged(bool)), this, SIGNAL(changed(bool)));
 }
 
@@ -125,7 +126,7 @@ bool ListEditor::asyncSave()
 
 void ListEditor::changeFile(int newIndex)
 {
-    if (m_model->needSave()){
+    if (m_model->needSave()) {
         int ret = QMessageBox::question(this,
                                         _("Save Changes"),
                                         _("The content has changed.\n"
@@ -134,7 +135,7 @@ void ListEditor::changeFile(int newIndex)
         if (ret == QMessageBox::Save) {
             //save(m_ui->fileListComboBox->itemText(lastFileIndex));
             save(m_lastFile);
-        } else if (ret==QMessageBox::Discard) {
+        } else if (ret == QMessageBox::Discard) {
             m_ui->fileListComboBox->setCurrentIndex(m_fileListModel->findFile(m_lastFile));
             return;
         } else {
@@ -277,10 +278,10 @@ void ListEditor::addFileTriggered()
 {
     bool ok;
     QString filename = QInputDialog::getText(this,
-                                             _("Create new file"),
-                                             _("Please input a filename for newfile"),
-                                             QLineEdit::Normal, "newfile", &ok
-    );
+                       _("Create new file"),
+                       _("Please input a filename for newfile"),
+                       QLineEdit::Normal, "newfile", &ok
+                                            );
 
     if (filename.contains('/')) {
         QMessageBox::warning(this, _("Invalid filename"), _("File name should not contain '/'."));
@@ -336,15 +337,15 @@ void ListEditor::removeFileTriggered()
                                     _("Are you sure to delete %1?").arg(curName),
                                     QMessageBox::Ok | QMessageBox::Cancel);
 
-    if (ret == QMessageBox::Ok){
+    if (ret == QMessageBox::Ok) {
         bool ok = f.remove();
-        if (!ok){
+        if (!ok) {
             QMessageBox::warning(this,
                                  _("File Operation Failed"),
                                  _("Error while deleting %1.").arg(curName)
-            );
+                                );
         }
-    } 
+    }
     loadFileList();
     load();
 }

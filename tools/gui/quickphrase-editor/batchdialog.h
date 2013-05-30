@@ -23,12 +23,15 @@
 #include <QDialog>
 
 class CMacroTable;
-namespace Ui {
+namespace Ui
+{
 class BatchDialog;
 }
 
-namespace fcitx {
-class BatchDialog : public QDialog {
+namespace fcitx
+{
+class BatchDialog : public QDialog
+{
     Q_OBJECT
 public:
     explicit BatchDialog(QWidget* parent = 0);

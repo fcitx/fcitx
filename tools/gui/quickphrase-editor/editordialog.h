@@ -23,12 +23,15 @@
 #include <QDialog>
 
 class CMacroTable;
-namespace Ui {
+namespace Ui
+{
 class EditorDialog;
 }
 
-namespace fcitx {
-class EditorDialog : public QDialog {
+namespace fcitx
+{
+class EditorDialog : public QDialog
+{
     Q_OBJECT
 public:
     explicit EditorDialog(QWidget* parent = 0);

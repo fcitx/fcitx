@@ -42,18 +42,18 @@ QVariant fcitx::FileListModel::data(const QModelIndex& index, int role) const
         return QVariant();
 
     switch (role) {
-        case Qt::DisplayRole:
-            if (m_fileList[index.row()] == QUICK_PHRASE_CONFIG_FILE) {
-                return _("Default");
-            } else {
-                // remove "data/quickphrase.d/"
-                const size_t length = strlen(QUICK_PHRASE_CONFIG_DIR);
-                return m_fileList[index.row()].mid(length + 1, m_fileList[index.row()].size() - length - strlen(".mb") - 1);
-            }
-        case Qt::UserRole:
-            return m_fileList[index.row()];
-        default:
-            break;
+    case Qt::DisplayRole:
+        if (m_fileList[index.row()] == QUICK_PHRASE_CONFIG_FILE) {
+            return _("Default");
+        } else {
+            // remove "data/quickphrase.d/"
+            const size_t length = strlen(QUICK_PHRASE_CONFIG_DIR);
+            return m_fileList[index.row()].mid(length + 1, m_fileList[index.row()].size() - length - strlen(".mb") - 1);
+        }
+    case Qt::UserRole:
+        return m_fileList[index.row()];
+    default:
+        break;
     }
     return QVariant();
 }

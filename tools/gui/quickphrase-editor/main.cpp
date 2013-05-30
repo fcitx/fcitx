@@ -52,4 +52,4 @@ QString QuickPhraseEditorPlugin::domain()
 }
 
 
-Q_EXPORT_PLUGIN2 (fcitx_quickphrase_editor, QuickPhraseEditorPlugin)
+Q_EXPORT_PLUGIN2(fcitx_quickphrase_editor, QuickPhraseEditorPlugin)

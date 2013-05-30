@@ -21,7 +21,8 @@
 #include "ui_batchdialog.h"
 #include "batchdialog.h"
 
-namespace fcitx {
+namespace fcitx
+{
 BatchDialog::BatchDialog(QWidget* parent): QDialog(parent),
     m_ui(new Ui::BatchDialog)
 {

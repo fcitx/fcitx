@@ -21,7 +21,8 @@
 #include "ui_editordialog.h"
 #include "editordialog.h"
 
-namespace fcitx {
+namespace fcitx
+{
 EditorDialog::EditorDialog(QWidget* parent): QDialog(parent),
     m_ui(new Ui::EditorDialog)
 {

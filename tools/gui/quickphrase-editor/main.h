@@ -22,9 +22,10 @@
 
 #include "fcitx-qt/fcitxqtconfiguiplugin.h"
 
-class QuickPhraseEditorPlugin : public FcitxQtConfigUIPlugin {
+class QuickPhraseEditorPlugin : public FcitxQtConfigUIPlugin
+{
     Q_OBJECT
-    Q_INTERFACES (FcitxQtConfigUIFactoryInterface)
+    Q_INTERFACES(FcitxQtConfigUIFactoryInterface)
 public:
     explicit QuickPhraseEditorPlugin(QObject* parent = 0);
     virtual QString name();

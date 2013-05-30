@@ -28,15 +28,18 @@
 
 class QAbstractItemModel;
 class CMacroTable;
-namespace Ui {
+namespace Ui
+{
 class Editor;
 }
 
-namespace fcitx {
+namespace fcitx
+{
 
 class FileListModel;
 
-class ListEditor : public FcitxQtConfigUIWidget {
+class ListEditor : public FcitxQtConfigUIWidget
+{
     Q_OBJECT
 public:
     explicit ListEditor(QWidget* parent = 0);
@@ -47,7 +50,7 @@ public:
     virtual QString title();
     virtual QString addon();
     virtual bool asyncSave();
-    
+
     void loadFileList();
 
 public slots:

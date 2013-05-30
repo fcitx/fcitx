@@ -27,9 +27,11 @@
 #define QUICK_PHRASE_CONFIG_DIR "data/quickphrase.d"
 #define QUICK_PHRASE_CONFIG_FILE "data/QuickPhrase.mb"
 
-namespace fcitx {
+namespace fcitx
+{
 
-class FileListModel : public QAbstractListModel {
+class FileListModel : public QAbstractListModel
+{
     Q_OBJECT
 public:
     explicit FileListModel(QObject* parent = 0);
