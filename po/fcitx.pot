@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-05-05 14:09-0400\n"
+"POT-Creation-Date: 2013-05-30 00:02-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -712,8 +712,8 @@ msgstr ""
 msgid "No available Input Method"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1537 data/fcitx-autostart.desktop.in:3
-#: data/fcitx.desktop.in:3
+#: src/lib/fcitx/ime.c:1537 src/module/notificationitem/notificationitem.c:416
+#: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr ""
 
@@ -870,18 +870,18 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: src/module/notificationitem/notificationitem.c:447
+#: src/module/notificationitem/notificationitem.c:461
 #: src/ui/kimpanel/kimpanel.c:227 src/ui/kimpanel/kimpanel.c:228
 msgid "No input window"
 msgstr ""
 
-#: src/module/notificationitem/notificationitem.c:453
+#: src/module/notificationitem/notificationitem.c:467
 #: src/ui/kimpanel/kimpanel.c:254 src/ui/kimpanel/kimpanel.c:259
 #: data/config.desc:33
 msgid "Disabled"
 msgstr ""
 
-#: src/module/notificationitem/notificationitem.c:454
+#: src/module/notificationitem/notificationitem.c:468
 #: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:260
 msgid "Input Method Disabled"
 msgstr ""
@@ -916,23 +916,23 @@ msgstr ""
 msgid "Can't open socket %s: %s"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:247
+#: src/module/unicode/charselectdata.c:248
 msgid "<Non Private Use High Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:249
+#: src/module/unicode/charselectdata.c:250
 msgid "<Private Use High Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:251
+#: src/module/unicode/charselectdata.c:252
 msgid "<Low Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:253
+#: src/module/unicode/charselectdata.c:254
 msgid "<Private Use>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:281
+#: src/module/unicode/charselectdata.c:282
 msgid "<not assigned>"
 msgstr ""
 
@@ -1067,51 +1067,131 @@ msgstr ""
 msgid "Toggle Input Method"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/batchdialog.cpp:30
+#: tools/gui/quickphrase-editor/batchdialog.cpp:31
 msgid "Use <Keyword> <Phrase> format on every line."
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:43
+#: tools/gui/quickphrase-editor/editor.cpp:51
 msgid "&Add"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:44
+#: tools/gui/quickphrase-editor/editor.cpp:52
 msgid "&Batch Edit"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:45
+#: tools/gui/quickphrase-editor/editor.cpp:53
 msgid "&Delete"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:46
+#: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:47
+#: tools/gui/quickphrase-editor/editor.cpp:55
 msgid "&Import"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:48
+#: tools/gui/quickphrase-editor/editor.cpp:56
 msgid "E&xport"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editor.cpp:103
+#: tools/gui/quickphrase-editor/editor.cpp:57
+msgid "&Operation"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:68
+msgid "Add File"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:69
+msgid "Remove File"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:70
+msgid "Refresh List"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:131
+msgid "Save Changes"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:132
+msgid ""
+"The content has changed.\n"
+"Do you want to save the changes or discard them?"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:150
 msgid "Quick Phrase Editor"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/editordialog.cpp:29
-msgid "Keyword:"
+#: tools/gui/quickphrase-editor/editor.cpp:281
+msgid "Create new file"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:282
+msgid "Please input a filename for newfile"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:287
+msgid "Invalid filename"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:287
+msgid "File name should not contain '/'."
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:297
+#: tools/gui/quickphrase-editor/editor.cpp:344
+msgid "File Operation Failed"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:298
+#, kde-format
+msgid "Cannot create file %1."
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:324
+msgid "Cannot remove system file"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:325
+#, kde-format
+msgid "%1 is a system file, do you want to delete all phrases instead?"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:336
+msgid "Confirm deleting"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:337
+#, kde-format
+msgid "Are you sure to delete %1?"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:345
+#, kde-format
+msgid "Error while deleting %1."
 msgstr ""
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:30
+msgid "Keyword:"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editordialog.cpp:31
 msgid "Phrase:"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/model.cpp:52
+#: tools/gui/quickphrase-editor/filelistmodel.cpp:47
+#: src/module/spell/fcitx-spell.desc:5
+msgid "Default"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/model.cpp:55
 msgid "Keyword"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/model.cpp:54
+#: tools/gui/quickphrase-editor/model.cpp:57
 msgid "Phrase"
 msgstr ""
 
@@ -1141,38 +1221,6 @@ msgstr ""
 
 #: data/fcitx-configtool.desktop.in:4
 msgid "Change Fcitx Configuration"
-msgstr ""
-
-#: data/table/cangjie.conf.in:3
-msgid "Cangjie"
-msgstr ""
-
-#: data/table/db.conf.in:3
-msgid "Dianbaoma"
-msgstr ""
-
-#: data/table/erbi.conf.in:3
-msgid "Erbi"
-msgstr ""
-
-#: data/table/qxm.conf.in:3
-msgid "Bingchan"
-msgstr ""
-
-#: data/table/wanfeng.conf.in:3
-msgid "Wanfeng"
-msgstr ""
-
-#: data/table/wbpy.conf.in:3
-msgid "WubiPinyin"
-msgstr ""
-
-#: data/table/wbx.conf.in:3
-msgid "Wubi"
-msgstr ""
-
-#: data/table/zrm.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:4
-msgid "Ziranma"
 msgstr ""
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
@@ -1944,6 +1992,10 @@ msgstr ""
 msgid "Add current input buffer to user dictionary"
 msgstr ""
 
+#: src/im/pinyin/fcitx-pinyin.desc:4
+msgid "Ziranma"
+msgstr ""
+
 #: src/im/pinyin/fcitx-pinyin.desc:5
 msgid "MS"
 msgstr ""
@@ -2564,10 +2616,6 @@ msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:1 src/module/spell/fcitx-spell.desc:10
 msgid "Spell Hint"
-msgstr ""
-
-#: src/module/spell/fcitx-spell.desc:5
-msgid "Default"
 msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:6
