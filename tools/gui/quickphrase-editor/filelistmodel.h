@@ -45,7 +45,6 @@ public:
 
 private:
     QStringList m_fileList;
-    size_t len;
 };
 
 }
