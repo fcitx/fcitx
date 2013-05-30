@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-05-30 00:02-0400\n"
+"POT-Creation-Date: 2013-05-30 08:09-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1259,6 +1259,38 @@ msgstr ""
 msgid "Quwei Input Method for Fcitx"
 msgstr ""
 
+#: src/im/table/data/cangjie.conf.in:3
+msgid "Cangjie"
+msgstr ""
+
+#: src/im/table/data/db.conf.in:3
+msgid "Dianbaoma"
+msgstr ""
+
+#: src/im/table/data/erbi.conf.in:3
+msgid "Erbi"
+msgstr ""
+
+#: src/im/table/data/qxm.conf.in:3
+msgid "Bingchan"
+msgstr ""
+
+#: src/im/table/data/wanfeng.conf.in:3
+msgid "Wanfeng"
+msgstr ""
+
+#: src/im/table/data/wbpy.conf.in:3
+msgid "WubiPinyin"
+msgstr ""
+
+#: src/im/table/data/wbx.conf.in:3
+msgid "Wubi"
+msgstr ""
+
+#: src/im/table/data/zrm.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:4
+msgid "Ziranma"
+msgstr ""
+
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
 msgid "Table"
 msgstr ""
@@ -1990,10 +2022,6 @@ msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.desc:44
 msgid "Add current input buffer to user dictionary"
-msgstr ""
-
-#: src/im/pinyin/fcitx-pinyin.desc:4
-msgid "Ziranma"
 msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:5

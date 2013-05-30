@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-05-30 00:02-0400\n"
-"PO-Revision-Date: 2013-05-22 08:07+0000\n"
-"Last-Translator: mar well <marwell.1980@freenet.de>\n"
+"POT-Creation-Date: 2013-05-30 08:09-0400\n"
+"PO-Revision-Date: 2013-05-30 04:07+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
 "Language: de\n"
@@ -370,6 +370,10 @@ msgstr "Hintergrundgraphik"
 msgid "Beginner's Guide"
 msgstr "Erste Schritte"
 
+#: src/im/table/data/qxm.conf.in:3
+msgid "Bingchan"
+msgstr ""
+
 #: src/ui/classic/skin.desc:135 src/ui/classic/skin.desc:241
 #: src/ui/classic/skin.desc:371
 msgid "BottomCenter"
@@ -431,6 +435,10 @@ msgstr "Farbe vorgeschlagene Kandidaten"
 #: data/config.desc:209
 msgid "Candidate Word Number"
 msgstr "Anzahl Zeichenvorschläge"
+
+#: src/im/table/data/cangjie.conf.in:3
+msgid "Cangjie"
+msgstr ""
 
 #: src/im/pinyin/py.c:1736
 #, c-format
@@ -715,9 +723,8 @@ msgid "Configure group name error: line %d"
 msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:336
-#, fuzzy
 msgid "Confirm deleting"
-msgstr "Konfiguration."
+msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
@@ -734,9 +741,8 @@ msgid "Copy"
 msgstr "Kopieren"
 
 #: tools/gui/quickphrase-editor/editor.cpp:281
-#, fuzzy
 msgid "Create new file"
-msgstr "Kann punc-Datei nicht öffnen"
+msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:138
 #: src/module/autoeng/fcitx-autoeng.desc:8
@@ -826,6 +832,10 @@ msgstr "Desktopumgebung"
 #: data/script/fcitx-diagnose.sh:539
 msgid "Desktop environment is ${1}."
 msgstr "Die Desktopumgebung ist ${1}"
+
+#: src/im/table/data/db.conf.in:3
+msgid "Dianbaoma"
+msgstr ""
 
 #: data/config.desc:197
 msgid "Disable Paging in Remind Mode"
@@ -961,6 +971,10 @@ msgstr "Die Umgebungsvariable ${1} ist richtig auf \"${2}\" gesetzt."
 #: data/script/fcitx-diagnose.sh:545
 msgid "Environment."
 msgstr "Umgebung."
+
+#: src/im/table/data/erbi.conf.in:3
+msgid "Erbi"
+msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:345
 #, kde-format
@@ -1516,9 +1530,8 @@ msgid "Invalid entry line @ line %d %s"
 msgstr "Ungültiger Eintrag Linie @ Linie %d %s"
 
 #: tools/gui/quickphrase-editor/editor.cpp:287
-#, fuzzy
 msgid "Invalid filename"
-msgstr "kein gültiger Font"
+msgstr ""
 
 #: src/lib/fcitx-utils/desktop-parse.c:513
 #, c-format
@@ -2220,9 +2233,8 @@ msgid "Remote"
 msgstr "Fcitx-Remote"
 
 #: tools/gui/quickphrase-editor/editor.cpp:69
-#, fuzzy
 msgid "Remove File"
-msgstr "Symbol > Datei"
+msgstr ""
 
 #: src/im/table/tabledict.c:428
 msgid "Rename OK"
@@ -2937,6 +2949,19 @@ msgstr "Bild für \"Virtuelle Tastatur\""
 msgid "Virtual Keyboard State"
 msgstr "Status der virtuellen Tastatur"
 
+#: src/im/table/data/wanfeng.conf.in:3
+msgid "Wanfeng"
+msgstr ""
+
+#: src/im/table/data/wbx.conf.in:3
+msgid "Wubi"
+msgstr ""
+
+#: src/im/table/data/wbpy.conf.in:3
+#, fuzzy
+msgid "WubiPinyin"
+msgstr "Pinyin"
+
 #: src/module/xkb/fcitx-xkb.desc:1 src/module/xkb/fcitx-xkb.desc:6
 #: src/module/xkb/fcitx-xkb.desc:11 src/module/xkb/fcitx-xkb.desc:16
 msgid "X Keyboard"
@@ -3096,7 +3121,7 @@ msgstr "Zhongwenzhixing"
 msgid "Ziguang"
 msgstr "Ziguang"
 
-#: src/im/pinyin/fcitx-pinyin.desc:4
+#: src/im/table/data/zrm.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:4
 msgid "Ziranma"
 msgstr "Ziranma"
 
@@ -3141,24 +3166,3 @@ msgstr "xmodmap Befehl"
 #, c-format
 msgid "your current font is: %s"
 msgstr "der aktuelle Font ist: %s"
-
-#~ msgid "Bingchan"
-#~ msgstr "Bingchan "
-
-#~ msgid "Cangjie"
-#~ msgstr "Cangjie"
-
-#~ msgid "Dianbaoma"
-#~ msgstr "Dianbaoma 电报码"
-
-#~ msgid "Erbi"
-#~ msgstr "Erbi 二笔"
-
-#~ msgid "Wanfeng"
-#~ msgstr "Wanfeng"
-
-#~ msgid "Wubi"
-#~ msgstr "Wubi"
-
-#~ msgid "WubiPinyin"
-#~ msgstr "Wubi Pinyin"
