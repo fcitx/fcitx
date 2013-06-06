@@ -36,9 +36,9 @@
 #define NOTIFICATIONS_SERVICE_NAME "org.freedesktop.Notifications"
 #define NOTIFICATIONS_INTERFACE_NAME "org.freedesktop.Notifications"
 #define NOTIFICATIONS_PATH "/org/freedesktop/Notifications"
-#define NOTIFICATIONS_MATCH_NAMES                   \
-    "sender='" NOTIFICATIONS_SERVICE_NAME "',"      \
-    "interface='" NOTIFICATIONS_INTERFACE_NAME "'," \
+#define NOTIFICATIONS_MATCH_NAMES                       \
+    "sender='" NOTIFICATIONS_SERVICE_NAME "',"          \
+    "interface='" NOTIFICATIONS_INTERFACE_NAME "',"     \
     "path='" NOTIFICATIONS_PATH "'"
 #define NOTIFICATIONS_MATCH_SIGNAL              \
     "type='signal',"                            \
@@ -553,6 +553,57 @@ FcitxNotifyShowTip(FcitxNotify *notify, const char *appName,
                                 body, actions, timeout,
                                 FcitxNotifyShowTipCallback,
                                 data, free);
+}
+
+static void
+FcitxNotifyShowTipFmtV(FcitxNotify *notify, const char *appName,
+                       const char *appIcon, const char *summary,
+                       const char *body_fmt, int32_t timeout,
+                       const char *tip_id, va_list *ap)
+{
+    char *body = NULL;
+    vasprintf(&body, body_fmt, *ap);
+    FcitxNotifyShowTip(notify, appName, appIcon, summary, body,
+                       timeout, tip_id);
+    fcitx_utils_free(body);
+}
+
+static void
+FcitxNotifyShowTipFmt(FcitxNotify *notify, const char *appName,
+                      const char *appIcon, const char *summary,
+                      const char *body_fmt, int32_t timeout,
+                      const char *tip_id, ...)
+{
+    va_list ap;
+    va_start(ap, tip_id);
+    FcitxNotifyShowTipFmtV(notify, appName, appIcon, summary, body_fmt,
+                           timeout, tip_id, &ap);
+    va_end(ap);
+}
+
+static void
+FcitxNotifyShowAddonTip(FcitxNotify *notify, const char *addon_id,
+                        const char *addon_name, const char *addon_url,
+                        const char *body)
+{
+    if (!addon_id)
+        return;
+    if (!addon_name)
+        addon_name = addon_id;
+    if (!addon_url)
+        addon_url = _("https://fcitx-im.org/wiki/Category:Addon");
+    if (body) {
+        FcitxNotifyShowTipFmt(notify, NULL, NULL, addon_name,
+                              _("<b>%s</b><br/>(Check <a href=\"%s\">here</a> "
+                                "for more detail.)"), 0,
+                              addon_id, body, addon_url);
+    } else {
+        FcitxNotifyShowTipFmt(notify, NULL, NULL, addon_name,
+                              _("<b>%s is triggered.</b><br/>"
+                                "(Check <a href=\"%s\">here</a> "
+                                "for more detail.)"), 0,
+                              addon_id, addon_name, addon_url);
+    }
 }
 
 static void

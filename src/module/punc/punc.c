@@ -38,6 +38,7 @@
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx-utils/bitset.h"
+#include "module/freedesktop-notify/fcitx-freedesktop-notify.h"
 
 /**
  * @file punc.c
@@ -549,6 +550,13 @@ void TogglePuncState(void* arg)
     FcitxInstance* instance = puncState->owner;
     FcitxProfile* profile = FcitxInstanceGetProfile(instance);
     profile->bUseWidePunc = !profile->bUseWidePunc;
+
+    FcitxFreeDesktopNotifyShowAddonTip(
+        instance, "fcitx-punc-toggle",
+        _("Punctuation Support"),
+        _("https://fcitx-im.org/wiki/Punctuation"),
+        profile->bUseWidePunc ? _("Full width punctuations are used.") :
+        _("Latin punctuations are used."));
 
     FcitxUISetStatusString(puncState->owner, "punc",
                            profile->bUseWidePunc ? _("Full width punct") :

@@ -5,6 +5,8 @@ Function0=Show
 Function1=Close
 Function2=ShowTip
 Function3=ShowSimple
+Function4=ShowTipFmt
+Function5=ShowAddonTip
 Include0="freedesktop-notify.h"
 Self.Type=FcitxNotify*
 
@@ -47,3 +49,23 @@ Arg3=const char*
 Arg4=int32_t
 Arg5=const char*
 Res.WrapFunc=FcitxNotifyShowTip
+
+[ShowTipFmt]
+Name=show-tip-fmt
+Arg0=const char*
+Arg1=const char*
+Arg2=const char*
+Arg3=const char*
+Arg4=int32_t
+Arg5=const char*
+Arg6=va_list*
+Arg6.PreconvType=...
+Res.WrapFunc=FcitxNotifyShowTipFmtV
+
+[ShowAddonTip]
+Name=show-addon-tip
+Arg0=const char*
+Arg1=const char*
+Arg2=const char*
+Arg3=const char*
+Res.WrapFunc=FcitxNotifyShowAddonTip

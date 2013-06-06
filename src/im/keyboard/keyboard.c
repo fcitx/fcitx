@@ -41,6 +41,7 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
 #include "module/spell/fcitx-spell.h"
+#include "module/freedesktop-notify/fcitx-freedesktop-notify.h"
 
 #include "keyboard.h"
 #if defined(ENABLE_LIBXML2)
@@ -885,23 +886,31 @@ void SaveKeyboardConfig(FcitxKeyboardConfig* fs)
 
 INPUT_RETURN_VALUE FcitxKeyboardHotkeyToggleWordHint(void* arg)
 {
-    FcitxKeyboard* keyboard = (FcitxKeyboard*) arg;
-    FcitxIM* im = FcitxInstanceGetCurrentIM(keyboard->owner);
-    FcitxInputContext* currentIC = FcitxInstanceGetCurrentIC(keyboard->owner);
+    FcitxKeyboard *keyboard = (FcitxKeyboard*)arg;
+    FcitxInstance *instance = keyboard->owner;
+    FcitxIM *im = FcitxInstanceGetCurrentIM(instance);
+    FcitxInputContext *currentIC = FcitxInstanceGetCurrentIC(instance);
     if (!currentIC)
         return IRV_TO_PROCESS;
     if (im && strncmp(im->uniqueName, "fcitx-keyboard",
                       strlen("fcitx-keyboard")) == 0) {
-        void* enableWordHint = FcitxInstanceGetICData(keyboard->owner,
-                                                      currentIC,
-                                                      keyboard->dataSlot);
+        void *enableWordHint =
+            FcitxInstanceGetICData(instance, currentIC, keyboard->dataSlot);
         if (!enableWordHint) {
             enableWordHint = PTR_TRUE;
             IsDictAvailable(keyboard);
         } else {
             enableWordHint = PTR_FALSE;
         }
-        FcitxInstanceSetICData(keyboard->owner, currentIC,
+
+        FcitxFreeDesktopNotifyShowAddonTip(
+            instance, "fcitx-keyboard-hint",
+            _("Keyboard input method spell hint"),
+            _("https://fcitx-im.org/wiki/Keyboard"),
+            enableWordHint != PTR_FALSE ? _("Spell hint is enabled.") :
+            _("Spell hint is disabled."));
+
+        FcitxInstanceSetICData(instance, currentIC,
                                keyboard->dataSlot, enableWordHint);
         return IRV_DO_NOTHING;
     } else {

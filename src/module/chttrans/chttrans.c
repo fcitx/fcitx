@@ -40,6 +40,7 @@
 #ifdef ENABLE_OPENCC
 #include "chttrans-opencc.h"
 #endif
+#include "module/freedesktop-notify/fcitx-freedesktop-notify.h"
 
 #define TABLE_GBKS2T "gbks2t.tab"
 
@@ -174,17 +175,26 @@ INPUT_RETURN_VALUE HotkeyToggleChttransState(void* arg)
 
 void ToggleChttransState(void* arg)
 {
-    FcitxChttrans* transState = (FcitxChttrans*) arg;
+    FcitxChttrans *transState = (FcitxChttrans*)arg;
+    FcitxInstance *instance = transState->owner;
     FcitxIM* im = FcitxInstanceGetCurrentIM(transState->owner);
     if (!im)
         return;
     boolean enabled = !ChttransEnabled(transState);
 
+    FcitxFreeDesktopNotifyShowAddonTip(
+        instance, "fcitx-chttrans-toggle",
+        _("Simplified Chinese To Traditional Chinese"),
+        _("https://fcitx-im.org/wiki/Chttrans"),
+        enabled ? _("Traditional Chinese is enabled.") :
+        _("Simplified Chinese is enabled."));
+
     fcitx_string_map_set(transState->enableIM, im->uniqueName, enabled);
-    FcitxUISetStatusString(transState->owner, "chttrans",
-                           enabled ? _("Traditional Chinese") :  _("Simplified Chinese"),
+    FcitxUISetStatusString(instance, "chttrans",
+                           enabled ? _("Traditional Chinese") :
+                           _("Simplified Chinese"),
                           _("Toggle Simp/Trad Chinese Conversion"));
-    FcitxUIUpdateInputWindow(transState->owner);
+    FcitxUIUpdateInputWindow(instance);
     SaveChttransConfig(transState);
 }
 
