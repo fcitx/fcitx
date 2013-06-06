@@ -530,8 +530,7 @@ init_ld_paths() {
     local IFS=$'\n'
     local _ldpaths=($(ldconfig -p 2> /dev/null | grep '=>' | \
         sed -e 's:.* => \(.*\)/[^/]*$:\1:g' | sort -u)
-        /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
-        /usr/local/lib /usr/local/lib32 /usr/local/lib64)
+        {/usr,,/usr/local}/lib*)
     local path
     ldpaths=()
     for path in "${_ldpaths[@]}"; do
@@ -856,36 +855,52 @@ _check_toolkit_env() {
     fi
 }
 
+find_qt_modules() {
+    local qt_dirs _qt_modules
+    find_file qt_dirs -H "${ldpaths[@]}" -type d -name '*qt*'
+    find_file _qt_modules -H "${qt_dirs[@]}" -type f -iname '*fcitx*.so'
+    qt_modules=()
+    for file in "${_qt_modules[@]}"; do
+        add_and_check_file qt "${file}" && \
+            qt_modules=("${qt_modules[@]}" "${file}")
+    done
+}
+
 check_qt() {
     write_title 2 "Qt."
     _check_toolkit_env QT_IM_MODULE qt
-    qtimmodule_found=''
+    find_qt_modules
+    qt4_module_found=''
+    qt5_module_found=''
     write_order_list "$(_ 'Qt IM module files:')"
-    echo
-    for path in "${ldpaths[@]}"; do
-        # the {/*,} here is for lib/$ARCH/ when output of ldconfig
-        # failed to include it
-        for file in "${path}"{/*,}/qt{,4}/**/*fcitx*.so; do
-            if [[ ${file} =~ (im-fcitx|inputmethods) ]]; then
-                __need_blank_line=0
-                add_and_check_file qt "${file}" && {
-                    write_eval "$(_ 'Found fcitx qt im module: ${1}.')" \
-                        "$(code_inline "${file}")"
-                }
-                qtimmodule_found=1
-            else
-                __need_blank_line=0
-                add_and_check_file qt "${file}" && {
-                    write_eval \
-                        "$(_ 'Found unknown fcitx qt module: ${1}.')" \
-                        "$(code_inline "${file}")"
-                }
-            fi
-        done
-    done
-    if [ -z "${qtimmodule_found}" ]; then
+    for file in "${qt_modules[@]}"; do
+        basename=$(basename "${file}")
         __need_blank_line=0
-        write_error "$(_ "Cannot find fcitx input method module for qt.")"
+        if [[ ${basename} =~ im-fcitx ]] &&
+            [[ ${file} =~ plugins/inputmethods ]]; then
+            write_eval "$(_ 'Found fcitx im module for Qt4: ${1}.')" \
+                "$(code_inline "${file}")"
+            qt4_module_found=1
+        elif [[ ${basename} =~ fcitxplatforminputcontextplugin ]] &&
+            [[ ${file} =~ plugins/platforminputcontexts ]]; then
+            write_eval "$(_ 'Found fcitx im module for Qt5: ${1}.')" \
+                "$(code_inline "${file}")"
+            qt5_module_found=1
+        elif [[ ${file} =~ /fcitx/qt/ ]]; then
+            write_eval "$(_ 'Found fcitx qt module: ${1}.')" \
+                "$(code_inline "${file}")"
+        else
+            write_eval "$(_ 'Found unknown fcitx qt module: ${1}.')" \
+                "$(code_inline "${file}")"
+        fi
+    done
+    if [ -z "${qt4_module_found}" ]; then
+        __need_blank_line=0
+        write_error "$(_ "Cannot find fcitx input method module for Qt4.")"
+    fi
+    if [ -z "${qt5_module_found}" ]; then
+        __need_blank_line=0
+        write_error "$(_ "Cannot find fcitx input method module for Qt5.")"
     fi
 }
 
