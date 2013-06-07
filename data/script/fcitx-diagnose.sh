@@ -469,7 +469,11 @@ write_quote_str() {
 }
 
 write_quote_cmd() {
-    write_quote_str "$("$@" 2>&1)"
+    local cmd_output_str cmd_ret_val
+    cmd_output_str="$("$@" 2>&1)"
+    cmd_ret_val=$?
+    write_quote_str "${cmd_output_str}"
+    return $cmd_ret_val
 }
 
 write_title() {
@@ -648,10 +652,16 @@ check_env() {
     write_order_list "$(_ "Locale:")"
     if type locale &> /dev/null; then
         increase_cur_level 1
-        write_order_list "$(_ "Current locale:")"
-        write_quote_cmd locale
         write_order_list "$(_ "All locale:")"
-        write_quote_cmd locale -a
+        write_quote_str "$(locale -a 2> /dev/null)"
+        write_order_list "$(_ "Current locale:")"
+        write_quote_str "$(locale 2> /dev/null)"
+        locale_error="$(locale 2>&1 > /dev/null)"
+        if [[ -n $locale_error ]]; then
+            write_error_eval "$(_ 'Error occurs when running ${1}. Please check your locale settings.')" \
+            "$(code_inline "locale")"
+            write_quote_str "${locale_error}"
+        fi
         increase_cur_level -1
     else
         write_paragraph "$(print_not_found 'locale')"
