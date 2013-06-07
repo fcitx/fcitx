@@ -622,7 +622,7 @@ check_system() {
         write_paragraph "$(print_not_found '/etc/os-release')"
     fi
     write_order_list "$(_ "Desktop Environment:")"
-    if [ -z "$DE" ]; then
+    if [[ -z $DE ]] || [[ $DE = generic ]]; then
         write_eval "$(_ 'Cannot determine desktop environment.')"
     else
         write_eval "$(_ 'Desktop environment is ${1}.')" \
