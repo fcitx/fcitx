@@ -57,6 +57,9 @@ static const char *fxscanner_header_str =
 
 #define FXSCANNER_BLANK " \b\f\v\r\t"
 
+#define FX_ARG_LEN (10)
+#define FX_ARG_LEN_STR "(10)"
+
 /**
  * typedefs
  **/
@@ -101,6 +104,7 @@ typedef struct {
     const char *self_deref;
     const char *self_dereftype;
     boolean is_static;
+    int vaarg_index;
 } FcitxAddonFuncDesc;
 
 static void
@@ -119,6 +123,8 @@ typedef struct {
     const char *type;
     const char *deref;
     const char *deref_type;
+    const char *preconv;
+    const char *preconv_type;
 } FcitxAddonArgDesc;
 
 static const UT_icd fxaddon_arg_icd = {
@@ -359,6 +365,170 @@ fxscanner_write_translate(FILE *ofp, const char *str,
 #define _fxscanner_write_translate(ofp, str, translator, data, delim, ...) \
     (fxscanner_write_translate)(ofp, str, translator, data, delim)
 
+typedef struct {
+    const char *key;
+    const char *value;
+} FxScannerTranslateMap;
+typedef boolean (*FxScannerTranslatorNumFilter)(FILE *ofp, int num, void *data);
+typedef struct {
+    int max;
+    FxScannerTranslatorNumFilter filter;
+    void *data;
+    const FxScannerTranslateMap *map;
+} FxScannerNumTranslate;
+
+static int
+fxscanner_num_translator(FILE *ofp, const char *str, void *data)
+{
+    const FxScannerNumTranslate *tran = data;
+    const FxScannerTranslateMap *map = tran->map;
+    for (;map->key;map++) {
+        if (!map->value)
+            continue;
+        int len = strlen(map->key);
+        if (strncmp(str, map->key, len) == 0) {
+            if (map->value)
+                _write_str(ofp, map->value);
+            return len;
+        }
+    }
+    char *end;
+    int id = strtol(str, &end, 10);
+    if (end <= str) {
+        FcitxLog(ERROR, "Cannot parse deref expression at %s", str);
+        return -1;
+    }
+    if (tran->max >= 0 && id >= tran->max) {
+        FcitxLog(ERROR, "%d in the deref expression is larger than "
+                 "the number of arguments.", id);
+        return -1;
+    }
+    if (!tran->filter || tran->filter(ofp, id, tran->data))
+        return end - str;
+    return -1;
+}
+
+static boolean
+fxscanner_write_translate_num(FILE *ofp, const char *str,
+                              const FxScannerNumTranslate *tran,
+                              const char *delim)
+{
+    return fxscanner_write_translate(ofp, str, fxscanner_num_translator,
+                                     (void*)(intptr_t)tran, delim);
+}
+
+typedef struct {
+    const FcitxAddonFuncDesc *func_desc;
+    const char *arg_prefix;
+    const char *deref_prefix;
+} FxScannerExpData;
+
+static boolean
+fxscanner_trans_exp_filter(FILE *ofp, int id, void *_data)
+{
+    const FxScannerExpData *data = _data;
+    FcitxAddonArgDesc *arg_desc;
+    arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&data->func_desc->args, id);
+    if (data->deref_prefix) {
+        if (!arg_desc->deref) {
+            _write_strings(ofp, "(", data->arg_prefix);
+        } else {
+            _write_strings(ofp, "(", data->deref_prefix);
+        }
+    } else {
+        /* if (arg_desc->deref && !arg_desc->deref_type) { */
+        /*     FcitxLog(ERROR, */
+        /*              "Refer to void argument $%d in the expression", id); */
+        /*     return false; */
+        /* } */
+        _write_strings(ofp, "(", data->arg_prefix);
+    }
+    fprintf(ofp, "%d", id);
+    _write_str(ofp, ")");
+    return true;
+}
+
+static boolean
+fxscanner_write_translate_exp(FILE *ofp, const char *str,
+                              const FcitxAddonFuncDesc *func_desc,
+                              const char *self_str, const char *res_str,
+                              const char *arg_prefix, const char *deref_prefix)
+{
+    FxScannerExpData data = {
+        .func_desc = func_desc,
+        .arg_prefix = arg_prefix,
+        .deref_prefix = deref_prefix
+    };
+    FxScannerTranslateMap map[] = {{
+            .key = "<",
+            .value = self_str
+        }, {
+            .key = "@",
+            .value = res_str
+        }, {
+            NULL, NULL
+        }
+    };
+    FxScannerNumTranslate tran = {
+        .max = utarray_len(&func_desc->args),
+        .filter = fxscanner_trans_exp_filter,
+        .data = &data,
+        .map = map
+    };
+    return fxscanner_write_translate_num(ofp, str, &tran, "$");
+}
+
+static boolean
+fxscanner_write_deref(FILE *ofp, const char *prefix, const char *deref,
+                      const char *deref_type,
+                      const FcitxAddonFuncDesc *func_desc,
+                      const char *self_str, const char *res_str,
+                      const char *arg_prefix, const char *deref_prefix,
+                      const char *res_fmt, const char *orig_fmt, ...)
+{
+    va_list ap;
+    _write_strings(ofp, prefix);
+    if (deref_type) {
+        _write_strings(ofp, deref_type, " ");
+        va_start(ap, orig_fmt);
+        vfprintf(ofp, res_fmt, ap);
+        va_end(ap);
+        _write_strings(ofp, " = (");
+    }
+    int level;
+    if (fxscanner_parse_int(deref, &level)) {
+        if (!deref_type) {
+            FcitxLog(ERROR, "Trying to Deref %d level without a DerefType.",
+                     level);
+            return false;
+        }
+        if (level < -1) {
+            FcitxLog(ERROR, "Invalid Deref expression \"%d\"", level);
+            return false;
+        } else if (level == -1) {
+            _write_strings(ofp, "&");
+        } else {
+            int j;
+            for (j = 0;j < level;j++) {
+                _write_str(ofp, "*");
+            }
+        }
+        _write_strings(ofp, "(");
+        va_start(ap, orig_fmt);
+        vfprintf(ofp, orig_fmt, ap);
+        va_end(ap);
+        _write_strings(ofp, ")");
+    } else if (!fxscanner_write_translate_exp(ofp, deref, func_desc, self_str,
+                                              res_str, arg_prefix,
+                                              deref_prefix)) {
+        return false;
+    }
+    if (deref_type)
+        _write_strings(ofp, ")");
+    _write_strings(ofp, ";\n");
+    return true;
+}
+
 static void
 fxscanner_name_to_macro(char *name)
 {
@@ -414,18 +584,60 @@ fxscanner_macro_loader(UT_array *array, const char *value,
 }
 
 static boolean
+__check_is_va_list_p(const char *type)
+{
+    type += strspn(type, FXSCANNER_BLANK);
+    if (strncmp("va_list", type, strlen("va_list")))
+        return false;
+    type += strlen("va_list");
+    type += strspn(type, FXSCANNER_BLANK);
+    if (type[0] != '*')
+        return false;
+    type++;
+    type += strspn(type, FXSCANNER_BLANK);
+    if (type[0])
+        return false;
+    return true;
+}
+
+static boolean
 fxscanner_arg_loader(UT_array *array, const char *value, FcitxAddonBuff *buff,
                      size_t prefix_l, void *data)
 {
     FcitxAddonArgDesc arg_desc = {
         .type = value
     };
-    FcitxDesktopGroup *grp = data;
+    FcitxAddonFuncDesc *func_desc = data;
+    FcitxDesktopGroup *grp = func_desc->grp;
     fxaddon_buff_realloc(buff, prefix_l + sizeof(".DerefType"));
     memcpy(buff->buff + prefix_l, ".Deref", sizeof(".Deref"));
     fxaddon_load_string(arg_desc.deref, grp, buff->buff);
     memcpy(buff->buff + prefix_l, ".DerefType", sizeof(".DerefType"));
     arg_desc.deref_type = fxscanner_group_get_type(grp, buff->buff);
+
+    fxaddon_buff_realloc(buff, prefix_l + sizeof(".PreconvType"));
+    memcpy(buff->buff + prefix_l, ".Preconv", sizeof(".Preconv"));
+    fxaddon_load_string(arg_desc.preconv, grp, buff->buff);
+    memcpy(buff->buff + prefix_l, ".PreconvType", sizeof(".PreconvType"));
+    arg_desc.preconv_type = fxscanner_group_get_type(grp, buff->buff);
+
+    if (arg_desc.preconv_type) {
+        if (!strcmp(arg_desc.preconv_type, "...")) {
+            if (!__check_is_va_list_p(arg_desc.type)) {
+                FcitxLog(ERROR, "Argument with PreconvType `...` "
+                         "must be `va_list*`.");
+                return false;
+            } else if (func_desc->vaarg_index >= 0) {
+                FcitxLog(ERROR, "At most one vaarg argument is allowed.");
+                return false;
+            }
+            func_desc->vaarg_index = utarray_len(array);
+        } else if (!arg_desc.preconv || !*arg_desc.preconv) {
+            FcitxLog(ERROR, "Missing PreConv.");
+            return false;
+        }
+    }
+
     utarray_push_back(array, &arg_desc);
     return true;
 }
@@ -445,7 +657,8 @@ fxscanner_func_loader(UT_array *array, const char *value, FcitxAddonBuff *buff,
     }
     FcitxAddonFuncDesc func_desc = {
         .name = value,
-        .grp = grp
+        .grp = grp,
+        .vaarg_index = -1,
     };
     fxaddon_load_string(func_desc.name_id, grp, "Name");
     if (!func_desc.name_id) {
@@ -467,8 +680,7 @@ fxscanner_func_loader(UT_array *array, const char *value, FcitxAddonBuff *buff,
     func_desc.is_static = fxscanner_group_get_boolean(grp, "Static", false);
     utarray_init(&func_desc.args, &fxaddon_arg_icd);
     if (!fxscanner_load_entry_list(&func_desc.args, grp, "Arg", true,
-                                   fxscanner_arg_loader, grp) ||
-        utarray_len(&func_desc.args) > 10) {
+                                   fxscanner_arg_loader, &func_desc)) {
         utarray_done(&func_desc.args);
         return false;
     }
@@ -535,13 +747,14 @@ fxscanner_addon_load(FcitxAddonDesc *addon_desc, FILE *ifp)
  * write public
  **/
 
-static void
+static boolean
 fxscanner_write_header_public(FILE *ofp)
 {
     _write_str(ofp, fxscanner_header_str);
+    return true;
 }
 
-static void
+static boolean
 fxscanner_macro_write_public(FcitxAddonMacroDesc *macro_desc, FILE *ofp)
 {
     _write_strings(ofp,
@@ -555,13 +768,15 @@ fxscanner_macro_write_public(FcitxAddonMacroDesc *macro_desc, FILE *ofp)
         }
         _write_str(ofp, "\n");
     }
+    return true;
 }
 
-static void
+static boolean
 fxscanner_includes_write_public(UT_array *includes, FILE *ofp)
 {
     _write_str(ofp,
                "#include <stdint.h>\n"
+               "#include <stdarg.h>\n"
                "#include <fcitx-utils/utils.h>\n"
                "#include <fcitx/instance.h>\n"
                "#include <fcitx/addon.h>\n"
@@ -572,19 +787,21 @@ fxscanner_includes_write_public(UT_array *includes, FILE *ofp)
         _write_strings(ofp, "\n#include ", *p);
     }
     _write_str(ofp, "\n\n");
+    return true;
 }
 
-static void
+static boolean
 fxscanner_function_write_public(FcitxAddonFuncDesc *func_desc,
                                 FcitxAddonDesc *addon_desc, int id, FILE *ofp)
 {
+    const size_t arg_len = utarray_len(&func_desc->args);
     if (func_desc->cache && !func_desc->type) {
         FcitxLog(WARNING, "Cannot cache result of type void.");
         func_desc->cache = false;
     }
     if (func_desc->err_ret && !func_desc->type) {
         FcitxLog(WARNING, "Cannot set error return of type void.");
-        func_desc->err_ret = false;
+        func_desc->err_ret = NULL;
     }
     if (!func_desc->err_ret) {
         _write_strings(ofp, "DEFINE_GET_AND_INVOKE_FUNC(",
@@ -604,12 +821,21 @@ fxscanner_function_write_public(FcitxAddonFuncDesc *func_desc,
                    "static inline ",
                    func_desc->type ? func_desc->type : "void", "\n"
                    "Fcitx", addon_desc->prefix, func_desc->name,
+                   func_desc->vaarg_index >= 0 ? "V" : "",
                    "(FcitxInstance *instance");
     unsigned int i;
     FcitxAddonArgDesc *arg_desc;
-    for (i = 0;i < utarray_len(&func_desc->args);i++) {
+    for (i = 0;i < arg_len;i++) {
         arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&func_desc->args, i);
-        _write_strings(ofp, ", ", arg_desc->type, " _arg");
+        const char *type;
+        if (i == func_desc->vaarg_index || !arg_desc->preconv) {
+            type = arg_desc->type;
+        } else if (!arg_desc->preconv_type) {
+            continue;
+        } else {
+            type = arg_desc->preconv_type;
+        }
+        _write_strings(ofp, ", ", type, " _arg");
         fprintf(ofp, "%d", i);
     }
     _write_str(ofp,
@@ -624,18 +850,35 @@ fxscanner_function_write_public(FcitxAddonFuncDesc *func_desc,
                        ", result);\n"
                        "    _instance = instance;\n");
     } else if (func_desc->type) {
-        _write_str(ofp, "    void *result;\n");
+        _write_str(ofp, "    void *result = NULL;\n");
     }
-    for (i = 0;i < utarray_len(&func_desc->args);i++) {
+    for (i = 0;i < arg_len;i++) {
         arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&func_desc->args, i);
+        boolean has_preconv = false;
+        if (i != func_desc->vaarg_index &&
+            (arg_desc->preconv || arg_desc->preconv_type)) {
+            // FIXME ?
+            if (!fxscanner_write_deref(ofp, "    ", arg_desc->preconv,
+                                       arg_desc->type, func_desc,
+                                       NULL, NULL, "_arg", NULL, "__arg%d",
+                                       "_arg%d", i)) {
+                return false;
+            }
+            has_preconv = true;
+        }
         _write_str(ofp, "    FCITX_DEF_CAST_TO_PTR(arg");
         fprintf(ofp, "%d", i);
-        _write_strings(ofp, ", ", arg_desc->type, ", _arg");
+        _write_strings(ofp, ", ", arg_desc->type,
+                       has_preconv ? ", __arg" : ", _arg");
         fprintf(ofp, "%d", i);
         _write_str(ofp, ");\n");
     }
-    _write_str(ofp, "    FCITX_DEF_MODULE_ARGS(args");
-    for (i = 0;i < utarray_len(&func_desc->args);i++) {
+    if (utarray_len(&func_desc->args) <= FX_ARG_LEN) {
+        _write_str(ofp, "    FCITX_DEF_MODULE_ARGS(args");
+    } else {
+        _write_str(ofp, "    FCITX_DEF_MODULE_ARGS_LONG(args");
+    }
+    for (i = 0;i < arg_len;i++) {
         _write_str(ofp, ", arg");
         fprintf(ofp, "%d", i);
     }
@@ -651,13 +894,67 @@ fxscanner_function_write_public(FcitxAddonFuncDesc *func_desc,
         _write_strings(ofp, "    FCITX_RETURN_FROM_PTR(",
                        func_desc->type, ", result);\n");
     }
-    if (func_desc->enable_wrapper) {
-        _write_str(ofp, "}\n\n");
-    } else {
-        _write_str(ofp,
-                   "}\n"
-                   "#endif\n\n");
+    _write_str(ofp, "}\n\n");
+
+    if (func_desc->vaarg_index >= 0) {
+        _write_strings(ofp,
+                       "static inline ",
+                       func_desc->type ? func_desc->type : "void", "\n"
+                       "Fcitx", addon_desc->prefix, func_desc->name,
+                       "(FcitxInstance *instance");
+        unsigned int i;
+        FcitxAddonArgDesc *arg_desc;
+        int last_arg = -1;
+        for (i = 0;i < arg_len;i++) {
+            arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&func_desc->args, i);
+            const char *type;
+            if (i == func_desc->vaarg_index) {
+                continue;
+            } if (!arg_desc->preconv) {
+                type = arg_desc->type;
+            } else if (!arg_desc->preconv_type) {
+                continue;
+            } else {
+                type = arg_desc->preconv_type;
+            }
+            _write_strings(ofp, ", ", type, " _arg");
+            fprintf(ofp, "%d", i);
+            last_arg = i;
+        }
+        _write_strings(ofp,
+                       ", ...)\n"
+                       "{\n"
+                       "    va_list ap;\n"
+                       "    va_start(ap, ");
+        if (last_arg >= 0) {
+            fprintf(ofp, "_arg%d", last_arg);
+        } else {
+            _write_strings(ofp, "instance");
+        }
+        _write_strings(ofp, ");\n    ");
+        if (func_desc->type)
+            _write_strings(ofp, func_desc->type, " res = ");
+        _write_strings(ofp, "Fcitx", addon_desc->prefix, func_desc->name,
+                       "V(instance");
+        for (i = 0;i < arg_len;i++) {
+            arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&func_desc->args, i);
+            if (i == func_desc->vaarg_index) {
+                _write_strings(ofp, ", &ap");
+            } else if (!arg_desc->preconv || arg_desc->preconv_type) {
+                fprintf(ofp, ", _arg%d", i);
+            }
+        }
+        _write_strings(ofp, ");\n"
+                       "    va_end(ap);\n");
+        if (func_desc->type)
+            _write_strings(ofp, "return res;\n");
+        _write_strings(ofp, "}\n\n");
     }
+
+
+    if (!func_desc->enable_wrapper)
+        _write_str(ofp, "#endif\n\n");
+    return true;
 }
 
 static boolean
@@ -674,9 +971,12 @@ fxscanner_addon_write_public(FcitxAddonDesc *addon_desc, FILE *ofp)
     for (i = 0;i < utarray_len(&addon_desc->macros);i++) {
         macro_desc = (FcitxAddonMacroDesc*)_utarray_eltptr(
             &addon_desc->macros, i);
-        fxscanner_macro_write_public(macro_desc, ofp);
+        if (!fxscanner_macro_write_public(macro_desc, ofp)) {
+            return false;
+        }
     }
-    fxscanner_includes_write_public(&addon_desc->includes, ofp);
+    if (!fxscanner_includes_write_public(&addon_desc->includes, ofp))
+        return false;
     _write_strings(ofp,
                    "#ifdef __cplusplus\n"
                    "extern \"C\" {\n"
@@ -687,7 +987,9 @@ fxscanner_addon_write_public(FcitxAddonDesc *addon_desc, FILE *ofp)
     for (i = 0;i < utarray_len(&addon_desc->functions);i++) {
         func_desc = (FcitxAddonFuncDesc*)_utarray_eltptr(
             &addon_desc->functions, i);
-        fxscanner_function_write_public(func_desc, addon_desc, i, ofp);
+        if(!fxscanner_function_write_public(func_desc, addon_desc, i, ofp)) {
+            return false;
+        }
     }
     _write_str(ofp,
                "\n"
@@ -749,165 +1051,6 @@ fxscanner_arg_check_private(FcitxAddonArgDesc *arg_desc)
     return true;
 }
 
-typedef struct {
-    const char *key;
-    const char *value;
-} FxScannerTranslateMap;
-typedef boolean (*FxScannerTranslatorNumFilter)(FILE *ofp, int num, void *data);
-typedef struct {
-    int max;
-    FxScannerTranslatorNumFilter filter;
-    void *data;
-    const FxScannerTranslateMap *map;
-} FxScannerNumTranslate;
-
-static int
-fxscanner_num_translator(FILE *ofp, const char *str, void *data)
-{
-    const FxScannerNumTranslate *tran = data;
-    const FxScannerTranslateMap *map = tran->map;
-    for (;map->key;map++) {
-        int len = strlen(map->key);
-        if (strncmp(str, map->key, len) == 0) {
-            if (map->value)
-                _write_str(ofp, map->value);
-            return len;
-        }
-    }
-    char *end;
-    int id = strtol(str, &end, 10);
-    if (end <= str) {
-        FcitxLog(ERROR, "Cannot parse deref expression at %s", str);
-        return -1;
-    }
-    if (tran->max >= 0 && id >= tran->max) {
-        FcitxLog(ERROR, "%d in the deref expression is larger than "
-                 "the number of arguments.", id);
-        return -1;
-    }
-    if (!tran->filter || tran->filter(ofp, id, tran->data))
-        return end - str;
-    return -1;
-}
-
-static boolean
-fxscanner_write_translate_num(FILE *ofp, const char *str,
-                              const FxScannerNumTranslate *tran,
-                              const char *delim)
-{
-    return fxscanner_write_translate(ofp, str, fxscanner_num_translator,
-                                     (void*)(intptr_t)tran, delim);
-}
-
-typedef struct {
-    const FcitxAddonFuncDesc *func_desc;
-    const char *arg_prefix;
-    const char *deref_prefix;
-} FxScannerExpData;
-
-static boolean
-fxscanner_trans_exp_filter(FILE *ofp, int id, void *_data)
-{
-    const FxScannerExpData *data = _data;
-    FcitxAddonArgDesc *arg_desc;
-    arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&data->func_desc->args, id);
-    if (data->deref_prefix) {
-        if (!arg_desc->deref) {
-            _write_strings(ofp, "(", data->arg_prefix);
-        } else {
-            _write_strings(ofp, "(", data->deref_prefix);
-        }
-    } else {
-        if (arg_desc->deref && !arg_desc->deref_type) {
-            FcitxLog(ERROR, "Refer to void argument $%d in the expression", id);
-            return false;
-        }
-        _write_strings(ofp, "(", data->arg_prefix);
-    }
-    fprintf(ofp, "%d", id);
-    _write_str(ofp, ")");
-    return true;
-}
-
-static boolean
-fxscanner_write_translate_exp(FILE *ofp, const char *str,
-                              const FcitxAddonFuncDesc *func_desc,
-                              const char *self_str, const char *res_str,
-                              const char *arg_prefix, const char *deref_prefix)
-{
-    FxScannerExpData data = {
-        .func_desc = func_desc,
-        .arg_prefix = arg_prefix,
-        .deref_prefix = deref_prefix
-    };
-    FxScannerTranslateMap map[] = {{
-            .key = "<",
-            .value = self_str
-        }, {
-            .key = res_str ? "@" : NULL,
-            .value = res_str
-        }
-    };
-    FxScannerNumTranslate tran = {
-        .max = utarray_len(&func_desc->args),
-        .filter = fxscanner_trans_exp_filter,
-        .data = &data,
-        .map = map
-    };
-    return fxscanner_write_translate_num(ofp, str, &tran, "$");
-}
-
-static boolean
-fxscanner_write_deref(FILE *ofp, const char *prefix, const char *deref,
-                      const char *deref_type,
-                      const FcitxAddonFuncDesc *func_desc,
-                      const char *self_str, const char *res_str,
-                      const char *arg_prefix, const char *deref_prefix,
-                      const char *res_fmt, const char *orig_fmt, ...)
-{
-    va_list ap;
-    _write_strings(ofp, prefix);
-    if (deref_type) {
-        _write_strings(ofp, deref_type, " ");
-        va_start(ap, orig_fmt);
-        vfprintf(ofp, res_fmt, ap);
-        va_end(ap);
-        _write_strings(ofp, " = (");
-    }
-    int level;
-    if (fxscanner_parse_int(deref, &level)) {
-        if (!deref_type) {
-            FcitxLog(ERROR, "Trying to Deref %d level without a DerefType.",
-                     level);
-            return false;
-        }
-        if (level < -1) {
-            FcitxLog(ERROR, "Invalid Deref expression \"%d\"", level);
-            return false;
-        } else if (level == -1) {
-            _write_strings(ofp, "&");
-        } else {
-            int j;
-            for (j = 0;j < level;j++) {
-                _write_str(ofp, "*");
-            }
-        }
-        _write_strings(ofp, "(");
-        va_start(ap, orig_fmt);
-        vfprintf(ofp, orig_fmt, ap);
-        va_end(ap);
-        _write_strings(ofp, ")");
-    } else if (!fxscanner_write_translate_exp(ofp, deref, func_desc, self_str,
-                                              res_str, arg_prefix,
-                                              deref_prefix)) {
-        return false;
-    }
-    if (deref_type)
-        _write_strings(ofp, ")");
-    _write_strings(ofp, ";\n");
-    return true;
-}
-
 static boolean
 fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
                                  FcitxAddonDesc *addon_desc,
@@ -933,20 +1076,38 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
     /**
      * casting arguments to correct types
      **/
-    if (!utarray_len(&func_desc->args))
+    const size_t arg_len = utarray_len(&func_desc->args);
+    if (!arg_len) {
         _write_strings(ofp, "    FCITX_UNUSED(_args);\n");
+    } else if (arg_len > FX_ARG_LEN) {
+        _write_strings(ofp,
+                       "    if (fcitx_utils_ptr_to_size(_args.args["
+                       FX_ARG_LEN_STR " - 2]) != ");
+        fprintf(ofp, "%d", (int)(arg_len - FX_ARG_LEN + 2));
+        _write_strings(ofp,
+                       ")\n"
+                       "        return NULL;\n"
+                       "    void **__arg_extras = (void**)_args.args["
+                       FX_ARG_LEN_STR " - 1];\n");
+    }
     unsigned int i;
     FcitxAddonArgDesc *arg_desc;
-    for (i = 0;i < utarray_len(&func_desc->args);i++) {
+    for (i = 0;i < arg_len;i++) {
         arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&func_desc->args, i);
         if (!fxscanner_arg_check_private(arg_desc))
             return false;
         _write_strings(ofp, "    FCITX_DEF_CAST_FROM_PTR(", arg_desc->type,
                        arg_desc->deref ? ", _arg" : ", arg");
         fprintf(ofp, "%d", i);
-        _write_strings(ofp, ", _args.args[");
-        fprintf(ofp, "%d", i);
-        _write_strings(ofp, "]);\n");
+        if (i < FX_ARG_LEN - 2 || arg_len <= FX_ARG_LEN) {
+            _write_strings(ofp, ", _args.args[");
+            fprintf(ofp, "%d", i);
+            _write_strings(ofp, "]);\n");
+        } else {
+            _write_strings(ofp, ", __arg_extras[");
+            fprintf(ofp, "%d", i - FX_ARG_LEN + 2);
+            _write_strings(ofp, "]);\n");
+        }
     }
 
     /**
@@ -964,7 +1125,7 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
     /**
      * deref arguments
      **/
-    for (i = 0;i < utarray_len(&func_desc->args);i++) {
+    for (i = 0;i < arg_len;i++) {
         arg_desc = (FcitxAddonArgDesc*)_utarray_eltptr(&func_desc->args, i);
         if (arg_desc->deref) {
             if (!arg_desc->deref_type && func_desc->res_wrapfunc) {
@@ -973,8 +1134,8 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
                 return false;
             }
             if (!fxscanner_write_deref(ofp, "    ", arg_desc->deref,
-                                      arg_desc->deref_type, func_desc,
-                                      "(__self)", NULL, "arg", "_arg", "arg%d",
+                                       arg_desc->deref_type, func_desc,
+                                       "(__self)", NULL, "arg", "_arg", "arg%d",
                                        "_arg%d", i)) {
                 return false;
             }
@@ -1004,13 +1165,13 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
     if (func_desc->res_wrapfunc) {
         _write_strings(ofp, func_desc->res_wrapfunc, "(");
         if (!func_desc->is_static) {
-            if (utarray_len(&func_desc->args)) {
+            if (arg_len) {
                 _write_strings(ofp, "self, ");
             } else {
                 _write_strings(ofp, "self");
             }
         }
-        for (i = 0;i < utarray_len(&func_desc->args);i++) {
+        for (i = 0;i < arg_len;i++) {
             if (i != 0)
                 _write_strings(ofp, ", ");
             _write_strings(ofp, "arg");
@@ -1030,7 +1191,7 @@ fxscanner_function_write_private(FcitxAddonFuncDesc *func_desc,
         !fxscanner_write_deref(ofp, "    ", func_desc->res_deref,
                                func_desc->type, func_desc,"(self)", res_type ?
                                "(res)" : NULL, "arg", NULL, "_res", "res")) {
-            return false;
+        return false;
     }
     if (func_desc->type) {
         _write_strings(ofp, "    FCITX_RETURN_AS_PTR(", func_desc->type,

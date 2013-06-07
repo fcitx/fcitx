@@ -823,7 +823,7 @@ function(fcitx_download tgt_name url output)
   # This behavior is designed to be friendly for a build from cache with all
   # necessary files already downloaded so that a change in the
   # build options/url/checksum will not cause cmake to remove the target file
-  # if it has already be updated correctly.
+  # if it has already been updated correctly.
   add_custom_command(OUTPUT "${output}" DEPENDS "${tgt_name}")
 endfunction()
 

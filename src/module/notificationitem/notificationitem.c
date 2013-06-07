@@ -114,6 +114,10 @@ const char * _notification_item =
 #define NOTIFICATION_ITEM_DBUS_IFACE      "org.kde.StatusNotifierItem"
 #define NOTIFICATION_ITEM_DEFAULT_OBJ     "/StatusNotifierItem"
 
+#ifndef DBUS_TIMEOUT_USE_DEFAULT
+#  define DBUS_TIMEOUT_USE_DEFAULT (-1)
+#endif
+
 static void* FcitxNotificationItemCreate(struct _FcitxInstance* instance);
 static void FcitxNotificationItemDestroy(void* arg);
 
@@ -219,14 +223,15 @@ void* FcitxNotificationItemCreate(FcitxInstance* instance)
         dbus_message_append_args(message, DBUS_TYPE_STRING, &notificationWatcher, DBUS_TYPE_INVALID);
 
         DBusPendingCall* call = NULL;
-        dbus_bool_t reply = dbus_connection_send_with_reply(notificationitem->conn, message,
-                                                            &call,
-                                                            0);
+        dbus_bool_t reply =
+            dbus_connection_send_with_reply(notificationitem->conn, message,
+                                            &call, DBUS_TIMEOUT_USE_DEFAULT);
         if (reply == TRUE) {
             dbus_pending_call_set_notify(call,
                                          NotificationWatcherServiceExistCallback,
                                          notificationitem,
                                          NULL);
+            dbus_pending_call_unref(call);
         }
         dbus_connection_flush(notificationitem->conn);
         dbus_message_unref(message);
@@ -281,27 +286,32 @@ void FcitxNotificationItemRegister(FcitxNotificationItem* notificationitem)
         return;
     }
 
-    DBusMessage* message = dbus_message_new_method_call(NOTIFICATION_WATCHER_DBUS_ADDR,
-                                                        NOTIFICATION_WATCHER_DBUS_OBJ,
-                                                        NOTIFICATION_WATCHER_DBUS_IFACE,
-                                                        "RegisterStatusNotifierItem");
-    dbus_message_append_args(message, DBUS_TYPE_STRING, &notificationitem->serviceName, DBUS_TYPE_INVALID);
+    DBusMessage *message =
+        dbus_message_new_method_call(NOTIFICATION_WATCHER_DBUS_ADDR,
+                                     NOTIFICATION_WATCHER_DBUS_OBJ,
+                                     NOTIFICATION_WATCHER_DBUS_IFACE,
+                                     "RegisterStatusNotifierItem");
+    dbus_message_append_args(message,
+                             DBUS_TYPE_STRING, &notificationitem->serviceName,
+                             DBUS_TYPE_INVALID);
 
-    DBusPendingCall* call = NULL;
-    dbus_bool_t reply = dbus_connection_send_with_reply(notificationitem->conn, message,
-                                                        &call,
-                                                        0);
+    DBusPendingCall *call = NULL;
+    dbus_bool_t reply =
+        dbus_connection_send_with_reply(notificationitem->conn, message,
+                                        &call, DBUS_TIMEOUT_USE_DEFAULT);
+    dbus_message_unref(message);
     if (reply == TRUE) {
         dbus_pending_call_set_notify(call,
                                      FcitxNotificationItemRegisterSuccess,
                                      notificationitem,
                                      NULL);
+        dbus_pending_call_unref(call);
     }
 }
 
 void FcitxNotificationItemRegisterSuccess(DBusPendingCall *call, void *data)
 {
-    FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) data;
+    FcitxNotificationItem *notificationitem = (FcitxNotificationItem*)data;
     if (notificationitem->callback) {
         notificationitem->callback(notificationitem->data, true);
     }
@@ -309,22 +319,19 @@ void FcitxNotificationItemRegisterSuccess(DBusPendingCall *call, void *data)
 
 void NotificationWatcherServiceExistCallback(DBusPendingCall *call, void *data)
 {
-    FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) data;
-
-    DBusMessage* msg = dbus_pending_call_steal_reply(call);
+    FcitxNotificationItem *notificationitem = (FcitxNotificationItem*)data;
+    DBusMessage *msg = dbus_pending_call_steal_reply(call);
 
     if (msg) {
-        dbus_bool_t has;
+        dbus_bool_t has = FALSE;
         DBusError error;
         dbus_error_init(&error);
-        dbus_message_get_args(msg, &error, DBUS_TYPE_BOOLEAN, &has , DBUS_TYPE_INVALID);
-        FcitxNotificationItemSetAvailable(notificationitem, has);
+        dbus_message_get_args(msg, &error, DBUS_TYPE_BOOLEAN, &has,
+                              DBUS_TYPE_INVALID);
         dbus_message_unref(msg);
         dbus_error_free(&error);
+        FcitxNotificationItemSetAvailable(notificationitem, has);
     }
-
-    dbus_pending_call_cancel(call);
-    dbus_pending_call_unref(call);
 }
 
 DBusHandlerResult FcitxNotificationItemEventHandler (DBusConnection  *connection,

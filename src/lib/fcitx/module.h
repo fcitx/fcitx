@@ -106,7 +106,8 @@ extern "C" {
      * @return void*
      **/
     FCITX_DEPRECATED
-    void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
+    void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId,
+                                    FcitxModuleFunctionArg args);
 #define FcitxModuleInvokeVaArgs(addon, functionId, ARGV...)             \
     (FcitxModuleInvokeFunction(addon, functionId,                       \
                                (FcitxModuleFunctionArg){ {ARGV} }))
@@ -124,7 +125,7 @@ extern "C" {
     void* FcitxModuleInvokeFunctionByName(struct _FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args);
 #define FcitxModuleInvokeVaArgsByName(instance, name, functionId, ARGV...) \
     (FcitxModuleInvokeFunctionByName(instance, name, functionId,        \
-                               (FcitxModuleFunctionArg){ {ARGV} }))
+                                     (FcitxModuleFunctionArg){ {ARGV} }))
 
 /** call a function provides by other addon */
 #define InvokeFunction(INST, MODULE, FUNC, ARG)                         \
@@ -214,12 +215,18 @@ extern "C" {
         return FcitxModuleInvokeOnAddon(addon, func, &args);           \
     }
 
-#define FCITX_DEF_MODULE_ARGS(var, ARGV...)             \
+#define FCITX_DEF_MODULE_ARGS(var, ARGV...)     \
     FcitxModuleFunctionArg var = { {ARGV} }
-    /* void *__##var##_array[] = {ARGV};                                   \ */
-    /* size_t __##var##_length = sizeof(__##var##_array) / sizeof(void*);  \ */
-    /* FcitxModuleFunctionArg var[] = { { .n = __##var##_length,           \ */
-    /*                                    .args = __##var##_array } } */
+
+#define FCITX_DEF_MODULE_ARGS_LONG(var, arg0, arg1, arg2, arg3, arg4,   \
+                                   arg5, arg6, arg7, ARGV...)           \
+    const void *__fcitx_def_mod_arg_long_##var##_extras[] = {ARGV};     \
+    const size_t __fcitx_def_mod_arg_long_##var##_n =                   \
+        sizeof(__fcitx_def_mod_arg_long_##var##_extras) / sizeof(void*); \
+    FcitxModuleFunctionArg var =                                        \
+    { {arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7,                  \
+       fcitx_utils_size_to_ptr(__fcitx_def_mod_arg_long_##var##_n),     \
+       (void*)(intptr_t)(__fcitx_def_mod_arg_long_##var##_extras)} }
 
 #define FCITX_MODULE_FUNCTION_ARGS void *arg, FcitxModuleFunctionArg args
 #define FCITX_MODULE_SELF(NAME, TYPE) TYPE *NAME = (TYPE*)arg

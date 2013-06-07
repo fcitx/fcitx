@@ -40,6 +40,7 @@
 #ifdef ENABLE_OPENCC
 #include "chttrans-opencc.h"
 #endif
+#include "module/freedesktop-notify/fcitx-freedesktop-notify.h"
 
 #define TABLE_GBKS2T "gbks2t.tab"
 
@@ -161,30 +162,42 @@ void *ChttransCreate(FcitxInstance* instance)
 
 INPUT_RETURN_VALUE HotkeyToggleChttransState(void* arg)
 {
-    FcitxChttrans* transState = (FcitxChttrans*) arg;
+    FcitxChttrans *transState = (FcitxChttrans*)arg;
+    FcitxInstance *instance = transState->owner;
 
-    FcitxUIStatus *status = FcitxUIGetStatusByName(transState->owner, "chttrans");
+    FcitxUIStatus *status = FcitxUIGetStatusByName(instance, "chttrans");
     if (status->visible){
-        FcitxUIUpdateStatus(transState->owner, "chttrans");
+        FcitxUIUpdateStatus(instance, "chttrans");
+        boolean enabled = ChttransEnabled(transState);
+        FcitxFreeDesktopNotifyShowAddonTip(
+            instance, "fcitx-chttrans-toggle",
+            _("Simplified Chinese To Traditional Chinese"),
+            enabled ? "fcitx-chttrans-active" :
+            "fcitx-chttrans-inactive",
+            _("https://fcitx-im.org/wiki/Chttrans"),
+            enabled ? _("Traditional Chinese is enabled.") :
+            _("Simplified Chinese is enabled."));
         return IRV_DO_NOTHING;
-    }
-    else
+    } else {
         return IRV_TO_PROCESS;
+    }
 }
 
 void ToggleChttransState(void* arg)
 {
-    FcitxChttrans* transState = (FcitxChttrans*) arg;
+    FcitxChttrans *transState = (FcitxChttrans*)arg;
+    FcitxInstance *instance = transState->owner;
     FcitxIM* im = FcitxInstanceGetCurrentIM(transState->owner);
     if (!im)
         return;
     boolean enabled = !ChttransEnabled(transState);
 
     fcitx_string_map_set(transState->enableIM, im->uniqueName, enabled);
-    FcitxUISetStatusString(transState->owner, "chttrans",
-                           enabled ? _("Traditional Chinese") :  _("Simplified Chinese"),
+    FcitxUISetStatusString(instance, "chttrans",
+                           enabled ? _("Traditional Chinese") :
+                           _("Simplified Chinese"),
                           _("Toggle Simp/Trad Chinese Conversion"));
-    FcitxUIUpdateInputWindow(transState->owner);
+    FcitxUIUpdateInputWindow(instance);
     SaveChttransConfig(transState);
 }
 

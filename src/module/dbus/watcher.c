@@ -80,6 +80,7 @@ int main (int argc, char* argv[])
 
     dbus_bus_add_match(conn,
             "type='signal',"
+            "sender='" DBUS_SERVICE_DBUS "',"
             "interface='" DBUS_INTERFACE_DBUS "',"
             "path='" DBUS_PATH_DBUS "',"
             "member='NameOwnerChanged'",

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by Yichao Yu                                  *
+ *   Copyright (C) 2012~2013 by Yichao Yu                                  *
  *   yyc1992@gmail.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -24,11 +24,11 @@
 #include "handler-table.h"
 #include "objpool.h"
 
-typedef struct {
+struct _FcitxHandlerKey {
     int first;
     int last;
     UT_hash_handle hh;
-} FcitxHandlerKey;
+};
 
 typedef struct {
     int prev;
@@ -40,32 +40,49 @@ struct _FcitxHandlerTable {
     size_t obj_size;
     FcitxFreeContentFunc free_func;
     FcitxHandlerKey *keys;
-    FcitxObjPool* objs;
+    FcitxObjPool *objs;
+    FcitxHandlerKeyDataVTable key_vtable;
 };
 
 FCITX_EXPORT_API FcitxHandlerTable*
-fcitx_handler_table_new(size_t obj_size, FcitxFreeContentFunc free_func)
+fcitx_handler_table_new_with_keydata(
+    size_t obj_size, FcitxFreeContentFunc free_func,
+    const FcitxHandlerKeyDataVTable *key_vtable)
 {
     FcitxHandlerTable *table = fcitx_utils_new(FcitxHandlerTable);
     table->obj_size = obj_size;
     table->free_func = free_func;
     table->objs = fcitx_obj_pool_new(obj_size + sizeof(FcitxHandlerObj));
+    if (key_vtable) {
+        memcpy(&table->key_vtable, key_vtable,
+               sizeof(FcitxHandlerKeyDataVTable));
+    }
     return table;
 }
 
-static FcitxHandlerKey*
-fcitx_handler_table_key_struct(FcitxHandlerTable *table, size_t keysize,
+FCITX_EXPORT_API FcitxHandlerTable*
+(fcitx_handler_table_new)(size_t obj_size, FcitxFreeContentFunc free_func)
+{
+    return fcitx_handler_table_new_with_keydata(obj_size, free_func, NULL);
+}
+
+FCITX_EXPORT_API FcitxHandlerKey*
+(fcitx_handler_table_find_key)(FcitxHandlerTable *table, size_t keysize,
                                const void *key, boolean create)
 {
     FcitxHandlerKey *key_struct = NULL;
     HASH_FIND(hh, table->keys, key, keysize, key_struct);
     if (key_struct || !create)
         return key_struct;
-    key_struct = malloc(sizeof(FcitxHandlerKey) + keysize);
+    key_struct = malloc(sizeof(FcitxHandlerKey) + keysize +
+                        table->key_vtable.size + 1);
+    if (table->key_vtable.init)
+        table->key_vtable.init(key_struct + 1, table->key_vtable.owner);
     key_struct->first = key_struct->last = FCITX_OBJECT_POOL_INVALID_ID;
-    memcpy(key_struct + 1, key, keysize);
-    key = key_struct + 1;
-    HASH_ADD_KEYPTR(hh, table->keys, key, keysize, key_struct);
+    void *key_ptr = ((void*)(key_struct + 1)) + table->key_vtable.size;
+    memcpy(key_ptr, key, keysize);
+    ((char*)key_ptr)[keysize] = '\0';
+    HASH_ADD_KEYPTR(hh, table->keys, key_ptr, keysize, key_struct);
     return key_struct;
 }
 
@@ -76,11 +93,9 @@ fcitx_handler_table_get_obj(FcitxHandlerTable *table, int id)
 }
 
 FCITX_EXPORT_API int
-fcitx_handler_table_append(FcitxHandlerTable *table, size_t keysize,
-                           const void *key, const void *obj)
+fcitx_handler_key_append(FcitxHandlerTable *table, FcitxHandlerKey *key_struct,
+                         const void *obj)
 {
-    FcitxHandlerKey *key_struct;
-    key_struct = fcitx_handler_table_key_struct(table, keysize, key, true);
     int new_id;
     new_id = fcitx_obj_pool_alloc_id(table->objs);
     FcitxHandlerObj *obj_struct;
@@ -101,11 +116,18 @@ fcitx_handler_table_append(FcitxHandlerTable *table, size_t keysize,
 }
 
 FCITX_EXPORT_API int
-fcitx_handler_table_prepend(FcitxHandlerTable *table, size_t keysize,
-                            const void *key, const void *obj)
+fcitx_handler_table_append(FcitxHandlerTable *table, size_t keysize,
+                           const void *key, const void *obj)
 {
     FcitxHandlerKey *key_struct;
-    key_struct = fcitx_handler_table_key_struct(table, keysize, key, true);
+    key_struct = fcitx_handler_table_find_key(table, keysize, key, true);
+    return fcitx_handler_key_append(table, key_struct, obj);
+}
+
+FCITX_EXPORT_API int
+fcitx_handler_key_prepend(FcitxHandlerTable *table, FcitxHandlerKey *key_struct,
+                          const void *obj)
+{
     int new_id;
     new_id = fcitx_obj_pool_alloc_id(table->objs);
     FcitxHandlerObj *obj_struct;
@@ -125,6 +147,15 @@ fcitx_handler_table_prepend(FcitxHandlerTable *table, size_t keysize,
     return new_id;
 }
 
+FCITX_EXPORT_API int
+fcitx_handler_table_prepend(FcitxHandlerTable *table, size_t keysize,
+                            const void *key, const void *obj)
+{
+    FcitxHandlerKey *key_struct;
+    key_struct = fcitx_handler_table_find_key(table, keysize, key, true);
+    return fcitx_handler_key_prepend(table, key_struct, obj);
+}
+
 FCITX_EXPORT_API void*
 fcitx_handler_table_get_by_id(FcitxHandlerTable *table, int id)
 {
@@ -135,12 +166,65 @@ fcitx_handler_table_get_by_id(FcitxHandlerTable *table, int id)
     return obj_struct + 1;
 }
 
+FCITX_EXPORT_API void*
+fcitx_handler_key_get_data(FcitxHandlerTable *table, FcitxHandlerKey *key)
+{
+    FCITX_UNUSED(table);
+    if (fcitx_unlikely(!key))
+        return NULL;
+    return key + 1;
+}
+
+FCITX_EXPORT_API const void*
+fcitx_handler_key_get_key(FcitxHandlerTable *table, FcitxHandlerKey *key,
+                          size_t *len)
+{
+    if (fcitx_unlikely(!key)) {
+        if (len)
+            *len = 0;
+        return NULL;
+    }
+    if (len)
+        *len = key->hh.keylen;
+    return key->hh.key;
+}
+
+FCITX_EXPORT_API int
+fcitx_handler_key_first_id(FcitxHandlerTable *table, FcitxHandlerKey *key)
+{
+    if (fcitx_unlikely(!key))
+        return FCITX_OBJECT_POOL_INVALID_ID;
+    return key->first;
+}
+
+FCITX_EXPORT_API int
+fcitx_handler_key_last_id(FcitxHandlerTable *table, FcitxHandlerKey *key)
+{
+    if (fcitx_unlikely(!key))
+        return FCITX_OBJECT_POOL_INVALID_ID;
+    return key->last;
+}
+
+FCITX_EXPORT_API void*
+fcitx_handler_key_first(FcitxHandlerTable *table, FcitxHandlerKey *key)
+{
+    int id = fcitx_handler_key_first_id(table, key);
+    return fcitx_handler_table_get_by_id(table, id);
+}
+
+FCITX_EXPORT_API void*
+fcitx_handler_key_last(FcitxHandlerTable *table, FcitxHandlerKey *key)
+{
+    int id = fcitx_handler_key_last_id(table, key);
+    return fcitx_handler_table_get_by_id(table, id);
+}
+
 FCITX_EXPORT_API int
 fcitx_handler_table_first_id(FcitxHandlerTable *table, size_t keysize,
                              const void *key)
 {
     FcitxHandlerKey *key_struct;
-    key_struct = fcitx_handler_table_key_struct(table, keysize, key, false);
+    key_struct = fcitx_handler_table_find_key(table, keysize, key, false);
     if (!key_struct)
         return FCITX_OBJECT_POOL_INVALID_ID;
     return key_struct->first;
@@ -151,7 +235,7 @@ fcitx_handler_table_last_id(FcitxHandlerTable *table, size_t keysize,
                             const void *key)
 {
     FcitxHandlerKey *key_struct;
-    key_struct = fcitx_handler_table_key_struct(table, keysize, key, false);
+    key_struct = fcitx_handler_table_find_key(table, keysize, key, false);
     if (!key_struct)
         return FCITX_OBJECT_POOL_INVALID_ID;
     return key_struct->last;
@@ -242,6 +326,8 @@ fcitx_handler_table_free_key(FcitxHandlerTable *table,
         fcitx_obj_pool_free_id(table->objs, id);
     }
     HASH_DELETE(hh, table->keys, key_struct);
+    if (table->key_vtable.free)
+        table->key_vtable.free(key_struct + 1);
     free(key_struct);
 }
 
@@ -250,7 +336,7 @@ fcitx_handler_table_remove_key(FcitxHandlerTable *table, size_t keysize,
                                const void *key)
 {
     FcitxHandlerKey *key_struct;
-    key_struct = fcitx_handler_table_key_struct(table, keysize, key, false);
+    key_struct = fcitx_handler_table_find_key(table, keysize, key, false);
     if (!key_struct)
         return;
     fcitx_handler_table_free_key(table, key_struct);

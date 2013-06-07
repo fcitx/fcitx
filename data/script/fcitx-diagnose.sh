@@ -23,6 +23,26 @@ fi
 # utility
 #############################
 
+array_push() {
+    eval "${1}"'=("${'"${1}"'[@]}" "${@:2}")'
+}
+
+_find_file() {
+    local "${1}"
+    eval "${2}"'=()'
+    while IFS= read -r -d '' "${1}"; do
+        array_push "${2}" "${!1}"
+    done < <(find "${@:3}" -print0)
+}
+
+find_file() {
+    if [[ ${1} = __find_file_line ]]; then
+        _find_file __find_file_line2 "$@"
+    else
+        _find_file __find_file_line "$@"
+    fi
+}
+
 str_match_glob() {
     local pattern=$1
     local str=$2
@@ -49,6 +69,14 @@ add_and_check_file() {
     [ ! -z "${!varname}" ] && return 1
     eval "${varname}=1"
     return 0
+}
+
+unique_file_array() {
+    for f in "${@:3}"; do
+        add_and_check_file "${1}" "${f}" && {
+            array_push "${2}" "${f}"
+        }
+    done
 }
 
 print_array() {
@@ -131,6 +159,51 @@ get_locale() {
     echo "POSIX"
 }
 
+if type dbus-send &> /dev/null; then
+    dbus_get_name_owner() {
+        local address
+        address=$(dbus-send --print-reply=literal --dest=org.freedesktop.DBus \
+            /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner \
+            "string:$1" 2> /dev/null) || return 1
+        echo -n "${address##* }"
+    }
+    dbus_get_pid() {
+        local pid
+        pid=$(dbus-send --print-reply=literal --dest=org.freedesktop.DBus \
+            /org/freedesktop/DBus org.freedesktop.DBus.GetConnectionUnixProcessID \
+            "string:$1" 2> /dev/null) || return 1
+        echo -n "${pid##* }"
+    }
+elif qdbus_exe=$(which qdbus 2> /dev/null) || \
+    qdbus_exe=$(which qdbus-qt4 2> /dev/null); then
+    dbus_get_name_owner() {
+        local address
+        "${qdbus_exe}" org.freedesktop.DBus /org/freedesktop/DBus \
+            org.freedesktop.DBus.GetNameOwner "$1" 2> /dev/null
+    }
+    dbus_get_pid() {
+        "${qdbus_exe}" org.freedesktop.DBus /org/freedesktop/DBus \
+            org.freedesktop.DBus.GetConnectionUnixProcessID "$1" 2> /dev/null
+    }
+else
+    dbus_get_name_owner() {
+        return 1
+    }
+    dbus_get_pid() {
+        return 1
+    }
+fi
+
+print_process_info() {
+    ps -o pid=,args= --pid "$1" 2> /dev/null && return
+    cmdline=''
+    [[ -d /proc/$1 ]] && {
+        cmdline=$(cat /proc/$1/cmdline) || cmdline=$(cat /proc/$1/comm) || \
+            cmdline=$(readlink /proc/$1/exe)
+    } 2> /dev/null
+    echo "$1 ${cmdline}"
+}
+
 _detectDE_XDG_CURRENT() {
     case "${XDG_CURRENT_DESKTOP}" in
         GNOME)
@@ -161,9 +234,7 @@ _detectDE_classic() {
         DE=gnome
     elif [ x"$MATE_DESKTOP_SESSION_ID" != x"" ]; then
         DE=mate
-    elif $(dbus-send --print-reply --dest=org.freedesktop.DBus \
-        /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner \
-        string:org.gnome.SessionManager > /dev/null 2>&1); then
+    elif dbus_get_name_owner org.gnome.SessionManager > /dev/null; then
         DE=gnome
     elif xprop -root _DT_SAVE_MODE 2> /dev/null | \
         grep ' = \"xfce4\"$' >/dev/null 2>&1; then
@@ -209,13 +280,22 @@ detectDE() {
     unset GREP_OPTIONS
 
     _detectDE_XDG_CURRENT || _detectDE_classic || \
-        _detectDE_SESSION || _detectDE_uname
+        _detectDE_SESSION || _detectDE_uname || {
+        DE=generic
+    }
     if [ x"$DE" = x"gnome" ]; then
         # gnome-default-applications-properties is only available in GNOME 2.x
         # but not in GNOME 3.x
         which gnome-default-applications-properties > /dev/null 2>&1 || \
             DE="gnome3"
+        which gnome-shell &> /dev/null && DE="gnome3"
     fi
+}
+
+maybe_gnome3() {
+    [[ $DE = gnome3 ]] && return 0
+    [[ $DE = generic ]] && which gnome-shell &> /dev/null && return 0
+    return 1
 }
 
 detectDE
@@ -360,9 +440,7 @@ write_paragraph() {
                 echo "${whole_prefix}${line}"
             }
         done | replace_reset "${code}"
-    } <<EOF
-${str}
-EOF
+    } <<< "${str}"
     [ -z "${code}" ] || print_tty_ctrl "0"
     __need_blank_line=1
 }
@@ -391,7 +469,11 @@ write_quote_str() {
 }
 
 write_quote_cmd() {
-    write_quote_str "$("$@" 2>&1)"
+    local cmd_output_str cmd_ret_val
+    cmd_output_str="$("$@" 2>&1)"
+    cmd_ret_val=$?
+    write_quote_str "${cmd_output_str}"
+    return $cmd_ret_val
 }
 
 write_title() {
@@ -450,19 +532,33 @@ set_env_link() {
     fmt=$(_ 'Please set environment variable ${env_name} to "${value}" using the tool your distribution provides or add ${1} to your ${2}. See ${link}.')
     local link
     link=$(print_link \
-        "$(_ "Input Method Related Environment Variables: ")${env_name}" \
-        "${wiki_url}$(_ "/Input_method_related_environment_variables")#${env_name}")
+        "$(_ 'Input Method Related Environment Variables: ')${env_name}" \
+        "${wiki_url}$(_ '/Input_method_related_environment_variables')#${env_name}")
     write_error_eval "${fmt}" "$(code_inline "export ${env_name}=${value}")" \
         "$(code_inline '~/.xprofile')"
 }
 
+gnome_36_check_gsettings() {
+    gsettings get org.gnome.settings-daemon.plugins.keyboard \
+        active 2> /dev/null || return 1
+}
+
 gnome_36_link() {
-    local link
+    # Do nothing if the DE is not gnome3
+    maybe_gnome3 || return 1
+    local link ibus_activated fmt
     link=$(print_link \
-        "$(_ "Note for GNOME Later than 3.6")" \
-        "${wiki_url}$(_ "/Note_for_GNOME_Later_than_3.6")")
-    local fmt
-    fmt=$(_ 'If you are using ${1}, you may want to uninstall ${2} or remove ${3} to be able to use any input method other than ${2}. See ${link} for more detail as well as alternative solutions.')
+        "$(_ 'Note for GNOME Later than 3.6')" \
+        "${wiki_url}$(_ '/Note_for_GNOME_Later_than_3.6')")
+
+    # Check if the gsettings key exists
+    if ibus_activated=$(gnome_36_check_gsettings); then
+        [[ $ibus_activated = 'false' ]] && return 1
+        g36_disable_ibus=$(code_inline 'gsettings set org.gnome.settings-daemon.plugins.keyboard active false')
+        fmt=$(_ 'If you are using ${1}, you may want to uninstall ${2}, remove ${3} or use the command ${g36_disable_ibus} to disable IBus integration in order to use any input method other than ${2}. See ${link} for more detail.')
+    else
+        fmt=$(_ 'If you are using ${1}, you may want to uninstall ${2} or remove ${3} in order to use any input method other than ${2}. See ${link} for more detail as well as alternative solutions.')
+    fi
     write_error_eval "${fmt}" "$(code_inline 'gnome>=3.6')" \
         "$(code_inline 'ibus')" "$(code_inline 'ibus-daemon')"
 }
@@ -472,12 +568,12 @@ no_xim_link() {
     fmt=$(_ 'To see some application specific problems you may have when using xim, check ${link1}. For other more general problems of using XIM including application freezing, see ${link2}.')
     local link1
     link1=$(print_link \
-        "$(_ "Hall of Shame for Linux IME Support")" \
-        "${wiki_url}$(_ "/Hall_of_Shame_for_Linux_IME_Support")")
+        "$(_ 'Hall of Shame for Linux IME Support')" \
+        "${wiki_url}$(_ '/Hall_of_Shame_for_Linux_IME_Support')")
     local link2
     link2=$(print_link \
-        "$(_ "here")" \
-        "${wiki_url}$(_ "/XIM")")
+        "$(_ 'here')" \
+        "${wiki_url}$(_ '/XIM')")
     write_error_eval "${fmt}"
 }
 
@@ -489,22 +585,15 @@ no_xim_link() {
 ldpaths=()
 init_ld_paths() {
     local IFS=$'\n'
-    local _ldpaths=($(ldconfig -p 2> /dev/null | grep '=>' | \
-        sed -e 's:.* => \(.*\)/[^/]*$:\1:g' | sort -u)
-        /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
-        /usr/local/lib /usr/local/lib32 /usr/local/lib64)
-    local path
     ldpaths=()
-    for path in "${_ldpaths[@]}"; do
-        [ -d "${path}" ] && add_and_check_file ldpath "${path}" && {
-            ldpaths=("${ldpaths[@]}" "${path}")
-        }
-    done
+    unique_file_array ldpath ldpaths $(ldconfig -p 2> /dev/null | grep '=>' | \
+        sed -e 's:.* => \(.*\)/[^/]*$:\1:g' | sort -u) \
+        {/usr,,/usr/local}/lib*
 }
 init_ld_paths
 
 check_system() {
-    write_title 1 "$(_ "System Info.")"
+    write_title 1 "$(_ 'System Info:')"
     write_order_list "$(code_inline 'uname -a'):"
     if type uname &> /dev/null; then
         write_quote_cmd uname -a
@@ -532,8 +621,8 @@ check_system() {
     else
         write_paragraph "$(print_not_found '/etc/os-release')"
     fi
-    write_order_list "$(_ "Desktop Environment.")"
-    if [ -z "$DE" ]; then
+    write_order_list "$(_ 'Desktop Environment:')"
+    if [[ -z $DE ]] || [[ $DE = generic ]]; then
         write_eval "$(_ 'Cannot determine desktop environment.')"
     else
         write_eval "$(_ 'Desktop environment is ${1}.')" \
@@ -542,31 +631,37 @@ check_system() {
 }
 
 check_env() {
-    write_title 1 "$(_ "Environment.")"
+    write_title 1 "$(_ 'Environment:')"
     write_order_list "DISPLAY:"
     write_quote_str "DISPLAY='${DISPLAY}'"
-    write_order_list "$(_ "Keyboard Layout:")"
+    write_order_list "$(_ 'Keyboard Layout:')"
     increase_cur_level 1
-    write_order_list "$(code_inline setxkbmap)"
+    write_order_list "$(code_inline setxkbmap):"
     if type setxkbmap &> /dev/null; then
         write_quote_cmd setxkbmap -print
     else
         write_paragraph "$(print_not_found 'setxkbmap')"
     fi
-    write_order_list "$(code_inline xprop)"
+    write_order_list "$(code_inline xprop):"
     if type xprop &> /dev/null; then
         write_quote_cmd xprop -root _XKB_RULES_NAMES
     else
         write_paragraph "$(print_not_found 'xprop')"
     fi
     increase_cur_level -1
-    write_order_list "$(_ "Locale:")"
+    write_order_list "$(_ 'Locale:')"
     if type locale &> /dev/null; then
         increase_cur_level 1
-        write_order_list "$(_ "Current locale:")"
-        write_quote_cmd locale
-        write_order_list "$(_ "All locale:")"
-        write_quote_cmd locale -a
+        write_order_list "$(_ 'All locale:')"
+        write_quote_str "$(locale -a 2> /dev/null)"
+        write_order_list "$(_ 'Current locale:')"
+        write_quote_str "$(locale 2> /dev/null)"
+        locale_error="$(locale 2>&1 > /dev/null)"
+        if [[ -n $locale_error ]]; then
+            write_error_eval "$(_ 'Error occurs when running ${1}. Please check your locale settings.')" \
+            "$(code_inline "locale")"
+            write_quote_str "${locale_error}"
+        fi
         increase_cur_level -1
     else
         write_paragraph "$(print_not_found 'locale')"
@@ -575,10 +670,10 @@ check_env() {
 
 check_fcitx() {
     local IFS=$'\n'
-    write_title 1 "$(_ "Fcitx State.")"
+    write_title 1 "$(_ 'Fcitx State:')"
     write_order_list "$(_ 'executable:')"
     if ! fcitx_exe="$(which fcitx 2> /dev/null)"; then
-        write_error "$(_ "Cannot find fcitx executable!")"
+        write_error "$(_ 'Cannot find fcitx executable!')"
         __need_blank_line=0
         write_error_eval "$(_ 'Please check ${1} for how to install fcitx.')" \
             "$(beginner_guide_link)"
@@ -589,20 +684,18 @@ check_fcitx() {
     write_order_list "$(_ 'version:')"
     version=$(fcitx -v 2> /dev/null | \
         sed -e 's/.*fcitx version: \([0-9.]*\).*/\1/g')
-    write_eval "$(_ 'Fcitx version: ${version}')"
+    write_eval "$(_ 'Fcitx version: ${1}')" "$(code_inline "${version}")"
     write_order_list "$(_ 'process:')"
     psoutput=$(ps -Ao pid,comm)
     process=()
     while read line; do
         if [[ $line =~ ^([0-9]*)\ .*fcitx.* ]]; then
             [ "${BASH_REMATCH[1]}" = "$$" ] && continue
-            process=("${process[@]}" "${line}")
+            array_push process "${line}"
         fi
-    done <<EOF
-${psoutput}
-EOF
+    done <<< "${psoutput}"
     if ! ((${#process[@]})); then
-        write_error "$(_ "Fcitx is not running.")"
+        write_error "$(_ 'Fcitx is not running.')"
         __need_blank_line=0
         write_error_eval "$(_ 'Please check the Configure link of your distribution in ${1} for how to setup fcitx autostart.')" "$(beginner_guide_link)"
         return 1
@@ -617,7 +710,7 @@ EOF
     write_order_list "$(code_inline 'fcitx-remote'):"
     if type fcitx-remote &> /dev/null; then
         if ! fcitx-remote &> /dev/null; then
-            write_error "$(_ "Cannot connect to fcitx correctly.")"
+            write_error "$(_ 'Cannot connect to fcitx correctly.')"
         else
             write_eval "$(_ '${1} works properly.')" \
                 "$(code_inline 'fcitx-remote')"
@@ -663,7 +756,7 @@ _check_config_gtk() {
     if ! config_gtk="$(which "fcitx-config-gtk${version}" 2> /dev/null)"; then
         if ! _check_config_gtk_version "${version}"; then
             write_error_eval \
-                "$(_ "Config GUI for gtk${1} not found.")" "${version}"
+                "$(_ 'Config GUI for gtk${1} not found.')" "${version}"
             return 1
         else
             config_gtk=$(_find_config_gtk)
@@ -694,10 +787,10 @@ _check_config_kcm() {
 
 check_config_ui() {
     local IFS=$'\n'
-    write_title 1 "$(_ "Fcitx Configure UI.")"
+    write_title 1 "$(_ 'Fcitx Configure UI:')"
     write_order_list "$(_ 'Config Tool Wrapper:')"
     if ! fcitx_configtool="$(which fcitx-configtool 2> /dev/null)"; then
-        write_error "$(_ "Cannot find fcitx-configtool executable!")"
+        write_error "$(_ 'Cannot find fcitx-configtool executable!')"
     else
         write_eval "$(_ 'Found fcitx-configtool at ${1}.')" \
             "$(code_inline "${fcitx_configtool}")"
@@ -731,7 +824,7 @@ _env_incorrect() {
 }
 
 check_xim() {
-    write_title 2 "Xim."
+    write_title 2 "Xim:"
     xim_name=fcitx
     write_order_list "$(code_inline '${XMODIFIERS}'):"
     if [ -z "${XMODIFIERS}" ]; then
@@ -751,7 +844,7 @@ check_xim() {
         fi
         if [ "${xim_name}" = "ibus" ]; then
             __need_blank_line=0
-            gnome_36_link
+            gnome_36_link || __need_blank_line=1
         fi
     fi
     write_eval "$(_ 'Xim Server Name from Environment variable is ${1}.')" \
@@ -766,24 +859,24 @@ check_xim() {
         if [[ ${xprop} =~ ^${atom_name}\ @server=(.*)$ ]]; then
             xim_server_name="${BASH_REMATCH[1]}"
             if [ "${xim_server_name}" = "${xim_name}" ]; then
-                write_paragraph "$(_ "Xim server name is the same with that set in the environment variable.")"
+                write_paragraph "$(_ 'Xim server name is the same with that set in the environment variable.')"
             else
                 write_error_eval "$(_ 'Xim server name: "${1}" is different from that set in the environment variable: "${2}".')" \
                     "${xim_server_name}" "${xim_name}"
             fi
         else
-            write_error "$(_ "Cannot find xim_server on root window.")"
+            write_error "$(_ 'Cannot find xim_server on root window.')"
         fi
     fi
     local _LC_CTYPE=$(get_locale CTYPE)
     if type emacs &> /dev/null &&
         ! str_match_regex '^(zh|ja|ko)([._].*|)$' "${_LC_CTYPE}"; then
-        write_order_list "$(_ "XIM for Emacs:")"
+        write_order_list "$(_ 'XIM for Emacs:')"
         write_error_eval \
             "$(_ 'Your LC_CTYPE is set to ${1} instead of one of zh, ja, ko. You may not be able to use input method in emacs because of an really old emacs bug that upstream refuse to fix for years.')" "${_LC_CTYPE}"
     fi
     if ! str_match_regex '.[Uu][Tt][Ff]-?8$' "${_LC_CTYPE}"; then
-        write_order_list "$(_ "XIM encoding:")"
+        write_order_list "$(_ 'XIM encoding:')"
         write_error_eval \
             "$(_ 'Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have trouble committing strings using XIM.')" "${_LC_CTYPE}"
     fi
@@ -810,75 +903,174 @@ _check_toolkit_env() {
                 "${name}"
             if [ "${!env_name}" = "ibus" ] && [ "${name}" = 'qt' ]; then
                 __need_blank_line=0
-                gnome_36_link
+                gnome_36_link || __need_blank_line=1
             fi
         fi
         set_env_link "${env_name}" 'fcitx'
     fi
 }
 
+find_qt_modules() {
+    local qt_dirs _qt_modules
+    find_file qt_dirs -H "${ldpaths[@]}" -type d -name '*qt*'
+    find_file _qt_modules -H "${qt_dirs[@]}" -type f -iname '*fcitx*.so'
+    qt_modules=()
+    unique_file_array qt_modules qt_modules "${_qt_modules[@]}"
+}
+
 check_qt() {
-    write_title 2 "Qt."
+    write_title 2 "Qt:"
     _check_toolkit_env QT_IM_MODULE qt
-    qtimmodule_found=''
+    find_qt_modules
+    qt4_module_found=''
+    qt5_module_found=''
     write_order_list "$(_ 'Qt IM module files:')"
-    echo
-    for path in "${ldpaths[@]}"; do
-        # the {/*,} here is for lib/$ARCH/ when output of ldconfig
-        # failed to include it
-        for file in "${path}"{/*,}/qt{,4}/**/*fcitx*.so; do
-            if [[ ${file} =~ (im-fcitx|inputmethods) ]]; then
-                __need_blank_line=0
-                add_and_check_file qt "${file}" && {
-                    write_eval "$(_ 'Found fcitx qt im module: ${1}.')" \
-                        "$(code_inline "${file}")"
-                }
-                qtimmodule_found=1
-            else
-                __need_blank_line=0
-                add_and_check_file qt "${file}" && {
-                    write_eval \
-                        "$(_ 'Found unknown fcitx qt module: ${1}.')" \
-                        "$(code_inline "${file}")"
-                }
-            fi
-        done
-    done
-    if [ -z "${qtimmodule_found}" ]; then
+    for file in "${qt_modules[@]}"; do
+        basename=$(basename "${file}")
         __need_blank_line=0
-        write_error "$(_ "Cannot find fcitx input method module for qt.")"
+        if [[ ${basename} =~ im-fcitx ]] &&
+            [[ ${file} =~ plugins/inputmethods ]]; then
+            write_eval "$(_ 'Found fcitx im module for ${2}: ${1}.')" \
+                "$(code_inline "${file}")" Qt4
+            qt4_module_found=1
+        elif [[ ${basename} =~ fcitxplatforminputcontextplugin ]] &&
+            [[ ${file} =~ plugins/platforminputcontexts ]]; then
+            write_eval "$(_ 'Found fcitx im module for ${2}: ${1}.')" \
+                "$(code_inline "${file}")" Qt5
+            qt5_module_found=1
+        elif [[ ${file} =~ /fcitx/qt/ ]]; then
+            write_eval "$(_ 'Found fcitx qt module: ${1}.')" \
+                "$(code_inline "${file}")"
+        else
+            write_eval "$(_ 'Found unknown fcitx qt module: ${1}.')" \
+                "$(code_inline "${file}")"
+        fi
+    done
+    if [ -z "${qt4_module_found}" ]; then
+        __need_blank_line=0
+        write_error "$(_ 'Cannot find fcitx input method module for ${1}.')" Qt4
+    fi
+    if [ -z "${qt5_module_found}" ]; then
+        __need_blank_line=0
+        write_error "$(_ 'Cannot find fcitx input method module for ${1}.')" Qt5
     fi
 }
 
-check_gtk_immodule() {
-    local version="$1"
-    local IFS=$'\n'
-    local query_immodule
-    local _query_immodule=($(find_in_path "gtk-query-immodules-${version}*"))
-    local module_found=0
-    local fcitx_gtk
-    write_order_list "gtk ${version}:"
-    [ ${#_query_immodule[@]} = 0 ] && {
-        write_error_eval \
-            "$(_ "Cannot find gtk-query-immodules for gtk ${1}")" \
-            "${version}"
-        return 1
+init_gtk_dirs() {
+    local gtk_dirs_name="__gtk${version}_dirs"
+    eval '((${#'"${gtk_dirs_name}"'[@]}))' || {
+        find_file "${gtk_dirs_name}" -H "${ldpaths[@]}" -type d \
+            '(' -name "gtk-${version}*" -o -name 'gtk' ')'
     }
-    local f
-    for f in "${_query_immodule[@]}"; do
-        add_and_check_file "gtk_immodule_${version}" "${f}" && {
-            write_eval \
-                "$(_ 'Found gtk-query-immodules for gtk ${1} at ${2}.')" \
-                "${version}" "$(code_inline "${f}")"
-            if fcitx_gtk=$("$f" | grep fcitx); then
-                module_found=1
-                __need_blank_line=0
-                write_eval "$(_ 'Found fcitx im modules for gtk ${1}.')" \
-                    "${version}"
-                write_quote_str "${fcitx_gtk}"
-            fi
+    eval 'gtk_dirs=("${'"${gtk_dirs_name}"'[@]}")'
+}
+
+find_gtk_query_immodules() {
+    local version="$1"
+    init_gtk_dirs "${version}"
+    local IFS=$'\n'
+    local query_im_lib
+    find_file query_im_lib -H "${gtk_dirs[@]}" -type f \
+        -name "gtk-query-immodules-${version}*"
+    gtk_query_immodules=()
+    unique_file_array "gtk_query_immodules_${version}" gtk_query_immodules \
+        $(find_in_path "gtk-query-immodules-${version}*") \
+        "${query_im_lib[@]}"
+}
+
+reg_gtk_query_output() {
+    local version="$1"
+    while read line; do
+        regex='"(/[^"]*\.so)"'
+        [[ $line =~ $regex ]] || continue
+        file=${BASH_REMATCH[1]}
+        add_and_check_file "__gtk_immodule_files_${version}" "${file}" && {
+            array_push "gtk_immodule_files_${version}" "${file}"
+        }
+    done <<< "$2"
+}
+
+check_gtk_immodule_file() {
+    local version=$1
+    local gtk_immodule_files
+    local all_exists=1
+    write_order_list "gtk ${version}:"
+    eval 'gtk_immodule_files=("${gtk_immodule_files_'"${version}"'[@]}")'
+    for file in "${gtk_immodule_files[@]}"; do
+        [[ -f "${file}" ]] || {
+            all_exists=0
+            write_error_eval \
+                "$(_ 'Gtk ${1} immodule file ${2} does not exist.')" \
+                "${version}" \
+                "${file}"
         }
     done
+    ((all_exists)) && \
+        write_eval "$(_ 'All found Gtk ${1} immodule files exist.')" \
+        "${version}"
+}
+
+check_gtk_query_immodule() {
+    local version="$1"
+    local IFS=$'\n'
+    find_gtk_query_immodules "${version}"
+    local module_found=0
+    local query_found=0
+    write_order_list "gtk ${version}:"
+
+    for query_immodule in "${gtk_query_immodules[@]}"; do
+        query_output=$("${query_immodule}")
+        real_version=''
+        version_line=''
+        while read line; do
+            regex='[Cc]reated.*gtk-query-immodules.*gtk\+-*([0-9][^ ]+)$'
+            [[ $line =~ $regex ]] && {
+                real_version="${BASH_REMATCH[1]}"
+                version_line="${line}"
+                break
+            }
+        done <<< "${query_output}"
+        if [[ -n $version_line ]]; then
+            regex="^${version}\."
+            if [[ $real_version =~ $regex ]]; then
+                query_found=1
+                write_command=write_eval
+            else
+                write_command=write_error_eval
+            fi
+            "$write_command" \
+                "$(_ 'Found ${3} for gtk ${1} at ${2}.')" \
+                "$(code_inline "${real_version}")" \
+                "$(code_inline "${query_immodule}")" \
+                "$(code_inline gtk-query-immodules)"
+            __need_blank_line=0
+            write_eval "$(_ 'Version Line:')"
+            write_quote_str "${version_line}"
+        else
+            write_eval "$(_ 'Found ${2} for unknow gtk version at ${1}.')" \
+                "$(code_inline "${query_immodule}")" \
+                "$(code_inline gtk-query-immodules)"
+            real_version=${version}
+        fi
+        if fcitx_gtk=$(grep fcitx <<< "${query_output}"); then
+            module_found=1
+            __need_blank_line=0
+            write_eval "$(_ 'Found fcitx im modules for gtk ${1}.')" \
+                "$(code_inline ${real_version})"
+            write_quote_str "${fcitx_gtk}"
+            reg_gtk_query_output "${version}" "${fcitx_gtk}"
+        else
+            write_error_eval \
+                "$(_ 'Failed to find fcitx in the output of ${1}')" \
+                "$(code_inline "${query_immodule}")"
+        fi
+    done
+    ((query_found)) || {
+        write_error_eval \
+            "$(_ 'Cannot ${2} for gtk ${1}')" \
+            "${version}" \
+            "$(code_inline gtk-query-immodules)"
+    }
     ((module_found)) || {
         write_error_eval \
             "$(_ 'Cannot find fcitx im module for gtk ${1}.')" \
@@ -886,32 +1078,82 @@ check_gtk_immodule() {
     }
 }
 
+find_gtk_immodules_cache() {
+    local version="$1"
+    init_gtk_dirs "${version}"
+    local IFS=$'\n'
+    local __gtk_immodule_cache
+    find_file __gtk_immodule_cache -H \
+        "${gtk_dirs[@]}" /etc/gtk-${version}* -type f \
+        '(' -name '*gtk.immodules*' -o -name '*immodules.cache*' ')'
+    unique_file_array "gtk_immodules_cache_${version}" "$2" \
+        "${__gtk_immodule_cache[@]}"
+}
+
 check_gtk_immodule_cache() {
     local version="$1"
     local IFS=$'\n'
     local cache_found=0
-    local fcitx_gtk
+    local module_found=0
+    local version_correct=0
     write_order_list "gtk ${version}:"
-    for path in /etc "${ldpaths[@]}"; do
-        # the {/*,} here is for lib/$ARCH/ when output of ldconfig
-        # failed to include it
-        for file in "${path}"{/*,}/gtk{-${version}{.0,},}{/**,}/*immodules*; do
-            [ -f "${file}" ] || continue
-            add_and_check_file "gtk_immodule_cache_${version}" "${file}" || {
-                continue
+    local gtk_immodules_cache
+    find_gtk_immodules_cache "${version}" gtk_immodules_cache
+
+    for cache in "${gtk_immodules_cache[@]}"; do
+        cache_content=$(cat "${cache}")
+        real_version=''
+        version_line=''
+        version_correct=0
+        while read line; do
+            regex='[Cc]reated.*gtk-query-immodules.*gtk\+-*([0-9][^ ]+)$'
+            [[ $line =~ $regex ]] && {
+                real_version="${BASH_REMATCH[1]}"
+                version_line="${line}"
+                break
             }
-            write_eval "$(_ 'Found immodules cache for gtk ${1} ${2}.')" \
-                "${version}" "$(code_inline "${file}")"
-            if fcitx_gtk=$(grep fcitx "${file}"); then
+        done <<< "${cache_content}"
+        if [[ -n $version_line ]]; then
+            regex="^${version}\."
+            if [[ $real_version =~ $regex ]]; then
                 cache_found=1
-                __need_blank_line=0
-                write_eval "$(_ 'Found fcitx in cache file ${1}:')" \
-                    "$(code_inline "${file}")"
-                write_quote_str "${fcitx_gtk}"
+                version_correct=1
+                write_command=write_eval
+            else
+                write_command=write_error_eval
             fi
-        done
+            "$write_command" \
+                "$(_ 'Found immodules cache for gtk ${1} at ${2}.')" \
+                "$(code_inline ${real_version})" \
+                "$(code_inline "${cache}")"
+            __need_blank_line=0
+            write_eval "$(_ 'Version Line:')"
+            write_quote_str "${version_line}"
+        else
+            write_eval \
+                "$(_ 'Found immodule cache for unknow gtk version at ${1}.')" \
+                "$(code_inline "${cache}")"
+            real_version=${version}
+        fi
+        if fcitx_gtk=$(grep fcitx <<< "${cache_content}"); then
+            ((version_correct)) && module_found=1
+            __need_blank_line=0
+            write_eval "$(_ 'Found fcitx im modules for gtk ${1}.')" \
+                "$(code_inline ${real_version})"
+            write_quote_str "${fcitx_gtk}"
+            reg_gtk_query_output "${version}" "${fcitx_gtk}"
+        else
+            write_error_eval \
+                "$(_ 'Failed to find fcitx in immodule cache at ${1}')" \
+                "$(code_inline "${cache}")"
+        fi
     done
     ((cache_found)) || {
+        write_error_eval \
+            "$(_ 'Cannot find immodules cache for gtk ${1}')" \
+            "${version}"
+    }
+    ((module_found)) || {
         write_error_eval \
             "$(_ 'Cannot find fcitx im module for gtk ${1} in cache.')" \
             "${version}"
@@ -919,17 +1161,22 @@ check_gtk_immodule_cache() {
 }
 
 check_gtk() {
-    write_title 2 "Gtk."
+    write_title 2 "Gtk:"
     _check_toolkit_env GTK_IM_MODULE gtk
-    write_order_list "$(_ 'Gtk IM module files:')"
+    write_order_list "$(code_inline gtk-query-immodules):"
     increase_cur_level 1
-    check_gtk_immodule 2
-    check_gtk_immodule 3
+    check_gtk_query_immodule 2
+    check_gtk_query_immodule 3
     increase_cur_level -1
     write_order_list "$(_ 'Gtk IM module cache:')"
     increase_cur_level 1
     check_gtk_immodule_cache 2
     check_gtk_immodule_cache 3
+    increase_cur_level -1
+    write_order_list "$(_ 'Gtk IM module files:')"
+    increase_cur_level 1
+    check_gtk_immodule_file 2
+    check_gtk_immodule_file 3
     increase_cur_level -1
 }
 
@@ -940,14 +1187,15 @@ check_gtk() {
 
 check_modules() {
     local addon_conf_dir
-    write_title 2 "$(_ "Fcitx Addons:")"
+    write_title 2 "$(_ 'Fcitx Addons:')"
     write_order_list "$(_ 'Addon Config Dir:')"
     addon_conf_dir="$(get_config_dir addonconfigdir addon)" || {
-        write_error "$(_ "Cannot find fcitx addon config directory.")"
+        write_error "$(_ 'Cannot find fcitx addon config directory.')"
         return
     }
     local enabled_addon=()
     local disabled_addon=()
+    local enabled_ui=()
     local name
     local enable
     write_eval "$(_ 'Found fcitx addon config directory: ${1}.')" \
@@ -967,9 +1215,12 @@ check_modules() {
             [ -z "${_enable}" ] || enable="${_enable}"
         fi
         if [ $(echo "${enable}" | sed -e 's/.*/\L&/g') = false ]; then
-            disabled_addon=("${disabled_addon[@]}" "${name}")
+            array_push disabled_addon "${name}"
         else
-            enabled_addon=("${enabled_addon[@]}" "${name}")
+            array_push enabled_addon "${name}"
+            if [[ $(get_from_config_file "${file}" Category) = UI ]]; then
+                array_push enabled_ui "${name}"
+            fi
         fi
     done
     increase_cur_level 1
@@ -983,15 +1234,38 @@ check_modules() {
     [ "${#disabled_addon[@]}" = 0 ] || {
         write_quote_cmd print_array "${disabled_addon[@]}"
     }
+    write_order_list_eval "$(_ 'User Interface:')"
+    if ! ((${#enabled_ui[@]})); then
+        write_error_eval "$(_ 'Cannot find enabled fcitx user interface!')"
+    else
+        write_eval "$(_ 'Found ${1} enabled user interface addons:')" \
+            "${#enabled_ui[@]}"
+        write_quote_cmd print_array "${enabled_ui[@]}"
+        has_non_kimpanel=0
+        has_kimpanel_dbus=0
+        for ui in "${enabled_ui[@]}"; do
+            if [[ $ui =~ kimpanel ]]; then
+                pid=$(dbus_get_pid org.kde.impanel) || continue
+                has_kimpanel_dbus=1
+                write_eval "$(_ 'Kimpanel process:')"
+                write_quote_cmd print_process_info "${pid}"
+            else
+                has_non_kimpanel=1
+            fi
+        done
+        ((has_non_kimpanel)) || ((has_kimpanel_dbus)) || \
+            write_error_eval \
+            "$(_ 'Cannot find kimpanel dbus interface or enabled non-kimpanel user interface.')"
+    fi
     increase_cur_level -1
 }
 
 check_input_methods() {
-    write_title 2 "$(_ "Input Methods:")"
+    write_title 2 "$(_ 'Input Methods:')"
     local IFS=','
     local imlist=($(get_from_config_file \
         ~/.config/fcitx/profile EnabledIMList)) || {
-        write_error "$(_ "Cannot read im list from fcitx profile.")"
+        write_error "$(_ 'Cannot read im list from fcitx profile.')"
         return 0
     }
     local enabled_im=()
@@ -1023,7 +1297,7 @@ check_input_methods() {
             write_error "$(_ "You don't have any input methods enabled.")"
             ;;
         1)
-            write_error "$(_ "You only have one input method enabled, please add a keyboard input method as the first one and your main input method as the second one.")"
+            write_error "$(_ 'You only have one input method enabled, please add a keyboard input method as the first one and your main input method as the second one.')"
             ;;
         *)
             if [[ ${enabled_im[0]} =~ ^fcitx-keyboard- ]]; then
@@ -1045,19 +1319,19 @@ check_input_methods() {
 #############################
 
 check_log() {
-    write_order_list "$(code_inline 'date')."
+    write_order_list "$(code_inline 'date'):"
     if type date &> /dev/null; then
         write_quote_cmd date
     else
         write_error "$(print_not_found 'date')"
     fi
-    write_order_list "$(code_inline '~/.config/fcitx/log/')."
+    write_order_list "$(code_inline '~/.config/fcitx/log/'):"
     [ -d ~/.config/fcitx/log/ ] || {
         write_paragraph "$(print_not_found '~/.config/fcitx/log/')"
         return
     }
     write_quote_cmd ls -AlF ~/.config/fcitx/log/
-    write_order_list "$(code_inline '~/.config/fcitx/log/crash.log')."
+    write_order_list "$(code_inline '~/.config/fcitx/log/crash.log'):"
     if [ -f ~/.config/fcitx/log/crash.log ]; then
         write_quote_cmd cat ~/.config/fcitx/log/crash.log
     else
@@ -1093,19 +1367,19 @@ check_fcitx
 check_config_ui
 
 ((_check_frontend)) && {
-    write_title 1 "$(_ "Frontends setup.")"
+    write_title 1 "$(_ 'Frontends setup:')"
     check_xim
     check_qt
     check_gtk
 }
 
 ((_check_modules)) && {
-    write_title 1 "$(_ "Configuration.")"
+    write_title 1 "$(_ 'Configuration:')"
     check_modules
     check_input_methods
 }
 
 ((_check_log)) && {
-    write_title 1 "$(_ "Log.")"
+    write_title 1 "$(_ 'Log:')"
     check_log
 }

@@ -8,7 +8,8 @@ FcitxStringMap* fcitx_string_map_new(const char* str, char delim);
 
 void fcitx_string_map_from_string(FcitxStringMap* map, const char* str, char delim);
 
-boolean fcitx_string_map_get(FcitxStringMap* map, const char* key, boolean value);
+boolean fcitx_string_map_get(FcitxStringMap *map, const char *key,
+                             boolean _default);
 
 void fcitx_string_map_set(FcitxStringMap* map, const char* key, boolean value);
 

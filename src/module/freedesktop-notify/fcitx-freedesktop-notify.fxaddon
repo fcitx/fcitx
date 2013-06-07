@@ -1,0 +1,72 @@
+[FcitxAddon]
+Name=fcitx-freedesktop-notify
+Prefix=FreeDesktopNotify
+Function0=Show
+Function1=Close
+Function2=ShowTip
+Function3=ShowSimple
+Function4=ShowTipFmt
+Function5=ShowAddonTip
+Include0="freedesktop-notify.h"
+Self.Type=FcitxNotify*
+
+[Show]
+Name=show
+Arg0=const char*
+Arg1=uint32_t
+Arg2=const char*
+Arg3=const char*
+Arg4=const char*
+Arg5=const FcitxFreedesktopNotifyAction*
+Arg6=int32_t
+Arg7=FcitxFreedesktopNotifyActionCallback
+Arg8=void*
+Arg9=FcitxDestroyNotify
+Return=uint32_t
+Res.WrapFunc=FcitxNotifySendNotification
+
+[ShowSimple]
+Name=show-simple
+Arg0=const char*
+Arg1=const char*
+Arg2=const char*
+Arg3=const char*
+Arg4=int32_t
+Return=uint32_t
+Res.Exp=FcitxNotifySendNotification($<, $0, 0, $1, $2, $3, NULL, $4, NULL, NULL, NULL)
+
+[Close]
+Name=close
+Arg0=uint32_t
+Res.WrapFunc=FcitxNotifyCloseNotification
+
+[ShowTip]
+Name=show-tip
+Arg0=const char*
+Arg1=const char*
+Arg2=const char*
+Arg3=const char*
+Arg4=int32_t
+Arg5=const char*
+Res.WrapFunc=FcitxNotifyShowTip
+
+[ShowTipFmt]
+Name=show-tip-fmt
+Arg0=const char*
+Arg1=const char*
+Arg2=const char*
+Arg3=const char*
+Arg4=int32_t
+Arg5=const char*
+Arg6=va_list*
+Arg6.PreconvType=...
+Res.WrapFunc=FcitxNotifyShowTipFmtV
+
+[ShowAddonTip]
+Name=show-addon-tip
+Arg0=const char*
+Arg1=const char*
+Arg2=const char*
+Arg3=const char*
+Arg4=const char*
+Res.WrapFunc=FcitxNotifyShowAddonTip

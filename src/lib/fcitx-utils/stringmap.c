@@ -11,7 +11,9 @@ struct _FcitxStringMap {
     FcitxStringMapItem* items;
 };
 
-static inline void fcitx_string_map_item_free(FcitxStringMapItem* item) {
+static inline void
+fcitx_string_map_item_free(FcitxStringMapItem* item)
+{
     free(item->key);
     free(item);
 }
@@ -44,14 +46,14 @@ void fcitx_string_map_from_string(FcitxStringMap* map, const char* str, char del
     fcitx_utils_free_string_list(list);
 }
 
-FCITX_EXPORT_API
-boolean fcitx_string_map_get(FcitxStringMap* map, const char* key, boolean value)
+FCITX_EXPORT_API boolean
+fcitx_string_map_get(FcitxStringMap* map, const char* key, boolean _default)
 {
     FcitxStringMapItem* item = NULL;
     HASH_FIND_STR(map->items, key, item);
     if (item)
         return item->value;
-    return value;
+    return _default;
 }
 
 FCITX_EXPORT_API
@@ -67,7 +69,8 @@ void fcitx_string_map_set(FcitxStringMap* map, const char* key, boolean value)
     item->value = value;
 }
 
-void fcitx_string_map_clear(FcitxStringMap* map)
+FCITX_EXPORT_API void
+fcitx_string_map_clear(FcitxStringMap* map)
 {
     while (map->items) {
         FcitxStringMapItem* p = map->items;
@@ -102,20 +105,25 @@ char* fcitx_string_map_to_string(FcitxStringMap* map, char delim)
 
     size_t len = 0;
     HASH_FOREACH(item, map->items, FcitxStringMapItem) {
-        len += strlen(item->key) + 1 + (item->value ? strlen("true") : strlen("false")) + 1;
+        len += item->hh.keylen + 1 + (item->value ? strlen("true") :
+                                      strlen("false")) + 1;
     }
 
     char* result = (char*)malloc(sizeof(char) * len);
     char* p = result;
     HASH_FOREACH(item2, map->items, FcitxStringMapItem) {
-        size_t strl = strlen(item2->key);
+        size_t strl = item2->hh.keylen;
         memcpy(p, item2->key, strl);
         p += strl;
         *p = ':';
         p++;
-        const char* s = item2->value ? "true" : "false";
-        strl = strlen(s);
-        memcpy(p, s, strl);
+        if (item2->value) {
+            strl = strlen("true");
+            memcpy(p, "true", strlen("true"));
+        } else {
+            strl = strlen("false");
+            memcpy(p, "false", strlen("false"));
+        }
         p += strl;
         *p = delim;
         p++;
@@ -124,6 +132,3 @@ char* fcitx_string_map_to_string(FcitxStringMap* map, char delim)
 
     return result;
 }
-
-
-

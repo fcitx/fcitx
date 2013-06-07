@@ -23,11 +23,11 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr "Ctrl+Supr para eliminar"
 
-#: data/script/fcitx-diagnose.sh:305
+#: data/script/fcitx-diagnose.sh:314
 msgid "${1} not found."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:622
+#: data/script/fcitx-diagnose.sh:645
 msgid "${1} works properly."
 msgstr ""
 
@@ -72,23 +72,23 @@ msgstr ""
 msgid "(Unavailable)"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:443
+#: data/script/fcitx-diagnose.sh:452
 msgid "/Beginner%27s_Guide"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:476
+#: data/script/fcitx-diagnose.sh:499
 msgid "/Hall_of_Shame_for_Linux_IME_Support"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:454
+#: data/script/fcitx-diagnose.sh:463
 msgid "/Input_method_related_environment_variables"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:463
+#: data/script/fcitx-diagnose.sh:479
 msgid "/Note_for_GNOME_Later_than_3.6"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:480
+#: data/script/fcitx-diagnose.sh:503
 msgid "/XIM"
 msgstr ""
 
@@ -218,11 +218,11 @@ msgstr ""
 msgid "Addon Config %s is %s"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:944
+#: data/script/fcitx-diagnose.sh:967
 msgid "Addon Config Dir:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:955
+#: data/script/fcitx-diagnose.sh:978
 msgid "Addon List:"
 msgstr ""
 
@@ -249,7 +249,7 @@ msgstr ""
 msgid "All"
 msgstr "Todo"
 
-#: data/script/fcitx-diagnose.sh:568
+#: data/script/fcitx-diagnose.sh:591
 msgid "All locale:"
 msgstr ""
 
@@ -363,7 +363,7 @@ msgstr ""
 msgid "Background Image"
 msgstr "Imagen de fondo"
 
-#: data/script/fcitx-diagnose.sh:442
+#: data/script/fcitx-diagnose.sh:451
 msgid "Beginner's Guide"
 msgstr ""
 
@@ -451,7 +451,7 @@ msgstr ""
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:620
+#: data/script/fcitx-diagnose.sh:643
 msgid "Cannot connect to fcitx correctly."
 msgstr ""
 
@@ -460,40 +460,40 @@ msgstr ""
 msgid "Cannot create file %1."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:537
+#: data/script/fcitx-diagnose.sh:560
 msgid "Cannot determine desktop environment."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:710
+#: data/script/fcitx-diagnose.sh:733
 msgid ""
 "Cannot find a GUI config tool, please install one of ${1}, ${2}, or ${3}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:946
+#: data/script/fcitx-diagnose.sh:969
 msgid "Cannot find fcitx addon config directory."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:581
+#: data/script/fcitx-diagnose.sh:604
 msgid "Cannot find fcitx executable!"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:916
+#: data/script/fcitx-diagnose.sh:939
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:884
+#: data/script/fcitx-diagnose.sh:907
 msgid "Cannot find fcitx im module for gtk ${1}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:849
+#: data/script/fcitx-diagnose.sh:872
 msgid "Cannot find fcitx input method module for qt."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:700
+#: data/script/fcitx-diagnose.sh:723
 msgid "Cannot find fcitx-configtool executable!"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:775
+#: data/script/fcitx-diagnose.sh:798
 msgid "Cannot find xim_server on root window."
 msgstr ""
 
@@ -501,11 +501,11 @@ msgstr ""
 msgid "Cannot found Pinyin"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:749
+#: data/script/fcitx-diagnose.sh:772
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:994
+#: data/script/fcitx-diagnose.sh:1017
 msgid "Cannot read im list from fcitx profile."
 msgstr ""
 
@@ -682,15 +682,15 @@ msgstr ""
 msgid "Commit with extra space when choose candidate word"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:662
+#: data/script/fcitx-diagnose.sh:685
 msgid "Config GUI for gtk${1}:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:682
+#: data/script/fcitx-diagnose.sh:705
 msgid "Config GUI for kde:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:698
+#: data/script/fcitx-diagnose.sh:721
 msgid "Config Tool Wrapper:"
 msgstr ""
 
@@ -698,7 +698,7 @@ msgstr ""
 msgid "ConfigFile"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:1103
+#: data/script/fcitx-diagnose.sh:1126
 msgid "Configuration."
 msgstr ""
 
@@ -765,7 +765,7 @@ msgstr "Nombre del método de entrada actual"
 msgid "Current local input method is "
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:566
+#: data/script/fcitx-diagnose.sh:589
 msgid "Current locale:"
 msgstr ""
 
@@ -803,7 +803,7 @@ msgstr ""
 msgid "Default Spell Hint Backends Order"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:1020
+#: data/script/fcitx-diagnose.sh:1043
 msgid "Default input methods:"
 msgstr ""
 
@@ -819,11 +819,11 @@ msgstr "Dependencia"
 msgid "Description of Skin"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:535
+#: data/script/fcitx-diagnose.sh:558
 msgid "Desktop Environment."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:539
+#: data/script/fcitx-diagnose.sh:562
 msgid "Desktop environment is ${1}."
 msgstr ""
 
@@ -945,17 +945,17 @@ msgstr ""
 msgid "Enum option number must larger than 0"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:729
+#: data/script/fcitx-diagnose.sh:752
 msgid ""
 "Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
 "you have exported it incorrectly in any of your init files."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:723
+#: data/script/fcitx-diagnose.sh:746
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:545
+#: data/script/fcitx-diagnose.sh:568
 msgid "Environment."
 msgstr ""
 
@@ -1016,7 +1016,7 @@ msgstr ""
 msgid "Fcitx"
 msgstr "Fcitx"
 
-#: data/script/fcitx-diagnose.sh:943
+#: data/script/fcitx-diagnose.sh:966
 msgid "Fcitx Addons:"
 msgstr ""
 
@@ -1028,7 +1028,7 @@ msgstr ""
 msgid "Fcitx Configuration"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:697
+#: data/script/fcitx-diagnose.sh:720
 msgid "Fcitx Configure UI."
 msgstr ""
 
@@ -1048,7 +1048,7 @@ msgstr ""
 msgid "Fcitx Spelling Hint/Completion Support"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:578
+#: data/script/fcitx-diagnose.sh:601
 msgid "Fcitx State."
 msgstr ""
 
@@ -1060,11 +1060,11 @@ msgstr ""
 msgid "Fcitx XIM Frontend"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:605
+#: data/script/fcitx-diagnose.sh:628
 msgid "Fcitx is not running."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:592
+#: data/script/fcitx-diagnose.sh:615
 #, sh-format
 msgid "Fcitx version: ${version}"
 msgstr ""
@@ -1124,67 +1124,67 @@ msgstr ""
 msgid "Font size repect dpi setting"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:675
+#: data/script/fcitx-diagnose.sh:698
 msgid "Found ${1} at ${2}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:981
+#: data/script/fcitx-diagnose.sh:1004
 msgid "Found ${1} disabled addons:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:976
+#: data/script/fcitx-diagnose.sh:999
 msgid "Found ${1} enabled addons:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:1015
+#: data/script/fcitx-diagnose.sh:1038
 msgid "Found ${1} enabled input methods:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:614
+#: data/script/fcitx-diagnose.sh:637
 msgid "Found ${1} fcitx process:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:612
+#: data/script/fcitx-diagnose.sh:635
 msgid "Found ${1} fcitx processes:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:953
+#: data/script/fcitx-diagnose.sh:976
 msgid "Found fcitx addon config directory: ${1}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:587
+#: data/script/fcitx-diagnose.sh:610
 msgid "Found fcitx at ${1}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:876
+#: data/script/fcitx-diagnose.sh:899
 msgid "Found fcitx im modules for gtk ${1}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:908
+#: data/script/fcitx-diagnose.sh:931
 msgid "Found fcitx in cache file ${1}:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:688
+#: data/script/fcitx-diagnose.sh:711
 msgid "Found fcitx kcm module."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:833
+#: data/script/fcitx-diagnose.sh:856
 msgid "Found fcitx qt im module: ${1}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:702
+#: data/script/fcitx-diagnose.sh:725
 msgid "Found fcitx-configtool at ${1}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:871
+#: data/script/fcitx-diagnose.sh:894
 msgid "Found gtk-query-immodules for gtk ${1} at ${2}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:903
+#: data/script/fcitx-diagnose.sh:926
 msgid "Found immodules cache for gtk ${1} ${2}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:841
+#: data/script/fcitx-diagnose.sh:864
 msgid "Found unknown fcitx qt module: ${1}."
 msgstr ""
 
@@ -1205,7 +1205,7 @@ msgstr ""
 msgid "Frontend: open %s fail %s"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:1096
+#: data/script/fcitx-diagnose.sh:1119
 msgid "Frontends setup."
 msgstr ""
 
@@ -1298,11 +1298,11 @@ msgstr ""
 msgid "Greek"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:929
+#: data/script/fcitx-diagnose.sh:952
 msgid "Gtk IM module cache:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:924
+#: data/script/fcitx-diagnose.sh:947
 msgid "Gtk IM module files:"
 msgstr ""
 
@@ -1311,7 +1311,7 @@ msgstr ""
 msgid "Half width Character"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:475
+#: data/script/fcitx-diagnose.sh:498
 msgid "Hall of Shame for Linux IME Support"
 msgstr ""
 
@@ -1382,11 +1382,18 @@ msgstr ""
 msgid "IconName"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:465
+#: data/script/fcitx-diagnose.sh:487
 msgid ""
-"If you are using ${1}, you may want to uninstall ${2} or remove ${3} to be "
-"able to use any input method other than ${2}. See ${link} for more detail as "
-"well as alternative solutions."
+"If you are using ${1}, you may want to uninstall ${2} or remove ${3} in "
+"order to use any input method other than ${2}. See ${link} for more detail "
+"as well as alternative solutions."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:485
+msgid ""
+"If you are using ${1}, you may want to uninstall ${2}, remove ${3} or use "
+"the command ${g36_disable_ibus} to disable IBus integration in order to use "
+"any input method other than ${2}. See ${link} for more detail."
 msgstr ""
 
 #: src/module/xkb/fcitx-xkb.desc:9
@@ -1463,11 +1470,11 @@ msgstr "Método de entrada desactivado"
 msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:453
+#: data/script/fcitx-diagnose.sh:462
 msgid "Input Method Related Environment Variables: "
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:990
+#: data/script/fcitx-diagnose.sh:1013
 msgid "Input Methods:"
 msgstr ""
 
@@ -1498,7 +1505,7 @@ msgstr ""
 msgid "Invalid Entry: line %d missing '='"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:959
+#: data/script/fcitx-diagnose.sh:982
 msgid "Invalid addon config file ${1}."
 msgstr ""
 
@@ -1516,7 +1523,7 @@ msgstr ""
 msgid "Invalid group name line @ line %d %s"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:1004
+#: data/script/fcitx-diagnose.sh:1027
 msgid "Invalid item ${1} in im list."
 msgstr ""
 
@@ -1560,7 +1567,7 @@ msgstr ""
 msgid "Keyboard Layout to be used"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:548
+#: data/script/fcitx-diagnose.sh:571
 msgid "Keyboard Layout:"
 msgstr ""
 
@@ -1674,11 +1681,11 @@ msgstr ""
 msgid "LocalSelector"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:563
+#: data/script/fcitx-diagnose.sh:586
 msgid "Locale:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:1109
+#: data/script/fcitx-diagnose.sh:1132
 msgid "Log."
 msgstr ""
 
@@ -1869,7 +1876,7 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:462
+#: data/script/fcitx-diagnose.sh:478
 msgid "Note for GNOME Later than 3.6"
 msgstr ""
 
@@ -1998,11 +2005,11 @@ msgstr "Pinyin:"
 msgid "PinyinJiaJia"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:583
+#: data/script/fcitx-diagnose.sh:606
 msgid "Please check ${1} for how to install fcitx."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:607
+#: data/script/fcitx-diagnose.sh:630
 msgid ""
 "Please check the Configure link of your distribution in ${1} for how to "
 "setup fcitx autostart."
@@ -2016,7 +2023,7 @@ msgstr ""
 msgid "Please set XMODIFIERS."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:450
+#: data/script/fcitx-diagnose.sh:459
 msgid ""
 "Please set environment variable ${env_name} to \"${value}\" using the tool "
 "your distribution provides or add ${1} to your ${2}. See ${link}."
@@ -2126,7 +2133,7 @@ msgstr ""
 msgid "Punctuation Support"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:824
+#: data/script/fcitx-diagnose.sh:847
 msgid "Qt IM module files:"
 msgstr ""
 
@@ -2617,7 +2624,7 @@ msgstr ""
 msgid "Symbol File"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:507
+#: data/script/fcitx-diagnose.sh:530
 msgid "System Info."
 msgstr ""
 
@@ -2665,7 +2672,7 @@ msgstr ""
 msgid "Tip Message Color"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:472
+#: data/script/fcitx-diagnose.sh:495
 #, sh-format
 msgid ""
 "To see some application specific problems you may have when using xim, check "
@@ -2944,15 +2951,15 @@ msgstr ""
 msgid "X11 not initialized"
 msgstr "X11 no inicializado"
 
-#: data/script/fcitx-diagnose.sh:786
+#: data/script/fcitx-diagnose.sh:809
 msgid "XIM encoding:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:781
+#: data/script/fcitx-diagnose.sh:804
 msgid "XIM for Emacs:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:759
+#: data/script/fcitx-diagnose.sh:782
 msgid "XIM_SERVERS on root window:"
 msgstr ""
 
@@ -2968,39 +2975,39 @@ msgstr ""
 msgid "Xim"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:757
+#: data/script/fcitx-diagnose.sh:780
 msgid "Xim Server Name from Environment variable is ${1}."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:769
+#: data/script/fcitx-diagnose.sh:792
 msgid "Xim server name is the same with that set in the environment variable."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:771
+#: data/script/fcitx-diagnose.sh:794
 msgid ""
 "Xim server name: \"${1}\" is different from that set in the environment "
 "variable: \"${2}\"."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:804
+#: data/script/fcitx-diagnose.sh:827
 msgid "You are using xim in ${1} programs."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:1023
+#: data/script/fcitx-diagnose.sh:1046
 msgid "You don't have any input methods enabled."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:1031
+#: data/script/fcitx-diagnose.sh:1054
 msgid ""
 "You have a keyboard input method \"${1}\" correctly added as your default "
 "input method."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:809
+#: data/script/fcitx-diagnose.sh:832
 msgid "You may have trouble using fcitx in ${1} programs."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:1026
+#: data/script/fcitx-diagnose.sh:1049
 msgid ""
 "You only have one input method enabled, please add a keyboard input method "
 "as the first one and your main input method as the second one."
@@ -3020,20 +3027,20 @@ msgid ""
 "it will open config file with default text editor."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:783
+#: data/script/fcitx-diagnose.sh:806
 msgid ""
 "Your LC_CTYPE is set to ${1} instead of one of zh, ja, ko. You may not be "
 "able to use input method in emacs because of an really old emacs bug that "
 "upstream refuse to fix for years."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:788
+#: data/script/fcitx-diagnose.sh:811
 msgid ""
 "Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have "
 "trouble committing strings using XIM."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:1035
+#: data/script/fcitx-diagnose.sh:1058
 msgid ""
 "Your first (default) input method is ${1} instead of a keyboard input "
 "method. You may have trouble deactivate fcitx."
@@ -3051,11 +3058,11 @@ msgstr "Ziguang"
 msgid "Ziranma"
 msgstr "Ziranma"
 
-#: data/script/fcitx-diagnose.sh:579
+#: data/script/fcitx-diagnose.sh:602
 msgid "executable:"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:479
+#: data/script/fcitx-diagnose.sh:502
 msgid "here"
 msgstr ""
 
@@ -3072,7 +3079,7 @@ msgstr ""
 msgid "no valid font."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:593
+#: data/script/fcitx-diagnose.sh:616
 msgid "process:"
 msgstr ""
 
@@ -3080,7 +3087,7 @@ msgstr ""
 msgid "pthread mutex init failed"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:589
+#: data/script/fcitx-diagnose.sh:612
 msgid "version:"
 msgstr ""
 
