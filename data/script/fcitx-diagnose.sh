@@ -532,8 +532,8 @@ set_env_link() {
     fmt=$(_ 'Please set environment variable ${env_name} to "${value}" using the tool your distribution provides or add ${1} to your ${2}. See ${link}.')
     local link
     link=$(print_link \
-        "$(_ "Input Method Related Environment Variables: ")${env_name}" \
-        "${wiki_url}$(_ "/Input_method_related_environment_variables")#${env_name}")
+        "$(_ 'Input Method Related Environment Variables: ')${env_name}" \
+        "${wiki_url}$(_ '/Input_method_related_environment_variables')#${env_name}")
     write_error_eval "${fmt}" "$(code_inline "export ${env_name}=${value}")" \
         "$(code_inline '~/.xprofile')"
 }
@@ -548,8 +548,8 @@ gnome_36_link() {
     maybe_gnome3 || return 1
     local link ibus_activated fmt
     link=$(print_link \
-        "$(_ "Note for GNOME Later than 3.6")" \
-        "${wiki_url}$(_ "/Note_for_GNOME_Later_than_3.6")")
+        "$(_ 'Note for GNOME Later than 3.6')" \
+        "${wiki_url}$(_ '/Note_for_GNOME_Later_than_3.6')")
 
     # Check if the gsettings key exists
     if ibus_activated=$(gnome_36_check_gsettings); then
@@ -568,12 +568,12 @@ no_xim_link() {
     fmt=$(_ 'To see some application specific problems you may have when using xim, check ${link1}. For other more general problems of using XIM including application freezing, see ${link2}.')
     local link1
     link1=$(print_link \
-        "$(_ "Hall of Shame for Linux IME Support")" \
-        "${wiki_url}$(_ "/Hall_of_Shame_for_Linux_IME_Support")")
+        "$(_ 'Hall of Shame for Linux IME Support')" \
+        "${wiki_url}$(_ '/Hall_of_Shame_for_Linux_IME_Support')")
     local link2
     link2=$(print_link \
-        "$(_ "here")" \
-        "${wiki_url}$(_ "/XIM")")
+        "$(_ 'here')" \
+        "${wiki_url}$(_ '/XIM')")
     write_error_eval "${fmt}"
 }
 
@@ -593,7 +593,7 @@ init_ld_paths() {
 init_ld_paths
 
 check_system() {
-    write_title 1 "$(_ "System Info:")"
+    write_title 1 "$(_ 'System Info:')"
     write_order_list "$(code_inline 'uname -a'):"
     if type uname &> /dev/null; then
         write_quote_cmd uname -a
@@ -621,7 +621,7 @@ check_system() {
     else
         write_paragraph "$(print_not_found '/etc/os-release')"
     fi
-    write_order_list "$(_ "Desktop Environment:")"
+    write_order_list "$(_ 'Desktop Environment:')"
     if [[ -z $DE ]] || [[ $DE = generic ]]; then
         write_eval "$(_ 'Cannot determine desktop environment.')"
     else
@@ -631,10 +631,10 @@ check_system() {
 }
 
 check_env() {
-    write_title 1 "$(_ "Environment:")"
+    write_title 1 "$(_ 'Environment:')"
     write_order_list "DISPLAY:"
     write_quote_str "DISPLAY='${DISPLAY}'"
-    write_order_list "$(_ "Keyboard Layout:")"
+    write_order_list "$(_ 'Keyboard Layout:')"
     increase_cur_level 1
     write_order_list "$(code_inline setxkbmap):"
     if type setxkbmap &> /dev/null; then
@@ -649,12 +649,12 @@ check_env() {
         write_paragraph "$(print_not_found 'xprop')"
     fi
     increase_cur_level -1
-    write_order_list "$(_ "Locale:")"
+    write_order_list "$(_ 'Locale:')"
     if type locale &> /dev/null; then
         increase_cur_level 1
-        write_order_list "$(_ "All locale:")"
+        write_order_list "$(_ 'All locale:')"
         write_quote_str "$(locale -a 2> /dev/null)"
-        write_order_list "$(_ "Current locale:")"
+        write_order_list "$(_ 'Current locale:')"
         write_quote_str "$(locale 2> /dev/null)"
         locale_error="$(locale 2>&1 > /dev/null)"
         if [[ -n $locale_error ]]; then
@@ -670,10 +670,10 @@ check_env() {
 
 check_fcitx() {
     local IFS=$'\n'
-    write_title 1 "$(_ "Fcitx State:")"
+    write_title 1 "$(_ 'Fcitx State:')"
     write_order_list "$(_ 'executable:')"
     if ! fcitx_exe="$(which fcitx 2> /dev/null)"; then
-        write_error "$(_ "Cannot find fcitx executable!")"
+        write_error "$(_ 'Cannot find fcitx executable!')"
         __need_blank_line=0
         write_error_eval "$(_ 'Please check ${1} for how to install fcitx.')" \
             "$(beginner_guide_link)"
@@ -695,7 +695,7 @@ check_fcitx() {
         fi
     done <<< "${psoutput}"
     if ! ((${#process[@]})); then
-        write_error "$(_ "Fcitx is not running.")"
+        write_error "$(_ 'Fcitx is not running.')"
         __need_blank_line=0
         write_error_eval "$(_ 'Please check the Configure link of your distribution in ${1} for how to setup fcitx autostart.')" "$(beginner_guide_link)"
         return 1
@@ -710,7 +710,7 @@ check_fcitx() {
     write_order_list "$(code_inline 'fcitx-remote'):"
     if type fcitx-remote &> /dev/null; then
         if ! fcitx-remote &> /dev/null; then
-            write_error "$(_ "Cannot connect to fcitx correctly.")"
+            write_error "$(_ 'Cannot connect to fcitx correctly.')"
         else
             write_eval "$(_ '${1} works properly.')" \
                 "$(code_inline 'fcitx-remote')"
@@ -756,7 +756,7 @@ _check_config_gtk() {
     if ! config_gtk="$(which "fcitx-config-gtk${version}" 2> /dev/null)"; then
         if ! _check_config_gtk_version "${version}"; then
             write_error_eval \
-                "$(_ "Config GUI for gtk${1} not found.")" "${version}"
+                "$(_ 'Config GUI for gtk${1} not found.')" "${version}"
             return 1
         else
             config_gtk=$(_find_config_gtk)
@@ -787,10 +787,10 @@ _check_config_kcm() {
 
 check_config_ui() {
     local IFS=$'\n'
-    write_title 1 "$(_ "Fcitx Configure UI:")"
+    write_title 1 "$(_ 'Fcitx Configure UI:')"
     write_order_list "$(_ 'Config Tool Wrapper:')"
     if ! fcitx_configtool="$(which fcitx-configtool 2> /dev/null)"; then
-        write_error "$(_ "Cannot find fcitx-configtool executable!")"
+        write_error "$(_ 'Cannot find fcitx-configtool executable!')"
     else
         write_eval "$(_ 'Found fcitx-configtool at ${1}.')" \
             "$(code_inline "${fcitx_configtool}")"
@@ -859,24 +859,24 @@ check_xim() {
         if [[ ${xprop} =~ ^${atom_name}\ @server=(.*)$ ]]; then
             xim_server_name="${BASH_REMATCH[1]}"
             if [ "${xim_server_name}" = "${xim_name}" ]; then
-                write_paragraph "$(_ "Xim server name is the same with that set in the environment variable.")"
+                write_paragraph "$(_ 'Xim server name is the same with that set in the environment variable.')"
             else
                 write_error_eval "$(_ 'Xim server name: "${1}" is different from that set in the environment variable: "${2}".')" \
                     "${xim_server_name}" "${xim_name}"
             fi
         else
-            write_error "$(_ "Cannot find xim_server on root window.")"
+            write_error "$(_ 'Cannot find xim_server on root window.')"
         fi
     fi
     local _LC_CTYPE=$(get_locale CTYPE)
     if type emacs &> /dev/null &&
         ! str_match_regex '^(zh|ja|ko)([._].*|)$' "${_LC_CTYPE}"; then
-        write_order_list "$(_ "XIM for Emacs:")"
+        write_order_list "$(_ 'XIM for Emacs:')"
         write_error_eval \
             "$(_ 'Your LC_CTYPE is set to ${1} instead of one of zh, ja, ko. You may not be able to use input method in emacs because of an really old emacs bug that upstream refuse to fix for years.')" "${_LC_CTYPE}"
     fi
     if ! str_match_regex '.[Uu][Tt][Ff]-?8$' "${_LC_CTYPE}"; then
-        write_order_list "$(_ "XIM encoding:")"
+        write_order_list "$(_ 'XIM encoding:')"
         write_error_eval \
             "$(_ 'Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have trouble committing strings using XIM.')" "${_LC_CTYPE}"
     fi
@@ -930,13 +930,13 @@ check_qt() {
         __need_blank_line=0
         if [[ ${basename} =~ im-fcitx ]] &&
             [[ ${file} =~ plugins/inputmethods ]]; then
-            write_eval "$(_ 'Found fcitx im module for Qt4: ${1}.')" \
-                "$(code_inline "${file}")"
+            write_eval "$(_ 'Found fcitx im module for ${2}: ${1}.')" \
+                "$(code_inline "${file}")" Qt4
             qt4_module_found=1
         elif [[ ${basename} =~ fcitxplatforminputcontextplugin ]] &&
             [[ ${file} =~ plugins/platforminputcontexts ]]; then
-            write_eval "$(_ 'Found fcitx im module for Qt5: ${1}.')" \
-                "$(code_inline "${file}")"
+            write_eval "$(_ 'Found fcitx im module for ${2}: ${1}.')" \
+                "$(code_inline "${file}")" Qt5
             qt5_module_found=1
         elif [[ ${file} =~ /fcitx/qt/ ]]; then
             write_eval "$(_ 'Found fcitx qt module: ${1}.')" \
@@ -948,11 +948,11 @@ check_qt() {
     done
     if [ -z "${qt4_module_found}" ]; then
         __need_blank_line=0
-        write_error "$(_ "Cannot find fcitx input method module for Qt4.")"
+        write_error "$(_ 'Cannot find fcitx input method module for ${1}.')" Qt4
     fi
     if [ -z "${qt5_module_found}" ]; then
         __need_blank_line=0
-        write_error "$(_ "Cannot find fcitx input method module for Qt5.")"
+        write_error "$(_ 'Cannot find fcitx input method module for ${1}.')" Qt5
     fi
 }
 
@@ -1187,10 +1187,10 @@ check_gtk() {
 
 check_modules() {
     local addon_conf_dir
-    write_title 2 "$(_ "Fcitx Addons:")"
+    write_title 2 "$(_ 'Fcitx Addons:')"
     write_order_list "$(_ 'Addon Config Dir:')"
     addon_conf_dir="$(get_config_dir addonconfigdir addon)" || {
-        write_error "$(_ "Cannot find fcitx addon config directory.")"
+        write_error "$(_ 'Cannot find fcitx addon config directory.')"
         return
     }
     local enabled_addon=()
@@ -1247,7 +1247,7 @@ check_modules() {
             if [[ $ui =~ kimpanel ]]; then
                 pid=$(dbus_get_pid org.kde.impanel) || continue
                 has_kimpanel_dbus=1
-                write_eval "$(_ "Kimpanel process:")"
+                write_eval "$(_ 'Kimpanel process:')"
                 write_quote_cmd print_process_info "${pid}"
             else
                 has_non_kimpanel=1
@@ -1261,11 +1261,11 @@ check_modules() {
 }
 
 check_input_methods() {
-    write_title 2 "$(_ "Input Methods:")"
+    write_title 2 "$(_ 'Input Methods:')"
     local IFS=','
     local imlist=($(get_from_config_file \
         ~/.config/fcitx/profile EnabledIMList)) || {
-        write_error "$(_ "Cannot read im list from fcitx profile.")"
+        write_error "$(_ 'Cannot read im list from fcitx profile.')"
         return 0
     }
     local enabled_im=()
@@ -1297,7 +1297,7 @@ check_input_methods() {
             write_error "$(_ "You don't have any input methods enabled.")"
             ;;
         1)
-            write_error "$(_ "You only have one input method enabled, please add a keyboard input method as the first one and your main input method as the second one.")"
+            write_error "$(_ 'You only have one input method enabled, please add a keyboard input method as the first one and your main input method as the second one.')"
             ;;
         *)
             if [[ ${enabled_im[0]} =~ ^fcitx-keyboard- ]]; then
@@ -1367,19 +1367,19 @@ check_fcitx
 check_config_ui
 
 ((_check_frontend)) && {
-    write_title 1 "$(_ "Frontends setup:")"
+    write_title 1 "$(_ 'Frontends setup:')"
     check_xim
     check_qt
     check_gtk
 }
 
 ((_check_modules)) && {
-    write_title 1 "$(_ "Configuration:")"
+    write_title 1 "$(_ 'Configuration:')"
     check_modules
     check_input_methods
 }
 
 ((_check_log)) && {
-    write_title 1 "$(_ "Log:")"
+    write_title 1 "$(_ 'Log:')"
     check_log
 }
