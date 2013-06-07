@@ -68,4 +68,5 @@ Arg0=const char*
 Arg1=const char*
 Arg2=const char*
 Arg3=const char*
+Arg4=const char*
 Res.WrapFunc=FcitxNotifyShowAddonTip

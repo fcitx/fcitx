@@ -290,9 +290,9 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
     sym = FcitxHotkeyPadToMain(sym);
     if (profile->bUseWidePunc) {
         if (puncState->bLastIsNumber && config->bEngPuncAfterNumber
-                && (FcitxHotkeyIsHotKey(origsym, state, FCITX_PERIOD)
-                    || FcitxHotkeyIsHotKey(origsym, state, FCITX_SEMICOLON)
-                    || FcitxHotkeyIsHotKey(origsym, state, FCITX_COMMA))) {
+            && (FcitxHotkeyIsHotKey(origsym, state, FCITX_PERIOD)
+                || FcitxHotkeyIsHotKey(origsym, state, FCITX_SEMICOLON)
+                || FcitxHotkeyIsHotKey(origsym, state, FCITX_COMMA))) {
             puncState->cLastIsAutoConvert = origsym;
             puncState->bLastIsNumber = false;
             *retVal = IRV_DONOT_PROCESS;
@@ -338,7 +338,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
 
     if (profile->bUseWidePunc) {
         if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)
-                && puncState->cLastIsAutoConvert) {
+            && puncState->cLastIsAutoConvert) {
             char *pPunc;
 
             FcitxInstanceForwardKey(puncState->owner, FcitxInstanceGetCurrentIC(instance), FCITX_PRESS_KEY, sym, state);
@@ -551,13 +551,6 @@ void TogglePuncState(void* arg)
     FcitxProfile* profile = FcitxInstanceGetProfile(instance);
     profile->bUseWidePunc = !profile->bUseWidePunc;
 
-    FcitxFreeDesktopNotifyShowAddonTip(
-        instance, "fcitx-punc-toggle",
-        _("Punctuation Support"),
-        _("https://fcitx-im.org/wiki/Punctuation"),
-        profile->bUseWidePunc ? _("Full width punctuations are used.") :
-        _("Latin punctuations are used."));
-
     FcitxUISetStatusString(puncState->owner, "punc",
                            profile->bUseWidePunc ? _("Full width punct") :
                            _("Latin punct"),
@@ -567,15 +560,25 @@ void TogglePuncState(void* arg)
 
 INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void* arg)
 {
-    FcitxPuncState* puncState = (FcitxPuncState*)arg;
+    FcitxPuncState *puncState = (FcitxPuncState*)arg;
+    FcitxInstance *instance = puncState->owner;
+    FcitxProfile *profile = FcitxInstanceGetProfile(instance);
 
-    FcitxUIStatus *status = FcitxUIGetStatusByName(puncState->owner, "punc");
+    FcitxUIStatus *status = FcitxUIGetStatusByName(instance, "punc");
     if (status->visible){
-        FcitxUIUpdateStatus(puncState->owner, "punc");
+        FcitxUIUpdateStatus(instance, "punc");
+        FcitxFreeDesktopNotifyShowAddonTip(
+            instance, "fcitx-punc-toggle",
+            _("Punctuation Support"),
+            profile->bUseWidePunc ? "fcitx-punc-active" :
+            "fcitx-punc-inactive",
+            _("https://fcitx-im.org/wiki/Punctuation"),
+            profile->bUseWidePunc ? _("Full width punctuations are used.") :
+            _("Latin punctuations are used."));
         return IRV_DO_NOTHING;
-    }
-    else
+    } else {
         return IRV_TO_PROCESS;
+    }
 }
 
 boolean GetPuncState(void* arg)
@@ -598,10 +601,10 @@ void ReloadPunc(void* arg)
 boolean IsHotKeyPunc(FcitxKeySym sym, unsigned int state)
 {
     if (FcitxHotkeyIsHotKeySimple(sym, state)
-            && !FcitxHotkeyIsHotKeyDigit(sym, state)
-            && !FcitxHotkeyIsHotKeyLAZ(sym, state)
-            && !FcitxHotkeyIsHotKeyUAZ(sym, state)
-            && !FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE))
+        && !FcitxHotkeyIsHotKeyDigit(sym, state)
+        && !FcitxHotkeyIsHotKeyLAZ(sym, state)
+        && !FcitxHotkeyIsHotKeyUAZ(sym, state)
+        && !FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE))
         return true;
 
     return false;

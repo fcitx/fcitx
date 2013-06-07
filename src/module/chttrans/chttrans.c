@@ -162,15 +162,25 @@ void *ChttransCreate(FcitxInstance* instance)
 
 INPUT_RETURN_VALUE HotkeyToggleChttransState(void* arg)
 {
-    FcitxChttrans* transState = (FcitxChttrans*) arg;
+    FcitxChttrans *transState = (FcitxChttrans*)arg;
+    FcitxInstance *instance = transState->owner;
 
-    FcitxUIStatus *status = FcitxUIGetStatusByName(transState->owner, "chttrans");
+    FcitxUIStatus *status = FcitxUIGetStatusByName(instance, "chttrans");
     if (status->visible){
-        FcitxUIUpdateStatus(transState->owner, "chttrans");
+        FcitxUIUpdateStatus(instance, "chttrans");
+        boolean enabled = ChttransEnabled(transState);
+        FcitxFreeDesktopNotifyShowAddonTip(
+            instance, "fcitx-chttrans-toggle",
+            _("Simplified Chinese To Traditional Chinese"),
+            enabled ? "fcitx-chttrans-active" :
+            "fcitx-chttrans-inactive",
+            _("https://fcitx-im.org/wiki/Chttrans"),
+            enabled ? _("Traditional Chinese is enabled.") :
+            _("Simplified Chinese is enabled."));
         return IRV_DO_NOTHING;
-    }
-    else
+    } else {
         return IRV_TO_PROCESS;
+    }
 }
 
 void ToggleChttransState(void* arg)
@@ -181,13 +191,6 @@ void ToggleChttransState(void* arg)
     if (!im)
         return;
     boolean enabled = !ChttransEnabled(transState);
-
-    FcitxFreeDesktopNotifyShowAddonTip(
-        instance, "fcitx-chttrans-toggle",
-        _("Simplified Chinese To Traditional Chinese"),
-        _("https://fcitx-im.org/wiki/Chttrans"),
-        enabled ? _("Traditional Chinese is enabled.") :
-        _("Simplified Chinese is enabled."));
 
     fcitx_string_map_set(transState->enableIM, im->uniqueName, enabled);
     FcitxUISetStatusString(instance, "chttrans",

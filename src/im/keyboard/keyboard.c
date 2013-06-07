@@ -550,7 +550,8 @@ void FcitxKeyboardOnClose(void* arg, FcitxIMCloseEventType event)
     }
 }
 
-static boolean IsDictAvailable(FcitxKeyboard* keyboard)
+static boolean
+IsDictAvailable(FcitxKeyboard* keyboard)
 {
     return FcitxSpellDictAvailable(keyboard->owner, keyboard->dictLang, NULL);
 }
@@ -896,19 +897,24 @@ INPUT_RETURN_VALUE FcitxKeyboardHotkeyToggleWordHint(void* arg)
                       strlen("fcitx-keyboard")) == 0) {
         void *enableWordHint =
             FcitxInstanceGetICData(instance, currentIC, keyboard->dataSlot);
+        boolean need_notify = true;
         if (!enableWordHint) {
             enableWordHint = PTR_TRUE;
-            IsDictAvailable(keyboard);
+            // also for preload dictionaries
+            need_notify = IsDictAvailable(keyboard);
         } else {
             enableWordHint = PTR_FALSE;
         }
 
-        FcitxFreeDesktopNotifyShowAddonTip(
-            instance, "fcitx-keyboard-hint",
-            _("Keyboard input method spell hint"),
-            _("https://fcitx-im.org/wiki/Keyboard"),
-            enableWordHint != PTR_FALSE ? _("Spell hint is enabled.") :
-            _("Spell hint is disabled."));
+        if (need_notify) {
+            FcitxFreeDesktopNotifyShowAddonTip(
+                instance, "fcitx-keyboard-hint",
+                _("Keyboard input method spell hint"),
+                "fcitx-kbd",
+                _("https://fcitx-im.org/wiki/Keyboard"),
+                enableWordHint != PTR_FALSE ? _("Spell hint is enabled.") :
+                _("Spell hint is disabled."));
+        }
 
         FcitxInstanceSetICData(instance, currentIC,
                                keyboard->dataSlot, enableWordHint);

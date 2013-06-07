@@ -94,6 +94,7 @@ struct _FcitxNotify {
     boolean timeout_added;
     FcitxDesktopFile dconfig;
     FcitxStringMap *hide_notify;
+    uint32_t last_tip_id;
 };
 
 #define TIMEOUT_REAL_TIME (100)
@@ -549,10 +550,10 @@ FcitxNotifyShowTip(FcitxNotify *notify, const char *appName,
     FcitxNotifyShowTipData *data =
         fcitx_utils_new_with_str(FcitxNotifyShowTipData, tip_id);
     data->notify = notify;
-    FcitxNotifySendNotification(notify, appName, 0, appIcon, summary,
-                                body, actions, timeout,
-                                FcitxNotifyShowTipCallback,
-                                data, free);
+    notify->last_tip_id =
+        FcitxNotifySendNotification(notify, appName, notify->last_tip_id,
+                                    appIcon, summary, body, actions, timeout,
+                                    FcitxNotifyShowTipCallback, data, free);
 }
 
 static void
@@ -583,8 +584,8 @@ FcitxNotifyShowTipFmt(FcitxNotify *notify, const char *appName,
 
 static void
 FcitxNotifyShowAddonTip(FcitxNotify *notify, const char *addon_id,
-                        const char *addon_name, const char *addon_url,
-                        const char *body)
+                        const char *addon_name, const char *addon_icon,
+                        const char *addon_url, const char *body)
 {
     if (!addon_id)
         return;
@@ -593,12 +594,12 @@ FcitxNotifyShowAddonTip(FcitxNotify *notify, const char *addon_id,
     if (!addon_url)
         addon_url = _("https://fcitx-im.org/wiki/Category:Addon");
     if (body) {
-        FcitxNotifyShowTipFmt(notify, NULL, NULL, addon_name,
+        FcitxNotifyShowTipFmt(notify, NULL, addon_icon, addon_name,
                               _("<b>%s</b><br/>(Check <a href=\"%s\">here</a> "
                                 "for more detail.)"), 0,
                               addon_id, body, addon_url);
     } else {
-        FcitxNotifyShowTipFmt(notify, NULL, NULL, addon_name,
+        FcitxNotifyShowTipFmt(notify, NULL, addon_icon, addon_name,
                               _("<b>%s is triggered.</b><br/>"
                                 "(Check <a href=\"%s\">here</a> "
                                 "for more detail.)"), 0,
