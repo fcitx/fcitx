@@ -684,7 +684,7 @@ check_fcitx() {
     write_order_list "$(_ 'version:')"
     version=$(fcitx -v 2> /dev/null | \
         sed -e 's/.*fcitx version: \([0-9.]*\).*/\1/g')
-    write_eval "$(_ 'Fcitx version: ${version}')"
+    write_eval "$(_ 'Fcitx version: ${1}')" "$(code_inline "${version}")"
     write_order_list "$(_ 'process:')"
     psoutput=$(ps -Ao pid,comm)
     process=()
