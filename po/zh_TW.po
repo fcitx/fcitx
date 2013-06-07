@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-05-31 00:02-0400\n"
-"PO-Revision-Date: 2013-05-30 12:14+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2013-06-07 00:02-0400\n"
+"PO-Revision-Date: 2013-06-07 01:39+0000\n"
+"Last-Translator: pellaeon <nfsmwlin@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -184,7 +184,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:309
 msgid "Active Tray Icon"
-msgstr ""
+msgstr "活動中操作列圖示"
 
 #: src/module/autoeng/fcitx-autoeng.desc:37
 msgid "Add Extra space when selecting a candidate word"
@@ -1087,12 +1087,12 @@ msgstr ""
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
 #: src/ui/classic/skin.desc:403
 msgid "Fill Background Horizontal rule"
-msgstr ""
+msgstr "背景填滿規則（垂直）"
 
 #: src/ui/classic/skin.desc:151 src/ui/classic/skin.desc:293
 #: src/ui/classic/skin.desc:395
 msgid "Fill Background Vertical rule"
-msgstr ""
+msgstr "背景填滿規則（垂直）"
 
 #: src/ui/classic/skin.desc:45
 msgid "First Candidate Color"
@@ -1439,7 +1439,7 @@ msgstr "加入目前選取文字到剪貼簿歷史"
 
 #: src/ui/classic/skin.desc:313
 msgid "Inctive Tray Icon"
-msgstr ""
+msgstr "非活動中操作列圖示"
 
 #: src/module/vk/vk.c:55
 msgid "Index"
@@ -1835,7 +1835,7 @@ msgstr "下一頁"
 #: src/ui/classic/skin.desc:273 src/ui/classic/skin.desc:281
 #: src/ui/classic/skin.desc:289
 msgid "Next Page Icon"
-msgstr ""
+msgstr "下一頁圖示"
 
 #: data/config.desc:164
 msgid "No"
@@ -2079,7 +2079,7 @@ msgstr "上一頁"
 #: src/ui/classic/skin.desc:269 src/ui/classic/skin.desc:277
 #: src/ui/classic/skin.desc:285
 msgid "Prev Page Icon"
-msgstr ""
+msgstr "上一頁圖示"
 
 #: data/config.desc:143
 msgid "Previous Candidate Word"
@@ -2496,7 +2496,7 @@ msgstr "特殊符號"
 
 #: src/ui/classic/skin.desc:182
 msgid "Special Icon position"
-msgstr ""
+msgstr "特殊圖示位置"
 
 #: src/module/spell/fcitx-spell.conf.in:3
 msgid "Spell"
