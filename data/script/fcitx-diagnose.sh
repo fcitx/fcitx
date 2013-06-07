@@ -23,11 +23,15 @@ fi
 # utility
 #############################
 
+array_push() {
+    eval "${1}"'=("${'"${1}"'[@]}" "${@:2}")'
+}
+
 _find_file() {
     local "${1}"
     eval "${2}"'=()'
     while IFS= read -r -d '' "${1}"; do
-        eval "${2}"'=("${'"${2}"'[@]}" "${'"${1}"'}")'
+        array_push "${2}" "${!1}"
     done < <(find "${@:3}" -print0)
 }
 
@@ -70,7 +74,7 @@ add_and_check_file() {
 unique_file_array() {
     for f in "${@:3}"; do
         add_and_check_file "${1}" "${f}" && {
-            eval "${2}"'=("${'"${2}"'[@]}" "${f}")'
+            array_push "${2}" "${f}"
         }
     done
 }
@@ -922,15 +926,38 @@ find_gtk_query_immodules() {
 }
 
 reg_gtk_query_output() {
-    # TODO provide hint looking for immodule file as well as checking if the
-    # file really exists.
     local version="$1"
     while read line; do
-        :
+        regex='"(/[^"]*\.so)"'
+        [[ $line =~ $regex ]] || continue
+        file=${BASH_REMATCH[1]}
+        add_and_check_file "__gtk_immodule_files_${version}" "${file}" && {
+            array_push "gtk_immodule_files_${version}" "${file}"
+        }
     done <<< "$2"
 }
 
-check_gtk_immodule() {
+check_gtk_immodule_file() {
+    local version=$1
+    local gtk_immodule_files
+    local all_exists=1
+    write_order_list "gtk ${version}:"
+    eval 'gtk_immodule_files=("${gtk_immodule_files_'"${version}"'[@]}")'
+    for file in "${gtk_immodule_files[@]}"; do
+        [[ -f "${file}" ]] || {
+            all_exists=0
+            write_error_eval \
+                "$(_ 'Gtk ${1} immodule file ${2} does not exist.')" \
+                "${version}" \
+                "${file}"
+        }
+    done
+    ((all_exists)) && \
+        write_eval "$(_ 'All found Gtk ${1} immodule files exist.')" \
+        "${version}"
+}
+
+check_gtk_query_immodule() {
     local version="$1"
     local IFS=$'\n'
     find_gtk_query_immodules "${version}"
@@ -959,15 +986,17 @@ check_gtk_immodule() {
                 write_command=write_error_eval
             fi
             "$write_command" \
-                "$(_ 'Found gtk-query-immodules for gtk ${1} at ${2}.')" \
-                "$(code_inline ${real_version})" \
-                "$(code_inline "${query_immodule}")"
+                "$(_ 'Found ${3} for gtk ${1} at ${2}.')" \
+                "$(code_inline "${real_version}")" \
+                "$(code_inline "${query_immodule}")" \
+                "$(code_inline gtk-query-immodules)"
             __need_blank_line=0
             write_eval "$(_ 'Version Line:')"
             write_quote_str "${version_line}"
         else
-            write_eval "$(_ 'Found gtk-query-immodules for unknow gtk version at ${1}.')" \
-                "$(code_inline "${query_immodule}")"
+            write_eval "$(_ 'Found ${2} for unknow gtk version at ${1}.')" \
+                "$(code_inline "${query_immodule}")" \
+                "$(code_inline gtk-query-immodules)"
             real_version=${version}
         fi
         if fcitx_gtk=$(grep fcitx <<< "${query_output}"); then
@@ -985,8 +1014,9 @@ check_gtk_immodule() {
     done
     ((query_found)) || {
         write_error_eval \
-            "$(_ 'Cannot find gtk-query-immodules for gtk ${1}')" \
-            "${version}"
+            "$(_ 'Cannot ${2} for gtk ${1}')" \
+            "${version}" \
+            "$(code_inline gtk-query-immodules)"
     }
     ((module_found)) || {
         write_error_eval \
@@ -1080,15 +1110,20 @@ check_gtk_immodule_cache() {
 check_gtk() {
     write_title 2 "Gtk:"
     _check_toolkit_env GTK_IM_MODULE gtk
-    write_order_list "$(_ 'Gtk IM module files:')"
+    write_order_list "$(code_inline gtk-query-immodules):"
     increase_cur_level 1
-    check_gtk_immodule 2
-    check_gtk_immodule 3
+    check_gtk_query_immodule 2
+    check_gtk_query_immodule 3
     increase_cur_level -1
     write_order_list "$(_ 'Gtk IM module cache:')"
     increase_cur_level 1
     check_gtk_immodule_cache 2
     check_gtk_immodule_cache 3
+    increase_cur_level -1
+    write_order_list "$(_ 'Gtk IM module files:')"
+    increase_cur_level 1
+    check_gtk_immodule_file 2
+    check_gtk_immodule_file 3
     increase_cur_level -1
 }
 
