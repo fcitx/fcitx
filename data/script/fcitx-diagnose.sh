@@ -159,6 +159,51 @@ get_locale() {
     echo "POSIX"
 }
 
+if type dbus-send &> /dev/null; then
+    dbus_get_name_owner() {
+        local address
+        address=$(dbus-send --print-reply=literal --dest=org.freedesktop.DBus \
+            /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner \
+            "string:$1" 2> /dev/null) || return 1
+        echo -n "${address##* }"
+    }
+    dbus_get_pid() {
+        local pid
+        pid=$(dbus-send --print-reply=literal --dest=org.freedesktop.DBus \
+            /org/freedesktop/DBus org.freedesktop.DBus.GetConnectionUnixProcessID \
+            "string:$1" 2> /dev/null) || return 1
+        echo -n "${pid##* }"
+    }
+elif qdbus_exe=$(which qdbus 2> /dev/null) || \
+    qdbus_exe=$(which qdbus-qt4 2> /dev/null); then
+    dbus_get_name_owner() {
+        local address
+        "${qdbus_exe}" org.freedesktop.DBus /org/freedesktop/DBus \
+            org.freedesktop.DBus.GetNameOwner "$1" 2> /dev/null
+    }
+    dbus_get_pid() {
+        "${qdbus_exe}" org.freedesktop.DBus /org/freedesktop/DBus \
+            org.freedesktop.DBus.GetConnectionUnixProcessID "$1" 2> /dev/null
+    }
+else
+    dbus_get_name_owner() {
+        return 1
+    }
+    dbus_get_pid() {
+        return 1
+    }
+fi
+
+print_process_info() {
+    ps -o pid=,args= --pid "$1" 2> /dev/null && return
+    cmdline=''
+    [[ -d /proc/$1 ]] && {
+        cmdline=$(cat /proc/$1/cmdline) || cmdline=$(cat /proc/$1/comm) || \
+            cmdline=$(readlink /proc/$1/exe)
+    } 2> /dev/null
+    echo "$1 ${cmdline}"
+}
+
 _detectDE_XDG_CURRENT() {
     case "${XDG_CURRENT_DESKTOP}" in
         GNOME)
@@ -189,9 +234,7 @@ _detectDE_classic() {
         DE=gnome
     elif [ x"$MATE_DESKTOP_SESSION_ID" != x"" ]; then
         DE=mate
-    elif $(dbus-send --print-reply --dest=org.freedesktop.DBus \
-        /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner \
-        string:org.gnome.SessionManager > /dev/null 2>&1); then
+    elif dbus_get_name_owner org.gnome.SessionManager > /dev/null; then
         DE=gnome
     elif xprop -root _DT_SAVE_MODE 2> /dev/null | \
         grep ' = \"xfce4\"$' >/dev/null 2>&1; then
@@ -638,7 +681,7 @@ check_fcitx() {
     while read line; do
         if [[ $line =~ ^([0-9]*)\ .*fcitx.* ]]; then
             [ "${BASH_REMATCH[1]}" = "$$" ] && continue
-            process=("${process[@]}" "${line}")
+            array_push process "${line}"
         fi
     done <<< "${psoutput}"
     if ! ((${#process[@]})); then
@@ -1142,6 +1185,7 @@ check_modules() {
     }
     local enabled_addon=()
     local disabled_addon=()
+    local enabled_ui=()
     local name
     local enable
     write_eval "$(_ 'Found fcitx addon config directory: ${1}.')" \
@@ -1161,9 +1205,12 @@ check_modules() {
             [ -z "${_enable}" ] || enable="${_enable}"
         fi
         if [ $(echo "${enable}" | sed -e 's/.*/\L&/g') = false ]; then
-            disabled_addon=("${disabled_addon[@]}" "${name}")
+            array_push disabled_addon "${name}"
         else
-            enabled_addon=("${enabled_addon[@]}" "${name}")
+            array_push enabled_addon "${name}"
+            if [[ $(get_from_config_file "${file}" Category) = UI ]]; then
+                array_push enabled_ui "${name}"
+            fi
         fi
     done
     increase_cur_level 1
@@ -1177,6 +1224,29 @@ check_modules() {
     [ "${#disabled_addon[@]}" = 0 ] || {
         write_quote_cmd print_array "${disabled_addon[@]}"
     }
+    write_order_list_eval "$(_ 'User Interface:')"
+    if ! ((${#enabled_ui[@]})); then
+        write_error_eval "$(_ 'Cannot find enabled fcitx user interface!')"
+    else
+        write_eval "$(_ 'Found ${1} enabled user interface addons:')" \
+            "${#enabled_ui[@]}"
+        write_quote_cmd print_array "${enabled_ui[@]}"
+        has_non_kimpanel=0
+        has_kimpanel_dbus=0
+        for ui in "${enabled_ui[@]}"; do
+            if [[ $ui =~ kimpanel ]]; then
+                pid=$(dbus_get_pid org.kde.impanel) || continue
+                has_kimpanel_dbus=1
+                write_eval "$(_ "Kimpanel process:")"
+                write_quote_cmd print_process_info "${pid}"
+            else
+                has_non_kimpanel=1
+            fi
+        done
+        ((has_non_kimpanel)) || ((has_kimpanel_dbus)) || \
+            write_error_eval \
+            "$(_ 'Cannot find kimpanel dbus interface or enabled non-kimpanel user interface.')"
+    fi
     increase_cur_level -1
 }
 
