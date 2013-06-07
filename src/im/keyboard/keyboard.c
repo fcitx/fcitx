@@ -545,7 +545,7 @@ void FcitxKeyboardOnClose(void* arg, FcitxIMCloseEventType event)
     } else if (event == CET_ChangeByInactivate) {
         FcitxKeyboardCommitBuffer(keyboard);
     } else if (event == CET_ChangeByUser) {
-        FcitxKeyboardCommitBuffer(keyboard);
+        FcitxKeyboardResetIM(keyboard);
     }
 }
 
