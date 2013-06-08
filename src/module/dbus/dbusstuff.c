@@ -373,7 +373,7 @@ void* DBusCreate(FcitxInstance* instance)
     vtable.owner = dbusmodule;
     vtable.init = DBusAddMatch;
     vtable.free = DBusRemoveMatch;
-    dbusmodule->handler = fcitx_handler_table_new(sizeof(FcitxDBusWatchNameNotify), FcitxDBusWatchNameNotifyFreeFunc);
+    dbusmodule->handler = fcitx_handler_table_new_with_keydata(sizeof(FcitxDBusWatchNameNotify), FcitxDBusWatchNameNotifyFreeFunc, &vtable);
 
     FcitxDBusAddFunctions(instance);
     dbus_error_free(&err);
