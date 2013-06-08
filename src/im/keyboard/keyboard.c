@@ -909,11 +909,10 @@ INPUT_RETURN_VALUE FcitxKeyboardHotkeyToggleWordHint(void* arg)
         if (need_notify) {
             FcitxFreeDesktopNotifyShowAddonTip(
                 instance, "fcitx-keyboard-hint",
-                _("Keyboard input method spell hint"),
-                "fcitx-kbd",
-                _("https://fcitx-im.org/wiki/Keyboard"),
+                "tools-check-spelling",
+                _("Spell hint"),
                 enableWordHint != PTR_FALSE ? _("Spell hint is enabled.") :
-                _("Spell hint is disabled."));
+                                              _("Spell hint is disabled."));
         }
 
         FcitxInstanceSetICData(instance, currentIC,

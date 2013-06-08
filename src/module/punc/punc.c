@@ -569,12 +569,10 @@ INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void* arg)
         FcitxUIUpdateStatus(instance, "punc");
         FcitxFreeDesktopNotifyShowAddonTip(
             instance, "fcitx-punc-toggle",
+            profile->bUseWidePunc ? "fcitx-punc-active" : "fcitx-punc-inactive",
             _("Punctuation Support"),
-            profile->bUseWidePunc ? "fcitx-punc-active" :
-            "fcitx-punc-inactive",
-            _("https://fcitx-im.org/wiki/Punctuation"),
             profile->bUseWidePunc ? _("Full width punctuations are used.") :
-            _("Latin punctuations are used."));
+                                    _("Latin punctuations are used."));
         return IRV_DO_NOTHING;
     } else {
         return IRV_TO_PROCESS;

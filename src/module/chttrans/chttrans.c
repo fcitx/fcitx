@@ -171,12 +171,11 @@ INPUT_RETURN_VALUE HotkeyToggleChttransState(void* arg)
         boolean enabled = ChttransEnabled(transState);
         FcitxFreeDesktopNotifyShowAddonTip(
             instance, "fcitx-chttrans-toggle",
-            _("Simplified Chinese To Traditional Chinese"),
             enabled ? "fcitx-chttrans-active" :
-            "fcitx-chttrans-inactive",
-            _("https://fcitx-im.org/wiki/Chttrans"),
+                      "fcitx-chttrans-inactive",
+            _("Simplified Chinese To Traditional Chinese"),
             enabled ? _("Traditional Chinese is enabled.") :
-            _("Simplified Chinese is enabled."));
+                      _("Simplified Chinese is enabled."));
         return IRV_DO_NOTHING;
     } else {
         return IRV_TO_PROCESS;

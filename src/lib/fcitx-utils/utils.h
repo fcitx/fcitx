@@ -119,8 +119,6 @@ extern "C" {
      * Function used to free the content of a structure,
      * DO NOT free the pointer itself
      **/
-    typedef void (*FcitxFreeContentFunc)(void *data);
-    typedef void (*FcitxInitContentFunc)(void *data, void *owner);
     typedef void (*FcitxCallBack)();
     /**
      * A hash set for string

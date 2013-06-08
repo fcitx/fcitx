@@ -142,6 +142,7 @@ static void KimpanelOnTriggerOn(void *arg);
 static void KimpanelOnTriggerOff(void *arg);
 static void KimpanelSuspend(void* arg);
 static void KimpanelDestroy(void* arg);
+static void KimpanelOwnerChanged(void* user_data, void* arg, const char* serviceName, const char* oldName, const char* newName);
 
 static void KimUpdateLookupTableCursor(FcitxKimpanelUI* kimpanel, int cursor);
 static void KimShowAux(FcitxKimpanelUI* kimpanel, boolean toShow);
@@ -311,18 +312,9 @@ void* KimpanelCreate(FcitxInstance* instance)
             break;
         }
 
-        dbus_bus_add_match(kimpanel->conn,
-                           "type='signal',"
-                           "sender='" DBUS_SERVICE_DBUS "',"
-                           "interface='" DBUS_INTERFACE_DBUS "',"
-                           "path='" DBUS_PATH_DBUS "',"
-                           "member='NameOwnerChanged',"
-                           "arg0='org.kde.impanel'",
-                           &err);
-
-        dbus_connection_flush(kimpanel->conn);
-        if (dbus_error_is_set(&err)) {
-            FcitxLog(ERROR, "Match Error (%s)", err.message);
+        int id = FcitxDBusWatchName(instance, "org.kde.impanel", kimpanel,
+                                    KimpanelOwnerChanged, NULL, NULL);
+        if (id == 0) {
             break;
         }
 
@@ -880,34 +872,20 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         FcitxLog(DEBUG, "Configure");
         fcitx_utils_launch_configure_tool();
         return DBUS_HANDLER_RESULT_HANDLED;
-    } else if (dbus_message_is_signal(msg, DBUS_INTERFACE_DBUS, "NameOwnerChanged")) {
-        const char* service, *oldowner, *newowner;
-        DBusError error;
-        dbus_error_init(&error);
-        if (dbus_message_get_args(msg, &error,
-                                  DBUS_TYPE_STRING, &service ,
-                                  DBUS_TYPE_STRING, &oldowner ,
-                                  DBUS_TYPE_STRING, &newowner ,
-                                  DBUS_TYPE_INVALID)) {
-            /* old die and no new one */
-            if (strcmp(service, "org.kde.impanel") == 0) {
-                if (strlen(oldowner) > 0 && strlen(newowner) == 0) {
-                    FcitxUISwitchToFallback(instance);
-                }
-                /*
-                 * since if new rise, it will send PanelCreated,
-                 * So don't need to re-register here
-                 */
-                return DBUS_HANDLER_RESULT_HANDLED;
-            }
-        }
-        dbus_error_free(&error);
     }
 
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
 
-
+void KimpanelOwnerChanged(void* user_data, void* arg, const char* serviceName, const char* oldName, const char* newName) {
+    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) user_data;
+    /* old die and no new one */
+    if (strcmp(serviceName, "org.kde.impanel") == 0) {
+        if (strlen(oldName) > 0 && strlen(newName) == 0) {
+            FcitxUISwitchToFallback(kimpanel->owner);
+        }
+    }
+}
 
 void KimExecDialog(FcitxKimpanelUI* kimpanel, char *prop)
 {
@@ -1729,15 +1707,6 @@ void KimpanelDestroy(void* arg)
                            NULL);
     dbus_bus_remove_match(kimpanel->conn,
                           "type='signal',sender='org.kde.impanel',interface='org.kde.impanel2'",
-                          NULL);
-
-    dbus_bus_remove_match(kimpanel->conn,
-                          "type='signal',"
-                           "sender='" DBUS_SERVICE_DBUS "',"
-                          "interface='" DBUS_INTERFACE_DBUS "',"
-                          "path='" DBUS_PATH_DBUS "',"
-                          "member='NameOwnerChanged',"
-                          "arg0='org.kde.impanel'",
                           NULL);
 
     dbus_connection_flush(kimpanel->conn);

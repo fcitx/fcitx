@@ -27,21 +27,23 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+    typedef void (*FcitxFreeKeyFunc)(void *data, const void* key, size_t len, void *owner);
+    typedef void (*FcitxInitKeyFunc)(void *data, const void* key, size_t len, void *owner);
 
     typedef struct _FcitxHandlerTable FcitxHandlerTable;
     typedef struct _FcitxHandlerKey FcitxHandlerKey;
 
     typedef struct {
         size_t size;
-        FcitxInitContentFunc init;
-        FcitxFreeContentFunc free;
+        FcitxInitKeyFunc init;
+        FcitxFreeKeyFunc free;
         void *owner;
     } FcitxHandlerKeyDataVTable;
 
     FcitxHandlerTable *fcitx_handler_table_new(size_t obj_size,
-                                               FcitxFreeContentFunc free_func);
+                                               FcitxDestroyNotify free_func);
     FcitxHandlerTable *fcitx_handler_table_new_with_keydata(
-        size_t obj_size, FcitxFreeContentFunc free_func,
+        size_t obj_size, FcitxDestroyNotify free_func,
         const FcitxHandlerKeyDataVTable *key_vtable);
 #define fcitx_handler_table_new(obj_size, free_func, args...)   \
     _fcitx_handler_table_new(obj_size, free_func, ##args, NULL)
@@ -58,8 +60,12 @@ extern "C" {
                                  FcitxHandlerKey *key, const void *obj);
     int fcitx_handler_key_prepend(FcitxHandlerTable *table,
                                   FcitxHandlerKey *key, const void *obj);
+    boolean fcitx_handler_key_is_empty(FcitxHandlerTable* table, FcitxHandlerKey* key);
 
     void *fcitx_handler_table_get_by_id(FcitxHandlerTable *table, int id);
+
+    FcitxHandlerKey *fcitx_handler_table_get_key_by_id(FcitxHandlerTable *table, int id);
+
     FcitxHandlerKey *fcitx_handler_table_find_key(
         FcitxHandlerTable *table, size_t keysize,
         const void *key, boolean create);
@@ -107,6 +113,7 @@ extern "C" {
     void fcitx_handler_table_remove_key(FcitxHandlerTable *table,
                                         size_t keysize, const void *key);
     void fcitx_handler_table_remove_by_id(FcitxHandlerTable *table, int id);
+    void fcitx_handler_table_remove_by_id_full(FcitxHandlerTable *table, int id);
     void fcitx_handler_table_free(FcitxHandlerTable *table);
 
     static inline int

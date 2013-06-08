@@ -136,6 +136,8 @@ static DBusHandlerResult FcitxNotificationItemEventHandler (DBusConnection  *con
 static void NotificationWatcherServiceExistCallback(DBusPendingCall *call, void *data);
 static void FcitxNotificationItemRegisterSuccess(DBusPendingCall *call, void *data);
 
+static void FcitxNotificationItemOwnerChanged(void* user_data, void* arg, const char* serviceName, const char* oldName, const char* newName);
+
 static void FcitxNotificationItemGetId(void* arg, DBusMessageIter* iter);
 static void FcitxNotificationItemGetCategory(void* arg, DBusMessageIter* iter);
 static void FcitxNotificationItemGetStatus(void* arg, DBusMessageIter* iter);
@@ -152,7 +154,6 @@ static void FcitxNotificationItemIMChanged(void* arg);
 static void FcitxNotificationItemUpdateIMList(void* arg);
 static boolean FcitxNotificationItemEnable(FcitxNotificationItem* notificationitem, FcitxNotificationItemAvailableCallback callback, void *data);
 static void FcitxNotificationItemDisable(FcitxNotificationItem* notificationitem);
-static DBusHandlerResult FcitxNotificationItemDBusFilter(DBusConnection* connection, DBusMessage* msg, void* user_data);
 static void FcitxNotificationItemSetAvailable(FcitxNotificationItem* notificationitem, boolean available);
 
 
@@ -189,11 +190,6 @@ void* FcitxNotificationItemCreate(FcitxInstance* instance)
 
         notificationitem->conn = conn;
 
-        if (!dbus_connection_add_filter(notificationitem->conn, FcitxNotificationItemDBusFilter, notificationitem, NULL)) {
-            FcitxLog(ERROR, "No memory");
-            break;
-        }
-
         DBusObjectPathVTable fcitxIPCVTable = {NULL, &FcitxNotificationItemEventHandler, NULL, NULL, NULL, NULL };
         if (!dbus_connection_register_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ, &fcitxIPCVTable, notificationitem)) {
             FcitxLog(ERROR, "No memory");
@@ -205,16 +201,15 @@ void* FcitxNotificationItemCreate(FcitxInstance* instance)
             break;
         }
 
-        dbus_bus_add_match(notificationitem->conn,
-                           "type='signal',"
-                           "interface='" DBUS_INTERFACE_DBUS "',"
-                           "path='" DBUS_PATH_DBUS "',"
-                           "member='NameOwnerChanged',"
-                           "arg0='" NOTIFICATION_WATCHER_DBUS_ADDR "'",
-                           &err);
-        dbus_connection_flush(notificationitem->conn);
-        if (dbus_error_is_set(&err)) {
-            FcitxLog(ERROR, "Match Error (%s)", err.message);
+
+        int id = FcitxDBusWatchName(instance,
+                                    NOTIFICATION_WATCHER_DBUS_ADDR,
+                                    notificationitem,
+                                    FcitxNotificationItemOwnerChanged,
+                                    NULL,
+                                    NULL);
+
+        if (id == 0) {
             break;
         }
 
@@ -265,15 +260,6 @@ void FcitxNotificationItemDestroy(void* arg)
     if (notificationitem->conn) {
         dbus_connection_unregister_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ);
         dbus_connection_unregister_object_path(notificationitem->conn, "/MenuBar");
-        dbus_connection_remove_filter(notificationitem->conn, FcitxNotificationItemDBusFilter, notificationitem);
-
-        dbus_bus_remove_match(notificationitem->conn,
-                           "type='signal',"
-                           "interface='" DBUS_INTERFACE_DBUS "',"
-                           "path='" DBUS_PATH_DBUS "',"
-                           "member='NameOwnerChanged',"
-                           "arg0='" NOTIFICATION_WATCHER_DBUS_ADDR "'",
-                           NULL);
     }
 
     free(notificationitem);
@@ -620,33 +606,15 @@ void FcitxNotificationItemDisable(FcitxNotificationItem* notificationitem)
     }
 }
 
-DBusHandlerResult FcitxNotificationItemDBusFilter(DBusConnection* connection, DBusMessage* msg, void* user_data)
+void FcitxNotificationItemOwnerChanged(void* user_data, void* arg, const char* serviceName, const char* oldName, const char* newName)
 {
     FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) user_data;
-    if (dbus_message_is_signal(msg, DBUS_INTERFACE_DBUS, "NameOwnerChanged")) {
-        const char* service, *oldowner, *newowner;
-        DBusError error;
-        dbus_error_init(&error);
-        do {
-            if (!dbus_message_get_args(msg, &error,
-                                       DBUS_TYPE_STRING, &service ,
-                                       DBUS_TYPE_STRING, &oldowner ,
-                                       DBUS_TYPE_STRING, &newowner ,
-                                       DBUS_TYPE_INVALID)) {
-                break;
-            }
-            /* old die and no new one */
-            if (strcmp(service, NOTIFICATION_WATCHER_DBUS_ADDR) != 0) {
-                break;
-            }
-
-            FcitxNotificationItemSetAvailable (notificationitem, strlen(newowner) > 0);
-            return DBUS_HANDLER_RESULT_HANDLED;
-        } while(0);
-        dbus_error_free(&error);
+    /* old die and no new one */
+    if (strcmp(serviceName, NOTIFICATION_WATCHER_DBUS_ADDR) != 0) {
+        return;
     }
 
-    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+    FcitxNotificationItemSetAvailable (notificationitem, strlen(newName) > 0);
 }
 
 void FcitxNotificationItemSetAvailable(FcitxNotificationItem* notificationitem, boolean available)

@@ -35,6 +35,8 @@ extern "C" {
 
 #define FCITX_DBUS_SERVICE "org.fcitx.Fcitx"
 
+typedef void (*FcitxDBusWatchNameCallback)(void* owner, void* arg, const char* serviceName, const char* oldName, const char* newName);
+
 #ifdef __cplusplus
 }
 #endif

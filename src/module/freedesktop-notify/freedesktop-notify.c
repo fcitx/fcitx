@@ -68,6 +68,13 @@ typedef enum {
     NOTIFY_TO_BE_REMOVE,
 } FcitxNotifyState;
 
+typedef enum _FcitxNotifyCapabilities {
+    NC_ACTIONS = (1 << 0),
+    NC_MARKUP = (1 << 1),
+    NC_LINK = (1 << 2),
+    NC_BODY = (1 << 3)
+} FcitxNotifyCapabilities;
+
 typedef struct _FcitxNotify FcitxNotify;
 
 typedef struct {
@@ -79,7 +86,6 @@ typedef struct {
     int32_t ref_count;
     FcitxNotify *owner;
     FcitxNotifyState state;
-
     FcitxDestroyNotify free_func;
     FcitxFreedesktopNotifyActionCallback callback;
     void *data;
@@ -95,6 +101,7 @@ struct _FcitxNotify {
     FcitxDesktopFile dconfig;
     FcitxStringMap *hide_notify;
     uint32_t last_tip_id;
+    uint32_t capabilities;
 };
 
 #define TIMEOUT_REAL_TIME (100)
@@ -232,6 +239,60 @@ FcitxNotifyDBusFilter(DBusConnection *connection, DBusMessage *message,
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
 
+
+void FcitxNotifyGetCapabilitiesCallback(DBusPendingCall *call, void *data)
+{
+    FcitxNotify *notify = (FcitxNotify*) data;
+
+    DBusMessage *msg = dbus_pending_call_steal_reply(call);
+
+    if (!msg) {
+        return;
+    }
+
+    DBusMessageIter args, sub;
+    dbus_message_iter_init(msg, &args);
+
+    if (dbus_message_iter_get_arg_type(&args) != DBUS_TYPE_ARRAY) {
+        return;
+    }
+
+    dbus_message_iter_recurse(&args, &sub);
+    while (dbus_message_iter_get_arg_type(&sub) != DBUS_TYPE_STRING) {
+        const char* action = NULL;
+        dbus_message_iter_get_basic(&sub, &action);
+        if (strcmp(action, "actions") == 0) {
+            notify->capabilities |= NC_ACTIONS;
+        } else if (strcmp(action, "body") == 0) {
+            notify->capabilities |= NC_BODY;
+        } else if (strcmp(action, "body-hyperlinks") == 0) {
+            notify->capabilities |= NC_LINK;
+        } else if (strcmp(action, "body-markup") == 0) {
+            notify->capabilities |= NC_MARKUP;
+        }
+        dbus_message_iter_next(&sub);
+    }
+}
+
+static void
+FcitxNotifyGetCapabilities(FcitxNotify *notify)
+{
+    DBusMessage* message = dbus_message_new_method_call(NOTIFICATIONS_SERVICE_NAME, NOTIFICATIONS_PATH, NOTIFICATIONS_INTERFACE_NAME, "GetCapabilities");
+
+    DBusPendingCall *call = NULL;
+    dbus_bool_t reply =
+        dbus_connection_send_with_reply(notify->conn, message,
+                                        &call, DBUS_TIMEOUT_USE_DEFAULT);
+
+    if (reply == TRUE) {
+        dbus_pending_call_set_notify(call,
+                                     FcitxNotifyGetCapabilitiesCallback,
+                                     notify,
+                                     NULL);
+        dbus_pending_call_unref(call);
+    }
+}
+
 static void
 FcitxNotifyLoadDConfig(FcitxNotify *notify)
 {
@@ -275,6 +336,14 @@ FcitxNotifySaveDConfig(FcitxNotify *notify)
     }
 }
 
+static void FcitxNotifyOwnerChanged(void* user_data, void* arg, const char* serviceName, const char* oldName, const char* newName)
+{
+    FcitxNotify *notify = (FcitxNotify*)user_data;
+    if (strlen(newName) > 0) {
+        FcitxNotifyGetCapabilities(notify);
+    }
+}
+
 static void*
 FcitxNotifyCreate(FcitxInstance *instance)
 {
@@ -305,6 +374,8 @@ FcitxNotifyCreate(FcitxInstance *instance)
     notify->hide_notify = fcitx_string_map_new(NULL, '\0');
     fcitx_desktop_file_init(&notify->dconfig, NULL, NULL);
     FcitxNotifyLoadDConfig(notify);
+
+    FcitxDBusWatchName(instance, NOTIFICATIONS_SERVICE_NAME, notify, FcitxNotifyOwnerChanged, NULL, NULL);
 
     FcitxFreeDesktopNotifyAddFunctions(instance);
 
@@ -532,8 +603,8 @@ FcitxNotifyShowTipCallback(void *arg, uint32_t id, const char *action)
 
 static void
 FcitxNotifyShowTip(FcitxNotify *notify, const char *appName,
-                   const char *appIcon, const char *summary, const char *body,
-                   int32_t timeout, const char *tip_id)
+                   const char *appIcon, int32_t timeout, const char *tip_id,
+                   const char *summary, const char *body)
 {
     if (fcitx_unlikely(!tip_id) ||
         fcitx_string_map_get(notify->hide_notify, tip_id, false))
@@ -552,59 +623,47 @@ FcitxNotifyShowTip(FcitxNotify *notify, const char *appName,
     data->notify = notify;
     notify->last_tip_id =
         FcitxNotifySendNotification(notify, appName, notify->last_tip_id,
-                                    appIcon, summary, body, actions, timeout,
+                                    appIcon, summary, body, notify->capabilities & NC_ACTIONS ? actions : NULL, timeout,
                                     FcitxNotifyShowTipCallback, data, free);
 }
 
 static void
 FcitxNotifyShowTipFmtV(FcitxNotify *notify, const char *appName,
-                       const char *appIcon, const char *summary,
-                       const char *body_fmt, int32_t timeout,
-                       const char *tip_id, va_list *ap)
+                       const char *appIcon, int32_t timeout,
+                       const char *tip_id, const char *summary,
+                       const char *body_fmt, va_list *ap)
 {
     char *body = NULL;
     vasprintf(&body, body_fmt, *ap);
-    FcitxNotifyShowTip(notify, appName, appIcon, summary, body,
-                       timeout, tip_id);
+    FcitxNotifyShowTip(notify, appName, appIcon,
+                       timeout, tip_id, summary, body);
     fcitx_utils_free(body);
 }
 
 static void
 FcitxNotifyShowTipFmt(FcitxNotify *notify, const char *appName,
-                      const char *appIcon, const char *summary,
-                      const char *body_fmt, int32_t timeout,
-                      const char *tip_id, ...)
+                      const char *appIcon, int32_t timeout,
+                      const char *tip_id, const char *summary,
+                      const char *body_fmt, ...)
 {
     va_list ap;
-    va_start(ap, tip_id);
-    FcitxNotifyShowTipFmtV(notify, appName, appIcon, summary, body_fmt,
-                           timeout, tip_id, &ap);
+    va_start(ap, body_fmt);
+    FcitxNotifyShowTipFmtV(notify, appName, appIcon, timeout, tip_id, summary, body_fmt,
+                           &ap);
     va_end(ap);
 }
 
 static void
 FcitxNotifyShowAddonTip(FcitxNotify *notify, const char *addon_id,
-                        const char *addon_name, const char *addon_icon,
-                        const char *addon_url, const char *body)
+                        const char *addon_icon, const char *summary, const char *body)
 {
-    if (!addon_id)
+    if (!addon_id) {
         return;
-    if (!addon_name)
-        addon_name = addon_id;
-    if (!addon_url)
-        addon_url = _("https://fcitx-im.org/wiki/Category:Addon");
-    if (body) {
-        FcitxNotifyShowTipFmt(notify, NULL, addon_icon, addon_name,
-                              _("<b>%s</b><br/>(Check <a href=\"%s\">here</a> "
-                                "for more detail.)"), 0,
-                              addon_id, body, addon_url);
-    } else {
-        FcitxNotifyShowTipFmt(notify, NULL, addon_icon, addon_name,
-                              _("<b>%s is triggered.</b><br/>"
-                                "(Check <a href=\"%s\">here</a> "
-                                "for more detail.)"), 0,
-                              addon_id, addon_name, addon_url);
     }
+
+    FcitxNotifyShowTipFmt(notify, "fcitx", addon_icon, 0,
+                          addon_id, summary ? summary : "",
+                          "%s", body ? body : "");
 }
 
 static void

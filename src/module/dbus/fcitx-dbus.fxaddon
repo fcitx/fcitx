@@ -4,8 +4,8 @@ Prefix=DBus
 Include0="dbusstuff.h"
 Function0=GetConnection
 Function1=GetPrivConnection
-Function2=
-Function3=
+Function2=WatchName
+Function3=UnwatchName
 Function4=
 Function5=
 Function6=
@@ -20,3 +20,22 @@ Res.Exp=$<->conn
 Name=get-priv-connection
 Return=DBusConnection*
 Res.Exp=$<->privconn
+
+[WatchName]
+Name=watch-name
+Return=int
+Arg0=const char*
+Arg1=void*
+Arg2=FcitxDBusWatchNameCallback
+Arg3=void*
+Arg4=FcitxDestroyNotify
+Res.WrapFunc=DBusWatchName
+Res.Deref=$@ + 1
+Res.DerefType=int
+
+[UnwatchName]
+Name=unwatch-name
+Arg0=int
+Arg0.Deref=$0 - 1
+Arg0.DerefType=int
+Res.WrapFunc=DBusUnwatchName
