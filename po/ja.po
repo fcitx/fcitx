@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-05-31 00:02-0400\n"
+"POT-Creation-Date: 2013-06-09 00:02-0400\n"
 "PO-Revision-Date: 2013-05-30 12:14+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
@@ -26,11 +26,11 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr "Ctrl+Delete で削除"
 
-#: data/script/fcitx-diagnose.sh:314
+#: data/script/fcitx-diagnose.sh:385
 msgid "${1} not found."
 msgstr "${1} は見つかりません"
 
-#: data/script/fcitx-diagnose.sh:645
+#: data/script/fcitx-diagnose.sh:715
 msgid "${1} works properly."
 msgstr "${1} は正常に動作しています。"
 
@@ -71,27 +71,27 @@ msgstr "リセット (&R)"
 msgid "&Save"
 msgstr "保存 (&S)"
 
-#: src/im/keyboard/keyboard.c:440 src/im/keyboard/keyboard.c:457
+#: src/im/keyboard/keyboard.c:441 src/im/keyboard/keyboard.c:458
 msgid "(Unavailable)"
 msgstr "(使えません)"
 
-#: data/script/fcitx-diagnose.sh:452
+#: data/script/fcitx-diagnose.sh:525
 msgid "/Beginner%27s_Guide"
 msgstr "/Beginner%27s_Guide"
 
-#: data/script/fcitx-diagnose.sh:499
+#: data/script/fcitx-diagnose.sh:572
 msgid "/Hall_of_Shame_for_Linux_IME_Support"
 msgstr "/Hall_of_Shame_for_Linux_IME_Support"
 
-#: data/script/fcitx-diagnose.sh:463
+#: data/script/fcitx-diagnose.sh:536
 msgid "/Input_method_related_environment_variables"
 msgstr "/Input_method_related_environment_variables"
 
-#: data/script/fcitx-diagnose.sh:479
+#: data/script/fcitx-diagnose.sh:552
 msgid "/Note_for_GNOME_Later_than_3.6"
 msgstr "/Note_for_GNOME_Later_than_3.6"
 
-#: data/script/fcitx-diagnose.sh:503
+#: data/script/fcitx-diagnose.sh:576
 msgid "/XIM"
 msgstr "/XIM"
 
@@ -103,23 +103,23 @@ msgstr ""
 msgid "0 for commit immediately, -1 for keep all words"
 msgstr "0 の場合すぐに確定し、 -1 の場合すべての単語を保持します"
 
-#: src/module/unicode/charselectdata.c:252
+#: src/module/unicode/charselectdata.c:249
 msgid "<Low Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:248
+#: src/module/unicode/charselectdata.c:245
 msgid "<Non Private Use High Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:250
+#: src/module/unicode/charselectdata.c:247
 msgid "<Private Use High Surrogate>"
 msgstr ""
 
-#: src/module/unicode/charselectdata.c:254
+#: src/module/unicode/charselectdata.c:251
 msgid "<Private Use>"
 msgstr "<プライベート用>"
 
-#: src/module/unicode/charselectdata.c:282
+#: src/module/unicode/charselectdata.c:279
 msgid "<not assigned>"
 msgstr "<未定義>"
 
@@ -223,11 +223,11 @@ msgstr "アドオン"
 msgid "Addon Config %s is %s"
 msgstr "アドオン設定 %s は %s です"
 
-#: data/script/fcitx-diagnose.sh:967
+#: data/script/fcitx-diagnose.sh:1191
 msgid "Addon Config Dir:"
 msgstr "アドオン設定ディレクトリ:"
 
-#: data/script/fcitx-diagnose.sh:978
+#: data/script/fcitx-diagnose.sh:1203
 msgid "Addon List:"
 msgstr "アドオンリスト:"
 
@@ -254,7 +254,11 @@ msgstr "調整しない"
 msgid "All"
 msgstr "すべて"
 
-#: data/script/fcitx-diagnose.sh:591
+#: data/script/fcitx-diagnose.sh:1009
+msgid "All found Gtk ${1} immodule files exist."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:655
 msgid "All locale:"
 msgstr "すべてのロケール:"
 
@@ -370,7 +374,7 @@ msgstr "可能な値:"
 msgid "Background Image"
 msgstr "背景"
 
-#: data/script/fcitx-diagnose.sh:451
+#: data/script/fcitx-diagnose.sh:524
 msgid "Beginner's Guide"
 msgstr "初心者ガイド"
 
@@ -422,7 +426,7 @@ msgstr "%sスキンをロードできません、既定のスキンに戻りま�
 msgid "Can't Create imWindow"
 msgstr "imWindow を生成できません"
 
-#: src/module/punc/punc.c:397
+#: src/module/punc/punc.c:398
 msgid "Can't open punc file."
 msgstr "句読点ファイルを開けません"
 
@@ -443,6 +447,11 @@ msgstr "候補の単語数"
 msgid "Cangjie"
 msgstr ""
 
+#: data/script/fcitx-diagnose.sh:1070
+#, fuzzy
+msgid "Cannot ${2} for gtk ${1}"
+msgstr "gtk${1} 向け設定GUI:"
+
 #: src/im/pinyin/py.c:1736
 #, c-format
 msgid "Cannot Save Frequent word: %s"
@@ -458,7 +467,7 @@ msgstr "Pinyin インデックスを保存できません: %s"
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "ユーザーのPinyinデータベースを保存できません: %s"
 
-#: data/script/fcitx-diagnose.sh:643
+#: data/script/fcitx-diagnose.sh:713
 msgid "Cannot connect to fcitx correctly."
 msgstr "正しくfcitxに接続できません。"
 
@@ -467,42 +476,58 @@ msgstr "正しくfcitxに接続できません。"
 msgid "Cannot create file %1."
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:560
+#: data/script/fcitx-diagnose.sh:626
 msgid "Cannot determine desktop environment."
 msgstr "デスクトップ環境を決定できません。"
 
-#: data/script/fcitx-diagnose.sh:733
+#: data/script/fcitx-diagnose.sh:803
 msgid ""
 "Cannot find a GUI config tool, please install one of ${1}, ${2}, or ${3}."
 msgstr ""
 "GUI 設定ツールが見つかりません。 ${1}, ${2}, ${3} のうちどれか一つをインス"
 "トールしてください。"
 
-#: data/script/fcitx-diagnose.sh:969
+#: data/script/fcitx-diagnose.sh:1239
+#, fuzzy
+msgid "Cannot find enabled fcitx user interface!"
+msgstr "fcitxを実行できません！"
+
+#: data/script/fcitx-diagnose.sh:1193
 msgid "Cannot find fcitx addon config directory."
 msgstr "Fcitx アドオンの設定ディレクトリが見つかりません。"
 
-#: data/script/fcitx-diagnose.sh:604
+#: data/script/fcitx-diagnose.sh:676
 msgid "Cannot find fcitx executable!"
 msgstr "fcitxを実行できません！"
 
-#: data/script/fcitx-diagnose.sh:939
+#: data/script/fcitx-diagnose.sh:1158
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
 msgstr "キャッシュに gtk ${1} 用の fcitx im モジュールが見つかりません。"
 
-#: data/script/fcitx-diagnose.sh:907
+#: data/script/fcitx-diagnose.sh:1076
 msgid "Cannot find fcitx im module for gtk ${1}."
 msgstr "gtk ${1} 用のFcitx im モジュールが見つかりません。"
 
-#: data/script/fcitx-diagnose.sh:872
-msgid "Cannot find fcitx input method module for qt."
+#: data/script/fcitx-diagnose.sh:951 data/script/fcitx-diagnose.sh:955
+#, fuzzy
+msgid "Cannot find fcitx input method module for ${1}."
 msgstr "qt用のFcitx入力メソッドモジュールが見つかりません。"
 
-#: data/script/fcitx-diagnose.sh:723
+#: data/script/fcitx-diagnose.sh:793
 msgid "Cannot find fcitx-configtool executable!"
 msgstr "fcitx-configtoolが実行可能な状態で見つかりませんでした！"
 
-#: data/script/fcitx-diagnose.sh:798
+#: data/script/fcitx-diagnose.sh:1153
+#, fuzzy
+msgid "Cannot find immodules cache for gtk ${1}"
+msgstr "gtk ${1} 用のFcitx im モジュールが見つかりません。"
+
+#: data/script/fcitx-diagnose.sh:1258
+msgid ""
+"Cannot find kimpanel dbus interface or enabled non-kimpanel user interface."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:868
 msgid "Cannot find xim_server on root window."
 msgstr "ルートウィンドウで xim_server が見つかりません。"
 
@@ -510,11 +535,11 @@ msgstr "ルートウィンドウで xim_server が見つかりません。"
 msgid "Cannot found Pinyin"
 msgstr "Pinyin が見つかりません"
 
-#: data/script/fcitx-diagnose.sh:772
+#: data/script/fcitx-diagnose.sh:842
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "XMODIFIERSを解釈できません: ${1}"
 
-#: data/script/fcitx-diagnose.sh:1017
+#: data/script/fcitx-diagnose.sh:1268
 msgid "Cannot read im list from fcitx profile."
 msgstr "fcitx プロファイルから IM リストを読み込めません。"
 
@@ -691,15 +716,20 @@ msgstr "状態を切り替えたら確定する"
 msgid "Commit with extra space when choose candidate word"
 msgstr "候補を選択時に空白を追加して確定する"
 
-#: data/script/fcitx-diagnose.sh:685
+#: data/script/fcitx-diagnose.sh:759
+#, fuzzy
+msgid "Config GUI for gtk${1} not found."
+msgstr "gtk${1} 向け設定GUI:"
+
+#: data/script/fcitx-diagnose.sh:755
 msgid "Config GUI for gtk${1}:"
 msgstr "gtk${1} 向け設定GUI:"
 
-#: data/script/fcitx-diagnose.sh:705
+#: data/script/fcitx-diagnose.sh:775
 msgid "Config GUI for kde:"
 msgstr "KDE向け設定GUI:"
 
-#: data/script/fcitx-diagnose.sh:721
+#: data/script/fcitx-diagnose.sh:791
 msgid "Config Tool Wrapper:"
 msgstr "設定ツールラッパー:"
 
@@ -707,8 +737,9 @@ msgstr "設定ツールラッパー:"
 msgid "ConfigFile"
 msgstr "設定ファイル"
 
-#: data/script/fcitx-diagnose.sh:1126
-msgid "Configuration."
+#: data/script/fcitx-diagnose.sh:1377
+#, fuzzy
+msgid "Configuration:"
 msgstr "設定。"
 
 #: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:504
@@ -716,7 +747,7 @@ msgid "Configure"
 msgstr "設定"
 
 #: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:503
-#: src/ui/kimpanel/kimpanel.c:754
+#: src/ui/kimpanel/kimpanel.c:751
 msgid "Configure Current Input Method"
 msgstr "現在の入力メソッドの設定"
 
@@ -774,7 +805,7 @@ msgstr "現在の入力メソッド名"
 msgid "Current local input method is "
 msgstr "現在のローカル入力メソッドは "
 
-#: data/script/fcitx-diagnose.sh:589
+#: data/script/fcitx-diagnose.sh:657
 msgid "Current locale:"
 msgstr "現在のロケール:"
 
@@ -812,7 +843,7 @@ msgstr "既定のShuangpinのスキーマー"
 msgid "Default Spell Hint Backends Order"
 msgstr "スペルヒントを使用する既定の順番"
 
-#: data/script/fcitx-diagnose.sh:1043
+#: data/script/fcitx-diagnose.sh:1294
 msgid "Default input methods:"
 msgstr "既定の入力メソッド"
 
@@ -828,11 +859,12 @@ msgstr "依存関係"
 msgid "Description of Skin"
 msgstr "スキンの詳細"
 
-#: data/script/fcitx-diagnose.sh:558
-msgid "Desktop Environment."
+#: data/script/fcitx-diagnose.sh:624
+#, fuzzy
+msgid "Desktop Environment:"
 msgstr "デスクトップ環境。"
 
-#: data/script/fcitx-diagnose.sh:562
+#: data/script/fcitx-diagnose.sh:628
 msgid "Desktop environment is ${1}."
 msgstr "デスクトップ環境は ${1} です。"
 
@@ -853,8 +885,8 @@ msgstr "Pinyin 記号を無効にする"
 msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr "アドオン %s を無効にしました。依存性 %s が解決されていません。"
 
-#: src/module/notificationitem/notificationitem.c:467
-#: src/ui/kimpanel/kimpanel.c:254 src/ui/kimpanel/kimpanel.c:259
+#: src/module/notificationitem/notificationitem.c:460
+#: src/ui/kimpanel/kimpanel.c:258 src/ui/kimpanel/kimpanel.c:263
 #: data/config.desc:33
 msgid "Disabled"
 msgstr "無効"
@@ -862,6 +894,11 @@ msgstr "無効"
 #: data/config.desc:222
 msgid "Do not commit preedit text when unfocus a window"
 msgstr "フォーカスを外しても未確定文字をコミットしない"
+
+#: src/module/freedesktop-notify/freedesktop-notify.c:616
+#, fuzzy
+msgid "Do not show again."
+msgstr "GUI で表示しない"
 
 #: data/addon.desc:82
 msgid "Do not show in GUI"
@@ -887,12 +924,12 @@ msgstr "スペルヒントを表示しない"
 msgid "Do not sort word with code less than this level"
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:565
+#: src/lib/fcitx-utils/desktop-parse.c:602
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
 msgstr " %s が %s グループ、 %d 行目で重複しており、前のを上書きします。"
 
-#: src/lib/fcitx-utils/desktop-parse.c:525
+#: src/lib/fcitx-utils/desktop-parse.c:562
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
@@ -958,7 +995,7 @@ msgstr "Enum の設定が重複しています。"
 msgid "Enum option number must larger than 0"
 msgstr "Enum 設定の数は0以上の必要があります"
 
-#: data/script/fcitx-diagnose.sh:752
+#: data/script/fcitx-diagnose.sh:822
 msgid ""
 "Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
 "you have exported it incorrectly in any of your init files."
@@ -966,16 +1003,21 @@ msgstr ""
 "環境変数 ${1} は \"${3}\" ではなく \"${2}\" に設定されています。初期設定ファ"
 "イルのどこかで間違って設定されていないか確認してください。"
 
-#: data/script/fcitx-diagnose.sh:746
+#: data/script/fcitx-diagnose.sh:816
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
 msgstr "環境変数 ${1} は \"{$2}\" に正しく設定されています。"
 
-#: data/script/fcitx-diagnose.sh:568
-msgid "Environment."
+#: data/script/fcitx-diagnose.sh:634
+#, fuzzy
+msgid "Environment:"
 msgstr "環境。"
 
 #: src/im/table/data/erbi.conf.in:3
 msgid "Erbi"
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:661
+msgid "Error occurs when running ${1}. Please check your locale settings."
 msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:345
@@ -1024,16 +1066,26 @@ msgstr "閉じる"
 msgid "Extra key for trigger input method"
 msgstr "入力メソッド起動のその他のキー"
 
+#: data/script/fcitx-diagnose.sh:1147
+#, fuzzy
+msgid "Failed to find fcitx in immodule cache at ${1}"
+msgstr "gtk ${1} 用のFcitx im モジュールが見つかりません。"
+
+#: data/script/fcitx-diagnose.sh:1064
+#, fuzzy
+msgid "Failed to find fcitx in the output of ${1}"
+msgstr "キャッシュファイル ${1} で Fcitx を見つけました。"
+
 #: data/addon.desc:72
 msgid "Fallback UI Addon"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:376 data/fcitx-autostart.desktop.in:2
+#: src/ui/kimpanel/kimpanel.c:373 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
 msgstr "Fcitx"
 
-#: data/script/fcitx-diagnose.sh:966
+#: data/script/fcitx-diagnose.sh:1190
 msgid "Fcitx Addons:"
 msgstr "Fcitx アドオン:"
 
@@ -1045,8 +1097,9 @@ msgstr "Fcitxクリップボード連携"
 msgid "Fcitx Configuration"
 msgstr "Fcitx 設定"
 
-#: data/script/fcitx-diagnose.sh:720
-msgid "Fcitx Configure UI."
+#: data/script/fcitx-diagnose.sh:790
+#, fuzzy
+msgid "Fcitx Configure UI:"
 msgstr "Fcitx設定UI。"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
@@ -1065,8 +1118,9 @@ msgstr "Fcitxスキンインストーラー"
 msgid "Fcitx Spelling Hint/Completion Support"
 msgstr "Fcitx スペルのヒント/補完サポート"
 
-#: data/script/fcitx-diagnose.sh:601
-msgid "Fcitx State."
+#: data/script/fcitx-diagnose.sh:673
+#, fuzzy
+msgid "Fcitx State:"
 msgstr "Fcitxの状態。"
 
 #: src/module/unicode/fcitx-unicode.conf.in:3
@@ -1077,13 +1131,13 @@ msgstr "Fcitx ユニコード入力対応"
 msgid "Fcitx XIM Frontend"
 msgstr "Fcitx XIMフロントエンド"
 
-#: data/script/fcitx-diagnose.sh:628
+#: data/script/fcitx-diagnose.sh:698
 msgid "Fcitx is not running."
 msgstr "Fcitxは実行されていません。"
 
-#: data/script/fcitx-diagnose.sh:615
-#, sh-format
-msgid "Fcitx version: ${version}"
+#: data/script/fcitx-diagnose.sh:687
+#, fuzzy
+msgid "Fcitx version: ${1}"
 msgstr "Fcitx バージョン ${version}"
 
 #: tools/gui/quickphrase-editor/editor.cpp:297
@@ -1141,69 +1195,91 @@ msgstr "フォントサイズ"
 msgid "Font size repect dpi setting"
 msgstr ""
 
-#: data/script/fcitx-diagnose.sh:698
+#: data/script/fcitx-diagnose.sh:768
 msgid "Found ${1} at ${2}."
 msgstr "${1} を ${2} で見つけました。"
 
-#: data/script/fcitx-diagnose.sh:1004
+#: data/script/fcitx-diagnose.sh:1232
 msgid "Found ${1} disabled addons:"
 msgstr "${1} の無効なアドオンを見つけました:"
 
-#: data/script/fcitx-diagnose.sh:999
+#: data/script/fcitx-diagnose.sh:1227
 msgid "Found ${1} enabled addons:"
 msgstr "${1} の有効なアドオンを見つけました:"
 
-#: data/script/fcitx-diagnose.sh:1038
+#: data/script/fcitx-diagnose.sh:1289
 msgid "Found ${1} enabled input methods:"
 msgstr "${1} の有効な入力メソッドを見つけました:"
 
-#: data/script/fcitx-diagnose.sh:637
+#: data/script/fcitx-diagnose.sh:1241
+#, fuzzy
+msgid "Found ${1} enabled user interface addons:"
+msgstr "${1} の有効なアドオンを見つけました:"
+
+#: data/script/fcitx-diagnose.sh:707
 msgid "Found ${1} fcitx process:"
 msgstr "Fcitxのプロセス ${1} を見つけました:"
 
-#: data/script/fcitx-diagnose.sh:635
+#: data/script/fcitx-diagnose.sh:705
 msgid "Found ${1} fcitx processes:"
 msgstr "Fcitxのプロセス ${1} を見つけました:"
 
-#: data/script/fcitx-diagnose.sh:976
+#: data/script/fcitx-diagnose.sh:1050
+msgid "Found ${2} for unknow gtk version at ${1}."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:1042
+#, fuzzy
+msgid "Found ${3} for gtk ${1} at ${2}."
+msgstr "${1} を ${2} で見つけました。"
+
+#: data/script/fcitx-diagnose.sh:1201
 msgid "Found fcitx addon config directory: ${1}."
 msgstr "Fcitx アドオンの設定ディレクトリを見つけました: ${1}"
 
-#: data/script/fcitx-diagnose.sh:610
+#: data/script/fcitx-diagnose.sh:682
 msgid "Found fcitx at ${1}."
 msgstr "${1} にfcitxを見つけました。"
 
-#: data/script/fcitx-diagnose.sh:899
+#: data/script/fcitx-diagnose.sh:933 data/script/fcitx-diagnose.sh:938
+#, fuzzy
+msgid "Found fcitx im module for ${2}: ${1}."
+msgstr "gtk ${1} 用のFcitx im モジュールを見つけました。"
+
+#: data/script/fcitx-diagnose.sh:1058 data/script/fcitx-diagnose.sh:1141
 msgid "Found fcitx im modules for gtk ${1}."
 msgstr "gtk ${1} 用のFcitx im モジュールを見つけました。"
 
-#: data/script/fcitx-diagnose.sh:931
-msgid "Found fcitx in cache file ${1}:"
-msgstr "キャッシュファイル ${1} で Fcitx を見つけました。"
-
-#: data/script/fcitx-diagnose.sh:711
+#: data/script/fcitx-diagnose.sh:781
 msgid "Found fcitx kcm module."
 msgstr "fcitx kcmモジュールを見つけました。"
 
-#: data/script/fcitx-diagnose.sh:856
-msgid "Found fcitx qt im module: ${1}."
+#: data/script/fcitx-diagnose.sh:942
+#, fuzzy
+msgid "Found fcitx qt module: ${1}."
 msgstr "fcitx qt IMモジュールを見つけました: ${1}"
 
-#: data/script/fcitx-diagnose.sh:725
+#: data/script/fcitx-diagnose.sh:795
 msgid "Found fcitx-configtool at ${1}."
 msgstr "fcitx-configtoolが ${1} を見つけました。"
 
-#: data/script/fcitx-diagnose.sh:894
-msgid "Found gtk-query-immodules for gtk ${1} at ${2}."
-msgstr "gtk ${1} 用の gtk-query-immodules を ${2} で見つけました。"
-
-#: data/script/fcitx-diagnose.sh:926
-msgid "Found immodules cache for gtk ${1} ${2}."
+#: data/script/fcitx-diagnose.sh:1134
+#, fuzzy
+msgid "Found immodule cache for unknow gtk version at ${1}."
 msgstr "gtk ${1} ${2} 用の immodules キャッシュを見つけました。"
 
-#: data/script/fcitx-diagnose.sh:864
+#: data/script/fcitx-diagnose.sh:1126
+#, fuzzy
+msgid "Found immodules cache for gtk ${1} at ${2}."
+msgstr "gtk ${1} ${2} 用の immodules キャッシュを見つけました。"
+
+#: data/script/fcitx-diagnose.sh:945
 msgid "Found unknown fcitx qt module: ${1}."
 msgstr "不明な Fcitx qt モジュールを見つけました: ${1}。"
+
+#: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:3
+msgid "Freedesktop.org Notification Support"
+msgstr ""
 
 #: data/addon.desc:19
 msgid "Frontend"
@@ -1222,8 +1298,9 @@ msgstr "フロントエンド: 不良なフロントエンド"
 msgid "Frontend: open %s fail %s"
 msgstr "フロントエンド: %s を開くのに失敗しました %s"
 
-#: data/script/fcitx-diagnose.sh:1119
-msgid "Frontends setup."
+#: data/script/fcitx-diagnose.sh:1370
+#, fuzzy
+msgid "Frontends setup:"
 msgstr "フロントエンド設定。"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
@@ -1231,8 +1308,13 @@ msgstr "フロントエンド設定。"
 msgid "Full width Character"
 msgstr "全角文字"
 
-#: src/module/punc/punc.c:147 src/module/punc/punc.c:554
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:555
 msgid "Full width punct"
+msgstr "全角句読点"
+
+#: src/module/punc/punc.c:574
+#, fuzzy
+msgid "Full width punctuations are used."
 msgstr "全角句読点"
 
 #: src/module/vk/vk.c:52
@@ -1315,11 +1397,15 @@ msgstr "Grave"
 msgid "Greek"
 msgstr "ギリシャ文字"
 
-#: data/script/fcitx-diagnose.sh:952
+#: data/script/fcitx-diagnose.sh:1003
+msgid "Gtk ${1} immodule file ${2} does not exist."
+msgstr ""
+
+#: data/script/fcitx-diagnose.sh:1171
 msgid "Gtk IM module cache:"
 msgstr "Gtk IM モジュールキャッシュ:"
 
-#: data/script/fcitx-diagnose.sh:947
+#: data/script/fcitx-diagnose.sh:1176
 msgid "Gtk IM module files:"
 msgstr "Gtk IM モジュールファイル:"
 
@@ -1328,7 +1414,7 @@ msgstr "Gtk IM モジュールファイル:"
 msgid "Half width Character"
 msgstr "半角文字"
 
-#: data/script/fcitx-diagnose.sh:498
+#: data/script/fcitx-diagnose.sh:571
 msgid "Hall of Shame for Linux IME Support"
 msgstr "Linux IMEサポートの「恥辱の殿堂」"
 
@@ -1399,14 +1485,19 @@ msgstr "アイコン名"
 msgid "IconName"
 msgstr "アイコン名"
 
-#: data/script/fcitx-diagnose.sh:487
+#: data/script/fcitx-diagnose.sh:560
+#, fuzzy
 msgid ""
 "If you are using ${1}, you may want to uninstall ${2} or remove ${3} in "
 "order to use any input method other than ${2}. See ${link} for more detail "
 "as well as alternative solutions."
 msgstr ""
+"${1} を使っている場合、 ${2} 以外の入力メソッドを使うためには ${2} をアンイン"
+"ストールするか ${3} を削除します。 他の解決方法の詳細は ${link} を参照してく"
+"ださい。"
 
-#: data/script/fcitx-diagnose.sh:485
+#: data/script/fcitx-diagnose.sh:558
+#, fuzzy
 msgid ""
 "If you are using ${1}, you may want to uninstall ${2}, remove ${3} or use "
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
@@ -1472,7 +1563,7 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1537 src/module/notificationitem/notificationitem.c:416
+#: src/lib/fcitx/ime.c:1537 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "入力メソッド"
@@ -1481,8 +1572,8 @@ msgstr "入力メソッド"
 msgid "Input Method Configuration"
 msgstr "入力メソッドの設定"
 
-#: src/module/notificationitem/notificationitem.c:468
-#: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:260
+#: src/module/notificationitem/notificationitem.c:461
+#: src/ui/kimpanel/kimpanel.c:259 src/ui/kimpanel/kimpanel.c:264
 msgid "Input Method Disabled"
 msgstr "入力メソッドが無効"
 
@@ -1490,11 +1581,11 @@ msgstr "入力メソッドが無効"
 msgid "Input Method Hint will be only shown when state is active"
 msgstr "オンの時だけ入力メソッドのヒントを表示"
 
-#: data/script/fcitx-diagnose.sh:462
+#: data/script/fcitx-diagnose.sh:535
 msgid "Input Method Related Environment Variables: "
 msgstr "入力メソッド関連の環境変数:"
 
-#: data/script/fcitx-diagnose.sh:1013
+#: data/script/fcitx-diagnose.sh:1264
 msgid "Input Methods:"
 msgstr "入力メソッド:"
 
@@ -1525,11 +1616,11 @@ msgstr "2つのキー入力の間隔"
 msgid "Invalid Entry: line %d missing '='"
 msgstr "不正な入力: %d 行目で '=' がありません"
 
-#: data/script/fcitx-diagnose.sh:982
+#: data/script/fcitx-diagnose.sh:1207
 msgid "Invalid addon config file ${1}."
 msgstr "不正なアドオン設定ファイル ${1} です。"
 
-#: src/lib/fcitx-utils/desktop-parse.c:555
+#: src/lib/fcitx-utils/desktop-parse.c:592
 #, c-format
 msgid "Invalid entry line @ line %d %s"
 msgstr "不正な入力です %d 行目 %s "
@@ -1538,12 +1629,12 @@ msgstr "不正な入力です %d 行目 %s "
 msgid "Invalid filename"
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:513
+#: src/lib/fcitx-utils/desktop-parse.c:550
 #, c-format
 msgid "Invalid group name line @ line %d %s"
 msgstr "不正なグループ名です。 %d 行目 %s"
 
-#: data/script/fcitx-diagnose.sh:1027
+#: data/script/fcitx-diagnose.sh:1278
 msgid "Invalid item ${1} in im list."
 msgstr "IM リストに不正なアイテム ${1} があります。"
 
@@ -1567,9 +1658,9 @@ msgstr "キー"
 msgid "Key Color On Virutal Keyboard"
 msgstr "仮想キーボードのキーの色"
 
-#: src/im/keyboard/keyboard.c:364 src/im/keyboard/keyboard.c:390
-#: src/im/keyboard/keyboard.c:438 src/im/keyboard/keyboard.c:451
-#: src/im/keyboard/keyboard.c:476 src/im/keyboard/keyboard.c:482
+#: src/im/keyboard/keyboard.c:365 src/im/keyboard/keyboard.c:391
+#: src/im/keyboard/keyboard.c:439 src/im/keyboard/keyboard.c:452
+#: src/im/keyboard/keyboard.c:477 src/im/keyboard/keyboard.c:483
 #: src/im/keyboard/fcitx-keyboard.desc:1 src/im/keyboard/fcitx-keyboard.desc:6
 #: src/im/keyboard/fcitx-keyboard.desc:16
 #: src/im/keyboard/fcitx-keyboard.desc:21
@@ -1587,7 +1678,7 @@ msgstr "キーボードレイアウト"
 msgid "Keyboard Layout to be used"
 msgstr "使用するキーボードレイアウト"
 
-#: data/script/fcitx-diagnose.sh:571
+#: data/script/fcitx-diagnose.sh:637
 msgid "Keyboard Layout:"
 msgstr "キーボードレイアウト:"
 
@@ -1606,6 +1697,11 @@ msgstr "Kimpanel"
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:4
 msgid "Kimpanel Support for Fcitx"
 msgstr "FcitxのKimpanelサポート"
+
+#: data/script/fcitx-diagnose.sh:1250
+#, fuzzy
+msgid "Kimpanel process:"
+msgstr "プロセス:"
 
 #: data/config.desc:23
 msgid "L_ALT"
@@ -1631,9 +1727,13 @@ msgstr "このテーブルへの言語コード"
 msgid "Latin"
 msgstr "半角英数字"
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:555
+#: src/module/punc/punc.c:149 src/module/punc/punc.c:556
 msgid "Latin punct"
 msgstr "英数句読点"
+
+#: src/module/punc/punc.c:575
+msgid "Latin punctuations are used."
+msgstr ""
 
 #: data/config.desc:26
 msgid "Left Super"
@@ -1699,13 +1799,13 @@ msgstr "ローカルIMを選択するキー"
 msgid "LocalSelector"
 msgstr "ローカルセレクター"
 
-#: data/script/fcitx-diagnose.sh:586
+#: data/script/fcitx-diagnose.sh:652
 msgid "Locale:"
 msgstr "ロケール:"
 
-#: data/script/fcitx-diagnose.sh:1132
-msgid "Log."
-msgstr "ログ。"
+#: data/script/fcitx-diagnose.sh:1383
+msgid "Log:"
+msgstr ""
 
 #: src/ui/classic/skin.desc:73
 msgid "Logo Icon"
@@ -1868,8 +1968,8 @@ msgstr "有効な入力メソッドがありません"
 msgid "No available frontend"
 msgstr "フロントエンドが見つかりません"
 
-#: src/module/notificationitem/notificationitem.c:461
-#: src/ui/kimpanel/kimpanel.c:227 src/ui/kimpanel/kimpanel.c:228
+#: src/module/notificationitem/notificationitem.c:454
+#: src/ui/kimpanel/kimpanel.c:231 src/ui/kimpanel/kimpanel.c:232
 msgid "No input window"
 msgstr "入力ウィンドウなし"
 
@@ -1881,7 +1981,7 @@ msgstr "ローカル入力メソッドがありません"
 msgid "No remind"
 msgstr "リマインドなし"
 
-#: src/lib/fcitx-utils/desktop-parse.c:549
+#: src/lib/fcitx-utils/desktop-parse.c:586
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr "コメントでない入力がグループに属していません %d 行目 %s"
@@ -1894,7 +1994,7 @@ msgstr "コメントでない入力がグループに属していません %d �
 msgid "None"
 msgstr "なし"
 
-#: data/script/fcitx-diagnose.sh:478
+#: data/script/fcitx-diagnose.sh:551
 msgid "Note for GNOME Later than 3.6"
 msgstr "GNOME 3.6 以降の注意"
 
@@ -2023,11 +2123,11 @@ msgstr "Pinyin: "
 msgid "PinyinJiaJia"
 msgstr "PinyinJiaJia"
 
-#: data/script/fcitx-diagnose.sh:606
+#: data/script/fcitx-diagnose.sh:678
 msgid "Please check ${1} for how to install fcitx."
 msgstr "fcitxのインストール方法 ${1} を確認してください。"
 
-#: data/script/fcitx-diagnose.sh:630
+#: data/script/fcitx-diagnose.sh:700
 msgid ""
 "Please check the Configure link of your distribution in ${1} for how to "
 "setup fcitx autostart."
@@ -2043,7 +2143,7 @@ msgstr ""
 msgid "Please set XMODIFIERS."
 msgstr "XMODIFIERSを設定してください。"
 
-#: data/script/fcitx-diagnose.sh:459
+#: data/script/fcitx-diagnose.sh:532
 msgid ""
 "Please set environment variable ${env_name} to \"${value}\" using the tool "
 "your distribution provides or add ${1} to your ${2}. See ${link}."
@@ -2140,6 +2240,11 @@ msgstr "Fcitx の Pinyin 拡張機能を提供します"
 msgid "Provides DBus Support (Used by other Addon)"
 msgstr "DBusサポートを提供 (他のアドオンで使用される)"
 
+#: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
+#, fuzzy
+msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
+msgstr "DBusサポートを提供 (他のアドオンで使用される)"
+
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
 msgid "Provides Fullwidth Character Input Support"
 msgstr "全角文字入力のサポートを提供"
@@ -2152,11 +2257,11 @@ msgstr "XIMサポートを提供"
 msgid "Punctuation Conversion Support"
 msgstr "句読点変換のサポート"
 
-#: src/module/punc/fcitx-punc.conf.in:3
+#: src/module/punc/punc.c:573 src/module/punc/fcitx-punc.conf.in:3
 msgid "Punctuation Support"
 msgstr "句読点サポート"
 
-#: data/script/fcitx-diagnose.sh:847
+#: data/script/fcitx-diagnose.sh:927
 msgid "Qt IM module files:"
 msgstr "Qt IM モジュールファイル:"
 
@@ -2263,7 +2368,7 @@ msgid "Resize Margin Top"
 msgstr "上マージンを調整"
 
 #: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:505
-#: src/ui/kimpanel/kimpanel.c:759
+#: src/ui/kimpanel/kimpanel.c:756
 msgid "Restart"
 msgstr "再起動"
 
@@ -2416,13 +2521,19 @@ msgstr "Shuangpin"
 msgid "Simple Pinyin support for Fcitx"
 msgstr "Fcitx の簡単な Pinyin サポート"
 
-#: src/module/chttrans/chttrans.c:150 src/module/chttrans/chttrans.c:185
+#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
 msgid "Simplified Chinese"
 msgstr "中国語簡体字"
 
+#: src/module/chttrans/chttrans.c:176
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr "簡体字中国語から繁体字中国語へ"
+
+#: src/module/chttrans/chttrans.c:178
+#, fuzzy
+msgid "Simplified Chinese is enabled."
+msgstr "中国語簡体字"
 
 #: src/ui/classic/skin.c:680 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
@@ -2527,6 +2638,19 @@ msgstr "スペル"
 #: src/module/spell/fcitx-spell.desc:1 src/module/spell/fcitx-spell.desc:10
 msgid "Spell Hint"
 msgstr "スペルヒント"
+
+#: src/im/keyboard/keyboard.c:913
+#, fuzzy
+msgid "Spell hint"
+msgstr "スペルヒント"
+
+#: src/im/keyboard/keyboard.c:915
+msgid "Spell hint is disabled."
+msgstr ""
+
+#: src/im/keyboard/keyboard.c:914
+msgid "Spell hint is enabled."
+msgstr ""
 
 #: data/fcitx-autostart.desktop.in:4 data/fcitx.desktop.in:4
 msgid "Start Input Method"
@@ -2647,8 +2771,9 @@ msgstr "記号"
 msgid "Symbol File"
 msgstr "記号ファイル"
 
-#: data/script/fcitx-diagnose.sh:530
-msgid "System Info."
+#: data/script/fcitx-diagnose.sh:596
+#, fuzzy
+msgid "System Info:"
 msgstr "システム情報。"
 
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
@@ -2695,7 +2820,7 @@ msgstr "いくつかのモジュールや入力メソッドで前の候補に移
 msgid "Tip Message Color"
 msgstr "ヒントメッセージの色"
 
-#: data/script/fcitx-diagnose.sh:495
+#: data/script/fcitx-diagnose.sh:568
 #, sh-format
 msgid ""
 "To see some application specific problems you may have when using xim, check "
@@ -2706,7 +2831,7 @@ msgstr ""
 "あります。 ${link1} を参照してください。 アプリケーションのフリーズを含むXIM"
 "による一般的な問題については ${link2} を参照してください。"
 
-#: src/module/punc/punc.c:149 src/module/punc/punc.c:556
+#: src/module/punc/punc.c:150 src/module/punc/punc.c:557
 msgid "Toggle Full Width Punctuation"
 msgstr "全角/半角句読点を切り替え"
 
@@ -2715,7 +2840,7 @@ msgstr "全角/半角句読点を切り替え"
 msgid "Toggle Half/Full width Character"
 msgstr "全角/半角文字の切り替え"
 
-#: src/ui/kimpanel/kimpanel.c:751
+#: src/ui/kimpanel/kimpanel.c:748
 msgid "Toggle Input Method"
 msgstr "入力メソッドの切り替え"
 
@@ -2723,7 +2848,7 @@ msgstr "入力メソッドの切り替え"
 msgid "Toggle Remind"
 msgstr "リマインドの切り替え"
 
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:186
+#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "中国語の簡体字/繁体字の変換の切り替え"
 
@@ -2758,13 +2883,18 @@ msgstr "左上"
 msgid "TopRight"
 msgstr "右上"
 
-#: src/module/chttrans/chttrans.c:150 src/module/chttrans/chttrans.c:185
+#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:196
 msgid "Traditional Chinese"
 msgstr "中国語繁体字"
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
 msgstr "中国語繁体字翻訳エンジン"
+
+#: src/module/chttrans/chttrans.c:177
+#, fuzzy
+msgid "Traditional Chinese is enabled."
+msgstr "中国語繁体字"
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
@@ -2906,9 +3036,18 @@ msgstr "普段省略された Pinyin を使わない人に便利です。"
 msgid "User Defined"
 msgstr "ユーザー定義"
 
+#: data/script/fcitx-diagnose.sh:1237
+msgid "User Interface:"
+msgstr ""
+
 #: src/ui/classic/skin.desc:49
 msgid "User Phrase Color"
 msgstr "ユーザーフレーズの色"
+
+#: data/script/fcitx-diagnose.sh:1047 data/script/fcitx-diagnose.sh:1130
+#, fuzzy
+msgid "Version Line:"
+msgstr "バージョン:"
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
@@ -2977,15 +3116,15 @@ msgstr "他のアドオンで使われる X11 ツール"
 msgid "X11 not initialized"
 msgstr "X11が初期化されていません"
 
-#: data/script/fcitx-diagnose.sh:809
+#: data/script/fcitx-diagnose.sh:879
 msgid "XIM encoding:"
 msgstr "XIM エンコーディング:"
 
-#: data/script/fcitx-diagnose.sh:804
+#: data/script/fcitx-diagnose.sh:874
 msgid "XIM for Emacs:"
 msgstr "Emacs 用 XIM:"
 
-#: data/script/fcitx-diagnose.sh:782
+#: data/script/fcitx-diagnose.sh:852
 msgid "XIM_SERVERS on root window:"
 msgstr "ルートウィンドウでの XIM_SERVERS :"
 
@@ -3001,40 +3140,40 @@ msgstr "XiaoHe"
 msgid "Xim"
 msgstr "Xim"
 
-#: data/script/fcitx-diagnose.sh:780
+#: data/script/fcitx-diagnose.sh:850
 msgid "Xim Server Name from Environment variable is ${1}."
 msgstr "環境変数から取得した Xim サーバー名は ${1} です。"
 
-#: data/script/fcitx-diagnose.sh:792
+#: data/script/fcitx-diagnose.sh:862
 msgid "Xim server name is the same with that set in the environment variable."
 msgstr "Xim サーバー名は環境変数で設定されたものと同じです。"
 
-#: data/script/fcitx-diagnose.sh:794
+#: data/script/fcitx-diagnose.sh:864
 msgid ""
 "Xim server name: \"${1}\" is different from that set in the environment "
 "variable: \"${2}\"."
 msgstr "Xim サーバー名: \"{1}\" は環境変数で設定された \"{2} と異なります。"
 
-#: data/script/fcitx-diagnose.sh:827
+#: data/script/fcitx-diagnose.sh:897
 msgid "You are using xim in ${1} programs."
 msgstr "xim を ${1} プログラムで使用しています。"
 
-#: data/script/fcitx-diagnose.sh:1046
+#: data/script/fcitx-diagnose.sh:1297
 msgid "You don't have any input methods enabled."
 msgstr "有効な入力メソッドがありません。"
 
-#: data/script/fcitx-diagnose.sh:1054
+#: data/script/fcitx-diagnose.sh:1305
 msgid ""
 "You have a keyboard input method \"${1}\" correctly added as your default "
 "input method."
 msgstr ""
 "キーボード 入力メソッド \"${1}\"  を既定の入力メソッドとして追加しました。"
 
-#: data/script/fcitx-diagnose.sh:832
+#: data/script/fcitx-diagnose.sh:902
 msgid "You may have trouble using fcitx in ${1} programs."
 msgstr "Fcitx を使っている プログラム ${1} で問題が発生しています。"
 
-#: data/script/fcitx-diagnose.sh:1049
+#: data/script/fcitx-diagnose.sh:1300
 msgid ""
 "You only have one input method enabled, please add a keyboard input method "
 "as the first one and your main input method as the second one."
@@ -3062,7 +3201,7 @@ msgstr ""
 "ケージ名は、たいていの場合kcm-fcitxかkde-config-fcitxです。今は既定のテキスト"
 "エディターで設定ファイルを開きます。"
 
-#: data/script/fcitx-diagnose.sh:806
+#: data/script/fcitx-diagnose.sh:876
 msgid ""
 "Your LC_CTYPE is set to ${1} instead of one of zh, ja, ko. You may not be "
 "able to use input method in emacs because of an really old emacs bug that "
@@ -3072,7 +3211,7 @@ msgstr ""
 "視されているとても古いemacsのバグにより、emacs中で入力メソッドを使用できない"
 "かもしれません。 "
 
-#: data/script/fcitx-diagnose.sh:811
+#: data/script/fcitx-diagnose.sh:881
 msgid ""
 "Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have "
 "trouble committing strings using XIM."
@@ -3080,7 +3219,7 @@ msgstr ""
 "LC_CTYPE がエンコーディングがUTF-8ではない \"${1}\" に設定されています。 XIM "
 "を使って文字入力を確定するときに問題が起きる可能性があります。"
 
-#: data/script/fcitx-diagnose.sh:1058
+#: data/script/fcitx-diagnose.sh:1309
 msgid ""
 "Your first (default) input method is ${1} instead of a keyboard input "
 "method. You may have trouble deactivate fcitx."
@@ -3100,11 +3239,11 @@ msgstr "Ziguang"
 msgid "Ziranma"
 msgstr "Ziranma"
 
-#: data/script/fcitx-diagnose.sh:602
+#: data/script/fcitx-diagnose.sh:674
 msgid "executable:"
 msgstr "実行可能:"
 
-#: data/script/fcitx-diagnose.sh:502
+#: data/script/fcitx-diagnose.sh:575
 msgid "here"
 msgstr "ここ"
 
@@ -3121,7 +3260,7 @@ msgstr "%s/%s に既定のオプションはありません"
 msgid "no valid font."
 msgstr "正しいフォントではありません"
 
-#: data/script/fcitx-diagnose.sh:616
+#: data/script/fcitx-diagnose.sh:688
 msgid "process:"
 msgstr "プロセス:"
 
@@ -3129,7 +3268,7 @@ msgstr "プロセス:"
 msgid "pthread mutex init failed"
 msgstr "pthread の mutex 初期化に失敗しました"
 
-#: data/script/fcitx-diagnose.sh:612
+#: data/script/fcitx-diagnose.sh:684
 msgid "version:"
 msgstr "バージョン:"
 
@@ -3141,3 +3280,9 @@ msgstr "xmodmap コマンド"
 #, c-format
 msgid "your current font is: %s"
 msgstr "あなたの現在のフォントは %s です"
+
+#~ msgid "Found gtk-query-immodules for gtk ${1} at ${2}."
+#~ msgstr "gtk ${1} 用の gtk-query-immodules を ${2} で見つけました。"
+
+#~ msgid "Log."
+#~ msgstr "ログ。"
