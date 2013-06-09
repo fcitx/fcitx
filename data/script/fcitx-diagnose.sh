@@ -1067,7 +1067,7 @@ check_gtk_query_immodule() {
     done
     ((query_found)) || {
         write_error_eval \
-            "$(_ 'Cannot ${2} for gtk ${1}')" \
+            "$(_ 'Cannot find ${2} for gtk ${1}')" \
             "${version}" \
             "$(code_inline gtk-query-immodules)"
     }
