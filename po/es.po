@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-09 00:02-0400\n"
-"PO-Revision-Date: 2013-05-30 12:14+0000\n"
+"POT-Creation-Date: 2013-06-10 00:02-0400\n"
+"PO-Revision-Date: 2013-06-09 04:07+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/fcitx/language/"
 "es/)\n"
@@ -724,9 +724,8 @@ msgid "ConfigFile"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1377
-#, fuzzy
 msgid "Configuration:"
-msgstr "Configurar"
+msgstr ""
 
 #: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:504
 msgid "Configure"
@@ -1071,9 +1070,8 @@ msgid "Fcitx Configuration"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:790
-#, fuzzy
 msgid "Fcitx Configure UI:"
-msgstr "Configurar"
+msgstr ""
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -1264,9 +1262,8 @@ msgid "Frontend: open %s fail %s"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1370
-#, fuzzy
 msgid "Frontends setup:"
-msgstr "Interfaz"
+msgstr ""
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -2482,9 +2479,8 @@ msgid "Simplified Chinese To Traditional Chinese"
 msgstr ""
 
 #: src/module/chttrans/chttrans.c:178
-#, fuzzy
 msgid "Simplified Chinese is enabled."
-msgstr "Convertir chino simplificado a chino tradicional"
+msgstr ""
 
 #: src/ui/classic/skin.c:680 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"

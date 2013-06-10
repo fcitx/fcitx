@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-09 00:02-0400\n"
-"PO-Revision-Date: 2013-06-07 01:39+0000\n"
-"Last-Translator: pellaeon <nfsmwlin@gmail.com>\n"
+"POT-Creation-Date: 2013-06-10 00:02-0400\n"
+"PO-Revision-Date: 2013-06-09 04:07+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -482,9 +482,8 @@ msgid ""
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1239
-#, fuzzy
 msgid "Cannot find enabled fcitx user interface!"
-msgstr "找不到 fcitx 可執行檔！"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1193
 msgid "Cannot find fcitx addon config directory."
@@ -503,18 +502,16 @@ msgid "Cannot find fcitx im module for gtk ${1}."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:951 data/script/fcitx-diagnose.sh:955
-#, fuzzy
 msgid "Cannot find fcitx input method module for ${1}."
-msgstr "找不到 fcitx 的Qt 輸入法模組。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:793
 msgid "Cannot find fcitx-configtool executable!"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1153
-#, fuzzy
 msgid "Cannot find immodules cache for gtk ${1}"
-msgstr "找不到 fcitx 的Qt 輸入法模組。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1258
 msgid ""
@@ -711,9 +708,8 @@ msgid "Commit with extra space when choose candidate word"
 msgstr "選擇候選詞時加入額外空格"
 
 #: data/script/fcitx-diagnose.sh:759
-#, fuzzy
 msgid "Config GUI for gtk${1} not found."
-msgstr "找不到 ${1}。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:755
 msgid "Config GUI for gtk${1}:"
@@ -732,9 +728,8 @@ msgid "ConfigFile"
 msgstr "設定檔"
 
 #: data/script/fcitx-diagnose.sh:1377
-#, fuzzy
 msgid "Configuration:"
-msgstr "設定。"
+msgstr ""
 
 #: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:504
 msgid "Configure"
@@ -854,9 +849,8 @@ msgid "Description of Skin"
 msgstr "佈景說明"
 
 #: data/script/fcitx-diagnose.sh:624
-#, fuzzy
 msgid "Desktop Environment:"
-msgstr "環境。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:628
 msgid "Desktop environment is ${1}."
@@ -890,9 +884,8 @@ msgid "Do not commit preedit text when unfocus a window"
 msgstr "未聚焦視窗時，不要提交預編輯文字"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:616
-#, fuzzy
 msgid "Do not show again."
-msgstr "不在圖形介面顯示"
+msgstr ""
 
 #: data/addon.desc:82
 msgid "Do not show in GUI"
@@ -998,9 +991,8 @@ msgid "Environment variable ${1} is set to \"${2}\" correctly."
 msgstr "環境變數 ${1} 正確地設定為「${2}」。"
 
 #: data/script/fcitx-diagnose.sh:634
-#, fuzzy
 msgid "Environment:"
-msgstr "環境。"
+msgstr ""
 
 #: src/im/table/data/erbi.conf.in:3
 msgid "Erbi"
@@ -1055,9 +1047,8 @@ msgid "Extra key for trigger input method"
 msgstr "額外的啟用輸入法快捷鍵"
 
 #: data/script/fcitx-diagnose.sh:1147
-#, fuzzy
 msgid "Failed to find fcitx in immodule cache at ${1}"
-msgstr "找到 fcitx Qt 輸入法模組：${1}。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1064
 msgid "Failed to find fcitx in the output of ${1}"
@@ -1085,9 +1076,8 @@ msgid "Fcitx Configuration"
 msgstr "Fcitx 設定"
 
 #: data/script/fcitx-diagnose.sh:790
-#, fuzzy
 msgid "Fcitx Configure UI:"
-msgstr "Fcitx 設定"
+msgstr ""
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -1106,9 +1096,8 @@ msgid "Fcitx Spelling Hint/Completion Support"
 msgstr "Fcitx 的拼寫提示與補全支援"
 
 #: data/script/fcitx-diagnose.sh:673
-#, fuzzy
 msgid "Fcitx State:"
-msgstr "Fcitx 狀態。"
+msgstr ""
 
 #: src/module/unicode/fcitx-unicode.conf.in:3
 msgid "Fcitx Unicode Typing Support"
@@ -1123,9 +1112,8 @@ msgid "Fcitx is not running."
 msgstr "Fcitx 未執行。"
 
 #: data/script/fcitx-diagnose.sh:687
-#, fuzzy
 msgid "Fcitx version: ${1}"
-msgstr "Fcitx 版本：${version}"
+msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:297
 #: tools/gui/quickphrase-editor/editor.cpp:344
@@ -1199,9 +1187,8 @@ msgid "Found ${1} enabled input methods:"
 msgstr "找到 ${1} 啟用輸入法："
 
 #: data/script/fcitx-diagnose.sh:1241
-#, fuzzy
 msgid "Found ${1} enabled user interface addons:"
-msgstr "找到 ${1} 啟用附加元件："
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:707
 msgid "Found ${1} fcitx process:"
@@ -1216,9 +1203,8 @@ msgid "Found ${2} for unknow gtk version at ${1}."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1042
-#, fuzzy
 msgid "Found ${3} for gtk ${1} at ${2}."
-msgstr "在 ${1} 找到 fcitx。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1201
 msgid "Found fcitx addon config directory: ${1}."
@@ -1229,9 +1215,8 @@ msgid "Found fcitx at ${1}."
 msgstr "在 ${1} 找到 fcitx。"
 
 #: data/script/fcitx-diagnose.sh:933 data/script/fcitx-diagnose.sh:938
-#, fuzzy
 msgid "Found fcitx im module for ${2}: ${1}."
-msgstr "找到 fcitx Qt 輸入法模組：${1}。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1058 data/script/fcitx-diagnose.sh:1141
 msgid "Found fcitx im modules for gtk ${1}."
@@ -1242,9 +1227,8 @@ msgid "Found fcitx kcm module."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:942
-#, fuzzy
 msgid "Found fcitx qt module: ${1}."
-msgstr "找到 fcitx Qt 輸入法模組：${1}。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:795
 msgid "Found fcitx-configtool at ${1}."
@@ -1284,9 +1268,8 @@ msgid "Frontend: open %s fail %s"
 msgstr "前端：開啟 %s 失敗 %s"
 
 #: data/script/fcitx-diagnose.sh:1370
-#, fuzzy
 msgid "Frontends setup:"
-msgstr "前端設定。"
+msgstr ""
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1298,9 +1281,8 @@ msgid "Full width punct"
 msgstr "全形標點符號"
 
 #: src/module/punc/punc.c:574
-#, fuzzy
 msgid "Full width punctuations are used."
-msgstr "全形標點符號"
+msgstr ""
 
 #: src/module/vk/vk.c:52
 msgid "Fullwidth"
@@ -1471,24 +1453,18 @@ msgid "IconName"
 msgstr "圖示名稱"
 
 #: data/script/fcitx-diagnose.sh:560
-#, fuzzy
 msgid ""
 "If you are using ${1}, you may want to uninstall ${2} or remove ${3} in "
 "order to use any input method other than ${2}. See ${link} for more detail "
 "as well as alternative solutions."
 msgstr ""
-"如果您正在使用 ${1}，您可能需要卸載 ${2} 或者刪除 ${3} 已使用除 ${2} 之外的任"
-"何輸入法. 更多細節和其它的解決方法參見 ${link}。"
 
 #: data/script/fcitx-diagnose.sh:558
-#, fuzzy
 msgid ""
 "If you are using ${1}, you may want to uninstall ${2}, remove ${3} or use "
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
-"如果您正在使用 ${1}，您可能需要卸載 ${2} 或者刪除 ${3} 已使用除 ${2} 之外的任"
-"何輸入法. 更多細節和其它的解決方法參見 ${link}。"
 
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Ignore Input Method Layout Request"
@@ -1682,9 +1658,8 @@ msgid "Kimpanel Support for Fcitx"
 msgstr "Fcitx 的 Kimpanel 支援"
 
 #: data/script/fcitx-diagnose.sh:1250
-#, fuzzy
 msgid "Kimpanel process:"
-msgstr "行程："
+msgstr ""
 
 #: data/config.desc:23
 msgid "L_ALT"
@@ -2221,9 +2196,8 @@ msgid "Provides DBus Support (Used by other Addon)"
 msgstr "提供 DBus 支援（給其他附加元件使用）"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
-#, fuzzy
 msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
-msgstr "提供 DBus 支援（給其他附加元件使用）"
+msgstr ""
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
 msgid "Provides Fullwidth Character Input Support"
@@ -2511,9 +2485,8 @@ msgid "Simplified Chinese To Traditional Chinese"
 msgstr "正簡轉換"
 
 #: src/module/chttrans/chttrans.c:178
-#, fuzzy
 msgid "Simplified Chinese is enabled."
-msgstr "至簡體中文"
+msgstr ""
 
 #: src/ui/classic/skin.c:680 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
@@ -2620,9 +2593,8 @@ msgid "Spell Hint"
 msgstr "拼寫提示"
 
 #: src/im/keyboard/keyboard.c:913
-#, fuzzy
 msgid "Spell hint"
-msgstr "拼寫提示"
+msgstr ""
 
 #: src/im/keyboard/keyboard.c:915
 msgid "Spell hint is disabled."
@@ -2752,9 +2724,8 @@ msgid "Symbol File"
 msgstr "符號檔案"
 
 #: data/script/fcitx-diagnose.sh:596
-#, fuzzy
 msgid "System Info:"
-msgstr "系統資訊。"
+msgstr ""
 
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
 msgid "Table"
@@ -2873,9 +2844,8 @@ msgid "Traditional Chinese Translate Engine"
 msgstr "正簡轉換引擎"
 
 #: src/module/chttrans/chttrans.c:177
-#, fuzzy
 msgid "Traditional Chinese is enabled."
-msgstr "正體中文"
+msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
@@ -3026,9 +2996,8 @@ msgid "User Phrase Color"
 msgstr "使用者詞彙顏色"
 
 #: data/script/fcitx-diagnose.sh:1047 data/script/fcitx-diagnose.sh:1130
-#, fuzzy
 msgid "Version Line:"
-msgstr "版本："
+msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
@@ -3249,6 +3218,3 @@ msgstr "xmodmap 指令"
 #, c-format
 msgid "your current font is: %s"
 msgstr ""
-
-#~ msgid "Log."
-#~ msgstr "日誌。"

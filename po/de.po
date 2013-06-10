@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-09 00:02-0400\n"
-"PO-Revision-Date: 2013-06-01 12:15+0000\n"
-"Last-Translator: mar well <marwell.1980@freenet.de>\n"
+"POT-Creation-Date: 2013-06-10 00:02-0400\n"
+"PO-Revision-Date: 2013-06-09 04:07+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
 "Language: de\n"
@@ -445,9 +445,8 @@ msgid "Cangjie"
 msgstr "Cangjie"
 
 #: data/script/fcitx-diagnose.sh:1070
-#, fuzzy
 msgid "Cannot ${2} for gtk ${1}"
-msgstr "Konfigurationsoberfläche für gtk${1}"
+msgstr ""
 
 #: src/im/pinyin/py.c:1736
 #, c-format
@@ -485,9 +484,8 @@ msgstr ""
 "installieren Sie ${1}, ${2}, oder ${3}."
 
 #: data/script/fcitx-diagnose.sh:1239
-#, fuzzy
 msgid "Cannot find enabled fcitx user interface!"
-msgstr "Kann das Programm Fcitx nicht finden"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1193
 msgid "Cannot find fcitx addon config directory."
@@ -506,18 +504,16 @@ msgid "Cannot find fcitx im module for gtk ${1}."
 msgstr "Kann kein Modul für gtk ${1} finden"
 
 #: data/script/fcitx-diagnose.sh:951 data/script/fcitx-diagnose.sh:955
-#, fuzzy
 msgid "Cannot find fcitx input method module for ${1}."
-msgstr "QT-Eingabemodul fur Fcitxz nicht auffindbar."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:793
 msgid "Cannot find fcitx-configtool executable!"
 msgstr "Kann das Programm fcitx-configtool nicht finden!"
 
 #: data/script/fcitx-diagnose.sh:1153
-#, fuzzy
 msgid "Cannot find immodules cache for gtk ${1}"
-msgstr "Kann kein Modul für gtk ${1} finden"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1258
 msgid ""
@@ -714,9 +710,8 @@ msgid "Commit with extra space when choose candidate word"
 msgstr "Auswahl eines Kandidaten zusätzlich mit SPACE bestätigen"
 
 #: data/script/fcitx-diagnose.sh:759
-#, fuzzy
 msgid "Config GUI for gtk${1} not found."
-msgstr "Konfigurationsoberfläche für gtk${1}"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:755
 msgid "Config GUI for gtk${1}:"
@@ -735,9 +730,8 @@ msgid "ConfigFile"
 msgstr "Konfigurationsdatei"
 
 #: data/script/fcitx-diagnose.sh:1377
-#, fuzzy
 msgid "Configuration:"
-msgstr "Konfiguration."
+msgstr ""
 
 #: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:504
 msgid "Configure"
@@ -857,9 +851,8 @@ msgid "Description of Skin"
 msgstr "Beschreibung Skin"
 
 #: data/script/fcitx-diagnose.sh:624
-#, fuzzy
 msgid "Desktop Environment:"
-msgstr "Desktopumgebung"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:628
 msgid "Desktop environment is ${1}."
@@ -894,9 +887,8 @@ msgid "Do not commit preedit text when unfocus a window"
 msgstr "Preedittext nicht eingeben, wenn das Fenster den Fokus verliert"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:616
-#, fuzzy
 msgid "Do not show again."
-msgstr "Nichts in Gnome-Anwendungen zeigen"
+msgstr ""
 
 #: data/addon.desc:82
 msgid "Do not show in GUI"
@@ -1006,9 +998,8 @@ msgid "Environment variable ${1} is set to \"${2}\" correctly."
 msgstr "Die Umgebungsvariable ${1} ist richtig auf \"${2}\" gesetzt."
 
 #: data/script/fcitx-diagnose.sh:634
-#, fuzzy
 msgid "Environment:"
-msgstr "Umgebung."
+msgstr ""
 
 #: src/im/table/data/erbi.conf.in:3
 msgid "Erbi"
@@ -1065,14 +1056,12 @@ msgid "Extra key for trigger input method"
 msgstr "Extrataste zum Aktivieren der Eingabemethode"
 
 #: data/script/fcitx-diagnose.sh:1147
-#, fuzzy
 msgid "Failed to find fcitx in immodule cache at ${1}"
-msgstr "Kann kein Modul für gtk ${1} finden"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1064
-#, fuzzy
 msgid "Failed to find fcitx in the output of ${1}"
-msgstr "Fcitx in Cachedatei gefunden ${1}:"
+msgstr ""
 
 #: data/addon.desc:72
 msgid "Fallback UI Addon"
@@ -1096,9 +1085,8 @@ msgid "Fcitx Configuration"
 msgstr "Fcitx Konfiguration"
 
 #: data/script/fcitx-diagnose.sh:790
-#, fuzzy
 msgid "Fcitx Configure UI:"
-msgstr "Fcitx Oberfläche konfigurieren."
+msgstr ""
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -1117,9 +1105,8 @@ msgid "Fcitx Spelling Hint/Completion Support"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:673
-#, fuzzy
 msgid "Fcitx State:"
-msgstr "Status Fcitx."
+msgstr ""
 
 #: src/module/unicode/fcitx-unicode.conf.in:3
 msgid "Fcitx Unicode Typing Support"
@@ -1134,9 +1121,8 @@ msgid "Fcitx is not running."
 msgstr "Fcitx läuft nicht."
 
 #: data/script/fcitx-diagnose.sh:687
-#, fuzzy
 msgid "Fcitx version: ${1}"
-msgstr "Fcitx Version: ${version}"
+msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:297
 #: tools/gui/quickphrase-editor/editor.cpp:344
@@ -1210,9 +1196,8 @@ msgid "Found ${1} enabled input methods:"
 msgstr "${1} Aktivierte Eingabemethoden gefunden:"
 
 #: data/script/fcitx-diagnose.sh:1241
-#, fuzzy
 msgid "Found ${1} enabled user interface addons:"
-msgstr "Aktivierte Addons gefunden ${1}"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:707
 msgid "Found ${1} fcitx process:"
@@ -1227,9 +1212,8 @@ msgid "Found ${2} for unknow gtk version at ${1}."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1042
-#, fuzzy
 msgid "Found ${3} for gtk ${1} at ${2}."
-msgstr "${1} in ${2} gefunden."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1201
 msgid "Found fcitx addon config directory: ${1}."
@@ -1240,9 +1224,8 @@ msgid "Found fcitx at ${1}."
 msgstr "Fcitx gefunden: ${1}"
 
 #: data/script/fcitx-diagnose.sh:933 data/script/fcitx-diagnose.sh:938
-#, fuzzy
 msgid "Found fcitx im module for ${2}: ${1}."
-msgstr "gtk ${1} Module für Fcitz gefunden"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1058 data/script/fcitx-diagnose.sh:1141
 msgid "Found fcitx im modules for gtk ${1}."
@@ -1253,23 +1236,20 @@ msgid "Found fcitx kcm module."
 msgstr "KCM-Modul für Fcitx gefunden"
 
 #: data/script/fcitx-diagnose.sh:942
-#, fuzzy
 msgid "Found fcitx qt module: ${1}."
-msgstr "Fcitz QT IM module gefunden: ${1}."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:795
 msgid "Found fcitx-configtool at ${1}."
 msgstr "fcitx-configtool hiergefunden ${1}."
 
 #: data/script/fcitx-diagnose.sh:1134
-#, fuzzy
 msgid "Found immodule cache for unknow gtk version at ${1}."
-msgstr "immodules Cache für gtk ${1} ${2}gefunden."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1126
-#, fuzzy
 msgid "Found immodules cache for gtk ${1} at ${2}."
-msgstr "immodules Cache für gtk ${1} ${2}gefunden."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:945
 msgid "Found unknown fcitx qt module: ${1}."
@@ -1297,9 +1277,8 @@ msgid "Frontend: open %s fail %s"
 msgstr "Schnittstelle: Öffnen von %s fehlgeschlagen %s"
 
 #: data/script/fcitx-diagnose.sh:1370
-#, fuzzy
 msgid "Frontends setup:"
-msgstr "Setup der Frontends"
+msgstr ""
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1311,9 +1290,8 @@ msgid "Full width punct"
 msgstr "Vollbreite Interpunktion"
 
 #: src/module/punc/punc.c:574
-#, fuzzy
 msgid "Full width punctuations are used."
-msgstr "Vollbreite Interpunktion"
+msgstr ""
 
 #: src/module/vk/vk.c:52
 msgid "Fullwidth"
@@ -1484,28 +1462,18 @@ msgid "IconName"
 msgstr "Name des Icons"
 
 #: data/script/fcitx-diagnose.sh:560
-#, fuzzy
 msgid ""
 "If you are using ${1}, you may want to uninstall ${2} or remove ${3} in "
 "order to use any input method other than ${2}. See ${link} for more detail "
 "as well as alternative solutions."
 msgstr ""
-"Wenn Sie ${1} benutzen wollen Sie vielleicht ${2} deinstallieren oder ${3} "
-"entfernen um in der Lage zu sein, andere Eingabemethoden als ${2} "
-"auszuwählen. Siehe ${link} für mehr Details und für andere "
-"Lösungsmöglichkeiten."
 
 #: data/script/fcitx-diagnose.sh:558
-#, fuzzy
 msgid ""
 "If you are using ${1}, you may want to uninstall ${2}, remove ${3} or use "
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
-"Wenn Sie ${1} benutzen wollen Sie vielleicht ${2} deinstallieren oder ${3} "
-"entfernen um in der Lage zu sein, andere Eingabemethoden als ${2} "
-"auszuwählen. Siehe ${link} für mehr Details und für andere "
-"Lösungsmöglichkeiten."
 
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Ignore Input Method Layout Request"
@@ -1703,9 +1671,8 @@ msgstr ""
 "Unterstützung zur Integration von Fcitx mit Kimpanel (KDE Plasma Widget)"
 
 #: data/script/fcitx-diagnose.sh:1250
-#, fuzzy
 msgid "Kimpanel process:"
-msgstr "Prozess:"
+msgstr ""
 
 #: data/config.desc:23
 msgid "L_ALT"
@@ -2253,9 +2220,8 @@ msgid "Provides DBus Support (Used by other Addon)"
 msgstr "Bietet DBus-Unterstützung (von anderem Addon verwendet)"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
-#, fuzzy
 msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
-msgstr "Bietet DBus-Unterstützung (von anderem Addon verwendet)"
+msgstr ""
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
 msgid "Provides Fullwidth Character Input Support"
@@ -2544,9 +2510,8 @@ msgid "Simplified Chinese To Traditional Chinese"
 msgstr "Kurz-/Langzeichen"
 
 #: src/module/chttrans/chttrans.c:178
-#, fuzzy
 msgid "Simplified Chinese is enabled."
-msgstr "Kurzzeichen"
+msgstr ""
 
 #: src/ui/classic/skin.c:680 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
@@ -2653,9 +2618,8 @@ msgid "Spell Hint"
 msgstr "Rechtschreibungshinweis"
 
 #: src/im/keyboard/keyboard.c:913
-#, fuzzy
 msgid "Spell hint"
-msgstr "Rechtschreibungshinweis"
+msgstr ""
 
 #: src/im/keyboard/keyboard.c:915
 msgid "Spell hint is disabled."
@@ -2785,9 +2749,8 @@ msgid "Symbol File"
 msgstr "Symbol > Datei"
 
 #: data/script/fcitx-diagnose.sh:596
-#, fuzzy
 msgid "System Info:"
-msgstr "Systeminfo."
+msgstr ""
 
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
 msgid "Table"
@@ -2914,9 +2877,8 @@ msgid "Traditional Chinese Translate Engine"
 msgstr "Übersetzungsmaschine für Traditionelles Chinesisch"
 
 #: src/module/chttrans/chttrans.c:177
-#, fuzzy
 msgid "Traditional Chinese is enabled."
-msgstr "Langzeichen"
+msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
@@ -3070,9 +3032,8 @@ msgid "User Phrase Color"
 msgstr "Farbe nutzerdefinierter Phrasen"
 
 #: data/script/fcitx-diagnose.sh:1047 data/script/fcitx-diagnose.sh:1130
-#, fuzzy
 msgid "Version Line:"
-msgstr "Version:"
+msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
@@ -3314,9 +3275,3 @@ msgstr "xmodmap Befehl"
 #, c-format
 msgid "your current font is: %s"
 msgstr "der aktuelle Font ist: %s"
-
-#~ msgid "Found gtk-query-immodules for gtk ${1} at ${2}."
-#~ msgstr "gtk-query-immodules für gtk ${1} hier gefunden: ${2}."
-
-#~ msgid "Log."
-#~ msgstr "Log."
