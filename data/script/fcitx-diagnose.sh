@@ -1047,7 +1047,7 @@ check_gtk_query_immodule() {
             write_eval "$(_ 'Version Line:')"
             write_quote_str "${version_line}"
         else
-            write_eval "$(_ 'Found ${2} for unknow gtk version at ${1}.')" \
+            write_eval "$(_ 'Found ${2} for unknown gtk version at ${1}.')" \
                 "$(code_inline "${query_immodule}")" \
                 "$(code_inline gtk-query-immodules)"
             real_version=${version}
@@ -1131,7 +1131,7 @@ check_gtk_immodule_cache() {
             write_quote_str "${version_line}"
         else
             write_eval \
-                "$(_ 'Found immodule cache for unknow gtk version at ${1}.')" \
+                "$(_ 'Found immodule cache for unknown gtk version at ${1}.')" \
                 "$(code_inline "${cache}")"
             real_version=${version}
         fi
