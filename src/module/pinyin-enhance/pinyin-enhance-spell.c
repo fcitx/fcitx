@@ -249,8 +249,6 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
             break;
         }
     } while (*(p++));
-    /* for linpinyin-shuangpin only */
-    py_fix_input_string(pyenhance, pinyin, pinyin_len);
     /* not at the end of the string */
     if (*last_start) {
         if (im_type == PY_IM_PINYIN) {
@@ -264,6 +262,8 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
         if (words_type[words_count - 1] != PY_TYPE_FULL)
             words_type[words_count - 1] = PY_TYPE_SHORT;
     }
+    /* for linpinyin-shuangpin only */
+    py_fix_input_string(pyenhance, pinyin, pinyin_len);
     cand_word = FcitxCandidateWordGetFirst(cand_list);
     if (!(cand_word && cand_word->strWord && (*cand_word->strWord & 0x80))) {
         len_limit = FcitxCandidateWordGetPageSize(cand_list) - 1;
