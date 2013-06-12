@@ -3,13 +3,8 @@ set(QT_WRAPPER_SRCS
   wrapperapp.cpp
   mainwindow.cpp
   )
-set(QT_WRAPPER_HDRS
-  wrapperapp.h
-  mainwindow.h
-  )
 fcitx_translate_add_sources(
-  ${QT_WRAPPER_SRCS}
-  ${QT_WRAPPER_HDRS})
+  ${QT_WRAPPER_SRCS})
 
 if(NOT (ENABLE_QT AND ENABLE_QT_GUI))
   return()
@@ -22,8 +17,8 @@ include_directories(
   )
 
 qt4_wrap_ui(QT_WRAPPER_SRCS mainwindow.ui)
-qt4_wrap_cpp(QT_WRAPPER_MOCS ${QT_WRAPPER_HDRS})
-add_executable(fcitx-qt-gui-wrapper ${QT_WRAPPER_SRCS} ${QT_WRAPPER_MOCS})
+add_executable(fcitx-qt-gui-wrapper ${QT_WRAPPER_SRCS})
+set_target_properties(fcitx-qt-gui-wrapper PROPERTIES AUTOMOC TRUE)
 target_link_libraries(fcitx-qt-gui-wrapper
   debug ${QT_QTCORE_LIBRARY_DEBUG}
   debug ${QT_QTDBUS_LIBRARY_DEBUG}

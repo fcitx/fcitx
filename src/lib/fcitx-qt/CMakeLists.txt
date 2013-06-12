@@ -9,6 +9,7 @@ set(fcitx_qt_SOURCES
     fcitxqtkeyboardlayout.cpp
     fcitxqtkeyboardproxy.cpp
     fcitxqtinputmethoditem.cpp
+    fcitxqtkeysequencewidget.cpp
     )
 
 set(fcitx_qt_HEADERS
@@ -23,6 +24,7 @@ set(fcitx_qt_HEADERS
     fcitxqtkeyboardlayout.h
     fcitxqtkeyboardproxy.h
     fcitxqtinputmethoditem.h
+    fcitxqtkeysequencewidget.h
 )
 
 fcitx_translate_add_sources(${fcitx_qt_HEADERS} ${fcitx_qt_SOURCES})
@@ -42,24 +44,19 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-QT4_WRAP_CPP(
-    fcitx_qt_MOC_SRCS
-    ${fcitx_qt_HEADERS}
-    fcitxqtconnection_p.h
-    fcitxqtconfiguifactory_p.h
-)
-
 if (ENABLE_X11)
     include_directories(${X11_INCLUDE_DIRS})
     link_directories(${X11_LIBRARY_DIRS})
 endif (ENABLE_X11)
 
-add_library(fcitx-qt SHARED ${fcitx_qt_SOURCES} ${fcitx_qt_MOC_SRCS})
+add_library(fcitx-qt SHARED ${fcitx_qt_SOURCES})
+
 set_target_properties(fcitx-qt
                       PROPERTIES VERSION 0.1
                       SOVERSION 0
                       COMPILE_FLAGS "-fvisibility=hidden"
                       LINK_FLAGS "-Wl,--no-undefined"
+                      AUTOMOC TRUE
 )
 
 target_link_libraries(
