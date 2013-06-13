@@ -241,13 +241,13 @@ bool QuickPhraseModel::saveData(const QString& file, const QStringPairList& list
 {
     char* name = NULL;
     QByteArray filenameArray = file.toLocal8Bit();
-    FILE* fp = FcitxXDGGetFileUserWithPrefix("", filenameArray.constData(), "w", &name);
-    fclose(fp);
+    FcitxXDGGetFileUserWithPrefix("", filenameArray.constData(), NULL, &name);
     QString fileName = QString::fromLocal8Bit(name);
     QTemporaryFile tempFile(fileName);
     free(name);
-    if (!tempFile.open())
+    if (!tempFile.open()) {
         return false;
+    }
 
     for (int i = 0; i < list.size(); i ++) {
         tempFile.write(list[i].first.toUtf8());
@@ -258,8 +258,9 @@ bool QuickPhraseModel::saveData(const QString& file, const QStringPairList& list
 
     tempFile.setAutoRemove(false);
     QFile::remove(fileName);
-    if (!tempFile.rename(fileName))
+    if (!tempFile.rename(fileName)) {
         tempFile.remove();
+    }
 
     return true;
 }

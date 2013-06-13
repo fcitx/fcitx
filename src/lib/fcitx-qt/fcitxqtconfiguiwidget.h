@@ -74,7 +74,7 @@ public:
      **/
     virtual bool asyncSave();
 
-signals:
+Q_SIGNALS:
     /**
      * the configuration is changed or not, used to indicate parent gui
      *

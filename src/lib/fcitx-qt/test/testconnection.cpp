@@ -17,7 +17,7 @@ public:
 
 private:
     FcitxQtConnection* conn;
-public slots:
+public Q_SLOTS:
     void connected() {
         qDebug() << "connected";
     }

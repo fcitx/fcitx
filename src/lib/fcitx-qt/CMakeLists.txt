@@ -49,6 +49,7 @@ if (ENABLE_X11)
     link_directories(${X11_LIBRARY_DIRS})
 endif (ENABLE_X11)
 
+add_definitions(-DQT_NO_KEYWORDS)
 add_library(fcitx-qt SHARED ${fcitx_qt_SOURCES})
 
 set_target_properties(fcitx-qt

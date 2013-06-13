@@ -96,7 +96,7 @@ void FcitxQtConfigUIFactoryPrivate::scan()
             continue;
         }
 
-        foreach (const QString & maybeFile, entryList) {
+        Q_FOREACH (const QString & maybeFile, entryList) {
             QFileInfo fi (dir.filePath (maybeFile));
 
             QString filePath = fi.filePath(); // file name with path
@@ -114,7 +114,7 @@ void FcitxQtConfigUIFactoryPrivate::scan()
             FcitxQtConfigUIFactoryInterface* plugin = qobject_cast< FcitxQtConfigUIFactoryInterface* > (loader->instance());
             if (plugin) {
                 QStringList list = plugin->files();
-                foreach(const QString& s, list) {
+                Q_FOREACH(const QString& s, list) {
                     plugins[s] = plugin;
                 }
             }

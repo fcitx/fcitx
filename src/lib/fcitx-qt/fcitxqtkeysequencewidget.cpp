@@ -272,7 +272,7 @@ void FcitxQtKeySequenceWidgetPrivate::doneRecording(bool validate)
         return;
     }
 
-    emit q->keySequenceChanged(keySequence);
+    Q_EMIT q->keySequenceChanged(keySequence);
 
     updateShortcutDisplay();
 }
