@@ -1875,7 +1875,10 @@ void FreeIMEntry(FcitxIMEntry* entry)
 FCITX_EXPORT_API
 INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state)
 {
-    if (FcitxInputStateGetRawInputBufferSize(input) != 0
+    if ((FcitxInputStateGetRawInputBufferSize(input) != 0
+         || FcitxMessagesGetMessageCount(input->msgPreedit)
+         || FcitxMessagesGetMessageCount(input->msgClientPreedit)
+         || FcitxCandidateWordGetListSize(input->candList))
         && (FcitxHotkeyIsHotKeySimple(key, state)
         || FcitxHotkeyIsHotkeyCursorMove(key, state)
         || FcitxHotkeyIsHotKey(key, state, FCITX_SHIFT_SPACE)
