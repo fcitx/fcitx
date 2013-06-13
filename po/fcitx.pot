@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-09 00:02-0400\n"
+"POT-Creation-Date: 2013-06-13 00:02-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -344,7 +344,7 @@ msgid "Version Line:"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1050
-msgid "Found ${2} for unknow gtk version at ${1}."
+msgid "Found ${2} for unknown gtk version at ${1}."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1058 data/script/fcitx-diagnose.sh:1141
@@ -356,7 +356,7 @@ msgid "Failed to find fcitx in the output of ${1}"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1070
-msgid "Cannot ${2} for gtk ${1}"
+msgid "Cannot find ${2} for gtk ${1}"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1076
@@ -368,7 +368,7 @@ msgid "Found immodules cache for gtk ${1} at ${2}."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1134
-msgid "Found immodule cache for unknow gtk version at ${1}."
+msgid "Found immodule cache for unknown gtk version at ${1}."
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1147
@@ -837,6 +837,26 @@ msgstr ""
 msgid "Module: bad module"
 msgstr ""
 
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:300
+msgid "Left"
+msgstr ""
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:302
+msgid "Right"
+msgstr ""
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:344
+msgid "Empty"
+msgstr ""
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:387
+msgid "The key you just pressed is not supported by Qt."
+msgstr ""
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:388
+msgid "Unsupported Key"
+msgstr ""
+
 #: src/lib/fcitx/ui.c:192
 #, c-format
 msgid "UI: open %s fail %s"
@@ -1177,134 +1197,6 @@ msgstr ""
 
 #: src/ui/kimpanel/kimpanel.c:748
 msgid "Toggle Input Method"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/batchdialog.cpp:31
-msgid "Use <Keyword> <Phrase> format on every line."
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:51
-msgid "&Add"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:52
-msgid "&Batch Edit"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:53
-msgid "&Delete"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:54
-msgid "De&lete All"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:55
-msgid "&Import"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:56
-msgid "E&xport"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:57
-msgid "&Operation"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:68
-msgid "Add File"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:69
-msgid "Remove File"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:70
-msgid "Refresh List"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:131
-msgid "Save Changes"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:132
-msgid ""
-"The content has changed.\n"
-"Do you want to save the changes or discard them?"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:150
-msgid "Quick Phrase Editor"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:281
-msgid "Create new file"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:282
-msgid "Please input a filename for newfile"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:287
-msgid "Invalid filename"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:287
-msgid "File name should not contain '/'."
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:297
-#: tools/gui/quickphrase-editor/editor.cpp:344
-msgid "File Operation Failed"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:298
-#, kde-format
-msgid "Cannot create file %1."
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:324
-msgid "Cannot remove system file"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:325
-#, kde-format
-msgid "%1 is a system file, do you want to delete all phrases instead?"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:336
-msgid "Confirm deleting"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:337
-#, kde-format
-msgid "Are you sure to delete %1?"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:345
-#, kde-format
-msgid "Error while deleting %1."
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editordialog.cpp:30
-msgid "Keyword:"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editordialog.cpp:31
-msgid "Phrase:"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/filelistmodel.cpp:47
-#: src/module/spell/fcitx-spell.desc:5
-msgid "Default"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/model.cpp:55
-msgid "Keyword"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/model.cpp:57
-msgid "Phrase"
 msgstr ""
 
 #: tools/gui/wrapper/mainwindow.cpp:40
@@ -2756,6 +2648,10 @@ msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:1 src/module/spell/fcitx-spell.desc:10
 msgid "Spell Hint"
+msgstr ""
+
+#: src/module/spell/fcitx-spell.desc:5
+msgid "Default"
 msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:6
