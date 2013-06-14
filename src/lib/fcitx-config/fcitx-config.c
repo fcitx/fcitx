@@ -328,8 +328,7 @@ FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE *fp)
                 if (coption) {
                     codesc2->constrain.stringConstrain.maxLength = atoi(coption->rawValue);
                 }
-            }
-            else if (!strcmp(option->rawValue, "I18NString"))
+            } else if (!strcmp(option->rawValue, "I18NString"))
                 codesc->type = T_I18NString;
             else if (!strcmp(option->rawValue, "Boolean"))
                 codesc->type = T_Boolean;
@@ -337,9 +336,20 @@ FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE *fp)
                 codesc->type = T_File;
             else if (!strcmp(option->rawValue, "Font"))
                 codesc->type = T_Font;
-            else if (!strcmp(option->rawValue, "Hotkey"))
+            else if (!strcmp(option->rawValue, "Hotkey")) {
                 codesc->type = T_Hotkey;
-            else if (!strcmp(option->rawValue, "Enum")) {
+                FcitxConfigOption* coption;
+                coption = NULL;
+                HASH_FIND_STR(options, "AllowModifierOnly", coption);
+                if (coption) {
+                    codesc2->constrain.hotkeyConstrain.allowModifierOnly = strcmp(coption->rawValue, "True") == 0;
+                }
+                coption = NULL;
+                HASH_FIND_STR(options, "DisallowNoModifer", coption);
+                if (coption) {
+                    codesc2->constrain.hotkeyConstrain.disallowNoModifer = strcmp(coption->rawValue, "True") == 0;
+                }
+            } else if (!strcmp(option->rawValue, "Enum")) {
                 FcitxConfigOption *eoption;
                 codesc->type = T_Enum;
                 HASH_FIND_STR(options, "EnumCount", eoption);

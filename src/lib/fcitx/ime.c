@@ -561,6 +561,21 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
 
     FcitxGlobalConfig *fc = instance->config;
 
+    const FcitxHotkey* hkSwitchKey1;
+    const FcitxHotkey* hkSwitchKey2;
+    // check config.desc
+#define CUSTOM_SWITCH_KEY 19
+    if ((int) fc->iSwitchKey < CUSTOM_SWITCH_KEY) {
+        hkSwitchKey1 = switchKey1[fc->iSwitchKey];
+    } else {
+        hkSwitchKey1 = fc->hkCustomSwitchKey;
+    }
+    if ((int) fc->iSwitchKey < CUSTOM_SWITCH_KEY) {
+        hkSwitchKey2 = switchKey2[fc->iSwitchKey];
+    } else {
+        hkSwitchKey2 = fc->hkCustomSwitchKey;
+    }
+
     if (instance->CurrentIC == NULL)
         return IRV_TO_PROCESS;
 
@@ -628,7 +643,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                     if (input->keyReleased == KR_SWITCH_IM_REVERSE) {
                         FcitxInstanceSwitchIMByIndex(instance, fc->bIMSwitchIncludeInactive ? -2 : -4);
                     }
-                } else if ((FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey])) && input->keyReleased == KR_SWITCH && !fc->bDoubleSwitchKey) {
+                } else if ((FcitxHotkeyIsHotKey(sym, state, hkSwitchKey1) || FcitxHotkeyIsHotKey(sym, state, hkSwitchKey2)) && input->keyReleased == KR_SWITCH && !fc->bDoubleSwitchKey) {
                     retVal = IRV_DONOT_PROCESS;
                     if (currentIM && currentIM->OnClose) {
                         currentIM->OnClose(currentIM->klass, CET_ChangeByInactivate);
@@ -671,8 +686,8 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                     return IRV_DO_NOTHING;
                 }
             }
-            if (!(FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) ||
-                  FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey])))
+            if (!(FcitxHotkeyIsHotKey(sym, state, hkSwitchKey1) ||
+                  FcitxHotkeyIsHotKey(sym, state, hkSwitchKey2)))
                 input->keyReleased = KR_OTHER;
             else {
                 if (input->keyReleased == KR_SWITCH &&
@@ -687,9 +702,13 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
             FcitxInputContext2* currentIC2 = (FcitxInputContext2*) instance->CurrentIC;
 
             if ((instance->CurrentIC->state == IS_ACTIVE || !fc->bUseExtraTriggerKeyOnlyWhenUseItToInactivate || currentIC2->switchBySwitchKey) &&
-                (FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey]))) {
+                (FcitxHotkeyIsHotKey(sym, state, hkSwitchKey1) || FcitxHotkeyIsHotKey(sym, state, hkSwitchKey2))) {
                 input->keyReleased = KR_SWITCH;
-                retVal = IRV_DONOT_PROCESS;
+                if (FcitxHotkeyIsHotKeyModifierCombine(sym, state)) {
+                    retVal = IRV_DONOT_PROCESS;
+                } else {
+                    retVal = IRV_DO_NOTHING;
+                }
             } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))) {
                 input->keyReleased = KR_SWITCH_IM;
                 retVal = IRV_DONOT_PROCESS;

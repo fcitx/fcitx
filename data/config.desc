@@ -11,7 +11,7 @@ Advance=True
 
 [Hotkey/SwitchKey]
 Type=Enum
-EnumCount=19
+EnumCount=20
 Enum0=R_CTRL
 Enum1=R_SHIFT
 Enum2=L_SHIFT
@@ -31,8 +31,16 @@ Enum15=Ctrl+Right Super
 Enum16=Super+Left Ctrl
 Enum17=Super+Right Ctrl
 Enum18=Disabled
+Enum19=Custom
 DefaultValue=L_SHIFT
 Description=Extra key for trigger input method
+
+[Hotkey/CustomSwitchKey]
+Type=Hotkey
+DefaultValue=
+Description=Custom switch key
+AllowModifierOnly=True
+Advance=True
 
 [Hotkey/ActivateKey]
 Type=Hotkey

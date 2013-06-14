@@ -566,8 +566,11 @@ FCITX_EXPORT_API
 boolean FcitxHotkeyIsHotKeyModifierCombine(FcitxKeySym sym, unsigned int state)
 {
     FCITX_UNUSED(state);
-    if (sym == FcitxKey_Control_L || sym == FcitxKey_Control_R ||
-        sym == FcitxKey_Shift_L || sym == FcitxKey_Shift_R)
+    if (sym == FcitxKey_Control_L || sym == FcitxKey_Control_R
+     || sym == FcitxKey_Alt_L || sym == FcitxKey_Alt_R
+     || sym == FcitxKey_Super_L || sym == FcitxKey_Super_R
+     || sym == FcitxKey_Hyper_L || sym == FcitxKey_Hyper_R
+     || sym == FcitxKey_Shift_L || sym == FcitxKey_Shift_R)
         return true;
     return false;
 }

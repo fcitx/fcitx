@@ -144,7 +144,11 @@ extern "C" {
             FcitxHotkey hkReloadConfig[2];
             int _dummy6[8];
         };
-        int padding[15]; /**< padding */
+        union {
+            FcitxHotkey hkCustomSwitchKey[2];
+            int _dummy7[8];
+        };
+        int padding[7]; /**< padding */
     } FcitxGlobalConfig;
 
     /**

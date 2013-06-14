@@ -249,6 +249,11 @@ extern "C"
             size_t maxLength;
         } stringConstrain;
 
+        struct {
+            boolean disallowNoModifer;
+            boolean allowModifierOnly;
+        } hotkeyConstrain;
+
         void* padding[10];
     };
 
