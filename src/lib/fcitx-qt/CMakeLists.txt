@@ -10,6 +10,7 @@ set(fcitx_qt_SOURCES
     fcitxqtkeyboardproxy.cpp
     fcitxqtinputmethoditem.cpp
     fcitxqtkeysequencewidget.cpp
+    qtkeytrans.cpp
     )
 
 set(fcitx_qt_HEADERS

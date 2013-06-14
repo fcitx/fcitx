@@ -47,7 +47,7 @@
 #include <QtCore/QList>
 #include <QtGui/QPushButton>
 
-#include <fcitx-qt/fcitxqt_export.h>
+#include "fcitx-qt/fcitxqt_export.h"
 
 enum FcitxQtModifierSide {
     MS_Unknown = 0,
@@ -110,6 +110,9 @@ public:
     void setClearButtonShown(bool show);
 
     QKeySequence keySequence() const;
+
+    static void keyQtToFcitx(int keyQt, FcitxQtModifierSide side, int& outsym, uint& outstate);
+    static int keyFcitxToQt(int sym, uint state);
 
 Q_SIGNALS:
     void keySequenceChanged(const QKeySequence &seq, FcitxQtModifierSide side);

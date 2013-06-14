@@ -55,6 +55,8 @@
 #include <libintl.h>
 #include <fcitx-utils/keysymgen.h>
 
+#include "qtkeytrans.h"
+
 #define _(x) QString::fromUtf8(dgettext("fcitx", x))
 
 class FcitxQtKeySequenceWidgetPrivate
@@ -553,5 +555,42 @@ bool FcitxQtKeySequenceWidgetPrivate::isOkWhenModifierless(int keyQt)
         return true;
     }
 }
+
+void FcitxQtKeySequenceWidget::keyQtToFcitx(int keyQt, FcitxQtModifierSide side, int& outsym, uint& outstate)
+{
+    int key = keyQt & (~Qt::KeyboardModifierMask);
+    int state = keyQt & Qt::KeyboardModifierMask;
+    int sym = 0;
+    keyQtToSym(key, Qt::KeyboardModifiers(state), sym, outstate);
+    if (side == MS_Right) {
+        switch (sym) {
+            case FcitxKey_Control_L:
+                sym = FcitxKey_Control_R;
+                break;
+            case FcitxKey_Alt_L:
+                sym = FcitxKey_Alt_R;
+                break;
+            case FcitxKey_Shift_L:
+                sym = FcitxKey_Shift_R;
+                break;
+            case FcitxKey_Super_L:
+                sym = FcitxKey_Super_R;
+                break;
+        }
+    }
+
+    outsym = sym;
+}
+
+int FcitxQtKeySequenceWidget::keyFcitxToQt(int sym, uint state)
+{
+    Qt::KeyboardModifiers qstate = Qt::NoModifier;
+
+    int key;
+    symToKeyQt((int) sym, state, key, qstate);
+
+    return key | qstate;
+}
+
 
 #include "moc_fcitxqtkeysequencewidget.cpp"
