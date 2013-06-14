@@ -850,6 +850,31 @@ FcitxKeySym FcitxHotkeyPadToMain(FcitxKeySym sym)
 }
 
 FCITX_EXPORT_API
+unsigned int FcitxHotkeyModifierToState(FcitxKeySym sym)
+{
+    switch (sym) {
+        case FcitxKey_Control_L:
+        case FcitxKey_Control_R:
+            return FcitxKeyState_Ctrl;
+        case FcitxKey_Alt_L:
+        case FcitxKey_Alt_R:
+            return FcitxKeyState_Alt;
+        case FcitxKey_Shift_L:
+        case FcitxKey_Shift_R:
+            return FcitxKeyState_Shift;
+        case FcitxKey_Super_L:
+        case FcitxKey_Super_R:
+            return FcitxKeyState_Super;
+        case FcitxKey_Hyper_L:
+        case FcitxKey_Hyper_R:
+            return FcitxKeyState_Hyper;
+        default:
+            return 0;
+    }
+    return 0;
+}
+
+FCITX_EXPORT_API
 void FcitxHotkeyFree(FcitxHotkey* hotkey)
 {
     if (hotkey[0].desc)

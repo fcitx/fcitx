@@ -186,6 +186,16 @@ extern "C"
      */
     FcitxKeySym FcitxHotkeyPadToMain(FcitxKeySym sym);
 
+
+    /**
+     * convert modifier key to mask
+     *
+     * @param sym keyval
+     * @return unsigned int
+     * @since 4.2.8
+     */
+    unsigned int FcitxHotkeyModifierToState(FcitxKeySym sym);
+
     /**
      * @brief free hotkey description
      *

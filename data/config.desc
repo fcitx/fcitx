@@ -1,6 +1,7 @@
 [Hotkey/TriggerKey]
 Type=Hotkey
 DefaultValue=CTRL_SPACE
+AllowModifierOnly=True
 Description=Trigger Input Method
 
 [Hotkey/UseExtraTriggerKeyOnlyWhenUseItToInactivate]
@@ -46,12 +47,14 @@ Advance=True
 Type=Hotkey
 DefaultValue=
 Description=Activate input method
+AllowModifierOnly=True
 Advance=True
 
 [Hotkey/InactivateKey]
 Type=Hotkey
 DefaultValue=
 Description=Inactivate Input Method
+AllowModifierOnly=True
 Advance=True
 
 [Hotkey/IMSwitchKey]

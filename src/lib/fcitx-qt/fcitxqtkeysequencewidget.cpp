@@ -107,7 +107,7 @@ public:
     bool isRecording;
     bool multiKeyShortcutsAllowed;
     bool allowModifierOnly;
-    FcitxQtKeySequenceWidget::ModifierSide side;
+    FcitxQtModifierSide side;
 };
 
 FcitxQtKeySequenceWidgetPrivate::FcitxQtKeySequenceWidgetPrivate(FcitxQtKeySequenceWidget *q)
@@ -121,7 +121,7 @@ FcitxQtKeySequenceWidgetPrivate::FcitxQtKeySequenceWidgetPrivate(FcitxQtKeySeque
      ,isRecording(false)
      ,multiKeyShortcutsAllowed(true)
      ,allowModifierOnly(false)
-     ,side(FcitxQtKeySequenceWidget::MS_Unknown)
+     ,side(MS_Unknown)
 {}
 
 FcitxQtKeySequenceWidget::FcitxQtKeySequenceWidget(QWidget *parent)
@@ -196,7 +196,7 @@ void FcitxQtKeySequenceWidget::setModifierOnlyAllowed(bool allow)
     d->allowModifierOnly = allow;
 }
 
-FcitxQtKeySequenceWidget::ModifierSide FcitxQtKeySequenceWidget::modifierSide()
+FcitxQtModifierSide FcitxQtKeySequenceWidget::modifierSide()
 {
     return d->side;
 }
@@ -220,7 +220,7 @@ QKeySequence FcitxQtKeySequenceWidget::keySequence() const
 
 
 //slot
-void FcitxQtKeySequenceWidget::setKeySequence(const QKeySequence &seq, Validation validate)
+void FcitxQtKeySequenceWidget::setKeySequence(const QKeySequence& seq, FcitxQtModifierSide side, FcitxQtKeySequenceWidget::Validation validate)
 {
     // oldKeySequence holds the key sequence before recording started, if setKeySequence()
     // is called while not recording then set oldKeySequence to the existing sequence so
@@ -229,6 +229,7 @@ void FcitxQtKeySequenceWidget::setKeySequence(const QKeySequence &seq, Validatio
     if (!d->isRecording)
         d->oldKeySequence = d->keySequence;
 
+    d->side = side;
     d->keySequence = seq;
     d->doneRecording(validate == Validate);
 }
@@ -238,7 +239,7 @@ void FcitxQtKeySequenceWidget::setKeySequence(const QKeySequence &seq, Validatio
 void FcitxQtKeySequenceWidget::clearKeySequence()
 {
     setKeySequence(QKeySequence());
-    d->side = FcitxQtKeySequenceWidget::MS_Unknown;
+    d->side = MS_Unknown;
 }
 
 void FcitxQtKeySequenceWidgetPrivate::startRecording()
@@ -272,7 +273,7 @@ void FcitxQtKeySequenceWidgetPrivate::doneRecording(bool validate)
         return;
     }
 
-    Q_EMIT q->keySequenceChanged(keySequence);
+    Q_EMIT q->keySequenceChanged(keySequence, side);
 
     updateShortcutDisplay();
 }
@@ -296,9 +297,9 @@ void FcitxQtKeySequenceWidgetPrivate::updateShortcutDisplay()
             if (mod & Qt::ALT && key != Qt::Key_Alt)   s += "Alt+";
             if (mod & Qt::SHIFT && key != Qt::Key_Shift) s += "Shift+";
 
-            if (side == FcitxQtKeySequenceWidget::MS_Left) {
+            if (side == MS_Left) {
                 s += _("Left") + " ";
-            } else if (side == FcitxQtKeySequenceWidget::MS_Right) {
+            } else if (side == MS_Right) {
                 s += _("Right") + " ";
             }
 
@@ -477,19 +478,19 @@ void FcitxQtKeySequenceButton::keyReleaseEvent(QKeyEvent *e)
             || e->key() == Qt::Key_Control
             || e->key() == Qt::Key_Meta
             || e->key() == Qt::Key_Alt)) {
-        d->side = FcitxQtKeySequenceWidget::MS_Unknown;
+        d->side = MS_Unknown;
 #ifdef Q_WS_X11
         if (e->nativeVirtualKey() == FcitxKey_Control_L
          || e->nativeVirtualKey() == FcitxKey_Alt_L
          || e->nativeVirtualKey() == FcitxKey_Shift_L
          || e->nativeVirtualKey() == FcitxKey_Super_L) {
-            d->side = FcitxQtKeySequenceWidget::MS_Left;
+            d->side = MS_Left;
         }
         if (e->nativeVirtualKey() == FcitxKey_Control_R
          || e->nativeVirtualKey() == FcitxKey_Alt_R
          || e->nativeVirtualKey() == FcitxKey_Shift_R
          || e->nativeVirtualKey() == FcitxKey_Super_R) {
-            d->side = FcitxQtKeySequenceWidget::MS_Right;
+            d->side = MS_Right;
         }
 #endif
         int keyQt = e->key() | d->modifierKeys;

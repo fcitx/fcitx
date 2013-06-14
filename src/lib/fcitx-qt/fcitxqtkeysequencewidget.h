@@ -49,6 +49,12 @@
 
 #include <fcitx-qt/fcitxqt_export.h>
 
+enum FcitxQtModifierSide {
+    MS_Unknown = 0,
+    MS_Left = 1,
+    MS_Right = 2
+};
+
 class FcitxQtKeySequenceWidgetPrivate;
 
 class FCITX_QT_EXPORT_API FcitxQtKeySequenceWidget: public QWidget
@@ -75,11 +81,6 @@ public:
         Validate = 0,
         NoValidate = 1
     };
-    enum ModifierSide {
-        MS_Unknown = 0,
-        MS_Left = 1,
-        MS_Right = 2
-    };
 
     /**
     * Constructor.
@@ -104,18 +105,18 @@ public:
      * only useful when modifierOnlyAllowed is true
      * and the key is modifierOnly.
      */
-    ModifierSide modifierSide();
+    FcitxQtModifierSide modifierSide();
 
     void setClearButtonShown(bool show);
 
     QKeySequence keySequence() const;
 
 Q_SIGNALS:
-    void keySequenceChanged(const QKeySequence &seq);
+    void keySequenceChanged(const QKeySequence &seq, FcitxQtModifierSide side);
 
 public Q_SLOTS:
     void captureKeySequence();
-    void setKeySequence(const QKeySequence &seq, Validation val = NoValidate);
+    void setKeySequence(const QKeySequence &seq, FcitxQtModifierSide side = MS_Unknown, Validation val = NoValidate);
     void clearKeySequence();
 
 private:
