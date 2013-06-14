@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-14 14:02-0400\n"
-"PO-Revision-Date: 2013-06-14 04:08+0000\n"
+"POT-Creation-Date: 2013-06-14 18:02-0400\n"
+"PO-Revision-Date: 2013-06-14 18:07+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/fcitx/language/"
 "es/)\n"
@@ -31,8 +31,33 @@ msgstr ""
 msgid "${1} works properly."
 msgstr ""
 
+#: tools/gui/quickphrase-editor/editor.cpp:323
+#, kde-format
+msgid "%1 is a system file, do you want to delete all phrases instead?"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:51
+msgid "&Add"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:52
+msgid "&Batch Edit"
+msgstr ""
+
 #: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:53
+msgid "&Delete"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:55
+msgid "&Import"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:57
+msgid "&Operation"
 msgstr ""
 
 #: tools/gui/wrapper/mainwindow.cpp:41
@@ -161,6 +186,10 @@ msgstr ""
 msgid "Add Extra space when selecting a candidate word"
 msgstr ""
 
+#: tools/gui/quickphrase-editor/editor.cpp:68
+msgid "Add File"
+msgstr ""
+
 #: src/module/lua/fcitx-lua.conf.in:4
 msgid "Add Lua script support to Fcitx"
 msgstr ""
@@ -269,6 +298,11 @@ msgstr "Apariencia"
 
 #: src/module/xkb/fcitx-xkb.desc:19
 msgid "Apply this custom xmodmap script after layout change"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:335
+#, kde-format
+msgid "Are you sure to delete %1?"
 msgstr ""
 
 #: data/addon.desc:67
@@ -425,6 +459,11 @@ msgstr ""
 msgid "Cannot connect to fcitx correctly."
 msgstr ""
 
+#: tools/gui/quickphrase-editor/editor.cpp:296
+#, kde-format
+msgid "Cannot create file %1."
+msgstr ""
+
 #: data/script/fcitx-diagnose.sh:626
 msgid "Cannot determine desktop environment."
 msgstr ""
@@ -489,6 +528,10 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1268
 msgid "Cannot read im list from fcitx profile."
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:322
+msgid "Cannot remove system file"
 msgstr ""
 
 #: data/addon.desc:22
@@ -566,7 +609,7 @@ msgstr ""
 msgid "Clean"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:157
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:159
 msgid "Clear"
 msgstr ""
 
@@ -702,6 +745,10 @@ msgstr ""
 msgid "Configure group name error: line %d"
 msgstr ""
 
+#: tools/gui/quickphrase-editor/editor.cpp:334
+msgid "Confirm deleting"
+msgstr ""
+
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
 msgstr ""
@@ -715,6 +762,10 @@ msgstr "Convertir chino simplificado a chino tradicional"
 #: src/ui/classic/skin.desc:397 src/ui/classic/skin.desc:405
 msgid "Copy"
 msgstr "Copiar"
+
+#: tools/gui/quickphrase-editor/editor.cpp:279
+msgid "Create new file"
+msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:138
 #: src/module/autoeng/fcitx-autoeng.desc:8
@@ -768,6 +819,11 @@ msgstr ""
 msgid "DBus based new Freedesktop.org tray icon"
 msgstr ""
 
+#: tools/gui/quickphrase-editor/editor.cpp:54
+msgid "De&lete All"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/filelistmodel.cpp:47
 #: src/module/spell/fcitx-spell.desc:5
 msgid "Default"
 msgstr ""
@@ -882,7 +938,11 @@ msgstr ""
 msgid "Duplicate option, overwrite: line %d"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:350
+#: tools/gui/quickphrase-editor/editor.cpp:56
+msgid "E&xport"
+msgstr ""
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:352
 msgid "Empty"
 msgstr ""
 
@@ -950,6 +1010,11 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:661
 msgid "Error occurs when running ${1}. Please check your locale settings."
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:343
+#, kde-format
+msgid "Error while deleting %1."
 msgstr ""
 
 #: src/ui/classic/fcitx-skin-installer.sh:64
@@ -1058,6 +1123,15 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:687
 msgid "Fcitx version: ${1}"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:295
+#: tools/gui/quickphrase-editor/editor.cpp:342
+msgid "File Operation Failed"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:285
+msgid "File name should not contain '/'."
 msgstr ""
 
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
@@ -1520,6 +1594,10 @@ msgstr ""
 msgid "Invalid entry line @ line %d %s"
 msgstr ""
 
+#: tools/gui/quickphrase-editor/editor.cpp:285
+msgid "Invalid filename"
+msgstr ""
+
 #: src/lib/fcitx-utils/desktop-parse.c:550
 #, c-format
 msgid "Invalid group name line @ line %d %s"
@@ -1573,6 +1651,14 @@ msgstr ""
 msgid "Keyboard Layout:"
 msgstr ""
 
+#: tools/gui/quickphrase-editor/model.cpp:55
+msgid "Keyword"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editordialog.cpp:30
+msgid "Keyword:"
+msgstr ""
+
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:3
 msgid "Kimpanel"
 msgstr ""
@@ -1617,7 +1703,7 @@ msgstr ""
 msgid "Latin punctuations are used."
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:306
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:308
 msgid "Left"
 msgstr ""
 
@@ -1954,8 +2040,16 @@ msgstr "Padre"
 msgid "PerProgram"
 msgstr ""
 
+#: tools/gui/quickphrase-editor/model.cpp:57
+msgid "Phrase"
+msgstr ""
+
 #: src/im/table/table.c:1408
 msgid "Phrase is already in Dict "
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editordialog.cpp:31
+msgid "Phrase:"
 msgstr ""
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
@@ -2011,6 +2105,10 @@ msgstr ""
 msgid ""
 "Please check the Configure link of your distribution in ${1} for how to "
 "setup fcitx autostart."
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:280
+msgid "Please input a filename for newfile"
 msgstr ""
 
 #: src/frontend/xim/xim.c:161
@@ -2135,6 +2233,11 @@ msgstr ""
 msgid "Qt IM module files:"
 msgstr ""
 
+#: tools/gui/quickphrase-editor/editor.cpp:148
+#, fuzzy
+msgid "Quick Phrase Editor"
+msgstr "Lista de frases rápidas"
+
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
 msgstr "Lista de frases rápidas"
@@ -2175,6 +2278,10 @@ msgstr ""
 msgid "R_SHIFT"
 msgstr ""
 
+#: tools/gui/quickphrase-editor/editor.cpp:70
+msgid "Refresh List"
+msgstr ""
+
 #: data/addon.desc:58
 msgid "Register IM"
 msgstr ""
@@ -2193,6 +2300,10 @@ msgstr ""
 
 #: src/module/remote/fcitx-remote-module.conf.in:3
 msgid "Remote"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:69
+msgid "Remove File"
 msgstr ""
 
 #: src/im/table/tabledict.c:428
@@ -2230,7 +2341,7 @@ msgstr ""
 msgid "Restart"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:308
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:310
 msgid "Right"
 msgstr ""
 
@@ -2270,6 +2381,10 @@ msgstr "Guardar la frase creada automáticamente"
 
 #: src/im/table/table.desc:108
 msgid "Save Auto Phrase"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/editor.cpp:131
+msgid "Save Changes"
 msgstr ""
 
 #: src/module/clipboard/fcitx-clipboard.desc:4
@@ -2647,7 +2762,13 @@ msgstr ""
 msgid "Table Symbol"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:393
+#: tools/gui/quickphrase-editor/editor.cpp:132
+msgid ""
+"The content has changed.\n"
+"Do you want to save the changes or discard them?"
+msgstr ""
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:395
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
@@ -2805,8 +2926,12 @@ msgstr ""
 msgid "Unknown type, take it as string: %s"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:394
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:396
 msgid "Unsupported Key"
+msgstr ""
+
+#: tools/gui/quickphrase-editor/batchdialog.cpp:31
+msgid "Use <Keyword> <Phrase> format on every line."
 msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
