@@ -153,10 +153,15 @@ void FcitxQtKeySequenceWidgetPrivate::init()
     clearButton = new QToolButton(q);
     layout->addWidget(clearButton);
 
+#if QT_VERSION < QT_VERSION_CHECK(4, 8, 0)
+    clearButton->setText(_("Clear"));
+#else
+    keyButton->setIcon(QIcon::fromTheme("configure"));
     if (qApp->isLeftToRight())
         clearButton->setIcon(QIcon::fromTheme("edit-clear-locationbar-rtl"));
     else
         clearButton->setIcon(QIcon::fromTheme("edit-clear-locationbar-ltr"));
+#endif
 }
 
 
