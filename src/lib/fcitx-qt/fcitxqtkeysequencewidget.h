@@ -47,7 +47,7 @@
 #include <QtCore/QList>
 #include <QtGui/QPushButton>
 
-#include <fcitxqt_export.h>
+#include <fcitx-qt/fcitxqt_export.h>
 
 class FcitxQtKeySequenceWidgetPrivate;
 
