@@ -850,8 +850,9 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
             && FcitxCandidateWordGetCurrentPage(input->candList) == 0
             && type == MSG_OTHER
             && FcitxUIUseDefaultHighlight(instance, input->candList)
-        )
+        ) {
             type = MSG_FIRSTCAND;
+        }
 
         FcitxMessagesAddMessageStringsAtLast(msgDown, type, candWord->strWord);
 
