@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-14 00:02-0400\n"
-"PO-Revision-Date: 2013-06-13 04:08+0000\n"
+"POT-Creation-Date: 2013-06-14 14:02-0400\n"
+"PO-Revision-Date: 2013-06-14 13:54+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -437,7 +437,7 @@ msgstr "无法确定桌面环境。"
 
 #: data/script/fcitx-diagnose.sh:1070
 msgid "Cannot find ${2} for gtk ${1}"
-msgstr ""
+msgstr "无法找到 gtk ${1} 的 ${2}."
 
 #: data/script/fcitx-diagnose.sh:803
 msgid ""
@@ -570,6 +570,11 @@ msgstr "经典界面"
 
 #: data/config.desc:199
 msgid "Clean"
+msgstr "清除"
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:157
+#, fuzzy
+msgid "Clear"
 msgstr "清除"
 
 #: src/im/table/fcitx-table.desc:19
@@ -751,11 +756,11 @@ msgstr "当前 locale:"
 
 #: data/config.desc:35
 msgid "Custom"
-msgstr ""
+msgstr "自定义"
 
 #: data/config.desc:42
 msgid "Custom switch key"
-msgstr ""
+msgstr "自定义切换键"
 
 #: data/addon.desc:37
 msgid "DBus"
@@ -884,9 +889,9 @@ msgstr "组名重复，和之前的组合并: %s :行 %d"
 msgid "Duplicate option, overwrite: line %d"
 msgstr "重复的配置项，覆盖: 行%d"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:345
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:350
 msgid "Empty"
-msgstr ""
+msgstr "空"
 
 #: src/im/table/table.desc:147
 msgid "Enable"
@@ -1140,7 +1145,7 @@ msgstr "找到了 ${1} 个 fcitx 进程:"
 
 #: data/script/fcitx-diagnose.sh:1050
 msgid "Found ${2} for unknown gtk version at ${1}."
-msgstr ""
+msgstr "在 ${1} 找到了未知 gtk 版本的 ${2}."
 
 #: data/script/fcitx-diagnose.sh:1042
 msgid "Found ${3} for gtk ${1} at ${2}."
@@ -1176,7 +1181,7 @@ msgstr "在 ${1} 找到了 fcitx-configtool。"
 
 #: data/script/fcitx-diagnose.sh:1134
 msgid "Found immodule cache for unknown gtk version at ${1}."
-msgstr ""
+msgstr "在 ${1} 找到了未知 gtk 版本的输入法模块缓存."
 
 #: data/script/fcitx-diagnose.sh:1126
 msgid "Found immodules cache for gtk ${1} at ${2}."
@@ -1626,9 +1631,9 @@ msgstr "英文标点"
 msgid "Latin punctuations are used."
 msgstr "已启用半角标点."
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:301
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:306
 msgid "Left"
-msgstr ""
+msgstr "左"
 
 #: data/config.desc:27
 msgid "Left Super"
@@ -2239,9 +2244,9 @@ msgstr "上边距"
 msgid "Restart"
 msgstr "重新启动"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:303
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:308
 msgid "Right"
-msgstr ""
+msgstr "右"
 
 #: data/config.desc:28
 msgid "Right Super"
@@ -2656,9 +2661,9 @@ msgstr "Fcitx 的码表输入法"
 msgid "Table Symbol"
 msgstr "制表符"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:388
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:393
 msgid "The key you just pressed is not supported by Qt."
-msgstr ""
+msgstr "你刚刚按下的按键不被 Qt 支持。"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
 msgid ""
@@ -2818,9 +2823,9 @@ msgstr "唯一名称"
 msgid "Unknown type, take it as string: %s"
 msgstr "未知类型，作为字符串处理: %s"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:389
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:394
 msgid "Unsupported Key"
-msgstr ""
+msgstr "不支持的按键"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"

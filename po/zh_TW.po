@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-14 00:02-0400\n"
-"PO-Revision-Date: 2013-06-13 04:08+0000\n"
+"POT-Creation-Date: 2013-06-14 14:02-0400\n"
+"PO-Revision-Date: 2013-06-14 04:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
@@ -571,6 +571,11 @@ msgstr "經典介面"
 msgid "Clean"
 msgstr "清除"
 
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:157
+#, fuzzy
+msgid "Clear"
+msgstr "清除"
+
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
 msgstr "清除輸入頻率"
@@ -883,7 +888,7 @@ msgstr ""
 msgid "Duplicate option, overwrite: line %d"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:345
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:350
 msgid "Empty"
 msgstr ""
 
@@ -1620,7 +1625,7 @@ msgstr "英文標點符號"
 msgid "Latin punctuations are used."
 msgstr "已啟用半形標點符號。"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:301
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:306
 msgid "Left"
 msgstr ""
 
@@ -2233,7 +2238,7 @@ msgstr "上邊界寬度"
 msgid "Restart"
 msgstr "重新啟動"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:303
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:308
 msgid "Right"
 msgstr ""
 
@@ -2650,7 +2655,7 @@ msgstr "Fcitx 的碼表輸入法"
 msgid "Table Symbol"
 msgstr "製表符號"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:388
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:393
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
@@ -2812,7 +2817,7 @@ msgstr "唯一名稱"
 msgid "Unknown type, take it as string: %s"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:389
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:394
 msgid "Unsupported Key"
 msgstr ""
 

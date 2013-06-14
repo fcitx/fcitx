@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-14 00:02-0400\n"
+"POT-Creation-Date: 2013-06-14 14:02-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -837,23 +837,27 @@ msgstr ""
 msgid "Module: bad module"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:301
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:157
+msgid "Clear"
+msgstr ""
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:306
 msgid "Left"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:303
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:308
 msgid "Right"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:345
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:350
 msgid "Empty"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:388
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:393
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:389
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:394
 msgid "Unsupported Key"
 msgstr ""
 
