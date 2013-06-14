@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-13 00:02-0400\n"
-"PO-Revision-Date: 2013-06-09 04:07+0000\n"
+"POT-Creation-Date: 2013-06-14 00:02-0400\n"
+"PO-Revision-Date: 2013-06-13 04:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -70,7 +70,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1631
+#: src/lib/fcitx/ime.c:1688
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -110,35 +110,35 @@ msgstr ""
 msgid "ABC"
 msgstr "ABC"
 
-#: data/config.desc:25
+#: data/config.desc:26
 msgid "ALT Both"
 msgstr "2つのAlt"
 
-#: data/config.desc:19
+#: data/config.desc:20
 msgid "ALT_L_SHIFT"
 msgstr "Altと左Shift"
 
-#: data/config.desc:20
+#: data/config.desc:21
 msgid "ALT_R_SHIFT"
 msgstr "Altと右シフト"
 
-#: data/config.desc:64
+#: data/config.desc:75
 msgid "ALT_SHIFT"
 msgstr "Alt+Shift"
 
-#: data/config.desc:66
+#: data/config.desc:77
 msgid "ALT_SUPER"
 msgstr "Alt+Super"
 
-#: data/config.desc:191
+#: data/config.desc:202
 msgid "Action after press enter"
 msgstr "Enterキー入力後の動作"
 
-#: data/config.desc:40
+#: data/config.desc:49
 msgid "Activate input method"
 msgstr "入力メソッドをオンに"
 
-#: data/config.desc:174
+#: data/config.desc:185
 msgid "Active"
 msgstr "有効"
 
@@ -221,7 +221,7 @@ msgstr "頻度で調整"
 msgid "AdjustNo"
 msgstr "調整しない"
 
-#: data/config.desc:165
+#: data/config.desc:176
 msgid "All"
 msgstr "すべて"
 
@@ -268,9 +268,9 @@ msgstr "別の前ページキー"
 msgid "Alternative Trigger Key for QuickPhrase"
 msgstr "クイックフレーズのトリガーとなる別のキー"
 
-#: data/config.desc:225 data/config.desc:231 data/config.desc:237
-#: data/config.desc:243 data/config.desc:249 data/config.desc:255
-#: data/config.desc:261
+#: data/config.desc:236 data/config.desc:242 data/config.desc:248
+#: data/config.desc:254 data/config.desc:260 data/config.desc:266
+#: data/config.desc:272
 msgid "Appearance"
 msgstr "外観"
 
@@ -330,8 +330,8 @@ msgstr "オートフレーズのフレーズ"
 msgid "Auto Send Candidate Word"
 msgstr "候補を自動で送る"
 
-#: src/lib/fcitx-config/fcitx-config.c:1170
-#: src/lib/fcitx-config/fcitx-config.c:1179
+#: src/lib/fcitx-config/fcitx-config.c:1180
+#: src/lib/fcitx-config/fcitx-config.c:1189
 msgid "Available Value:"
 msgstr "可能な値:"
 
@@ -363,15 +363,15 @@ msgstr "左下"
 msgid "BottomRight"
 msgstr "右下"
 
-#: data/config.desc:21
+#: data/config.desc:22
 msgid "CTRL Both"
 msgstr "2つのCtrl"
 
-#: data/config.desc:63
+#: data/config.desc:74
 msgid "CTRL_SHIFT"
 msgstr "Ctrl+Shift"
 
-#: data/config.desc:65
+#: data/config.desc:76
 msgid "CTRL_SUPER"
 msgstr "Ctrl+Super"
 
@@ -405,7 +405,7 @@ msgstr "ソケット %s を開けません: %s"
 msgid "Candidate Index Color"
 msgstr "候補インデックスの色"
 
-#: data/config.desc:209
+#: data/config.desc:220
 msgid "Candidate Word Number"
 msgstr "候補の単語数"
 
@@ -437,9 +437,8 @@ msgid "Cannot determine desktop environment."
 msgstr "デスクトップ環境を決定できません。"
 
 #: data/script/fcitx-diagnose.sh:1070
-#, fuzzy
 msgid "Cannot find ${2} for gtk ${1}"
-msgstr "gtk ${1} 用のFcitx im モジュールが見つかりません。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:803
 msgid ""
@@ -528,7 +527,7 @@ msgstr "Fcitx 設定を変更"
 msgid "Choose"
 msgstr "選択"
 
-#: data/config.desc:125
+#: data/config.desc:136
 msgid "Choose Second and Third Candidate Word"
 msgstr "二番目と三番目の候補を選択"
 
@@ -572,7 +571,7 @@ msgstr "スキンをサポートしたクラシックなユーザーインタフ
 msgid "ClassicUI"
 msgstr "クラシックUI"
 
-#: data/config.desc:188
+#: data/config.desc:199
 msgid "Clean"
 msgstr "削除"
 
@@ -646,7 +645,7 @@ msgstr "カーソルの色"
 msgid "Comment"
 msgstr "コメント"
 
-#: data/config.desc:189
+#: data/config.desc:200
 msgid "Commit"
 msgstr "確定"
 
@@ -662,7 +661,7 @@ msgstr "最初の候補を確定するキー"
 msgid "Commit string when there is no match"
 msgstr "一致しない場合文字列を確定する"
 
-#: data/config.desc:203
+#: data/config.desc:214
 msgid "Commit when toggle state"
 msgstr "状態を切り替えたら確定する"
 
@@ -703,7 +702,7 @@ msgstr "設定"
 msgid "Configure Current Input Method"
 msgstr "現在の入力メソッドの設定"
 
-#: src/lib/fcitx-config/fcitx-config.c:884
+#: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
 msgid "Configure group name error: line %d"
 msgstr "グループ名設定エラー: %d 行目"
@@ -729,11 +728,11 @@ msgstr "コピー"
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: data/config.desc:29
+#: data/config.desc:30
 msgid "Ctrl+Left Super"
 msgstr "Ctrl+左Super"
 
-#: data/config.desc:30
+#: data/config.desc:31
 msgid "Ctrl+Right Super"
 msgstr "Ctrl+右Super"
 
@@ -753,6 +752,14 @@ msgstr "現在のローカル入力メソッドは "
 msgid "Current locale:"
 msgstr "現在のロケール:"
 
+#: data/config.desc:35
+msgid "Custom"
+msgstr ""
+
+#: data/config.desc:42
+msgid "Custom switch key"
+msgstr ""
+
 #: data/addon.desc:37
 msgid "DBus"
 msgstr "DBus"
@@ -770,7 +777,7 @@ msgstr "新しい Freedesktop.org の DBus のトレイアイコン"
 msgid "Default"
 msgstr "既定"
 
-#: data/config.desc:175
+#: data/config.desc:186
 msgid "Default Input Method State"
 msgstr "既定の入力メソッドの状態"
 
@@ -810,7 +817,7 @@ msgstr "デスクトップ環境は ${1} です。"
 msgid "Dianbaoma"
 msgstr ""
 
-#: data/config.desc:197
+#: data/config.desc:208
 msgid "Disable Paging in Remind Mode"
 msgstr "リマインドモードでページを無効に"
 
@@ -825,11 +832,11 @@ msgstr "アドオン %s を無効にしました。依存性 %s が解決され�
 
 #: src/module/notificationitem/notificationitem.c:460
 #: src/ui/kimpanel/kimpanel.c:258 src/ui/kimpanel/kimpanel.c:263
-#: data/config.desc:33
+#: data/config.desc:34
 msgid "Disabled"
 msgstr "無効"
 
-#: data/config.desc:222
+#: data/config.desc:233
 msgid "Do not commit preedit text when unfocus a window"
 msgstr "フォーカスを外しても未確定文字をコミットしない"
 
@@ -841,13 +848,13 @@ msgstr ""
 msgid "Do not show in GUI"
 msgstr "GUI で表示しない"
 
-#: data/config.desc:264
+#: data/config.desc:275
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr ""
 "候補とプレエディットに1つの候補しか表示されていない場合は入力ウィンドウを表示"
 "しない"
 
-#: data/config.desc:258
+#: data/config.desc:269
 msgid "Do not show input window if there is only preedit string"
 msgstr "プレエディットを表示している場合は入力ウィンドウを表示しない"
 
@@ -874,17 +881,17 @@ msgstr ""
 "デスクトップファイルで重複したグループ %s が %d 行目にあり、前のとマージしま"
 "す。"
 
-#: src/lib/fcitx-config/fcitx-config.c:891
+#: src/lib/fcitx-config/fcitx-config.c:901
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
 msgstr "グループ名が重複しており、前のとマージします: %s : %d 行目"
 
-#: src/lib/fcitx-config/fcitx-config.c:958
+#: src/lib/fcitx-config/fcitx-config.c:968
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
 msgstr "設定が重複しており、上書きします: %d 行目"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:344
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:345
 msgid "Empty"
 msgstr ""
 
@@ -892,7 +899,7 @@ msgstr ""
 msgid "Enable"
 msgstr "有効"
 
-#: data/config.desc:52
+#: data/config.desc:63
 msgid "Enable Hotkey to scroll Between Input Method"
 msgstr "入力メソッドの切換をホットキーで"
 
@@ -920,15 +927,15 @@ msgstr "English (US)"
 msgid "English Mode Icon"
 msgstr "英語モードのアイコン"
 
-#: src/lib/fcitx-config/fcitx-config.c:390
+#: src/lib/fcitx-config/fcitx-config.c:400
 msgid "Enum Option is invalid, take it as string"
 msgstr "Enum 設定が不正です。文字列として扱います。"
 
-#: src/lib/fcitx-config/fcitx-config.c:366
+#: src/lib/fcitx-config/fcitx-config.c:376
 msgid "Enum option duplicated."
 msgstr "Enum の設定が重複しています。"
 
-#: src/lib/fcitx-config/fcitx-config.c:376
+#: src/lib/fcitx-config/fcitx-config.c:386
 msgid "Enum option number must larger than 0"
 msgstr "Enum 設定の数は0以上の必要があります"
 
@@ -993,7 +1000,7 @@ msgstr "Exec"
 msgid "Exit"
 msgstr "閉じる"
 
-#: data/config.desc:35
+#: data/config.desc:37
 msgid "Extra key for trigger input method"
 msgstr "入力メソッド起動のその他のキー"
 
@@ -1177,9 +1184,8 @@ msgid "Found fcitx-configtool at ${1}."
 msgstr "fcitx-configtoolが ${1} を見つけました。"
 
 #: data/script/fcitx-diagnose.sh:1134
-#, fuzzy
 msgid "Found immodule cache for unknown gtk version at ${1}."
-msgstr "gtk ${1} 用のFcitx im モジュールを見つけました。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1126
 msgid "Found immodules cache for gtk ${1} at ${2}."
@@ -1279,7 +1285,7 @@ msgstr "uan と uang を曖昧に"
 msgid "Fuzzy z and zh"
 msgstr "z と zh を曖昧に"
 
-#: data/config.desc:216
+#: data/config.desc:227
 msgid "Give the tips of Phrase"
 msgstr "Tipsのフレーズにヒントを与える"
 
@@ -1340,14 +1346,14 @@ msgstr "トレイアイコンが有効なときに隠す"
 msgid "Hiragana"
 msgstr "ひらがな"
 
-#: data/config.desc:1 data/config.desc:6 data/config.desc:12
-#: data/config.desc:37 data/config.desc:43 data/config.desc:49
-#: data/config.desc:54 data/config.desc:60 data/config.desc:70
-#: data/config.desc:76 data/config.desc:82 data/config.desc:88
-#: data/config.desc:94 data/config.desc:100 data/config.desc:106
-#: data/config.desc:112 data/config.desc:117 data/config.desc:122
-#: data/config.desc:128 data/config.desc:134 data/config.desc:140
-#: data/config.desc:147
+#: data/config.desc:1 data/config.desc:7 data/config.desc:13
+#: data/config.desc:39 data/config.desc:46 data/config.desc:53
+#: data/config.desc:60 data/config.desc:65 data/config.desc:71
+#: data/config.desc:81 data/config.desc:87 data/config.desc:93
+#: data/config.desc:99 data/config.desc:105 data/config.desc:111
+#: data/config.desc:117 data/config.desc:123 data/config.desc:128
+#: data/config.desc:133 data/config.desc:139 data/config.desc:145
+#: data/config.desc:151 data/config.desc:158
 msgid "Hotkey"
 msgstr "ホットキー"
 
@@ -1425,11 +1431,11 @@ msgstr "空白の選択を無視"
 msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
 msgstr ""
 
-#: data/config.desc:46
+#: data/config.desc:56
 msgid "Inactivate Input Method"
 msgstr "入力メソッドをオフに"
 
-#: data/config.desc:173
+#: data/config.desc:184
 msgid "Inactive"
 msgstr "無効"
 
@@ -1441,7 +1447,7 @@ msgstr "選択されていないメニューアイテムの文字色"
 msgid "Inactive Text Icon Color"
 msgstr "無効なテキストアイコンの色"
 
-#: data/config.desc:57
+#: data/config.desc:68
 msgid "Include Inactivate when scrolling between Input Method"
 msgstr "入力メソッドの切換にオフも含む"
 
@@ -1465,7 +1471,7 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1537 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1594 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "入力メソッド"
@@ -1479,7 +1485,7 @@ msgstr "入力メソッドの設定"
 msgid "Input Method Disabled"
 msgstr "入力メソッドが無効"
 
-#: data/config.desc:240
+#: data/config.desc:251
 msgid "Input Method Hint will be only shown when state is active"
 msgstr "オンの時だけ入力メソッドのヒントを表示"
 
@@ -1491,7 +1497,7 @@ msgstr "入力メソッド関連の環境変数:"
 msgid "Input Methods:"
 msgstr "入力メソッド:"
 
-#: src/lib/fcitx/ime.c:1628
+#: src/lib/fcitx/ime.c:1685
 msgid "Input Speed: "
 msgstr "入力スピード"
 
@@ -1509,11 +1515,11 @@ msgstr "入力メソッド"
 msgid "Installer Script for Fcitx Skin"
 msgstr "Fcitxスキンのインストールスクリプト"
 
-#: data/config.desc:85
+#: data/config.desc:96
 msgid "Interval of Two Key Input"
 msgstr "2つのキー入力の間隔"
 
-#: src/lib/fcitx-config/fcitx-config.c:912
+#: src/lib/fcitx-config/fcitx-config.c:922
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
 msgstr "不正な入力: %d 行目で '=' がありません"
@@ -1592,15 +1598,15 @@ msgstr "FcitxのKimpanelサポート"
 msgid "Kimpanel process:"
 msgstr ""
 
-#: data/config.desc:23
+#: data/config.desc:24
 msgid "L_ALT"
 msgstr "左Alt"
 
-#: data/config.desc:18
+#: data/config.desc:19
 msgid "L_CTRL"
 msgstr "左Control"
 
-#: data/config.desc:17
+#: data/config.desc:18
 msgid "L_SHIFT"
 msgstr "左Shift"
 
@@ -1624,12 +1630,11 @@ msgstr "英数句読点"
 msgid "Latin punctuations are used."
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:300
-#, fuzzy
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:301
 msgid "Left"
-msgstr "左上"
+msgstr ""
 
-#: data/config.desc:26
+#: data/config.desc:27
 msgid "Left Super"
 msgstr "左Super"
 
@@ -1804,7 +1809,7 @@ msgstr "候補がない場合に自動で候補を送る最小文字数"
 msgid "Minimum length trigger auto send candidate word when only one candidate"
 msgstr "一つの候補しかないときに自動で候補を送る最小文字数"
 
-#: src/lib/fcitx-config/fcitx-config.c:400
+#: src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
 msgstr "型がありません。文字列として扱います"
 
@@ -1837,11 +1842,11 @@ msgstr "UIに表示する名前"
 msgid "Native"
 msgstr "ネイティブ"
 
-#: data/config.desc:150
+#: data/config.desc:161
 msgid "Next Candidate Word"
 msgstr "次の候補"
 
-#: data/config.desc:120
+#: data/config.desc:131
 msgid "Next Page"
 msgstr "次のページ"
 
@@ -1850,7 +1855,7 @@ msgstr "次のページ"
 msgid "Next Page Icon"
 msgstr "次ページのアイコン"
 
-#: data/config.desc:164
+#: data/config.desc:175
 msgid "No"
 msgstr "No"
 
@@ -1892,7 +1897,7 @@ msgstr "なし"
 msgid "Note for GNOME Later than 3.6"
 msgstr "GNOME 3.6 以降の注意"
 
-#: data/config.desc:187
+#: data/config.desc:198
 msgid "Nothing"
 msgstr "なし"
 
@@ -1908,12 +1913,12 @@ msgstr "オンラインヘルプ"
 msgid "OpenCC"
 msgstr "OpenCC"
 
-#: src/lib/fcitx-config/fcitx-config.c:1126
+#: src/lib/fcitx-config/fcitx-config.c:1136
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
 msgstr "設定 %s が不正のため、既定値 %s を使います"
 
-#: src/lib/fcitx-config/fcitx-config.c:1134
+#: src/lib/fcitx-config/fcitx-config.c:1144
 #, c-format
 msgid "Option %s is Invalid."
 msgstr "オプション %s は正しくありません。"
@@ -1926,9 +1931,9 @@ msgstr "コードテーブルの順序"
 msgid "Other Color"
 msgstr "他の色"
 
-#: data/config.desc:178 data/config.desc:184 data/config.desc:194
-#: data/config.desc:200 data/config.desc:206 data/config.desc:213
-#: data/config.desc:219
+#: data/config.desc:189 data/config.desc:195 data/config.desc:205
+#: data/config.desc:211 data/config.desc:217 data/config.desc:224
+#: data/config.desc:230
 msgid "Output"
 msgstr "出力"
 
@@ -1956,7 +1961,7 @@ msgstr "スキンのフォントサイズを上書きする"
 msgid "Parent"
 msgstr "親"
 
-#: data/config.desc:166
+#: data/config.desc:177
 msgid "PerProgram"
 msgstr "プログラムごと"
 
@@ -2064,7 +2069,7 @@ msgstr ""
 msgid "Press Enter to input text"
 msgstr "文字を入力するには Enter を押してください"
 
-#: data/config.desc:79
+#: data/config.desc:90
 msgid "Press Switch Key twice to Change Mode"
 msgstr "モードの切り替えにキーを2回押す"
 
@@ -2076,7 +2081,7 @@ msgstr ""
 msgid "Press number to make word in frequent list"
 msgstr ""
 
-#: data/config.desc:115
+#: data/config.desc:126
 msgid "Prev Page"
 msgstr "前のページ"
 
@@ -2085,7 +2090,7 @@ msgstr "前のページ"
 msgid "Prev Page Icon"
 msgstr "前ページのアイコン"
 
-#: data/config.desc:143
+#: data/config.desc:154
 msgid "Previous Candidate Word"
 msgstr "前の候補"
 
@@ -2102,7 +2107,7 @@ msgstr "アドオンの優先度"
 msgid "Profile"
 msgstr "プロファイル"
 
-#: data/config.desc:154 data/config.desc:160 data/config.desc:169
+#: data/config.desc:165 data/config.desc:171 data/config.desc:180
 msgid "Program"
 msgstr "プログラム"
 
@@ -2174,15 +2179,15 @@ msgstr "Quwei"
 msgid "Quwei Input Method for Fcitx"
 msgstr "Fcitx用のQuwei入力メソッド"
 
-#: data/config.desc:24
+#: data/config.desc:25
 msgid "R_ALT"
 msgstr "右Alt"
 
-#: data/config.desc:15
+#: data/config.desc:16
 msgid "R_CTRL"
 msgstr "右Control"
 
-#: data/config.desc:16
+#: data/config.desc:17
 msgid "R_SHIFT"
 msgstr "右Shift"
 
@@ -2190,7 +2195,7 @@ msgstr "右Shift"
 msgid "Register IM"
 msgstr "IM登録"
 
-#: data/config.desc:73
+#: data/config.desc:84
 msgid "Reload configuration"
 msgstr "設定の再読み込み"
 
@@ -2241,12 +2246,11 @@ msgstr "上マージンを調整"
 msgid "Restart"
 msgstr "再起動"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:302
-#, fuzzy
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:303
 msgid "Right"
-msgstr "右上"
+msgstr ""
 
-#: data/config.desc:27
+#: data/config.desc:28
 msgid "Right Super"
 msgstr "右Super"
 
@@ -2272,7 +2276,7 @@ msgstr "よく使う単語の表示順序ルール"
 msgid "Russian"
 msgstr "ロシア文字"
 
-#: data/config.desc:22
+#: data/config.desc:23
 msgid "SHIFT Both"
 msgstr "2つのShift"
 
@@ -2292,11 +2296,11 @@ msgstr "クリップボードの履歴をファイルに保存"
 msgid "Save dict error"
 msgstr "辞書の保存エラー"
 
-#: data/config.desc:131
+#: data/config.desc:142
 msgid "Saving All Config and Input History"
 msgstr "すべての設定と入力履歴を保存"
 
-#: data/config.desc:68
+#: data/config.desc:79
 msgid "Scroll between Input Method"
 msgstr "入力メソッドの切換"
 
@@ -2304,7 +2308,7 @@ msgstr "入力メソッドの切換"
 msgid "Search unicode"
 msgstr "Unicodeの検索"
 
-#: data/config.desc:157
+#: data/config.desc:168
 msgid "Seconds sleep before fcitx really start"
 msgstr "fcitxが本当に起動するまでのスリープ時間(秒)"
 
@@ -2336,11 +2340,11 @@ msgstr "セミコロン"
 msgid "Send Raw Preedit"
 msgstr "プレエディットをそのまま送る"
 
-#: data/config.desc:204
+#: data/config.desc:215
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr "オフの際に入力したテキストをそのまま送信"
 
-#: data/config.desc:167
+#: data/config.desc:178
 msgid "Share State Among Window"
 msgstr "ウィンドウ間で状態を共有"
 
@@ -2359,15 +2363,15 @@ msgstr "Shift"
 msgid "Show"
 msgstr "表示"
 
-#: data/config.desc:228
+#: data/config.desc:239
 msgid "Show Input Method Hint After Input method changed"
 msgstr "入力メソッドを切換後にヒントを表示"
 
-#: data/config.desc:234
+#: data/config.desc:245
 msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr "入力メソッドを切換え、フォーカスした時にヒントを表示"
 
-#: data/config.desc:246
+#: data/config.desc:257
 msgid "Show Input Speed"
 msgstr "入力速度の表示"
 
@@ -2375,7 +2379,7 @@ msgstr "入力速度の表示"
 msgid "Show Preedit String in Client Window"
 msgstr "クライアントのウィンドウにプレエディットを表示"
 
-#: data/config.desc:252
+#: data/config.desc:263
 msgid "Show Version"
 msgstr "バージョンの表示"
 
@@ -2553,23 +2557,23 @@ msgstr "モジュールの設定"
 msgid "Successfully Installed skin"
 msgstr "スキンをインストールしました"
 
-#: data/config.desc:28
+#: data/config.desc:29
 msgid "Super Both"
 msgstr "２つのSuper"
 
-#: data/config.desc:31
+#: data/config.desc:32
 msgid "Super+Left Ctrl"
 msgstr "Super+左Ctrl"
 
-#: data/config.desc:32
+#: data/config.desc:33
 msgid "Super+Right Ctrl"
 msgstr "Super+右Ctrl"
 
-#: data/config.desc:137
+#: data/config.desc:148
 msgid "Switch Embeded Preedit"
 msgstr "組み込みプレエディットに切り替え"
 
-#: data/config.desc:109
+#: data/config.desc:120
 msgid "Switch Full Width Punc Mode"
 msgstr "全角句読点モードに切り替え"
 
@@ -2618,15 +2622,15 @@ msgstr "6番目のIMに切り替え"
 msgid "Switch to the Third Input Method"
 msgstr "3番目のIMに切り替え"
 
-#: data/config.desc:103
+#: data/config.desc:114
 msgid "Switching Full Width Character Mode"
 msgstr "全角文字モードに切り替え"
 
-#: data/config.desc:97
+#: data/config.desc:108
 msgid "Switching Remind Mode"
 msgstr "リマインドモードの切り替え"
 
-#: data/config.desc:91
+#: data/config.desc:102
 msgid "Switching Virtual Keyboard"
 msgstr "仮想キーボードに切り替え"
 
@@ -2659,7 +2663,7 @@ msgstr "Fcitx用のテーブル入力メソッド"
 msgid "Table Symbol"
 msgstr "罫線文字"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:387
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:388
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
@@ -2669,13 +2673,13 @@ msgid ""
 "larger than this when multiple characters have the same order of strokes."
 msgstr ""
 
-#: data/config.desc:151
+#: data/config.desc:162
 msgid ""
 "This is used in some modules and input methods to navigate to the next "
 "candidate word"
 msgstr "いくつかのモジュールや入力メソッドで次の候補に移動するために便利です"
 
-#: data/config.desc:144
+#: data/config.desc:155
 msgid ""
 "This is used in some modules and input methods to navigate to the previous "
 "candidate word"
@@ -2770,7 +2774,7 @@ msgstr "中国語繁体字"
 msgid "Treating abbreviated Pinyin as English"
 msgstr "省略された Pinyin を英語として扱う"
 
-#: data/config.desc:4
+#: data/config.desc:5
 msgid "Trigger Input Method"
 msgstr "入力メソッドのオンオフ"
 
@@ -2786,7 +2790,7 @@ msgstr "クイックフレーズのトリガーとなるキー"
 msgid "Type"
 msgstr "タイプ"
 
-#: data/config.desc:181
+#: data/config.desc:192
 msgid "Type half width Punc After a Number"
 msgstr "数字の後に半角句読点を入力"
 
@@ -2815,12 +2819,12 @@ msgstr ""
 msgid "UniqueName"
 msgstr "一意な名称"
 
-#: src/lib/fcitx-config/fcitx-config.c:396
+#: src/lib/fcitx-config/fcitx-config.c:406
 #, c-format
 msgid "Unknown type, take it as string: %s"
 msgstr "不明な型です。文字列として扱います: %s"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:388
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:389
 msgid "Unsupported Key"
 msgstr ""
 
@@ -2880,7 +2884,7 @@ msgstr "全角の句読点を使用"
 msgid "Use enter to commit the existing string"
 msgstr "既存の文字列を確定するときに Enter を使う"
 
-#: data/config.desc:9
+#: data/config.desc:10
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr "アクティブでない時だけその他のトリガーキーを使用する"
 
@@ -3110,11 +3114,11 @@ msgstr "実行可能:"
 msgid "here"
 msgstr "ここ"
 
-#: src/lib/fcitx/ime.c:1634
+#: src/lib/fcitx/ime.c:1691
 msgid "min Num of Characters: "
 msgstr ""
 
-#: src/lib/fcitx-config/fcitx-config.c:1192
+#: src/lib/fcitx-config/fcitx-config.c:1202
 #, c-format
 msgid "no default option for %s/%s"
 msgstr "%s/%s に既定のオプションはありません"
@@ -3143,39 +3147,3 @@ msgstr "xmodmap コマンド"
 #, c-format
 msgid "your current font is: %s"
 msgstr "あなたの現在のフォントは %s です"
-
-#~ msgid "&Add"
-#~ msgstr "追加 (&A)"
-
-#~ msgid "&Batch Edit"
-#~ msgstr "バッチ編集 (&B)"
-
-#~ msgid "&Delete"
-#~ msgstr "削除 (&D)"
-
-#~ msgid "&Import"
-#~ msgstr "インポート (&I)"
-
-#~ msgid "De&lete All"
-#~ msgstr "全削除 (&l)"
-
-#~ msgid "E&xport"
-#~ msgstr "エクスポート (&x)"
-
-#~ msgid "Keyword"
-#~ msgstr "キーワード"
-
-#~ msgid "Keyword:"
-#~ msgstr "キーワード:"
-
-#~ msgid "Phrase"
-#~ msgstr "フレーズ"
-
-#~ msgid "Phrase:"
-#~ msgstr "フレーズ:"
-
-#~ msgid "Quick Phrase Editor"
-#~ msgstr "クイックフレーズ エディター"
-
-#~ msgid "Use <Keyword> <Phrase> format on every line."
-#~ msgstr "各行では <Keyword> <Phrase> の形式を使用してください。"

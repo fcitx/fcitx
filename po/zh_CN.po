@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-13 00:02-0400\n"
-"PO-Revision-Date: 2013-06-09 06:47+0000\n"
-"Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
+"POT-Creation-Date: 2013-06-14 00:02-0400\n"
+"PO-Revision-Date: 2013-06-13 04:08+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -73,7 +73,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM/zh-cn"
 
-#: src/lib/fcitx/ime.c:1631
+#: src/lib/fcitx/ime.c:1688
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -111,35 +111,35 @@ msgstr "如果您使用横排候选词, 一个与全局不同的设定可能会�
 msgid "ABC"
 msgstr "智能ABC"
 
-#: data/config.desc:25
+#: data/config.desc:26
 msgid "ALT Both"
 msgstr "两侧 Alt"
 
-#: data/config.desc:19
+#: data/config.desc:20
 msgid "ALT_L_SHIFT"
 msgstr "Alt+左Shift"
 
-#: data/config.desc:20
+#: data/config.desc:21
 msgid "ALT_R_SHIFT"
 msgstr "Alt+右Shift"
 
-#: data/config.desc:64
+#: data/config.desc:75
 msgid "ALT_SHIFT"
 msgstr "Alt+Shift"
 
-#: data/config.desc:66
+#: data/config.desc:77
 msgid "ALT_SUPER"
 msgstr "Alt+Super"
 
-#: data/config.desc:191
+#: data/config.desc:202
 msgid "Action after press enter"
 msgstr "回车键操作"
 
-#: data/config.desc:40
+#: data/config.desc:49
 msgid "Activate input method"
 msgstr "激活输入法"
 
-#: data/config.desc:174
+#: data/config.desc:185
 msgid "Active"
 msgstr "激活"
 
@@ -222,7 +222,7 @@ msgstr "按频率"
 msgid "AdjustNo"
 msgstr "不调整"
 
-#: data/config.desc:165
+#: data/config.desc:176
 msgid "All"
 msgstr "所有"
 
@@ -267,9 +267,9 @@ msgstr "额外的上一页快捷键"
 msgid "Alternative Trigger Key for QuickPhrase"
 msgstr "额外的快速输入触发键"
 
-#: data/config.desc:225 data/config.desc:231 data/config.desc:237
-#: data/config.desc:243 data/config.desc:249 data/config.desc:255
-#: data/config.desc:261
+#: data/config.desc:236 data/config.desc:242 data/config.desc:248
+#: data/config.desc:254 data/config.desc:260 data/config.desc:266
+#: data/config.desc:272
 msgid "Appearance"
 msgstr "外观"
 
@@ -329,8 +329,8 @@ msgstr "词组参与自动造词"
 msgid "Auto Send Candidate Word"
 msgstr "自动上屏"
 
-#: src/lib/fcitx-config/fcitx-config.c:1170
-#: src/lib/fcitx-config/fcitx-config.c:1179
+#: src/lib/fcitx-config/fcitx-config.c:1180
+#: src/lib/fcitx-config/fcitx-config.c:1189
 msgid "Available Value:"
 msgstr "可选值："
 
@@ -362,15 +362,15 @@ msgstr "左下角"
 msgid "BottomRight"
 msgstr "右下角"
 
-#: data/config.desc:21
+#: data/config.desc:22
 msgid "CTRL Both"
 msgstr "两侧 Ctrl"
 
-#: data/config.desc:63
+#: data/config.desc:74
 msgid "CTRL_SHIFT"
 msgstr "Ctrl+Shift"
 
-#: data/config.desc:65
+#: data/config.desc:76
 msgid "CTRL_SUPER"
 msgstr "Ctrl+Super"
 
@@ -404,7 +404,7 @@ msgstr "无法打开Socket %s: %s"
 msgid "Candidate Index Color"
 msgstr "候选词索引颜色"
 
-#: data/config.desc:209
+#: data/config.desc:220
 msgid "Candidate Word Number"
 msgstr "候选词个数"
 
@@ -436,9 +436,8 @@ msgid "Cannot determine desktop environment."
 msgstr "无法确定桌面环境。"
 
 #: data/script/fcitx-diagnose.sh:1070
-#, fuzzy
 msgid "Cannot find ${2} for gtk ${1}"
-msgstr "无法找到 gtk ${1} 的 ${2}."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:803
 msgid ""
@@ -525,7 +524,7 @@ msgstr "修改 Fcitx 配置"
 msgid "Choose"
 msgstr "选择键"
 
-#: data/config.desc:125
+#: data/config.desc:136
 msgid "Choose Second and Third Candidate Word"
 msgstr "选择第二第三候选词"
 
@@ -569,7 +568,7 @@ msgstr "带皮肤支持的经典界面"
 msgid "ClassicUI"
 msgstr "经典界面"
 
-#: data/config.desc:188
+#: data/config.desc:199
 msgid "Clean"
 msgstr "清除"
 
@@ -643,7 +642,7 @@ msgstr "光标颜色"
 msgid "Comment"
 msgstr "描述"
 
-#: data/config.desc:189
+#: data/config.desc:200
 msgid "Commit"
 msgstr "提交输入"
 
@@ -659,7 +658,7 @@ msgstr "第一个候选词的提交键"
 msgid "Commit string when there is no match"
 msgstr "当无匹配时提交输入"
 
-#: data/config.desc:203
+#: data/config.desc:214
 msgid "Commit when toggle state"
 msgstr "切换状态时提交"
 
@@ -700,7 +699,7 @@ msgstr "配置"
 msgid "Configure Current Input Method"
 msgstr "配置当前输入法"
 
-#: src/lib/fcitx-config/fcitx-config.c:884
+#: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
 msgid "Configure group name error: line %d"
 msgstr "配置组名错误: 行%d"
@@ -726,11 +725,11 @@ msgstr "复制"
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: data/config.desc:29
+#: data/config.desc:30
 msgid "Ctrl+Left Super"
 msgstr "Ctrl+左 Super"
 
-#: data/config.desc:30
+#: data/config.desc:31
 msgid "Ctrl+Right Super"
 msgstr "Ctrl+右 Super"
 
@@ -750,6 +749,14 @@ msgstr "当前局部输入法为 "
 msgid "Current locale:"
 msgstr "当前 locale:"
 
+#: data/config.desc:35
+msgid "Custom"
+msgstr ""
+
+#: data/config.desc:42
+msgid "Custom switch key"
+msgstr ""
+
 #: data/addon.desc:37
 msgid "DBus"
 msgstr "DBus"
@@ -767,7 +774,7 @@ msgstr "基于 DBus 的新 Freedesktop.org 托盘图标"
 msgid "Default"
 msgstr "默认"
 
-#: data/config.desc:175
+#: data/config.desc:186
 msgid "Default Input Method State"
 msgstr "默认输入法状态"
 
@@ -807,7 +814,7 @@ msgstr "桌面环境为 ${1}。"
 msgid "Dianbaoma"
 msgstr "电报码"
 
-#: data/config.desc:197
+#: data/config.desc:208
 msgid "Disable Paging in Remind Mode"
 msgstr "联想模式禁用翻页"
 
@@ -822,11 +829,11 @@ msgstr "禁用插件 %s，依赖 %s 无法满足。"
 
 #: src/module/notificationitem/notificationitem.c:460
 #: src/ui/kimpanel/kimpanel.c:258 src/ui/kimpanel/kimpanel.c:263
-#: data/config.desc:33
+#: data/config.desc:34
 msgid "Disabled"
 msgstr "禁用"
 
-#: data/config.desc:222
+#: data/config.desc:233
 msgid "Do not commit preedit text when unfocus a window"
 msgstr "窗口失去焦点时不提交预编辑文本"
 
@@ -838,11 +845,11 @@ msgstr "不要再显示."
 msgid "Do not show in GUI"
 msgstr "不在图形界面显示"
 
-#: data/config.desc:264
+#: data/config.desc:275
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr "只有一个候选词和预编辑字符串时不显示输入窗口"
 
-#: data/config.desc:258
+#: data/config.desc:269
 msgid "Do not show input window if there is only preedit string"
 msgstr "只有预编辑字符串时不显示输入窗口"
 
@@ -867,17 +874,17 @@ msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
 msgstr "重复的组名 %s, @第 %d 行, 与之前的组合并."
 
-#: src/lib/fcitx-config/fcitx-config.c:891
+#: src/lib/fcitx-config/fcitx-config.c:901
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
 msgstr "组名重复，和之前的组合并: %s :行 %d"
 
-#: src/lib/fcitx-config/fcitx-config.c:958
+#: src/lib/fcitx-config/fcitx-config.c:968
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
 msgstr "重复的配置项，覆盖: 行%d"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:344
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:345
 msgid "Empty"
 msgstr ""
 
@@ -885,7 +892,7 @@ msgstr ""
 msgid "Enable"
 msgstr "启用"
 
-#: data/config.desc:52
+#: data/config.desc:63
 msgid "Enable Hotkey to scroll Between Input Method"
 msgstr "启用输入法间切换"
 
@@ -913,15 +920,15 @@ msgstr "英语 (美国)"
 msgid "English Mode Icon"
 msgstr "英文模式图标"
 
-#: src/lib/fcitx-config/fcitx-config.c:390
+#: src/lib/fcitx-config/fcitx-config.c:400
 msgid "Enum Option is invalid, take it as string"
 msgstr "枚举选项不合法，将类型作为字符串处理"
 
-#: src/lib/fcitx-config/fcitx-config.c:366
+#: src/lib/fcitx-config/fcitx-config.c:376
 msgid "Enum option duplicated."
 msgstr "枚举选项重复"
 
-#: src/lib/fcitx-config/fcitx-config.c:376
+#: src/lib/fcitx-config/fcitx-config.c:386
 msgid "Enum option number must larger than 0"
 msgstr "枚举选项个数需要大于0"
 
@@ -984,7 +991,7 @@ msgstr "Exec"
 msgid "Exit"
 msgstr "退出"
 
-#: data/config.desc:35
+#: data/config.desc:37
 msgid "Extra key for trigger input method"
 msgstr "额外的激活输入法快捷键"
 
@@ -1132,9 +1139,8 @@ msgid "Found ${1} fcitx processes:"
 msgstr "找到了 ${1} 个 fcitx 进程:"
 
 #: data/script/fcitx-diagnose.sh:1050
-#, fuzzy
 msgid "Found ${2} for unknown gtk version at ${1}."
-msgstr "在 ${1} 找到了未知 gtk 版本的 ${2}."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1042
 msgid "Found ${3} for gtk ${1} at ${2}."
@@ -1169,9 +1175,8 @@ msgid "Found fcitx-configtool at ${1}."
 msgstr "在 ${1} 找到了 fcitx-configtool。"
 
 #: data/script/fcitx-diagnose.sh:1134
-#, fuzzy
 msgid "Found immodule cache for unknown gtk version at ${1}."
-msgstr "在 ${1} 找到了未知 gtk 版本的输入法模块缓存."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1126
 msgid "Found immodules cache for gtk ${1} at ${2}."
@@ -1271,7 +1276,7 @@ msgstr "模糊uan和uang"
 msgid "Fuzzy z and zh"
 msgstr "模糊z和zh"
 
-#: data/config.desc:216
+#: data/config.desc:227
 msgid "Give the tips of Phrase"
 msgstr "提示词库中词组"
 
@@ -1332,14 +1337,14 @@ msgstr "当托盘图标可用时隐藏"
 msgid "Hiragana"
 msgstr "平假名"
 
-#: data/config.desc:1 data/config.desc:6 data/config.desc:12
-#: data/config.desc:37 data/config.desc:43 data/config.desc:49
-#: data/config.desc:54 data/config.desc:60 data/config.desc:70
-#: data/config.desc:76 data/config.desc:82 data/config.desc:88
-#: data/config.desc:94 data/config.desc:100 data/config.desc:106
-#: data/config.desc:112 data/config.desc:117 data/config.desc:122
-#: data/config.desc:128 data/config.desc:134 data/config.desc:140
-#: data/config.desc:147
+#: data/config.desc:1 data/config.desc:7 data/config.desc:13
+#: data/config.desc:39 data/config.desc:46 data/config.desc:53
+#: data/config.desc:60 data/config.desc:65 data/config.desc:71
+#: data/config.desc:81 data/config.desc:87 data/config.desc:93
+#: data/config.desc:99 data/config.desc:105 data/config.desc:111
+#: data/config.desc:117 data/config.desc:123 data/config.desc:128
+#: data/config.desc:133 data/config.desc:139 data/config.desc:145
+#: data/config.desc:151 data/config.desc:158
 msgid "Hotkey"
 msgstr "快捷键"
 
@@ -1422,11 +1427,11 @@ msgstr "忽略空白的剪贴板内容"
 msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
 msgstr "忽略部分标点，若为空则忽略所有标点"
 
-#: data/config.desc:46
+#: data/config.desc:56
 msgid "Inactivate Input Method"
 msgstr "取消激活输入法"
 
-#: data/config.desc:173
+#: data/config.desc:184
 msgid "Inactive"
 msgstr "非激活"
 
@@ -1438,7 +1443,7 @@ msgstr "非活动菜单项颜色"
 msgid "Inactive Text Icon Color"
 msgstr "非活动的文本图标颜色"
 
-#: data/config.desc:57
+#: data/config.desc:68
 msgid "Include Inactivate when scrolling between Input Method"
 msgstr "输入法间切换时包含未激活状态"
 
@@ -1462,7 +1467,7 @@ msgstr "输入字体大小"
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-#: src/lib/fcitx/ime.c:1537 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1594 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "输入法"
@@ -1476,7 +1481,7 @@ msgstr "输入法配置"
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
 
-#: data/config.desc:240
+#: data/config.desc:251
 msgid "Input Method Hint will be only shown when state is active"
 msgstr "输入法提示只在激活状态显示"
 
@@ -1488,7 +1493,7 @@ msgstr "输入法相关的环境变量: "
 msgid "Input Methods:"
 msgstr "输入法:"
 
-#: src/lib/fcitx/ime.c:1628
+#: src/lib/fcitx/ime.c:1685
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -1506,11 +1511,11 @@ msgstr "输入法"
 msgid "Installer Script for Fcitx Skin"
 msgstr "Fcitx 皮肤的安装器"
 
-#: data/config.desc:85
+#: data/config.desc:96
 msgid "Interval of Two Key Input"
 msgstr "输入间隔"
 
-#: src/lib/fcitx-config/fcitx-config.c:912
+#: src/lib/fcitx-config/fcitx-config.c:922
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
 msgstr "配置项不合法:  行%d 缺少'='"
@@ -1589,15 +1594,15 @@ msgstr "Fcitx 的 Kimpanel 支持"
 msgid "Kimpanel process:"
 msgstr "Kimpanel 进程:"
 
-#: data/config.desc:23
+#: data/config.desc:24
 msgid "L_ALT"
 msgstr "左 Alt"
 
-#: data/config.desc:18
+#: data/config.desc:19
 msgid "L_CTRL"
 msgstr "左Ctrl"
 
-#: data/config.desc:17
+#: data/config.desc:18
 msgid "L_SHIFT"
 msgstr "左Shift"
 
@@ -1621,12 +1626,11 @@ msgstr "英文标点"
 msgid "Latin punctuations are used."
 msgstr "已启用半角标点."
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:300
-#, fuzzy
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:301
 msgid "Left"
-msgstr "左上角"
+msgstr ""
 
-#: data/config.desc:26
+#: data/config.desc:27
 msgid "Left Super"
 msgstr "左 Super"
 
@@ -1801,7 +1805,7 @@ msgstr "将要无候选词时触发自动上屏的最短输入长度"
 msgid "Minimum length trigger auto send candidate word when only one candidate"
 msgstr "在只有一个候选词时触发自动上屏的最短输入长度"
 
-#: src/lib/fcitx-config/fcitx-config.c:400
+#: src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
 msgstr "类型缺失，作为字符串处理"
 
@@ -1834,11 +1838,11 @@ msgstr "显示于用户界面中的名称"
 msgid "Native"
 msgstr "原生"
 
-#: data/config.desc:150
+#: data/config.desc:161
 msgid "Next Candidate Word"
 msgstr "下一个候选词"
 
-#: data/config.desc:120
+#: data/config.desc:131
 msgid "Next Page"
 msgstr "下一页"
 
@@ -1847,7 +1851,7 @@ msgstr "下一页"
 msgid "Next Page Icon"
 msgstr "下一页图标"
 
-#: data/config.desc:164
+#: data/config.desc:175
 msgid "No"
 msgstr "否"
 
@@ -1889,7 +1893,7 @@ msgstr "无"
 msgid "Note for GNOME Later than 3.6"
 msgstr "有关 3.6 之后版本 GNOME 的备注"
 
-#: data/config.desc:187
+#: data/config.desc:198
 msgid "Nothing"
 msgstr "无操作"
 
@@ -1905,12 +1909,12 @@ msgstr "在线帮助"
 msgid "OpenCC"
 msgstr "OpenCC"
 
-#: src/lib/fcitx-config/fcitx-config.c:1126
+#: src/lib/fcitx-config/fcitx-config.c:1136
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
 msgstr "配置项%s不合法，使用默认值%s"
 
-#: src/lib/fcitx-config/fcitx-config.c:1134
+#: src/lib/fcitx-config/fcitx-config.c:1144
 #, c-format
 msgid "Option %s is Invalid."
 msgstr "配置项%s不合法"
@@ -1923,9 +1927,9 @@ msgstr "码表顺序"
 msgid "Other Color"
 msgstr "其他颜色"
 
-#: data/config.desc:178 data/config.desc:184 data/config.desc:194
-#: data/config.desc:200 data/config.desc:206 data/config.desc:213
-#: data/config.desc:219
+#: data/config.desc:189 data/config.desc:195 data/config.desc:205
+#: data/config.desc:211 data/config.desc:217 data/config.desc:224
+#: data/config.desc:230
 msgid "Output"
 msgstr "输出"
 
@@ -1953,7 +1957,7 @@ msgstr "覆盖皮肤的字号设置"
 msgid "Parent"
 msgstr "所属附加组件"
 
-#: data/config.desc:166
+#: data/config.desc:177
 msgid "PerProgram"
 msgstr "按程序"
 
@@ -2058,7 +2062,7 @@ msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
 msgid "Press Enter to input text"
 msgstr "按下回车输入文本"
 
-#: data/config.desc:79
+#: data/config.desc:90
 msgid "Press Switch Key twice to Change Mode"
 msgstr "双击切换键时切换"
 
@@ -2070,7 +2074,7 @@ msgstr "按下索引来删除用户词组 (ESC 取消)"
 msgid "Press number to make word in frequent list"
 msgstr "按下数字加入常用字表"
 
-#: data/config.desc:115
+#: data/config.desc:126
 msgid "Prev Page"
 msgstr "上一页"
 
@@ -2079,7 +2083,7 @@ msgstr "上一页"
 msgid "Prev Page Icon"
 msgstr "上一页图标"
 
-#: data/config.desc:143
+#: data/config.desc:154
 msgid "Previous Candidate Word"
 msgstr "上一个候选词"
 
@@ -2096,7 +2100,7 @@ msgstr "插件的优先级"
 msgid "Profile"
 msgstr "预置文件"
 
-#: data/config.desc:154 data/config.desc:160 data/config.desc:169
+#: data/config.desc:165 data/config.desc:171 data/config.desc:180
 msgid "Program"
 msgstr "程序"
 
@@ -2168,15 +2172,15 @@ msgstr "区位"
 msgid "Quwei Input Method for Fcitx"
 msgstr "Fcitx 的区位输入法"
 
-#: data/config.desc:24
+#: data/config.desc:25
 msgid "R_ALT"
 msgstr "右 Alt"
 
-#: data/config.desc:15
+#: data/config.desc:16
 msgid "R_CTRL"
 msgstr "右Ctrl"
 
-#: data/config.desc:16
+#: data/config.desc:17
 msgid "R_SHIFT"
 msgstr "右Shift"
 
@@ -2184,7 +2188,7 @@ msgstr "右Shift"
 msgid "Register IM"
 msgstr "注册输入法方法"
 
-#: data/config.desc:73
+#: data/config.desc:84
 msgid "Reload configuration"
 msgstr "重新载入配置"
 
@@ -2235,12 +2239,11 @@ msgstr "上边距"
 msgid "Restart"
 msgstr "重新启动"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:302
-#, fuzzy
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:303
 msgid "Right"
-msgstr "右上角"
+msgstr ""
 
-#: data/config.desc:27
+#: data/config.desc:28
 msgid "Right Super"
 msgstr "右 Super"
 
@@ -2266,7 +2269,7 @@ msgstr "常用字顺序"
 msgid "Russian"
 msgstr "俄文字符"
 
-#: data/config.desc:22
+#: data/config.desc:23
 msgid "SHIFT Both"
 msgstr "两侧 Shift"
 
@@ -2286,11 +2289,11 @@ msgstr "将剪贴板历史保存为文件"
 msgid "Save dict error"
 msgstr "保存码表出错"
 
-#: data/config.desc:131
+#: data/config.desc:142
 msgid "Saving All Config and Input History"
 msgstr "保存配置及输入历史"
 
-#: data/config.desc:68
+#: data/config.desc:79
 msgid "Scroll between Input Method"
 msgstr "输入法切换键"
 
@@ -2298,7 +2301,7 @@ msgstr "输入法切换键"
 msgid "Search unicode"
 msgstr "搜索 unicode"
 
-#: data/config.desc:157
+#: data/config.desc:168
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx真正启动前延迟的秒数"
 
@@ -2330,11 +2333,11 @@ msgstr "分号"
 msgid "Send Raw Preedit"
 msgstr "发送原始输入按键"
 
-#: data/config.desc:204
+#: data/config.desc:215
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr "切换到非激活模式时当前输入的原始文本上屏"
 
-#: data/config.desc:167
+#: data/config.desc:178
 msgid "Share State Among Window"
 msgstr "在窗口间共享状态"
 
@@ -2353,15 +2356,15 @@ msgstr "Shift"
 msgid "Show"
 msgstr "显示"
 
-#: data/config.desc:228
+#: data/config.desc:239
 msgid "Show Input Method Hint After Input method changed"
 msgstr "切换输入法时显示输入法提示"
 
-#: data/config.desc:234
+#: data/config.desc:245
 msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr "获得输入焦点并且输入法变化时显示输入法提示"
 
-#: data/config.desc:246
+#: data/config.desc:257
 msgid "Show Input Speed"
 msgstr "显示输入速度"
 
@@ -2369,7 +2372,7 @@ msgstr "显示输入速度"
 msgid "Show Preedit String in Client Window"
 msgstr "在客户端窗口中显示预编辑字符串"
 
-#: data/config.desc:252
+#: data/config.desc:263
 msgid "Show Version"
 msgstr "显示版本"
 
@@ -2547,23 +2550,23 @@ msgstr "子配置"
 msgid "Successfully Installed skin"
 msgstr "成功安装皮肤"
 
-#: data/config.desc:28
+#: data/config.desc:29
 msgid "Super Both"
 msgstr "两侧 Super"
 
-#: data/config.desc:31
+#: data/config.desc:32
 msgid "Super+Left Ctrl"
 msgstr "Super+左 Ctrl"
 
-#: data/config.desc:32
+#: data/config.desc:33
 msgid "Super+Right Ctrl"
 msgstr "Super+右 Ctrl"
 
-#: data/config.desc:137
+#: data/config.desc:148
 msgid "Switch Embeded Preedit"
 msgstr "切换嵌入预编辑字符串"
 
-#: data/config.desc:109
+#: data/config.desc:120
 msgid "Switch Full Width Punc Mode"
 msgstr "切换全角标点"
 
@@ -2612,15 +2615,15 @@ msgstr "切换至第6个输入法"
 msgid "Switch to the Third Input Method"
 msgstr "切换至第3个输入法"
 
-#: data/config.desc:103
+#: data/config.desc:114
 msgid "Switching Full Width Character Mode"
 msgstr "切换全角"
 
-#: data/config.desc:97
+#: data/config.desc:108
 msgid "Switching Remind Mode"
 msgstr "切换联想模式"
 
-#: data/config.desc:91
+#: data/config.desc:102
 msgid "Switching Virtual Keyboard"
 msgstr "切换虚拟键盘"
 
@@ -2653,7 +2656,7 @@ msgstr "Fcitx 的码表输入法"
 msgid "Table Symbol"
 msgstr "制表符"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:387
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:388
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
@@ -2665,13 +2668,13 @@ msgstr ""
 "这仅仅是个软性限制. 当有多个字的笔顺相同时, 实际的笔画输入结果个数可能多于这"
 "个值."
 
-#: data/config.desc:151
+#: data/config.desc:162
 msgid ""
 "This is used in some modules and input methods to navigate to the next "
 "candidate word"
 msgstr "在部分插件 / 输入法中用来切换到下一个候选词的快捷键"
 
-#: data/config.desc:144
+#: data/config.desc:155
 msgid ""
 "This is used in some modules and input methods to navigate to the previous "
 "candidate word"
@@ -2765,7 +2768,7 @@ msgstr "繁体中文"
 msgid "Treating abbreviated Pinyin as English"
 msgstr "将简拼视为英文"
 
-#: data/config.desc:4
+#: data/config.desc:5
 msgid "Trigger Input Method"
 msgstr "切换激活/非激活输入法"
 
@@ -2781,7 +2784,7 @@ msgstr "快速输入的触发键"
 msgid "Type"
 msgstr "类型"
 
-#: data/config.desc:181
+#: data/config.desc:192
 msgid "Type half width Punc After a Number"
 msgstr "数字后跟半角符号"
 
@@ -2810,12 +2813,12 @@ msgstr "码表的唯一名称"
 msgid "UniqueName"
 msgstr "唯一名称"
 
-#: src/lib/fcitx-config/fcitx-config.c:396
+#: src/lib/fcitx-config/fcitx-config.c:406
 #, c-format
 msgid "Unknown type, take it as string: %s"
 msgstr "未知类型，作为字符串处理: %s"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:388
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:389
 msgid "Unsupported Key"
 msgstr ""
 
@@ -2875,7 +2878,7 @@ msgstr "使用全角标点"
 msgid "Use enter to commit the existing string"
 msgstr "使用回车确认已输入字符串"
 
-#: data/config.desc:9
+#: data/config.desc:10
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr "只在用额外切换键取消激活后才使用它进行切换"
 
@@ -3102,11 +3105,11 @@ msgstr "可执行文件:"
 msgid "here"
 msgstr "这里"
 
-#: src/lib/fcitx/ime.c:1634
+#: src/lib/fcitx/ime.c:1691
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 
-#: src/lib/fcitx-config/fcitx-config.c:1192
+#: src/lib/fcitx-config/fcitx-config.c:1202
 #, c-format
 msgid "no default option for %s/%s"
 msgstr "选项%s/%s没有默认选项"
@@ -3135,94 +3138,3 @@ msgstr "xmodmap 命令"
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
-
-#~ msgid "%1 is a system file, do you want to delete all phrases instead?"
-#~ msgstr "%1 是系统文件，您是否想要改为清空所有词组？"
-
-#~ msgid "&Add"
-#~ msgstr "添加(&A)"
-
-#~ msgid "&Batch Edit"
-#~ msgstr "批量编辑(&B)"
-
-#~ msgid "&Delete"
-#~ msgstr "删除(&D)"
-
-#~ msgid "&Import"
-#~ msgstr "导入(&I)"
-
-#~ msgid "&Operation"
-#~ msgstr "操作(&O)"
-
-#~ msgid "Add File"
-#~ msgstr "添加文件"
-
-#~ msgid "Are you sure to delete %1?"
-#~ msgstr "您确定要删除 %1？"
-
-#~ msgid "Cannot create file %1."
-#~ msgstr "无法创建文件 %1。"
-
-#~ msgid "Cannot remove system file"
-#~ msgstr "无法移除系统文件"
-
-#~ msgid "Confirm deleting"
-#~ msgstr "确认删除"
-
-#~ msgid "Create new file"
-#~ msgstr "创建新文件"
-
-#~ msgid "De&lete All"
-#~ msgstr "删除全部(&l)"
-
-#~ msgid "E&xport"
-#~ msgstr "导出(&X)"
-
-#~ msgid "Error while deleting %1."
-#~ msgstr "删除 %1 时出错。"
-
-#~ msgid "File Operation Failed"
-#~ msgstr "文件操作失败"
-
-#~ msgid "File name should not contain '/'."
-#~ msgstr "文件名不应该包括 “/”。"
-
-#~ msgid "Invalid filename"
-#~ msgstr "文件名无效"
-
-#~ msgid "Keyword"
-#~ msgstr "关键字"
-
-#~ msgid "Keyword:"
-#~ msgstr "关键字："
-
-#~ msgid "Phrase"
-#~ msgstr "词组"
-
-#~ msgid "Phrase:"
-#~ msgstr "词组："
-
-#~ msgid "Please input a filename for newfile"
-#~ msgstr "请输入新文件的文件名"
-
-#~ msgid "Quick Phrase Editor"
-#~ msgstr "快速输入编辑器"
-
-#~ msgid "Refresh List"
-#~ msgstr "刷新列表"
-
-#~ msgid "Remove File"
-#~ msgstr "移除文件"
-
-#~ msgid "Save Changes"
-#~ msgstr "保存更改"
-
-#~ msgid ""
-#~ "The content has changed.\n"
-#~ "Do you want to save the changes or discard them?"
-#~ msgstr ""
-#~ "内容已更改。\n"
-#~ "您想要保存还是撤销这些修改？"
-
-#~ msgid "Use <Keyword> <Phrase> format on every line."
-#~ msgstr "每行使用 <关键词> <词组> 的格式。"

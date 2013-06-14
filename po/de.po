@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-13 00:02-0400\n"
-"PO-Revision-Date: 2013-06-09 04:07+0000\n"
+"POT-Creation-Date: 2013-06-14 00:02-0400\n"
+"PO-Revision-Date: 2013-06-13 04:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
@@ -67,7 +67,7 @@ msgstr "/Hinweis_für_GNOME_höher_als_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1631
+#: src/lib/fcitx/ime.c:1688
 msgid "/min  Time Used: "
 msgstr "/min Verwendete Zeit:"
 
@@ -105,35 +105,35 @@ msgstr ""
 msgid "ABC"
 msgstr "ABC"
 
-#: data/config.desc:25
+#: data/config.desc:26
 msgid "ALT Both"
 msgstr "ALT Beide"
 
-#: data/config.desc:19
+#: data/config.desc:20
 msgid "ALT_L_SHIFT"
 msgstr "ALT_L_SHIFT"
 
-#: data/config.desc:20
+#: data/config.desc:21
 msgid "ALT_R_SHIFT"
 msgstr "ALT_R_SHIFT"
 
-#: data/config.desc:64
+#: data/config.desc:75
 msgid "ALT_SHIFT"
 msgstr "ALT_SHIFT"
 
-#: data/config.desc:66
+#: data/config.desc:77
 msgid "ALT_SUPER"
 msgstr "ALT_SUPER"
 
-#: data/config.desc:191
+#: data/config.desc:202
 msgid "Action after press enter"
 msgstr "Verhalten ENTER Taste"
 
-#: data/config.desc:40
+#: data/config.desc:49
 msgid "Activate input method"
 msgstr "Eingabemethode aktivieren"
 
-#: data/config.desc:174
+#: data/config.desc:185
 msgid "Active"
 msgstr "Aktiv"
 
@@ -216,7 +216,7 @@ msgstr ""
 msgid "AdjustNo"
 msgstr ""
 
-#: data/config.desc:165
+#: data/config.desc:176
 msgid "All"
 msgstr "Für alle Programme"
 
@@ -263,9 +263,9 @@ msgstr "Alternative Taste Vorherige Seite"
 msgid "Alternative Trigger Key for QuickPhrase"
 msgstr "Alternative Tastenkombination für Quickphrase"
 
-#: data/config.desc:225 data/config.desc:231 data/config.desc:237
-#: data/config.desc:243 data/config.desc:249 data/config.desc:255
-#: data/config.desc:261
+#: data/config.desc:236 data/config.desc:242 data/config.desc:248
+#: data/config.desc:254 data/config.desc:260 data/config.desc:266
+#: data/config.desc:272
 msgid "Appearance"
 msgstr "Aussehen"
 
@@ -326,8 +326,8 @@ msgstr "Automatische Phrasen"
 msgid "Auto Send Candidate Word"
 msgstr "Automatisches Senden des Kandidaten"
 
-#: src/lib/fcitx-config/fcitx-config.c:1170
-#: src/lib/fcitx-config/fcitx-config.c:1179
+#: src/lib/fcitx-config/fcitx-config.c:1180
+#: src/lib/fcitx-config/fcitx-config.c:1189
 msgid "Available Value:"
 msgstr "Mögliche Werte:"
 
@@ -359,15 +359,15 @@ msgstr "unten rechts"
 msgid "BottomRight"
 msgstr "unten rechts"
 
-#: data/config.desc:21
+#: data/config.desc:22
 msgid "CTRL Both"
 msgstr "CTRL Beide"
 
-#: data/config.desc:63
+#: data/config.desc:74
 msgid "CTRL_SHIFT"
 msgstr "CTRL_SHIFT"
 
-#: data/config.desc:65
+#: data/config.desc:76
 msgid "CTRL_SUPER"
 msgstr "CTRL_SUPER"
 
@@ -402,7 +402,7 @@ msgstr "Socket kann nicht geöffnet werden %s: %s"
 msgid "Candidate Index Color"
 msgstr "Farbe vorgeschlagene Kandidaten"
 
-#: data/config.desc:209
+#: data/config.desc:220
 msgid "Candidate Word Number"
 msgstr "Anzahl Zeichenvorschläge"
 
@@ -434,9 +434,8 @@ msgid "Cannot determine desktop environment."
 msgstr "Kann die Desktopumgebung micht feststellen"
 
 #: data/script/fcitx-diagnose.sh:1070
-#, fuzzy
 msgid "Cannot find ${2} for gtk ${1}"
-msgstr "Kann kein Modul für gtk ${1} finden"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:803
 msgid ""
@@ -525,7 +524,7 @@ msgstr "Wechsel der Fcitx Konfiguration"
 msgid "Choose"
 msgstr "Auswählen"
 
-#: data/config.desc:125
+#: data/config.desc:136
 msgid "Choose Second and Third Candidate Word"
 msgstr "Zweiten und dritten Kandidaten auswählen"
 
@@ -569,7 +568,7 @@ msgstr "CLASSIC mit Unterstützung von Skins"
 msgid "ClassicUI"
 msgstr "Klassik Oberfläche"
 
-#: data/config.desc:188
+#: data/config.desc:199
 msgid "Clean"
 msgstr "Leeren"
 
@@ -643,7 +642,7 @@ msgstr "Farbe der Cursors"
 msgid "Comment"
 msgstr "Kommentar"
 
-#: data/config.desc:189
+#: data/config.desc:200
 msgid "Commit"
 msgstr "Auswählen"
 
@@ -659,7 +658,7 @@ msgstr "Bestätigungstaste für den ersten Kandidaten"
 msgid "Commit string when there is no match"
 msgstr "Bestätigungstaste wenn kein Kandidat vorhanden ist"
 
-#: data/config.desc:203
+#: data/config.desc:214
 msgid "Commit when toggle state"
 msgstr "Bestätigen, wenn der Status verändert wird"
 
@@ -700,7 +699,7 @@ msgstr "Konfigurieren"
 msgid "Configure Current Input Method"
 msgstr "Aktuelle Eingabemethode konfigurieren"
 
-#: src/lib/fcitx-config/fcitx-config.c:884
+#: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
 msgid "Configure group name error: line %d"
 msgstr ""
@@ -726,11 +725,11 @@ msgstr "Kopieren"
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: data/config.desc:29
+#: data/config.desc:30
 msgid "Ctrl+Left Super"
 msgstr "Ctrl-L Super"
 
-#: data/config.desc:30
+#: data/config.desc:31
 msgid "Ctrl+Right Super"
 msgstr "Ctrl-R Super"
 
@@ -750,6 +749,14 @@ msgstr "Die gegenwärtig aktivierte Eingabemethode ist"
 msgid "Current locale:"
 msgstr "Zur Zeit aktivierte Locale:"
 
+#: data/config.desc:35
+msgid "Custom"
+msgstr ""
+
+#: data/config.desc:42
+msgid "Custom switch key"
+msgstr ""
+
 #: data/addon.desc:37
 msgid "DBus"
 msgstr "DBus"
@@ -767,7 +774,7 @@ msgstr "DBus basiertes, neues Trayicon von Freedesktop.org"
 msgid "Default"
 msgstr "Standard"
 
-#: data/config.desc:175
+#: data/config.desc:186
 msgid "Default Input Method State"
 msgstr "Standard Status Eingabemethode"
 
@@ -807,7 +814,7 @@ msgstr "Die Desktopumgebung ist ${1}"
 msgid "Dianbaoma"
 msgstr "Dianbaoma"
 
-#: data/config.desc:197
+#: data/config.desc:208
 msgid "Disable Paging in Remind Mode"
 msgstr ""
 
@@ -823,11 +830,11 @@ msgstr ""
 
 #: src/module/notificationitem/notificationitem.c:460
 #: src/ui/kimpanel/kimpanel.c:258 src/ui/kimpanel/kimpanel.c:263
-#: data/config.desc:33
+#: data/config.desc:34
 msgid "Disabled"
 msgstr "Ausgeschaltet"
 
-#: data/config.desc:222
+#: data/config.desc:233
 msgid "Do not commit preedit text when unfocus a window"
 msgstr "Preedittext nicht eingeben, wenn das Fenster den Fokus verliert"
 
@@ -839,13 +846,13 @@ msgstr ""
 msgid "Do not show in GUI"
 msgstr "Nichts in Gnome-Anwendungen zeigen"
 
-#: data/config.desc:264
+#: data/config.desc:275
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr ""
 "Eingabefenster nicht zeigen, wenn nur ein Kandidat und der Preeditstring "
 "vorhanden sind"
 
-#: data/config.desc:258
+#: data/config.desc:269
 msgid "Do not show input window if there is only preedit string"
 msgstr "Fcitx Fenster nicht anzeigen, wenn es nur einen Vorschlag gibt"
 
@@ -872,17 +879,17 @@ msgstr ""
 "Doppelte Gruppe in %s im Desktop.file, @ Linie %d, mit vorheriger "
 "zusammenfügen"
 
-#: src/lib/fcitx-config/fcitx-config.c:891
+#: src/lib/fcitx-config/fcitx-config.c:901
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
 msgstr ""
 
-#: src/lib/fcitx-config/fcitx-config.c:958
+#: src/lib/fcitx-config/fcitx-config.c:968
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
 msgstr "Doblikat Option, überschreibe Zeile %d"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:344
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:345
 msgid "Empty"
 msgstr ""
 
@@ -890,7 +897,7 @@ msgstr ""
 msgid "Enable"
 msgstr "Aktivieren"
 
-#: data/config.desc:52
+#: data/config.desc:63
 msgid "Enable Hotkey to scroll Between Input Method"
 msgstr "Hotkey aktivieren, um durch die Eingabemethoden zu scrollen"
 
@@ -918,15 +925,15 @@ msgstr "English (US)"
 msgid "English Mode Icon"
 msgstr "Icon Englischer Modus"
 
-#: src/lib/fcitx-config/fcitx-config.c:390
+#: src/lib/fcitx-config/fcitx-config.c:400
 msgid "Enum Option is invalid, take it as string"
 msgstr ""
 
-#: src/lib/fcitx-config/fcitx-config.c:366
+#: src/lib/fcitx-config/fcitx-config.c:376
 msgid "Enum option duplicated."
 msgstr ""
 
-#: src/lib/fcitx-config/fcitx-config.c:376
+#: src/lib/fcitx-config/fcitx-config.c:386
 msgid "Enum option number must larger than 0"
 msgstr ""
 
@@ -991,7 +998,7 @@ msgstr "Exec"
 msgid "Exit"
 msgstr "Benden"
 
-#: data/config.desc:35
+#: data/config.desc:37
 msgid "Extra key for trigger input method"
 msgstr "Extrataste zum Aktivieren der Eingabemethode"
 
@@ -1175,9 +1182,8 @@ msgid "Found fcitx-configtool at ${1}."
 msgstr "fcitx-configtool hiergefunden ${1}."
 
 #: data/script/fcitx-diagnose.sh:1134
-#, fuzzy
 msgid "Found immodule cache for unknown gtk version at ${1}."
-msgstr "gtk ${1} Module für Fcitz gefunden"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1126
 msgid "Found immodules cache for gtk ${1} at ${2}."
@@ -1277,7 +1283,7 @@ msgstr "Fuzzy Pinyin uan/uang"
 msgid "Fuzzy z and zh"
 msgstr "Fuzzy Pinyin z/zh"
 
-#: data/config.desc:216
+#: data/config.desc:227
 msgid "Give the tips of Phrase"
 msgstr "Phrasenvorschläge aktivieren"
 
@@ -1338,14 +1344,14 @@ msgstr "Verstecken, falls Trayicon aktiv"
 msgid "Hiragana"
 msgstr "Hiragana"
 
-#: data/config.desc:1 data/config.desc:6 data/config.desc:12
-#: data/config.desc:37 data/config.desc:43 data/config.desc:49
-#: data/config.desc:54 data/config.desc:60 data/config.desc:70
-#: data/config.desc:76 data/config.desc:82 data/config.desc:88
-#: data/config.desc:94 data/config.desc:100 data/config.desc:106
-#: data/config.desc:112 data/config.desc:117 data/config.desc:122
-#: data/config.desc:128 data/config.desc:134 data/config.desc:140
-#: data/config.desc:147
+#: data/config.desc:1 data/config.desc:7 data/config.desc:13
+#: data/config.desc:39 data/config.desc:46 data/config.desc:53
+#: data/config.desc:60 data/config.desc:65 data/config.desc:71
+#: data/config.desc:81 data/config.desc:87 data/config.desc:93
+#: data/config.desc:99 data/config.desc:105 data/config.desc:111
+#: data/config.desc:117 data/config.desc:123 data/config.desc:128
+#: data/config.desc:133 data/config.desc:139 data/config.desc:145
+#: data/config.desc:151 data/config.desc:158
 msgid "Hotkey"
 msgstr "Kurzbefehl"
 
@@ -1424,11 +1430,11 @@ msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
 msgstr ""
 "Punktuation ignorieren, wenn dies leer ist, alle Punktuation ignorieren"
 
-#: data/config.desc:46
+#: data/config.desc:56
 msgid "Inactivate Input Method"
 msgstr "Eingabemethode deaktivieren"
 
-#: data/config.desc:173
+#: data/config.desc:184
 msgid "Inactive"
 msgstr "Inaktiv"
 
@@ -1440,7 +1446,7 @@ msgstr "Farbe inaktiver Menüeintrag"
 msgid "Inactive Text Icon Color"
 msgstr "Inaktive Texticon-Farbe"
 
-#: data/config.desc:57
+#: data/config.desc:68
 msgid "Include Inactivate when scrolling between Input Method"
 msgstr ""
 "\"Deaktiviert\" einschließen, wenn durch die Eingabemethoden gescrollt wird"
@@ -1465,7 +1471,7 @@ msgstr "Schriftgröße Eingabe"
 msgid "Input Message Color"
 msgstr "Farbe der Pinyineingabe"
 
-#: src/lib/fcitx/ime.c:1537 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1594 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Eingabemethode"
@@ -1479,7 +1485,7 @@ msgstr "Konfiguration Eingabemethode"
 msgid "Input Method Disabled"
 msgstr "Eingabemethode deaktiviert"
 
-#: data/config.desc:240
+#: data/config.desc:251
 msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 "Hinweis auf die Eingabemethode wird nur angezeigt, wenn der Status AKTIV ist"
@@ -1492,7 +1498,7 @@ msgstr "Eingabemethodenbezogenen Umgebungsvariablen:"
 msgid "Input Methods:"
 msgstr "Eingabemethoden:"
 
-#: src/lib/fcitx/ime.c:1628
+#: src/lib/fcitx/ime.c:1685
 msgid "Input Speed: "
 msgstr "Eingabegeschwindigkeit"
 
@@ -1510,11 +1516,11 @@ msgstr "Eingabemethode"
 msgid "Installer Script for Fcitx Skin"
 msgstr "Installationsscript für Fcitx-Skins"
 
-#: data/config.desc:85
+#: data/config.desc:96
 msgid "Interval of Two Key Input"
 msgstr "Tastenwiederholung/Sekunde"
 
-#: src/lib/fcitx-config/fcitx-config.c:912
+#: src/lib/fcitx-config/fcitx-config.c:922
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
 msgstr "Ungültiger Eintrag: In Linie %d fehlt \"=\""
@@ -1594,15 +1600,15 @@ msgstr ""
 msgid "Kimpanel process:"
 msgstr ""
 
-#: data/config.desc:23
+#: data/config.desc:24
 msgid "L_ALT"
 msgstr "L_ALT"
 
-#: data/config.desc:18
+#: data/config.desc:19
 msgid "L_CTRL"
 msgstr "L_CTRL"
 
-#: data/config.desc:17
+#: data/config.desc:18
 msgid "L_SHIFT"
 msgstr "L_SHIFT"
 
@@ -1626,12 +1632,11 @@ msgstr "Lateinische Interpunktion"
 msgid "Latin punctuations are used."
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:300
-#, fuzzy
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:301
 msgid "Left"
-msgstr "Oben links"
+msgstr ""
 
-#: data/config.desc:26
+#: data/config.desc:27
 msgid "Left Super"
 msgstr "Links Super"
 
@@ -1810,7 +1815,7 @@ msgstr ""
 msgid "Minimum length trigger auto send candidate word when only one candidate"
 msgstr ""
 
-#: src/lib/fcitx-config/fcitx-config.c:400
+#: src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
 msgstr "Fehlender Typ, als String benutzen"
 
@@ -1843,11 +1848,11 @@ msgstr ""
 msgid "Native"
 msgstr ""
 
-#: data/config.desc:150
+#: data/config.desc:161
 msgid "Next Candidate Word"
 msgstr "Nächster Kandidat (Wort)"
 
-#: data/config.desc:120
+#: data/config.desc:131
 msgid "Next Page"
 msgstr "Taste für weitere Kanditaten"
 
@@ -1856,7 +1861,7 @@ msgstr "Taste für weitere Kanditaten"
 msgid "Next Page Icon"
 msgstr "Icon für nächste Seite Kandidaten"
 
-#: data/config.desc:164
+#: data/config.desc:175
 msgid "No"
 msgstr ""
 
@@ -1898,7 +1903,7 @@ msgstr "Nicht beibehalten"
 msgid "Note for GNOME Later than 3.6"
 msgstr "Hinweis für GNOME höher als 3.6"
 
-#: data/config.desc:187
+#: data/config.desc:198
 msgid "Nothing"
 msgstr "Nichts"
 
@@ -1914,12 +1919,12 @@ msgstr "Online Hilfe"
 msgid "OpenCC"
 msgstr "OpenCC"
 
-#: src/lib/fcitx-config/fcitx-config.c:1126
+#: src/lib/fcitx-config/fcitx-config.c:1136
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
 msgstr "Option %s ist ungültig, verwende Standardeinstellung %s"
 
-#: src/lib/fcitx-config/fcitx-config.c:1134
+#: src/lib/fcitx-config/fcitx-config.c:1144
 #, c-format
 msgid "Option %s is Invalid."
 msgstr "Option %s ist ungültig"
@@ -1932,9 +1937,9 @@ msgstr ""
 msgid "Other Color"
 msgstr "Farbe Andere"
 
-#: data/config.desc:178 data/config.desc:184 data/config.desc:194
-#: data/config.desc:200 data/config.desc:206 data/config.desc:213
-#: data/config.desc:219
+#: data/config.desc:189 data/config.desc:195 data/config.desc:205
+#: data/config.desc:211 data/config.desc:217 data/config.desc:224
+#: data/config.desc:230
 msgid "Output"
 msgstr "Ausgabe"
 
@@ -1962,7 +1967,7 @@ msgstr "Fontgröße der Skin ignorieren"
 msgid "Parent"
 msgstr "Parent"
 
-#: data/config.desc:166
+#: data/config.desc:177
 msgid "PerProgram"
 msgstr "Für jedes Programm"
 
@@ -2073,7 +2078,7 @@ msgstr ""
 msgid "Press Enter to input text"
 msgstr "ENTER drücken zum Text eingeben"
 
-#: data/config.desc:79
+#: data/config.desc:90
 msgid "Press Switch Key twice to Change Mode"
 msgstr "Taste zweimal zum Scrollen der Eingabemethode betätigen"
 
@@ -2086,7 +2091,7 @@ msgid "Press number to make word in frequent list"
 msgstr ""
 "Nummer drücken, um das Wort in die Lister der oft benutzen Wörter einzufügen"
 
-#: data/config.desc:115
+#: data/config.desc:126
 msgid "Prev Page"
 msgstr "Taste vorherige Kandidaten"
 
@@ -2095,7 +2100,7 @@ msgstr "Taste vorherige Kandidaten"
 msgid "Prev Page Icon"
 msgstr "Icon für vorherige Seite Kandidaten"
 
-#: data/config.desc:143
+#: data/config.desc:154
 msgid "Previous Candidate Word"
 msgstr "Vorheriger Kandidat (Wort)"
 
@@ -2112,7 +2117,7 @@ msgstr "Priorität des Addons"
 msgid "Profile"
 msgstr "Profil"
 
-#: data/config.desc:154 data/config.desc:160 data/config.desc:169
+#: data/config.desc:165 data/config.desc:171 data/config.desc:180
 msgid "Program"
 msgstr "Programm"
 
@@ -2184,15 +2189,15 @@ msgstr "Quwei"
 msgid "Quwei Input Method for Fcitx"
 msgstr "Quwei Eingabemethode für Fcitx"
 
-#: data/config.desc:24
+#: data/config.desc:25
 msgid "R_ALT"
 msgstr "R_ALT"
 
-#: data/config.desc:15
+#: data/config.desc:16
 msgid "R_CTRL"
 msgstr "R_CTRL"
 
-#: data/config.desc:16
+#: data/config.desc:17
 msgid "R_SHIFT"
 msgstr "R_SHIFT"
 
@@ -2200,7 +2205,7 @@ msgstr "R_SHIFT"
 msgid "Register IM"
 msgstr "Eingabemethode registrieren"
 
-#: data/config.desc:73
+#: data/config.desc:84
 msgid "Reload configuration"
 msgstr "Konfiguration erneut laden"
 
@@ -2251,12 +2256,11 @@ msgstr "Korrektur Größe Rand oben"
 msgid "Restart"
 msgstr "Neustart"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:302
-#, fuzzy
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:303
 msgid "Right"
-msgstr "Oben rechts"
+msgstr ""
 
-#: data/config.desc:27
+#: data/config.desc:28
 msgid "Right Super"
 msgstr "Rechts Super"
 
@@ -2282,7 +2286,7 @@ msgstr "Regel Darstellung der Liste häufiger Wörter"
 msgid "Russian"
 msgstr "Russisch"
 
-#: data/config.desc:22
+#: data/config.desc:23
 msgid "SHIFT Both"
 msgstr "SHIFT Beide"
 
@@ -2302,11 +2306,11 @@ msgstr "Zwischenablagenverlauf in Datei sichern"
 msgid "Save dict error"
 msgstr "Fehler beim Speichern der dict-Datei"
 
-#: data/config.desc:131
+#: data/config.desc:142
 msgid "Saving All Config and Input History"
 msgstr "Konfiguration und Eingabeverlauf sichern"
 
-#: data/config.desc:68
+#: data/config.desc:79
 msgid "Scroll between Input Method"
 msgstr "Durch Eingabemethoden scrollen"
 
@@ -2314,7 +2318,7 @@ msgstr "Durch Eingabemethoden scrollen"
 msgid "Search unicode"
 msgstr "Unicode suchen"
 
-#: data/config.desc:157
+#: data/config.desc:168
 msgid "Seconds sleep before fcitx really start"
 msgstr "Warten, bevor fcitx started (sec.)"
 
@@ -2346,11 +2350,11 @@ msgstr "Semikolon"
 msgid "Send Raw Preedit"
 msgstr "Raw Preeditstring eingeben"
 
-#: data/config.desc:204
+#: data/config.desc:215
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr "Raw-Text eingeben, wenn zum inaktiven Modus gewechselt wird"
 
-#: data/config.desc:167
+#: data/config.desc:178
 msgid "Share State Among Window"
 msgstr "Eingabemethode beibehalten"
 
@@ -2369,16 +2373,16 @@ msgstr "Shift"
 msgid "Show"
 msgstr ""
 
-#: data/config.desc:228
+#: data/config.desc:239
 msgid "Show Input Method Hint After Input method changed"
 msgstr "Hinweis zur Eingabemethode zeigen, nachdem sie gewechselt wurde"
 
-#: data/config.desc:234
+#: data/config.desc:245
 msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr ""
 "Hinweis zur Eingabemethode zeigen, nachdem sie gewechselt wurde und Fokus auf"
 
-#: data/config.desc:246
+#: data/config.desc:257
 msgid "Show Input Speed"
 msgstr "Eingabegeschwindigkeit zeigen"
 
@@ -2386,7 +2390,7 @@ msgstr "Eingabegeschwindigkeit zeigen"
 msgid "Show Preedit String in Client Window"
 msgstr "Eingabe im Programmfenster integrieren"
 
-#: data/config.desc:252
+#: data/config.desc:263
 msgid "Show Version"
 msgstr "Version zeigen"
 
@@ -2564,23 +2568,23 @@ msgstr "Unterkonfiguration für das Modul"
 msgid "Successfully Installed skin"
 msgstr "Skin erfolgreich installiert"
 
-#: data/config.desc:28
+#: data/config.desc:29
 msgid "Super Both"
 msgstr "Super (Beide)"
 
-#: data/config.desc:31
+#: data/config.desc:32
 msgid "Super+Left Ctrl"
 msgstr "Super + Ctrl-L"
 
-#: data/config.desc:32
+#: data/config.desc:33
 msgid "Super+Right Ctrl"
 msgstr "Super+Ctrl_R"
 
-#: data/config.desc:137
+#: data/config.desc:148
 msgid "Switch Embeded Preedit"
 msgstr "Wechsel zum eingebetteten Preedit"
 
-#: data/config.desc:109
+#: data/config.desc:120
 msgid "Switch Full Width Punc Mode"
 msgstr "Wechsel zum Modus Vollbreite Interpunktion"
 
@@ -2629,15 +2633,15 @@ msgstr "Zur sechsten Eingabemethode wechseln"
 msgid "Switch to the Third Input Method"
 msgstr "Zur dritten Eingabemethode wechseln"
 
-#: data/config.desc:103
+#: data/config.desc:114
 msgid "Switching Full Width Character Mode"
 msgstr "Wechsel zum Modus Vollbreite Zeichen"
 
-#: data/config.desc:97
+#: data/config.desc:108
 msgid "Switching Remind Mode"
 msgstr ""
 
-#: data/config.desc:91
+#: data/config.desc:102
 msgid "Switching Virtual Keyboard"
 msgstr "Wechsel der Virtuellen Tastatur"
 
@@ -2670,7 +2674,7 @@ msgstr "Table Einggabemethode für Fcitx"
 msgid "Table Symbol"
 msgstr "Tabellen Symbol"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:387
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:388
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
@@ -2683,7 +2687,7 @@ msgstr ""
 "Anzahl kann größer sein, wenn mehrere Zeichen die selbe Anzahle von Strichen "
 "haben."
 
-#: data/config.desc:151
+#: data/config.desc:162
 msgid ""
 "This is used in some modules and input methods to navigate to the next "
 "candidate word"
@@ -2691,7 +2695,7 @@ msgstr ""
 "Dies wird in einigen Modulen und Eingabemethoden benutzt um zum nächsten "
 "Kandidaten (Wort) zu navigieren"
 
-#: data/config.desc:144
+#: data/config.desc:155
 msgid ""
 "This is used in some modules and input methods to navigate to the previous "
 "candidate word"
@@ -2788,7 +2792,7 @@ msgstr "Chinesisch Langform"
 msgid "Treating abbreviated Pinyin as English"
 msgstr "Gekürztes Pinyin als Englisch bearbeiten"
 
-#: data/config.desc:4
+#: data/config.desc:5
 msgid "Trigger Input Method"
 msgstr "Eingabemethode aktivieren"
 
@@ -2804,7 +2808,7 @@ msgstr "Trigger Key für QuickPhrase"
 msgid "Type"
 msgstr "Typ"
 
-#: data/config.desc:181
+#: data/config.desc:192
 msgid "Type half width Punc After a Number"
 msgstr "Halbweite Interpunktion nach Zahlen"
 
@@ -2833,12 +2837,12 @@ msgstr "Eindeutiger Name für Tabellen-Eingabemethoden"
 msgid "UniqueName"
 msgstr "Eindeutiger Name"
 
-#: src/lib/fcitx-config/fcitx-config.c:396
+#: src/lib/fcitx-config/fcitx-config.c:406
 #, c-format
 msgid "Unknown type, take it as string: %s"
 msgstr "Unbekannter Typ, als String verwenden: %s"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:388
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:389
 msgid "Unsupported Key"
 msgstr ""
 
@@ -2898,7 +2902,7 @@ msgstr "Verwende Vollbreite Form der Punktuation"
 msgid "Use enter to commit the existing string"
 msgstr "Benutzte ENTER um den existierenden String zu bestätigen"
 
-#: data/config.desc:9
+#: data/config.desc:10
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr ""
 "Extra Triggertaste nur benutzen, wenn sie vorher zum inaktivieren benutzt "
@@ -3140,11 +3144,11 @@ msgstr "Programm:"
 msgid "here"
 msgstr "hier"
 
-#: src/lib/fcitx/ime.c:1634
+#: src/lib/fcitx/ime.c:1691
 msgid "min Num of Characters: "
 msgstr "min Anzahl Zeichen:"
 
-#: src/lib/fcitx-config/fcitx-config.c:1192
+#: src/lib/fcitx-config/fcitx-config.c:1202
 #, c-format
 msgid "no default option for %s/%s"
 msgstr "Keine Standardeinstellung für %s/%s"
@@ -3173,67 +3177,3 @@ msgstr "xmodmap Befehl"
 #, c-format
 msgid "your current font is: %s"
 msgstr "der aktuelle Font ist: %s"
-
-#~ msgid "&Add"
-#~ msgstr "&Add"
-
-#~ msgid "&Batch Edit"
-#~ msgstr "&Stapelbearbeitung"
-
-#~ msgid "&Delete"
-#~ msgstr "&Delete"
-
-#~ msgid "&Import"
-#~ msgstr "&Import"
-
-#~ msgid "Add File"
-#~ msgstr "Datei hinzufügen"
-
-#~ msgid "Confirm deleting"
-#~ msgstr "Löschen bestätigen"
-
-#~ msgid "De&lete All"
-#~ msgstr "De&lete All"
-
-#~ msgid "E&xport"
-#~ msgstr "E&xport"
-
-#~ msgid "File name should not contain '/'."
-#~ msgstr "Dateiname darf kein '/' enthalten."
-
-#~ msgid "Invalid filename"
-#~ msgstr "Ungültiger Dateiname"
-
-#~ msgid "Keyword"
-#~ msgstr "Schlüsselwort"
-
-#~ msgid "Keyword:"
-#~ msgstr "Schlüsselwort:"
-
-#~ msgid "Phrase"
-#~ msgstr "Phrase"
-
-#~ msgid "Phrase:"
-#~ msgstr "Phrase:"
-
-#~ msgid "Please input a filename for newfile"
-#~ msgstr "Bitte für die neue Datei einen Namen eingeben"
-
-#~ msgid "Quick Phrase Editor"
-#~ msgstr "Quick Phrase Editor"
-
-#~ msgid "Remove File"
-#~ msgstr "Datei entfernen"
-
-#~ msgid "Save Changes"
-#~ msgstr "Änderungen speichern"
-
-#~ msgid ""
-#~ "The content has changed.\n"
-#~ "Do you want to save the changes or discard them?"
-#~ msgstr ""
-#~ "Der Inhalt hat sich geändert.\n"
-#~ "Möchten Sie die Änderungen speichern oder verwerfen?"
-
-#~ msgid "Use <Keyword> <Phrase> format on every line."
-#~ msgstr "Benutze  <Keyword> <Phrase> Format in jeder Linie."
