@@ -42,7 +42,7 @@ MainWindow::MainWindow(FcitxQtConfigUIWidget* pluginWidget, QWidget* parent): QM
     m_ui->buttonBox->button(QDialogButtonBox::Close)->setText(_("&Close"));
     m_ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
     m_ui->buttonBox->button(QDialogButtonBox::Reset)->setEnabled(false);
-    setWindowIcon(QIcon::fromTheme("fcitx"));
+    setWindowIcon(QIcon::fromTheme(m_pluginWidget->icon()));
     setWindowTitle(m_pluginWidget->title());
 
     connect(m_pluginWidget, SIGNAL(changed(bool)), this, SLOT(changed(bool)));
