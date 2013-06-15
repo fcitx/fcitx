@@ -1178,11 +1178,9 @@ boolean FcitxConfigSaveConfigFileFp(FILE* fp, FcitxGenericConfig *config, FcitxC
             switch (optiondesc->type) {
             case T_Enum: {
                 fprintf(fp, "# %s\n", _("Available Value:"));
-                fprintf(fp, "#");
                 int i;
                 for (i = 0; i < optiondesc->configEnum.enumCount; i++)
-                    fprintf(fp, " %s", optiondesc->configEnum.enumDesc[i]);
-                fprintf(fp, "\n");
+                    fprintf(fp, "# %s\n", optiondesc->configEnum.enumDesc[i]);
             }
             break;
             case T_Boolean: {
