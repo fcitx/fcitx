@@ -7,12 +7,13 @@
 # いくや あわしろ <ikunya@gmail.com>, 2013
 # いくや あわしろ <ikunya@gmail.com>, 2012-2013
 # mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>, 2012
+# Xuetian Weng <wengxt@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-14 20:02-0400\n"
-"PO-Revision-Date: 2013-06-14 22:07+0000\n"
+"POT-Creation-Date: 2013-06-14 22:02-0400\n"
+"PO-Revision-Date: 2013-06-15 00:24+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -41,11 +42,11 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:51
 msgid "&Add"
-msgstr ""
+msgstr "追加 (&A)"
 
 #: tools/gui/quickphrase-editor/editor.cpp:52
 msgid "&Batch Edit"
-msgstr ""
+msgstr "バッチ編集 (&B)"
 
 #: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
@@ -53,11 +54,11 @@ msgstr "閉じる (&C)"
 
 #: tools/gui/quickphrase-editor/editor.cpp:53
 msgid "&Delete"
-msgstr ""
+msgstr "削除 (&D)"
 
 #: tools/gui/quickphrase-editor/editor.cpp:55
 msgid "&Import"
-msgstr ""
+msgstr "インポート (&I)"
 
 #: tools/gui/quickphrase-editor/editor.cpp:57
 msgid "&Operation"
@@ -830,7 +831,7 @@ msgstr "新しい Freedesktop.org の DBus のトレイアイコン"
 
 #: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"
-msgstr ""
+msgstr "全削除 (&l)"
 
 #: tools/gui/quickphrase-editor/filelistmodel.cpp:47
 #: src/module/spell/fcitx-spell.desc:5
@@ -953,7 +954,7 @@ msgstr "設定が重複しており、上書きします: %d 行目"
 
 #: tools/gui/quickphrase-editor/editor.cpp:56
 msgid "E&xport"
-msgstr ""
+msgstr "エクスポート (&x)"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:352
 msgid "Empty"
@@ -1670,11 +1671,11 @@ msgstr "キーボードレイアウト:"
 
 #: tools/gui/quickphrase-editor/model.cpp:55
 msgid "Keyword"
-msgstr ""
+msgstr "キーワード"
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:30
 msgid "Keyword:"
-msgstr ""
+msgstr "キーワード:"
 
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:3
 msgid "Kimpanel"
@@ -2057,7 +2058,7 @@ msgstr "プログラムごと"
 
 #: tools/gui/quickphrase-editor/model.cpp:57
 msgid "Phrase"
-msgstr ""
+msgstr "フレーズ"
 
 #: src/im/table/table.c:1408
 msgid "Phrase is already in Dict "
@@ -2065,7 +2066,7 @@ msgstr "フレーズは既に辞書にあります"
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:31
 msgid "Phrase:"
-msgstr ""
+msgstr "フレーズ:"
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -2255,7 +2256,7 @@ msgstr "Qt IM モジュールファイル:"
 
 #: tools/gui/quickphrase-editor/editor.cpp:148
 msgid "Quick Phrase Editor"
-msgstr ""
+msgstr "クイックフレーズ エディター"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
@@ -2954,7 +2955,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/batchdialog.cpp:31
 msgid "Use <Keyword> <Phrase> format on every line."
-msgstr ""
+msgstr "各行では <Keyword> <Phrase> の形式を使用してください。"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"

@@ -8,13 +8,14 @@
 # Hiunn_Hue <hiunnhue108@ymail.com>, 2012-2013
 # pellaeon <nfsmwlin@gmail.com>, 2013
 # pellaeon <nfsmwlin@gmail.com>, 2013
+# Xuetian Weng <wengxt@gmail.com>, 2013
 # Xuetian Weng <wengxt@gmail.com>, 2012-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-14 20:02-0400\n"
-"PO-Revision-Date: 2013-06-14 22:07+0000\n"
+"POT-Creation-Date: 2013-06-14 22:02-0400\n"
+"PO-Revision-Date: 2013-06-15 00:25+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
@@ -39,15 +40,15 @@ msgstr "${1} 運作正常。"
 #: tools/gui/quickphrase-editor/editor.cpp:323
 #, kde-format
 msgid "%1 is a system file, do you want to delete all phrases instead?"
-msgstr ""
+msgstr "%1 是系統檔，您是否想要改為清空所有字詞？"
 
 #: tools/gui/quickphrase-editor/editor.cpp:51
 msgid "&Add"
-msgstr ""
+msgstr "新增 (&A)"
 
 #: tools/gui/quickphrase-editor/editor.cpp:52
 msgid "&Batch Edit"
-msgstr ""
+msgstr "批次編輯 (&B)"
 
 #: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
@@ -55,15 +56,15 @@ msgstr "關閉 (&C)"
 
 #: tools/gui/quickphrase-editor/editor.cpp:53
 msgid "&Delete"
-msgstr ""
+msgstr "刪除 (&D)"
 
 #: tools/gui/quickphrase-editor/editor.cpp:55
 msgid "&Import"
-msgstr ""
+msgstr "匯入 (&I)"
 
 #: tools/gui/quickphrase-editor/editor.cpp:57
 msgid "&Operation"
-msgstr ""
+msgstr "操作 (&O)"
 
 #: tools/gui/wrapper/mainwindow.cpp:41
 msgid "&Reset"
@@ -193,7 +194,7 @@ msgstr "選擇候選字時輸入額外空格"
 
 #: tools/gui/quickphrase-editor/editor.cpp:68
 msgid "Add File"
-msgstr ""
+msgstr "加入檔案"
 
 #: src/module/lua/fcitx-lua.conf.in:4
 msgid "Add Lua script support to Fcitx"
@@ -308,7 +309,7 @@ msgstr "在鍵盤配置修改之後應用自訂的 xmodmap 文稿"
 #: tools/gui/quickphrase-editor/editor.cpp:335
 #, kde-format
 msgid "Are you sure to delete %1?"
-msgstr ""
+msgstr "您確定要刪除 %1？"
 
 #: data/addon.desc:67
 msgid "Argument for InputMethod Register"
@@ -467,7 +468,7 @@ msgstr "無法正確連接 fcitx。"
 #: tools/gui/quickphrase-editor/editor.cpp:296
 #, kde-format
 msgid "Cannot create file %1."
-msgstr ""
+msgstr "無法建立檔案 %1。"
 
 #: data/script/fcitx-diagnose.sh:626
 msgid "Cannot determine desktop environment."
@@ -537,7 +538,7 @@ msgstr "無法從 fcitx 設定檔中讀取輸入法清單。"
 
 #: tools/gui/quickphrase-editor/editor.cpp:322
 msgid "Cannot remove system file"
-msgstr ""
+msgstr "無法移除系統檔案"
 
 #: data/addon.desc:22
 msgid "Category"
@@ -752,7 +753,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
 msgid "Confirm deleting"
-msgstr ""
+msgstr "確認刪除"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
@@ -770,7 +771,7 @@ msgstr "複製"
 
 #: tools/gui/quickphrase-editor/editor.cpp:279
 msgid "Create new file"
-msgstr ""
+msgstr "建立新檔"
 
 #: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:138
 #: src/module/autoeng/fcitx-autoeng.desc:8
@@ -826,7 +827,7 @@ msgstr "基於 DBus 的新 Freedesktop.org 系統匣圖示"
 
 #: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"
-msgstr ""
+msgstr "全部刪除 (&L)"
 
 #: tools/gui/quickphrase-editor/filelistmodel.cpp:47
 #: src/module/spell/fcitx-spell.desc:5
@@ -945,7 +946,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:56
 msgid "E&xport"
-msgstr ""
+msgstr "匯出 (&X)"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:352
 msgid "Empty"
@@ -1022,7 +1023,7 @@ msgstr "執行 ${1} 時發生錯誤。請檢查您的地區設定。"
 #: tools/gui/quickphrase-editor/editor.cpp:343
 #, kde-format
 msgid "Error while deleting %1."
-msgstr ""
+msgstr "刪除 %1 時出錯。"
 
 #: src/ui/classic/fcitx-skin-installer.sh:64
 #, sh-format
@@ -1135,11 +1136,11 @@ msgstr "Fcitx 版本：${1}"
 #: tools/gui/quickphrase-editor/editor.cpp:295
 #: tools/gui/quickphrase-editor/editor.cpp:342
 msgid "File Operation Failed"
-msgstr ""
+msgstr "檔案操作失敗"
 
 #: tools/gui/quickphrase-editor/editor.cpp:285
 msgid "File name should not contain '/'."
-msgstr ""
+msgstr "檔案名稱不能有「/」。"
 
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
 #: src/ui/classic/skin.desc:403
@@ -1603,7 +1604,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:285
 msgid "Invalid filename"
-msgstr ""
+msgstr "無效的檔案名稱"
 
 #: src/lib/fcitx-utils/desktop-parse.c:550
 #, c-format
@@ -1660,11 +1661,11 @@ msgstr "鍵盤配置："
 
 #: tools/gui/quickphrase-editor/model.cpp:55
 msgid "Keyword"
-msgstr ""
+msgstr "關鍵字"
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:30
 msgid "Keyword:"
-msgstr ""
+msgstr "關鍵字："
 
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:3
 msgid "Kimpanel"
@@ -2047,7 +2048,7 @@ msgstr "按程式"
 
 #: tools/gui/quickphrase-editor/model.cpp:57
 msgid "Phrase"
-msgstr ""
+msgstr "字詞"
 
 #: src/im/table/table.c:1408
 msgid "Phrase is already in Dict "
@@ -2055,7 +2056,7 @@ msgstr "字詞已在碼表中"
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:31
 msgid "Phrase:"
-msgstr ""
+msgstr "字詞："
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -2114,7 +2115,7 @@ msgstr "請在 ${1} 檢查您的發行版的設定連結是如何設定 fcitx �
 
 #: tools/gui/quickphrase-editor/editor.cpp:280
 msgid "Please input a filename for newfile"
-msgstr ""
+msgstr "請輸入新檔案的名稱"
 
 #: src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
@@ -2242,7 +2243,7 @@ msgstr "Qt 輸入法模組檔案："
 
 #: tools/gui/quickphrase-editor/editor.cpp:148
 msgid "Quick Phrase Editor"
-msgstr ""
+msgstr "快速輸入編輯器"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
@@ -2286,7 +2287,7 @@ msgstr "右Shift"
 
 #: tools/gui/quickphrase-editor/editor.cpp:70
 msgid "Refresh List"
-msgstr ""
+msgstr "更新列表"
 
 #: data/addon.desc:58
 msgid "Register IM"
@@ -2310,7 +2311,7 @@ msgstr "遠端操作"
 
 #: tools/gui/quickphrase-editor/editor.cpp:69
 msgid "Remove File"
-msgstr ""
+msgstr "移除檔案"
 
 #: src/im/table/tabledict.c:428
 msgid "Rename OK"
@@ -2391,7 +2392,7 @@ msgstr "儲存自動字詞"
 
 #: tools/gui/quickphrase-editor/editor.cpp:131
 msgid "Save Changes"
-msgstr ""
+msgstr "儲存修改"
 
 #: src/module/clipboard/fcitx-clipboard.desc:4
 msgid "Save Clipboard History To File"
@@ -2773,6 +2774,8 @@ msgid ""
 "The content has changed.\n"
 "Do you want to save the changes or discard them?"
 msgstr ""
+"內容已修改。\n"
+"您想要儲存還是放棄這些修改？"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:395
 msgid "The key you just pressed is not supported by Qt."
@@ -2942,7 +2945,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/batchdialog.cpp:31
 msgid "Use <Keyword> <Phrase> format on every line."
-msgstr ""
+msgstr "每一行請使用 <Keyword> <Phrase> 格式。"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"

@@ -4,12 +4,13 @@
 #
 # Translators:
 # mar well <marwell.1980@freenet.de>, 2012-2013
+# Xuetian Weng <wengxt@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-14 20:02-0400\n"
-"PO-Revision-Date: 2013-06-14 22:07+0000\n"
+"POT-Creation-Date: 2013-06-14 22:02-0400\n"
+"PO-Revision-Date: 2013-06-15 00:27+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
@@ -38,11 +39,11 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:51
 msgid "&Add"
-msgstr ""
+msgstr "&Add"
 
 #: tools/gui/quickphrase-editor/editor.cpp:52
 msgid "&Batch Edit"
-msgstr ""
+msgstr "&Stapelbearbeitung"
 
 #: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
@@ -50,11 +51,11 @@ msgstr "&Schließen"
 
 #: tools/gui/quickphrase-editor/editor.cpp:53
 msgid "&Delete"
-msgstr ""
+msgstr "&Delete"
 
 #: tools/gui/quickphrase-editor/editor.cpp:55
 msgid "&Import"
-msgstr ""
+msgstr "&Import"
 
 #: tools/gui/quickphrase-editor/editor.cpp:57
 msgid "&Operation"
@@ -188,7 +189,7 @@ msgstr "Extra SPACE hinzufügen, um einen Kandidaten auszuwählen"
 
 #: tools/gui/quickphrase-editor/editor.cpp:68
 msgid "Add File"
-msgstr ""
+msgstr "Datei hinzufügen"
 
 #: src/module/lua/fcitx-lua.conf.in:4
 msgid "Add Lua script support to Fcitx"
@@ -753,7 +754,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
 msgid "Confirm deleting"
-msgstr ""
+msgstr "Löschen bestätigen"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
@@ -827,7 +828,7 @@ msgstr "DBus basiertes, neues Trayicon von Freedesktop.org"
 
 #: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"
-msgstr ""
+msgstr "De&lete All"
 
 #: tools/gui/quickphrase-editor/filelistmodel.cpp:47
 #: src/module/spell/fcitx-spell.desc:5
@@ -951,7 +952,7 @@ msgstr "Doblikat Option, überschreibe Zeile %d"
 
 #: tools/gui/quickphrase-editor/editor.cpp:56
 msgid "E&xport"
-msgstr ""
+msgstr "E&xport"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:352
 msgid "Empty"
@@ -1147,7 +1148,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:285
 msgid "File name should not contain '/'."
-msgstr ""
+msgstr "Dateiname darf kein '/' enthalten."
 
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
 #: src/ui/classic/skin.desc:403
@@ -1614,7 +1615,7 @@ msgstr "Ungültiger Eintrag Linie @ Linie %d %s"
 
 #: tools/gui/quickphrase-editor/editor.cpp:285
 msgid "Invalid filename"
-msgstr ""
+msgstr "Ungültiger Dateiname"
 
 #: src/lib/fcitx-utils/desktop-parse.c:550
 #, c-format
@@ -1671,11 +1672,11 @@ msgstr "Tastatur Layout:"
 
 #: tools/gui/quickphrase-editor/model.cpp:55
 msgid "Keyword"
-msgstr ""
+msgstr "Schlüsselwort"
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:30
 msgid "Keyword:"
-msgstr ""
+msgstr "Schlüsselwort:"
 
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:3
 msgid "Kimpanel"
@@ -2063,7 +2064,7 @@ msgstr "Für jedes Programm"
 
 #: tools/gui/quickphrase-editor/model.cpp:57
 msgid "Phrase"
-msgstr ""
+msgstr "Phrase"
 
 #: src/im/table/table.c:1408
 msgid "Phrase is already in Dict "
@@ -2071,7 +2072,7 @@ msgstr "Phrase ist schon im Wörterbuch"
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:31
 msgid "Phrase:"
-msgstr ""
+msgstr "Phrase:"
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -2132,7 +2133,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:280
 msgid "Please input a filename for newfile"
-msgstr ""
+msgstr "Bitte für die neue Datei einen Namen eingeben"
 
 #: src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
@@ -2265,7 +2266,7 @@ msgstr "QT IM module Dateien:"
 
 #: tools/gui/quickphrase-editor/editor.cpp:148
 msgid "Quick Phrase Editor"
-msgstr ""
+msgstr "Quick Phrase Editor"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
@@ -2333,7 +2334,7 @@ msgstr "Fcitx-Remote"
 
 #: tools/gui/quickphrase-editor/editor.cpp:69
 msgid "Remove File"
-msgstr ""
+msgstr "Datei entfernen"
 
 #: src/im/table/tabledict.c:428
 msgid "Rename OK"
@@ -2414,7 +2415,7 @@ msgstr "Automatische Phrase speichern"
 
 #: tools/gui/quickphrase-editor/editor.cpp:131
 msgid "Save Changes"
-msgstr ""
+msgstr "Änderungen speichern"
 
 #: src/module/clipboard/fcitx-clipboard.desc:4
 msgid "Save Clipboard History To File"
@@ -2797,6 +2798,8 @@ msgid ""
 "The content has changed.\n"
 "Do you want to save the changes or discard them?"
 msgstr ""
+"Der Inhalt hat sich geändert.\n"
+"Möchten Sie die Änderungen speichern oder verwerfen?"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:395
 msgid "The key you just pressed is not supported by Qt."
@@ -2972,7 +2975,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/batchdialog.cpp:31
 msgid "Use <Keyword> <Phrase> format on every line."
-msgstr ""
+msgstr "Benutze  <Keyword> <Phrase> Format in jeder Linie."
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
