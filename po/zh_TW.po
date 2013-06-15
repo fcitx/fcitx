@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-14 18:02-0400\n"
-"PO-Revision-Date: 2013-06-14 18:07+0000\n"
+"POT-Creation-Date: 2013-06-14 20:02-0400\n"
+"PO-Revision-Date: 2013-06-14 22:07+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
@@ -54,9 +54,8 @@ msgid "&Close"
 msgstr "關閉 (&C)"
 
 #: tools/gui/quickphrase-editor/editor.cpp:53
-#, fuzzy
 msgid "&Delete"
-msgstr "刪除字詞"
+msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:55
 msgid "&Import"
@@ -752,9 +751,8 @@ msgid "Configure group name error: line %d"
 msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
-#, fuzzy
 msgid "Confirm deleting"
-msgstr "設定："
+msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
@@ -771,9 +769,8 @@ msgid "Copy"
 msgstr "複製"
 
 #: tools/gui/quickphrase-editor/editor.cpp:279
-#, fuzzy
 msgid "Create new file"
-msgstr "無法開啟標點符號檔案"
+msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:138
 #: src/module/autoeng/fcitx-autoeng.desc:8
@@ -2049,18 +2046,16 @@ msgid "PerProgram"
 msgstr "按程式"
 
 #: tools/gui/quickphrase-editor/model.cpp:57
-#, fuzzy
 msgid "Phrase"
-msgstr "加入字詞"
+msgstr ""
 
 #: src/im/table/table.c:1408
 msgid "Phrase is already in Dict "
 msgstr "字詞已在碼表中"
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:31
-#, fuzzy
 msgid "Phrase:"
-msgstr "加入字詞"
+msgstr ""
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -2246,9 +2241,8 @@ msgid "Qt IM module files:"
 msgstr "Qt 輸入法模組檔案："
 
 #: tools/gui/quickphrase-editor/editor.cpp:148
-#, fuzzy
 msgid "Quick Phrase Editor"
-msgstr "快速輸入清單"
+msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
@@ -2315,9 +2309,8 @@ msgid "Remote"
 msgstr "遠端操作"
 
 #: tools/gui/quickphrase-editor/editor.cpp:69
-#, fuzzy
 msgid "Remove File"
-msgstr "符號檔案"
+msgstr ""
 
 #: src/im/table/tabledict.c:428
 msgid "Rename OK"

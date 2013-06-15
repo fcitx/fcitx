@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-14 18:02-0400\n"
-"PO-Revision-Date: 2013-06-14 18:07+0000\n"
+"POT-Creation-Date: 2013-06-14 20:02-0400\n"
+"PO-Revision-Date: 2013-06-14 22:07+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -52,9 +52,8 @@ msgid "&Close"
 msgstr "閉じる (&C)"
 
 #: tools/gui/quickphrase-editor/editor.cpp:53
-#, fuzzy
 msgid "&Delete"
-msgstr "フレーズを削除"
+msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:55
 msgid "&Import"
@@ -774,9 +773,8 @@ msgid "Copy"
 msgstr "コピー"
 
 #: tools/gui/quickphrase-editor/editor.cpp:279
-#, fuzzy
 msgid "Create new file"
-msgstr "句読点ファイルを開けません"
+msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:138
 #: src/module/autoeng/fcitx-autoeng.desc:8
@@ -1614,9 +1612,8 @@ msgid "Invalid entry line @ line %d %s"
 msgstr "不正な入力です %d 行目 %s "
 
 #: tools/gui/quickphrase-editor/editor.cpp:285
-#, fuzzy
 msgid "Invalid filename"
-msgstr "正しいフォントではありません"
+msgstr ""
 
 #: src/lib/fcitx-utils/desktop-parse.c:550
 #, c-format
@@ -2059,18 +2056,16 @@ msgid "PerProgram"
 msgstr "プログラムごと"
 
 #: tools/gui/quickphrase-editor/model.cpp:57
-#, fuzzy
 msgid "Phrase"
-msgstr "フレーズを追加"
+msgstr ""
 
 #: src/im/table/table.c:1408
 msgid "Phrase is already in Dict "
 msgstr "フレーズは既に辞書にあります"
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:31
-#, fuzzy
 msgid "Phrase:"
-msgstr "フレーズを追加"
+msgstr ""
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -2259,9 +2254,8 @@ msgid "Qt IM module files:"
 msgstr "Qt IM モジュールファイル:"
 
 #: tools/gui/quickphrase-editor/editor.cpp:148
-#, fuzzy
 msgid "Quick Phrase Editor"
-msgstr "クイックフレーズリスト"
+msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
@@ -2328,9 +2322,8 @@ msgid "Remote"
 msgstr "リモート"
 
 #: tools/gui/quickphrase-editor/editor.cpp:69
-#, fuzzy
 msgid "Remove File"
-msgstr "記号ファイル"
+msgstr ""
 
 #: src/im/table/tabledict.c:428
 msgid "Rename OK"

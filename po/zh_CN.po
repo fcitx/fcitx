@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-14 18:02-0400\n"
-"PO-Revision-Date: 2013-06-14 18:07+0000\n"
+"POT-Creation-Date: 2013-06-14 20:02-0400\n"
+"PO-Revision-Date: 2013-06-14 22:07+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -55,9 +55,8 @@ msgid "&Close"
 msgstr "关闭(&C)"
 
 #: tools/gui/quickphrase-editor/editor.cpp:53
-#, fuzzy
 msgid "&Delete"
-msgstr "删除词组"
+msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:55
 msgid "&Import"
@@ -753,9 +752,8 @@ msgid "Configure group name error: line %d"
 msgstr "配置组名错误: 行%d"
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
-#, fuzzy
 msgid "Confirm deleting"
-msgstr "配置:"
+msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
@@ -772,9 +770,8 @@ msgid "Copy"
 msgstr "复制"
 
 #: tools/gui/quickphrase-editor/editor.cpp:279
-#, fuzzy
 msgid "Create new file"
-msgstr "无法打开标点文件"
+msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:138
 #: src/module/autoeng/fcitx-autoeng.desc:8
@@ -1611,9 +1608,8 @@ msgid "Invalid entry line @ line %d %s"
 msgstr "非法键值出现在第 %d 行: %s"
 
 #: tools/gui/quickphrase-editor/editor.cpp:285
-#, fuzzy
 msgid "Invalid filename"
-msgstr "无可用字体"
+msgstr ""
 
 #: src/lib/fcitx-utils/desktop-parse.c:550
 #, c-format
@@ -2056,18 +2052,16 @@ msgid "PerProgram"
 msgstr "按程序"
 
 #: tools/gui/quickphrase-editor/model.cpp:57
-#, fuzzy
 msgid "Phrase"
-msgstr "添加词组"
+msgstr ""
 
 #: src/im/table/table.c:1408
 msgid "Phrase is already in Dict "
 msgstr "词组已在码表中"
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:31
-#, fuzzy
 msgid "Phrase:"
-msgstr "添加词组"
+msgstr ""
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -2253,9 +2247,8 @@ msgid "Qt IM module files:"
 msgstr "Qt 输入法模块文件:"
 
 #: tools/gui/quickphrase-editor/editor.cpp:148
-#, fuzzy
 msgid "Quick Phrase Editor"
-msgstr "快速输入列表"
+msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
@@ -2322,9 +2315,8 @@ msgid "Remote"
 msgstr "远程调用"
 
 #: tools/gui/quickphrase-editor/editor.cpp:69
-#, fuzzy
 msgid "Remove File"
-msgstr "符号文件"
+msgstr ""
 
 #: src/im/table/tabledict.c:428
 msgid "Rename OK"
