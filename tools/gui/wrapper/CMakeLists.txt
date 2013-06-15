@@ -31,4 +31,4 @@ target_link_libraries(fcitx-qt-gui-wrapper
   fcitx-qt
   )
 
-install(TARGETS fcitx-qt-gui-wrapper DESTINATION ${bindir})
+install(TARGETS fcitx-qt-gui-wrapper DESTINATION ${addondir}/libexec)
