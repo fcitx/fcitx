@@ -24,6 +24,7 @@
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/utils.h"
+#include <ctype.h>
 #include "hotkey.h"
 #include "keydata.h"
 
@@ -611,6 +612,61 @@ void FcitxHotkeyGetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* 
     *outs = iKeyState;
 }
 
+FCITX_EXPORT_API
+char* FcitxHotkeyGetReadableKeyString(FcitxKeySym sym, unsigned int state)
+{
+    char *str;
+    size_t len = 0;
+
+    if (state & FcitxKeyState_Ctrl)
+        len += strlen("Ctrl+");
+
+    if (state & FcitxKeyState_Alt)
+        len += strlen("Alt+");
+
+    if (state & FcitxKeyState_Shift)
+        len += strlen("Shift+");
+
+    if (state & FcitxKeyState_Super)
+        len += strlen("Super+");
+
+    if (sym == FcitxKey_ISO_Left_Tab)
+        sym = FcitxKey_Tab;
+
+    char *key = FcitxHotkeyGetKeyListString(sym);
+
+    if (!key)
+        return NULL;
+
+    size_t keylen = strlen(key);
+
+    str = fcitx_utils_malloc0(sizeof(char) * (len + keylen + 1));
+
+    if (state & FcitxKeyState_Ctrl)
+        strcat(str, "Ctrl+");
+
+    if (state & FcitxKeyState_Alt)
+        strcat(str, "Alt+");
+
+    if (state & FcitxKeyState_Shift)
+        strcat(str, "Shift+");
+
+    if (state & FcitxKeyState_Super)
+        strcat(str, "Super+");
+
+    int i = 0;
+    for (i = 0; i < keylen; i ++) {
+        if (i == 0) {
+            continue;
+        }
+        key[i] = tolower(key[i]);
+    }
+    strcpy(str + len, key);
+
+    free(key);
+
+    return str;
+}
 
 FCITX_EXPORT_API
 char* FcitxHotkeyGetKeyString(FcitxKeySym sym, unsigned int state)

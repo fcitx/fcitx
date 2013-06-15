@@ -95,12 +95,22 @@ extern "C"
 
     /**
      * Get the Fcitx Key String for given keyval and state
+     * this is used for save configuration.
      *
      * @param sym keyval
      * @param state state
      * @return char* string like CTRL_SPACE
      **/
     char* FcitxHotkeyGetKeyString(FcitxKeySym sym, unsigned int state);
+
+    /**
+     * Get the more readable Fcitx Key String for given keyval and state
+     *
+     * @param sym keyval
+     * @param state state
+     * @return char* string like Ctrl+Space
+     **/
+    char* FcitxHotkeyGetReadableKeyString(FcitxKeySym sym, unsigned int state);
 
     /**
      * is hotkey 0-9
