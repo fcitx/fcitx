@@ -23,7 +23,7 @@
 
 CONFIG_BINDING_BEGIN(FcitxXkbConfig);
 CONFIG_BINDING_REGISTER("X Keyboard", "OverrideSystemXKBSettings", bOverrideSystemXKBSettings);
-CONFIG_BINDING_REGISTER("X Keyboard", "IgnoreInputMethodLayoutRequest", bIgnoreInputMethodLayoutRequest);
+CONFIG_BINDING_REGISTER("X Keyboard", "UseFirstKeyboardIMAsDefaultLayout", useFirstKeyboardIMAsDefaultLayout);
 CONFIG_BINDING_REGISTER("X Keyboard", "XModmapCommand", xmodmapCommand);
 CONFIG_BINDING_REGISTER("X Keyboard", "CustomXModmapScript", customXModmapScript);
 CONFIG_BINDING_END();

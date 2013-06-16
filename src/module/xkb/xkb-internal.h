@@ -28,7 +28,7 @@
 typedef struct _FcitxXkbConfig {
     FcitxGenericConfig gconfig;
     boolean bOverrideSystemXKBSettings;
-    boolean bIgnoreInputMethodLayoutRequest;
+    boolean useFirstKeyboardIMAsDefaultLayout;
     char* xmodmapCommand;
     char* customXModmapScript;
 } FcitxXkbConfig;

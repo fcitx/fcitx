@@ -513,13 +513,15 @@ int CmpMap(FcitxPinyinConfig* pyconfig, const char *strMap1,
     *iMatchedLength = 0;
 
     for (;;) {
-        if (!strMap2[*iMatchedLength])
+        if (!strMap2[*iMatchedLength]) {
             return (strMap1[*iMatchedLength] - strMap2[*iMatchedLength]);
+        }
 
-        if (((*iMatchedLength + 1) % 2) && (IsZ_C_S(strMap2[*iMatchedLength]) && (strMap2[*iMatchedLength + 1] == '0' || !strMap2[*iMatchedLength + 1])))
+        if (((*iMatchedLength + 1) % 2) && (IsZ_C_S(strMap2[*iMatchedLength]) && (strMap2[*iMatchedLength + 1] == '0' || !strMap2[*iMatchedLength + 1]))) {
             val = Cmp1Map(pyconfig, strMap1[*iMatchedLength], strMap2[*iMatchedLength], (*iMatchedLength + 1) % 2, true, bSP);
-        else
+        } else {
             val = Cmp1Map(pyconfig, strMap1[*iMatchedLength], strMap2[*iMatchedLength], (*iMatchedLength + 1) % 2, false, bSP);
+        }
 
         if (val)
             return val;
