@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-14 20:02-0400\n"
+"POT-Creation-Date: 2013-06-16 04:02-0400\n"
 "PO-Revision-Date: 2013-06-14 22:07+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/fcitx/language/"
@@ -296,7 +296,7 @@ msgstr ""
 msgid "Appearance"
 msgstr "Apariencia"
 
-#: src/module/xkb/fcitx-xkb.desc:19
+#: src/module/xkb/fcitx-xkb.desc:20
 msgid "Apply this custom xmodmap script after layout change"
 msgstr ""
 
@@ -358,7 +358,7 @@ msgid "Auto Send Candidate Word"
 msgstr ""
 
 #: src/lib/fcitx-config/fcitx-config.c:1180
-#: src/lib/fcitx-config/fcitx-config.c:1189
+#: src/lib/fcitx-config/fcitx-config.c:1187
 msgid "Available Value:"
 msgstr ""
 
@@ -1180,6 +1180,13 @@ msgstr ""
 msgid "Font size repect dpi setting"
 msgstr ""
 
+#: src/module/xkb/fcitx-xkb.desc:10
+msgid ""
+"For example, if Keyboard - English (US) is the first input method in the "
+"list, then English (US) will be applied to all other non keyboard input "
+"method layout"
+msgstr ""
+
 #: data/script/fcitx-diagnose.sh:768
 msgid "Found ${1} at ${2}."
 msgstr ""
@@ -1474,10 +1481,6 @@ msgid ""
 "If you are using ${1}, you may want to uninstall ${2}, remove ${3} or use "
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
 "any input method other than ${2}. See ${link} for more detail."
-msgstr ""
-
-#: src/module/xkb/fcitx-xkb.desc:9
-msgid "Ignore Input Method Layout Request"
 msgstr ""
 
 #: src/im/table/table.desc:197
@@ -2997,6 +3000,10 @@ msgstr ""
 msgid "Use remind"
 msgstr ""
 
+#: src/module/xkb/fcitx-xkb.desc:9
+msgid "Use the layout of first keyboard input method in list as default layout"
+msgstr ""
+
 #: src/module/remote/fcitx-remote-module.conf.in:4
 msgid "Used by fcitx-remote to change Fcitx state from console"
 msgstr ""
@@ -3058,7 +3065,7 @@ msgid "WubiPinyin"
 msgstr ""
 
 #: src/module/xkb/fcitx-xkb.desc:1 src/module/xkb/fcitx-xkb.desc:6
-#: src/module/xkb/fcitx-xkb.desc:11 src/module/xkb/fcitx-xkb.desc:16
+#: src/module/xkb/fcitx-xkb.desc:12 src/module/xkb/fcitx-xkb.desc:17
 msgid "X Keyboard"
 msgstr ""
 
@@ -3207,7 +3214,7 @@ msgstr ""
 msgid "min Num of Characters: "
 msgstr ""
 
-#: src/lib/fcitx-config/fcitx-config.c:1202
+#: src/lib/fcitx-config/fcitx-config.c:1200
 #, c-format
 msgid "no default option for %s/%s"
 msgstr ""
@@ -3228,7 +3235,7 @@ msgstr ""
 msgid "version:"
 msgstr ""
 
-#: src/module/xkb/fcitx-xkb.desc:14
+#: src/module/xkb/fcitx-xkb.desc:15
 msgid "xmodmap command"
 msgstr ""
 
