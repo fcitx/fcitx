@@ -258,16 +258,16 @@ void FcitxNotifyGetCapabilitiesCallback(DBusPendingCall *call, void *data)
     }
 
     dbus_message_iter_recurse(&args, &sub);
-    while (dbus_message_iter_get_arg_type(&sub) != DBUS_TYPE_STRING) {
-        const char* action = NULL;
-        dbus_message_iter_get_basic(&sub, &action);
-        if (strcmp(action, "actions") == 0) {
+    while (dbus_message_iter_get_arg_type(&sub) == DBUS_TYPE_STRING) {
+        const char* capability = NULL;
+        dbus_message_iter_get_basic(&sub, &capability);
+        if (strcmp(capability, "actions") == 0) {
             notify->capabilities |= NC_ACTIONS;
-        } else if (strcmp(action, "body") == 0) {
+        } else if (strcmp(capability, "body") == 0) {
             notify->capabilities |= NC_BODY;
-        } else if (strcmp(action, "body-hyperlinks") == 0) {
+        } else if (strcmp(capability, "body-hyperlinks") == 0) {
             notify->capabilities |= NC_LINK;
-        } else if (strcmp(action, "body-markup") == 0) {
+        } else if (strcmp(capability, "body-markup") == 0) {
             notify->capabilities |= NC_MARKUP;
         }
         dbus_message_iter_next(&sub);
@@ -376,7 +376,7 @@ FcitxNotifyCreate(FcitxInstance *instance)
     FcitxNotifyLoadDConfig(notify);
 
     FcitxDBusWatchName(instance, NOTIFICATIONS_SERVICE_NAME, notify, FcitxNotifyOwnerChanged, NULL, NULL);
-
+    FcitxNotifyGetCapabilities(notify);
     FcitxFreeDesktopNotifyAddFunctions(instance);
 
     return notify;
@@ -613,7 +613,7 @@ FcitxNotifyShowTip(FcitxNotify *notify, const char *appName,
     const FcitxFreedesktopNotifyAction actions[] = {
         {
             .id = "dont-show",
-            .name = _("Do not show again."),
+            .name = _("Do not show again"),
         }, {
             NULL, NULL
         }

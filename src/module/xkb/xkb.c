@@ -88,8 +88,6 @@ static void ExtractKeyboardIMLayout(const char* imname, char** layout, char** va
     } else {
         *layout = strdup(imname);
     }
-    FcitxLog(INFO, "%s", imname);
-    FcitxLog(INFO, "%s %s", *layout, *variant);
 }
 
 #if 0
