@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-20 00:02-0400\n"
-"PO-Revision-Date: 2013-06-16 08:07+0000\n"
+"POT-Creation-Date: 2013-06-20 02:02-0400\n"
+"PO-Revision-Date: 2013-06-20 04:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -902,9 +902,8 @@ msgid "Do not commit preedit text when unfocus a window"
 msgstr "フォーカスを外しても未確定文字をコミットしない"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:616
-#, fuzzy
 msgid "Do not show again"
-msgstr "GUI で表示しない"
+msgstr ""
 
 #: data/addon.desc:82
 msgid "Do not show in GUI"

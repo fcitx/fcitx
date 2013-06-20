@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-20 00:02-0400\n"
-"PO-Revision-Date: 2013-06-20 02:45+0000\n"
+"POT-Creation-Date: 2013-06-20 02:02-0400\n"
+"PO-Revision-Date: 2013-06-20 04:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -898,9 +898,8 @@ msgid "Do not commit preedit text when unfocus a window"
 msgstr "窗口失去焦点时不提交预编辑文本"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:616
-#, fuzzy
 msgid "Do not show again"
-msgstr "不再显示。"
+msgstr ""
 
 #: data/addon.desc:82
 msgid "Do not show in GUI"
