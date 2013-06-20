@@ -661,7 +661,7 @@ FcitxNotifyShowAddonTip(FcitxNotify *notify, const char *addon_id,
         return;
     }
 
-    FcitxNotifyShowTipFmt(notify, "fcitx", addon_icon, 0,
+    FcitxNotifyShowTipFmt(notify, "fcitx", addon_icon, -1,
                           addon_id, summary ? summary : "",
                           "%s", body ? body : "");
 }
