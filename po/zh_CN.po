@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-16 04:02-0400\n"
-"PO-Revision-Date: 2013-06-15 00:22+0000\n"
+"POT-Creation-Date: 2013-06-20 00:02-0400\n"
+"PO-Revision-Date: 2013-06-20 02:45+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -898,8 +898,9 @@ msgid "Do not commit preedit text when unfocus a window"
 msgstr "窗口失去焦点时不提交预编辑文本"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:616
-msgid "Do not show again."
-msgstr "不要再显示."
+#, fuzzy
+msgid "Do not show again"
+msgstr "不再显示。"
 
 #: data/addon.desc:82
 msgid "Do not show in GUI"
@@ -932,7 +933,7 @@ msgstr "重复的键 %s 出现在组 %s 中, @第 %d 行, 覆盖之前的值."
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
-msgstr "重复的组名 %s, @第 %d 行, 与之前的组合并."
+msgstr "重复的组名 %s，@第 %d 行，与之前的组合并。"
 
 #: src/lib/fcitx-config/fcitx-config.c:901
 #, c-format
@@ -1307,7 +1308,7 @@ msgstr "全角标点"
 
 #: src/module/punc/punc.c:574
 msgid "Full width punctuations are used."
-msgstr "已启用全角标点."
+msgstr "已启用全角标点。"
 
 #: src/module/vk/vk.c:52
 msgid "Fullwidth"
@@ -1717,7 +1718,7 @@ msgstr "英文标点"
 
 #: src/module/punc/punc.c:575
 msgid "Latin punctuations are used."
-msgstr "已启用半角标点."
+msgstr "已启用半角标点。"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:308
 msgid "Left"
@@ -2520,7 +2521,7 @@ msgstr "简繁转换"
 
 #: src/module/chttrans/chttrans.c:178
 msgid "Simplified Chinese is enabled."
-msgstr "已启用简体中文."
+msgstr "已启用简体中文。"
 
 #: src/ui/classic/skin.c:680 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
@@ -2632,11 +2633,11 @@ msgstr "拼写提示"
 
 #: src/im/keyboard/keyboard.c:915
 msgid "Spell hint is disabled."
-msgstr "已禁用拼写提示."
+msgstr "已禁用拼写提示。"
 
 #: src/im/keyboard/keyboard.c:914
 msgid "Spell hint is enabled."
-msgstr "已启用拼写提示."
+msgstr "已启用拼写提示。"
 
 #: data/fcitx-autostart.desktop.in:4 data/fcitx.desktop.in:4
 msgid "Start Input Method"
@@ -2885,7 +2886,7 @@ msgstr "简繁转换引擎"
 
 #: src/module/chttrans/chttrans.c:177
 msgid "Traditional Chinese is enabled."
-msgstr "已启用繁体中文."
+msgstr "已启用繁体中文。"
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
@@ -3128,7 +3129,7 @@ msgstr "根窗口上的 XIM_SERVERS:"
 
 #: src/frontend/xim/xim.c:157
 msgid "XMODIFIERS Error."
-msgstr "XMODIFIERS 错误."
+msgstr "XMODIFIERS 错误。"
 
 #: src/im/pinyin/fcitx-pinyin.desc:10
 msgid "XiaoHe"
@@ -3275,6 +3276,3 @@ msgstr "xmodmap 命令"
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
-
-#~ msgid "Ignore Input Method Layout Request"
-#~ msgstr "忽略输入法的键盘布局请求"

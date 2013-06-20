@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-16 04:02-0400\n"
-"PO-Revision-Date: 2013-06-15 00:27+0000\n"
+"POT-Creation-Date: 2013-06-20 00:02-0400\n"
+"PO-Revision-Date: 2013-06-16 08:07+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
@@ -900,8 +900,9 @@ msgid "Do not commit preedit text when unfocus a window"
 msgstr "Preedittext nicht eingeben, wenn das Fenster den Fokus verliert"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:616
-msgid "Do not show again."
-msgstr ""
+#, fuzzy
+msgid "Do not show again"
+msgstr "Nichts in Gnome-Anwendungen zeigen"
 
 #: data/addon.desc:82
 msgid "Do not show in GUI"
@@ -3315,6 +3316,3 @@ msgstr "xmodmap Befehl"
 #, c-format
 msgid "your current font is: %s"
 msgstr "der aktuelle Font ist: %s"
-
-#~ msgid "Ignore Input Method Layout Request"
-#~ msgstr "Ignoriere, wenn die Eingabemethode ein Tastaturlayout verlangt"

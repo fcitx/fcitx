@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-16 04:02-0400\n"
-"PO-Revision-Date: 2013-06-15 00:25+0000\n"
+"POT-Creation-Date: 2013-06-20 00:02-0400\n"
+"PO-Revision-Date: 2013-06-16 08:07+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
@@ -898,7 +898,8 @@ msgid "Do not commit preedit text when unfocus a window"
 msgstr "未聚焦視窗時，不要提交預編輯文字"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:616
-msgid "Do not show again."
+#, fuzzy
+msgid "Do not show again"
 msgstr "不要再顯示。"
 
 #: data/addon.desc:82
@@ -3267,6 +3268,3 @@ msgstr "xmodmap 指令"
 #, c-format
 msgid "your current font is: %s"
 msgstr ""
-
-#~ msgid "Ignore Input Method Layout Request"
-#~ msgstr "忽略輸入法的鍵盤配置請求"
