@@ -349,7 +349,7 @@ table_load_error:
 void SaveTableDict(TableMetaData *tableMetaData)
 {
     RECORD         *recTemp;
-    char           *pstr, *tempfile;
+    char           *tempfile;
     FILE           *fpDict;
     uint32_t    iTemp;
     unsigned int    i;
@@ -375,54 +375,90 @@ void SaveTableDict(TableMetaData *tableMetaData)
         return;
     }
 
+    boolean error = false;
+    size_t size;
+#define CHECK_WRITE_TABLE_ERROR(SIZE) if (size < (SIZE)) { error = true; goto table_write_error; }
+
     // write version number
-    fcitx_utils_write_uint32(fpDict, 0);
-    fwrite(&iInternalVersion, sizeof(char), 1, fpDict);
+    size = fcitx_utils_write_uint32(fpDict, 0);
+    CHECK_WRITE_TABLE_ERROR(1);
+    size = fwrite(&iInternalVersion, sizeof(char), 1, fpDict);
+    CHECK_WRITE_TABLE_ERROR(1);
 
     iTemp = strlen(tableDict->strInputCode);
-    fcitx_utils_write_uint32(fpDict, iTemp);
-    fwrite(tableDict->strInputCode, sizeof(char), iTemp + 1, fpDict);
-    fwrite(&(tableDict->iCodeLength), sizeof(char), 1, fpDict);
-    fwrite(&(tableDict->iPYCodeLength), sizeof(char), 1, fpDict);
-    iTemp = strlen(tableDict->strIgnoreChars);
-    fcitx_utils_write_uint32(fpDict, iTemp);
-    fwrite(tableDict->strIgnoreChars, sizeof(char), iTemp + 1, fpDict);
+    size = fcitx_utils_write_uint32(fpDict, iTemp);
+    CHECK_WRITE_TABLE_ERROR(1);
 
-    fwrite(&(tableDict->bRule), sizeof(unsigned char), 1, fpDict);
+    size = fwrite(tableDict->strInputCode, sizeof(char), iTemp + 1, fpDict);
+    CHECK_WRITE_TABLE_ERROR(iTemp + 1);
+
+    size = fwrite(&(tableDict->iCodeLength), sizeof(char), 1, fpDict);
+    CHECK_WRITE_TABLE_ERROR(1);
+    size = fwrite(&(tableDict->iPYCodeLength), sizeof(char), 1, fpDict);
+    CHECK_WRITE_TABLE_ERROR(1);
+    iTemp = strlen(tableDict->strIgnoreChars);
+    size = fcitx_utils_write_uint32(fpDict, iTemp);
+    CHECK_WRITE_TABLE_ERROR(1);
+    size = fwrite(tableDict->strIgnoreChars, sizeof(char), iTemp + 1, fpDict);
+    CHECK_WRITE_TABLE_ERROR(iTemp + 1);
+
+    size = fwrite(&(tableDict->bRule), sizeof(unsigned char), 1, fpDict);
+    CHECK_WRITE_TABLE_ERROR(1);
     if (tableDict->bRule) { // table contains rule
         for (i = 0; i < tableDict->iCodeLength - 1; i++) {
-            fwrite(&(tableDict->rule[i].iFlag), sizeof(unsigned char), 1, fpDict);
-            fwrite(&(tableDict->rule[i].iWords), sizeof(unsigned char), 1, fpDict);
+            size = fwrite(&(tableDict->rule[i].iFlag), sizeof(unsigned char), 1, fpDict);
+            CHECK_WRITE_TABLE_ERROR(1);
+            size = fwrite(&(tableDict->rule[i].iWords), sizeof(unsigned char), 1, fpDict);
+            CHECK_WRITE_TABLE_ERROR(1);
             for (iTemp = 0; iTemp < tableDict->iCodeLength; iTemp++) {
-                fwrite(&(tableDict->rule[i].rule[iTemp].iFlag), sizeof(unsigned char), 1, fpDict);
-                fwrite(&(tableDict->rule[i].rule[iTemp].iWhich), sizeof(unsigned char), 1, fpDict);
-                fwrite(&(tableDict->rule[i].rule[iTemp].iIndex), sizeof(unsigned char), 1, fpDict);
+                size = fwrite(&(tableDict->rule[i].rule[iTemp].iFlag), sizeof(unsigned char), 1, fpDict);
+                CHECK_WRITE_TABLE_ERROR(1);
+                size = fwrite(&(tableDict->rule[i].rule[iTemp].iWhich), sizeof(unsigned char), 1, fpDict);
+                CHECK_WRITE_TABLE_ERROR(1);
+                size = fwrite(&(tableDict->rule[i].rule[iTemp].iIndex), sizeof(unsigned char), 1, fpDict);
+                CHECK_WRITE_TABLE_ERROR(1);
             }
         }
     }
 
-    fcitx_utils_write_uint32(fpDict, tableDict->iRecordCount);
+    size = fcitx_utils_write_uint32(fpDict, tableDict->iRecordCount);
+    CHECK_WRITE_TABLE_ERROR(1);
     recTemp = tableDict->recordHead->next;
     while (recTemp != tableDict->recordHead) {
-        fwrite(recTemp->strCode, sizeof(char), tableDict->iPYCodeLength + 1, fpDict);
+        size = fwrite(recTemp->strCode, sizeof(char), tableDict->iPYCodeLength + 1, fpDict);
+        CHECK_WRITE_TABLE_ERROR(tableDict->iPYCodeLength + 1);
 
         iTemp = strlen(recTemp->strHZ) + 1;
-        fcitx_utils_write_uint32(fpDict, iTemp);
-        fwrite(recTemp->strHZ, sizeof(char), iTemp, fpDict);
+        size = fcitx_utils_write_uint32(fpDict, iTemp);
+        CHECK_WRITE_TABLE_ERROR(1);
+        size = fwrite(recTemp->strHZ, sizeof(char), iTemp, fpDict);
+        CHECK_WRITE_TABLE_ERROR(iTemp);
 
         cTemp = recTemp->type;
-        fwrite(&cTemp, sizeof(int8_t), 1, fpDict);
-        fcitx_utils_write_uint32(fpDict, recTemp->iHit);
-        fcitx_utils_write_uint32(fpDict, recTemp->iIndex);
+        size = fwrite(&cTemp, sizeof(int8_t), 1, fpDict);
+        CHECK_WRITE_TABLE_ERROR(1);
+        size = fcitx_utils_write_uint32(fpDict, recTemp->iHit);
+        CHECK_WRITE_TABLE_ERROR(1);
+        size = fcitx_utils_write_uint32(fpDict, recTemp->iIndex);
+        CHECK_WRITE_TABLE_ERROR(1);
         recTemp = recTemp->next;
     }
 
+table_write_error:
+
     fclose(fpDict);
-    fpDict = FcitxXDGGetFileUserWithPrefix("table", tableMetaData->strPath, NULL, &pstr);
-    if (access(pstr, 0))
-        unlink(pstr);
-    rename(tempfile, pstr);
-    free(pstr);
+
+    if (!error) {
+        char* pstr;
+        FcitxXDGGetFileUserWithPrefix("table", tableMetaData->strPath, NULL, &pstr);
+        if (access(pstr, 0))
+            unlink(pstr);
+        rename(tempfile, pstr);
+        free(pstr);
+    } else {
+        unlink(tempfile);
+        FcitxLog(ERROR, "Write Table dict failed");
+    }
     free(tempfile);
 
     FcitxLog(DEBUG, _("Rename OK"));
@@ -437,29 +473,43 @@ void SaveTableDict(TableMetaData *tableMetaData)
         fd = mkstemp(tempfile);
         fpDict = NULL;
 
-        if (fd > 0)
+        if (fd > 0) {
             fpDict = fdopen(fd, "w");
+        }
 
+        boolean autophraseError = false;
         if (fpDict) {
-            fcitx_utils_write_uint32(fpDict, tableDict->iAutoPhrase);
+#define CHECK_WRITE_AUTOPHRASE_ERROR(SIZE) if (size < (SIZE)) { autophraseError = true; goto autophrase_write_error; }
+            size = fcitx_utils_write_uint32(fpDict, tableDict->iAutoPhrase);
+            CHECK_WRITE_AUTOPHRASE_ERROR(1);
             for (i = 0; i < tableDict->iAutoPhrase; i++) {
-                fwrite(tableDict->autoPhrase[i].strCode, tableDict->iCodeLength + 1, 1, fpDict);
-                fwrite(tableDict->autoPhrase[i].strHZ, PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1, 1, fpDict);
-                fcitx_utils_write_int32(
-                    fpDict, tableDict->autoPhrase[i].iSelected);
+                size = fwrite(tableDict->autoPhrase[i].strCode, tableDict->iCodeLength + 1, 1, fpDict);
+                CHECK_WRITE_AUTOPHRASE_ERROR(1);
+                size = fwrite(tableDict->autoPhrase[i].strHZ, PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1, 1, fpDict);
+                CHECK_WRITE_AUTOPHRASE_ERROR(1);
+                size = fcitx_utils_write_int32(fpDict, tableDict->autoPhrase[i].iSelected);
+                CHECK_WRITE_AUTOPHRASE_ERROR(1);
             }
+autophrase_write_error:
             fclose(fpDict);
         }
 
-        char *strPath;
-        fcitx_utils_alloc_cat_str(strPath, tableMetaData->uniqueName,
-                                  "_LastAutoPhrase.tmp");
-        fpDict = FcitxXDGGetFileUserWithPrefix("table", strPath, NULL, &pstr);
-        free(strPath);
-        if (access(pstr, F_OK))
-            unlink(pstr);
-        rename(tempfile, pstr);
-        free(pstr);
+        if (!autophraseError) {
+            char *strPath;
+            fcitx_utils_alloc_cat_str(strPath, tableMetaData->uniqueName,
+                                      "_LastAutoPhrase.tmp");
+
+            char* pstr = NULL;
+            FcitxXDGGetFileUserWithPrefix("table", strPath, NULL, &pstr);
+            free(strPath);
+            if (access(pstr, F_OK))
+                unlink(pstr);
+            rename(tempfile, pstr);
+            free(pstr);
+        } else {
+            unlink(tempfile);
+            FcitxLog(ERROR, "Write Autophrase file failed");
+        }
         free(tempfile);
     }
 }
