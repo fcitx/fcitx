@@ -290,7 +290,8 @@ void* SimpleCopy(void* arg, void* dest, void* src)
     return src;
 }
 
-const char* FindBestLanguage(FcitxIsoCodes* isocodes, const char* hint, UT_array* languages)
+#if defined(ENABLE_LIBXML2)
+static const char* FindBestLanguage(FcitxIsoCodes* isocodes, const char* hint, UT_array* languages)
 {
     const char* bestLang = NULL;
 
@@ -351,6 +352,7 @@ const char* FindBestLanguage(FcitxIsoCodes* isocodes, const char* hint, UT_array
     }
     return bestLang;
 }
+#endif
 
 void* FcitxKeyboardCreate(FcitxInstance* instance)
 {
