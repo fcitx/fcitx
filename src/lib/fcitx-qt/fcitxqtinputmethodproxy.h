@@ -8,8 +8,8 @@
  * Do not edit! All changes made to it will be lost.
  */
 
-#ifndef FCITXQTINPUTMETHODPROXY_H_1354834547
-#define FCITXQTINPUTMETHODPROXY_H_1354834547
+#ifndef FCITXQTINPUTMETHODPROXY_H_1372279782
+#define FCITXQTINPUTMETHODPROXY_H_1372279782
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
@@ -178,6 +178,12 @@ public Q_SLOTS: // METHODS
     {
         QList<QVariant> argumentList;
         return asyncCallWithArgumentList(QLatin1String("ReloadConfig"), argumentList);
+    }
+
+    inline QDBusPendingReply<> ResetIMList()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QLatin1String("ResetIMList"), argumentList);
     }
 
     inline QDBusPendingReply<> Restart()

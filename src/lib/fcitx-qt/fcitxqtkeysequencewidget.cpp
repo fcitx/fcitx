@@ -88,6 +88,7 @@ public:
     void cancelRecording()
     {
         keySequence = oldKeySequence;
+        side = oldSide;
         doneRecording();
     }
 
@@ -110,6 +111,7 @@ public:
     bool multiKeyShortcutsAllowed;
     bool allowModifierOnly;
     FcitxQtModifierSide side;
+    FcitxQtModifierSide oldSide;
 };
 
 FcitxQtKeySequenceWidgetPrivate::FcitxQtKeySequenceWidgetPrivate(FcitxQtKeySequenceWidget *q)
@@ -233,8 +235,10 @@ void FcitxQtKeySequenceWidget::setKeySequence(const QKeySequence& seq, FcitxQtMo
     // is called while not recording then set oldKeySequence to the existing sequence so
     // that the keySequenceChanged() signal is emitted if the new and previous key
     // sequences are different
-    if (!d->isRecording)
+    if (!d->isRecording) {
         d->oldKeySequence = d->keySequence;
+        d->oldSide = d->side;
+    }
 
     d->side = side;
     d->keySequence = seq;
@@ -254,7 +258,9 @@ void FcitxQtKeySequenceWidgetPrivate::startRecording()
     nKey = 0;
     modifierKeys = 0;
     oldKeySequence = keySequence;
+    oldSide = side;
     keySequence = QKeySequence();
+    side = MS_Unknown;
     isRecording = true;
     keyButton->grabKeyboard();
 
@@ -274,7 +280,7 @@ void FcitxQtKeySequenceWidgetPrivate::doneRecording(bool validate)
     keyButton->releaseKeyboard();
     keyButton->setDown(false);
 
-    if (keySequence==oldKeySequence) {
+    if (keySequence==oldKeySequence && (oldSide == side || !allowModifierOnly)) {
         // The sequence hasn't changed
         updateShortcutDisplay();
         return;

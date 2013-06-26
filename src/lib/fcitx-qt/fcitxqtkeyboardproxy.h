@@ -8,8 +8,8 @@
  * Do not edit! All changes made to it will be lost.
  */
 
-#ifndef FCITXQTKEYBOARDPROXY_H_1354825180
-#define FCITXQTKEYBOARDPROXY_H_1354825180
+#ifndef FCITXQTKEYBOARDPROXY_H_1372279782
+#define FCITXQTKEYBOARDPROXY_H_1372279782
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>

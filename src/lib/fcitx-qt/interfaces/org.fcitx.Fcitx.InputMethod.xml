@@ -64,6 +64,8 @@
     </method>
     <method name="ToggleIM">
     </method>
+    <method name="ResetIMList">
+    </method>
     <method name="GetCurrentState">
       <arg name="state" direction="out" type="i"/>
     </method>
