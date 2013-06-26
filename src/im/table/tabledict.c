@@ -446,7 +446,10 @@ void SaveTableDict(TableMetaData *tableMetaData)
 
 table_write_error:
 
-    fclose(fpDict);
+    if (fclose(fpDict) == EOF) {
+        error = true;
+    }
+
 
     if (!error) {
         char* pstr;
@@ -491,7 +494,9 @@ table_write_error:
                 CHECK_WRITE_AUTOPHRASE_ERROR(1);
             }
 autophrase_write_error:
-            fclose(fpDict);
+            if (fclose(fpDict) == EOF) {
+                error = true;
+            }
         }
 
         if (!autophraseError) {
