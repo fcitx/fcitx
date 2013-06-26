@@ -290,6 +290,68 @@ void* SimpleCopy(void* arg, void* dest, void* src)
     return src;
 }
 
+const char* FindBestLanguage(FcitxIsoCodes* isocodes, const char* hint, UT_array* languages)
+{
+    const char* bestLang = NULL;
+
+    /* score:
+     * 1 -> first one
+     * 2 -> match 2
+     * 3 -> match three
+     */
+    FcitxIsoCodes639Entry* bestEntry = NULL;
+    int bestScore = 0;
+    utarray_foreach(plang, languages, char*) {
+        FcitxIsoCodes639Entry* entry = FcitxIsoCodesGetEntry(isocodes, *plang);
+        if (!entry) {
+            continue;
+        }
+
+        const char* lang = entry->iso_639_1_code;
+        if (!lang) {
+            lang = entry->iso_639_2T_code;
+        }
+
+        if (!lang) {
+            lang = entry->iso_639_2B_code;
+        }
+
+        if (!lang) {
+            continue;
+        }
+
+        size_t len = strlen(lang);
+        if (len != 2 && len != 3) {
+            continue;
+        }
+
+        int score = 1;
+        while (len >= 2) {
+            if (strncasecmp(hint, lang, len) == 0) {
+                score = len;
+                break;
+            }
+
+            len --;
+        }
+
+        if (bestScore < score) {
+            bestEntry = entry;
+            bestScore = score;
+        }
+    }
+    if (bestEntry) {
+        bestLang = bestEntry->iso_639_1_code;
+        if (!bestLang) {
+            bestLang = bestEntry->iso_639_2T_code;
+        }
+        if (!bestLang) {
+            bestLang = bestEntry->iso_639_2B_code;
+        }
+    }
+    return bestLang;
+}
+
 void* FcitxKeyboardCreate(FcitxInstance* instance)
 {
     FcitxKeyboard* keyboard = fcitx_utils_malloc0(sizeof(FcitxKeyboard));
@@ -346,21 +408,9 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
         }
 
         FcitxIsoCodes* isocodes = FcitxXkbReadIsoCodes(ISOCODES_ISO639_XML, ISOCODES_ISO3166_XML);
-        FcitxXkbLayoutInfo* layoutInfo;
-        for (layoutInfo = (FcitxXkbLayoutInfo*) utarray_front(rules->layoutInfos);
-            layoutInfo != NULL;
-            layoutInfo = (FcitxXkbLayoutInfo*) utarray_next(rules->layoutInfos, layoutInfo))
-        {
+        utarray_foreach(layoutInfo, rules->layoutInfos, FcitxXkbLayoutInfo) {
             {
-                char** plang = NULL;
-                plang = (char**) utarray_front(layoutInfo->languages);
-                char* lang = NULL;
-                if (plang) {
-                    FcitxIsoCodes639Entry* entry = FcitxIsoCodesGetEntry(isocodes, *plang);
-                    if (entry) {
-                        lang = entry->iso_639_1_code;
-                    }
-                }
+                const char* lang = FindBestLanguage(isocodes, layoutInfo->description, layoutInfo->languages);
                 char *description;
                 fcitx_utils_alloc_cat_str(description, _("Keyboard"), " - ",
                                           dgettext("xkeyboard-config",
@@ -376,17 +426,8 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
                 variantInfo != NULL;
                 variantInfo = (FcitxXkbVariantInfo*) utarray_next(layoutInfo->variantInfos, variantInfo))
             {
-                char** plang = NULL;
-                plang = (char**) utarray_front(variantInfo->languages);
-                if (!plang)
-                    plang = (char**) utarray_front(layoutInfo->languages);
-                char* lang = NULL;
-                if (plang) {
-                    FcitxIsoCodes639Entry* entry = FcitxIsoCodesGetEntry(isocodes, *plang);
-                    if (entry) {
-                        lang = entry->iso_639_1_code;
-                    }
-                }
+                const char* lang = FindBestLanguage(isocodes, layoutInfo->description,
+                                                    utarray_len(variantInfo->languages) > 0 ? variantInfo->languages : layoutInfo->languages);
                 char *description;
                 fcitx_utils_alloc_cat_str(description, _("Keyboard"), " - ",
                                           dgettext("xkeyboard-config",
