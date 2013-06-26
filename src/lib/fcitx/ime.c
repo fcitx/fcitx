@@ -1824,6 +1824,25 @@ void UnusedIMItemFreeAll(UnusedIMItem* item)
     }
 }
 
+static inline boolean MatchLanguage(const char* lang, const char* cur) {
+    /* here we hard code some for chinese */
+    if (strcmp(cur, "zh_HK") == 0) {
+        cur = "zh_TW";
+    }
+    if (strcmp(cur, "en_HK") == 0) {
+        cur = "zh_TW";
+    }
+    if (strcmp(lang, "zh_HK") == 0) {
+        lang = "zh_TW";
+    }
+
+    if (strncmp(cur, "zh", 2) == 0 && strlen(cur) == 5) {
+        return strcmp(lang, cur) == 0;
+    }
+
+    return strncmp(lang, cur, 2) == 0;
+}
+
 FCITX_EXPORT_API
 void FcitxInstanceUpdateIMList(FcitxInstance* instance)
 {
@@ -1835,6 +1854,9 @@ void FcitxInstanceUpdateIMList(FcitxInstance* instance)
     utarray_clear(&instance->imes);
     UnusedIMItemFreeAll(instance->unusedItem);
     instance->unusedItem = NULL;
+
+    boolean imListIsEmpty = utarray_len(imList) == 0;
+
 
     char** pstr;
     FcitxIM* ime;
@@ -1865,6 +1887,7 @@ void FcitxInstanceUpdateIMList(FcitxInstance* instance)
         }
     }
 
+    char* lang = fcitx_utils_get_current_langcode();
     for (ime = (FcitxIM*) utarray_front(&instance->availimes);
             ime != NULL;
             ime = (FcitxIM*) utarray_next(&instance->availimes, ime)) {
@@ -1872,10 +1895,19 @@ void FcitxInstanceUpdateIMList(FcitxInstance* instance)
             /* ok, make all im priority larger than 100 disable by default */
             if (ime->iPriority == 0)
                 utarray_push_front(&instance->imes, ime);
-            else if (ime->iPriority < PRIORITY_DISABLE)
-                utarray_push_back(&instance->imes, ime);
+            else if (ime->iPriority < PRIORITY_DISABLE) {
+                /*
+                 * here, we use such logic, if user start fcitx for first time (or doing reset)
+                 * then match everything by language, otherwise user might just install something,
+                 * then add something else.
+                 */
+                if (!imListIsEmpty || MatchLanguage(ime->langCode, lang)) {
+                    utarray_push_back(&instance->imes, ime);
+                }
+            }
         }
     }
+    free(lang);
 
     utarray_free(imList);
 

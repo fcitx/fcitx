@@ -192,6 +192,8 @@ const char * im_introspection_xml =
     "</method>"
     "<method name=\"ToggleIM\">"
     "</method>"
+    "<method name=\"ResetIMList\">"
+    "</method>"
     "<method name=\"GetCurrentState\">"
     "<arg name=\"state\" direction=\"out\" type=\"i\"/>"
     "</method>"
@@ -664,6 +666,13 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         reply = dbus_message_new_method_return(msg);
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ToggleIM")) {
         FcitxInstanceChangeIMState(ipc->owner, FcitxInstanceGetCurrentIC(ipc->owner));
+        reply = dbus_message_new_method_return(msg);
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ResetIMList")) {
+        FcitxProfile* profile = FcitxInstanceGetProfile(instance);
+        if (profile->imList)
+            free(profile->imList);
+        profile->imList = strdup("");;
+        FcitxInstanceUpdateIMList(instance);
         reply = dbus_message_new_method_return(msg);
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetCurrentState")) {
         int r = FcitxInstanceGetCurrentState(ipc->owner);

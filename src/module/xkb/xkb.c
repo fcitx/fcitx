@@ -665,7 +665,7 @@ static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
                 if (!xkb->config.useFirstKeyboardIMAsDefaultLayout) {
                     break;
                 }
-                if (IMIsKeyboardIM(currentIM->uniqueName)) {
+                if (currentIM && IMIsKeyboardIM(currentIM->uniqueName)) {
                     break;
                 }
 
