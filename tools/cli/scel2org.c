@@ -153,10 +153,10 @@ int main(int argc, char **argv)
     utarray_init(&pys, &py_icd);
 
     for (; ;) {
-        short index;
-        short count;
-        fread(&index, 1, sizeof(short), fp);
-        fread(&count, 1, sizeof(short), fp);
+        int16_t index;
+        int16_t count;
+        fread(&index, 1, sizeof(int16_t), fp);
+        fread(&count, 1, sizeof(int16_t), fp);
         ScelPinyin py;
         memset(buf, 0, sizeof(buf));
         memset(&py, 0, sizeof(ScelPinyin));
@@ -175,21 +175,20 @@ int main(int argc, char **argv)
     }
 
     while (!feof(fp)) {
-        short symcount;
-        short count;
-        short wordcount;
-        fread(&symcount, 1, sizeof(short), fp);
+        int16_t symcount;
+        int16_t count;
+        int16_t wordcount;
+        fread(&symcount, 1, sizeof(int16_t), fp);
 
         if (feof(fp))
             break;
 
-        fread(&count, 1, sizeof(short), fp);
-
-        short pyindex[10];
+        fread(&count, 1, sizeof(int16_t), fp);
 
         wordcount = count / 2;
+        int16_t* pyindex = malloc(sizeof(int16_t) * wordcount);
 
-        fread(pyindex, wordcount, sizeof(short), fp);
+        fread(pyindex, wordcount, sizeof(int16_t), fp);
 
         int s;
 
@@ -198,7 +197,7 @@ int main(int argc, char **argv)
             memset(buf, 0, sizeof(buf));
 
             memset(bufout, 0, sizeof(bufout));
-            fread(&count, 1, sizeof(short), fp);
+            fread(&count, 1, sizeof(int16_t), fp);
             fread(buf, count, sizeof(char), fp);
             in = buf;
             out = bufout;
@@ -226,10 +225,14 @@ int main(int argc, char **argv)
             }
             fprintf(fout, "\n");
 
-            fread(&count, 1, sizeof(short), fp);
+            fread(&count, 1, sizeof(int16_t), fp);
             fread(buf, count, sizeof(char), fp);
         }
+
+        free(pyindex);
     }
+
+    iconv_close(conv);
 
     utarray_done(&pys);
     fclose(fout);
