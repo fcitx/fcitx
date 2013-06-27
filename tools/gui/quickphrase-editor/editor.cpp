@@ -331,7 +331,7 @@ void ListEditor::removeFileTriggered()
     }
 
     int ret = QMessageBox::question(this,
-                                    _("Confirm deleting"),
+                                    _("Confirm deletion"),
                                     _("Are you sure to delete %1?").arg(curName),
                                     QMessageBox::Ok | QMessageBox::Cancel);
 
