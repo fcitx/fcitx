@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-20 00:02-0400\n"
+"POT-Creation-Date: 2013-06-27 18:02-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -519,9 +519,9 @@ msgstr ""
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr ""
 
-#: src/im/keyboard/keyboard.c:365 src/im/keyboard/keyboard.c:391
-#: src/im/keyboard/keyboard.c:439 src/im/keyboard/keyboard.c:452
-#: src/im/keyboard/keyboard.c:477 src/im/keyboard/keyboard.c:483
+#: src/im/keyboard/keyboard.c:417 src/im/keyboard/keyboard.c:434
+#: src/im/keyboard/keyboard.c:482 src/im/keyboard/keyboard.c:495
+#: src/im/keyboard/keyboard.c:520 src/im/keyboard/keyboard.c:526
 #: src/im/keyboard/fcitx-keyboard.desc:1 src/im/keyboard/fcitx-keyboard.desc:6
 #: src/im/keyboard/fcitx-keyboard.desc:16
 #: src/im/keyboard/fcitx-keyboard.desc:21
@@ -531,19 +531,19 @@ msgstr ""
 msgid "Keyboard"
 msgstr ""
 
-#: src/im/keyboard/keyboard.c:441 src/im/keyboard/keyboard.c:458
+#: src/im/keyboard/keyboard.c:484 src/im/keyboard/keyboard.c:501
 msgid "(Unavailable)"
 msgstr ""
 
-#: src/im/keyboard/keyboard.c:913
+#: src/im/keyboard/keyboard.c:956
 msgid "Spell hint"
 msgstr ""
 
-#: src/im/keyboard/keyboard.c:914
+#: src/im/keyboard/keyboard.c:957
 msgid "Spell hint is enabled."
 msgstr ""
 
-#: src/im/keyboard/keyboard.c:915
+#: src/im/keyboard/keyboard.c:958
 msgid "Spell hint is disabled."
 msgstr ""
 
@@ -688,7 +688,7 @@ msgstr ""
 msgid "Save dict error"
 msgstr ""
 
-#: src/im/table/tabledict.c:428
+#: src/im/table/tabledict.c:467
 msgid "Rename OK"
 msgstr ""
 
@@ -837,27 +837,27 @@ msgstr ""
 msgid "Module: bad module"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:159
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:308
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:310
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:352
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:395
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:396
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
 msgstr ""
 
@@ -1297,7 +1297,7 @@ msgid "%1 is a system file, do you want to delete all phrases instead?"
 msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
-msgid "Confirm deleting"
+msgid "Confirm deletion"
 msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:335

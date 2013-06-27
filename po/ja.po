@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-20 02:02-0400\n"
+"POT-Creation-Date: 2013-06-27 18:02-0400\n"
 "PO-Revision-Date: 2013-06-20 04:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
@@ -72,7 +72,7 @@ msgstr "リセット (&R)"
 msgid "&Save"
 msgstr "保存 (&S)"
 
-#: src/im/keyboard/keyboard.c:441 src/im/keyboard/keyboard.c:458
+#: src/im/keyboard/keyboard.c:484 src/im/keyboard/keyboard.c:501
 msgid "(Unavailable)"
 msgstr "(使えません)"
 
@@ -619,7 +619,7 @@ msgstr "クラシックUI"
 msgid "Clean"
 msgstr "削除"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:159
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
 msgstr ""
 
@@ -756,7 +756,7 @@ msgid "Configure group name error: line %d"
 msgstr "グループ名設定エラー: %d 行目"
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
-msgid "Confirm deleting"
+msgid "Confirm deletion"
 msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
@@ -956,7 +956,7 @@ msgstr "設定が重複しており、上書きします: %d 行目"
 msgid "E&xport"
 msgstr "エクスポート (&x)"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:352
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
 msgstr ""
 
@@ -1648,9 +1648,9 @@ msgstr "キー"
 msgid "Key Color On Virutal Keyboard"
 msgstr "仮想キーボードのキーの色"
 
-#: src/im/keyboard/keyboard.c:365 src/im/keyboard/keyboard.c:391
-#: src/im/keyboard/keyboard.c:439 src/im/keyboard/keyboard.c:452
-#: src/im/keyboard/keyboard.c:477 src/im/keyboard/keyboard.c:483
+#: src/im/keyboard/keyboard.c:417 src/im/keyboard/keyboard.c:434
+#: src/im/keyboard/keyboard.c:482 src/im/keyboard/keyboard.c:495
+#: src/im/keyboard/keyboard.c:520 src/im/keyboard/keyboard.c:526
 #: src/im/keyboard/fcitx-keyboard.desc:1 src/im/keyboard/fcitx-keyboard.desc:6
 #: src/im/keyboard/fcitx-keyboard.desc:16
 #: src/im/keyboard/fcitx-keyboard.desc:21
@@ -1724,7 +1724,7 @@ msgstr "英数句読点"
 msgid "Latin punctuations are used."
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:308
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
 msgstr ""
 
@@ -2329,7 +2329,7 @@ msgstr "リモート"
 msgid "Remove File"
 msgstr ""
 
-#: src/im/table/tabledict.c:428
+#: src/im/table/tabledict.c:467
 msgid "Rename OK"
 msgstr "名前変更を完了"
 
@@ -2364,7 +2364,7 @@ msgstr "上マージンを調整"
 msgid "Restart"
 msgstr "再起動"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:310
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
 msgstr ""
 
@@ -2634,15 +2634,15 @@ msgstr "スペル"
 msgid "Spell Hint"
 msgstr "スペルヒント"
 
-#: src/im/keyboard/keyboard.c:913
+#: src/im/keyboard/keyboard.c:956
 msgid "Spell hint"
 msgstr ""
 
-#: src/im/keyboard/keyboard.c:915
+#: src/im/keyboard/keyboard.c:958
 msgid "Spell hint is disabled."
 msgstr ""
 
-#: src/im/keyboard/keyboard.c:914
+#: src/im/keyboard/keyboard.c:957
 msgid "Spell hint is enabled."
 msgstr ""
 
@@ -2791,7 +2791,7 @@ msgid ""
 "Do you want to save the changes or discard them?"
 msgstr ""
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:395
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
@@ -2952,7 +2952,7 @@ msgstr "一意な名称"
 msgid "Unknown type, take it as string: %s"
 msgstr "不明な型です。文字列として扱います: %s"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:396
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
 msgstr ""
 
