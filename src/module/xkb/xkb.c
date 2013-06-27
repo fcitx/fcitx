@@ -334,6 +334,9 @@ FcitxXkbSetRules(FcitxXkb* xkb, const char *rules_file, const char *model,
                                    XkbGBN_AllComponentsMask &
                                    (~XkbGBN_GeometryMask), True);
 
+    XkbRF_Free(rules, True);
+
+
     Bool result = True;
     if (!xkbDesc) {
         FcitxLog (WARNING, "Cannot load new keyboard description.");
@@ -343,6 +346,7 @@ FcitxXkbSetRules(FcitxXkb* xkb, const char *rules_file, const char *model,
         char* tempstr = strdup(rules_file);
         XkbRF_SetNamesProp(dpy, tempstr, &rdefs);
         free (tempstr);
+        XkbFreeKeyboard(xkbDesc, XkbGBN_AllComponentsMask, True);
     }
     free(rdefs.model);
     free(rdefs.layout);
