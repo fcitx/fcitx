@@ -236,7 +236,7 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
     if (strlen(name) > 0 && strcmp(name , "NONE") != 0) {
         int i = 0;
         for (i = 0; i < fallbackSize; i ++) {
-            char* filename;
+            char* filename = NULL;
             const char* skintype = fallbackChain[i];
 
             FILE* fp = FcitxXDGGetFileWithPrefix(skintype, name, "r", &filename);

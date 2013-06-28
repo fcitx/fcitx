@@ -57,14 +57,15 @@ int main(int argc, char **argv)
         }
     }
 
-    if (pyusrphrase_mb)
+    if (pyusrphrase_mb) {
         fi = fopen(pyusrphrase_mb, "r");
-    else
-        fi = FcitxXDGGetFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "r" , &pyusrphrase_mb);
+    } else {
+        fi = FcitxXDGGetFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "r" , NULL);
+    }
 
     if (!fi) {
         perror("fopen");
-        fprintf(stderr, "Can't open file `%s' for reading\n", pyusrphrase_mb);
+        fprintf(stderr, "Can't open phrase file.\n");
         exit(1);
     }
 

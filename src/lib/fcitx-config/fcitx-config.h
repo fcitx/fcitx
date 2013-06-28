@@ -430,11 +430,8 @@ CONFIG_DESC_DEFINE(Get##name##Desc, config_name ".desc") \
 void name##SaveConfig(type* _cfg) \
 { \
     FcitxConfigFileDesc* configDesc = Get##name##Desc(); \
-    char *file; \
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", config_name ".config", "w", &file); \
-    FcitxLog(DEBUG, "Save Config to %s", file); \
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", config_name ".config", "w", NULL); \
     FcitxConfigSaveConfigFileFp(fp, &_cfg->gconfig, configDesc); \
-    free(file); \
     if (fp) \
         fclose(fp); \
 } \
@@ -444,10 +441,7 @@ boolean name##LoadConfig(type* _cfg) { \
         return false; \
     \
     FILE *fp; \
-    char *file; \
-    fp = FcitxXDGGetFileUserWithPrefix("conf", config_name ".config", "r", &file); \
-    FcitxLog(DEBUG, "Load Config File %s", file); \
-    free(file); \
+    fp = FcitxXDGGetFileUserWithPrefix("conf", config_name ".config", "r", NULL); \
     if (!fp) { \
         if (errno == ENOENT) \
             name##SaveConfig(_cfg); \

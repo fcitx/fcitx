@@ -361,10 +361,7 @@ boolean LoadIMSelectorConfig(IMSelector* imselector)
         return false;
 
     FILE *fp;
-    char *file;
-    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-imselector.config", "r", &file);
-    FcitxLog(DEBUG, "Load Config File %s", file);
-    free(file);
+    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-imselector.config", "r", NULL);
     if (!fp) {
         if (errno == ENOENT)
             SaveIMSelectorConfig(imselector);
@@ -384,11 +381,8 @@ boolean LoadIMSelectorConfig(IMSelector* imselector)
 void SaveIMSelectorConfig(IMSelector* imselector)
 {
     FcitxConfigFileDesc* configDesc = GetIMSelectorConfig();
-    char *file;
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-imselector.config", "w", &file);
-    FcitxLog(DEBUG, "Save Config to %s", file);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-imselector.config", "w", NULL);
     FcitxConfigSaveConfigFileFp(fp, &imselector->gconfig, configDesc);
-    free(file);
     if (fp)
         fclose(fp);
 }

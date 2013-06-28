@@ -91,10 +91,7 @@ boolean LoadTableConfig(TableConfig* config)
         return false;
 
     FILE *fp;
-    char *file;
-    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-table.config", "r", &file);
-    FcitxLog(DEBUG, "Load Config File %s", file);
-    free(file);
+    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-table.config", "r", NULL);
     if (!fp) {
         if (errno == ENOENT)
             SaveTableConfig(config);

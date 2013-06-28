@@ -397,19 +397,17 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
         FcitxStringHashSet *sset = FcitxXDGGetFiles("pinyin", NULL, ".mb");
         FcitxStringHashSet *curStr = sset;
         while (curStr) {
-            char *filename;
-
             if (strcmp(curStr->name, PY_PHRASE_FILE) != 0
                 && strcmp(curStr->name, PY_USERPHRASE_FILE) != 0
                 && strcmp(curStr->name, PY_SYMBOL_FILE) != 0
                 && strcmp(curStr->name, PY_BASE_FILE) != 0
                 && strcmp(curStr->name, PY_FREQ_FILE) != 0) {
 
-                fp = FcitxXDGGetFileWithPrefix("pinyin", curStr->name, "r", &filename);
-                FcitxLog(INFO, _("Load extra dict: %s"), filename);
-                free(filename);
-                LoadPYPhraseDict(pystate, fp, true, true);
-                fclose(fp);
+                fp = FcitxXDGGetFileWithPrefix("pinyin", curStr->name, "r", NULL);
+                if (fp) {
+                    LoadPYPhraseDict(pystate, fp, true, true);
+                    fclose(fp);
+                }
             }
             curStr = curStr->hh.next;
         }

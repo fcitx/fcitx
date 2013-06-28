@@ -79,9 +79,7 @@ boolean LoadPYConfig(FcitxPinyinConfig *pyconfig)
     if (configDesc == NULL)
         return false;
     FILE *fp;
-    char *file;
-    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-pinyin.config", "r", &file);
-    free(file);
+    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-pinyin.config", "r", NULL);
     if (!fp) {
         if (errno == ENOENT)
             SavePYConfig(pyconfig);
@@ -127,10 +125,8 @@ boolean LoadPYConfig(FcitxPinyinConfig *pyconfig)
 void SavePYConfig(FcitxPinyinConfig* pyconfig)
 {
     FcitxConfigFileDesc* configDesc = GetPYConfigDesc();
-    char *file;
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-pinyin.config", "w", &file);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-pinyin.config", "w", NULL);
     FcitxConfigSaveConfigFileFp(fp, &pyconfig->gconfig, configDesc);
-    free(file);
     if (fp)
         fclose(fp);
 }

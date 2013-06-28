@@ -129,6 +129,14 @@ extern "C"
 
     /**
      * get xdg file with prefix string, usually [install_prefix]/fcitx/prefix/filename and ~/.config/fcitx/prefix/filename
+     * for "mode", if mode contains "w", "a" (which means writing), all parent directory will be created automatically.
+     *
+     * if mode is null, retFile will always be allocated, but to make it more concrete, please use FcitxXDGGetFileUserWithPrefix
+     * if mode contains no "w" / "a", retFile will be NULL if fp is NULL.
+     * if mode contains "w"/"a", retFile will be the first file being tried.
+     *
+     * for former condition:
+     * if xdg path is empty, fileName will be returned if ret file
      *
      * @param prefix prefix
      * @param fileName filename
@@ -146,6 +154,8 @@ extern "C"
      * @param mode file open mode
      * @param retFile file name to return
      * @return FILE*
+     *
+     * @see FcitxXDGGetFileWithPrefix
      *
      **/
     FILE *FcitxXDGGetFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile);

@@ -455,11 +455,8 @@ boolean LoadChttransConfig(FcitxChttrans* transState)
         return false;
 
     FILE *fp;
-    char *file;
     fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config",
-                                       "r", &file);
-    FcitxLog(DEBUG, "Load Config File %s", file);
-    free(file);
+                                       "r", NULL);
     if (!fp) {
         if (errno == ENOENT)
             SaveChttransConfig(transState);
@@ -481,12 +478,9 @@ CONFIG_DESC_DEFINE(GetChttransConfigDesc, "fcitx-chttrans.desc")
 void SaveChttransConfig(FcitxChttrans* transState)
 {
     FcitxConfigFileDesc* configDesc = GetChttransConfigDesc();
-    char *file;
     FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config",
-                                             "w", &file);
-    FcitxLog(DEBUG, "Save Config to %s", file);
+                                             "w", NULL);
     FcitxConfigSaveConfigFileFp(fp, &transState->gconfig, configDesc);
-    free(file);
     if (fp) {
         fclose(fp);
     }

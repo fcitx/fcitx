@@ -141,31 +141,36 @@ FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode,
     size_t i;
     FILE *fp = NULL;
 
-    /* check absolute path */
-
-    if (fileName[0] == '/') {
-        if (mode)
-            fp = fopen(fileName, mode);
-
-        if (retFile)
+    if (len <= 0) {
+        if (retFile && (strchr(mode, 'w') || strchr(mode, 'a'))) {
             *retFile = strdup(fileName);
-
-        return fp;
+        }
+        return NULL;
     }
 
-    if (len <= 0) {
+    if (!mode) {
+        if (retFile) {
+            if (fileName[0] == '/') {
+                *retFile = strdup(fileName);
+            } else {
+                fcitx_utils_alloc_cat_str(*retFile, path[0], "/", fileName);
+            }
+        }
+        return NULL;
+    }
+
+    /* check absolute path */
+    if (fileName[0] == '/') {
+        fp = fopen(fileName, mode);
+
         if (retFile) {
             *retFile = strdup(fileName);
         }
 
-        return NULL;
+        return fp;
     }
 
-    if (!mode && retFile) {
-        fcitx_utils_alloc_cat_str(*retFile, path[0], "/", fileName);
-        return NULL;
-    }
-
+    /* check empty file name */
     if (!fileName[0]) {
         if (retFile) {
             *retFile = strdup(path[0]);
@@ -176,6 +181,7 @@ FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode,
         return NULL;
     }
 
+    // when we reach here, path is valid, fileName is valid, mode is valid.
     char *buf = NULL;
     for (i = 0; i < len; i++) {
         fcitx_utils_alloc_cat_str(buf, path[i], "/", fileName);

@@ -48,8 +48,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
              * kcm saves a absolute path here but it is then interpreted as
              * a relative path?
              **/
-            fpDict = FcitxXDGGetFileWithPrefix("table", tableMetaData->strPath,
-                                               "r", NULL);
+            fpDict = FcitxXDGGetFileWithPrefix("table", tableMetaData->strPath, "r", NULL);
         } else {
             char *tablepath;
             char *path = fcitx_utils_get_fcitx_path("pkgdatadir");

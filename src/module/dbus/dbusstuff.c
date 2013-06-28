@@ -273,14 +273,12 @@ void* DBusCreate(FcitxInstance* instance)
         if (noPrivateDBus)
             break;
 
-        char* file;
+        char* file = NULL;
         FILE* dbusfp = FcitxXDGGetFileWithPrefix("dbus", "daemon.conf", "r", &file);
+
+        // even we don't have daemon.conf here, we can still use the default one.
         if (dbusfp) {
             fclose(dbusfp);
-        }
-        else {
-            free(file);
-            file = NULL;
         }
 
         dbusmodule->daemon = DBusLaunch(file);

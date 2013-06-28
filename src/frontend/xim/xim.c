@@ -170,19 +170,13 @@ XimCreate(FcitxInstance* instance, int frontendid)
         FcitxConfigFileDesc* configDesc = GetXimConfigDesc();
 
         FILE *fp;
-        char *file;
-        fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-xim.config", "r", &file);
-        FcitxLog(DEBUG, "Load Config File %s", file);
-        free(file);
+        fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-xim.config", "r", NULL);
         if (!fp) {
             if (errno == ENOENT) {
-                char *file;
                 FILE *fp2 = FcitxXDGGetFileUserWithPrefix("conf",
                                                           "fcitx-xim.config",
-                                                          "w", &file);
-                FcitxLog(DEBUG, "Save Config to %s", file);
+                                                          "w", NULL);
                 FcitxConfigSaveConfigFileFp(fp2, &xim->gconfig, configDesc);
-                free(file);
                 if (fp2) {
                     fclose(fp2);
                 }

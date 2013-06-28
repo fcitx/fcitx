@@ -41,7 +41,7 @@ int main(int argc, char **argv)
         switch (c) {
 
         case 'b':
-            pybase_mb = strdup(optarg);
+            pybase_mb = optarg;
             break;
 
         case 'h':
@@ -51,18 +51,16 @@ int main(int argc, char **argv)
         }
     }
 
-    if (pybase_mb)
+    if (pybase_mb) {
         fi = fopen(pybase_mb , "r");
-    else
-        fi = FcitxXDGGetFileWithPrefix("pinyin", PY_BASE_FILE, "r", &pybase_mb);
-
-    if (!fi) {
-        perror("fopen");
-        fprintf(stderr, "Can't open file `%s' for reading\n", pybase_mb);
-        exit(1);
+    } else {
+        fi = FcitxXDGGetFileWithPrefix("pinyin", PY_BASE_FILE, "r", NULL);
     }
 
-    free(pybase_mb);
+    if (!fi) {
+        fprintf(stderr, "Can't open base file.");
+        exit(1);
+    }
 
     PYFACount = LoadPYBase(fi, &HZMap);
 

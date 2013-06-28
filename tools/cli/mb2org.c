@@ -56,11 +56,11 @@ int main(int argc, char **argv)
         switch (c) {
 
         case 'f':
-            pyusrphrase_mb = strdup(optarg);
+            pyusrphrase_mb = optarg;
             break;
 
         case 'b':
-            pybase_mb = strdup(optarg);
+            pybase_mb = optarg;
             break;
 
         case 's':
@@ -74,29 +74,27 @@ int main(int argc, char **argv)
         }
     }
 
-    if (pyusrphrase_mb)
+    if (pyusrphrase_mb) {
         fi = fopen(pyusrphrase_mb , "r");
-    else
-        fi = FcitxXDGGetFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "r" , &pyusrphrase_mb);
+    } else {
+        fi = FcitxXDGGetFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "r", NULL);
+    }
 
     if (!fi) {
-        fprintf(stderr, "Can't open file `%s' for reading\n", pyusrphrase_mb);
+        fprintf(stderr, "Can't open phrase file.\n");
         exit(1);
     }
 
-    free(pyusrphrase_mb);
-
-    if (pybase_mb)
+    if (pybase_mb) {
         fi2 = fopen(pybase_mb , "r");
-    else
-        fi2 = FcitxXDGGetFileWithPrefix("pinyin", PY_BASE_FILE, "r", &pybase_mb);
+    } else {
+        fi2 = FcitxXDGGetFileWithPrefix("pinyin", PY_BASE_FILE, "r", NULL);
+    }
 
     if (!fi2) {
-        fprintf(stderr, "Can't open file `%s' for reading\n", pybase_mb);
+        fprintf(stderr, "Can't open base file\n");
         exit(1);
     }
-
-    free(pybase_mb);
 
 
     LoadPYMB(fi, &PYMB, isUser);

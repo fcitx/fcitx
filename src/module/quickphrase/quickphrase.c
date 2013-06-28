@@ -726,11 +726,8 @@ boolean LoadQuickPhraseConfig(QuickPhraseConfig *qpconfig)
         return false;
 
     FILE *fp;
-    char *file;
     fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-quickphrase.config",
-                                       "r", &file);
-    FcitxLog(DEBUG, "Load Config File %s", file);
-    free(file);
+                                       "r", NULL);
     if (!fp) {
         if (errno == ENOENT) {
             SaveQuickPhraseConfig(qpconfig);
@@ -753,12 +750,9 @@ boolean LoadQuickPhraseConfig(QuickPhraseConfig *qpconfig)
 void SaveQuickPhraseConfig(QuickPhraseConfig* qpconfig)
 {
     FcitxConfigFileDesc* configDesc = GetQuickPhraseConfigDesc();
-    char *file;
     FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-quickphrase.config",
-                                             "w", &file);
-    FcitxLog(DEBUG, "Save Config to %s", file);
+                                             "w", NULL);
     FcitxConfigSaveConfigFileFp(fp, &qpconfig->gconfig, configDesc);
-    free(file);
     if (fp)
         fclose(fp);
 }
