@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-27 18:02-0400\n"
-"PO-Revision-Date: 2013-06-23 11:12+0000\n"
-"Last-Translator: wwj402 <wwj402@gmail.com>\n"
+"POT-Creation-Date: 2013-06-28 00:02-0400\n"
+"PO-Revision-Date: 2013-06-27 22:08+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -753,9 +753,8 @@ msgid "Configure group name error: line %d"
 msgstr "配置组名错误: 行%d"
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
-#, fuzzy
 msgid "Confirm deletion"
-msgstr "确认删除"
+msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
