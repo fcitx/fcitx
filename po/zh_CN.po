@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-28 12:02-0400\n"
+"POT-Creation-Date: 2013-06-28 18:02-0400\n"
 "PO-Revision-Date: 2013-06-28 16:01+0000\n"
 "Last-Translator: wwj402 <wwj402@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/im/table/table.c:1416
+#: src/im/table/table.c:1413
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
@@ -447,17 +447,17 @@ msgstr "候选词个数"
 msgid "Cangjie"
 msgstr "仓颉"
 
-#: src/im/pinyin/py.c:1736
+#: src/im/pinyin/py.c:1734
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "无法保存词频: %s"
 
-#: src/im/pinyin/py.c:1799
+#: src/im/pinyin/py.c:1797
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "无法保存拼音索引: %s"
 
-#: src/im/pinyin/py.c:1673
+#: src/im/pinyin/py.c:1671
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
@@ -525,7 +525,7 @@ msgstr "无法找到 kimpanel dbus 接口或非 kimpanel 用户界面."
 msgid "Cannot find xim_server on root window."
 msgstr "无法在根窗口找到 xim_server."
 
-#: src/im/table/table.c:659
+#: src/im/table/table.c:656
 msgid "Cannot found Pinyin"
 msgstr "无法找到拼音"
 
@@ -579,15 +579,15 @@ msgstr "选择第二第三候选词"
 msgid "Choose key modifier"
 msgstr "选词修饰键"
 
-#: src/im/table/table.c:727
+#: src/im/table/table.c:724
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr "选择要删除的词组，按Escape 取消"
 
-#: src/im/table/table.c:719
+#: src/im/table/table.c:716
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "选择放在前面的词组，按Escape 取消"
 
-#: src/im/table/table.c:735
+#: src/im/table/table.c:732
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "选择要清理输入频率的词组，按Escape 取消"
 
@@ -655,7 +655,7 @@ msgstr "码表文件"
 msgid "Code Table Name"
 msgstr "码表名称"
 
-#: src/im/table/table.c:1412
+#: src/im/table/table.c:1409
 msgid "Code is "
 msgstr "编码为 "
 
@@ -738,11 +738,11 @@ msgstr "配置文件"
 msgid "Configuration:"
 msgstr "配置:"
 
-#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:499
+#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:493
 msgid "Configure"
 msgstr "配置"
 
-#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:498
+#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
 #: src/ui/kimpanel/kimpanel.c:751
 msgid "Configure Current Input Method"
 msgstr "配置当前输入法"
@@ -1057,7 +1057,7 @@ msgstr "精确匹配"
 msgid "Exec"
 msgstr "Exec"
 
-#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:501
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:495
 msgid "Exit"
 msgstr "退出"
 
@@ -1730,7 +1730,7 @@ msgstr "左"
 msgid "Left Super"
 msgstr "左 Super"
 
-#: src/im/table/table.c:610
+#: src/im/table/table.c:607
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1753,20 +1753,15 @@ msgstr "库"
 msgid "Load Addon Config File:%s"
 msgstr "加载附加组件配置文件: %s"
 
-#: src/im/table/tabledict.c:342
+#: src/im/table/tabledict.c:341
 msgid "Load Autophrase OK"
 msgstr "加载自动组词信息完成"
 
-#: src/im/table/tabledict.c:249
+#: src/im/table/tabledict.c:248
 msgid "Load Table Dict OK"
 msgstr "加载码表文件成功"
 
-#: src/im/pinyin/py.c:409
-#, c-format
-msgid "Load extra dict: %s"
-msgstr "加载额外码表：%s"
-
-#: src/im/table/tabledict.c:286
+#: src/im/table/tabledict.c:285
 msgid "Loading Autophrase."
 msgstr "加载自动组词信息中"
 
@@ -1880,7 +1875,7 @@ msgstr "菜单字体"
 msgid "Menu Font Size"
 msgstr "菜单字体大小"
 
-#: src/im/pinyin/py.c:2140
+#: src/im/pinyin/py.c:2138
 msgid "Migrate the old file path to the new one"
 msgstr "迁移老文件路径到新文件路径"
 
@@ -1997,7 +1992,7 @@ msgstr "无操作"
 msgid "Number"
 msgstr "数字"
 
-#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:437
+#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:431
 msgid "Online Help"
 msgstr "在线帮助"
 
@@ -2061,7 +2056,7 @@ msgstr "按程序"
 msgid "Phrase"
 msgstr "词组"
 
-#: src/im/table/table.c:1408
+#: src/im/table/table.c:1405
 msgid "Phrase is already in Dict "
 msgstr "词组已在码表中"
 
@@ -2098,7 +2093,7 @@ msgstr "拼音"
 msgid "Pinyin Enhance"
 msgstr "拼音增强"
 
-#: src/im/pinyin/py.c:459
+#: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
 msgstr "拼音索引的Magic Number不匹配"
 
@@ -2106,7 +2101,7 @@ msgstr "拼音索引的Magic Number不匹配"
 msgid "Pinyin Key"
 msgstr "拼音键"
 
-#: src/im/table/table.c:635
+#: src/im/table/table.c:632
 msgid "Pinyin: "
 msgstr "拼音："
 
@@ -2156,12 +2151,12 @@ msgstr "可选的后端: presage, custom, enchant (用英文逗号分隔)"
 msgid "Preferred Enchant provider"
 msgstr "首选的Enchant后端"
 
-#: src/im/pinyin/py.c:780
+#: src/im/pinyin/py.c:778
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1 删除常用字表中的 %s (ESC 取消)"
 
-#: src/im/pinyin/py.c:782
+#: src/im/pinyin/py.c:780
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
@@ -2174,11 +2169,11 @@ msgstr "按下回车输入文本"
 msgid "Press Switch Key twice to Change Mode"
 msgstr "双击切换键时切换"
 
-#: src/im/pinyin/py.c:739
+#: src/im/pinyin/py.c:737
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr "按下索引来删除用户词组 (ESC 取消)"
 
-#: src/im/pinyin/py.c:752
+#: src/im/pinyin/py.c:750
 msgid "Press number to make word in frequent list"
 msgstr "按下数字加入常用字表"
 
@@ -2308,11 +2303,11 @@ msgstr "注册输入法方法"
 msgid "Reload configuration"
 msgstr "重新载入配置"
 
-#: src/im/table/table.c:1300
+#: src/im/table/table.c:1297
 msgid "Remind:"
 msgstr "联想："
 
-#: src/im/pinyin/py.c:2055
+#: src/im/pinyin/py.c:2053
 msgid "Remind: "
 msgstr "联想："
 
@@ -2324,7 +2319,7 @@ msgstr "远程调用"
 msgid "Remove File"
 msgstr "移除文件"
 
-#: src/im/table/tabledict.c:467
+#: src/im/table/tabledict.c:466
 msgid "Rename OK"
 msgstr "重命名成功"
 
@@ -2354,7 +2349,7 @@ msgstr "右边距"
 msgid "Resize Margin Top"
 msgstr "上边距"
 
-#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:500
+#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
 #: src/ui/kimpanel/kimpanel.c:756
 msgid "Restart"
 msgstr "重新启动"
@@ -2409,7 +2404,7 @@ msgstr "保存更改"
 msgid "Save Clipboard History To File"
 msgstr "将剪贴板历史保存为文件"
 
-#: src/im/table/tabledict.c:373
+#: src/im/table/tabledict.c:372
 msgid "Save dict error"
 msgstr "保存码表出错"
 
@@ -2645,7 +2640,7 @@ msgstr "已启用拼写提示。"
 msgid "Start Input Method"
 msgstr "启动输入法"
 
-#: src/frontend/xim/xim.c:245
+#: src/frontend/xim/xim.c:239
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
@@ -3278,3 +3273,6 @@ msgstr "xmodmap 命令"
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
+
+#~ msgid "Load extra dict: %s"
+#~ msgstr "加载额外码表：%s"

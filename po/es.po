@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-27 18:02-0400\n"
-"PO-Revision-Date: 2013-06-20 04:08+0000\n"
+"POT-Creation-Date: 2013-06-28 18:02-0400\n"
+"PO-Revision-Date: 2013-06-27 22:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/fcitx/language/"
 "es/)\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/im/table/table.c:1416
+#: src/im/table/table.c:1413
 msgid " Ctrl+Delete To Delete"
 msgstr "Ctrl+Supr para eliminar"
 
@@ -440,17 +440,17 @@ msgstr "Número de palabra candidata"
 msgid "Cangjie"
 msgstr ""
 
-#: src/im/pinyin/py.c:1736
+#: src/im/pinyin/py.c:1734
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: src/im/pinyin/py.c:1799
+#: src/im/pinyin/py.c:1797
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
 
-#: src/im/pinyin/py.c:1673
+#: src/im/pinyin/py.c:1671
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
@@ -518,7 +518,7 @@ msgstr ""
 msgid "Cannot find xim_server on root window."
 msgstr ""
 
-#: src/im/table/table.c:659
+#: src/im/table/table.c:656
 msgid "Cannot found Pinyin"
 msgstr ""
 
@@ -572,15 +572,15 @@ msgstr ""
 msgid "Choose key modifier"
 msgstr ""
 
-#: src/im/table/table.c:727
+#: src/im/table/table.c:724
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:719
+#: src/im/table/table.c:716
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:735
+#: src/im/table/table.c:732
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
@@ -648,7 +648,7 @@ msgstr ""
 msgid "Code Table Name"
 msgstr ""
 
-#: src/im/table/table.c:1412
+#: src/im/table/table.c:1409
 msgid "Code is "
 msgstr "El código es"
 
@@ -731,11 +731,11 @@ msgstr ""
 msgid "Configuration:"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:504
+#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:493
 msgid "Configure"
 msgstr "Configurar"
 
-#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:503
+#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
 #: src/ui/kimpanel/kimpanel.c:751
 msgid "Configure Current Input Method"
 msgstr ""
@@ -1048,7 +1048,7 @@ msgstr ""
 msgid "Exec"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:506
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:495
 msgid "Exit"
 msgstr "Salir"
 
@@ -1714,7 +1714,7 @@ msgstr ""
 msgid "Left Super"
 msgstr ""
 
-#: src/im/table/table.c:610
+#: src/im/table/table.c:607
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1739,20 +1739,15 @@ msgstr "Biblioteca"
 msgid "Load Addon Config File:%s"
 msgstr ""
 
-#: src/im/table/tabledict.c:342
+#: src/im/table/tabledict.c:341
 msgid "Load Autophrase OK"
 msgstr ""
 
-#: src/im/table/tabledict.c:249
+#: src/im/table/tabledict.c:248
 msgid "Load Table Dict OK"
 msgstr ""
 
-#: src/im/pinyin/py.c:409
-#, c-format
-msgid "Load extra dict: %s"
-msgstr ""
-
-#: src/im/table/tabledict.c:286
+#: src/im/table/tabledict.c:285
 msgid "Loading Autophrase."
 msgstr ""
 
@@ -1866,7 +1861,7 @@ msgstr "Tipo de letra del menú"
 msgid "Menu Font Size"
 msgstr "Tamaño de letra de los menús"
 
-#: src/im/pinyin/py.c:2140
+#: src/im/pinyin/py.c:2138
 msgid "Migrate the old file path to the new one"
 msgstr "Migrar la ruta de archivo anterior a la nueva"
 
@@ -1983,7 +1978,7 @@ msgstr "Ninguno"
 msgid "Number"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:442
+#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:431
 msgid "Online Help"
 msgstr "Ayuda en línea"
 
@@ -2047,7 +2042,7 @@ msgstr ""
 msgid "Phrase"
 msgstr ""
 
-#: src/im/table/table.c:1408
+#: src/im/table/table.c:1405
 msgid "Phrase is already in Dict "
 msgstr ""
 
@@ -2084,7 +2079,7 @@ msgstr "Pinyin"
 msgid "Pinyin Enhance"
 msgstr ""
 
-#: src/im/pinyin/py.c:459
+#: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
 msgstr ""
 
@@ -2092,7 +2087,7 @@ msgstr ""
 msgid "Pinyin Key"
 msgstr ""
 
-#: src/im/table/table.c:635
+#: src/im/table/table.c:632
 msgid "Pinyin: "
 msgstr "Pinyin:"
 
@@ -2140,12 +2135,12 @@ msgstr ""
 msgid "Preferred Enchant provider"
 msgstr ""
 
-#: src/im/pinyin/py.c:780
+#: src/im/pinyin/py.c:778
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:782
+#: src/im/pinyin/py.c:780
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
@@ -2158,11 +2153,11 @@ msgstr "Oprima Intro para introducir texto"
 msgid "Press Switch Key twice to Change Mode"
 msgstr ""
 
-#: src/im/pinyin/py.c:739
+#: src/im/pinyin/py.c:737
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:752
+#: src/im/pinyin/py.c:750
 msgid "Press number to make word in frequent list"
 msgstr ""
 
@@ -2292,11 +2287,11 @@ msgstr ""
 msgid "Reload configuration"
 msgstr ""
 
-#: src/im/table/table.c:1300
+#: src/im/table/table.c:1297
 msgid "Remind:"
 msgstr ""
 
-#: src/im/pinyin/py.c:2055
+#: src/im/pinyin/py.c:2053
 msgid "Remind: "
 msgstr ""
 
@@ -2308,7 +2303,7 @@ msgstr ""
 msgid "Remove File"
 msgstr ""
 
-#: src/im/table/tabledict.c:467
+#: src/im/table/tabledict.c:466
 msgid "Rename OK"
 msgstr ""
 
@@ -2338,7 +2333,7 @@ msgstr ""
 msgid "Resize Margin Top"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:505
+#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
 #: src/ui/kimpanel/kimpanel.c:756
 msgid "Restart"
 msgstr ""
@@ -2393,7 +2388,7 @@ msgstr ""
 msgid "Save Clipboard History To File"
 msgstr ""
 
-#: src/im/table/tabledict.c:373
+#: src/im/table/tabledict.c:372
 msgid "Save dict error"
 msgstr ""
 
@@ -2629,7 +2624,7 @@ msgstr ""
 msgid "Start Input Method"
 msgstr ""
 
-#: src/frontend/xim/xim.c:245
+#: src/frontend/xim/xim.c:239
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr ""

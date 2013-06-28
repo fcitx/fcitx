@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-27 18:02-0400\n"
-"PO-Revision-Date: 2013-06-20 04:08+0000\n"
+"POT-Creation-Date: 2013-06-28 18:02-0400\n"
+"PO-Revision-Date: 2013-06-27 22:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/im/table/table.c:1416
+#: src/im/table/table.c:1413
 msgid " Ctrl+Delete To Delete"
 msgstr "Ctrl+Delete で削除"
 
@@ -448,17 +448,17 @@ msgstr "候補の単語数"
 msgid "Cangjie"
 msgstr ""
 
-#: src/im/pinyin/py.c:1736
+#: src/im/pinyin/py.c:1734
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "よく使う単語を保存できません: %s"
 
-#: src/im/pinyin/py.c:1799
+#: src/im/pinyin/py.c:1797
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "Pinyin インデックスを保存できません: %s"
 
-#: src/im/pinyin/py.c:1673
+#: src/im/pinyin/py.c:1671
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "ユーザーのPinyinデータベースを保存できません: %s"
@@ -528,7 +528,7 @@ msgstr ""
 msgid "Cannot find xim_server on root window."
 msgstr "ルートウィンドウで xim_server が見つかりません。"
 
-#: src/im/table/table.c:659
+#: src/im/table/table.c:656
 msgid "Cannot found Pinyin"
 msgstr "Pinyin が見つかりません"
 
@@ -582,15 +582,15 @@ msgstr "二番目と三番目の候補を選択"
 msgid "Choose key modifier"
 msgstr "修飾キーを選択"
 
-#: src/im/table/table.c:727
+#: src/im/table/table.c:724
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:719
+#: src/im/table/table.c:716
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:735
+#: src/im/table/table.c:732
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "入力履歴を削除するフレーズを選択、Escapeでキャンセル"
 
@@ -658,7 +658,7 @@ msgstr "コードテーブルファイル"
 msgid "Code Table Name"
 msgstr "コードテーブル名"
 
-#: src/im/table/table.c:1412
+#: src/im/table/table.c:1409
 msgid "Code is "
 msgstr "コードは"
 
@@ -741,11 +741,11 @@ msgstr "設定ファイル"
 msgid "Configuration:"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:504
+#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:493
 msgid "Configure"
 msgstr "設定"
 
-#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:503
+#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
 #: src/ui/kimpanel/kimpanel.c:751
 msgid "Configure Current Input Method"
 msgstr "現在の入力メソッドの設定"
@@ -1066,7 +1066,7 @@ msgstr "完全一致"
 msgid "Exec"
 msgstr "Exec"
 
-#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:506
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:495
 msgid "Exit"
 msgstr "閉じる"
 
@@ -1732,7 +1732,7 @@ msgstr ""
 msgid "Left Super"
 msgstr "左Super"
 
-#: src/im/table/table.c:610
+#: src/im/table/table.c:607
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1755,20 +1755,15 @@ msgstr "ライブラリ"
 msgid "Load Addon Config File:%s"
 msgstr "アドオンの設定ファイルを読み込み: %s"
 
-#: src/im/table/tabledict.c:342
+#: src/im/table/tabledict.c:341
 msgid "Load Autophrase OK"
 msgstr "オートフレーズの読み込み完了"
 
-#: src/im/table/tabledict.c:249
+#: src/im/table/tabledict.c:248
 msgid "Load Table Dict OK"
 msgstr "テーブル辞書の読み込み完了"
 
-#: src/im/pinyin/py.c:409
-#, c-format
-msgid "Load extra dict: %s"
-msgstr "拡張辞書の読み込み: %s"
-
-#: src/im/table/tabledict.c:286
+#: src/im/table/tabledict.c:285
 msgid "Loading Autophrase."
 msgstr "オートフレーズを読込中"
 
@@ -1882,7 +1877,7 @@ msgstr "メニューのフォント"
 msgid "Menu Font Size"
 msgstr "メニューのフォントの大きさ"
 
-#: src/im/pinyin/py.c:2140
+#: src/im/pinyin/py.c:2138
 msgid "Migrate the old file path to the new one"
 msgstr "古いファイルパスから新しいファイルパスへ移動"
 
@@ -1999,7 +1994,7 @@ msgstr "なし"
 msgid "Number"
 msgstr "漢数字"
 
-#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:442
+#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:431
 msgid "Online Help"
 msgstr "オンラインヘルプ"
 
@@ -2063,7 +2058,7 @@ msgstr "プログラムごと"
 msgid "Phrase"
 msgstr "フレーズ"
 
-#: src/im/table/table.c:1408
+#: src/im/table/table.c:1405
 msgid "Phrase is already in Dict "
 msgstr "フレーズは既に辞書にあります"
 
@@ -2100,7 +2095,7 @@ msgstr "Pinyin"
 msgid "Pinyin Enhance"
 msgstr "Pinyin 拡張"
 
-#: src/im/pinyin/py.c:459
+#: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
 msgstr ""
 
@@ -2108,7 +2103,7 @@ msgstr ""
 msgid "Pinyin Key"
 msgstr "Pinyinキー"
 
-#: src/im/table/table.c:635
+#: src/im/table/table.c:632
 msgid "Pinyin: "
 msgstr "Pinyin: "
 
@@ -2161,12 +2156,12 @@ msgstr "可能なプロバイダー: eresage, eustom, enchant (カンマ区切�
 msgid "Preferred Enchant provider"
 msgstr ""
 
-#: src/im/pinyin/py.c:780
+#: src/im/pinyin/py.c:778
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:782
+#: src/im/pinyin/py.c:780
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
@@ -2179,11 +2174,11 @@ msgstr "文字を入力するには Enter を押してください"
 msgid "Press Switch Key twice to Change Mode"
 msgstr "モードの切り替えにキーを2回押す"
 
-#: src/im/pinyin/py.c:739
+#: src/im/pinyin/py.c:737
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:752
+#: src/im/pinyin/py.c:750
 msgid "Press number to make word in frequent list"
 msgstr ""
 
@@ -2313,11 +2308,11 @@ msgstr "IM登録"
 msgid "Reload configuration"
 msgstr "設定の再読み込み"
 
-#: src/im/table/table.c:1300
+#: src/im/table/table.c:1297
 msgid "Remind:"
 msgstr "リマインド:"
 
-#: src/im/pinyin/py.c:2055
+#: src/im/pinyin/py.c:2053
 msgid "Remind: "
 msgstr "リマインド:"
 
@@ -2329,7 +2324,7 @@ msgstr "リモート"
 msgid "Remove File"
 msgstr ""
 
-#: src/im/table/tabledict.c:467
+#: src/im/table/tabledict.c:466
 msgid "Rename OK"
 msgstr "名前変更を完了"
 
@@ -2359,7 +2354,7 @@ msgstr "右マージンを調整"
 msgid "Resize Margin Top"
 msgstr "上マージンを調整"
 
-#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:505
+#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
 #: src/ui/kimpanel/kimpanel.c:756
 msgid "Restart"
 msgstr "再起動"
@@ -2414,7 +2409,7 @@ msgstr ""
 msgid "Save Clipboard History To File"
 msgstr "クリップボードの履歴をファイルに保存"
 
-#: src/im/table/tabledict.c:373
+#: src/im/table/tabledict.c:372
 msgid "Save dict error"
 msgstr "辞書の保存エラー"
 
@@ -2650,7 +2645,7 @@ msgstr ""
 msgid "Start Input Method"
 msgstr "入力メソッドを開始"
 
-#: src/frontend/xim/xim.c:245
+#: src/frontend/xim/xim.c:239
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "XIM 開始エラー: %s という他の XIM が動いていませんか?"
@@ -3283,3 +3278,6 @@ msgstr "xmodmap コマンド"
 #, c-format
 msgid "your current font is: %s"
 msgstr "あなたの現在のフォントは %s です"
+
+#~ msgid "Load extra dict: %s"
+#~ msgstr "拡張辞書の読み込み: %s"
