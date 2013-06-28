@@ -82,8 +82,10 @@ int main(int argc, char **argv)
         case 'o':
             fout = fopen(optarg, "w");
 
-            if (!fout)
-                fprintf(stderr, "can not open %s\n", optarg);
+            if (!fout) {
+                fprintf(stderr, "Cannot open file: %s\n", optarg);
+                return 1;
+            }
 
             break;
 
@@ -96,10 +98,16 @@ int main(int argc, char **argv)
         }
     }
 
-    if (optind >= argc)
+    if (optind >= argc) {
         usage();
+        return 1;
+    }
 
     FILE *fp = fopen(argv[optind], "r");
+    if (!fp) {
+        fprintf(stderr, "Cannot open file: %s\n", argv[optind]);
+        return 1;
+    }
 
     char buf[BUFLEN], bufout[BUFLEN];
 

@@ -80,7 +80,6 @@ int main(int argc, char **argv)
         fi = FcitxXDGGetFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "r" , &pyusrphrase_mb);
 
     if (!fi) {
-        perror("fopen");
         fprintf(stderr, "Can't open file `%s' for reading\n", pyusrphrase_mb);
         exit(1);
     }
@@ -93,7 +92,6 @@ int main(int argc, char **argv)
         fi2 = FcitxXDGGetFileWithPrefix("pinyin", PY_BASE_FILE, "r", &pybase_mb);
 
     if (!fi2) {
-        perror("fopen");
         fprintf(stderr, "Can't open file `%s' for reading\n", pybase_mb);
         exit(1);
     }

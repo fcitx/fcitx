@@ -24,13 +24,11 @@
 #include "im/pinyin/pyMapTable.h"
 #include "im/pinyin/PYFA.h"
 #include "fcitx-utils/utf8.h"
-#include "im/pinyin/pyconfig.h"
-#include <im/pinyin/py.h>
+#include "im/pinyin/py.h"
 
 FcitxPinyinConfig pyconfig;
 
 FILE           *fps, *fpt, *fp1, *fp2;
-boolean         bSingleHZMode = false;
 
 typedef struct _PY {
     char            strPY[3];
@@ -158,12 +156,6 @@ void CreatePYPhrase(void)
     FILE           *fg = fopen("pyPhrase.ok", "w");
     int             kkk;
     uint32_t        uIndex;
-    FcitxPinyinConfig pyconfig;
-
-    memset(&pyconfig, 0 , sizeof(pyconfig));
-    InitMHPY(&pyconfig.MHPY_C, MHPY_C_TEMPLATE);
-    InitMHPY(&pyconfig.MHPY_S, MHPY_S_TEMPLATE);
-    InitPYTable(&pyconfig);
 
     s1 = 0;
     s2 = 0;
@@ -408,16 +400,21 @@ int main(int argc, char *argv[])
     }
 
     fps = fopen(argv[1], "r");
-
     fpt = fopen(argv[2], "r");
     fp1 = fopen("pybase.mb", "w");
     fp2 = fopen("pyphrase.mb", "w");
 
     if (fps && fpt && fp1 && fp2) {
+        memset(&pyconfig, 0 , sizeof(pyconfig));
+        InitMHPY(&pyconfig.MHPY_C, MHPY_C_TEMPLATE);
+        InitMHPY(&pyconfig.MHPY_S, MHPY_S_TEMPLATE);
+        InitPYTable(&pyconfig);
+
         CreatePYBase();
         LoadPY();
         CreatePYPhrase();
-    }
+    } while(0);
+
 
     return 0;
 }
