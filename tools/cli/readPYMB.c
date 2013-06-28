@@ -64,7 +64,6 @@ int main(int argc, char **argv)
     }
 
     if (!fi) {
-        perror("fopen");
         fprintf(stderr, "Can't open phrase file.\n");
         exit(1);
     }

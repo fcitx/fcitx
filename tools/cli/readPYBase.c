@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     }
 
     if (!fi) {
-        fprintf(stderr, "Can't open base file.");
+        fprintf(stderr, "Can't open base file.\n");
         exit(1);
     }
 
