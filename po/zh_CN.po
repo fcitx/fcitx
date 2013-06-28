@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-28 00:02-0400\n"
-"PO-Revision-Date: 2013-06-27 22:08+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2013-06-28 12:02-0400\n"
+"PO-Revision-Date: 2013-06-28 16:01+0000\n"
+"Last-Translator: wwj402 <wwj402@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -738,11 +738,11 @@ msgstr "配置文件"
 msgid "Configuration:"
 msgstr "配置:"
 
-#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:504
+#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:499
 msgid "Configure"
 msgstr "配置"
 
-#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:503
+#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:498
 #: src/ui/kimpanel/kimpanel.c:751
 msgid "Configure Current Input Method"
 msgstr "配置当前输入法"
@@ -754,7 +754,7 @@ msgstr "配置组名错误: 行%d"
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
 msgid "Confirm deletion"
-msgstr ""
+msgstr "确认删除"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
@@ -1057,7 +1057,7 @@ msgstr "精确匹配"
 msgid "Exec"
 msgstr "Exec"
 
-#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:506
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:501
 msgid "Exit"
 msgstr "退出"
 
@@ -1997,7 +1997,7 @@ msgstr "无操作"
 msgid "Number"
 msgstr "数字"
 
-#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:442
+#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:437
 msgid "Online Help"
 msgstr "在线帮助"
 
@@ -2354,7 +2354,7 @@ msgstr "右边距"
 msgid "Resize Margin Top"
 msgstr "上边距"
 
-#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:505
+#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:500
 #: src/ui/kimpanel/kimpanel.c:756
 msgid "Restart"
 msgstr "重新启动"
