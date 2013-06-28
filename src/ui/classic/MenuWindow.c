@@ -471,28 +471,20 @@ void XlibMenuMoveWindow(FcitxXlibWindow* window)
     XlibMenu* menu = (XlibMenu*) window;
     FcitxClassicUI* classicui = window->owner;
 
-    int sheight;
-    GetScreenSize(classicui, NULL, &sheight);
-
     if (menu->anchor == MA_MainWindow) {
-        menu->iPosX = classicui->iMainWindowOffsetX;
-        menu->iPosY = classicui->iMainWindowOffsetY + classicui->mainWindow->parent.height;
-        if ((menu->iPosY + window->height) > sheight) {
-            menu->iPosY = classicui->iMainWindowOffsetY - 5 - window->height;
-        }
+        CalMenuWindowPosition(menu, classicui->iMainWindowOffsetX, classicui->iMainWindowOffsetY, classicui->mainWindow->parent.height);
     } else if (menu->anchor == MA_Menu) {
-        int dwidth, dheight;
         XlibMenu* parent = menu->anchorMenu;
-        GetScreenSize(classicui, &dwidth, &dheight);
         menu->iPosX = parent->iPosX + parent->parent.contentX + parent->parent.contentWidth - 4;
         menu->iPosY = parent->iPosY + menu->offseth - window->contentY;
+        FcitxRect rect = GetScreenGeometry(classicui, menu->iPosX, menu->iPosY);
 
-        if (menu->iPosX + window->width > dwidth) {
+        if (menu->iPosX + window->width > rect.x2) {
             menu->iPosX = parent->iPosX - window->width + parent->parent.contentX + 4;
         }
 
-        if (menu->iPosY + window->height > dheight) {
-            menu->iPosY = dheight - window->height;
+        if (menu->iPosY + window->height > rect.y2) {
+            menu->iPosY = rect.y2 - window->height;
         }
 
     } else if (menu->anchor == MA_Tray) {

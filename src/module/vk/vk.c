@@ -724,33 +724,27 @@ void SwitchVK(FcitxVKState *vkstate)
 
     if (vkstate->bVK) {
         int             x, y;
-        int dwidth, dheight;
-        FcitxX11GetScreenSize(vkstate->owner, &dwidth, &dheight);
+        FcitxRect rect;
+        int icx = 0, icy = 0, w = 0, h = 0;
+        FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
+        FcitxInstanceGetWindowRect(instance, ic, &icx, &icy, &w, &h);
+        FcitxX11GetScreenGeometry(instance, &icx, &icy, &rect);
+        x = (rect.x1 + rect.x2) / 2 - VK_WINDOW_WIDTH / 2;
+        y = rect.y1 + 40;
 
-        if (!FcitxUISupportMainWindow(instance)) {
-            x = dwidth / 2 - VK_WINDOW_WIDTH / 2;
-            y = 40;
-        } else {
-            int mx = 0, my = 0, mw = 0, mh = 0;
-            FcitxUIGetMainWindowSize(instance, &mx, &my, &mw, &mh);
-            x = mx;
-            y = my + mh + 2;
-            if ((y + VK_WINDOW_HEIGHT) >= dheight)
-                y = my - VK_WINDOW_HEIGHT - 2;
-            if (y < 0)
-                y = 0;
-        }
-        if ((x + VK_WINDOW_WIDTH) >= dwidth)
-            x = dwidth - VK_WINDOW_WIDTH - 1;
-        if (x < 0)
-            x = 0;
+        if ((y + VK_WINDOW_HEIGHT) >= rect.y2)
+            y = rect.y2 - VK_WINDOW_HEIGHT - 2;
+        if (y < rect.y1)
+            y = rect.y1;
+        if ((x + VK_WINDOW_WIDTH) >= rect.x2)
+            x = rect.x2 - VK_WINDOW_WIDTH - 1;
+        if (x < rect.x1)
+            x = rect.x1;
 
 
         XMoveWindow(vkWindow->dpy, vkWindow->window, x, y);
         DisplayVKWindow(vkWindow);
         FcitxUICloseInputWindow(instance);
-
-        FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
 
         if (ic && FcitxInstanceGetCurrentState(instance) == IS_CLOSED)
             FcitxInstanceEnableIM(instance, ic, true);

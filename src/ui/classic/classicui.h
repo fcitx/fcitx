@@ -91,7 +91,6 @@ typedef struct _FcitxClassicUI {
     uint64_t waitDelayed;
 } FcitxClassicUI;
 
-void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height);
 FcitxRect GetScreenGeometry(FcitxClassicUI* classicui, int x, int y);
 Visual * ClassicUIFindARGBVisual(FcitxClassicUI* classicui);
 boolean ClassicUIMouseClick(FcitxClassicUI* classicui, Window window, int *x, int *y);

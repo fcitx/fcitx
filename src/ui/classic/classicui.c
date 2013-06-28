@@ -355,11 +355,6 @@ void ActivateWindow(Display *dpy, int iScreen, Window window)
     XSync(dpy, False);
 }
 
-void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height)
-{
-    FcitxX11GetScreenSize(classicui->owner, width, height);
-}
-
 FcitxRect GetScreenGeometry(FcitxClassicUI* classicui, int x, int y)
 {
     FcitxRect result = { 0, 0 , 0 , 0 };

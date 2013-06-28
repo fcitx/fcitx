@@ -76,21 +76,6 @@ void MainWindowInit(MainWindow* mainWindow)
     FcitxXlibWindow* window = &mainWindow->parent;
     FcitxClassicUI* classicui = window->owner;
     FcitxSkin* sc = &classicui->skin;
-    int swidth = 0, sheight = 0;
-
-    GetScreenSize(classicui, &swidth, &sheight);
-    SkinImage *back = LoadImage(sc, sc->skinMainBar.background.background, false);
-    int w = MAIN_BAR_MAX_WIDTH, h = MAIN_BAR_MAX_HEIGHT;
-    if (back) {
-        w = cairo_image_surface_get_width(back->image);
-        h = cairo_image_surface_get_height(back->image);
-    }
-
-    if (classicui->iMainWindowOffsetX + w > swidth)
-        classicui->iMainWindowOffsetX = swidth - w;
-
-    if (classicui->iMainWindowOffsetY + h > sheight)
-        classicui->iMainWindowOffsetY = sheight - h;
 
     FcitxXlibWindowInit(&mainWindow->parent,
                         MAIN_BAR_MAX_WIDTH, MAIN_BAR_MAX_HEIGHT,
@@ -679,7 +664,42 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
 
 void MainWindowMoveWindow(FcitxXlibWindow* window)
 {
+    FcitxClassicUI* classicui = window->owner;
+    FcitxSkin* sc = &classicui->skin;
+    FcitxRect rect = GetScreenGeometry(classicui, classicui->iMainWindowOffsetX, classicui->iMainWindowOffsetY);
+    SkinImage *back = LoadImage(sc, sc->skinMainBar.background.background, false);
+    int w = MAIN_BAR_MAX_WIDTH, h = MAIN_BAR_MAX_HEIGHT;
+    if (back) {
+        w = cairo_image_surface_get_width(back->image);
+        h = cairo_image_surface_get_height(back->image);
+    }
 
+    int x = classicui->iMainWindowOffsetX;
+    int y = classicui->iMainWindowOffsetY;
+
+    if (x < rect.x1) {
+        x = rect.x1;
+    }
+
+    if (y < rect.y1) {
+        y = rect.y1;
+    }
+
+    if ((x + window->width) > rect.x2)
+        x =  rect.x2 - window->width;
+
+    if ((y + window->height) >  rect.y2) {
+        if (y >  rect.y2)
+            y =  rect.y2 - window->height;
+        else /* better position the window */
+            y = y - window->height;
+    }
+
+    if (classicui->iMainWindowOffsetX != x || classicui->iMainWindowOffsetY != y) {
+        classicui->iMainWindowOffsetX = x;
+        classicui->iMainWindowOffsetY = y;
+        XMoveWindow(classicui->dpy, window->wId, x, y);
+    }
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
