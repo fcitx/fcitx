@@ -3,7 +3,7 @@ set(PY_STROKE_VER 20121124)
 set(PY_STROKE_TGT "${CMAKE_CURRENT_BINARY_DIR}/py_stroke.mb")
 set(PY_STROKE_TAR "py_stroke-${PY_STROKE_VER}.tar.gz")
 set(PY_STROKE_URL
-  "http://fcitx.googlecode.com/files/py_stroke-${PY_STROKE_VER}.tar.gz")
+  "http://download.fcitx-im.org/data/py_stroke-${PY_STROKE_VER}.tar.gz")
 fcitx_download(py-stroke-download "${PY_STROKE_URL}" "${PY_STROKE_TAR}"
   MD5SUM 2559d025c5bbb50fa450a02429f92762)
 fcitx_extract(py-stroke-extract "${PY_STROKE_TAR}" DEPENDS py-stroke-download

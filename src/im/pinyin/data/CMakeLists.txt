@@ -3,7 +3,7 @@ set(PY_ORGDATA pyPhrase.org)
 set(PY_DATA "${CMAKE_CURRENT_BINARY_DIR}/pybase.mb"
   "${CMAKE_CURRENT_BINARY_DIR}/pyphrase.mb")
 set(PY_TAR pinyin.tar.gz)
-set(PY_URL "http://fcitx.googlecode.com/files/pinyin.tar.gz")
+set(PY_URL "http://download.fcitx-im.org/data/pinyin.tar.gz")
 
 add_custom_target(pinyin_data ALL DEPENDS ${PY_DATA})
 

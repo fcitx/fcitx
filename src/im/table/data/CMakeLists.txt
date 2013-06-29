@@ -15,7 +15,7 @@ set(TABLEORG_DATA db.txt erbi.txt qxm.txt wanfeng.txt
 set(TABLE_NAME db erbi qxm wanfeng wbpy wbx zrm cj)
 set(TABLE_CONF db.conf erbi.conf qxm.conf wanfeng.conf
   wbpy.conf wbx.conf zrm.conf cangjie.conf)
-set(TABLE_URL http://fcitx.googlecode.com/files/table.tar.gz)
+set(TABLE_URL "http://download.fcitx-im.org/data/files/table.tar.gz")
 set(TABLE_TAR ${CMAKE_CURRENT_SOURCE_DIR}/table.tar.gz)
 
 foreach(tableconffile ${TABLE_CONF})
