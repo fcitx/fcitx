@@ -134,6 +134,7 @@ void DBusAddMatch(void* data, const void* key, size_t len, void* owner)
     free(name);
 
     dbus_bus_add_match(dbusmodule->conn, rule, NULL);
+    free(rule);
 }
 
 
@@ -155,6 +156,7 @@ void DBusRemoveMatch(void* data, const void* key, size_t len, void* owner)
     free(name);
 
     dbus_bus_remove_match(dbusmodule->conn, rule, NULL);
+    free(rule);
 }
 
 void* DBusCreate(FcitxInstance* instance)
@@ -445,12 +447,12 @@ boolean DBusWatchName(void* arg,
         return 0;
     }
 
-    FcitxDBusWatchNameNotify* notify = fcitx_utils_new(FcitxDBusWatchNameNotify);
-    notify->data = data;
-    notify->destroy = destroy;
-    notify->owner = owner;
-    notify->func = func;
-    return fcitx_handler_table_append_strkey(dbusmodule->handler, name, notify);
+    FcitxDBusWatchNameNotify notify;
+    notify.data = data;
+    notify.destroy = destroy;
+    notify.owner = owner;
+    notify.func = func;
+    return fcitx_handler_table_append_strkey(dbusmodule->handler, name, &notify);
 }
 
 void DBusUnwatchName(void* arg, int id)

@@ -434,6 +434,7 @@ ClipboardDestroy(void *arg)
 {
     FcitxClipboard *clipboard = (FcitxClipboard*)arg;
     ClipboardWriteHistory(clipboard);
+    FcitxConfigFree(&clipboard->config.gconfig);
     fcitx_utils_free(clipboard->primary.str);
     free(arg);
 }

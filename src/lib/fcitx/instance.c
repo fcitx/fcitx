@@ -138,7 +138,7 @@ boolean FcitxInstanceRun(int argc, char* argv[], int fd)
         RunInstance(instance);
     } while(0);
     boolean result = instance->loadingFatalError;
-    free(instance);
+//    free(instance);
 
     return result;
 }

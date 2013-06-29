@@ -153,8 +153,6 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
 
     char* iconText = strndup(text, len);
 
-    FcitxLog(DEBUG, "%s", iconText);
-
     cairo_surface_t* newsurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
     cairo_t* c = cairo_create(newsurface);
 
@@ -171,9 +169,9 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
             color = sc->skinMainBar.textIconColor[0];
         else
             color = sc->skinMainBar.textIconColor[1];
-    }
-    else
+    } else {
         color = sc->skinFont.menuFontColor[1];
+    }
 
     int textw, texth;
     FcitxCairoTextContext* ctc = FcitxCairoTextContextCreate(c);
@@ -182,6 +180,7 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
 
     FcitxCairoTextContextOutputString(ctc, iconText, (w - textw) * 0.5, 0, &color);
 
+    free(iconText);
     FcitxCairoTextContextFree(ctc);
 
     cairo_destroy(c);

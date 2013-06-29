@@ -336,6 +336,9 @@ Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data)
 boolean XimDestroy(void* arg)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
+
+    FcitxConfigFree(&xim->gconfig);
+
     /**
      * Destroy the window BEFORE(!!!!!) CloseIM!!!
      * Work arround for a bug in libX11. See wengxt's commit log:

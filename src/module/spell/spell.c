@@ -123,6 +123,7 @@ static void
 SpellDestroy(void *arg)
 {
     FcitxSpell *spell = (FcitxSpell*)arg;
+
     if (spell->dictLang)
         free(spell->dictLang);
 #ifdef ENABLE_ENCHANT
@@ -132,6 +133,8 @@ SpellDestroy(void *arg)
     SpellPresageDestroy(spell);
 #endif
     SpellCustomDestroy(spell);
+
+    FcitxConfigFree(&spell->config.gconfig);
     free(arg);
 }
 

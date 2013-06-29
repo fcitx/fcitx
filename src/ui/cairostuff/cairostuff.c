@@ -78,6 +78,10 @@ void FcitxCairoTextContextFree(FcitxCairoTextContext* ctc)
 #ifdef _ENABLE_PANGO
     g_object_unref(ctc->pangoLayout);
     g_object_unref(ctc->pangoContext);
+
+    if (ctc->fontDesc) {
+        pango_font_description_free(ctc->fontDesc);
+    }
 #endif
 
     if (ctc->ownSurface) {

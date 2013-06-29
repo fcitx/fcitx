@@ -335,7 +335,12 @@ FcitxXkbSetRules(FcitxXkb* xkb, const char *rules_file, const char *model,
                                    (~XkbGBN_GeometryMask), True);
 
     XkbRF_Free(rules, True);
-
+    free(rnames.keymap);
+    free(rnames.keycodes);
+    free(rnames.types);
+    free(rnames.compat);
+    free(rnames.symbols);
+    free(rnames.geometry);
 
     Bool result = True;
     if (!xkbDesc) {
@@ -412,16 +417,14 @@ FcitxXkbUpdateProperties(FcitxXkb* xkb, const char *rules_file,
         next += strlen (all_options);
     }
     *next++ = '\0';
-    if ((next - pval) != len) {
-        free (pval);
-        return True;
+    if ((next - pval) == len) {
+        XChangeProperty (dpy, root_window,
+                        rules_atom, XA_STRING, 8, PropModeReplace,
+                        (unsigned char *) pval, len);
+        XSync(dpy, False);
     }
 
-    XChangeProperty (dpy, root_window,
-                     rules_atom, XA_STRING, 8, PropModeReplace,
-                     (unsigned char *) pval, len);
-    XSync(dpy, False);
-
+    free(pval);
     return True;
 }
 
@@ -891,6 +894,8 @@ static void FcitxXkbDestroy(void* arg)
     fcitx_utils_free(xkb->closeLayout);
     fcitx_utils_free(xkb->closeVariant);
     fcitx_utils_free(xkb->defaultXmodmapPath);
+
+    FcitxConfigFree(&xkb->config.gconfig);
     free(xkb);
 }
 
