@@ -451,16 +451,18 @@ py_enhance_load_py(PinyinEnhance *pyenhance)
     }
 }
 
-/* since bsearch doesn't support user data afaik. */
-static const void *_evil_global_py_table_data = NULL;
+typedef struct {
+    const char *str;
+    const void *py_table_data;
+} PySearchKey;
 
 static int
 compare_func(const void *p1, const void *p2)
 {
-    const char *str1 = p1;
+    const PySearchKey *key = p1;
     const uint32_t *id_p = p2;
-    const char *str2 = _evil_global_py_table_data + *id_p;
-    return strcmp(str1, str2);
+    const char *str2 = key->py_table_data + *id_p;
+    return strcmp(key->str, str2);
 }
 
 const int8_t*
@@ -470,8 +472,11 @@ py_enhance_py_find_py(PinyinEnhance *pyenhance, const char *str)
     if (!pyenhance->py_list.len)
         return NULL;
     uint32_t *py_list;
-    _evil_global_py_table_data = pyenhance->py_table.data;
-    py_list = bsearch(str, pyenhance->py_list.data,
+    const PySearchKey key = {
+        .str = str,
+        .py_table_data = pyenhance->py_table.data,
+    };
+    py_list = bsearch(&key, pyenhance->py_list.data,
                       pyenhance->py_list.len / PY_ENHANCE_UINT32_ALIGN_SIZE,
                       sizeof(uint32_t), compare_func);
     if (!py_list)
