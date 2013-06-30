@@ -10,13 +10,14 @@
 # pellaeon <nfsmwlin@gmail.com>, 2013
 # Xuetian Weng <wengxt@gmail.com>, 2013
 # Xuetian Weng <wengxt@gmail.com>, 2012-2013
+# Xuetian Weng <wengxt@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-28 18:02-0400\n"
-"PO-Revision-Date: 2013-06-27 22:08+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2013-06-30 00:02-0400\n"
+"PO-Revision-Date: 2013-06-30 03:21+0000\n"
+"Last-Translator: Alisha <alisha.4m@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -518,7 +519,7 @@ msgstr ""
 #: data/script/fcitx-diagnose.sh:1258
 msgid ""
 "Cannot find kimpanel dbus interface or enabled non-kimpanel user interface."
-msgstr ""
+msgstr "找不到 kimpanel dbus 介面或非 kimpanel 使用者介面。"
 
 #: data/script/fcitx-diagnose.sh:868
 msgid "Cannot find xim_server on root window."
@@ -727,7 +728,7 @@ msgstr "KDE 的設定界面："
 
 #: data/script/fcitx-diagnose.sh:791
 msgid "Config Tool Wrapper:"
-msgstr ""
+msgstr "設定工具封裝："
 
 #: data/addon.desc:62
 msgid "ConfigFile"
@@ -753,7 +754,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
 msgid "Confirm deletion"
-msgstr ""
+msgstr "確定刪除"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
@@ -806,11 +807,11 @@ msgstr "目前地區設定："
 
 #: data/config.desc:35
 msgid "Custom"
-msgstr ""
+msgstr "自訂"
 
 #: data/config.desc:42
 msgid "Custom switch key"
-msgstr ""
+msgstr "自訂切換鍵"
 
 #: data/addon.desc:37
 msgid "DBus"
@@ -899,7 +900,7 @@ msgstr "未聚焦視窗時，不要提交預編輯文字"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:616
 msgid "Do not show again"
-msgstr ""
+msgstr "不再顯示"
 
 #: data/addon.desc:82
 msgid "Do not show in GUI"
@@ -1095,7 +1096,7 @@ msgstr "Fcitx 設定"
 
 #: data/script/fcitx-diagnose.sh:790
 msgid "Fcitx Configure UI:"
-msgstr ""
+msgstr "Fcitx 設定界面："
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -1680,7 +1681,7 @@ msgstr "Fcitx 的 Kimpanel 支援"
 
 #: data/script/fcitx-diagnose.sh:1250
 msgid "Kimpanel process:"
-msgstr ""
+msgstr "Kimpanel 行程："
 
 #: data/config.desc:24
 msgid "L_ALT"
@@ -1783,7 +1784,7 @@ msgstr "地區設定："
 
 #: data/script/fcitx-diagnose.sh:1383
 msgid "Log:"
-msgstr ""
+msgstr "日誌："
 
 #: src/ui/classic/skin.desc:73
 msgid "Logo Icon"
@@ -2512,7 +2513,7 @@ msgstr "正簡轉換"
 msgid "Simplified Chinese is enabled."
 msgstr "已啟用簡體中文。"
 
-#: src/ui/classic/skin.c:680 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:679 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "皮膚"
 
@@ -3027,7 +3028,7 @@ msgstr "使用者定義"
 
 #: data/script/fcitx-diagnose.sh:1237
 msgid "User Interface:"
-msgstr ""
+msgstr "使用者界面："
 
 #: src/ui/classic/skin.desc:49
 msgid "User Phrase Color"
@@ -3262,6 +3263,3 @@ msgstr "xmodmap 指令"
 #, c-format
 msgid "your current font is: %s"
 msgstr ""
-
-#~ msgid "Load extra dict: %s"
-#~ msgstr "載入額外的字典：%s"
