@@ -755,9 +755,9 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
         INPUT_RETURN_VALUE (*callback)(FcitxInstance*);
         boolean (*check)(FcitxInstance*);
     } keyHandle[] = {
-        {KR_SWITCH, hkSwitchKey1, hkSwitchKey2, _DoSwitch, _CheckSwitch}, // KR_SWITCH
         {KR_2ND_SELECTKEY, fc->i2ndSelectKey, NULL, _Do2ndSelect, _Check2ndSelect}, // KR_2ND_SELECTKEY,
         {KR_3RD_SELECTKEY, fc->i3rdSelectKey, NULL, _Do3ndSelect, _Check3ndSelect}, // KR_3RD_SELECTKEY,
+        {KR_SWITCH, hkSwitchKey1, hkSwitchKey2, _DoSwitch, _CheckSwitch}, // KR_SWITCH
         {KR_SWITCH_IM, hkSwitchNext1, hkSwitchNext2, _DoSwitchIM, _CheckSwitchIM}, //  KR_SWITCH_IM,
         {KR_SWITCH_IM_REVERSE, hkSwitchPrev1, hkSwitchPrev2, _DoSwitchIMReverse, _CheckSwitchIM}, // KR_SWITCH_IM_REVERSE,
         {KR_TRIGGER, hkTrigger1, hkTrigger2, _DoTrigger, NULL},
