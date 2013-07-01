@@ -96,6 +96,8 @@ typedef int32_t boolean;
 #  define fcitx_expect(exp, var) (exp)
 #endif
 
+#define FCITX_ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
+
 #define fcitx_likely(x) fcitx_expect(!!(x), 1)
 #define fcitx_unlikely(x) fcitx_expect(!!(x), 0)
 

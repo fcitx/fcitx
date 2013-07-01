@@ -60,7 +60,6 @@ CONFIG_BINDING_REGISTER("Hotkey", "IMSwitchIncludeInactive", bIMSwitchIncludeIna
 CONFIG_BINDING_REGISTER("Hotkey", "IMSwitchHotkey", iIMSwitchKey)
 CONFIG_BINDING_REGISTER("Hotkey", "SwitchKey", iSwitchKey)
 CONFIG_BINDING_REGISTER("Hotkey", "CustomSwitchKey", hkCustomSwitchKey)
-CONFIG_BINDING_REGISTER("Hotkey", "DoubleSwitchKey", bDoubleSwitchKey)
 CONFIG_BINDING_REGISTER("Hotkey", "TimeInterval", iTimeInterval)
 CONFIG_BINDING_REGISTER("Hotkey", "VKSwitchKey", hkVK)
 CONFIG_BINDING_REGISTER("Hotkey", "RemindSwitchKey", hkRemind)

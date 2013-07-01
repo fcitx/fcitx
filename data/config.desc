@@ -84,12 +84,6 @@ DefaultValue=CTRL_5
 Description=Reload configuration
 Advance=True
 
-[Hotkey/DoubleSwitchKey]
-Type=Boolean
-DefaultValue=False
-Description=Press Switch Key twice to Change Mode
-Advance=True
-
 [Hotkey/TimeInterval]
 Type=Integer
 DefaultValue=250

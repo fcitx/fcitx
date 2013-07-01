@@ -561,6 +561,144 @@ _NormalizeHotkeyForModifier(const FcitxHotkey* origin, FcitxHotkey* group1, Fcit
     }
 }
 
+static inline boolean IsTriggerOnRelease(FcitxKeySym sym, unsigned int state) {
+    if (state == 0) {
+        return true;
+    }
+
+    if (FcitxHotkeyIsHotKeyModifierCombine(sym, state)) {
+        return true;
+    }
+
+    return false;
+}
+
+INPUT_RETURN_VALUE _DoTrigger(FcitxInstance* instance)
+{
+    if (FcitxInstanceGetCurrentState(instance) == IS_INACTIVE) {
+        FcitxInstanceChangeIMState(instance, instance->CurrentIC);
+        FcitxInstanceShowInputSpeed(instance);
+    } else {
+        FcitxInstanceCloseIM(instance, instance->CurrentIC);
+    }
+    return IRV_DO_NOTHING;
+}
+
+INPUT_RETURN_VALUE _DoActivate(FcitxInstance* instance)
+{
+    if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
+        FcitxInstanceEnableIM(instance, instance->CurrentIC, false);
+        return IRV_DO_NOTHING;
+    }
+    return IRV_TO_PROCESS;
+}
+
+INPUT_RETURN_VALUE _DoDeactivate(FcitxInstance* instance)
+{
+    if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) {
+        FcitxInstanceCloseIM(instance, instance->CurrentIC);
+        return IRV_DO_NOTHING;
+    }
+    return IRV_TO_PROCESS;
+}
+
+INPUT_RETURN_VALUE _DoSwitchIM(FcitxInstance* instance)
+{
+    if (instance->config->bIMSwitchKey
+        && (instance->config->bIMSwitchIncludeInactive || FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)) {
+        FcitxInstanceSwitchIMByIndex(instance, instance->config->bIMSwitchIncludeInactive ? -1 : -3);
+        return IRV_DO_NOTHING;
+    }
+    return IRV_TO_PROCESS;
+}
+
+INPUT_RETURN_VALUE _DoSwitchIMReverse(FcitxInstance* instance)
+{
+    if (instance->config->bIMSwitchKey
+        && (instance->config->bIMSwitchIncludeInactive || FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)) {
+        FcitxInstanceSwitchIMByIndex(instance, instance->config->bIMSwitchIncludeInactive ? -2 : -4);
+        return IRV_DO_NOTHING;
+    }
+    return IRV_TO_PROCESS;
+}
+
+INPUT_RETURN_VALUE _DoSwitch(FcitxInstance* instance)
+{
+    INPUT_RETURN_VALUE retVal = IRV_DONOT_PROCESS;
+    FcitxIM* currentIM = FcitxInstanceGetCurrentIM(instance);
+    if (currentIM && currentIM->OnClose) {
+        currentIM->OnClose(currentIM->klass, CET_ChangeByInactivate);
+    }
+    else {
+        if (instance->config->bSendTextWhenSwitchEng) {
+            if (instance->input->iCodeInputCount != 0) {
+                strcpy(FcitxInputStateGetOutputString(instance->input), FcitxInputStateGetRawInputBuffer(instance->input));
+                retVal = IRV_ENG;
+            }
+        }
+    }
+    FcitxInstanceChangeIMStateWithKey(instance, instance->CurrentIC, true);
+    FcitxInstanceShowInputSpeed(instance);
+
+    return retVal;
+}
+
+INPUT_RETURN_VALUE _Do2ndSelect(FcitxInstance* instance)
+{
+    FcitxInputState* input = instance->input;
+    if (input->bIsInRemind || FcitxCandidateWordGetPageSize(input->candList) != 0) {
+        if (!input->bIsInRemind) {
+            return FcitxCandidateWordChooseByIndex(input->candList, 1);
+        } else {
+            strcpy(FcitxInputStateGetOutputString(input), " ");
+            return IRV_COMMIT_STRING;
+        }
+    }
+    return IRV_TO_PROCESS;
+}
+
+INPUT_RETURN_VALUE _Do3ndSelect(FcitxInstance* instance)
+{
+    FcitxInputState* input = instance->input;
+    if (input->bIsInRemind || FcitxCandidateWordGetPageSize(input->candList) != 0) {
+        if (!input->bIsInRemind) {
+            return FcitxCandidateWordChooseByIndex(input->candList, 2);
+        } else {
+            strcpy(FcitxInputStateGetOutputString(input), "\xe3\x80\x80");
+            return IRV_COMMIT_STRING;
+        }
+    }
+    return IRV_TO_PROCESS;
+}
+
+boolean _Check2ndSelect(FcitxInstance* instance) {
+    return FcitxCandidateWordGetByIndex(instance->input->candList, 1) != NULL;
+}
+
+boolean _Check3ndSelect(FcitxInstance* instance) {
+    return FcitxCandidateWordGetByIndex(instance->input->candList, 2) != NULL;
+}
+
+boolean _CheckActivate(FcitxInstance* instance)
+{
+    return FcitxInstanceGetCurrentState(instance) != IS_ACTIVE;
+}
+
+boolean _CheckDeactivate(FcitxInstance* instance)
+{
+    return FcitxInstanceGetCurrentState(instance) == IS_ACTIVE;
+}
+
+boolean _CheckSwitch(FcitxInstance* instance) {
+    return instance->CurrentIC->state == IS_ACTIVE
+           || !instance->config->bUseExtraTriggerKeyOnlyWhenUseItToInactivate
+           || ((FcitxInputContext2*)(instance->CurrentIC))->switchBySwitchKey;
+}
+
+boolean _CheckSwitchIM(FcitxInstance* instance) {
+    return instance->config->bIMSwitchKey;
+}
+
 FCITX_EXPORT_API
 INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     FcitxInstance* instance,
@@ -579,6 +717,12 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
 
     FcitxGlobalConfig *fc = instance->config;
 
+    const FcitxHotkey* hkSwitchNext1 = imSWNextKey1[fc->iIMSwitchKey];
+    const FcitxHotkey* hkSwitchNext2 = imSWNextKey2[fc->iIMSwitchKey];
+
+    const FcitxHotkey* hkSwitchPrev1 = imSWPrevKey1[fc->iIMSwitchKey];
+    const FcitxHotkey* hkSwitchPrev2 = imSWPrevKey2[fc->iIMSwitchKey];
+
     const FcitxHotkey* hkSwitchKey1;
     const FcitxHotkey* hkSwitchKey2;
 
@@ -587,7 +731,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     FcitxHotkey hkTrigger1[2];
     FcitxHotkey hkTrigger2[2];
     FcitxHotkey hkActivate1[2];
-    FcitxHotkey hkActivate2[2];
+    FcitxHotkey     hkActivate2[2];
     FcitxHotkey hkInactivate1[2];
     FcitxHotkey hkInactivate2[2];
     // check config.desc
@@ -603,6 +747,23 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     _NormalizeHotkeyForModifier(fc->hkTrigger, hkTrigger1, hkTrigger2);
     _NormalizeHotkeyForModifier(fc->hkActivate, hkActivate1, hkActivate2);
     _NormalizeHotkeyForModifier(fc->hkInactivate, hkInactivate1, hkInactivate2);
+
+    struct {
+        KEY_RELEASED kr;
+        const FcitxHotkey* hk1;
+        const FcitxHotkey* hk2;
+        INPUT_RETURN_VALUE (*callback)(FcitxInstance*);
+        boolean (*check)(FcitxInstance*);
+    } keyHandle[] = {
+        {KR_SWITCH, hkSwitchKey1, hkSwitchKey2, _DoSwitch, _CheckSwitch}, // KR_SWITCH
+        {KR_2ND_SELECTKEY, fc->i2ndSelectKey, NULL, _Do2ndSelect, _Check2ndSelect}, // KR_2ND_SELECTKEY,
+        {KR_3RD_SELECTKEY, fc->i3rdSelectKey, NULL, _Do3ndSelect, _Check3ndSelect}, // KR_3RD_SELECTKEY,
+        {KR_SWITCH_IM, hkSwitchNext1, hkSwitchNext2, _DoSwitchIM, _CheckSwitchIM}, //  KR_SWITCH_IM,
+        {KR_SWITCH_IM_REVERSE, hkSwitchPrev1, hkSwitchPrev2, _DoSwitchIMReverse, _CheckSwitchIM}, // KR_SWITCH_IM_REVERSE,
+        {KR_TRIGGER, hkTrigger1, hkTrigger2, _DoTrigger, NULL},
+        {KR_ACTIVATE, hkActivate1, hkActivate2, _DoActivate, _CheckActivate},
+        {KR_DEACTIVATE, hkActivate2, hkActivate2, _DoDeactivate, _CheckDeactivate}, //  KR_DEACTIVATE
+    };
 
     if (instance->CurrentIC == NULL)
         return IRV_TO_PROCESS;
@@ -620,8 +781,10 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     if (currentIM == NULL)
         return IRV_TO_PROCESS;
 
+    boolean triggerOnRelease = IsTriggerOnRelease(sym, state);
+
 #define HAVE_IM (utarray_len(&instance->imes) > 1)
-#define CHECK_HOTKEY(name) (FcitxHotkeyIsHotKey(sym, state, name##1) || FcitxHotkeyIsHotKey(sym, state, name##2))
+#define CHECK_HOTKEY(name) ((name##1 ? FcitxHotkeyIsHotKey(sym, state, name##1) : false) || (name##2 ? FcitxHotkeyIsHotKey(sym, state, name##2) : false))
 
     /*
      * for following reason, we cannot just process switch key, 2nd, 3rd key as other simple hotkey
@@ -634,82 +797,27 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     if (event == FCITX_RELEASE_KEY
         && FcitxInstanceGetCurrentState(instance) != IS_CLOSED
         && (timestamp - input->lastKeyPressedTime) < 500
-        && (!input->bIsDoInputOnly)) {
-        if ((input->bIsInRemind || FcitxCandidateWordGetPageSize(input->candList) != 0)
-            && FcitxHotkeyIsHotKey(sym, state, fc->i2ndSelectKey)
-            && input->keyReleased == KR_2ND_SELECTKEY) {
-            if (!input->bIsInRemind) {
-                retVal = FcitxCandidateWordChooseByIndex(input->candList, 1);
-            } else {
-                strcpy(FcitxInputStateGetOutputString(input), " ");
-                retVal = IRV_COMMIT_STRING;
-            }
-            input->keyReleased = KR_OTHER;
-        } else if ((input->bIsInRemind || FcitxCandidateWordGetPageSize(input->candList) != 0)
-                    && FcitxHotkeyIsHotKey(sym, state, fc->i3rdSelectKey)
-                    && input->keyReleased == KR_3RD_SELECTKEY) {
-            if (!input->bIsInRemind) {
-                retVal = FcitxCandidateWordChooseByIndex(input->candList, 2);
-            } else {
-                strcpy(FcitxInputStateGetOutputString(input), "\xe3\x80\x80");
-                retVal = IRV_COMMIT_STRING;
-            }
-
-            input->keyReleased = KR_OTHER;
-        } else {
-            if (HAVE_IM) {
-                if (input->keyReleased == KR_TRIGGER && CHECK_HOTKEY(hkTrigger)) {
-                    /* trigger key has the highest priority, so we check it first */
-                    if (FcitxInstanceGetCurrentState(instance) == IS_INACTIVE) {
-                        FcitxInstanceChangeIMState(instance, instance->CurrentIC);
-                        FcitxInstanceShowInputSpeed(instance);
-                    } else {
-                        FcitxInstanceCloseIM(instance, instance->CurrentIC);
-                    }
-
+        && (!input->bIsDoInputOnly)
+        && HAVE_IM) {
+        int i;
+        for (i = 0; i < FCITX_ARRAY_SIZE(keyHandle); i ++) {
+            if (retVal == IRV_TO_PROCESS
+                && input->keyReleased == keyHandle[i].kr
+                && CHECK_HOTKEY(keyHandle[i].hk)) {
+                if (triggerOnRelease) {
+                    retVal = keyHandle[i].callback(instance);
+                } else {
                     retVal = IRV_DO_NOTHING;
-                } else if (input->keyReleased == KR_ACTIVATE && CHECK_HOTKEY(hkActivate)) {
-                    if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
-                        FcitxInstanceEnableIM(instance, instance->CurrentIC, false);
-                        retVal = IRV_DO_NOTHING;
-                    }
-                } else if (input->keyReleased == KR_DEACTIVATE && CHECK_HOTKEY(hkInactivate)) {
-                    if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) {
-                        FcitxInstanceCloseIM(instance, instance->CurrentIC);
-                        retVal = IRV_DO_NOTHING;
-                    }
-                } else if (fc->bIMSwitchKey
-                    && (fc->bIMSwitchIncludeInactive || FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)
-                    && (FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))
-                       ) {
-                    if (input->keyReleased == KR_SWITCH_IM) {
-                        FcitxInstanceSwitchIMByIndex(instance, fc->bIMSwitchIncludeInactive ? -1 : -3);
-                    }
-                } else if (fc->bIMSwitchKey
-                           && (fc->bIMSwitchIncludeInactive || FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)
-                           && (FcitxHotkeyIsHotKey(sym, state, imSWPrevKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWPrevKey2[fc->iIMSwitchKey]))
-                        ) {
-                    if (input->keyReleased == KR_SWITCH_IM_REVERSE) {
-                        FcitxInstanceSwitchIMByIndex(instance, fc->bIMSwitchIncludeInactive ? -2 : -4);
-                    }
-                } else if ((FcitxHotkeyIsHotKey(sym, state, hkSwitchKey1) || FcitxHotkeyIsHotKey(sym, state, hkSwitchKey2)) && input->keyReleased == KR_SWITCH && !fc->bDoubleSwitchKey) {
-                    retVal = IRV_DONOT_PROCESS;
-                    if (currentIM && currentIM->OnClose) {
-                        currentIM->OnClose(currentIM->klass, CET_ChangeByInactivate);
-                    }
-                    else {
-                        if (fc->bSendTextWhenSwitchEng) {
-                            if (input->iCodeInputCount != 0) {
-                                strcpy(FcitxInputStateGetOutputString(input), FcitxInputStateGetRawInputBuffer(input));
-                                retVal = IRV_ENG;
-                            }
-                        }
-                    }
-                    input->keyReleased = KR_OTHER;
-                    FcitxInstanceChangeIMStateWithKey(instance, instance->CurrentIC, true);
-                    FcitxInstanceShowInputSpeed(instance);
                 }
             }
+
+            if (retVal != IRV_TO_PROCESS) {
+                input->keyReleased = KR_OTHER;
+                break;
+            }
+        }
+        if (i == FCITX_ARRAY_SIZE(keyHandle)) {
+            input->keyReleased = KR_OTHER;
         }
     }
 
@@ -724,57 +832,24 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
         /* process key event for switch key */
         if (event == FCITX_PRESS_KEY) {
             input->lastKeyPressedTime = timestamp;
-            if (FcitxHotkeyIsHotKey(sym, state, fc->i2ndSelectKey)) {
-                if (FcitxCandidateWordGetByIndex(input->candList, 1) != NULL) {
-                    input->keyReleased = KR_2ND_SELECTKEY;
-                    return IRV_DO_NOTHING;
+            do {
+                if (!HAVE_IM) {
+                    break;
                 }
-            } else if (FcitxHotkeyIsHotKey(sym, state, fc->i3rdSelectKey)) {
-                if (FcitxCandidateWordGetByIndex(input->candList, 2) != NULL) {
-                    input->keyReleased = KR_3RD_SELECTKEY;
-                    return IRV_DO_NOTHING;
-                }
-            }
-            if (!(FcitxHotkeyIsHotKey(sym, state, hkSwitchKey1) ||
-                  FcitxHotkeyIsHotKey(sym, state, hkSwitchKey2)))
-                input->keyReleased = KR_OTHER;
-            else {
-                if (input->keyReleased == KR_SWITCH &&
-                    (timestamp - input->lastKeyPressedTime <
-                     (unsigned)fc->iTimeInterval) &&
-                    fc->bDoubleSwitchKey) {
-                    FcitxInstanceCommitString(instance, instance->CurrentIC, FcitxInputStateGetRawInputBuffer(input));
-                    FcitxInstanceChangeIMStateWithKey(instance, instance->CurrentIC, true);
-                }
-            }
-
-            FcitxInputContext2* currentIC2 = (FcitxInputContext2*) instance->CurrentIC;
-
-            if (HAVE_IM) {
-                if (CHECK_HOTKEY(hkTrigger)) {
-                    input->keyReleased = KR_TRIGGER;
-                } else if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE && CHECK_HOTKEY(hkActivate)) {
-                    input->keyReleased = KR_ACTIVATE;
-                } else if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE && CHECK_HOTKEY(hkInactivate)) {
-                    input->keyReleased = KR_DEACTIVATE;
-                } else if ((instance->CurrentIC->state == IS_ACTIVE || !fc->bUseExtraTriggerKeyOnlyWhenUseItToInactivate || currentIC2->switchBySwitchKey) &&
-                          CHECK_HOTKEY(hkSwitchKey)) {
-                    input->keyReleased = KR_SWITCH;
-                } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))) {
-                    input->keyReleased = KR_SWITCH_IM;
-                    retVal = IRV_DONOT_PROCESS;
-                } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWPrevKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWPrevKey2[fc->iIMSwitchKey]))) {
-                    input->keyReleased = KR_SWITCH_IM_REVERSE;
-                    retVal = IRV_DONOT_PROCESS;
-                }
-                if (input->keyReleased != KR_OTHER) {
-                    if (FcitxHotkeyIsHotKeyModifierCombine(sym, state)) {
-                        retVal = IRV_DONOT_PROCESS;
-                    } else {
-                        retVal = IRV_DO_NOTHING;
+                int i;
+                for (i = 0; i < FCITX_ARRAY_SIZE(keyHandle); i ++) {
+                    if (CHECK_HOTKEY(keyHandle[i].hk) && (!keyHandle[i].check || keyHandle[i].check(instance))) {
+                        if (!triggerOnRelease) {
+                            retVal = keyHandle[i].callback(instance);
+                        }
+                        input->keyReleased = keyHandle[i].kr;
+                        break;
                     }
                 }
-            }
+                if (i == FCITX_ARRAY_SIZE(keyHandle)) {
+                    input->keyReleased = KR_OTHER;
+                }
+            } while(0);
         }
     }
 
