@@ -50,6 +50,10 @@
     NOTIFICATIONS_MATCH_SIGNAL ","              \
     "member='NotificationClosed'"
 
+#ifndef DBUS_TIMEOUT_USE_DEFAULT
+#  define DBUS_TIMEOUT_USE_DEFAULT (-1)
+#endif
+
 static void *FcitxNotifyCreate(FcitxInstance *instance);
 static void FcitxNotifyDestroy(void *arg);
 
