@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-28 18:02-0400\n"
-"PO-Revision-Date: 2013-06-28 16:01+0000\n"
-"Last-Translator: wwj402 <wwj402@gmail.com>\n"
+"POT-Creation-Date: 2013-07-01 12:03-0400\n"
+"PO-Revision-Date: 2013-06-28 22:08+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -99,7 +99,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM/zh-cn"
 
-#: src/lib/fcitx/ime.c:1688
+#: src/lib/fcitx/ime.c:1763
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -157,7 +157,7 @@ msgstr "Alt+Shift"
 msgid "ALT_SUPER"
 msgstr "Alt+Super"
 
-#: data/config.desc:202
+#: data/config.desc:196
 msgid "Action after press enter"
 msgstr "回车键操作"
 
@@ -165,7 +165,7 @@ msgstr "回车键操作"
 msgid "Activate input method"
 msgstr "激活输入法"
 
-#: data/config.desc:185
+#: data/config.desc:179
 msgid "Active"
 msgstr "激活"
 
@@ -252,7 +252,7 @@ msgstr "按频率"
 msgid "AdjustNo"
 msgstr "不调整"
 
-#: data/config.desc:176
+#: data/config.desc:170
 msgid "All"
 msgstr "所有"
 
@@ -297,9 +297,9 @@ msgstr "额外的上一页快捷键"
 msgid "Alternative Trigger Key for QuickPhrase"
 msgstr "额外的快速输入触发键"
 
-#: data/config.desc:236 data/config.desc:242 data/config.desc:248
-#: data/config.desc:254 data/config.desc:260 data/config.desc:266
-#: data/config.desc:272
+#: data/config.desc:230 data/config.desc:236 data/config.desc:242
+#: data/config.desc:248 data/config.desc:254 data/config.desc:260
+#: data/config.desc:266
 msgid "Appearance"
 msgstr "外观"
 
@@ -439,7 +439,7 @@ msgstr "无法打开Socket %s: %s"
 msgid "Candidate Index Color"
 msgstr "候选词索引颜色"
 
-#: data/config.desc:220
+#: data/config.desc:214
 msgid "Candidate Word Number"
 msgstr "候选词个数"
 
@@ -568,7 +568,7 @@ msgstr "修改 Fcitx 配置"
 msgid "Choose"
 msgstr "选择键"
 
-#: data/config.desc:136
+#: data/config.desc:130
 msgid "Choose Second and Third Candidate Word"
 msgstr "选择第二第三候选词"
 
@@ -612,7 +612,7 @@ msgstr "带皮肤支持的经典界面"
 msgid "ClassicUI"
 msgstr "经典界面"
 
-#: data/config.desc:199
+#: data/config.desc:193
 msgid "Clean"
 msgstr "清除"
 
@@ -690,7 +690,7 @@ msgstr "光标颜色"
 msgid "Comment"
 msgstr "描述"
 
-#: data/config.desc:200
+#: data/config.desc:194
 msgid "Commit"
 msgstr "提交输入"
 
@@ -706,7 +706,7 @@ msgstr "第一个候选词的提交键"
 msgid "Commit string when there is no match"
 msgstr "当无匹配时提交输入"
 
-#: data/config.desc:214
+#: data/config.desc:208
 msgid "Commit when toggle state"
 msgstr "切换状态时提交"
 
@@ -835,7 +835,7 @@ msgstr "全部删除(&L)"
 msgid "Default"
 msgstr "默认"
 
-#: data/config.desc:186
+#: data/config.desc:180
 msgid "Default Input Method State"
 msgstr "默认输入法状态"
 
@@ -875,7 +875,7 @@ msgstr "桌面环境为 ${1}。"
 msgid "Dianbaoma"
 msgstr "电报码"
 
-#: data/config.desc:208
+#: data/config.desc:202
 msgid "Disable Paging in Remind Mode"
 msgstr "联想模式禁用翻页"
 
@@ -894,11 +894,11 @@ msgstr "禁用插件 %s，依赖 %s 无法满足。"
 msgid "Disabled"
 msgstr "禁用"
 
-#: data/config.desc:233
+#: data/config.desc:227
 msgid "Do not commit preedit text when unfocus a window"
 msgstr "窗口失去焦点时不提交预编辑文本"
 
-#: src/module/freedesktop-notify/freedesktop-notify.c:616
+#: src/module/freedesktop-notify/freedesktop-notify.c:620
 msgid "Do not show again"
 msgstr "不要再显示"
 
@@ -906,11 +906,11 @@ msgstr "不要再显示"
 msgid "Do not show in GUI"
 msgstr "不在图形界面显示"
 
-#: data/config.desc:275
+#: data/config.desc:269
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr "只有一个候选词和预编辑字符串时不显示输入窗口"
 
-#: data/config.desc:269
+#: data/config.desc:263
 msgid "Do not show input window if there is only preedit string"
 msgstr "只有预编辑字符串时不显示输入窗口"
 
@@ -1364,7 +1364,7 @@ msgstr "模糊uan和uang"
 msgid "Fuzzy z and zh"
 msgstr "模糊z和zh"
 
-#: data/config.desc:227
+#: data/config.desc:221
 msgid "Give the tips of Phrase"
 msgstr "提示词库中词组"
 
@@ -1430,9 +1430,9 @@ msgstr "平假名"
 #: data/config.desc:60 data/config.desc:65 data/config.desc:71
 #: data/config.desc:81 data/config.desc:87 data/config.desc:93
 #: data/config.desc:99 data/config.desc:105 data/config.desc:111
-#: data/config.desc:117 data/config.desc:123 data/config.desc:128
+#: data/config.desc:117 data/config.desc:122 data/config.desc:127
 #: data/config.desc:133 data/config.desc:139 data/config.desc:145
-#: data/config.desc:151 data/config.desc:158
+#: data/config.desc:152
 msgid "Hotkey"
 msgstr "快捷键"
 
@@ -1515,7 +1515,7 @@ msgstr "忽略部分标点，若为空则忽略所有标点"
 msgid "Inactivate Input Method"
 msgstr "取消激活输入法"
 
-#: data/config.desc:184
+#: data/config.desc:178
 msgid "Inactive"
 msgstr "非激活"
 
@@ -1551,7 +1551,7 @@ msgstr "输入字体大小"
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-#: src/lib/fcitx/ime.c:1594 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1669 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "输入法"
@@ -1565,7 +1565,7 @@ msgstr "输入法配置"
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
 
-#: data/config.desc:251
+#: data/config.desc:245
 msgid "Input Method Hint will be only shown when state is active"
 msgstr "输入法提示只在激活状态显示"
 
@@ -1577,7 +1577,7 @@ msgstr "输入法相关的环境变量: "
 msgid "Input Methods:"
 msgstr "输入法:"
 
-#: src/lib/fcitx/ime.c:1685
+#: src/lib/fcitx/ime.c:1760
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -1595,7 +1595,7 @@ msgstr "输入法"
 msgid "Installer Script for Fcitx Skin"
 msgstr "Fcitx 皮肤的安装器"
 
-#: data/config.desc:96
+#: data/config.desc:90
 msgid "Interval of Two Key Input"
 msgstr "输入间隔"
 
@@ -1929,11 +1929,11 @@ msgstr "显示于用户界面中的名称"
 msgid "Native"
 msgstr "原生"
 
-#: data/config.desc:161
+#: data/config.desc:155
 msgid "Next Candidate Word"
 msgstr "下一个候选词"
 
-#: data/config.desc:131
+#: data/config.desc:125
 msgid "Next Page"
 msgstr "下一页"
 
@@ -1942,7 +1942,7 @@ msgstr "下一页"
 msgid "Next Page Icon"
 msgstr "下一页图标"
 
-#: data/config.desc:175
+#: data/config.desc:169
 msgid "No"
 msgstr "否"
 
@@ -1984,7 +1984,7 @@ msgstr "无"
 msgid "Note for GNOME Later than 3.6"
 msgstr "有关 3.6 之后版本 GNOME 的备注"
 
-#: data/config.desc:198
+#: data/config.desc:192
 msgid "Nothing"
 msgstr "无操作"
 
@@ -2018,9 +2018,9 @@ msgstr "码表顺序"
 msgid "Other Color"
 msgstr "其他颜色"
 
-#: data/config.desc:189 data/config.desc:195 data/config.desc:205
-#: data/config.desc:211 data/config.desc:217 data/config.desc:224
-#: data/config.desc:230
+#: data/config.desc:183 data/config.desc:189 data/config.desc:199
+#: data/config.desc:205 data/config.desc:211 data/config.desc:218
+#: data/config.desc:224
 msgid "Output"
 msgstr "输出"
 
@@ -2048,7 +2048,7 @@ msgstr "覆盖皮肤的字号设置"
 msgid "Parent"
 msgstr "所属附加组件"
 
-#: data/config.desc:177
+#: data/config.desc:171
 msgid "PerProgram"
 msgstr "按程序"
 
@@ -2165,10 +2165,6 @@ msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
 msgid "Press Enter to input text"
 msgstr "按下回车输入文本"
 
-#: data/config.desc:90
-msgid "Press Switch Key twice to Change Mode"
-msgstr "双击切换键时切换"
-
 #: src/im/pinyin/py.c:737
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr "按下索引来删除用户词组 (ESC 取消)"
@@ -2177,7 +2173,7 @@ msgstr "按下索引来删除用户词组 (ESC 取消)"
 msgid "Press number to make word in frequent list"
 msgstr "按下数字加入常用字表"
 
-#: data/config.desc:126
+#: data/config.desc:120
 msgid "Prev Page"
 msgstr "上一页"
 
@@ -2186,7 +2182,7 @@ msgstr "上一页"
 msgid "Prev Page Icon"
 msgstr "上一页图标"
 
-#: data/config.desc:154
+#: data/config.desc:148
 msgid "Previous Candidate Word"
 msgstr "上一个候选词"
 
@@ -2203,7 +2199,7 @@ msgstr "插件的优先级"
 msgid "Profile"
 msgstr "预置文件"
 
-#: data/config.desc:165 data/config.desc:171 data/config.desc:180
+#: data/config.desc:159 data/config.desc:165 data/config.desc:174
 msgid "Program"
 msgstr "程序"
 
@@ -2408,7 +2404,7 @@ msgstr "将剪贴板历史保存为文件"
 msgid "Save dict error"
 msgstr "保存码表出错"
 
-#: data/config.desc:142
+#: data/config.desc:136
 msgid "Saving All Config and Input History"
 msgstr "保存配置及输入历史"
 
@@ -2420,7 +2416,7 @@ msgstr "输入法切换键"
 msgid "Search unicode"
 msgstr "搜索 unicode"
 
-#: data/config.desc:168
+#: data/config.desc:162
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx真正启动前延迟的秒数"
 
@@ -2452,11 +2448,11 @@ msgstr "分号"
 msgid "Send Raw Preedit"
 msgstr "发送原始输入按键"
 
-#: data/config.desc:215
+#: data/config.desc:209
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr "切换到非激活模式时当前输入的原始文本上屏"
 
-#: data/config.desc:178
+#: data/config.desc:172
 msgid "Share State Among Window"
 msgstr "在窗口间共享状态"
 
@@ -2475,15 +2471,15 @@ msgstr "Shift"
 msgid "Show"
 msgstr "显示"
 
-#: data/config.desc:239
+#: data/config.desc:233
 msgid "Show Input Method Hint After Input method changed"
 msgstr "切换输入法时显示输入法提示"
 
-#: data/config.desc:245
+#: data/config.desc:239
 msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr "获得输入焦点并且输入法变化时显示输入法提示"
 
-#: data/config.desc:257
+#: data/config.desc:251
 msgid "Show Input Speed"
 msgstr "显示输入速度"
 
@@ -2491,7 +2487,7 @@ msgstr "显示输入速度"
 msgid "Show Preedit String in Client Window"
 msgstr "在客户端窗口中显示预编辑字符串"
 
-#: data/config.desc:263
+#: data/config.desc:257
 msgid "Show Version"
 msgstr "显示版本"
 
@@ -2520,7 +2516,7 @@ msgstr "简繁转换"
 msgid "Simplified Chinese is enabled."
 msgstr "已启用简体中文。"
 
-#: src/ui/classic/skin.c:680 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:679 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "皮肤"
 
@@ -2681,11 +2677,11 @@ msgstr "Super+左 Ctrl"
 msgid "Super+Right Ctrl"
 msgstr "Super+右 Ctrl"
 
-#: data/config.desc:148
+#: data/config.desc:142
 msgid "Switch Embeded Preedit"
 msgstr "切换嵌入预编辑字符串"
 
-#: data/config.desc:120
+#: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
 msgstr "切换全角标点"
 
@@ -2734,15 +2730,15 @@ msgstr "切换至第6个输入法"
 msgid "Switch to the Third Input Method"
 msgstr "切换至第3个输入法"
 
-#: data/config.desc:114
+#: data/config.desc:108
 msgid "Switching Full Width Character Mode"
 msgstr "切换全角"
 
-#: data/config.desc:108
+#: data/config.desc:102
 msgid "Switching Remind Mode"
 msgstr "切换联想模式"
 
-#: data/config.desc:102
+#: data/config.desc:96
 msgid "Switching Virtual Keyboard"
 msgstr "切换虚拟键盘"
 
@@ -2795,13 +2791,13 @@ msgstr ""
 "这仅仅是个软性限制. 当有多个字的笔顺相同时, 实际的笔画输入结果个数可能多于这"
 "个值."
 
-#: data/config.desc:162
+#: data/config.desc:156
 msgid ""
 "This is used in some modules and input methods to navigate to the next "
 "candidate word"
 msgstr "在部分插件 / 输入法中用来切换到下一个候选词的快捷键"
 
-#: data/config.desc:155
+#: data/config.desc:149
 msgid ""
 "This is used in some modules and input methods to navigate to the previous "
 "candidate word"
@@ -2911,7 +2907,7 @@ msgstr "快速输入的触发键"
 msgid "Type"
 msgstr "类型"
 
-#: data/config.desc:192
+#: data/config.desc:186
 msgid "Type half width Punc After a Number"
 msgstr "数字后跟半角符号"
 
@@ -3240,7 +3236,7 @@ msgstr "可执行文件:"
 msgid "here"
 msgstr "这里"
 
-#: src/lib/fcitx/ime.c:1691
+#: src/lib/fcitx/ime.c:1766
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 
@@ -3274,5 +3270,5 @@ msgstr "xmodmap 命令"
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
 
-#~ msgid "Load extra dict: %s"
-#~ msgstr "加载额外码表：%s"
+#~ msgid "Press Switch Key twice to Change Mode"
+#~ msgstr "双击切换键时切换"
