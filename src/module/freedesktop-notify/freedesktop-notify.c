@@ -33,6 +33,10 @@
 #include "module/dbus/fcitx-dbus.h"
 #include "freedesktop-notify.h"
 
+#ifndef DBUS_TIMEOUT_USE_DEFAULT
+#  define DBUS_TIMEOUT_USE_DEFAULT (-1)
+#endif
+
 #define NOTIFICATIONS_SERVICE_NAME "org.freedesktop.Notifications"
 #define NOTIFICATIONS_INTERFACE_NAME "org.freedesktop.Notifications"
 #define NOTIFICATIONS_PATH "/org/freedesktop/Notifications"

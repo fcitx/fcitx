@@ -20,4 +20,4 @@ if(NOT _FCITX_DISABLE_GETTEXT)
 endif()
 
 install(TARGETS fcitx-scanner fcitx-po-parser
-  DESTINATION "${prefix}/share/cmake/fcitx/")
+  DESTINATION "${addondir}/libexec")

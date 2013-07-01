@@ -184,10 +184,10 @@ function(__fcitx_cmake_init)
       CACHE INTERNAL "include dir" FORCE)
   else()
     set(FCITX_SCANNER_EXECUTABLE
-      "${FCITX_MACRO_CMAKE_DIR}/fcitx-scanner"
+      "${FCITX4_ADDON_INSTALL_DIR}/libexec/fcitx-scanner"
       CACHE INTERNAL "fcitx-scanner" FORCE)
     set(FCITX_PO_PARSER_EXECUTABLE
-      "${FCITX_MACRO_CMAKE_DIR}/fcitx-po-parser"
+      "${FCITX4_ADDON_INSTALL_DIR}/libexec/fcitx-po-parser"
       CACHE INTERNAL "fcitx-po-parser" FORCE)
     execute_process(COMMAND env ${FCITX_PO_PARSER_EXECUTABLE}
       --gettext-support RESULT_VARIABLE result)
