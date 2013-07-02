@@ -413,7 +413,7 @@ int main(int argc, char *argv[])
         CreatePYBase();
         LoadPY();
         CreatePYPhrase();
-    } while(0);
+    }
 
 
     return 0;
