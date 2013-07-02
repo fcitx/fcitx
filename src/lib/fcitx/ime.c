@@ -1231,19 +1231,9 @@ INPUT_RETURN_VALUE ImProcessEnter(void *arg)
     if (!input->iCodeInputCount)
         retVal = IRV_DONOT_PROCESS;
     else {
-        switch (fc->enterToDo) {
-        case K_ENTER_NOTHING:
-            retVal = IRV_DO_NOTHING;
-            break;
-        case K_ENTER_CLEAN:
-            retVal = IRV_CLEAN;
-            break;
-        case K_ENTER_SEND:
-            FcitxInstanceCleanInputWindow(instance);
-            strcpy(FcitxInputStateGetOutputString(input), FcitxInputStateGetRawInputBuffer(input));
-            retVal = IRV_ENG;
-            break;
-        }
+        FcitxInstanceCleanInputWindow(instance);
+        strcpy(FcitxInputStateGetOutputString(input), FcitxInputStateGetRawInputBuffer(input));
+        retVal = IRV_ENG;
     }
     return retVal;
 }
