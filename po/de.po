@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-07-01 12:03-0400\n"
-"PO-Revision-Date: 2013-06-28 22:08+0000\n"
+"POT-Creation-Date: 2013-07-02 12:02-0400\n"
+"PO-Revision-Date: 2013-07-01 16:09+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/im/table/table.c:1413
+#: src/im/table/table.c:1411
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete zum Löschen"
 
@@ -93,7 +93,7 @@ msgstr "/Hinweis_für_GNOME_höher_als_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1763
+#: src/lib/fcitx/ime.c:1752
 msgid "/min  Time Used: "
 msgstr "/min Verwendete Zeit:"
 
@@ -150,10 +150,6 @@ msgstr "ALT_SHIFT"
 #: data/config.desc:77
 msgid "ALT_SUPER"
 msgstr "ALT_SUPER"
-
-#: data/config.desc:196
-msgid "Action after press enter"
-msgstr "Verhalten ENTER Taste"
 
 #: data/config.desc:49
 msgid "Activate input method"
@@ -293,9 +289,9 @@ msgstr "Alternative Taste Vorherige Seite"
 msgid "Alternative Trigger Key for QuickPhrase"
 msgstr "Alternative Tastenkombination für Quickphrase"
 
-#: data/config.desc:230 data/config.desc:236 data/config.desc:242
-#: data/config.desc:248 data/config.desc:254 data/config.desc:260
-#: data/config.desc:266
+#: data/config.desc:220 data/config.desc:226 data/config.desc:232
+#: data/config.desc:238 data/config.desc:244 data/config.desc:250
+#: data/config.desc:256
 msgid "Appearance"
 msgstr "Aussehen"
 
@@ -437,7 +433,7 @@ msgstr "Socket kann nicht geöffnet werden %s: %s"
 msgid "Candidate Index Color"
 msgstr "Farbe vorgeschlagene Kandidaten"
 
-#: data/config.desc:214
+#: data/config.desc:204
 msgid "Candidate Word Number"
 msgstr "Anzahl Zeichenvorschläge"
 
@@ -445,17 +441,17 @@ msgstr "Anzahl Zeichenvorschläge"
 msgid "Cangjie"
 msgstr "Cangjie"
 
-#: src/im/pinyin/py.c:1734
+#: src/im/pinyin/py.c:1733
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "\"Häufig benutztes Wort\" kann nicht gesichert werden: %s"
 
-#: src/im/pinyin/py.c:1797
+#: src/im/pinyin/py.c:1796
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "\"Pinyin Index\" kann nicht gesichert werden: %s"
 
-#: src/im/pinyin/py.c:1671
+#: src/im/pinyin/py.c:1670
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "Die Benutzerdaten können nicht gesichert werden: %s"
@@ -525,7 +521,7 @@ msgstr ""
 msgid "Cannot find xim_server on root window."
 msgstr ""
 
-#: src/im/table/table.c:656
+#: src/im/table/table.c:654
 msgid "Cannot found Pinyin"
 msgstr "Pinyin kann nicht gefunden werden"
 
@@ -579,15 +575,15 @@ msgstr "Zweiten und dritten Kandidaten auswählen"
 msgid "Choose key modifier"
 msgstr ""
 
-#: src/im/table/table.c:724
+#: src/im/table/table.c:722
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr "Phrase zum löschen auswählen, ESC zum Abbrechen"
 
-#: src/im/table/table.c:716
+#: src/im/table/table.c:714
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "Phrase zum nach vorne bringen auswählen, ESC zum Abrrechen"
 
-#: src/im/table/table.c:732
+#: src/im/table/table.c:730
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "Phrase asuwählen und den Eingabeverlauf zu löschen. ESC zum Abbrechen"
 
@@ -611,10 +607,6 @@ msgstr "CLASSIC mit Unterstützung von Skins"
 #: src/ui/classic/fcitx-classic-ui.desc:56
 msgid "ClassicUI"
 msgstr "Klassik Oberfläche"
-
-#: data/config.desc:193
-msgid "Clean"
-msgstr "Leeren"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
@@ -655,7 +647,7 @@ msgstr ""
 msgid "Code Table Name"
 msgstr ""
 
-#: src/im/table/table.c:1409
+#: src/im/table/table.c:1407
 msgid "Code is "
 msgstr "Code ist"
 
@@ -690,10 +682,6 @@ msgstr "Farbe der Cursors"
 msgid "Comment"
 msgstr "Kommentar"
 
-#: data/config.desc:194
-msgid "Commit"
-msgstr "Auswählen"
-
 #: src/im/table/table.desc:182
 msgid "Commit and pass when invalid key of this table pressed"
 msgstr ""
@@ -706,7 +694,7 @@ msgstr "Bestätigungstaste für den ersten Kandidaten"
 msgid "Commit string when there is no match"
 msgstr "Bestätigungstaste wenn kein Kandidat vorhanden ist"
 
-#: data/config.desc:208
+#: data/config.desc:198
 msgid "Commit when toggle state"
 msgstr "Bestätigen, wenn der Status verändert wird"
 
@@ -875,7 +863,7 @@ msgstr "Die Desktopumgebung ist ${1}"
 msgid "Dianbaoma"
 msgstr "Dianbaoma"
 
-#: data/config.desc:202
+#: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
 msgstr ""
 
@@ -895,7 +883,7 @@ msgstr ""
 msgid "Disabled"
 msgstr "Ausgeschaltet"
 
-#: data/config.desc:227
+#: data/config.desc:217
 msgid "Do not commit preedit text when unfocus a window"
 msgstr "Preedittext nicht eingeben, wenn das Fenster den Fokus verliert"
 
@@ -907,13 +895,13 @@ msgstr ""
 msgid "Do not show in GUI"
 msgstr "Nichts in Gnome-Anwendungen zeigen"
 
-#: data/config.desc:269
+#: data/config.desc:259
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr ""
 "Eingabefenster nicht zeigen, wenn nur ein Kandidat und der Preeditstring "
 "vorhanden sind"
 
-#: data/config.desc:263
+#: data/config.desc:253
 msgid "Do not show input window if there is only preedit string"
 msgstr "Fcitx Fenster nicht anzeigen, wenn es nur einen Vorschlag gibt"
 
@@ -1369,7 +1357,7 @@ msgstr "Fuzzy Pinyin uan/uang"
 msgid "Fuzzy z and zh"
 msgstr "Fuzzy Pinyin z/zh"
 
-#: data/config.desc:221
+#: data/config.desc:211
 msgid "Give the tips of Phrase"
 msgstr "Phrasenvorschläge aktivieren"
 
@@ -1553,7 +1541,7 @@ msgstr "Schriftgröße Eingabe"
 msgid "Input Message Color"
 msgstr "Farbe der Pinyineingabe"
 
-#: src/lib/fcitx/ime.c:1669 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1658 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Eingabemethode"
@@ -1567,7 +1555,7 @@ msgstr "Konfiguration Eingabemethode"
 msgid "Input Method Disabled"
 msgstr "Eingabemethode deaktiviert"
 
-#: data/config.desc:245
+#: data/config.desc:235
 msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 "Hinweis auf die Eingabemethode wird nur angezeigt, wenn der Status AKTIV ist"
@@ -1580,7 +1568,7 @@ msgstr "Eingabemethodenbezogenen Umgebungsvariablen:"
 msgid "Input Methods:"
 msgstr "Eingabemethoden:"
 
-#: src/lib/fcitx/ime.c:1760
+#: src/lib/fcitx/ime.c:1749
 msgid "Input Speed: "
 msgstr "Eingabegeschwindigkeit"
 
@@ -1734,7 +1722,7 @@ msgstr ""
 msgid "Left Super"
 msgstr "Links Super"
 
-#: src/im/table/table.c:607
+#: src/im/table/table.c:605
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1881,7 +1869,7 @@ msgstr "Font Menu"
 msgid "Menu Font Size"
 msgstr "Schriftgröße Menu"
 
-#: src/im/pinyin/py.c:2138
+#: src/im/pinyin/py.c:2139
 msgid "Migrate the old file path to the new one"
 msgstr "Dateien vom alten Pfad zum neuen verschieben"
 
@@ -1992,10 +1980,6 @@ msgstr "Nicht beibehalten"
 msgid "Note for GNOME Later than 3.6"
 msgstr "Hinweis für GNOME höher als 3.6"
 
-#: data/config.desc:192
-msgid "Nothing"
-msgstr "Nichts"
-
 #: src/module/vk/vk.c:57
 msgid "Number"
 msgstr "Nummer"
@@ -2026,9 +2010,8 @@ msgstr ""
 msgid "Other Color"
 msgstr "Farbe Andere"
 
-#: data/config.desc:183 data/config.desc:189 data/config.desc:199
-#: data/config.desc:205 data/config.desc:211 data/config.desc:218
-#: data/config.desc:224
+#: data/config.desc:183 data/config.desc:189 data/config.desc:195
+#: data/config.desc:201 data/config.desc:208 data/config.desc:214
 msgid "Output"
 msgstr "Ausgabe"
 
@@ -2064,7 +2047,7 @@ msgstr "Für jedes Programm"
 msgid "Phrase"
 msgstr "Phrase"
 
-#: src/im/table/table.c:1405
+#: src/im/table/table.c:1403
 msgid "Phrase is already in Dict "
 msgstr "Phrase ist schon im Wörterbuch"
 
@@ -2109,7 +2092,7 @@ msgstr "Die \"Pinyin Index Magic Number\" stimmt nicht überein!"
 msgid "Pinyin Key"
 msgstr "Taste PINYIN"
 
-#: src/im/table/table.c:632
+#: src/im/table/table.c:630
 msgid "Pinyin: "
 msgstr "Pinyin: "
 
@@ -2162,13 +2145,13 @@ msgstr ""
 msgid "Preferred Enchant provider"
 msgstr ""
 
-#: src/im/pinyin/py.c:778
+#: src/im/pinyin/py.c:767
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 "\"1\" drücken um %s aus der Liste der oft benutzten Wörter zu entfernen"
 
-#: src/im/pinyin/py.c:780
+#: src/im/pinyin/py.c:769
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
@@ -2179,11 +2162,11 @@ msgstr ""
 msgid "Press Enter to input text"
 msgstr "ENTER drücken zum Text eingeben"
 
-#: src/im/pinyin/py.c:737
+#: src/im/pinyin/py.c:728
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr "Index drücken um die Benutzer-Phrasen zu löschen (ESC zum Abbrechen)"
 
-#: src/im/pinyin/py.c:750
+#: src/im/pinyin/py.c:741
 msgid "Press number to make word in frequent list"
 msgstr ""
 "Nummer drücken, um das Wort in die Lister der oft benutzen Wörter einzufügen"
@@ -2314,11 +2297,11 @@ msgstr "Eingabemethode registrieren"
 msgid "Reload configuration"
 msgstr "Konfiguration erneut laden"
 
-#: src/im/table/table.c:1297
+#: src/im/table/table.c:1295
 msgid "Remind:"
 msgstr ""
 
-#: src/im/pinyin/py.c:2053
+#: src/im/pinyin/py.c:2057
 msgid "Remind: "
 msgstr "Erinnern:"
 
@@ -2463,7 +2446,7 @@ msgstr "Semikolon"
 msgid "Send Raw Preedit"
 msgstr "Raw Preeditstring eingeben"
 
-#: data/config.desc:209
+#: data/config.desc:199
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr "Raw-Text eingeben, wenn zum inaktiven Modus gewechselt wird"
 
@@ -2486,16 +2469,16 @@ msgstr "Shift"
 msgid "Show"
 msgstr ""
 
-#: data/config.desc:233
+#: data/config.desc:223
 msgid "Show Input Method Hint After Input method changed"
 msgstr "Hinweis zur Eingabemethode zeigen, nachdem sie gewechselt wurde"
 
-#: data/config.desc:239
+#: data/config.desc:229
 msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr ""
 "Hinweis zur Eingabemethode zeigen, nachdem sie gewechselt wurde und Fokus auf"
 
-#: data/config.desc:251
+#: data/config.desc:241
 msgid "Show Input Speed"
 msgstr "Eingabegeschwindigkeit zeigen"
 
@@ -2503,7 +2486,7 @@ msgstr "Eingabegeschwindigkeit zeigen"
 msgid "Show Preedit String in Client Window"
 msgstr "Eingabe im Programmfenster integrieren"
 
-#: data/config.desc:257
+#: data/config.desc:247
 msgid "Show Version"
 msgstr "Version zeigen"
 
@@ -3273,7 +3256,7 @@ msgstr "Programm:"
 msgid "here"
 msgstr "hier"
 
-#: src/lib/fcitx/ime.c:1766
+#: src/lib/fcitx/ime.c:1755
 msgid "min Num of Characters: "
 msgstr "min Anzahl Zeichen:"
 
@@ -3307,5 +3290,14 @@ msgstr "xmodmap Befehl"
 msgid "your current font is: %s"
 msgstr "der aktuelle Font ist: %s"
 
-#~ msgid "Press Switch Key twice to Change Mode"
-#~ msgstr "Taste zweimal zum Scrollen der Eingabemethode betätigen"
+#~ msgid "Action after press enter"
+#~ msgstr "Verhalten ENTER Taste"
+
+#~ msgid "Clean"
+#~ msgstr "Leeren"
+
+#~ msgid "Commit"
+#~ msgstr "Auswählen"
+
+#~ msgid "Nothing"
+#~ msgstr "Nichts"

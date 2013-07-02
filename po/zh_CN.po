@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-07-01 12:03-0400\n"
-"PO-Revision-Date: 2013-06-28 22:08+0000\n"
+"POT-Creation-Date: 2013-07-02 12:02-0400\n"
+"PO-Revision-Date: 2013-07-01 16:09+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/im/table/table.c:1413
+#: src/im/table/table.c:1411
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
@@ -99,7 +99,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM/zh-cn"
 
-#: src/lib/fcitx/ime.c:1763
+#: src/lib/fcitx/ime.c:1752
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -156,10 +156,6 @@ msgstr "Alt+Shift"
 #: data/config.desc:77
 msgid "ALT_SUPER"
 msgstr "Alt+Super"
-
-#: data/config.desc:196
-msgid "Action after press enter"
-msgstr "回车键操作"
 
 #: data/config.desc:49
 msgid "Activate input method"
@@ -297,9 +293,9 @@ msgstr "额外的上一页快捷键"
 msgid "Alternative Trigger Key for QuickPhrase"
 msgstr "额外的快速输入触发键"
 
-#: data/config.desc:230 data/config.desc:236 data/config.desc:242
-#: data/config.desc:248 data/config.desc:254 data/config.desc:260
-#: data/config.desc:266
+#: data/config.desc:220 data/config.desc:226 data/config.desc:232
+#: data/config.desc:238 data/config.desc:244 data/config.desc:250
+#: data/config.desc:256
 msgid "Appearance"
 msgstr "外观"
 
@@ -439,7 +435,7 @@ msgstr "无法打开Socket %s: %s"
 msgid "Candidate Index Color"
 msgstr "候选词索引颜色"
 
-#: data/config.desc:214
+#: data/config.desc:204
 msgid "Candidate Word Number"
 msgstr "候选词个数"
 
@@ -447,17 +443,17 @@ msgstr "候选词个数"
 msgid "Cangjie"
 msgstr "仓颉"
 
-#: src/im/pinyin/py.c:1734
+#: src/im/pinyin/py.c:1733
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "无法保存词频: %s"
 
-#: src/im/pinyin/py.c:1797
+#: src/im/pinyin/py.c:1796
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "无法保存拼音索引: %s"
 
-#: src/im/pinyin/py.c:1671
+#: src/im/pinyin/py.c:1670
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
@@ -525,7 +521,7 @@ msgstr "无法找到 kimpanel dbus 接口或非 kimpanel 用户界面."
 msgid "Cannot find xim_server on root window."
 msgstr "无法在根窗口找到 xim_server."
 
-#: src/im/table/table.c:656
+#: src/im/table/table.c:654
 msgid "Cannot found Pinyin"
 msgstr "无法找到拼音"
 
@@ -579,15 +575,15 @@ msgstr "选择第二第三候选词"
 msgid "Choose key modifier"
 msgstr "选词修饰键"
 
-#: src/im/table/table.c:724
+#: src/im/table/table.c:722
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr "选择要删除的词组，按Escape 取消"
 
-#: src/im/table/table.c:716
+#: src/im/table/table.c:714
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "选择放在前面的词组，按Escape 取消"
 
-#: src/im/table/table.c:732
+#: src/im/table/table.c:730
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "选择要清理输入频率的词组，按Escape 取消"
 
@@ -611,10 +607,6 @@ msgstr "带皮肤支持的经典界面"
 #: src/ui/classic/fcitx-classic-ui.desc:56
 msgid "ClassicUI"
 msgstr "经典界面"
-
-#: data/config.desc:193
-msgid "Clean"
-msgstr "清除"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
@@ -655,7 +647,7 @@ msgstr "码表文件"
 msgid "Code Table Name"
 msgstr "码表名称"
 
-#: src/im/table/table.c:1409
+#: src/im/table/table.c:1407
 msgid "Code is "
 msgstr "编码为 "
 
@@ -690,10 +682,6 @@ msgstr "光标颜色"
 msgid "Comment"
 msgstr "描述"
 
-#: data/config.desc:194
-msgid "Commit"
-msgstr "提交输入"
-
 #: src/im/table/table.desc:182
 msgid "Commit and pass when invalid key of this table pressed"
 msgstr "当输入码表中非法的按键时提交输入并且发送这个按键"
@@ -706,7 +694,7 @@ msgstr "第一个候选词的提交键"
 msgid "Commit string when there is no match"
 msgstr "当无匹配时提交输入"
 
-#: data/config.desc:208
+#: data/config.desc:198
 msgid "Commit when toggle state"
 msgstr "切换状态时提交"
 
@@ -875,7 +863,7 @@ msgstr "桌面环境为 ${1}。"
 msgid "Dianbaoma"
 msgstr "电报码"
 
-#: data/config.desc:202
+#: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
 msgstr "联想模式禁用翻页"
 
@@ -894,7 +882,7 @@ msgstr "禁用插件 %s，依赖 %s 无法满足。"
 msgid "Disabled"
 msgstr "禁用"
 
-#: data/config.desc:227
+#: data/config.desc:217
 msgid "Do not commit preedit text when unfocus a window"
 msgstr "窗口失去焦点时不提交预编辑文本"
 
@@ -906,11 +894,11 @@ msgstr "不要再显示"
 msgid "Do not show in GUI"
 msgstr "不在图形界面显示"
 
-#: data/config.desc:269
+#: data/config.desc:259
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr "只有一个候选词和预编辑字符串时不显示输入窗口"
 
-#: data/config.desc:263
+#: data/config.desc:253
 msgid "Do not show input window if there is only preedit string"
 msgstr "只有预编辑字符串时不显示输入窗口"
 
@@ -1364,7 +1352,7 @@ msgstr "模糊uan和uang"
 msgid "Fuzzy z and zh"
 msgstr "模糊z和zh"
 
-#: data/config.desc:221
+#: data/config.desc:211
 msgid "Give the tips of Phrase"
 msgstr "提示词库中词组"
 
@@ -1551,7 +1539,7 @@ msgstr "输入字体大小"
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-#: src/lib/fcitx/ime.c:1669 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1658 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "输入法"
@@ -1565,7 +1553,7 @@ msgstr "输入法配置"
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
 
-#: data/config.desc:245
+#: data/config.desc:235
 msgid "Input Method Hint will be only shown when state is active"
 msgstr "输入法提示只在激活状态显示"
 
@@ -1577,7 +1565,7 @@ msgstr "输入法相关的环境变量: "
 msgid "Input Methods:"
 msgstr "输入法:"
 
-#: src/lib/fcitx/ime.c:1760
+#: src/lib/fcitx/ime.c:1749
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -1730,7 +1718,7 @@ msgstr "左"
 msgid "Left Super"
 msgstr "左 Super"
 
-#: src/im/table/table.c:607
+#: src/im/table/table.c:605
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1875,7 +1863,7 @@ msgstr "菜单字体"
 msgid "Menu Font Size"
 msgstr "菜单字体大小"
 
-#: src/im/pinyin/py.c:2138
+#: src/im/pinyin/py.c:2139
 msgid "Migrate the old file path to the new one"
 msgstr "迁移老文件路径到新文件路径"
 
@@ -1984,10 +1972,6 @@ msgstr "无"
 msgid "Note for GNOME Later than 3.6"
 msgstr "有关 3.6 之后版本 GNOME 的备注"
 
-#: data/config.desc:192
-msgid "Nothing"
-msgstr "无操作"
-
 #: src/module/vk/vk.c:57
 msgid "Number"
 msgstr "数字"
@@ -2018,9 +2002,8 @@ msgstr "码表顺序"
 msgid "Other Color"
 msgstr "其他颜色"
 
-#: data/config.desc:183 data/config.desc:189 data/config.desc:199
-#: data/config.desc:205 data/config.desc:211 data/config.desc:218
-#: data/config.desc:224
+#: data/config.desc:183 data/config.desc:189 data/config.desc:195
+#: data/config.desc:201 data/config.desc:208 data/config.desc:214
 msgid "Output"
 msgstr "输出"
 
@@ -2056,7 +2039,7 @@ msgstr "按程序"
 msgid "Phrase"
 msgstr "词组"
 
-#: src/im/table/table.c:1405
+#: src/im/table/table.c:1403
 msgid "Phrase is already in Dict "
 msgstr "词组已在码表中"
 
@@ -2101,7 +2084,7 @@ msgstr "拼音索引的Magic Number不匹配"
 msgid "Pinyin Key"
 msgstr "拼音键"
 
-#: src/im/table/table.c:632
+#: src/im/table/table.c:630
 msgid "Pinyin: "
 msgstr "拼音："
 
@@ -2151,12 +2134,12 @@ msgstr "可选的后端: presage, custom, enchant (用英文逗号分隔)"
 msgid "Preferred Enchant provider"
 msgstr "首选的Enchant后端"
 
-#: src/im/pinyin/py.c:778
+#: src/im/pinyin/py.c:767
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1 删除常用字表中的 %s (ESC 取消)"
 
-#: src/im/pinyin/py.c:780
+#: src/im/pinyin/py.c:769
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
@@ -2165,11 +2148,11 @@ msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
 msgid "Press Enter to input text"
 msgstr "按下回车输入文本"
 
-#: src/im/pinyin/py.c:737
+#: src/im/pinyin/py.c:728
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr "按下索引来删除用户词组 (ESC 取消)"
 
-#: src/im/pinyin/py.c:750
+#: src/im/pinyin/py.c:741
 msgid "Press number to make word in frequent list"
 msgstr "按下数字加入常用字表"
 
@@ -2299,11 +2282,11 @@ msgstr "注册输入法方法"
 msgid "Reload configuration"
 msgstr "重新载入配置"
 
-#: src/im/table/table.c:1297
+#: src/im/table/table.c:1295
 msgid "Remind:"
 msgstr "联想："
 
-#: src/im/pinyin/py.c:2053
+#: src/im/pinyin/py.c:2057
 msgid "Remind: "
 msgstr "联想："
 
@@ -2448,7 +2431,7 @@ msgstr "分号"
 msgid "Send Raw Preedit"
 msgstr "发送原始输入按键"
 
-#: data/config.desc:209
+#: data/config.desc:199
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr "切换到非激活模式时当前输入的原始文本上屏"
 
@@ -2471,15 +2454,15 @@ msgstr "Shift"
 msgid "Show"
 msgstr "显示"
 
-#: data/config.desc:233
+#: data/config.desc:223
 msgid "Show Input Method Hint After Input method changed"
 msgstr "切换输入法时显示输入法提示"
 
-#: data/config.desc:239
+#: data/config.desc:229
 msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr "获得输入焦点并且输入法变化时显示输入法提示"
 
-#: data/config.desc:251
+#: data/config.desc:241
 msgid "Show Input Speed"
 msgstr "显示输入速度"
 
@@ -2487,7 +2470,7 @@ msgstr "显示输入速度"
 msgid "Show Preedit String in Client Window"
 msgstr "在客户端窗口中显示预编辑字符串"
 
-#: data/config.desc:257
+#: data/config.desc:247
 msgid "Show Version"
 msgstr "显示版本"
 
@@ -3236,7 +3219,7 @@ msgstr "可执行文件:"
 msgid "here"
 msgstr "这里"
 
-#: src/lib/fcitx/ime.c:1766
+#: src/lib/fcitx/ime.c:1755
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 
@@ -3270,5 +3253,14 @@ msgstr "xmodmap 命令"
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
 
-#~ msgid "Press Switch Key twice to Change Mode"
-#~ msgstr "双击切换键时切换"
+#~ msgid "Action after press enter"
+#~ msgstr "回车键操作"
+
+#~ msgid "Clean"
+#~ msgstr "清除"
+
+#~ msgid "Commit"
+#~ msgstr "提交输入"
+
+#~ msgid "Nothing"
+#~ msgstr "无操作"

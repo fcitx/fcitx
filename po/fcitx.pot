@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-07-01 12:03-0400\n"
+"POT-Creation-Date: 2013-07-02 12:02-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -576,44 +576,44 @@ msgstr ""
 msgid "Pinyin Index Magic Number Doesn't match"
 msgstr ""
 
-#: src/im/pinyin/py.c:737
+#: src/im/pinyin/py.c:728
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:750
+#: src/im/pinyin/py.c:741
 msgid "Press number to make word in frequent list"
 msgstr ""
 
-#: src/im/pinyin/py.c:778
+#: src/im/pinyin/py.c:767
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:780
+#: src/im/pinyin/py.c:769
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:1671
+#: src/im/pinyin/py.c:1670
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: src/im/pinyin/py.c:1734
+#: src/im/pinyin/py.c:1733
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: src/im/pinyin/py.c:1797
+#: src/im/pinyin/py.c:1796
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
 
-#: src/im/pinyin/py.c:2053
+#: src/im/pinyin/py.c:2057
 msgid "Remind: "
 msgstr ""
 
-#: src/im/pinyin/py.c:2138
+#: src/im/pinyin/py.c:2139
 msgid "Migrate the old file path to the new one"
 msgstr ""
 
@@ -621,45 +621,45 @@ msgstr ""
 msgid "Quwei"
 msgstr ""
 
-#: src/im/table/table.c:607
+#: src/im/table/table.c:605
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:632
+#: src/im/table/table.c:630
 msgid "Pinyin: "
 msgstr ""
 
-#: src/im/table/table.c:656
+#: src/im/table/table.c:654
 msgid "Cannot found Pinyin"
 msgstr ""
 
-#: src/im/table/table.c:716
+#: src/im/table/table.c:714
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:724
+#: src/im/table/table.c:722
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:732
+#: src/im/table/table.c:730
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:1297
+#: src/im/table/table.c:1295
 msgid "Remind:"
 msgstr ""
 
-#: src/im/table/table.c:1405
+#: src/im/table/table.c:1403
 msgid "Phrase is already in Dict "
 msgstr ""
 
-#: src/im/table/table.c:1409
+#: src/im/table/table.c:1407
 msgid "Code is "
 msgstr ""
 
-#: src/im/table/table.c:1413
+#: src/im/table/table.c:1411
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -790,20 +790,20 @@ msgstr ""
 msgid "No available Input Method"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1669 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1658 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1760
+#: src/lib/fcitx/ime.c:1749
 msgid "Input Speed: "
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1763
+#: src/lib/fcitx/ime.c:1752
 msgid "/min  Time Used: "
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1766
+#: src/lib/fcitx/ime.c:1755
 msgid "min Num of Characters: "
 msgstr ""
 
@@ -1952,9 +1952,8 @@ msgstr ""
 msgid "Default Input Method State"
 msgstr ""
 
-#: data/config.desc:183 data/config.desc:189 data/config.desc:199
-#: data/config.desc:205 data/config.desc:211 data/config.desc:218
-#: data/config.desc:224
+#: data/config.desc:183 data/config.desc:189 data/config.desc:195
+#: data/config.desc:201 data/config.desc:208 data/config.desc:214
 msgid "Output"
 msgstr ""
 
@@ -1963,76 +1962,60 @@ msgid "Type half width Punc After a Number"
 msgstr ""
 
 #: data/config.desc:192
-msgid "Nothing"
-msgstr ""
-
-#: data/config.desc:193
-msgid "Clean"
-msgstr ""
-
-#: data/config.desc:194
-msgid "Commit"
-msgstr ""
-
-#: data/config.desc:196
-msgid "Action after press enter"
-msgstr ""
-
-#: data/config.desc:202
 msgid "Disable Paging in Remind Mode"
 msgstr ""
 
-#: data/config.desc:208
+#: data/config.desc:198
 msgid "Commit when toggle state"
 msgstr ""
 
-#: data/config.desc:209
+#: data/config.desc:199
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr ""
 
-#: data/config.desc:214
+#: data/config.desc:204
 msgid "Candidate Word Number"
 msgstr ""
 
-#: data/config.desc:221
+#: data/config.desc:211
 msgid "Give the tips of Phrase"
 msgstr ""
 
-#: data/config.desc:227
+#: data/config.desc:217
 msgid "Do not commit preedit text when unfocus a window"
 msgstr ""
 
-#: data/config.desc:230 data/config.desc:236 data/config.desc:242
-#: data/config.desc:248 data/config.desc:254 data/config.desc:260
-#: data/config.desc:266
+#: data/config.desc:220 data/config.desc:226 data/config.desc:232
+#: data/config.desc:238 data/config.desc:244 data/config.desc:250
+#: data/config.desc:256
 msgid "Appearance"
 msgstr ""
 
-#: data/config.desc:233
+#: data/config.desc:223
 msgid "Show Input Method Hint After Input method changed"
 msgstr ""
 
-#: data/config.desc:239
+#: data/config.desc:229
 msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr ""
 
-#: data/config.desc:245
+#: data/config.desc:235
 msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 
-#: data/config.desc:251
+#: data/config.desc:241
 msgid "Show Input Speed"
 msgstr ""
 
-#: data/config.desc:257
+#: data/config.desc:247
 msgid "Show Version"
 msgstr ""
 
-#: data/config.desc:263
+#: data/config.desc:253
 msgid "Do not show input window if there is only preedit string"
 msgstr ""
 
-#: data/config.desc:269
+#: data/config.desc:259
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr ""
 
