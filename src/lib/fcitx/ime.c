@@ -1226,7 +1226,6 @@ INPUT_RETURN_VALUE ImProcessEnter(void *arg)
     FcitxInstance *instance = (FcitxInstance *)arg;
     INPUT_RETURN_VALUE retVal = IRV_TO_PROCESS;
     FcitxInputState *input = instance->input;
-    FcitxGlobalConfig *fc = instance->config;
 
     if (!input->iCodeInputCount)
         retVal = IRV_DONOT_PROCESS;

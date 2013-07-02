@@ -462,7 +462,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                         table->bUsePY) {
                         retVal = IRV_DISPLAY_LAST;
                     } else {
-                        char        *strTemp;
+                        char        *strTemp = NULL;
                         char        *strLastFirstCand;
                         CANDTYPE     lastFirstCandType;
                         int          lastPageCount = FcitxCandidateWordPageCount(candList);
@@ -487,11 +487,8 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                         if (!table->bIgnorePunc
                             || (table->bIgnorePunc
                                 && table->ignorePuncList
-                                && table->ignorePuncList[0]
-                                && strchr(table->ignorePuncList, key))) {
-                            strTemp = FcitxPuncGetPunc(instance, &key);
-                        } else {
-                            strTemp = NULL;
+                                && (!table->ignorePuncList[0] || strchr(table->ignorePuncList, key)))) {
+                            FcitxPuncGetPunc2(instance, &key, &strTemp, NULL);
                         }
                         if (IsEndKey(table, sym)) {
                             if (raw_size == 1)
@@ -529,6 +526,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                              * 如果第一个字母是标点，并且没有候选字/词
                              * 则当做标点处理──适用于二笔这样的输入
                              **/
+                            FcitxInstanceCleanInputWindow(instance);
                             FcitxInputStateGetRawInputBuffer(input)[0] = '\0';
                             FcitxInputStateSetRawInputBufferSize(input, 0);
                             TableResetStatus(table);
