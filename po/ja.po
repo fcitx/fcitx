@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-07-01 12:03-0400\n"
-"PO-Revision-Date: 2013-06-28 22:08+0000\n"
+"POT-Creation-Date: 2013-07-02 12:02-0400\n"
+"PO-Revision-Date: 2013-07-01 16:09+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/im/table/table.c:1413
+#: src/im/table/table.c:1411
 msgid " Ctrl+Delete To Delete"
 msgstr "Ctrl+Delete で削除"
 
@@ -96,7 +96,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1763
+#: src/lib/fcitx/ime.c:1752
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -155,10 +155,6 @@ msgstr "Alt+Shift"
 #: data/config.desc:77
 msgid "ALT_SUPER"
 msgstr "Alt+Super"
-
-#: data/config.desc:196
-msgid "Action after press enter"
-msgstr "Enterキー入力後の動作"
 
 #: data/config.desc:49
 msgid "Activate input method"
@@ -298,9 +294,9 @@ msgstr "別の前ページキー"
 msgid "Alternative Trigger Key for QuickPhrase"
 msgstr "クイックフレーズのトリガーとなる別のキー"
 
-#: data/config.desc:230 data/config.desc:236 data/config.desc:242
-#: data/config.desc:248 data/config.desc:254 data/config.desc:260
-#: data/config.desc:266
+#: data/config.desc:220 data/config.desc:226 data/config.desc:232
+#: data/config.desc:238 data/config.desc:244 data/config.desc:250
+#: data/config.desc:256
 msgid "Appearance"
 msgstr "外観"
 
@@ -440,7 +436,7 @@ msgstr "ソケット %s を開けません: %s"
 msgid "Candidate Index Color"
 msgstr "候補インデックスの色"
 
-#: data/config.desc:214
+#: data/config.desc:204
 msgid "Candidate Word Number"
 msgstr "候補の単語数"
 
@@ -448,17 +444,17 @@ msgstr "候補の単語数"
 msgid "Cangjie"
 msgstr ""
 
-#: src/im/pinyin/py.c:1734
+#: src/im/pinyin/py.c:1733
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "よく使う単語を保存できません: %s"
 
-#: src/im/pinyin/py.c:1797
+#: src/im/pinyin/py.c:1796
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "Pinyin インデックスを保存できません: %s"
 
-#: src/im/pinyin/py.c:1671
+#: src/im/pinyin/py.c:1670
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "ユーザーのPinyinデータベースを保存できません: %s"
@@ -528,7 +524,7 @@ msgstr ""
 msgid "Cannot find xim_server on root window."
 msgstr "ルートウィンドウで xim_server が見つかりません。"
 
-#: src/im/table/table.c:656
+#: src/im/table/table.c:654
 msgid "Cannot found Pinyin"
 msgstr "Pinyin が見つかりません"
 
@@ -582,15 +578,15 @@ msgstr "二番目と三番目の候補を選択"
 msgid "Choose key modifier"
 msgstr "修飾キーを選択"
 
-#: src/im/table/table.c:724
+#: src/im/table/table.c:722
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:716
+#: src/im/table/table.c:714
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:732
+#: src/im/table/table.c:730
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "入力履歴を削除するフレーズを選択、Escapeでキャンセル"
 
@@ -614,10 +610,6 @@ msgstr "スキンをサポートしたクラシックなユーザーインタフ
 #: src/ui/classic/fcitx-classic-ui.desc:56
 msgid "ClassicUI"
 msgstr "クラシックUI"
-
-#: data/config.desc:193
-msgid "Clean"
-msgstr "削除"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
@@ -658,7 +650,7 @@ msgstr "コードテーブルファイル"
 msgid "Code Table Name"
 msgstr "コードテーブル名"
 
-#: src/im/table/table.c:1409
+#: src/im/table/table.c:1407
 msgid "Code is "
 msgstr "コードは"
 
@@ -693,10 +685,6 @@ msgstr "カーソルの色"
 msgid "Comment"
 msgstr "コメント"
 
-#: data/config.desc:194
-msgid "Commit"
-msgstr "確定"
-
 #: src/im/table/table.desc:182
 msgid "Commit and pass when invalid key of this table pressed"
 msgstr "このテーブルの不正なキーが押された時に確定し、飛ばす"
@@ -709,7 +697,7 @@ msgstr "最初の候補を確定するキー"
 msgid "Commit string when there is no match"
 msgstr "一致しない場合文字列を確定する"
 
-#: data/config.desc:208
+#: data/config.desc:198
 msgid "Commit when toggle state"
 msgstr "状態を切り替えたら確定する"
 
@@ -878,7 +866,7 @@ msgstr "デスクトップ環境は ${1} です。"
 msgid "Dianbaoma"
 msgstr ""
 
-#: data/config.desc:202
+#: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
 msgstr "リマインドモードでページを無効に"
 
@@ -897,7 +885,7 @@ msgstr "アドオン %s を無効にしました。依存性 %s が解決され�
 msgid "Disabled"
 msgstr "無効"
 
-#: data/config.desc:227
+#: data/config.desc:217
 msgid "Do not commit preedit text when unfocus a window"
 msgstr "フォーカスを外しても未確定文字をコミットしない"
 
@@ -909,13 +897,13 @@ msgstr ""
 msgid "Do not show in GUI"
 msgstr "GUI で表示しない"
 
-#: data/config.desc:269
+#: data/config.desc:259
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr ""
 "候補とプレエディットに1つの候補しか表示されていない場合は入力ウィンドウを表示"
 "しない"
 
-#: data/config.desc:263
+#: data/config.desc:253
 msgid "Do not show input window if there is only preedit string"
 msgstr "プレエディットを表示している場合は入力ウィンドウを表示しない"
 
@@ -1371,7 +1359,7 @@ msgstr "uan と uang を曖昧に"
 msgid "Fuzzy z and zh"
 msgstr "z と zh を曖昧に"
 
-#: data/config.desc:221
+#: data/config.desc:211
 msgid "Give the tips of Phrase"
 msgstr "Tipsのフレーズにヒントを与える"
 
@@ -1553,7 +1541,7 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1669 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1658 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "入力メソッド"
@@ -1567,7 +1555,7 @@ msgstr "入力メソッドの設定"
 msgid "Input Method Disabled"
 msgstr "入力メソッドが無効"
 
-#: data/config.desc:245
+#: data/config.desc:235
 msgid "Input Method Hint will be only shown when state is active"
 msgstr "オンの時だけ入力メソッドのヒントを表示"
 
@@ -1579,7 +1567,7 @@ msgstr "入力メソッド関連の環境変数:"
 msgid "Input Methods:"
 msgstr "入力メソッド:"
 
-#: src/lib/fcitx/ime.c:1760
+#: src/lib/fcitx/ime.c:1749
 msgid "Input Speed: "
 msgstr "入力スピード"
 
@@ -1732,7 +1720,7 @@ msgstr ""
 msgid "Left Super"
 msgstr "左Super"
 
-#: src/im/table/table.c:607
+#: src/im/table/table.c:605
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1877,7 +1865,7 @@ msgstr "メニューのフォント"
 msgid "Menu Font Size"
 msgstr "メニューのフォントの大きさ"
 
-#: src/im/pinyin/py.c:2138
+#: src/im/pinyin/py.c:2139
 msgid "Migrate the old file path to the new one"
 msgstr "古いファイルパスから新しいファイルパスへ移動"
 
@@ -1986,10 +1974,6 @@ msgstr "なし"
 msgid "Note for GNOME Later than 3.6"
 msgstr "GNOME 3.6 以降の注意"
 
-#: data/config.desc:192
-msgid "Nothing"
-msgstr "なし"
-
 #: src/module/vk/vk.c:57
 msgid "Number"
 msgstr "漢数字"
@@ -2020,9 +2004,8 @@ msgstr "コードテーブルの順序"
 msgid "Other Color"
 msgstr "他の色"
 
-#: data/config.desc:183 data/config.desc:189 data/config.desc:199
-#: data/config.desc:205 data/config.desc:211 data/config.desc:218
-#: data/config.desc:224
+#: data/config.desc:183 data/config.desc:189 data/config.desc:195
+#: data/config.desc:201 data/config.desc:208 data/config.desc:214
 msgid "Output"
 msgstr "出力"
 
@@ -2058,7 +2041,7 @@ msgstr "プログラムごと"
 msgid "Phrase"
 msgstr "フレーズ"
 
-#: src/im/table/table.c:1405
+#: src/im/table/table.c:1403
 msgid "Phrase is already in Dict "
 msgstr "フレーズは既に辞書にあります"
 
@@ -2103,7 +2086,7 @@ msgstr ""
 msgid "Pinyin Key"
 msgstr "Pinyinキー"
 
-#: src/im/table/table.c:632
+#: src/im/table/table.c:630
 msgid "Pinyin: "
 msgstr "Pinyin: "
 
@@ -2156,12 +2139,12 @@ msgstr "可能なプロバイダー: eresage, eustom, enchant (カンマ区切�
 msgid "Preferred Enchant provider"
 msgstr ""
 
-#: src/im/pinyin/py.c:778
+#: src/im/pinyin/py.c:767
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:780
+#: src/im/pinyin/py.c:769
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
@@ -2170,11 +2153,11 @@ msgstr ""
 msgid "Press Enter to input text"
 msgstr "文字を入力するには Enter を押してください"
 
-#: src/im/pinyin/py.c:737
+#: src/im/pinyin/py.c:728
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr ""
 
-#: src/im/pinyin/py.c:750
+#: src/im/pinyin/py.c:741
 msgid "Press number to make word in frequent list"
 msgstr ""
 
@@ -2304,11 +2287,11 @@ msgstr "IM登録"
 msgid "Reload configuration"
 msgstr "設定の再読み込み"
 
-#: src/im/table/table.c:1297
+#: src/im/table/table.c:1295
 msgid "Remind:"
 msgstr "リマインド:"
 
-#: src/im/pinyin/py.c:2053
+#: src/im/pinyin/py.c:2057
 msgid "Remind: "
 msgstr "リマインド:"
 
@@ -2453,7 +2436,7 @@ msgstr "セミコロン"
 msgid "Send Raw Preedit"
 msgstr "プレエディットをそのまま送る"
 
-#: data/config.desc:209
+#: data/config.desc:199
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr "オフの際に入力したテキストをそのまま送信"
 
@@ -2476,15 +2459,15 @@ msgstr "Shift"
 msgid "Show"
 msgstr "表示"
 
-#: data/config.desc:233
+#: data/config.desc:223
 msgid "Show Input Method Hint After Input method changed"
 msgstr "入力メソッドを切換後にヒントを表示"
 
-#: data/config.desc:239
+#: data/config.desc:229
 msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr "入力メソッドを切換え、フォーカスした時にヒントを表示"
 
-#: data/config.desc:251
+#: data/config.desc:241
 msgid "Show Input Speed"
 msgstr "入力速度の表示"
 
@@ -2492,7 +2475,7 @@ msgstr "入力速度の表示"
 msgid "Show Preedit String in Client Window"
 msgstr "クライアントのウィンドウにプレエディットを表示"
 
-#: data/config.desc:257
+#: data/config.desc:247
 msgid "Show Version"
 msgstr "バージョンの表示"
 
@@ -3241,7 +3224,7 @@ msgstr "実行可能:"
 msgid "here"
 msgstr "ここ"
 
-#: src/lib/fcitx/ime.c:1766
+#: src/lib/fcitx/ime.c:1755
 msgid "min Num of Characters: "
 msgstr ""
 
@@ -3275,5 +3258,14 @@ msgstr "xmodmap コマンド"
 msgid "your current font is: %s"
 msgstr "あなたの現在のフォントは %s です"
 
-#~ msgid "Press Switch Key twice to Change Mode"
-#~ msgstr "モードの切り替えにキーを2回押す"
+#~ msgid "Action after press enter"
+#~ msgstr "Enterキー入力後の動作"
+
+#~ msgid "Clean"
+#~ msgstr "削除"
+
+#~ msgid "Commit"
+#~ msgstr "確定"
+
+#~ msgid "Nothing"
+#~ msgstr "なし"

@@ -38,7 +38,6 @@ CONFIG_BINDING_REGISTER("Program", "DelayStart", iDelayStart)
 CONFIG_BINDING_REGISTER("Program", "ShareStateAmongWindow", shareState)
 CONFIG_BINDING_REGISTER("Program", "DefaultInputMethodState", _defaultIMState)
 CONFIG_BINDING_REGISTER("Output", "HalfPuncAfterNumber", bEngPuncAfterNumber)
-CONFIG_BINDING_REGISTER("Output", "EnterAction", enterToDo)
 CONFIG_BINDING_REGISTER("Output", "RemindModeDisablePaging", bDisablePagingInRemind)
 CONFIG_BINDING_REGISTER("Output", "SendTextWhenSwitchEng", bSendTextWhenSwitchEng)
 CONFIG_BINDING_REGISTER("Output", "CandidateWordNumber", iMaxCandWord)
@@ -127,6 +126,7 @@ boolean FcitxGlobalConfigLoad(FcitxGlobalConfig* fc)
 
     /* removed option */
     fc->bPointAfterNumber = true;
+    fc->enterToDo = K_ENTER_SEND;
 
     FILE *fp;
     boolean newconfig = false;

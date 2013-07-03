@@ -1226,24 +1226,13 @@ INPUT_RETURN_VALUE ImProcessEnter(void *arg)
     FcitxInstance *instance = (FcitxInstance *)arg;
     INPUT_RETURN_VALUE retVal = IRV_TO_PROCESS;
     FcitxInputState *input = instance->input;
-    FcitxGlobalConfig *fc = instance->config;
 
     if (!input->iCodeInputCount)
         retVal = IRV_DONOT_PROCESS;
     else {
-        switch (fc->enterToDo) {
-        case K_ENTER_NOTHING:
-            retVal = IRV_DO_NOTHING;
-            break;
-        case K_ENTER_CLEAN:
-            retVal = IRV_CLEAN;
-            break;
-        case K_ENTER_SEND:
-            FcitxInstanceCleanInputWindow(instance);
-            strcpy(FcitxInputStateGetOutputString(input), FcitxInputStateGetRawInputBuffer(input));
-            retVal = IRV_ENG;
-            break;
-        }
+        FcitxInstanceCleanInputWindow(instance);
+        strcpy(FcitxInputStateGetOutputString(input), FcitxInputStateGetRawInputBuffer(input));
+        retVal = IRV_ENG;
     }
     return retVal;
 }

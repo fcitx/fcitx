@@ -186,16 +186,6 @@ DefaultValue=True
 Description=Type half width Punc After a Number
 Advance=True
 
-[Output/EnterAction]
-Type=Enum
-EnumCount=3
-Enum0=Nothing
-Enum1=Clean
-Enum2=Commit
-DefaultValue=Commit
-Description=Action after press enter
-Advance=True
-
 [Output/RemindModeDisablePaging]
 Type=Boolean
 DefaultValue=True
