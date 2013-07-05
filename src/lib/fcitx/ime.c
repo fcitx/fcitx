@@ -562,15 +562,19 @@ _NormalizeHotkeyForModifier(const FcitxHotkey* origin, FcitxHotkey* group1, Fcit
 }
 
 static inline boolean IsTriggerOnRelease(FcitxKeySym sym, unsigned int state) {
-    if (state == 0) {
-        return true;
-    }
-
     if (FcitxHotkeyIsHotKeyModifierCombine(sym, state)) {
         return true;
     }
 
-    return false;
+    if (state != 0) {
+        return false;
+    }
+
+    if (FcitxKeySymToUnicode(sym)) {
+        return false;
+    }
+
+    return true;
 }
 
 INPUT_RETURN_VALUE _DoTrigger(FcitxInstance* instance)
