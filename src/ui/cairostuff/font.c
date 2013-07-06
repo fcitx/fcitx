@@ -71,7 +71,8 @@ reloadfont:
         FcObjectSetDestroy(os);
     os = NULL;
 
-    FcPatternDestroy(pat);
+    if (pat)
+        FcPatternDestroy(pat);
     pat = NULL;
 
     if (!fs || fs->nfont <= 0)
@@ -91,14 +92,15 @@ reloadfont:
     return;
 
 nofont:
+    if (pat)
+        FcPatternDestroy(pat);
+    if (os)
+        FcObjectSetDestroy(os);
+    if (fs)
+        FcFontSetDestroy(fs);
+
     if (strcmp(*font, "") != 0) {
         strcpy(*font, "");
-        if (pat)
-            FcPatternDestroy(pat);
-        if (os)
-            FcObjectSetDestroy(os);
-        if (fs)
-            FcFontSetDestroy(fs);
 
         goto reloadfont;
     }
