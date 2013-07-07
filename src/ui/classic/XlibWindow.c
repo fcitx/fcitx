@@ -189,7 +189,7 @@ void FcitxXlibWindowPaintBackground(FcitxXlibWindow* window,
                                 r, 1, ShapeSet, Unsorted
                                );
     } else {
-        XShapeCombineMask(classicui->dpy, window->wId, ShapeBounding, 0, 0,
+        XShapeCombineMask(classicui->dpy, window->wId, ShapeInput, 0, 0,
                           None, ShapeSet);
     }
 }
