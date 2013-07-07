@@ -249,6 +249,13 @@ void FcitxXlibWindowPaint(FcitxXlibWindow* window)
     int width = mergedRect.x2 - mergedRect.x1;
     int height = mergedRect.y2 - mergedRect.y1;
 
+    if (width <= 0) {
+        width = 1;
+    }
+    if (height <= 0) {
+        height = 1;
+    }
+
     EnlargeCairoSurface(&window->contentSurface, width, height);
     cairo_t* c = cairo_create(window->contentSurface);
     FcitxXlibWindowPaintBackground(window, c, offX, offY, contentWidth, contentHeight, overlayX, overlayY);
