@@ -217,7 +217,7 @@ void MainWindowCalculateContentSize(FcitxXlibWindow* window, unsigned int* width
             if (icon[0] != '\0')
                 statusicon = LoadImage(sc, path, false);
             if (statusicon == NULL || statusicon->textIcon) {
-                if (activeIcon && icon[0] == '\0') {
+                if (activeIcon) {
                     statusicon = LoadImageWithText(
                         classicui, sc, path, compstatus->shortDescription,
                         cairo_image_surface_get_width(activeIcon->image),

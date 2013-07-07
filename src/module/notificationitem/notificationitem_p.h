@@ -38,4 +38,13 @@ typedef struct _FcitxNotificationItem {
 
 boolean FcitxDBusMenuCreate(FcitxNotificationItem* notificationitem);
 
+static inline boolean CheckAddPrefix( const char** name) {
+    boolean result = !((*name)[0] == '\0' || (*name)[0] == '/' || (*name)[0] == '@');
+    if ((*name)[0] == '@') {
+        (*name) += 1;
+    }
+
+    return result;
+}
+
 #endif // NOTIFICATIONITEM_P_H
