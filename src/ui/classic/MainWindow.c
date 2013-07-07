@@ -225,7 +225,7 @@ void MainWindowCalculateContentSize(FcitxXlibWindow* window, unsigned int* width
                         true);
                 }
             } else {
-                if (icon[0] == '/' && activeIcon) {
+                if (activeIcon) {
                     ResizeSurface(
                         &statusicon->image,
                         cairo_image_surface_get_width(activeIcon->image),
