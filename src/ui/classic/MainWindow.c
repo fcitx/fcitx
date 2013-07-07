@@ -348,8 +348,7 @@ void MainWindowPaint(FcitxXlibWindow* window, cairo_t* c)
                     const char *path;
                     char *tmpstr = NULL;
                     if (icon[0] != '/') {
-                        fcitx_utils_alloc_cat_str(tmpstr,
-                                                    compstatus->name, ".png");
+                        fcitx_utils_alloc_cat_str(tmpstr, icon, ".png");
                         path = tmpstr;
                     } else {
                         path = icon;
@@ -406,8 +405,7 @@ void MainWindowPaint(FcitxXlibWindow* window, cairo_t* c)
                 if (icon[0] == '\0') {
                     path = compstatus->shortDescription;
                 } else {
-                    fcitx_utils_alloc_cat_str(tmpstr,
-                                                compstatus->name, ".png");
+                    fcitx_utils_alloc_cat_str(tmpstr, icon, ".png");
                     path = tmpstr;
                 }
             } else {
