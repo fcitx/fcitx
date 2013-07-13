@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-07-02 12:02-0400\n"
+"POT-Creation-Date: 2013-07-13 12:02-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -790,20 +790,20 @@ msgstr ""
 msgid "No available Input Method"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1658 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1662 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1749
+#: src/lib/fcitx/ime.c:1753
 msgid "Input Speed: "
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1752
+#: src/lib/fcitx/ime.c:1756
 msgid "/min  Time Used: "
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1755
+#: src/lib/fcitx/ime.c:1759
 msgid "min Num of Characters: "
 msgstr ""
 
@@ -972,7 +972,7 @@ msgid "Online Help"
 msgstr ""
 
 #: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
-#: src/ui/kimpanel/kimpanel.c:751
+#: src/ui/kimpanel/kimpanel.c:763
 msgid "Configure Current Input Method"
 msgstr ""
 
@@ -981,7 +981,7 @@ msgid "Configure"
 msgstr ""
 
 #: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
-#: src/ui/kimpanel/kimpanel.c:756
+#: src/ui/kimpanel/kimpanel.c:768
 msgid "Restart"
 msgstr ""
 
@@ -990,18 +990,18 @@ msgid "Exit"
 msgstr ""
 
 #: src/module/notificationitem/notificationitem.c:454
-#: src/ui/kimpanel/kimpanel.c:231 src/ui/kimpanel/kimpanel.c:232
+#: src/ui/kimpanel/kimpanel.c:241 src/ui/kimpanel/kimpanel.c:242
 msgid "No input window"
 msgstr ""
 
 #: src/module/notificationitem/notificationitem.c:460
-#: src/ui/kimpanel/kimpanel.c:258 src/ui/kimpanel/kimpanel.c:263
+#: src/ui/kimpanel/kimpanel.c:268 src/ui/kimpanel/kimpanel.c:273
 #: data/config.desc:34
 msgid "Disabled"
 msgstr ""
 
 #: src/module/notificationitem/notificationitem.c:461
-#: src/ui/kimpanel/kimpanel.c:259 src/ui/kimpanel/kimpanel.c:264
+#: src/ui/kimpanel/kimpanel.c:269 src/ui/kimpanel/kimpanel.c:274
 msgid "Input Method Disabled"
 msgstr ""
 
@@ -1135,16 +1135,16 @@ msgstr ""
 msgid "English (US)"
 msgstr ""
 
-#: src/ui/cairostuff/font.c:49
+#: src/ui/cairostuff/font.c:46
 msgid "Error: Load fontconfig failed"
 msgstr ""
 
-#: src/ui/cairostuff/font.c:90
+#: src/ui/cairostuff/font.c:119
 #, c-format
 msgid "your current font is: %s"
 msgstr ""
 
-#: src/ui/cairostuff/font.c:106
+#: src/ui/cairostuff/font.c:121
 msgid "no valid font."
 msgstr ""
 
@@ -1180,7 +1180,7 @@ msgstr ""
 msgid "Can not load skin %s, return to default"
 msgstr ""
 
-#: src/ui/classic/skin.c:679 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr ""
 
@@ -1189,12 +1189,12 @@ msgstr ""
 msgid "X error %i on opcode send"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:373 data/fcitx-autostart.desktop.in:2
+#: src/ui/kimpanel/kimpanel.c:384 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:748
+#: src/ui/kimpanel/kimpanel.c:760
 msgid "Toggle Input Method"
 msgstr ""
 
@@ -3089,10 +3089,14 @@ msgstr ""
 msgid "Overlay dock position"
 msgstr ""
 
-#: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:147
-#: src/ui/classic/skin.desc:248 src/ui/classic/skin.desc:253
-#: src/ui/classic/skin.desc:378 src/ui/classic/skin.desc:383
+#: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:248
+#: src/ui/classic/skin.desc:378
 msgid "Overlay X offset"
+msgstr ""
+
+#: src/ui/classic/skin.desc:147 src/ui/classic/skin.desc:253
+#: src/ui/classic/skin.desc:383
+msgid "Overlay Y offset"
 msgstr ""
 
 #: src/ui/classic/skin.desc:151 src/ui/classic/skin.desc:293
