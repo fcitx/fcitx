@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-07-13 12:02-0400\n"
-"PO-Revision-Date: 2013-07-02 16:08+0000\n"
+"POT-Creation-Date: 2013-07-13 18:02-0400\n"
+"PO-Revision-Date: 2013-07-13 16:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
@@ -2022,9 +2022,8 @@ msgstr "Ebene X Offset"
 
 #: src/ui/classic/skin.desc:147 src/ui/classic/skin.desc:253
 #: src/ui/classic/skin.desc:383
-#, fuzzy
 msgid "Overlay Y offset"
-msgstr "Ebene X Offset"
+msgstr ""
 
 #: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
 #: src/ui/classic/skin.desc:373
