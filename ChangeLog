@@ -1,3 +1,16 @@
+2013-07-15: CSSlayer <wengxt@gmail.com>
+	* 4.2.8.1
+	  - udpate default skin
+	  - Merge pull request #119 for fixing Libkvm detection with cmake 2.8.11
+	  - add support for using @ to escape icon name
+	  - remove an icon to support icon fallback in glib
+	  - Check window size to avoid BadWindow caused by invalid skin
+	  - Fix Issue #118
+	  - Fix some memory leak in Issue #117
+	  - Fix table punctuation ignore list
+	  - Fix Pinyin Remind mode
+	  - Fix behavior of trigger key with modifier
+
 2011-04-27: CSSlayer <wengxt@gmail.com>
 	* 修复txt2mb在64位系统下的一个bug
 	* 参考Freedesktop.org WM-Spec尝试解决GNOME3窗口显示相关的问题（未验证）
