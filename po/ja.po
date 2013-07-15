@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-07-02 12:02-0400\n"
-"PO-Revision-Date: 2013-07-01 16:09+0000\n"
+"POT-Creation-Date: 2013-07-13 18:02-0400\n"
+"PO-Revision-Date: 2013-07-13 16:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -96,7 +96,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1752
+#: src/lib/fcitx/ime.c:1756
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -734,7 +734,7 @@ msgid "Configure"
 msgstr "設定"
 
 #: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
-#: src/ui/kimpanel/kimpanel.c:751
+#: src/ui/kimpanel/kimpanel.c:763
 msgid "Configure Current Input Method"
 msgstr "現在の入力メソッドの設定"
 
@@ -880,7 +880,7 @@ msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr "アドオン %s を無効にしました。依存性 %s が解決されていません。"
 
 #: src/module/notificationitem/notificationitem.c:460
-#: src/ui/kimpanel/kimpanel.c:258 src/ui/kimpanel/kimpanel.c:263
+#: src/ui/kimpanel/kimpanel.c:268 src/ui/kimpanel/kimpanel.c:273
 #: data/config.desc:34
 msgid "Disabled"
 msgstr "無効"
@@ -1030,7 +1030,7 @@ msgstr ""
 "エラー: $HOME か $XDG_CONFIG_HOME が設定されておらず、インストールパスが決定"
 "できません。"
 
-#: src/ui/cairostuff/font.c:49
+#: src/ui/cairostuff/font.c:46
 msgid "Error: Load fontconfig failed"
 msgstr "エラー:fontconfigが読み込めません"
 
@@ -1074,7 +1074,7 @@ msgstr ""
 msgid "Fallback UI Addon"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:373 data/fcitx-autostart.desktop.in:2
+#: src/ui/kimpanel/kimpanel.c:384 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
 msgstr "Fcitx"
@@ -1541,7 +1541,7 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1658 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1662 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "入力メソッド"
@@ -1551,7 +1551,7 @@ msgid "Input Method Configuration"
 msgstr "入力メソッドの設定"
 
 #: src/module/notificationitem/notificationitem.c:461
-#: src/ui/kimpanel/kimpanel.c:259 src/ui/kimpanel/kimpanel.c:264
+#: src/ui/kimpanel/kimpanel.c:269 src/ui/kimpanel/kimpanel.c:274
 msgid "Input Method Disabled"
 msgstr "入力メソッドが無効"
 
@@ -1567,7 +1567,7 @@ msgstr "入力メソッド関連の環境変数:"
 msgid "Input Methods:"
 msgstr "入力メソッド:"
 
-#: src/lib/fcitx/ime.c:1749
+#: src/lib/fcitx/ime.c:1753
 msgid "Input Speed: "
 msgstr "入力スピード"
 
@@ -1945,7 +1945,7 @@ msgid "No available frontend"
 msgstr "フロントエンドが見つかりません"
 
 #: src/module/notificationitem/notificationitem.c:454
-#: src/ui/kimpanel/kimpanel.c:231 src/ui/kimpanel/kimpanel.c:232
+#: src/ui/kimpanel/kimpanel.c:241 src/ui/kimpanel/kimpanel.c:242
 msgid "No input window"
 msgstr "入力ウィンドウなし"
 
@@ -2009,10 +2009,14 @@ msgstr "他の色"
 msgid "Output"
 msgstr "出力"
 
-#: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:147
-#: src/ui/classic/skin.desc:248 src/ui/classic/skin.desc:253
-#: src/ui/classic/skin.desc:378 src/ui/classic/skin.desc:383
+#: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:248
+#: src/ui/classic/skin.desc:378
 msgid "Overlay X offset"
+msgstr ""
+
+#: src/ui/classic/skin.desc:147 src/ui/classic/skin.desc:253
+#: src/ui/classic/skin.desc:383
+msgid "Overlay Y offset"
 msgstr ""
 
 #: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
@@ -2334,7 +2338,7 @@ msgid "Resize Margin Top"
 msgstr "上マージンを調整"
 
 #: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
-#: src/ui/kimpanel/kimpanel.c:756
+#: src/ui/kimpanel/kimpanel.c:768
 msgid "Restart"
 msgstr "再起動"
 
@@ -2504,7 +2508,7 @@ msgstr "簡体字中国語から繁体字中国語へ"
 msgid "Simplified Chinese is enabled."
 msgstr ""
 
-#: src/ui/classic/skin.c:679 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "スキン"
 
@@ -2811,7 +2815,7 @@ msgstr "全角/半角句読点を切り替え"
 msgid "Toggle Half/Full width Character"
 msgstr "全角/半角文字の切り替え"
 
-#: src/ui/kimpanel/kimpanel.c:748
+#: src/ui/kimpanel/kimpanel.c:760
 msgid "Toggle Input Method"
 msgstr "入力メソッドの切り替え"
 
@@ -3224,7 +3228,7 @@ msgstr "実行可能:"
 msgid "here"
 msgstr "ここ"
 
-#: src/lib/fcitx/ime.c:1755
+#: src/lib/fcitx/ime.c:1759
 msgid "min Num of Characters: "
 msgstr ""
 
@@ -3233,7 +3237,7 @@ msgstr ""
 msgid "no default option for %s/%s"
 msgstr "%s/%s に既定のオプションはありません"
 
-#: src/ui/cairostuff/font.c:106
+#: src/ui/cairostuff/font.c:121
 msgid "no valid font."
 msgstr "正しいフォントではありません"
 
@@ -3253,19 +3257,7 @@ msgstr "バージョン:"
 msgid "xmodmap command"
 msgstr "xmodmap コマンド"
 
-#: src/ui/cairostuff/font.c:90
+#: src/ui/cairostuff/font.c:119
 #, c-format
 msgid "your current font is: %s"
 msgstr "あなたの現在のフォントは %s です"
-
-#~ msgid "Action after press enter"
-#~ msgstr "Enterキー入力後の動作"
-
-#~ msgid "Clean"
-#~ msgstr "削除"
-
-#~ msgid "Commit"
-#~ msgstr "確定"
-
-#~ msgid "Nothing"
-#~ msgstr "なし"

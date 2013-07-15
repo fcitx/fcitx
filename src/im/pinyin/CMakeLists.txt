@@ -18,7 +18,7 @@ set(FCITX_PINYIN_HEADERS
   pydef.h
   )
   
-if(ENABLE_TABLE)
+if(ENABLE_PINYIN)
   set(pinyin_noinstall)
 else()
   set(pinyin_noinstall NO_INSTALL)

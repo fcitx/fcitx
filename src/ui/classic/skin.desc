@@ -144,7 +144,7 @@ Description=Overlay X offset
 [SkinMainBar/OverlayOffsetY]
 Type=Integer
 DefaultValue=0
-Description=Overlay X offset
+Description=Overlay Y offset
 
 [SkinMainBar/FillVertical]
 Type=Enum
@@ -250,7 +250,7 @@ Description=Overlay X offset
 [SkinInputBar/OverlayOffsetY]
 Type=Integer
 DefaultValue=0
-Description=Overlay X offset
+Description=Overlay Y offset
 
 [SkinInputBar/CursorColor]
 Type=Color
@@ -380,7 +380,7 @@ Description=Overlay X offset
 [SkinMenu/OverlayOffsetY]
 Type=Integer
 DefaultValue=0
-Description=Overlay X offset
+Description=Overlay Y offset
 
 [SkinMenu/ActiveColor]
 Type=Color

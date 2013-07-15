@@ -371,8 +371,8 @@ char* FcitxNotificationItemGetIconNameString(FcitxNotificationItem* notification
             return strdup("input-keyboard");
         }
     }
-    fcitx_utils_alloc_cat_str(iconName, (icon[0] == '\0' || icon[0] == '/') ?
-                              "" : "fcitx-", icon);
+    boolean result = CheckAddPrefix(&icon);
+    fcitx_utils_alloc_cat_str(iconName, result ? "fcitx-" : "", icon);
     return iconName;
 }
 

@@ -387,6 +387,11 @@ void FcitxDBusMenuFillProperty(FcitxNotificationItem* notificationitem, int32_t 
                 if (compstatus) {
                     name = compstatus->shortDescription;
                     icon = compstatus->getIconName(compstatus->arg);
+
+                    if (CheckAddPrefix(&icon)) {
+                        fcitx_utils_alloc_cat_str(needfree, "fcitx-", icon);
+                        icon = needfree;
+                    }
                 }
             } else {
                 UT_array* uistats = FcitxInstanceGetUIStats(instance);

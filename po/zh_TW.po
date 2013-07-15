@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-07-02 12:02-0400\n"
-"PO-Revision-Date: 2013-07-01 16:09+0000\n"
+"POT-Creation-Date: 2013-07-13 12:02-0400\n"
+"PO-Revision-Date: 2013-07-02 16:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
@@ -99,7 +99,7 @@ msgstr ""
 msgid "/XIM"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1752
+#: src/lib/fcitx/ime.c:1756
 msgid "/min  Time Used: "
 msgstr "/分 經過時間："
 
@@ -731,7 +731,7 @@ msgid "Configure"
 msgstr "設定"
 
 #: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
-#: src/ui/kimpanel/kimpanel.c:751
+#: src/ui/kimpanel/kimpanel.c:763
 msgid "Configure Current Input Method"
 msgstr "設定目前輸入法"
 
@@ -877,7 +877,7 @@ msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr ""
 
 #: src/module/notificationitem/notificationitem.c:460
-#: src/ui/kimpanel/kimpanel.c:258 src/ui/kimpanel/kimpanel.c:263
+#: src/ui/kimpanel/kimpanel.c:268 src/ui/kimpanel/kimpanel.c:273
 #: data/config.desc:34
 msgid "Disabled"
 msgstr "停用"
@@ -1021,7 +1021,7 @@ msgid ""
 "path"
 msgstr ""
 
-#: src/ui/cairostuff/font.c:49
+#: src/ui/cairostuff/font.c:46
 msgid "Error: Load fontconfig failed"
 msgstr ""
 
@@ -1065,7 +1065,7 @@ msgstr ""
 msgid "Fallback UI Addon"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:373 data/fcitx-autostart.desktop.in:2
+#: src/ui/kimpanel/kimpanel.c:384 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
 msgstr "Fcitx"
@@ -1532,7 +1532,7 @@ msgstr "輸入字體尺寸"
 msgid "Input Message Color"
 msgstr "輸入訊息顏色"
 
-#: src/lib/fcitx/ime.c:1658 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1662 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "輸入法"
@@ -1542,7 +1542,7 @@ msgid "Input Method Configuration"
 msgstr "輸入法設定"
 
 #: src/module/notificationitem/notificationitem.c:461
-#: src/ui/kimpanel/kimpanel.c:259 src/ui/kimpanel/kimpanel.c:264
+#: src/ui/kimpanel/kimpanel.c:269 src/ui/kimpanel/kimpanel.c:274
 msgid "Input Method Disabled"
 msgstr "停用輸入法"
 
@@ -1558,7 +1558,7 @@ msgstr "輸入法相關環境變數："
 msgid "Input Methods:"
 msgstr "輸入法："
 
-#: src/lib/fcitx/ime.c:1749
+#: src/lib/fcitx/ime.c:1753
 msgid "Input Speed: "
 msgstr "輸入速度："
 
@@ -1936,7 +1936,7 @@ msgid "No available frontend"
 msgstr "無可用前端"
 
 #: src/module/notificationitem/notificationitem.c:454
-#: src/ui/kimpanel/kimpanel.c:231 src/ui/kimpanel/kimpanel.c:232
+#: src/ui/kimpanel/kimpanel.c:241 src/ui/kimpanel/kimpanel.c:242
 msgid "No input window"
 msgstr "沒有輸入視窗"
 
@@ -2000,10 +2000,14 @@ msgstr "其他顏色"
 msgid "Output"
 msgstr "輸出"
 
-#: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:147
-#: src/ui/classic/skin.desc:248 src/ui/classic/skin.desc:253
-#: src/ui/classic/skin.desc:378 src/ui/classic/skin.desc:383
+#: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:248
+#: src/ui/classic/skin.desc:378
 msgid "Overlay X offset"
+msgstr ""
+
+#: src/ui/classic/skin.desc:147 src/ui/classic/skin.desc:253
+#: src/ui/classic/skin.desc:383
+msgid "Overlay Y offset"
 msgstr ""
 
 #: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
@@ -2322,7 +2326,7 @@ msgid "Resize Margin Top"
 msgstr "上邊界寬度"
 
 #: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
-#: src/ui/kimpanel/kimpanel.c:756
+#: src/ui/kimpanel/kimpanel.c:768
 msgid "Restart"
 msgstr "重新啟動"
 
@@ -2492,7 +2496,7 @@ msgstr "正簡轉換"
 msgid "Simplified Chinese is enabled."
 msgstr "已啟用簡體中文。"
 
-#: src/ui/classic/skin.c:679 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "皮膚"
 
@@ -2802,7 +2806,7 @@ msgstr "切換全形標點符號"
 msgid "Toggle Half/Full width Character"
 msgstr "切換全形半形字元"
 
-#: src/ui/kimpanel/kimpanel.c:748
+#: src/ui/kimpanel/kimpanel.c:760
 msgid "Toggle Input Method"
 msgstr "切換輸入法"
 
@@ -3209,7 +3213,7 @@ msgstr "可執行檔："
 msgid "here"
 msgstr "在此"
 
-#: src/lib/fcitx/ime.c:1755
+#: src/lib/fcitx/ime.c:1759
 msgid "min Num of Characters: "
 msgstr "分 字元數："
 
@@ -3218,7 +3222,7 @@ msgstr "分 字元數："
 msgid "no default option for %s/%s"
 msgstr "選項 %s/%s 沒有預設選項"
 
-#: src/ui/cairostuff/font.c:106
+#: src/ui/cairostuff/font.c:121
 msgid "no valid font."
 msgstr ""
 
@@ -3238,19 +3242,7 @@ msgstr "版本："
 msgid "xmodmap command"
 msgstr "xmodmap 指令"
 
-#: src/ui/cairostuff/font.c:90
+#: src/ui/cairostuff/font.c:119
 #, c-format
 msgid "your current font is: %s"
 msgstr ""
-
-#~ msgid "Action after press enter"
-#~ msgstr "按下 enter 鍵後動作"
-
-#~ msgid "Clean"
-#~ msgstr "清除"
-
-#~ msgid "Commit"
-#~ msgstr "提交輸入"
-
-#~ msgid "Nothing"
-#~ msgstr "不動作"

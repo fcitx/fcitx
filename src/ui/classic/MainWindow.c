@@ -217,7 +217,7 @@ void MainWindowCalculateContentSize(FcitxXlibWindow* window, unsigned int* width
             if (icon[0] != '\0')
                 statusicon = LoadImage(sc, path, false);
             if (statusicon == NULL || statusicon->textIcon) {
-                if (activeIcon && icon[0] == '\0') {
+                if (activeIcon) {
                     statusicon = LoadImageWithText(
                         classicui, sc, path, compstatus->shortDescription,
                         cairo_image_surface_get_width(activeIcon->image),
@@ -225,7 +225,7 @@ void MainWindowCalculateContentSize(FcitxXlibWindow* window, unsigned int* width
                         true);
                 }
             } else {
-                if (icon[0] == '/' && activeIcon) {
+                if (activeIcon) {
                     ResizeSurface(
                         &statusicon->image,
                         cairo_image_surface_get_width(activeIcon->image),
@@ -348,8 +348,7 @@ void MainWindowPaint(FcitxXlibWindow* window, cairo_t* c)
                     const char *path;
                     char *tmpstr = NULL;
                     if (icon[0] != '/') {
-                        fcitx_utils_alloc_cat_str(tmpstr,
-                                                    compstatus->name, ".png");
+                        fcitx_utils_alloc_cat_str(tmpstr, icon, ".png");
                         path = tmpstr;
                     } else {
                         path = icon;
@@ -406,8 +405,7 @@ void MainWindowPaint(FcitxXlibWindow* window, cairo_t* c)
                 if (icon[0] == '\0') {
                     path = compstatus->shortDescription;
                 } else {
-                    fcitx_utils_alloc_cat_str(tmpstr,
-                                                compstatus->name, ".png");
+                    fcitx_utils_alloc_cat_str(tmpstr, icon, ".png");
                     path = tmpstr;
                 }
             } else {
