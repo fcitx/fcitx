@@ -8,6 +8,6 @@ install(DIRECTORY scalable DESTINATION share/icons/hicolor
          PATTERN ".*" EXCLUDE
          PATTERN "*~" EXCLUDE)
 
-install(DIRECTORY symbolic/scalable DESTINATION share/icons/gnome
+install(DIRECTORY symbolic/scalable DESTINATION share/icons/hicolor
          PATTERN ".*" EXCLUDE
          PATTERN "*~" EXCLUDE )

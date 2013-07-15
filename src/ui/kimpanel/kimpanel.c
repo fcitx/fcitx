@@ -44,6 +44,15 @@
 
 #define GetMenuItem(m, i) ((FcitxMenuItem*) utarray_eltptr(&(m)->shell, (i)))
 
+static inline boolean CheckAddPrefix( const char** name) {
+    boolean result = !((*name)[0] == '\0' || (*name)[0] == '/' || (*name)[0] == '@');
+    if ((*name)[0] == '@') {
+        (*name) += 1;
+    }
+
+    return result;
+}
+
 const char * kimpanel_introspection_xml =
     "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\" "
     "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">"
@@ -210,12 +219,13 @@ static void SetIMMenu(FcitxIM *pim, char** prop)
 {
     const char *icon = "";
     if (strncmp(pim->uniqueName, "fcitx-keyboard-",
-                strlen("fcitx-keyboard-")) != 0)
+                strlen("fcitx-keyboard-")) != 0) {
         icon = pim->strIconName;
+    }
+    boolean result = CheckAddPrefix(&icon);
     fcitx_utils_alloc_cat_str(*prop, "/Fcitx/im/", pim->uniqueName, ":",
                               pim->strName,
-                              (icon[0] == '\0' || icon[0] == '/') ?
-                              ":" : ":fcitx-", icon, ":", pim->strName);
+                              result ? ":fcitx-" : ":", icon, ":", pim->strName);
 }
 
 static void SetIMIcon(FcitxInstance* instance, char** prop)
@@ -266,10 +276,11 @@ static void SetIMIcon(FcitxInstance* instance, char** prop)
     /* add fcitx- prefix, unless icon name is an absolute path */
 
     char *icon_prefix;
-    if (icon[0] == '\0' || icon[0] == '/') {
-        icon_prefix = ":";
-    } else {
+    boolean result = CheckAddPrefix(&icon);
+    if (result) {
         icon_prefix = ":fcitx-";
+    } else {
+        icon_prefix = ":";
     }
     fcitx_utils_alloc_cat_str(*prop, "/Fcitx/im:", imname, icon_prefix, icon,
                               ":", description);
@@ -515,14 +526,15 @@ char* Status2String(FcitxUIStatus* status)
 
 char* ComplexStatus2String(FcitxUIComplexStatus* status)
 {
-    const char* iconName = status->getIconName(status->arg);
-    char *result;
-    fcitx_utils_alloc_cat_str(result, "/Fcitx/", status->name, ":",
+    const char* icon = status->getIconName(status->arg);
+    char *str;
+    boolean result = CheckAddPrefix(&icon);
+    fcitx_utils_alloc_cat_str(str, "/Fcitx/", status->name, ":",
                               status->shortDescription,
-                              (iconName[0] == '\0' || iconName[0] == '/') ?
-                              ":" : ":fcitx-", iconName, ":",
+                              (result ? ":fcitx-" : ":"),
+                              icon, ":",
                               status->longDescription);
-    return result;
+    return str;
 }
 
 void KimpanelShowInputWindow(void* arg)

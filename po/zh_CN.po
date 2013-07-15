@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-07-02 12:02-0400\n"
-"PO-Revision-Date: 2013-07-01 16:09+0000\n"
+"POT-Creation-Date: 2013-07-13 18:02-0400\n"
+"PO-Revision-Date: 2013-07-13 17:40+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -99,7 +99,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM/zh-cn"
 
-#: src/lib/fcitx/ime.c:1752
+#: src/lib/fcitx/ime.c:1756
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -731,7 +731,7 @@ msgid "Configure"
 msgstr "配置"
 
 #: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
-#: src/ui/kimpanel/kimpanel.c:751
+#: src/ui/kimpanel/kimpanel.c:763
 msgid "Configure Current Input Method"
 msgstr "配置当前输入法"
 
@@ -877,7 +877,7 @@ msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr "禁用插件 %s，依赖 %s 无法满足。"
 
 #: src/module/notificationitem/notificationitem.c:460
-#: src/ui/kimpanel/kimpanel.c:258 src/ui/kimpanel/kimpanel.c:263
+#: src/ui/kimpanel/kimpanel.c:268 src/ui/kimpanel/kimpanel.c:273
 #: data/config.desc:34
 msgid "Disabled"
 msgstr "禁用"
@@ -1021,7 +1021,7 @@ msgid ""
 "path"
 msgstr "错误：$HOME 或 $XDG_CONFIG_HOME 未设置，无法确定安装路径"
 
-#: src/ui/cairostuff/font.c:49
+#: src/ui/cairostuff/font.c:46
 msgid "Error: Load fontconfig failed"
 msgstr "错误: fontconfig加载失败"
 
@@ -1065,7 +1065,7 @@ msgstr "无法在 ${1} 的输出重找到 fcitx."
 msgid "Fallback UI Addon"
 msgstr "备选界面附加组件"
 
-#: src/ui/kimpanel/kimpanel.c:373 data/fcitx-autostart.desktop.in:2
+#: src/ui/kimpanel/kimpanel.c:384 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
 msgstr "Fcitx"
@@ -1539,7 +1539,7 @@ msgstr "输入字体大小"
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-#: src/lib/fcitx/ime.c:1658 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1662 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "输入法"
@@ -1549,7 +1549,7 @@ msgid "Input Method Configuration"
 msgstr "输入法配置"
 
 #: src/module/notificationitem/notificationitem.c:461
-#: src/ui/kimpanel/kimpanel.c:259 src/ui/kimpanel/kimpanel.c:264
+#: src/ui/kimpanel/kimpanel.c:269 src/ui/kimpanel/kimpanel.c:274
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
 
@@ -1565,7 +1565,7 @@ msgstr "输入法相关的环境变量: "
 msgid "Input Methods:"
 msgstr "输入法:"
 
-#: src/lib/fcitx/ime.c:1749
+#: src/lib/fcitx/ime.c:1753
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -1943,7 +1943,7 @@ msgid "No available frontend"
 msgstr "无可用前端"
 
 #: src/module/notificationitem/notificationitem.c:454
-#: src/ui/kimpanel/kimpanel.c:231 src/ui/kimpanel/kimpanel.c:232
+#: src/ui/kimpanel/kimpanel.c:241 src/ui/kimpanel/kimpanel.c:242
 msgid "No input window"
 msgstr "无输入窗口"
 
@@ -2007,11 +2007,15 @@ msgstr "其他颜色"
 msgid "Output"
 msgstr "输出"
 
-#: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:147
-#: src/ui/classic/skin.desc:248 src/ui/classic/skin.desc:253
-#: src/ui/classic/skin.desc:378 src/ui/classic/skin.desc:383
+#: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:248
+#: src/ui/classic/skin.desc:378
 msgid "Overlay X offset"
 msgstr "覆盖图片 X 偏移"
+
+#: src/ui/classic/skin.desc:147 src/ui/classic/skin.desc:253
+#: src/ui/classic/skin.desc:383
+msgid "Overlay Y offset"
+msgstr "覆盖图片 Y 偏移"
 
 #: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
 #: src/ui/classic/skin.desc:373
@@ -2329,7 +2333,7 @@ msgid "Resize Margin Top"
 msgstr "上边距"
 
 #: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
-#: src/ui/kimpanel/kimpanel.c:756
+#: src/ui/kimpanel/kimpanel.c:768
 msgid "Restart"
 msgstr "重新启动"
 
@@ -2499,7 +2503,7 @@ msgstr "简繁转换"
 msgid "Simplified Chinese is enabled."
 msgstr "已启用简体中文。"
 
-#: src/ui/classic/skin.c:679 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "皮肤"
 
@@ -2809,7 +2813,7 @@ msgstr "切换全角标点"
 msgid "Toggle Half/Full width Character"
 msgstr "切换半/全角字符"
 
-#: src/ui/kimpanel/kimpanel.c:748
+#: src/ui/kimpanel/kimpanel.c:760
 msgid "Toggle Input Method"
 msgstr "切换输入法"
 
@@ -3219,7 +3223,7 @@ msgstr "可执行文件:"
 msgid "here"
 msgstr "这里"
 
-#: src/lib/fcitx/ime.c:1755
+#: src/lib/fcitx/ime.c:1759
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 
@@ -3228,7 +3232,7 @@ msgstr "分 字符数: "
 msgid "no default option for %s/%s"
 msgstr "选项%s/%s没有默认选项"
 
-#: src/ui/cairostuff/font.c:106
+#: src/ui/cairostuff/font.c:121
 msgid "no valid font."
 msgstr "无可用字体"
 
@@ -3248,19 +3252,7 @@ msgstr "版本:"
 msgid "xmodmap command"
 msgstr "xmodmap 命令"
 
-#: src/ui/cairostuff/font.c:90
+#: src/ui/cairostuff/font.c:119
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
-
-#~ msgid "Action after press enter"
-#~ msgstr "回车键操作"
-
-#~ msgid "Clean"
-#~ msgstr "清除"
-
-#~ msgid "Commit"
-#~ msgstr "提交输入"
-
-#~ msgid "Nothing"
-#~ msgstr "无操作"

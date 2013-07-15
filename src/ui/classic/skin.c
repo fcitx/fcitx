@@ -145,6 +145,10 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
     if (!text || *text == '\0')
         return NULL;
 
+    if (name[0] == '@') {
+        name++;
+    }
+
     UnloadSingleImage(sc, name);
 
     int len = fcitx_utf8_char_len(text);
@@ -202,6 +206,10 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
     const char* fallbackChainPanel[] = { buf, "skin/default" };
     const char* fallbackChainTray[] = { "imicon" };
     const char* fallbackChainPanelIMIcon[] = { buf, "imicon", "skin/default" };
+
+    if (name[0] == '@') {
+        name ++;
+    }
 
     HASH_FIND_STR(*imageTable, name, image);
     if (image != NULL) {

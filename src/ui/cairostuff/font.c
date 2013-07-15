@@ -18,7 +18,7 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include "fcitx/fcitx.h"
+#include "config.h"
 
 #ifndef _ENABLE_PANGO
 
@@ -41,9 +41,6 @@
  **/
 void GetValidFont(const char* strUserLocale, char **font)
 {
-    FcFontSet   *fs = NULL;
-    FcPattern   *pat = NULL;
-    FcObjectSet *os = NULL;
 
     if (!FcInit()) {
         FcitxLog(ERROR, _("Error: Load fontconfig failed"));
@@ -56,54 +53,73 @@ void GetValidFont(const char* strUserLocale, char **font)
     else
         strcpy(locale, "zh");
     locale[2] = '\0';
-reloadfont:
-    if (strcmp(*font, "") == 0) {
-        fcitx_utils_local_cat_str(strpat, strlen(":lang=") + sizeof(locale),
-                                  ":lang=", locale);
-        pat = FcNameParse((FcChar8*)strpat);
-    } else {
-        pat = FcNameParse((FcChar8*)(*font));
-    }
 
-    os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, (char*)0);
-    fs = FcFontList(0, pat, os);
-    if (os)
-        FcObjectSetDestroy(os);
-    os = NULL;
+    boolean      found = false;
+    while(true) {
+        FcFontSet   *fs = NULL;
+        FcPattern   *pat = NULL;
+        FcObjectSet *os = NULL;
 
-    FcPatternDestroy(pat);
-    pat = NULL;
+        do {
+            if (strcmp(*font, "") == 0) {
+                fcitx_utils_local_cat_str(strpat, strlen(":lang=") + sizeof(locale),
+                                        ":lang=", locale);
+                pat = FcNameParse((FcChar8*)strpat);
+            } else {
+                pat = FcNameParse((FcChar8*)(*font));
+            }
 
-    if (!fs || fs->nfont <= 0)
-        goto nofont;
+            if (!pat) {
+                break;
+            }
 
-    FcChar8* family;
-    if (FcPatternGetString(fs->fonts[0], FC_FAMILY, 0, &family) != FcResultMatch)
-        goto nofont;
-    if (*font)
-        free(*font);
+            os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, (char*)0);
+            if (!os) {
+                break;
+            }
 
-    *font = strdup((const char*) family);
+            fs = FcFontList(0, pat, os);
+            if (!fs || fs->nfont <= 0) {
+                break;
+            }
 
-    FcFontSetDestroy(fs);
+            FcChar8* family;
+            if (FcPatternGetString(fs->fonts[0], FC_FAMILY, 0, &family) != FcResultMatch) {
+                break;
+            }
 
-    FcitxLog(INFO, _("your current font is: %s"), *font);
-    return;
+            found = true;
+            free(*font);
+            *font = strdup((const char*) family);
+        } while (0);
 
-nofont:
-    if (strcmp(*font, "") != 0) {
-        strcpy(*font, "");
-        if (pat)
-            FcPatternDestroy(pat);
-        if (os)
-            FcObjectSetDestroy(os);
-        if (fs)
+        if (fs) {
             FcFontSetDestroy(fs);
+        }
+        if (os) {
+            FcObjectSetDestroy(os);
+        }
+        if (pat) {
+            FcPatternDestroy(pat);
+        }
 
-        goto reloadfont;
+        if (found) {
+            break;
+        }
+
+        if (strcmp(*font, "") != 0) {
+            /* *font must have enough space for "" */
+            strcpy(*font, "");
+        } else {
+            break;
+        }
     }
 
-    FcitxLog(FATAL, _("no valid font."));
+    if (found) {
+        FcitxLog(INFO, _("your current font is: %s"), *font);
+    } else {
+        FcitxLog(WARNING, _("no valid font."));
+    }
     return;
 }
 #endif

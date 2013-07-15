@@ -189,7 +189,7 @@ void FcitxXlibWindowPaintBackground(FcitxXlibWindow* window,
                                 r, 1, ShapeSet, Unsorted
                                );
     } else {
-        XShapeCombineMask(classicui->dpy, window->wId, ShapeBounding, 0, 0,
+        XShapeCombineMask(classicui->dpy, window->wId, ShapeInput, 0, 0,
                           None, ShapeSet);
     }
 }
@@ -248,6 +248,13 @@ void FcitxXlibWindowPaint(FcitxXlibWindow* window)
 
     int width = mergedRect.x2 - mergedRect.x1;
     int height = mergedRect.y2 - mergedRect.y1;
+
+    if (width <= 0) {
+        width = 1;
+    }
+    if (height <= 0) {
+        height = 1;
+    }
 
     EnlargeCairoSurface(&window->contentSurface, width, height);
     cairo_t* c = cairo_create(window->contentSurface);
