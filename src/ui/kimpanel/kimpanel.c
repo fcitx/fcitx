@@ -230,7 +230,7 @@ static void SetIMMenu(FcitxIM *pim, char** prop)
 
 static void SetIMIcon(FcitxInstance* instance, char** prop)
 {
-    char* icon;
+    const char* icon;
     char* imname;
     char* description;
     char temp[LANGCODE_LENGTH + 1] = { '\0', };
