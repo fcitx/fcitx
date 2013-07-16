@@ -663,14 +663,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
 void MainWindowMoveWindow(FcitxXlibWindow* window)
 {
     FcitxClassicUI* classicui = window->owner;
-    FcitxSkin* sc = &classicui->skin;
     FcitxRect rect = GetScreenGeometry(classicui, classicui->iMainWindowOffsetX, classicui->iMainWindowOffsetY);
-    SkinImage *back = LoadImage(sc, sc->skinMainBar.background.background, false);
-    int w = MAIN_BAR_MAX_WIDTH, h = MAIN_BAR_MAX_HEIGHT;
-    if (back) {
-        w = cairo_image_surface_get_width(back->image);
-        h = cairo_image_surface_get_height(back->image);
-    }
 
     int x = classicui->iMainWindowOffsetX;
     int y = classicui->iMainWindowOffsetY;
