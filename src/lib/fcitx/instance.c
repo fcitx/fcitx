@@ -484,7 +484,7 @@ void FcitxInstanceRealEnd(FcitxInstance* instance) {
         ) {
         if (pfrontend == NULL)
             continue;
-        FcitxFrontend* frontend = (*pfrontend)->frontend;
+        frontend = (*pfrontend)->frontend;
         frontend->Destroy((*pfrontend)->addonInstance);
     }
 
