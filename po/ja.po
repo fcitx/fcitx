@@ -7,14 +7,15 @@
 # いくや あわしろ <ikunya@gmail.com>, 2013
 # いくや あわしろ <ikunya@gmail.com>, 2012-2013
 # mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>, 2012
+# しろう, 2013
 # Xuetian Weng <wengxt@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-07-13 18:02-0400\n"
-"PO-Revision-Date: 2013-07-13 16:08+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2013-08-07 12:02-0400\n"
+"PO-Revision-Date: 2013-08-07 15:23+0000\n"
+"Last-Translator: しろう\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
 "Language: ja\n"
@@ -38,7 +39,7 @@ msgstr "${1} は正常に動作しています。"
 #: tools/gui/quickphrase-editor/editor.cpp:323
 #, kde-format
 msgid "%1 is a system file, do you want to delete all phrases instead?"
-msgstr ""
+msgstr "%1 はシステムファイルです。代わりにすべてのフレーズを削除しますか?"
 
 #: tools/gui/quickphrase-editor/editor.cpp:51
 msgid "&Add"
@@ -190,7 +191,7 @@ msgstr "候補を選択している時に空白を追加する"
 
 #: tools/gui/quickphrase-editor/editor.cpp:68
 msgid "Add File"
-msgstr ""
+msgstr "ファイル追加"
 
 #: src/module/lua/fcitx-lua.conf.in:4
 msgid "Add Lua script support to Fcitx"
@@ -253,7 +254,7 @@ msgstr "すべて"
 
 #: data/script/fcitx-diagnose.sh:1009
 msgid "All found Gtk ${1} immodule files exist."
-msgstr ""
+msgstr "見つけたGtk ${1} IMモジュールファイルはすべて存在します。"
 
 #: data/script/fcitx-diagnose.sh:655
 msgid "All locale:"
@@ -307,7 +308,7 @@ msgstr "レイアウト変更後にこの独自 xmodmap スクリプトを適用
 #: tools/gui/quickphrase-editor/editor.cpp:335
 #, kde-format
 msgid "Are you sure to delete %1?"
-msgstr ""
+msgstr "本当に %1 を削除しますか?"
 
 #: data/addon.desc:67
 msgid "Argument for InputMethod Register"
@@ -377,7 +378,7 @@ msgstr "初心者ガイド"
 
 #: src/im/table/data/qxm.conf.in:3
 msgid "Bingchan"
-msgstr ""
+msgstr "Bingchan"
 
 #: src/ui/classic/skin.desc:135 src/ui/classic/skin.desc:241
 #: src/ui/classic/skin.desc:371
@@ -442,7 +443,7 @@ msgstr "候補の単語数"
 
 #: src/im/table/data/cangjie.conf.in:3
 msgid "Cangjie"
-msgstr ""
+msgstr "Cangjie"
 
 #: src/im/pinyin/py.c:1733
 #, c-format
@@ -466,7 +467,7 @@ msgstr "正しくfcitxに接続できません。"
 #: tools/gui/quickphrase-editor/editor.cpp:296
 #, kde-format
 msgid "Cannot create file %1."
-msgstr ""
+msgstr "%1 ファイルを作成できません。"
 
 #: data/script/fcitx-diagnose.sh:626
 msgid "Cannot determine desktop environment."
@@ -485,7 +486,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1239
 msgid "Cannot find enabled fcitx user interface!"
-msgstr ""
+msgstr "有効なfcitxユーザーインターフェースが見つかりません!"
 
 #: data/script/fcitx-diagnose.sh:1193
 msgid "Cannot find fcitx addon config directory."
@@ -505,7 +506,7 @@ msgstr "gtk ${1} 用のFcitx im モジュールが見つかりません。"
 
 #: data/script/fcitx-diagnose.sh:951 data/script/fcitx-diagnose.sh:955
 msgid "Cannot find fcitx input method module for ${1}."
-msgstr ""
+msgstr "${1}のFcitx入力メソッドモジュールが見つかりません。"
 
 #: data/script/fcitx-diagnose.sh:793
 msgid "Cannot find fcitx-configtool executable!"
@@ -538,7 +539,7 @@ msgstr "fcitx プロファイルから IM リストを読み込めません。"
 
 #: tools/gui/quickphrase-editor/editor.cpp:322
 msgid "Cannot remove system file"
-msgstr ""
+msgstr "システムファイルは削除出来ません。"
 
 #: data/addon.desc:22
 msgid "Category"
@@ -707,7 +708,7 @@ msgstr "候補を選択時に空白を追加して確定する"
 
 #: data/script/fcitx-diagnose.sh:759
 msgid "Config GUI for gtk${1} not found."
-msgstr ""
+msgstr "gtk${1} に対する設定のGUIが見つかりません。"
 
 #: data/script/fcitx-diagnose.sh:755
 msgid "Config GUI for gtk${1}:"
@@ -727,7 +728,7 @@ msgstr "設定ファイル"
 
 #: data/script/fcitx-diagnose.sh:1377
 msgid "Configuration:"
-msgstr ""
+msgstr "設定:"
 
 #: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:493
 msgid "Configure"
@@ -745,7 +746,7 @@ msgstr "グループ名設定エラー: %d 行目"
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
 msgid "Confirm deletion"
-msgstr ""
+msgstr "削除の確認"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
@@ -763,7 +764,7 @@ msgstr "コピー"
 
 #: tools/gui/quickphrase-editor/editor.cpp:279
 msgid "Create new file"
-msgstr ""
+msgstr "ファイルの新規作成"
 
 #: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:138
 #: src/module/autoeng/fcitx-autoeng.desc:8
@@ -798,7 +799,7 @@ msgstr "現在のロケール:"
 
 #: data/config.desc:35
 msgid "Custom"
-msgstr ""
+msgstr "カスタム"
 
 #: data/config.desc:42
 msgid "Custom switch key"
@@ -856,7 +857,7 @@ msgstr "スキンの詳細"
 
 #: data/script/fcitx-diagnose.sh:624
 msgid "Desktop Environment:"
-msgstr ""
+msgstr "デスクトップ環境:"
 
 #: data/script/fcitx-diagnose.sh:628
 msgid "Desktop environment is ${1}."
@@ -864,7 +865,7 @@ msgstr "デスクトップ環境は ${1} です。"
 
 #: src/im/table/data/db.conf.in:3
 msgid "Dianbaoma"
-msgstr ""
+msgstr "Dianbaoma"
 
 #: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
@@ -1006,20 +1007,20 @@ msgstr "環境変数 ${1} は \"{$2}\" に正しく設定されています。"
 
 #: data/script/fcitx-diagnose.sh:634
 msgid "Environment:"
-msgstr ""
+msgstr "環境:"
 
 #: src/im/table/data/erbi.conf.in:3
 msgid "Erbi"
-msgstr ""
+msgstr "Erbi"
 
 #: data/script/fcitx-diagnose.sh:661
 msgid "Error occurs when running ${1}. Please check your locale settings."
-msgstr ""
+msgstr "${1} の実行中にエラーが起きました。ロケール設定を確認してください。"
 
 #: tools/gui/quickphrase-editor/editor.cpp:343
 #, kde-format
 msgid "Error while deleting %1."
-msgstr ""
+msgstr "%1 の削除中にエラーが起きました。"
 
 #: src/ui/classic/fcitx-skin-installer.sh:64
 #, sh-format
@@ -1093,7 +1094,7 @@ msgstr "Fcitx 設定"
 
 #: data/script/fcitx-diagnose.sh:790
 msgid "Fcitx Configure UI:"
-msgstr ""
+msgstr "Fcitx設定UI:"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -1113,7 +1114,7 @@ msgstr "Fcitx スペルのヒント/補完サポート"
 
 #: data/script/fcitx-diagnose.sh:673
 msgid "Fcitx State:"
-msgstr ""
+msgstr "Fcitxの状態:"
 
 #: src/module/unicode/fcitx-unicode.conf.in:3
 msgid "Fcitx Unicode Typing Support"
@@ -1129,16 +1130,16 @@ msgstr "Fcitxは実行されていません。"
 
 #: data/script/fcitx-diagnose.sh:687
 msgid "Fcitx version: ${1}"
-msgstr ""
+msgstr "Fcitxのバージョン: ${1}"
 
 #: tools/gui/quickphrase-editor/editor.cpp:295
 #: tools/gui/quickphrase-editor/editor.cpp:342
 msgid "File Operation Failed"
-msgstr ""
+msgstr "ファイル処理に失敗しました"
 
 #: tools/gui/quickphrase-editor/editor.cpp:285
 msgid "File name should not contain '/'."
-msgstr ""
+msgstr "ファイル名に '/' は含められません。"
 
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
 #: src/ui/classic/skin.desc:403
@@ -1239,7 +1240,7 @@ msgstr "${1} にfcitxを見つけました。"
 
 #: data/script/fcitx-diagnose.sh:933 data/script/fcitx-diagnose.sh:938
 msgid "Found fcitx im module for ${2}: ${1}."
-msgstr ""
+msgstr "${2}のfcitx im モジュールが見つかりました: ${1}"
 
 #: data/script/fcitx-diagnose.sh:1058 data/script/fcitx-diagnose.sh:1141
 msgid "Found fcitx im modules for gtk ${1}."
@@ -1251,7 +1252,7 @@ msgstr "fcitx kcmモジュールを見つけました。"
 
 #: data/script/fcitx-diagnose.sh:942
 msgid "Found fcitx qt module: ${1}."
-msgstr ""
+msgstr "fcitx qt モジュールが見つかりました: ${1}"
 
 #: data/script/fcitx-diagnose.sh:795
 msgid "Found fcitx-configtool at ${1}."
@@ -1271,7 +1272,7 @@ msgstr "不明な Fcitx qt モジュールを見つけました: ${1}。"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:3
 msgid "Freedesktop.org Notification Support"
-msgstr ""
+msgstr "Freedesktop.org通知サポート"
 
 #: data/addon.desc:19
 msgid "Frontend"
@@ -1292,7 +1293,7 @@ msgstr "フロントエンド: %s を開くのに失敗しました %s"
 
 #: data/script/fcitx-diagnose.sh:1370
 msgid "Frontends setup:"
-msgstr ""
+msgstr "フロントエンド設定:"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1389,7 +1390,7 @@ msgstr "ギリシャ文字"
 
 #: data/script/fcitx-diagnose.sh:1003
 msgid "Gtk ${1} immodule file ${2} does not exist."
-msgstr ""
+msgstr "Gtk ${1} IMモジュールファイル ${2} がありません。"
 
 #: data/script/fcitx-diagnose.sh:1171
 msgid "Gtk IM module cache:"
@@ -1605,7 +1606,7 @@ msgstr "不正な入力です %d 行目 %s "
 
 #: tools/gui/quickphrase-editor/editor.cpp:285
 msgid "Invalid filename"
-msgstr ""
+msgstr "無効なファイル名"
 
 #: src/lib/fcitx-utils/desktop-parse.c:550
 #, c-format
@@ -1714,7 +1715,7 @@ msgstr ""
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
-msgstr ""
+msgstr "左"
 
 #: data/config.desc:27
 msgid "Left Super"
@@ -1781,7 +1782,7 @@ msgstr "ロケール:"
 
 #: data/script/fcitx-diagnose.sh:1383
 msgid "Log:"
-msgstr ""
+msgstr "ログ:"
 
 #: src/ui/classic/skin.desc:73
 msgid "Logo Icon"
@@ -2012,12 +2013,12 @@ msgstr "出力"
 #: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:248
 #: src/ui/classic/skin.desc:378
 msgid "Overlay X offset"
-msgstr ""
+msgstr "オーバーレイのX座標オフセット"
 
 #: src/ui/classic/skin.desc:147 src/ui/classic/skin.desc:253
 #: src/ui/classic/skin.desc:383
 msgid "Overlay Y offset"
-msgstr ""
+msgstr "オーバーレイのY座標オフセット"
 
 #: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
 #: src/ui/classic/skin.desc:373
@@ -2112,7 +2113,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:280
 msgid "Please input a filename for newfile"
-msgstr ""
+msgstr "新しいファイルのファイル名を入力してください"
 
 #: src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
@@ -2213,7 +2214,7 @@ msgstr "DBusサポートを提供 (他のアドオンで使用される)"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
 msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
-msgstr ""
+msgstr "Freedesktop.orgの通知サポートを提供します(他のアドオンが使用します)"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
 msgid "Provides Fullwidth Character Input Support"
@@ -2281,7 +2282,7 @@ msgstr "右Shift"
 
 #: tools/gui/quickphrase-editor/editor.cpp:70
 msgid "Refresh List"
-msgstr ""
+msgstr "リストの更新"
 
 #: data/addon.desc:58
 msgid "Register IM"
@@ -2305,7 +2306,7 @@ msgstr "リモート"
 
 #: tools/gui/quickphrase-editor/editor.cpp:69
 msgid "Remove File"
-msgstr ""
+msgstr "ファイル削除"
 
 #: src/im/table/tabledict.c:466
 msgid "Rename OK"
@@ -2344,7 +2345,7 @@ msgstr "再起動"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
-msgstr ""
+msgstr "右"
 
 #: data/config.desc:28
 msgid "Right Super"
@@ -2386,7 +2387,7 @@ msgstr "オートフレーズを保存"
 
 #: tools/gui/quickphrase-editor/editor.cpp:131
 msgid "Save Changes"
-msgstr ""
+msgstr "変更の保存"
 
 #: src/module/clipboard/fcitx-clipboard.desc:4
 msgid "Save Clipboard History To File"
@@ -2506,7 +2507,7 @@ msgstr "簡体字中国語から繁体字中国語へ"
 
 #: src/module/chttrans/chttrans.c:178
 msgid "Simplified Chinese is enabled."
-msgstr ""
+msgstr "簡体字は有効です。"
 
 #: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
@@ -2614,15 +2615,15 @@ msgstr "スペルヒント"
 
 #: src/im/keyboard/keyboard.c:956
 msgid "Spell hint"
-msgstr ""
+msgstr "スペルヒント"
 
 #: src/im/keyboard/keyboard.c:958
 msgid "Spell hint is disabled."
-msgstr ""
+msgstr "スペルヒントは無効です。"
 
 #: src/im/keyboard/keyboard.c:957
 msgid "Spell hint is enabled."
-msgstr ""
+msgstr "スペルヒントは有効です。"
 
 #: data/fcitx-autostart.desktop.in:4 data/fcitx.desktop.in:4
 msgid "Start Input Method"
@@ -2745,7 +2746,7 @@ msgstr "記号ファイル"
 
 #: data/script/fcitx-diagnose.sh:596
 msgid "System Info:"
-msgstr ""
+msgstr "システム情報:"
 
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
 msgid "Table"
@@ -2768,10 +2769,12 @@ msgid ""
 "The content has changed.\n"
 "Do you want to save the changes or discard them?"
 msgstr ""
+"内容が変更されています。\n"
+"変更を保存しますか?それとも変更を破棄しますか?"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
-msgstr ""
+msgstr "押されたキーはQtでサポートされていません。"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
 msgid ""
@@ -2868,7 +2871,7 @@ msgstr "中国語繁体字翻訳エンジン"
 
 #: src/module/chttrans/chttrans.c:177
 msgid "Traditional Chinese is enabled."
-msgstr ""
+msgstr "繁体字は有効です。"
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
@@ -2932,7 +2935,7 @@ msgstr "不明な型です。文字列として扱います: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr ""
+msgstr "サポートされていないキー"
 
 #: tools/gui/quickphrase-editor/batchdialog.cpp:31
 msgid "Use <Keyword> <Phrase> format on every line."
@@ -3020,7 +3023,7 @@ msgstr "ユーザー定義"
 
 #: data/script/fcitx-diagnose.sh:1237
 msgid "User Interface:"
-msgstr ""
+msgstr "ユーザーインターフェース:"
 
 #: src/ui/classic/skin.desc:49
 msgid "User Phrase Color"
@@ -3028,7 +3031,7 @@ msgstr "ユーザーフレーズの色"
 
 #: data/script/fcitx-diagnose.sh:1047 data/script/fcitx-diagnose.sh:1130
 msgid "Version Line:"
-msgstr ""
+msgstr "バージョンライン:"
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
@@ -3056,15 +3059,15 @@ msgstr "仮想キーボードの状態"
 
 #: src/im/table/data/wanfeng.conf.in:3
 msgid "Wanfeng"
-msgstr ""
+msgstr "Wanfeng"
 
 #: src/im/table/data/wbx.conf.in:3
 msgid "Wubi"
-msgstr ""
+msgstr "Wubi"
 
 #: src/im/table/data/wbpy.conf.in:3
 msgid "WubiPinyin"
-msgstr ""
+msgstr "WubiPinyin"
 
 #: src/module/xkb/fcitx-xkb.desc:1 src/module/xkb/fcitx-xkb.desc:6
 #: src/module/xkb/fcitx-xkb.desc:12 src/module/xkb/fcitx-xkb.desc:17
@@ -3083,7 +3086,7 @@ msgstr "DBus と X Keyboard との連携"
 #: src/ui/classic/tray.c:159
 #, c-format
 msgid "X error %i on opcode send"
-msgstr ""
+msgstr "Xのエラー %i がopcodeの送信の時に起きました"
 
 #: src/module/x11/fcitx-x11.conf.in:3
 msgid "X11 Support"
