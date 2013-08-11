@@ -538,7 +538,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
     FcitxCandidateWordList *candList = FcitxInputStateGetCandidateList(input);
 
     if (sym == 0 && state == 0)
-        sym = -1;
+        sym = FcitxKey_VoidSymbol;
 
     if (!pystate->bPYBaseDictLoaded)
         LoadPYBaseDict(pystate);
@@ -716,19 +716,21 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                     }
                 }
 
-                if (!candWord)
+                if (!candWord) {
                     retVal = IRV_TO_PROCESS;
+                } else {
 
-                pystate->bIsPYDelUserPhr = true;
-                FcitxInputStateSetIsDoInputOnly(input, true);
+                    pystate->bIsPYDelUserPhr = true;
+                    FcitxInputStateSetIsDoInputOnly(input, true);
 
-                FcitxInstanceCleanInputWindowUp(pystate->owner);
-                FcitxMessagesAddMessageStringsAtLast(
-                    FcitxInputStateGetAuxUp(input), MSG_TIPS,
-                    _("Press index to delete user phrase (ESC for cancel)"));
-                FcitxInputStateSetShowCursor(input, false);
+                    FcitxInstanceCleanInputWindowUp(pystate->owner);
+                    FcitxMessagesAddMessageStringsAtLast(
+                        FcitxInputStateGetAuxUp(input), MSG_TIPS,
+                        _("Press index to delete user phrase (ESC for cancel)"));
+                    FcitxInputStateSetShowCursor(input, false);
 
-                return IRV_DISPLAY_MESSAGE;
+                    return IRV_DISPLAY_MESSAGE;
+                }
             }
         } else if (FcitxHotkeyIsHotKey(sym, state, pystate->pyconfig.hkPYAddFreq)) {
             if (!pystate->bIsPYAddFreq && pystate->findMap.iHZCount == 1 && FcitxInputStateGetRawInputBufferSize(input)) {
@@ -812,7 +814,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                     }
                 }
             }
-        } else if (sym == -1) {
+        } else if (sym == FcitxKey_VoidSymbol) {
             ParsePY(&pystate->pyconfig, pystate->strFindString, &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
             pystate->iPYInsertPoint = 0;
             retVal = IRV_DISPLAY_CANDWORDS;
@@ -1186,7 +1188,7 @@ INPUT_RETURN_VALUE PYGetCandWord(void* arg, FcitxCandidateWord* candWord)
     case PY_CAND_AUTO:
         pBase = pystate->strPYAuto;
         pBaseMap = pystate->strPYAutoMap;
-        bAddNewPhrase = pystate->pyconfig.bPYSaveAutoAsPhrase;
+        bAddNewPhrase = (pystate->iPYSelected > 0) || pystate->pyconfig.bPYSaveAutoAsPhrase;
         break;
     case PY_CAND_BASE:         //是系统单字
         pBase = PYFAList[pycandWord->cand.base.iPYFA].pyBase[pycandWord->cand.base.iBase].strHZ;
