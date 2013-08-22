@@ -3,6 +3,9 @@
 shopt -s extglob nullglob globstar
 export TEXTDOMAIN=fcitx
 
+# TODO check if run with root
+# TODO ldd on modules
+
 __test_bash_unicode() {
     local magic_str='${1}'$'\xe4'$'\xb8'$'\x80'
     local magic_replace=${magic_str//\$\{/$'\n'$\{}
@@ -622,6 +625,7 @@ check_system() {
         write_paragraph "$(print_not_found '/etc/os-release')"
     fi
     write_order_list "$(_ 'Desktop Environment:')"
+    # TODO check unity
     if [[ -z $DE ]] || [[ $DE = generic ]]; then
         write_eval "$(_ 'Cannot determine desktop environment.')"
     else
@@ -828,6 +832,7 @@ check_xim() {
     xim_name=fcitx
     write_order_list "$(code_inline '${XMODIFIERS}'):"
     if [ -z "${XMODIFIERS}" ]; then
+        write_error_eval "$(_ 'XMODIFIERS is not set')"
         set_env_link XMODIFIERS '@im=fcitx'
         __need_blank_line=0
     elif [ "${XMODIFIERS}" = '@im=fcitx' ]; then
@@ -835,6 +840,7 @@ check_xim() {
         __need_blank_line=0
     else
         _env_incorrect 'XMODIFIERS' '@im=fcitx' "${XMODIFIERS}"
+        set_env_link XMODIFIERS '@im=fcitx'
         if [[ ${XMODIFIERS} =~ @im=([-_0-9a-zA-Z]+) ]]; then
             xim_name="${BASH_REMATCH[1]}"
         else
@@ -842,7 +848,7 @@ check_xim() {
             write_error_eval "$(_ 'Cannot interpret XMODIFIERS: ${1}.')" \
                 "${XMODIFIERS}"
         fi
-        if [ "${xim_name}" = "ibus" ]; then
+        if [[ ${xim_name} = ibus ]]; then
             __need_blank_line=0
             gnome_36_link || __need_blank_line=1
         fi
@@ -1297,7 +1303,11 @@ check_input_methods() {
             write_error "$(_ "You don't have any input methods enabled.")"
             ;;
         1)
-            write_error "$(_ 'You only have one input method enabled, please add a keyboard input method as the first one and your main input method as the second one.')"
+            if [[ ${enabled_im[0]} =~ ^fcitx-keyboard- ]]; then
+                write_eval "$(_ 'You only have one keyboard input method enabled. You may want to add another input method to input other languages.')"
+            else
+                write_error "$(_ 'You only have one input method enabled, please add a keyboard input method as the first one and your main input method as the second one.')"
+            fi
             ;;
         *)
             if [[ ${enabled_im[0]} =~ ^fcitx-keyboard- ]]; then
