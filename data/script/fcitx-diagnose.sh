@@ -3,7 +3,6 @@
 shopt -s extglob nullglob globstar
 export TEXTDOMAIN=fcitx
 
-# TODO check if run with root
 # TODO ldd on modules
 
 __test_bash_unicode() {
@@ -207,6 +206,8 @@ print_process_info() {
     echo "$1 ${cmdline}"
 }
 
+# Detect DE
+
 _detectDE_XDG_CURRENT() {
     case "${XDG_CURRENT_DESKTOP}" in
         GNOME)
@@ -303,6 +304,63 @@ maybe_gnome3() {
 
 detectDE
 
+# user and uid
+
+detect_user() {
+    if which id &> /dev/null; then
+        cur_user=$(id -un)
+        cur_uid=$(id -u)
+    else
+        if [[ -n $UID ]]; then
+            cur_uid=$UID
+        elif [[ -d /proc/$$/ ]]; then
+            cur_uid=$(stat -c %u /proc/$$/)
+        else
+            cur_uid=""
+        fi
+        if which whoami &> /dev/null; then
+            cur_user=$(whoami)
+        elif [[ -d /proc/$$/ ]]; then
+            cur_user=$(stat -c %U /proc/$$/)
+        elif [[ -n $USER ]]; then
+            cur_user=$USER
+        else
+            cur_user=""
+        fi
+    fi
+}
+
+detect_user &> /dev/null
+
+try_open() {
+    (exec < "$1") &> /dev/null
+}
+
+_check_open_root() {
+    for f in /proc/1/environ /proc/1/mem /proc/kcore /proc/kmem; do
+        try_open "$f" && return 0
+    done
+    if which readlink &> /dev/null; then
+        for f in /proc/1/exe /proc/1/cwd /proc/1/root; do
+            readlink "$f" &> /dev/null && return 0
+        done
+    fi
+    return 1
+}
+
+check_is_root() {
+    if [[ $cur_uid = 0 ]]; then
+        return 0
+    elif [[ $cur_user = root ]]; then
+        return 0
+    elif [[ -n $cur_uid ]] && [[ -n $cur_user ]]; then
+        return 1
+    elif _check_open_root; then
+        return 0
+    fi
+    return 1
+}
+
 #############################
 # print
 #############################
@@ -382,6 +440,17 @@ print_link() {
     print_tty_ctrl '01;33'
     echo -n "[$text]($url)" | replace_reset '01;33'
     print_tty_ctrl '0'
+}
+
+escape_url_get() {
+    local get="$1"
+    echo -n "$get" | sed -e 's/&/%26/g' -e 's/+/%2B/g' -e 's/ /+/g'
+}
+
+print_google_link() {
+    local text="$1"
+    local url="https://www.google.com/search?q=$(escape_url_get "${text}")"
+    print_link "${text}" "${url}"
 }
 
 print_not_found() {
@@ -669,6 +738,16 @@ check_env() {
         increase_cur_level -1
     else
         write_paragraph "$(print_not_found 'locale')"
+    fi
+    write_order_list "$(_ 'Current user:')"
+    write_eval "$(_ 'The script is run as ${1} (${2}).')" \
+        "${cur_user}" "${cur_uid}"
+    if check_is_root; then
+        write_error_eval \
+            "$(_ 'You are probably logging in as ${1} or using ${2} to run this script. This either means you have security problems or the result of this script may not be accurate. See ${3} or ${4} for more information.')" \
+            "$(code_inline 'root')" "$(code_inline 'sudo')" \
+            "$(print_google_link "$(_ "Why is it bad to run as root")")" \
+            "$(print_google_link "$(_ "sudo environment variables")")"
     fi
 }
 
