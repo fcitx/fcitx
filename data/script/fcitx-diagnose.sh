@@ -3,8 +3,6 @@
 shopt -s extglob nullglob globstar
 export TEXTDOMAIN=fcitx
 
-# TODO ldd on modules
-
 __test_bash_unicode() {
     local magic_str='${1}'$'\xe4'$'\xb8'$'\x80'
     local magic_replace=${magic_str//\$\{/$'\n'$\{}
@@ -120,6 +118,7 @@ run_grep_fcitx() {
 get_config_dir() {
     local conf_option="$1"
     local default_name="$2"
+    local path
     for path in "$(fcitx4-config "--${conf_option}" 2> /dev/null)" \
         "/usr/share/fcitx/${default_name}" \
         "/usr/local/share/fcitx/${default_name}"; do
@@ -127,7 +126,7 @@ get_config_dir() {
             echo "${path}"
             return 0
         }
-    done
+    done 2> /dev/null
     return 1
 }
 
@@ -359,6 +358,23 @@ check_is_root() {
         return 0
     fi
     return 1
+}
+
+# ldd
+
+run_ldd() {
+    [ -f "$1" ] || return 1
+    local __line
+    local soname
+    while read __line; do
+        [[ $__line =~ ^[\ $'\t']*([^\ $'\t'].*) ]] || continue
+        __line="${BASH_REMATCH[1]}"
+        [[ $__line =~ ^([-_.a-zA-Z0-9]+)[\ $'\t']([^\ $'\t'].*) ]] || \
+            continue
+        soname="${BASH_REMATCH[1]}"
+        __line="${BASH_REMATCH[2]}"
+        [[ $__line =~ not[\ $'\t']+found ]] && echo "$soname"
+    done <<< "$(LANG=C LC_ALL=C ldd "$1" 2> /dev/null)"
 }
 
 #############################
@@ -657,12 +673,28 @@ no_xim_link() {
 ldpaths=()
 init_ld_paths() {
     local IFS=$'\n'
-    ldpaths=()
     unique_file_array ldpath ldpaths $(ldconfig -p 2> /dev/null | grep '=>' | \
         sed -e 's:.* => \(.*\)/[^/]*$:\1:g' | sort -u) \
         {/usr,,/usr/local}/lib*
 }
 init_ld_paths
+
+fcitx_lib_path=()
+init_fcitx_lib_path() {
+    local path
+    local __fcitx_lib_path
+    for path in "$(fcitx4-config "--libdir" 2> /dev/null)" "${ldpaths[@]}"; do
+        [ ! -z "${path}" ] && [ -d "${path}/fcitx/" ] && {
+            __fcitx_lib_path=("${__fcitx_lib_path[@]}" "${path}/fcitx/")
+        }
+    done 2> /dev/null
+    unique_file_array _fcitx_lib_path fcitx_lib_path "${__fcitx_lib_path[@]}"
+}
+init_fcitx_lib_path
+
+find_fcitx_lib() {
+    find_file "$1" -H "${fcitx_lib_path[@]}" -name "$2"
+}
 
 check_system() {
     write_title 1 "$(_ 'System Info:')"
@@ -1281,8 +1313,10 @@ check_modules() {
     local enabled_addon=()
     local disabled_addon=()
     local enabled_ui=()
+    local addon_file
     local name
     local enable
+    declare -A addon_file
     write_eval "$(_ 'Found fcitx addon config directory: ${1}.')" \
         "$(code_inline "${addon_conf_dir}")"
     write_order_list "$(_ 'Addon List:')"
@@ -1307,6 +1341,10 @@ check_modules() {
                 array_push enabled_ui "${name}"
             fi
         fi
+        type=$(get_from_config_file "${file}" Type)
+        if [[ -z $type ]] || [[ $type = SharedLibrary ]]; then
+            addon_file["${name}"]="$(get_from_config_file "${file}" Library)"
+        fi
     done
     increase_cur_level 1
     write_order_list_eval "$(_ 'Found ${1} enabled addons:')" \
@@ -1319,6 +1357,34 @@ check_modules() {
     [ "${#disabled_addon[@]}" = 0 ] || {
         write_quote_cmd print_array "${disabled_addon[@]}"
     }
+    increase_cur_level -1
+    write_order_list_eval "$(_ 'Addon Libraries:')"
+    local all_module_ok=1
+    local module_files
+    local _module_file
+    for addon_name in "${!addon_file[@]}"; do
+        find_fcitx_lib module_files "${addon_file[${addon_name}]}"
+        if [[ ${#module_files[@]} = 0 ]]; then
+            write_error_eval \
+                "$(_ 'Cannot find file ${1} of addon ${2}.')" \
+                "$(code_inline "${addon_file[${addon_name}]}")" \
+                "$(code_inline ${addon_name})"
+            all_module_ok=0
+            continue
+        fi
+        for _module_file in "${module_files[@]}"; do
+            not_found="$(run_ldd "${_module_file}")"
+            [[ -z ${not_found} ]] && continue
+            write_error_eval \
+                "$(_ 'Cannot find following required libraries for ${1} of addon ${2}.')" \
+                "$(code_inline "${addon_file[${addon_name}]}")" \
+                "$(code_inline ${addon_name})"
+            write_quote_str "${not_found}"
+            all_module_ok=0
+        done
+    done
+    ((all_module_ok)) && \
+        write_eval "$(_ 'All libraries for all addons are found.')"
     write_order_list_eval "$(_ 'User Interface:')"
     if ! ((${#enabled_ui[@]})); then
         write_error_eval "$(_ 'Cannot find enabled fcitx user interface!')"
