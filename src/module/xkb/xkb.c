@@ -100,10 +100,10 @@ FcitxXkbSetLayoutByName(FcitxXkb *xkb,
                         const char *layout, const char *variant, boolean toDefault);
 static void
 FcitxXkbRetrieveCloseGroup(FcitxXkb *xkb);
-static boolean FcitxXkbSetLayout  (FcitxXkb* xkb,
-                                   const char *layouts,
-                                   const char *variants,
-                                   const char *options);
+static void FcitxXkbSetLayout  (FcitxXkb* xkb,
+                                const char *layouts,
+                                const char *variants,
+                                const char *options);
 static int FcitxXkbGetCurrentGroup (FcitxXkb* xkb);
 static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value);
 static int FcitxXkbFindLayoutIndex(FcitxXkb* xkb, const char* layout, const char* variant);
@@ -421,7 +421,6 @@ FcitxXkbUpdateProperties(FcitxXkb* xkb, const char *rules_file,
         XChangeProperty (dpy, root_window,
                         rules_atom, XA_STRING, 8, PropModeReplace,
                         (unsigned char *) pval, len);
-        XSync(dpy, False);
     }
 
     free(pval);
@@ -468,11 +467,10 @@ FcitxXkbGetCurrentOption(FcitxXkb* xkb)
 #endif
 
 /* This SHOULD be _SetLayouts_ .... */
-static boolean
+static void
 FcitxXkbSetLayout(FcitxXkb* xkb, const char *layouts,
                   const char *variants, const char *options)
 {
-    boolean retval = False;
     char *layouts_line;
     char *options_line;
     char *variants_line;
@@ -480,7 +478,7 @@ FcitxXkbSetLayout(FcitxXkb* xkb, const char *layouts,
 
     if (utarray_len(xkb->defaultLayouts) == 0) {
         FcitxLog(WARNING, "Your system seems not to support XKB.");
-        return False;
+        return;
     }
 
     if (layouts == NULL)
@@ -502,20 +500,20 @@ FcitxXkbSetLayout(FcitxXkb* xkb, const char *layouts,
 
     char* rulesName = FcitxXkbGetRulesName(xkb);
     if (rulesName) {
-        retval = FcitxXkbSetRules(xkb,
-                                  rulesName, model_line,
-                                  layouts_line, variants_line, options_line);
-        FcitxXkbUpdateProperties(xkb,
-                                 rulesName, model_line,
-                                 layouts_line, variants_line, options_line);
+        if (FcitxXkbSetRules(xkb,
+                             rulesName, model_line,
+                             layouts_line, variants_line, options_line)) {
+            FcitxXkbUpdateProperties(xkb,
+                                     rulesName, model_line,
+                                     layouts_line, variants_line, options_line);
+            xkb->waitingForRefresh = true;
+        }
         free(rulesName);
     }
     free(layouts_line);
     free(variants_line);
     free(options_line);
     free(model_line);
-
-    return retval;
 }
 
 static int
@@ -834,7 +832,11 @@ static void FcitxXkbScheduleRefresh(void* arg) {
     FcitxXkb* xkb = (FcitxXkb*) arg;
     FcitxUIUpdateInputWindow(xkb->owner);
     FcitxXkbInitDefaultLayout(xkb);
-    FcitxXkbApplyCustomScript(xkb);
+    // we shall now ignore all outside world change, apply only if we do it on our own
+    if (xkb->waitingForRefresh) {
+        xkb->waitingForRefresh = false;
+        FcitxXkbApplyCustomScript(xkb);
+    }
 }
 
 static boolean FcitxXkbEventHandler(void* arg, XEvent* event)
@@ -856,7 +858,6 @@ static boolean FcitxXkbEventHandler(void* arg, XEvent* event)
             && xkbEvent->new_kbd.serial != xkb->lastSerial
         ) {
             xkb->lastSerial = xkbEvent->new_kbd.serial;
-            XSync(xkb->dpy, False);
             FcitxInstanceRemoveTimeoutByFunc(xkb->owner, FcitxXkbScheduleRefresh);
             FcitxInstanceAddTimeout(xkb->owner, 10, FcitxXkbScheduleRefresh, xkb);
         }

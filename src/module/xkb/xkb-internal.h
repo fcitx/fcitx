@@ -49,6 +49,7 @@ typedef struct _FcitxXkb
     int xkbOpcode;
     struct _LayoutOverride* layoutOverride;
     unsigned long lastSerial;
+    boolean waitingForRefresh;
 } FcitxXkb;
 
 
