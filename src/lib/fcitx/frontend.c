@@ -21,6 +21,7 @@
 #include <dlfcn.h>
 #include <libintl.h>
 #include <pthread.h>
+#include <regex.h>
 
 #include "fcitx-utils/utarray.h"
 #include "frontend.h"
@@ -34,11 +35,13 @@
 #include "instance.h"
 #include "instance-internal.h"
 #include "addon-internal.h"
+#include "config.h"
 
 static void FcitxInstanceCleanUpIC(FcitxInstance* instance);
 static void NewICData(FcitxInstance* instance, FcitxInputContext* ic);
 static void FreeICData(FcitxInstance* instance, FcitxInputContext* ic);
 static void FillICData(FcitxInstance* instance, FcitxInputContext* ic);
+static boolean _app_preedit_blacklisted(FcitxInputContext* ic);
 
 void FillICData(FcitxInstance* instance, FcitxInputContext* ic)
 {
@@ -165,6 +168,7 @@ FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid, void * priv)
     rec->frontendid = frontendid;
     rec->offset_x = -1;
     rec->offset_y = -1;
+    rec->prgname = NULL;
 
     NewICData(instance, rec);
     switch (instance->config->shareState) {
@@ -415,6 +419,9 @@ void FcitxInstanceUpdatePreedit(FcitxInstance* instance, FcitxInputContext* ic)
     if (ic == NULL)
         return;
 
+    if (_app_preedit_blacklisted(ic))
+        return;
+
     if (!(ic->contextCaps & CAPACITY_PREEDIT))
         return;
     FcitxAddon **pfrontend = FcitxInstanceGetPFrontend(instance, ic->frontendid);
@@ -552,10 +559,43 @@ boolean FcitxInstanceLoadFrontend(FcitxInstance* instance)
 FCITX_EXPORT_API
 boolean FcitxInstanceICSupportPreedit(FcitxInstance* instance, FcitxInputContext* ic)
 {
-    if (!ic || ((ic->contextCaps & CAPACITY_PREEDIT) == 0 || !instance->profile->bUsePreedit))
+    if (!ic || ((ic->contextCaps & CAPACITY_PREEDIT) == 0
+                || !instance->profile->bUsePreedit
+                || _app_preedit_blacklisted(ic)))
         return false;
     return true;
 }
 
+static boolean _app_preedit_blacklisted(FcitxInputContext* ic)
+{
+    static const char* _no_preedit_apps = NO_PREEDIT_APPS;
+    static UT_array* _no_preedit_app_list = NULL;
+    static regex_t _re;
+
+    const char* no_preedit_apps;
+
+    if (_no_preedit_app_list == NULL) {
+        no_preedit_apps = getenv("FCITX_NO_PREEDIT_APPS");
+        if (no_preedit_apps == NULL)
+            no_preedit_apps = _no_preedit_apps;
+        _no_preedit_app_list = fcitx_utils_split_string(no_preedit_apps, ',');
+    }
+
+    const char* prgname = ic->prgname;
+    if (!prgname)
+        return false;
+
+    utarray_foreach(pat, _no_preedit_app_list, char*) {
+        int ret = regcomp(&_re, *pat, REG_EXTENDED | REG_ICASE | REG_NOSUB);
+        if (ret)
+            continue;
+        ret = regexec(&_re, prgname, 0, NULL, 0);
+        regfree(&_re);
+        if (ret == 0) /* matched */
+            return true;
+    }
+
+    return false;
+}
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

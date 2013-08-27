@@ -47,6 +47,11 @@ if(NOT NO_SNOOPER_APPS)
     CACHE STRING "Disable Key Snooper for following app")
 endif()
 
+if(NOT NO_PREEDIT_APPS)
+  set(NO_PREEDIT_APPS "vim"
+    CACHE STRING "Disable Preedit for the following apps")
+endif()
+
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
 include(FindPkgConfig)

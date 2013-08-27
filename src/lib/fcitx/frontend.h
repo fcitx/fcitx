@@ -89,6 +89,7 @@ extern "C" {
         int offset_y; /**< y offset to the window */
         int frontendid; /**< frontend id */
         void *privateic; /**< private input context data */
+        char *prgname; /**< program name */
         FcitxCapacityFlags contextCaps; /**< input context capacity */
         struct _FcitxInputContext* next; /**< next input context */
     } FcitxInputContext;
