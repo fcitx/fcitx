@@ -118,6 +118,7 @@ run_grep_fcitx() {
 get_config_dir() {
     local conf_option="$1"
     local default_name="$2"
+    local path
     for path in "$(fcitx4-config "--${conf_option}" 2> /dev/null)" \
         "/usr/share/fcitx/${default_name}" \
         "/usr/local/share/fcitx/${default_name}"; do
@@ -125,7 +126,7 @@ get_config_dir() {
             echo "${path}"
             return 0
         }
-    done
+    done 2> /dev/null
     return 1
 }
 
@@ -203,6 +204,8 @@ print_process_info() {
     } 2> /dev/null
     echo "$1 ${cmdline}"
 }
+
+# Detect DE
 
 _detectDE_XDG_CURRENT() {
     case "${XDG_CURRENT_DESKTOP}" in
@@ -300,6 +303,80 @@ maybe_gnome3() {
 
 detectDE
 
+# user and uid
+
+detect_user() {
+    if which id &> /dev/null; then
+        cur_user=$(id -un)
+        cur_uid=$(id -u)
+    else
+        if [[ -n $UID ]]; then
+            cur_uid=$UID
+        elif [[ -d /proc/$$/ ]]; then
+            cur_uid=$(stat -c %u /proc/$$/)
+        else
+            cur_uid=""
+        fi
+        if which whoami &> /dev/null; then
+            cur_user=$(whoami)
+        elif [[ -d /proc/$$/ ]]; then
+            cur_user=$(stat -c %U /proc/$$/)
+        elif [[ -n $USER ]]; then
+            cur_user=$USER
+        else
+            cur_user=""
+        fi
+    fi
+}
+
+detect_user &> /dev/null
+
+try_open() {
+    (exec < "$1") &> /dev/null
+}
+
+_check_open_root() {
+    for f in /proc/1/environ /proc/1/mem /proc/kcore /proc/kmem; do
+        try_open "$f" && return 0
+    done
+    if which readlink &> /dev/null; then
+        for f in /proc/1/exe /proc/1/cwd /proc/1/root; do
+            readlink "$f" &> /dev/null && return 0
+        done
+    fi
+    return 1
+}
+
+check_is_root() {
+    if [[ $cur_uid = 0 ]]; then
+        return 0
+    elif [[ $cur_user = root ]]; then
+        return 0
+    elif [[ -n $cur_uid ]] && [[ -n $cur_user ]]; then
+        return 1
+    elif _check_open_root; then
+        return 0
+    fi
+    return 1
+}
+
+# ldd
+
+run_ldd() {
+    [ -f "$1" ] || return 1
+    local __line
+    local soname
+    while read __line; do
+        [[ $__line =~ ^[\ $'\t']*([^\ $'\t'].*) ]] || continue
+        __line="${BASH_REMATCH[1]}"
+        [[ $__line =~ ^([-_.a-zA-Z0-9]+)[\ $'\t']([^\ $'\t'].*) ]] || \
+            continue
+        soname="${BASH_REMATCH[1]}"
+        __line="${BASH_REMATCH[2]}"
+        [[ $__line =~ not[\ $'\t']+found ]] && echo "$soname"
+    done <<< "$(LANG=C LC_ALL=C ldd "$1" 2> /dev/null)"
+}
+
 #############################
 # print
 #############################
@@ -379,6 +456,17 @@ print_link() {
     print_tty_ctrl '01;33'
     echo -n "[$text]($url)" | replace_reset '01;33'
     print_tty_ctrl '0'
+}
+
+escape_url_get() {
+    local get="$1"
+    echo -n "$get" | sed -e 's/&/%26/g' -e 's/+/%2B/g' -e 's/ /+/g'
+}
+
+print_google_link() {
+    local text="$1"
+    local url="https://www.google.com/search?q=$(escape_url_get "${text}")"
+    print_link "${text}" "${url}"
 }
 
 print_not_found() {
@@ -585,12 +673,28 @@ no_xim_link() {
 ldpaths=()
 init_ld_paths() {
     local IFS=$'\n'
-    ldpaths=()
     unique_file_array ldpath ldpaths $(ldconfig -p 2> /dev/null | grep '=>' | \
         sed -e 's:.* => \(.*\)/[^/]*$:\1:g' | sort -u) \
         {/usr,,/usr/local}/lib*
 }
 init_ld_paths
+
+fcitx_lib_path=()
+init_fcitx_lib_path() {
+    local path
+    local __fcitx_lib_path
+    for path in "$(fcitx4-config "--libdir" 2> /dev/null)" "${ldpaths[@]}"; do
+        [ ! -z "${path}" ] && [ -d "${path}/fcitx/" ] && {
+            __fcitx_lib_path=("${__fcitx_lib_path[@]}" "${path}/fcitx/")
+        }
+    done 2> /dev/null
+    unique_file_array _fcitx_lib_path fcitx_lib_path "${__fcitx_lib_path[@]}"
+}
+init_fcitx_lib_path
+
+find_fcitx_lib() {
+    find_file "$1" -H "${fcitx_lib_path[@]}" -name "$2"
+}
 
 check_system() {
     write_title 1 "$(_ 'System Info:')"
@@ -622,6 +726,7 @@ check_system() {
         write_paragraph "$(print_not_found '/etc/os-release')"
     fi
     write_order_list "$(_ 'Desktop Environment:')"
+    # TODO check unity
     if [[ -z $DE ]] || [[ $DE = generic ]]; then
         write_eval "$(_ 'Cannot determine desktop environment.')"
     else
@@ -665,6 +770,16 @@ check_env() {
         increase_cur_level -1
     else
         write_paragraph "$(print_not_found 'locale')"
+    fi
+    write_order_list "$(_ 'Current user:')"
+    write_eval "$(_ 'The script is run as ${1} (${2}).')" \
+        "${cur_user}" "${cur_uid}"
+    if check_is_root; then
+        write_error_eval \
+            "$(_ 'You are probably logging in as ${1} or using ${2} to run this script. This either means you have security problems or the result of this script may not be accurate. See ${3} or ${4} for more information.')" \
+            "$(code_inline 'root')" "$(code_inline 'sudo')" \
+            "$(print_google_link "$(_ "Why is it bad to run as root")")" \
+            "$(print_google_link "$(_ "sudo environment variables")")"
     fi
 }
 
@@ -828,6 +943,7 @@ check_xim() {
     xim_name=fcitx
     write_order_list "$(code_inline '${XMODIFIERS}'):"
     if [ -z "${XMODIFIERS}" ]; then
+        write_error_eval "$(_ 'XMODIFIERS is not set')"
         set_env_link XMODIFIERS '@im=fcitx'
         __need_blank_line=0
     elif [ "${XMODIFIERS}" = '@im=fcitx' ]; then
@@ -835,6 +951,7 @@ check_xim() {
         __need_blank_line=0
     else
         _env_incorrect 'XMODIFIERS' '@im=fcitx' "${XMODIFIERS}"
+        set_env_link XMODIFIERS '@im=fcitx'
         if [[ ${XMODIFIERS} =~ @im=([-_0-9a-zA-Z]+) ]]; then
             xim_name="${BASH_REMATCH[1]}"
         else
@@ -842,7 +959,7 @@ check_xim() {
             write_error_eval "$(_ 'Cannot interpret XMODIFIERS: ${1}.')" \
                 "${XMODIFIERS}"
         fi
-        if [ "${xim_name}" = "ibus" ]; then
+        if [[ ${xim_name} = ibus ]]; then
             __need_blank_line=0
             gnome_36_link || __need_blank_line=1
         fi
@@ -1196,8 +1313,10 @@ check_modules() {
     local enabled_addon=()
     local disabled_addon=()
     local enabled_ui=()
+    local addon_file
     local name
     local enable
+    declare -A addon_file
     write_eval "$(_ 'Found fcitx addon config directory: ${1}.')" \
         "$(code_inline "${addon_conf_dir}")"
     write_order_list "$(_ 'Addon List:')"
@@ -1222,6 +1341,10 @@ check_modules() {
                 array_push enabled_ui "${name}"
             fi
         fi
+        type=$(get_from_config_file "${file}" Type)
+        if [[ -z $type ]] || [[ $type = SharedLibrary ]]; then
+            addon_file["${name}"]="$(get_from_config_file "${file}" Library)"
+        fi
     done
     increase_cur_level 1
     write_order_list_eval "$(_ 'Found ${1} enabled addons:')" \
@@ -1234,6 +1357,34 @@ check_modules() {
     [ "${#disabled_addon[@]}" = 0 ] || {
         write_quote_cmd print_array "${disabled_addon[@]}"
     }
+    increase_cur_level -1
+    write_order_list_eval "$(_ 'Addon Libraries:')"
+    local all_module_ok=1
+    local module_files
+    local _module_file
+    for addon_name in "${!addon_file[@]}"; do
+        find_fcitx_lib module_files "${addon_file[${addon_name}]}"
+        if [[ ${#module_files[@]} = 0 ]]; then
+            write_error_eval \
+                "$(_ 'Cannot find file ${1} of addon ${2}.')" \
+                "$(code_inline "${addon_file[${addon_name}]}")" \
+                "$(code_inline ${addon_name})"
+            all_module_ok=0
+            continue
+        fi
+        for _module_file in "${module_files[@]}"; do
+            not_found="$(run_ldd "${_module_file}")"
+            [[ -z ${not_found} ]] && continue
+            write_error_eval \
+                "$(_ 'Cannot find following required libraries for ${1} of addon ${2}.')" \
+                "$(code_inline "${addon_file[${addon_name}]}")" \
+                "$(code_inline ${addon_name})"
+            write_quote_str "${not_found}"
+            all_module_ok=0
+        done
+    done
+    ((all_module_ok)) && \
+        write_eval "$(_ 'All libraries for all addons are found.')"
     write_order_list_eval "$(_ 'User Interface:')"
     if ! ((${#enabled_ui[@]})); then
         write_error_eval "$(_ 'Cannot find enabled fcitx user interface!')"
@@ -1297,7 +1448,11 @@ check_input_methods() {
             write_error "$(_ "You don't have any input methods enabled.")"
             ;;
         1)
-            write_error "$(_ 'You only have one input method enabled, please add a keyboard input method as the first one and your main input method as the second one.')"
+            if [[ ${enabled_im[0]} =~ ^fcitx-keyboard- ]]; then
+                write_eval "$(_ 'You only have one keyboard input method enabled. You may want to add another input method to input other languages.')"
+            else
+                write_error "$(_ 'You only have one input method enabled, please add a keyboard input method as the first one and your main input method as the second one.')"
+            fi
             ;;
         *)
             if [[ ${enabled_im[0]} =~ ^fcitx-keyboard- ]]; then
