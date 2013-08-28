@@ -148,11 +148,11 @@ UT_array* CharSelectDataUnihanInfo(CharSelectData* charselect, uint32_t unicode)
 
     int min = 0;
     int mid;
-    int max = ((offsetEnd - offsetBegin) / 30) - 1;
+    int max = ((offsetEnd - offsetBegin) / 32) - 1;
 
     while (max >= min) {
         mid = (min + max) / 2;
-        const uint32_t midUnicode = FromLittleEndian16(data + offsetBegin + mid*30);
+        const uint32_t midUnicode = FromLittleEndian16(data + offsetBegin + mid*32);
         if (unicode > midUnicode)
             min = mid + 1;
         else if (unicode < midUnicode)
@@ -160,7 +160,7 @@ UT_array* CharSelectDataUnihanInfo(CharSelectData* charselect, uint32_t unicode)
         else {
             int i;
             for(i = 0; i < 7; i++) {
-                uint32_t offset = FromLittleEndian32(data + offsetBegin + mid*30 + 2 + i*4);
+                uint32_t offset = FromLittleEndian32(data + offsetBegin + mid*32 + 4 + i*4);
                 const char* empty = "";
                 if(offset != 0) {
                     const char* r = data + offset;
@@ -186,7 +186,7 @@ uint32_t CharSelectDataGetDetailIndex(CharSelectData* charselect, uint32_t unico
 
     int min = 0;
     int mid;
-    int max = ((offsetEnd - offsetBegin) / 27) - 1;
+    int max = ((offsetEnd - offsetBegin) / 29) - 1;
 
     static uint32_t most_recent_searched;
     static uint32_t most_recent_result;
@@ -199,13 +199,13 @@ uint32_t CharSelectDataGetDetailIndex(CharSelectData* charselect, uint32_t unico
 
     while (max >= min) {
         mid = (min + max) / 2;
-        const uint32_t midUnicode = FromLittleEndian16(data + offsetBegin + mid*27);
+        const uint32_t midUnicode = FromLittleEndian16(data + offsetBegin + mid*29);
         if (unicode > midUnicode)
             min = mid + 1;
         else if (unicode < midUnicode)
             max = mid - 1;
         else {
-            most_recent_result = offsetBegin + mid*27;
+            most_recent_result = offsetBegin + mid*29;
 
             return most_recent_result;
         }
@@ -220,8 +220,8 @@ char* CharSelectDataName(CharSelectData* charselect, uint32_t unicode)
     char* result = NULL;
     do {
         if ((unicode >= 0x3400 && unicode <= 0x4DB5)
-                || (unicode >= 0x4e00 && unicode <= 0x9fa5)) {
-            // || (unicode >= 0x20000 && unicode <= 0x2A6D6) // useless, since limited to 16 bit
+                || (unicode >= 0x4e00 && unicode <= 0x9fa5)
+                || (unicode >= 0x20000 && unicode <= 0x2A6D6)) {
             asprintf(&result, "CJK UNIFIED IDEOGRAPH-%x", unicode);
         } else if (unicode >= 0xac00 && unicode <= 0xd7af) {
             /* compute hangul syllable name as per UAX #15 */
@@ -257,17 +257,17 @@ char* CharSelectDataName(CharSelectData* charselect, uint32_t unicode)
 
             int min = 0;
             int mid;
-            int max = ((offsetEnd - offsetBegin) / 6) - 1;
+            int max = ((offsetEnd - offsetBegin) / 8) - 1;
 
             while (max >= min) {
                 mid = (min + max) / 2;
-                const uint32_t midUnicode = FromLittleEndian16(data + offsetBegin + mid*6);
+                const uint32_t midUnicode = FromLittleEndian32(data + offsetBegin + mid*8);
                 if (unicode > midUnicode)
                     min = mid + 1;
                 else if (unicode < midUnicode)
                     max = mid - 1;
                 else {
-                    uint32_t offset = FromLittleEndian32(data + offsetBegin + mid*6 + 2);
+                    uint32_t offset = FromLittleEndian32(data + offsetBegin + mid*8 + 4);
                     result = strdup(charselect->dataFile + offset + 1);
                     break;
                 }
@@ -479,7 +479,7 @@ UnicodeSet* CharSelectDataGetMatchingChars(CharSelectData* charselect, const cha
     if (!last)
         last = (CharSelectDataIndex**)utarray_back(charselect->indexList);
     while (pos != last && strncasecmp(s, (*pos)->key, s_l) == 0) {
-        utarray_foreach (c, (*pos)->items, uint16_t) {
+        utarray_foreach (c, (*pos)->items, uint32_t) {
             result = InsertResult(result, *c);
         }
         ++pos;
@@ -496,8 +496,8 @@ UT_array* CharSelectDataAliases(CharSelectData* charselect, uint32_t unicode)
         return fcitx_utils_new_string_list();
     }
 
-    const uint8_t count = * (uint8_t *)(data + detailIndex + 6);
-    uint32_t offset = FromLittleEndian32(data + detailIndex + 2);
+    const uint8_t count = * (uint8_t *)(data + detailIndex + 8);
+    uint32_t offset = FromLittleEndian32(data + detailIndex + 4);
 
     UT_array* aliases = fcitx_utils_new_string_list();
 
@@ -519,8 +519,8 @@ UT_array* CharSelectDataNotes(CharSelectData* charselect, uint32_t unicode)
     }
 
     const char* data = charselect->dataFile;
-    const uint8_t count = * (uint8_t *)(data + detailIndex + 11);
-    uint32_t offset = FromLittleEndian32(data + detailIndex + 7);
+    const uint8_t count = * (uint8_t *)(data + detailIndex + 13);
+    uint32_t offset = FromLittleEndian32(data + detailIndex + 9);
 
     UT_array* notes = fcitx_utils_new_string_list();
 
@@ -545,8 +545,8 @@ CharSelectDataSeeAlso(CharSelectData* charselect, uint32_t unicode)
     }
 
     const char* data = charselect->dataFile;
-    const uint8_t count = * (uint8_t *)(data + detailIndex + 26);
-    uint32_t offset = FromLittleEndian32(data + detailIndex + 22);
+    const uint8_t count = * (uint8_t *)(data + detailIndex + 28);
+    uint32_t offset = FromLittleEndian32(data + detailIndex + 24);
 
     int i;
     for (i = 0;  i < count;  i++) {
@@ -566,8 +566,8 @@ UT_array* CharSelectDataEquivalents(CharSelectData* charselect, uint32_t unicode
     }
 
     const char* data = charselect->dataFile;
-    const uint8_t count = * (uint8_t *)(data + detailIndex + 21);
-    uint32_t offset = FromLittleEndian32(data + detailIndex + 17);
+    const uint8_t count = * (uint8_t *)(data + detailIndex + 23);
+    uint32_t offset = FromLittleEndian32(data + detailIndex + 19);
 
     UT_array* equivalents = fcitx_utils_new_string_list();
 
@@ -589,8 +589,8 @@ UT_array* CharSelectDataApproximateEquivalents(CharSelectData* charselect, uint3
     }
 
     const char* data = charselect->dataFile;
-    const uint8_t count = * (uint8_t *)(data + detailIndex + 16);
-    uint32_t offset = FromLittleEndian32(data + detailIndex + 12);
+    const uint8_t count = * (uint8_t *)(data + detailIndex + 18);
+    uint32_t offset = FromLittleEndian32(data + detailIndex + 14);
 
     UT_array* approxEquivalents = fcitx_utils_new_string_list();
 
@@ -643,11 +643,11 @@ CharSelectDataIndex* CharSelectDataIndexNew(const char* key)
 {
     CharSelectDataIndex* idx = fcitx_utils_new(CharSelectDataIndex);
     idx->key = strdup(key);
-    utarray_new(idx->items, fcitx_int16_icd);
+    utarray_new(idx->items, fcitx_int32_icd);
     return idx;
 }
 
-void CharSelectDataAppendToIndex(CharSelectData* charselect, uint16_t unicode, const char* str)
+void CharSelectDataAppendToIndex(CharSelectData* charselect, uint32_t unicode, const char* str)
 {
     UT_array* strings = SplitString(str);
     utarray_foreach(s, strings, char*) {
@@ -683,13 +683,13 @@ void CharSelectDataCreateIndex(CharSelectData* charselect)
     const uint32_t nameOffsetBegin = FromLittleEndian32(data+4);
     const uint32_t nameOffsetEnd = FromLittleEndian32(data+8);
 
-    int max = ((nameOffsetEnd - nameOffsetBegin) / 6) - 1;
+    int max = ((nameOffsetEnd - nameOffsetBegin) / 8) - 1;
 
     int pos, j;
 
     for (pos = 0; pos <= max; pos++) {
-        const uint16_t unicode = FromLittleEndian16(data + nameOffsetBegin + pos*6);
-        uint32_t offset = FromLittleEndian32(data + nameOffsetBegin + pos*6 + 2);
+        const uint32_t unicode = FromLittleEndian32(data + nameOffsetBegin + pos*8);
+        uint32_t offset = FromLittleEndian32(data + nameOffsetBegin + pos*8 + 4);
         // TODO
         CharSelectDataAppendToIndex(charselect, unicode, (data + offset + 1));
     }
@@ -698,13 +698,13 @@ void CharSelectDataCreateIndex(CharSelectData* charselect)
     const uint32_t detailsOffsetBegin = FromLittleEndian32(data+12);
     const uint32_t detailsOffsetEnd = FromLittleEndian32(data+16);
 
-    max = ((detailsOffsetEnd - detailsOffsetBegin) / 27) - 1;
+    max = ((detailsOffsetEnd - detailsOffsetBegin) / 29) - 1;
     for (pos = 0; pos <= max; pos++) {
-        const uint16_t unicode = FromLittleEndian16(data + detailsOffsetBegin + pos*27);
+        const uint32_t unicode = FromLittleEndian32(data + detailsOffsetBegin + pos*29);
 
         // aliases
-        const uint8_t aliasCount = * (uint8_t *)(data + detailsOffsetBegin + pos*27 + 6);
-        uint32_t aliasOffset = FromLittleEndian32(data + detailsOffsetBegin + pos*27 + 2);
+        const uint8_t aliasCount = * (uint8_t *)(data + detailsOffsetBegin + pos*29 + 8);
+        uint32_t aliasOffset = FromLittleEndian32(data + detailsOffsetBegin + pos*29 + 4);
 
         for (j = 0;  j < aliasCount;  j++) {
             CharSelectDataAppendToIndex(charselect, unicode, data + aliasOffset);
@@ -712,8 +712,8 @@ void CharSelectDataCreateIndex(CharSelectData* charselect)
         }
 
         // notes
-        const uint8_t notesCount = * (uint8_t *)(data + detailsOffsetBegin + pos*27 + 11);
-        uint32_t notesOffset = FromLittleEndian32(data + detailsOffsetBegin + pos*27 + 7);
+        const uint8_t notesCount = * (uint8_t *)(data + detailsOffsetBegin + pos*29 + 13);
+        uint32_t notesOffset = FromLittleEndian32(data + detailsOffsetBegin + pos*29 + 9);
 
         for (j = 0;  j < notesCount;  j++) {
             CharSelectDataAppendToIndex(charselect, unicode, data + notesOffset);
@@ -721,8 +721,8 @@ void CharSelectDataCreateIndex(CharSelectData* charselect)
         }
 
         // approximate equivalents
-        const uint8_t apprCount = * (uint8_t *)(data + detailsOffsetBegin + pos*27 + 16);
-        uint32_t apprOffset = FromLittleEndian32(data + detailsOffsetBegin + pos*27 + 12);
+        const uint8_t apprCount = * (uint8_t *)(data + detailsOffsetBegin + pos*29 + 18);
+        uint32_t apprOffset = FromLittleEndian32(data + detailsOffsetBegin + pos*29 + 14);
 
         for (j = 0;  j < apprCount;  j++) {
             CharSelectDataAppendToIndex(charselect, unicode,data + apprOffset);
@@ -730,8 +730,8 @@ void CharSelectDataCreateIndex(CharSelectData* charselect)
         }
 
         // equivalents
-        const uint8_t equivCount = * (uint8_t *)(data + detailsOffsetBegin + pos*27 + 21);
-        uint32_t equivOffset = FromLittleEndian32(data + detailsOffsetBegin + pos*27 + 17);
+        const uint8_t equivCount = * (uint8_t *)(data + detailsOffsetBegin + pos*29 + 23);
+        uint32_t equivOffset = FromLittleEndian32(data + detailsOffsetBegin + pos*29 + 19);
 
         for (j = 0;  j < equivCount;  j++) {
             CharSelectDataAppendToIndex(charselect, unicode, data + equivOffset);
@@ -739,8 +739,8 @@ void CharSelectDataCreateIndex(CharSelectData* charselect)
         }
 
         // see also - convert to string (hex)
-        const uint8_t seeAlsoCount = * (uint8_t *)(data + detailsOffsetBegin + pos*27 + 26);
-        uint32_t seeAlsoOffset = FromLittleEndian32(data + detailsOffsetBegin + pos*27 + 22);
+        const uint8_t seeAlsoCount = * (uint8_t *)(data + detailsOffsetBegin + pos*29 + 28);
+        uint32_t seeAlsoOffset = FromLittleEndian32(data + detailsOffsetBegin + pos*29 + 24);
 
         for (j = 0;  j < seeAlsoCount;  j++) {
             uint32_t seeAlso = FromLittleEndian16 (data + seeAlsoOffset);
@@ -755,12 +755,12 @@ void CharSelectDataCreateIndex(CharSelectData* charselect)
     // temporary disabled due to the huge amount of data
      const uint32_t unihanOffsetBegin = FromLittleEndian32(data+36);
      const uint32_t unihanOffsetEnd = charselect->size;
-     max = ((unihanOffsetEnd - unihanOffsetBegin) / 30) - 1;
+     max = ((unihanOffsetEnd - unihanOffsetBegin) / 32) - 1;
 
      for (pos = 0; pos <= max; pos++) {
-         const uint16_t unicode = FromLittleEndian16(data + unihanOffsetBegin + pos*30);
+         const uint32_t unicode = FromLittleEndian32(data + unihanOffsetBegin + pos*32);
          for(j = 0; j < 7; j++) {
-             uint32_t offset = FromLittleEndian32(data + unihanOffsetBegin + pos*30 + 2 + j*4);
+             uint32_t offset = FromLittleEndian32(data + unihanOffsetBegin + pos*32 + 4 + j*4);
              if(offset != 0) {
                  CharSelectDataAppendToIndex(charselect, unicode, (data + offset));
              }

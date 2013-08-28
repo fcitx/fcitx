@@ -286,6 +286,72 @@ Low Surrogates
 Private Use Area
 Specials
 Variation Selectors
+
+SECTION SMP
+Linear B Syllabary
+Linear B Ideograms
+Aegean Numbers
+Ancient Greek Numbers
+Ancient Symbols
+Phaistos Disc
+Lycian
+Carian
+Old Italic
+Gothic
+Ugaritic
+Old Persian
+Deseret
+Shavian
+Osmanya
+Cypriot Syllabary
+Imperial Aramaic
+Phoenician
+Lydian
+Meroitic Hieroglyphs
+Meroitic Cursive
+Kharoshthi
+Old South Arabian
+Avestan
+Inscriptional Parthian
+Inscriptional Pahlavi
+Old Turkic
+Rumi Numeral Symbols
+Brahmi
+Kaithi
+Sora Sompeng
+Chakma
+Sharada
+Takri
+Cuneiform
+Cuneiform Numbers and Punctuation
+Egyptian Hieroglyphs
+Bamum Supplement
+Miao
+Kana Supplement
+Byzantine Musical Symbols
+Musical Symbols
+Ancient Greek Musical Notation
+Tai Xuan Jing Symbols
+Counting Rod Numerals
+Mathematical Alphanumeric Symbols
+Arabic Mathematical Alphabetic Symbols
+Mahjong Tiles
+Domino Tiles
+Playing Cards
+Enclosed Alphanumeric Supplement
+Enclosed Ideographic Supplement
+Miscellaneous Symbols And Pictographs
+Emoticons
+Transport And Map Symbols
+Alchemical Symbols
+CJK Unified Ideographs Extension B
+CJK Unified Ideographs Extension C
+CJK Unified Ideographs Extension D
+CJK Compatibility Ideographs Supplement
+Tags
+Variation Selectors Supplement
+Supplementary Private Use Area-A
+Supplementary Private Use Area-B
 '''
 # TODO: rename "Other Scripts" to "American Scripts"
 
@@ -336,14 +402,14 @@ class Names:
         for entry in self.names:
             if entry[1] == "<control>":
                 if not hadcontrol:
-                    size += len(entry[1]) + 2
+                    size += len(entry[1].encode('utf-8')) + 2
                     hadcontrol = True
             else:
-                size += len(entry[1]) + 2
+                size += len(entry[1].encode('utf-8')) + 2
         return size
 
     def calculateOffsetSize(self):
-        return len(self.names)*6
+        return len(self.names)*8
 
     def writeStrings(self, out, pos):
         hadcontrol = False
@@ -351,8 +417,8 @@ class Names:
             if entry[1] == "<control>":
                 if not hadcontrol:
                     out.write(pack("=b", entry[2]))
-                    out.write(entry[1] + "\0")
-                    size = len(entry[1]) + 2
+                    out.write(entry[1].encode('utf-8') + b"\0")
+                    size = len(entry[1].encode('utf-8')) + 2
                     entry[1] = pos
                     self.controlpos = pos
                     pos += size
@@ -361,16 +427,16 @@ class Names:
                     entry[1] = self.controlpos
             else:
                 out.write(pack("=b", entry[2]))
-                out.write(entry[1] + "\0")
-                size = len(entry[1]) + 2
+                out.write(entry[1].encode('utf-8') + b"\0")
+                size = len(entry[1].encode('utf-8')) + 2
                 entry[1] = pos
                 pos += size
         return pos
 
     def writeOffsets(self, out, pos):
         for entry in self.names:
-            out.write(pack("=HI", int(entry[0], 16), entry[1]))
-            pos += 6
+            out.write(pack("=II", int(entry[0], 16), entry[1]))
+            pos += 8
         return pos
 
 class Details:
@@ -389,13 +455,13 @@ class Details:
             for cat in char.values():
                 for s in cat:
                     if type(s) is str:
-                        size += len(s) + 1
+                        size += len(s.encode('utf-8')) + 1
                     else:
-                        size += 2
+                        size += 4
         return size
 
     def calculateOffsetSize(self):
-        return len(self.details)*27
+        return len(self.details)*29
 
     def writeStrings(self, out, pos):
         for char in self.details.values():
@@ -403,11 +469,11 @@ class Details:
                 for i in range(0, len(cat)):
                     s = cat[i]
                     if type(s) is str:
-                        out.write(s + "\0")
-                        size = len(s) + 1
+                        out.write(s.encode('utf-8') + b"\0")
+                        size = len(s.encode('utf-8')) + 1
                     else:
-                        out.write(pack("=H", s))
-                        size = 2
+                        out.write(pack("=I", s))
+                        size = 4
                     cat[i] = pos
                     pos += size
         return pos
@@ -444,8 +510,8 @@ class Details:
                 seeAlso = self.details[char]["seeAlso"][0]
                 seeAlso_count = len(self.details[char]["seeAlso"])
 
-            out.write(pack("=HIbIbIbIbIb", char, alias, alias_count, note, note_count, approxEquiv, approxEquiv_count, equiv, equiv_count, seeAlso, seeAlso_count))
-            pos += 27
+            out.write(pack("=IIbIbIbIbIb", char, alias, alias_count, note, note_count, approxEquiv, approxEquiv_count, equiv, equiv_count, seeAlso, seeAlso_count))
+            pos += 29
 
         return pos
 
@@ -468,29 +534,29 @@ class SectionsBlocks:
     def calculateBlockStringSize(self):
         size = 0
         for block in self.blocks:
-            size += len(block[2]) + 1
+            size += len(block[2].encode('utf-8')) + 1
         return size
 
     def calculateBlockOffsetSize(self):
-        return len(self.blocks) * 4
+        return len(self.blocks) * 8
 
     def calculateSectionStringSize(self):
         size = 0
         lastsection = ""
         for section in self.sections:
             if section[0] != lastsection:
-                size += len(section[0]) + 1
+                size += len(section[0].encode('utf-8')) + 1
                 lastsection = section[0]
         return size
 
     def calculateSectionOffsetSize(self):
-        return len(self.sections) * 4
+        return len(self.sections) * 8
 
     def writeBlockStrings(self, out, pos):
         index = 0
         for block in self.blocks:
-            out.write(block[2] + "\0")
-            size = len(block[2]) + 1
+            out.write(block[2].encode('utf-8') + b"\0")
+            size = len(block[2].encode('utf-8')) + 1
             found = False
             for section in self.sections:
                 print(section)
@@ -508,8 +574,8 @@ class SectionsBlocks:
 
     def writeBlockOffsets(self, out, pos):
         for block in self.blocks:
-            out.write(pack("=HH", int(block[0], 16), int(block[1], 16)))
-            pos += 4
+            out.write(pack("=II", int(block[0], 16), int(block[1], 16)))
+            pos += 8
         return pos
 
     def writeSectionStrings(self, out, pos):
@@ -520,8 +586,8 @@ class SectionsBlocks:
             if section[0] != lastsection:
                 index += 1
                 lastsection = section[0]
-                out.write(section[0] + "\0")
-                size = len(section[0]) + 1
+                out.write(section[0].encode('utf-8') + b"\0")
+                size = len(section[0].encode('utf-8')) + 1
                 section[0] = index
                 lastpos = pos
                 pos += size
@@ -532,8 +598,8 @@ class SectionsBlocks:
     def writeSectionOffsets(self, out, pos):
         print(self.sections)
         for section in self.sections:
-            out.write(pack("=HH", section[0], section[1]))
-            pos += 4
+            out.write(pack("=II", section[0], section[1]))
+            pos += 8
         return pos
 
     def getBlockList(self):
@@ -572,31 +638,31 @@ class Unihan:
         for char in self.unihan.keys():
             for entry in self.unihan[char]:
                 if entry != None:
-                    size += len(entry) + 1
+                    size += len(entry.encode('utf-8')) + 1
         return size
 
     def calculateOffsetSize(self):
-        return len(self.unihan) * 30
+        return len(self.unihan) * 32
 
     def writeStrings(self, out, pos):
         for char in self.unihan.keys():
             for i in range(0, 7):
                 if self.unihan[char][i] != None:
-                    out.write(self.unihan[char][i] + "\0")
-                    size = len(self.unihan[char][i]) + 1
+                    out.write(self.unihan[char][i].encode('utf-8') + b"\0")
+                    size = len(self.unihan[char][i].encode('utf-8')) + 1
                     self.unihan[char][i] = pos
                     pos += size
         return pos
 
     def writeOffsets(self, out, pos):
         for char in self.unihan.keys():
-            out.write(pack("=H", char))
+            out.write(pack("=I", char))
             for i in range(0, 7):
                 if self.unihan[char][i] != None:
                     out.write(pack("=I", self.unihan[char][i]))
                 else:
                     out.write(pack("=I", 0))
-            pos += 30
+            pos += 32
         return pos
 
 class Parser:
@@ -610,7 +676,7 @@ class Parser:
             uni = m.group(1)
             name = m.group(2)
             category = m.group(3)
-            if len(uni) > 4:
+            if len(uni) > 8:
                 continue
             names.addName(uni, name, categoryMap[category])
 
@@ -639,7 +705,7 @@ class Parser:
                 continue
             elif m1:
                 currChar = int(m1.group(1), 16)
-                if len(m1.group(1)) > 4: #limit to 16bit
+                if len(m1.group(1)) > 8: #limit to 32bit
                     drop = 1
                     continue
             elif drop == 1:
@@ -666,7 +732,7 @@ class Parser:
             m = regexp.match(line)
             if not m:
                 continue
-            if len(m.group(1)) > 4:
+            if len(m.group(1)) > 8:
                 continue
             sectionsBlocks.addBlock(m.group(1), m.group(2), m.group(3))
     def parseSections(self, inSections, sectionsBlocks):
@@ -699,7 +765,7 @@ class Parser:
                 unihan.addUnihan(m.group(1), m.group(2), m.group(3))
 
 def writeTranslationDummy(out, data):
-    out.write("""/* This file is part of the KDE libraries
+    out.write(b"""/* This file is part of the KDE libraries
 
    Copyright (C) 2007 Daniel Laidig <d.laidig@gmx.de>
 
@@ -722,7 +788,7 @@ def writeTranslationDummy(out, data):
 */\n\n""")
     for group in data:
         for entry in group[1]:
-            out.write("I18N_NOOP2(\""+group[0]+"\", \""+entry+"\");\n")
+            out.write(b"I18N_NOOP2(\""+group[0].encode('utf-8')+b"\", \""+entry.encode('utf-8')+b"\");\n")
 
 out = open("kcharselect-data", "wb")
 outTranslationDummy = open("kcharselect-translation.cpp", "wb")
