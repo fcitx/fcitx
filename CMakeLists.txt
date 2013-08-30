@@ -48,7 +48,7 @@ if(NOT NO_SNOOPER_APPS)
 endif()
 
 if(NOT NO_PREEDIT_APPS)
-  set(NO_PREEDIT_APPS "vim"
+  set(NO_PREEDIT_APPS "gvim"
     CACHE STRING "Disable Preedit for the following apps")
 endif()
 

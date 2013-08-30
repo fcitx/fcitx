@@ -41,7 +41,7 @@ static void FcitxInstanceCleanUpIC(FcitxInstance* instance);
 static void NewICData(FcitxInstance* instance, FcitxInputContext* ic);
 static void FreeICData(FcitxInstance* instance, FcitxInputContext* ic);
 static void FillICData(FcitxInstance* instance, FcitxInputContext* ic);
-static boolean _app_preedit_blacklisted(FcitxInputContext* ic);
+static boolean AppPreeditBlacklisted(FcitxInputContext* ic);
 
 void FillICData(FcitxInstance* instance, FcitxInputContext* ic)
 {
@@ -419,7 +419,7 @@ void FcitxInstanceUpdatePreedit(FcitxInstance* instance, FcitxInputContext* ic)
     if (ic == NULL)
         return;
 
-    if (_app_preedit_blacklisted(ic))
+    if (AppPreeditBlacklisted(ic))
         return;
 
     if (!(ic->contextCaps & CAPACITY_PREEDIT))
@@ -561,36 +561,45 @@ boolean FcitxInstanceICSupportPreedit(FcitxInstance* instance, FcitxInputContext
 {
     if (!ic || ((ic->contextCaps & CAPACITY_PREEDIT) == 0
                 || !instance->profile->bUsePreedit
-                || _app_preedit_blacklisted(ic)))
+                || AppPreeditBlacklisted(ic)))
         return false;
     return true;
 }
 
-static boolean _app_preedit_blacklisted(FcitxInputContext* ic)
+static boolean AppPreeditBlacklisted(FcitxInputContext* ic)
 {
-    static const char* _no_preedit_apps = NO_PREEDIT_APPS;
-    static UT_array* _no_preedit_app_list = NULL;
-    static regex_t _re;
-
+    static UT_array* no_preedit_app_list = NULL;
     const char* no_preedit_apps;
+    int ret;
 
-    if (_no_preedit_app_list == NULL) {
+    if (no_preedit_app_list == NULL) {
+        const char* _no_preedit_apps = NO_PREEDIT_APPS;
+        UT_array* app_pat_list;
+        regex_t* re = NULL;
+
         no_preedit_apps = getenv("FCITX_NO_PREEDIT_APPS");
         if (no_preedit_apps == NULL)
             no_preedit_apps = _no_preedit_apps;
-        _no_preedit_app_list = fcitx_utils_split_string(no_preedit_apps, ',');
+        app_pat_list = fcitx_utils_split_string(no_preedit_apps, ',');
+
+        utarray_new(no_preedit_app_list, fcitx_ptr_icd);
+        utarray_foreach(pat, app_pat_list, char*) {
+            if (re == NULL)
+                re = malloc(sizeof(regex_t));
+            ret = regcomp(re, *pat, REG_EXTENDED | REG_ICASE | REG_NOSUB);
+            if (ret)
+                continue;
+            utarray_push_back(no_preedit_app_list, &re);
+            re = NULL;
+        }
     }
 
     const char* prgname = ic->prgname;
     if (!prgname)
         return false;
 
-    utarray_foreach(pat, _no_preedit_app_list, char*) {
-        int ret = regcomp(&_re, *pat, REG_EXTENDED | REG_ICASE | REG_NOSUB);
-        if (ret)
-            continue;
-        ret = regexec(&_re, prgname, 0, NULL, 0);
-        regfree(&_re);
+    utarray_foreach(re, no_preedit_app_list, regex_t*) {
+        ret = regexec(*re, prgname, 0, NULL, 0);
         if (ret == 0) /* matched */
             return true;
     }
