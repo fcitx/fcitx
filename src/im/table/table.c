@@ -465,7 +465,6 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                         char        *strTemp = NULL;
                         char        *strLastFirstCand;
                         CANDTYPE     lastFirstCandType;
-                        int          lastPageCount = FcitxCandidateWordPageCount(candList);
 
                         strLastFirstCand = (char *)NULL;
                         lastFirstCandType = CT_AUTOPHRASE;
@@ -521,7 +520,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                             strCodeInput[0] = sym;
                             strCodeInput[1] = '\0';
                         } else if ((raw_size == 1) && strTemp &&
-                                   lastPageCount == 0) {
+                                   FcitxCandidateWordPageCount(candList) == 0) {
                             /**
                              * 如果第一个字母是标点，并且没有候选字/词
                              * 则当做标点处理──适用于二笔这样的输入
