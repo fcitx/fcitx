@@ -5,9 +5,10 @@ PKG_CHECK_MODULES(GTK3 REQUIRED "gtk+-3.0" )
 
 _pkgconfig_invoke("gtk+-3.0" GTK3 BINARY_VERSION
   "" "--variable=gtk_binary_version")
-_pkgconfig_invoke("gtk+-3.0" GTK3 LIBDIR "" "--variable=libdir")
-set(GTK3_IM_MODULEDIR
-  "${GTK3_LIBDIR}/gtk-3.0/${GTK3_BINARY_VERSION}/immodules")
+
+if (NOT DEFINED GTK3_IM_MODULEDIR)
+    set(GTK3_IM_MODULEDIR "${LIB_INSTALL_DIR}/gtk-3.0/${GTK3_BINARY_VERSION}/immodules" CACHE PATH "Gtk3 im module directory")
+endif()
 
 include_directories(${GTK3_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
