@@ -75,6 +75,7 @@ typedef struct _FcitxKeyboardLayout {
     FcitxKeyboard *owner;
     char *layoutString;
     char *variantString;
+    char* langCode;
 } FcitxKeyboardLayout;
 
 CONFIG_BINDING_DECLARE(FcitxKeyboardConfig);

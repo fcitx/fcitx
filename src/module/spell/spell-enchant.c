@@ -85,14 +85,16 @@ fail:
 boolean
 SpellEnchantInit(FcitxSpell *spell)
 {
+    if (!SpellEnchantLoadLib()) {
+        return false;
+    }
+
     if (spell->broker)
         return true;
-    if (!SpellEnchantLoadLib())
-        return false;
     spell->broker = _enchant_broker_init();
-    spell->cur_enchant_provider = EP_Default;
     if (!spell->broker)
         return false;
+    SpellEnchantApplyConfig(spell, true);
     if (spell->dictLang)
         SpellEnchantLoadDict(spell, spell->dictLang);
     return true;
@@ -178,17 +180,12 @@ SpellEnchantLoadDict(FcitxSpell *spell, const char *lang)
 }
 
 void
-SpellEnchantApplyConfig(FcitxSpell *spell)
+SpellEnchantApplyConfig(FcitxSpell *spell, boolean force)
 {
-    if (!SpellEnchantInit(spell))
-        return;
     if (!spell->broker) {
-        spell->broker = _enchant_broker_init();
-        spell->cur_enchant_provider = EP_Default;
-        if (!spell->broker)
-            return;
+        return;
     }
-    if (spell->cur_enchant_provider == spell->config.enchant_provider)
+    if (!force && spell->cur_enchant_provider == spell->config.enchant_provider)
         return;
     if (spell->config.enchant_provider == EP_Default) {
         if (spell->enchant_saved_lang) {

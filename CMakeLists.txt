@@ -41,7 +41,7 @@ option(ENABLE_ICU "Enable icu for qt/keyboard compose" On)
 option(ENABLE_BACKTRACE "Enable backtrace support" On)
 option(ENABLE_XDGAUTOSTART "Enable xdg autostart desktop file installion" On)
 option(ENABLE_GETTEXT "Enable gettext support." On)
-option(ENABLE_WAYLAND "Enable wayland support." On)
+option(ENABLE_WAYLAND "Enable wayland support." Off)
 
 if(NOT NO_SNOOPER_APPS)
   set(NO_SNOOPER_APPS ".*chrome.*,.*chromium.*,firefox.*,Do.*"
@@ -70,7 +70,8 @@ if(NOT "${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
   set(ENABLE_WAYLAND Off)
 endif()
 if(ENABLE_WAYLAND)
-  find_package(WaylandClient 1.0.0 REQUIRED)
+  find_package(WaylandClient 1.2.0 REQUIRED)
+  find_package(XKBCommon REQUIRED)
 endif()
 
 if(NOT ENABLE_GETTEXT OR NOT GETTEXTPO_FOUND)

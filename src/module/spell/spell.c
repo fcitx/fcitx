@@ -101,20 +101,12 @@ SpellCreate(FcitxInstance *instance)
     spell->owner = instance;
 
     /* SpellCustomInit(spell); */
-#ifdef ENABLE_PRESAGE
-    SpellPresageInit(spell);
-#endif
-#ifdef ENABLE_ENCHANT
-    SpellEnchantInit(spell);
-#endif
 
     if (!LoadSpellConfig(&spell->config)) {
         SpellDestroy(spell);
         return NULL;
     }
     ApplySpellConfig(spell);
-
-    SpellSetLang(spell, "en");
     FcitxSpellAddFunctions(instance);
     return spell;
 }
@@ -147,7 +139,7 @@ ApplySpellConfig(FcitxSpell *spell)
         spell->provider_order = "presage,custom,enchant";
     }
 #ifdef ENABLE_ENCHANT
-    SpellEnchantApplyConfig(spell);
+    SpellEnchantApplyConfig(spell, false);
 #endif
 }
 

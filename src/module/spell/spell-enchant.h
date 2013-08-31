@@ -27,7 +27,7 @@ extern "C" {
 #endif
     boolean SpellEnchantInit(FcitxSpell *spell);
     SpellHint *SpellEnchantHintWords(FcitxSpell *spell, unsigned int len_limit);
-    void SpellEnchantApplyConfig(FcitxSpell *spell);
+    void SpellEnchantApplyConfig(FcitxSpell *spell, boolean force);
     boolean SpellEnchantCheck(FcitxSpell *spell);
     void SpellEnchantDestroy(FcitxSpell *spell);
     boolean SpellEnchantLoadDict(FcitxSpell *spell, const char *lang);

@@ -890,6 +890,7 @@ char* FcitxUIMessagesToCString(FcitxMessages* messages)
     return str;
 }
 
+FCITX_EXPORT_API
 char* FcitxUIMessagesToCStringForCommit(FcitxMessages* messages)
 {
     int length = 0;

@@ -234,6 +234,7 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
     if (variantString)
         layout->variantString = strdup(variantString);
     layout->owner = keyboard;
+    layout->langCode = langCode ? strdup(langCode) : NULL;
 
     if (fcitx_utils_strcmp0(langCode, "en") == 0
         && fcitx_utils_strcmp0(layoutString, "us") == 0
@@ -594,9 +595,12 @@ void FcitxKeyboardOnClose(void* arg, FcitxIMCloseEventType event)
 }
 
 static boolean
-IsDictAvailable(FcitxKeyboard* keyboard)
+IsDictAvailable(FcitxKeyboardLayout* layout)
 {
-    return FcitxSpellDictAvailable(keyboard->owner, keyboard->dictLang, NULL);
+    if (!layout->langCode || !layout->langCode[0]) {
+        return false;
+    }
+    return FcitxSpellDictAvailable(layout->owner->owner, layout->langCode, NULL);
 }
 
 /* a little bit funny here LOL.... */
@@ -694,10 +698,6 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
     INPUT_RETURN_VALUE res = FcitxKeyboardHandleFocus(keyboard, sym, state);
     if (res != IRV_TO_PROCESS)
         return res;
-    const char* currentLang = FcitxInstanceGetContextString(instance,
-                                                            CONTEXT_IM_LANGUAGE);
-    if (currentLang == NULL)
-        currentLang = "";
 
     if (sym == FcitxKey_Shift_L || sym == FcitxKey_Shift_R ||
         sym == FcitxKey_Alt_L || sym == FcitxKey_Alt_R ||
@@ -717,17 +717,15 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
     FcitxInputContext* currentIC = FcitxInstanceGetCurrentIC(instance);
     void* enableWordHint = FcitxInstanceGetICData(instance, currentIC,
                                                   keyboard->dataSlot);
-    if (enableWordHint && strcmp(keyboard->dictLang, currentLang) != 0)
-        strncpy(keyboard->dictLang, currentLang, LANGCODE_LENGTH);
 
     /* dict is set and loaded as a side effect */
-    if (enableWordHint && IsDictAvailable(keyboard)) {
+    if (enableWordHint && IsDictAvailable(layout)) {
         FcitxInputState *input = FcitxInstanceGetInputState(instance);
 
         if (FcitxHotkeyIsHotKey(sym, state,
                                 keyboard->config.hkAddToUserDict)) {
             if (FcitxSpellAddPersonal(instance, keyboard->buffer[0],
-                                      keyboard->dictLang)) {
+                                      layout->langCode)) {
                 return IRV_DO_NOTHING;
             }
         }
@@ -944,7 +942,7 @@ INPUT_RETURN_VALUE FcitxKeyboardHotkeyToggleWordHint(void* arg)
         if (!enableWordHint) {
             enableWordHint = PTR_TRUE;
             // also for preload dictionaries
-            need_notify = IsDictAvailable(keyboard);
+            need_notify = IsDictAvailable((FcitxKeyboardLayout*)im->klass);
         } else {
             enableWordHint = PTR_FALSE;
         }

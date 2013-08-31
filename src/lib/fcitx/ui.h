@@ -827,6 +827,16 @@ extern "C" {
     char* FcitxUIMessagesToCString(FcitxMessages* messages);
 
     /**
+     * @brief Get string without MSG_DONOT_COMMIT_WHEN_UNFOCUS
+     *
+     * @param messages message
+     * @return return string
+     *
+     * @see MSG_DONOT_COMMIT_WHEN_UNFOCUS
+     **/
+    char* FcitxUIMessagesToCStringForCommit(FcitxMessages* messages);
+
+    /**
      * convert candidate words to a string which can direct displayed
      *
      * @param instance fcitx instance

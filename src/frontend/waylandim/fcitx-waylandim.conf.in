@@ -1,0 +1,10 @@
+[Addon]
+Name=fcitx-waylandim
+_GeneralName=Fcitx Wayland IM Frontend
+_Comment=Frontend Used by Wayland
+Category=Frontend
+Enabled=True
+Library=fcitx-waylandim.so
+Type=SharedLibrary
+Dependency=fcitx-wayland
+Advance=True
