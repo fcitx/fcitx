@@ -1,0 +1,10 @@
+[Addon]
+Name=fcitx-wayland
+_GeneralName=Wayland Support
+_Comment=Wayland Utilitiy used by other Addon
+Category=Module
+Enabled=True
+Library=fcitx-wayland.so
+Type=SharedLibrary
+Priority=30
+Advance=True
