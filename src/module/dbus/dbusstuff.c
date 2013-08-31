@@ -234,8 +234,6 @@ void* DBusCreate(FcitxInstance* instance)
         do {
             request_retry = false;
 
-            dbus_bus_request_name(conn, FCITX_DBUS_SERVICE, DBUS_NAME_FLAG_DO_NOT_QUEUE, NULL);
-
             // request a name on the bus
             int ret = dbus_bus_request_name(conn, servicename,
                                             DBUS_NAME_FLAG_DO_NOT_QUEUE,
@@ -265,6 +263,8 @@ void* DBusCreate(FcitxInstance* instance)
 
                 FcitxInstanceEnd(instance);
                 return NULL;
+            } else {
+                dbus_bus_request_name(conn, FCITX_DBUS_SERVICE, DBUS_NAME_FLAG_DO_NOT_QUEUE, NULL);
             }
         } while (request_retry);
 
@@ -305,7 +305,7 @@ void* DBusCreate(FcitxInstance* instance)
             break;
         }
 
-        dbus_bus_request_name(conn, FCITX_DBUS_SERVICE, DBUS_NAME_FLAG_DO_NOT_QUEUE, NULL);
+        dbus_bus_request_name(privconn, FCITX_DBUS_SERVICE, DBUS_NAME_FLAG_DO_NOT_QUEUE, NULL);
 
         int ret = dbus_bus_request_name(privconn, servicename,
                                         DBUS_NAME_FLAG_DO_NOT_QUEUE,
