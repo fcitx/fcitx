@@ -208,9 +208,6 @@ static inline char* TableConfigStealTableName(FcitxConfigFile* cfile)
  */
 boolean LoadTableInfo(FcitxTableState *tbl)
 {
-    char **tablePath;
-    size_t len;
-
     FcitxStringHashSet* sset = NULL;
     tbl->bTablePhraseTips = false;
     if (tbl->curLoadedTable) {
@@ -218,7 +215,6 @@ boolean LoadTableInfo(FcitxTableState *tbl)
         tbl->curLoadedTable = NULL;
     }
 
-    tablePath = FcitxXDGGetPathWithPrefix(&len, "table");
     sset = FcitxXDGGetFiles("table", NULL, ".conf");
 
     {
@@ -231,56 +227,48 @@ boolean LoadTableInfo(FcitxTableState *tbl)
     }
 
     boolean imchanged = false;
-    char *paths[len];
     HASH_FOREACH(string, sset, FcitxStringHashSet) {
-        int i;
-        for (i = len - 1; i >= 0; i--) {
-            fcitx_utils_alloc_cat_str(paths[i], tablePath[len - i - 1],
-                                      "/", string->name);
-            FcitxLog(DEBUG, "Load Table Config File:%s", paths[i]);
-        }
         // FcitxLog(INFO, _("Load Table Config File:%s"), string->name);
-        FcitxConfigFile *cfile;
-        cfile = FcitxConfigParseMultiConfigFile(paths, len,
-                                                GetTableConfigDesc());
-        if (cfile) {
-            do {
-                char *tableName = TableConfigStealTableName(cfile);
-                boolean needunregister = true;
-                if (!tableName)
-                    break;
-                TableMetaData* t = TableMetaDataFind(tbl->tables, tableName);
-                if (!t) {
-                    t = fcitx_utils_new(TableMetaData);
-                    needunregister = false;
-                } else {
-                    TableMetaDataUnlink(&tbl->tables, t);
-                }
-                TableMetaDataConfigBind(t, cfile, GetTableConfigDesc());
-                FcitxConfigBindSync((FcitxGenericConfig*)t);
-                if (t->bEnabled) {
-                    t->confName = strdup(string->name);
-                    t->owner = tbl;
-                    TableMetaDataInsert(&tbl->tables, t);
-                    if (needunregister)
-                        t->status = TABLE_REGISTERED;
-                    else
-                        t->status = TABLE_NEW;
-                } else {
-                    if (needunregister) {
-                        FcitxInstanceUnregisterIM(tbl->owner,
-                                                  TableMetaDataGetName(t));
-                        imchanged = true;
-                    }
-                    TableMetaDataFree(t);
-                }
-            } while(0);
+        FILE* fp = FcitxXDGGetFileWithPrefix("table", string->name, "r", NULL);
+        if (!fp) {
+            continue;
         }
-        for (i = len - 1;i >= 0;i--) {
-            free(paths[i]);
+        FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, GetTableConfigDesc());
+        fclose(fp);
+        if (!cfile) {
+            continue;
+        }
+        char *tableName = TableConfigStealTableName(cfile);
+        boolean needunregister = true;
+        if (!tableName) {
+            continue;
+        }
+        TableMetaData* t = TableMetaDataFind(tbl->tables, tableName);
+        if (!t) {
+            t = fcitx_utils_new(TableMetaData);
+            needunregister = false;
+        } else {
+            TableMetaDataUnlink(&tbl->tables, t);
+        }
+        TableMetaDataConfigBind(t, cfile, GetTableConfigDesc());
+        FcitxConfigBindSync((FcitxGenericConfig*)t);
+        if (t->bEnabled) {
+            t->confName = strdup(string->name);
+            t->owner = tbl;
+            TableMetaDataInsert(&tbl->tables, t);
+            if (needunregister)
+                t->status = TABLE_REGISTERED;
+            else
+                t->status = TABLE_NEW;
+        } else {
+            if (needunregister) {
+                FcitxInstanceUnregisterIM(tbl->owner,
+                                            TableMetaDataGetName(t));
+                imchanged = true;
+            }
+            TableMetaDataFree(t);
         }
     }
-    FcitxXDGFreePath(tablePath);
     fcitx_utils_free_string_hash_set(sset);
 
     TableMetaData* titer = tbl->tables;
