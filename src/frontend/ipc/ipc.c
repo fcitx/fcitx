@@ -451,7 +451,7 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
                                  DBUS_TYPE_UINT32, &arg4,
                                  DBUS_TYPE_INVALID);
     }
-    context->prgname = ipcic->appname;
+    ((FcitxInputContext2*)context)->prgname = ipcic->appname;
     dbus_connection_send(ipcpriv->conn, reply, NULL);
     dbus_message_unref(reply);
 

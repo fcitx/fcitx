@@ -168,7 +168,7 @@ FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid, void * priv)
     rec->frontendid = frontendid;
     rec->offset_x = -1;
     rec->offset_y = -1;
-    rec->prgname = NULL;
+    ((FcitxInputContext2*)rec)->prgname = NULL;
 
     NewICData(instance, rec);
     switch (instance->config->shareState) {
@@ -594,7 +594,7 @@ static boolean AppPreeditBlacklisted(FcitxInputContext* ic)
         }
     }
 
-    const char* prgname = ic->prgname;
+    const char* prgname = ((FcitxInputContext2*)ic)->prgname;
     if (!prgname)
         return false;
 

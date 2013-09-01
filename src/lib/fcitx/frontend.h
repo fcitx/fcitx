@@ -89,7 +89,6 @@ extern "C" {
         int offset_y; /**< y offset to the window */
         int frontendid; /**< frontend id */
         void *privateic; /**< private input context data */
-        char *prgname; /**< program name */
         FcitxCapacityFlags contextCaps; /**< input context capacity */
         struct _FcitxInputContext* next; /**< next input context */
     } FcitxInputContext;
@@ -99,7 +98,8 @@ extern "C" {
         char* imname;
         intptr_t switchBySwitchKey;
         UT_array* data;
-        void* padding[14];
+        char* prgname; /**< program name */
+        void* padding[13];
     } FcitxInputContext2;
 
     /**
