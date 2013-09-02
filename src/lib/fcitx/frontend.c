@@ -171,6 +171,7 @@ FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid, void * priv)
     rec->offset_x = -1;
     rec->offset_y = -1;
     ((FcitxInputContext2*)rec)->prgname = NULL;
+    ((FcitxInputContext2*)rec)->mayUsePreedit = TriUnknown;
 
     NewICData(instance, rec);
     switch (instance->config->shareState) {
@@ -571,13 +572,22 @@ boolean FcitxInstanceICSupportPreedit(FcitxInstance* instance, FcitxInputContext
 static boolean AppPreeditBlacklisted(
     FcitxInstance* instance, FcitxInputContext* ic)
 {
-    const char* prgname = ((FcitxInputContext2*)ic)->prgname;
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    if (ic2->mayUsePreedit != TriUnknown)
+        return ic2->mayUsePreedit;
+
+    ic2->mayUsePreedit = false;
+
+    const char* prgname = ic2->prgname;
     if (!prgname)
         return false;
 
     utarray_foreach(re, instance->no_preedit_app_list, regex_t*) {
-        if (regexec(*re, prgname, 0, NULL, 0) == 0)
-            return true; /* matched */
+        if (regexec(*re, prgname, 0, NULL, 0) == 0) {
+            /* matched */
+            ic2->mayUsePreedit = true;
+            return true;
+        }
     }
 
     return false;
