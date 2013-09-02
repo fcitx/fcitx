@@ -78,6 +78,7 @@ void FreeICData(FcitxInstance* instance, FcitxInputContext* ic)
         }
     }
     utarray_free(ic2->data);
+    fcitx_utils_free(ic2->prgname);
 }
 
 FCITX_EXPORT_API void*
@@ -309,8 +310,8 @@ void FcitxInstanceDestroyIC(FcitxInstance* instance, int frontendid, void* filte
                 FcitxInstanceSetCurrentIC(instance, NULL);
             }
 
-            FreeICData(instance, rec);
             frontend->DestroyIC((*pfrontend)->addonInstance, rec);
+            FreeICData(instance, rec);
             return;
         }
     }

@@ -42,7 +42,6 @@ typedef struct _FcitxIPCCreateICPriv {
 typedef struct _FcitxIPCIC {
     int id;
     char path[32];
-    char* appname;
     int width;
     int height;
     pid_t pid;
@@ -374,6 +373,7 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     sprintf(ipcic->path, FCITX_IC_DBUS_PATH, ipcic->id);
 
     uint32_t arg1, arg2, arg3, arg4;
+    char* appname = NULL;
     arg1 = config->hkTrigger[0].sym;
     arg2 = config->hkTrigger[0].state;
     arg3 = config->hkTrigger[1].sym;
@@ -382,7 +382,6 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
         /* CreateIC v1 indicates that default state can only be disabled */
         context->state = IS_CLOSED;
         context->contextCaps |= CAPACITY_CLIENT_SIDE_CONTROL_STATE;
-        ipcic->appname = NULL;
         dbus_message_append_args(reply,
                                  DBUS_TYPE_INT32, &ipcic->id,
                                  DBUS_TYPE_UINT32, &arg1,
@@ -394,14 +393,13 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
 
         DBusError error;
         dbus_error_init(&error);
-        char* appname;
         if (!dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INVALID))
-            ipcic->appname = NULL;
+            appname = NULL;
         else {
             if (strlen(appname) == 0) {
-                ipcic->appname = NULL;
+                appname = NULL;
             } else {
-                ipcic->appname = strdup(appname);
+                appname = strdup(appname);
             }
         }
 
@@ -423,15 +421,14 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
 
         DBusError error;
         dbus_error_init(&error);
-        char* appname = NULL;
         int icpid = 0;
         if (!dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INT32, &icpid, DBUS_TYPE_INVALID))
-            ipcic->appname = NULL;
+            appname = NULL;
         else {
             if (strlen(appname) == 0) {
-                ipcic->appname = NULL;
+                appname = NULL;
             } else {
-                ipcic->appname = strdup(appname);
+                appname = strdup(appname);
             }
         }
         ipcic->pid = icpid;
@@ -451,7 +448,7 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
                                  DBUS_TYPE_UINT32, &arg4,
                                  DBUS_TYPE_INVALID);
     }
-    ((FcitxInputContext2*)context)->prgname = ipcic->appname;
+    ((FcitxInputContext2*)context)->prgname = appname;
     dbus_connection_send(ipcpriv->conn, reply, NULL);
     dbus_message_unref(reply);
 
@@ -492,7 +489,6 @@ void IPCDestroyIC(void* arg, FcitxInputContext* context)
         if (ipc->_privconn)
             dbus_connection_unregister_object_path(ipc->_privconn, GetIPCIC(context)->path);
     }
-    fcitx_utils_free(ipcic->appname);
     fcitx_utils_free(ipcic->surroundingText);
     free(context->privateic);
     context->privateic = NULL;
@@ -1192,11 +1188,11 @@ void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic)
 boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic)
 {
     FCITX_UNUSED(arg);
-    FcitxIPCIC* ipcicToCheck = GetIPCIC(icToCheck);
-    FcitxIPCIC* ipcic = GetIPCIC(ic);
-    if (ipcic->appname == NULL || ipcicToCheck->appname == NULL)
+    FcitxInputContext2* ic2ToCheck = (FcitxInputContext2*)icToCheck;
+    FcitxInputContext2* ic2 = (FcitxInputContext2*)ic;
+    if (ic2->prgname == NULL || ic2ToCheck->prgname == NULL)
         return false;
-    return strcmp(ipcicToCheck->appname, ipcic->appname) == 0;
+    return strcmp(ic2ToCheck->prgname, ic2->prgname) == 0;
 }
 
 void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
