@@ -283,7 +283,7 @@ static void SetIMIcon(FcitxInstance* instance, char** prop)
         icon_prefix = ":";
     }
     fcitx_utils_alloc_cat_str(*prop, "/Fcitx/im:", imname, icon_prefix, icon,
-                              ":", description);
+                              ":", description, ":menu");
 }
 
 void* KimpanelCreate(FcitxInstance* instance)
@@ -382,7 +382,7 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
     char **prop = fcitx_utils_malloc0(sizeof(char*) * (2 + utarray_len(uistats) + utarray_len(uicompstats)));
 
     char *fcitx = _("Fcitx");
-    fcitx_utils_alloc_cat_str(prop[0], "/Fcitx/logo:", fcitx, ":fcitx:", fcitx);
+    fcitx_utils_alloc_cat_str(prop[0], "/Fcitx/logo:", fcitx, ":fcitx:", fcitx, ":menu");
     SetIMIcon(instance, &prop[1]);
 
     int count = 2;
