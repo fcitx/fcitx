@@ -263,6 +263,8 @@ void* DBusCreate(FcitxInstance* instance)
 
                 FcitxInstanceEnd(instance);
                 return NULL;
+            } else {
+                dbus_bus_request_name(conn, FCITX_DBUS_SERVICE, DBUS_NAME_FLAG_DO_NOT_QUEUE, NULL);
             }
         } while (request_retry);
 
@@ -302,6 +304,8 @@ void* DBusCreate(FcitxInstance* instance)
             FcitxLog(ERROR, "Private dbus bus register error (%s)", err.message);
             break;
         }
+
+        dbus_bus_request_name(privconn, FCITX_DBUS_SERVICE, DBUS_NAME_FLAG_DO_NOT_QUEUE, NULL);
 
         int ret = dbus_bus_request_name(privconn, servicename,
                                         DBUS_NAME_FLAG_DO_NOT_QUEUE,

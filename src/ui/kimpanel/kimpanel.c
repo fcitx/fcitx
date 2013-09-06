@@ -177,8 +177,8 @@ static DBusHandlerResult KimpanelDBusEventHandler(DBusConnection *connection, DB
 static DBusHandlerResult KimpanelDBusFilter(DBusConnection *connection, DBusMessage *message, void *user_data);
 static int CalKimCursorPos(FcitxKimpanelUI *kimpanel);
 static void KimpanelInputIMChanged(void *arg);
-static char* Status2String(FcitxUIStatus* status);
-static char* ComplexStatus2String(FcitxUIComplexStatus* status);
+static char* Status2String(FcitxInstance* instance, FcitxUIStatus* status);
+static char* ComplexStatus2String(FcitxInstance* instance, FcitxUIComplexStatus* status);
 static void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel);
 static void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel);
 static void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[], int n);
@@ -283,7 +283,7 @@ static void SetIMIcon(FcitxInstance* instance, char** prop)
         icon_prefix = ":";
     }
     fcitx_utils_alloc_cat_str(*prop, "/Fcitx/im:", imname, icon_prefix, icon,
-                              ":", description);
+                              ":", description, ":menu");
 }
 
 void* KimpanelCreate(FcitxInstance* instance)
@@ -382,7 +382,7 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
     char **prop = fcitx_utils_malloc0(sizeof(char*) * (2 + utarray_len(uistats) + utarray_len(uicompstats)));
 
     char *fcitx = _("Fcitx");
-    fcitx_utils_alloc_cat_str(prop[0], "/Fcitx/logo:", fcitx, ":fcitx:", fcitx);
+    fcitx_utils_alloc_cat_str(prop[0], "/Fcitx/logo:", fcitx, ":fcitx:", fcitx, ":menu");
     SetIMIcon(instance, &prop[1]);
 
     int count = 2;
@@ -393,7 +393,7 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
          compstatus = (FcitxUIComplexStatus *) utarray_next(uicompstats, compstatus)) {
         if (!compstatus->visible)
             continue;
-        prop[count] = ComplexStatus2String(compstatus);
+        prop[count] = ComplexStatus2String(instance, compstatus);
         count ++;
     }
 
@@ -403,7 +403,7 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
          status = (FcitxUIStatus *) utarray_next(uistats, status)) {
         if (!status->visible)
             continue;
-        prop[count] = Status2String(status);
+        prop[count] = Status2String(instance, status);
         count ++;
     }
 
@@ -512,28 +512,33 @@ void KimpanelRegisterComplexStatus(void* arg, FcitxUIComplexStatus* status)
     return ;
 }
 
-char* Status2String(FcitxUIStatus* status)
+char* Status2String(FcitxInstance* instance, FcitxUIStatus* status)
 {
     char *result;
+    FcitxUIMenu *menu = FcitxUIGetMenuByStatusName(instance, status->name);
     fcitx_utils_alloc_cat_str(result, "/Fcitx/", status->name, ":",
                               status->shortDescription, ":fcitx-", status->name,
                               ((status->getCurrentStatus(status->arg)) ?
                                "-active:" : "-inactive:"),
-                              status->longDescription);
+                              status->longDescription,
+                              menu ? ":menu" : ":");
     return result;
 }
 
 
-char* ComplexStatus2String(FcitxUIComplexStatus* status)
+char* ComplexStatus2String(FcitxInstance* instance, FcitxUIComplexStatus* status)
 {
     const char* icon = status->getIconName(status->arg);
     char *str;
     boolean result = CheckAddPrefix(&icon);
+    FcitxUIMenu *menu = FcitxUIGetMenuByStatusName(instance, status->name);
     fcitx_utils_alloc_cat_str(str, "/Fcitx/", status->name, ":",
                               status->shortDescription,
                               (result ? ":fcitx-" : ":"),
                               icon, ":",
-                              status->longDescription);
+                              status->longDescription,
+                              menu ? ":menu" : ":"
+                             );
     return str;
 }
 

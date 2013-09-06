@@ -53,7 +53,7 @@ fcitx_install_addon_desc(${FCITX_DESC_FILES})
 
 if(_ENABLE_DBUS AND ENABLE_XDGAUTOSTART)
   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/fcitx-autostart.desktop"
-    DESTINATION /etc/xdg/autostart)
+    DESTINATION "${SYSCONFDIR}/xdg/autostart")
 endif()
 
 if(_ENABLE_DBUS)
