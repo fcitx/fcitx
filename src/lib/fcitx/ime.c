@@ -735,7 +735,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     FcitxHotkey hkTrigger1[2];
     FcitxHotkey hkTrigger2[2];
     FcitxHotkey hkActivate1[2];
-    FcitxHotkey     hkActivate2[2];
+    FcitxHotkey hkActivate2[2];
     FcitxHotkey hkInactivate1[2];
     FcitxHotkey hkInactivate2[2];
     // check config.desc
@@ -766,7 +766,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
         {KR_SWITCH_IM_REVERSE, hkSwitchPrev1, hkSwitchPrev2, _DoSwitchIMReverse, _CheckSwitchIM}, // KR_SWITCH_IM_REVERSE,
         {KR_TRIGGER, hkTrigger1, hkTrigger2, _DoTrigger, NULL},
         {KR_ACTIVATE, hkActivate1, hkActivate2, _DoActivate, _CheckActivate},
-        {KR_DEACTIVATE, hkActivate2, hkActivate2, _DoDeactivate, _CheckDeactivate}, //  KR_DEACTIVATE
+        {KR_DEACTIVATE, hkInactivate1, hkInactivate2, _DoDeactivate, _CheckDeactivate}, //  KR_DEACTIVATE
     };
 
     if (instance->CurrentIC == NULL)
