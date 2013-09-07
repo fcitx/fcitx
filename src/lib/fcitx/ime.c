@@ -561,20 +561,19 @@ _NormalizeHotkeyForModifier(const FcitxHotkey* origin, FcitxHotkey* group1, Fcit
     }
 }
 
+/**
+ * consider different situation
+ * ctrl+space -> on press (reason space is not modifier
+ * space -> on press
+ * a -> on press
+ * tab -> on press
+ * ctrl -> on release
+ *
+ * once here's a wrong implementation that using all key without unicode as trigger on release
+ * which passes press to im. (to mozc)
+ */
 static inline boolean IsTriggerOnRelease(FcitxKeySym sym, unsigned int state) {
-    if (FcitxHotkeyIsHotKeyModifierCombine(sym, state)) {
-        return true;
-    }
-
-    if (state != 0) {
-        return false;
-    }
-
-    if (FcitxKeySymToUnicode(sym)) {
-        return false;
-    }
-
-    return true;
+    return (FcitxHotkeyIsHotKeyModifierCombine(sym, state));
 }
 
 INPUT_RETURN_VALUE _DoTrigger(FcitxInstance* instance)
