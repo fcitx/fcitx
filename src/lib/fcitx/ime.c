@@ -968,17 +968,18 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
     if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE &&
         !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
         FcitxInstanceProcessPostInputFilter(instance, sym, state, &retVal);
-
-        if (retVal == IRV_TO_PROCESS) {
-            if (currentIM && currentIM->KeyBlocker)
-                retVal = currentIM->KeyBlocker(currentIM->klass, sym, state);
-            else
-                retVal = FcitxStandardKeyBlocker(input, sym, state);
-        }
     }
 
     if (retVal == IRV_TO_PROCESS) {
         retVal = FcitxInstanceProcessHotkey(instance, sym, state);
+    }
+
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE &&
+        !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
+        if (currentIM && currentIM->KeyBlocker)
+            retVal = currentIM->KeyBlocker(currentIM->klass, sym, state);
+        else
+            retVal = FcitxStandardKeyBlocker(input, sym, state);
     }
 
     FcitxInstanceProcessInputReturnValue(instance, retVal);

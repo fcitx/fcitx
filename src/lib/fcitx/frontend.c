@@ -171,7 +171,7 @@ FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid, void * priv)
     rec->offset_x = -1;
     rec->offset_y = -1;
     ((FcitxInputContext2*)rec)->prgname = NULL;
-    ((FcitxInputContext2*)rec)->mayUsePreedit = TriUnknown;
+    ((FcitxInputContext2*)rec)->mayUsePreedit = Tri_Unknown;
 
     NewICData(instance, rec);
     switch (instance->config->shareState) {
@@ -573,7 +573,7 @@ static boolean AppPreeditBlacklisted(
     FcitxInstance* instance, FcitxInputContext* ic)
 {
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
-    if (ic2->mayUsePreedit != TriUnknown)
+    if (ic2->mayUsePreedit != Tri_Unknown)
         return ic2->mayUsePreedit;
 
     ic2->mayUsePreedit = false;
