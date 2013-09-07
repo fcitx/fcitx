@@ -105,11 +105,11 @@ typedef int32_t boolean;
 extern "C" {
 #endif
 
-    typedef enum _FcitxTriBoolean {
+    typedef enum _FcitxTriState {
       Tri_False = false,
       Tri_True = true,
       Tri_Unknown
-    } FcitxTriBoolean;
+    } FcitxTriState;
 
     extern const UT_icd *const fcitx_ptr_icd;
     extern const UT_icd *const fcitx_str_icd;

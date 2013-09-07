@@ -100,7 +100,7 @@ extern "C" {
         UT_array* data;
         char* prgname; /**< program name */
         union {
-            FcitxTriBoolean mayUsePreedit;
+            FcitxTriState mayUsePreedit;
             void* _dummy;
         };
         void* padding[12];
