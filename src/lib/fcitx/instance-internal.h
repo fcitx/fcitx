@@ -162,6 +162,7 @@ struct _FcitxInstance {
     int overrideDelay;
     
     UT_array eventQueue;
+    UT_array* no_preedit_app_list;
 };
 
 static inline FcitxAddon**

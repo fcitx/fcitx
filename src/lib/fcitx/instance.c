@@ -30,6 +30,7 @@
 #include <sys/time.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <regex.h>
 
 #include "instance.h"
 #include "fcitx-utils/log.h"
@@ -91,6 +92,7 @@ static void* RunInstance(void* arg);
 static void FcitxInstanceInitBuiltContext(FcitxInstance* instance);
 static void FcitxInstanceShowRemindStatusChanged(void* arg, const void* value);
 static void FcitxInstanceRealEnd(FcitxInstance* instance);
+static void FcitxInstanceInitNoPreeditApps(FcitxInstance* instance);
 
 /**
  * 显示命令行参数
@@ -222,6 +224,7 @@ void* RunInstance(void* arg)
     FcitxInstance* instance = (FcitxInstance*) arg;
     FcitxAddonsInit(&instance->addons);
     FcitxInstanceInitIM(instance);
+    FcitxInstanceInitNoPreeditApps(instance);
     FcitxFrontendsInit(&instance->frontends);
     InitFcitxModules(&instance->modules);
     InitFcitxModules(&instance->eventmodules);
@@ -769,6 +772,31 @@ boolean FcitxInstanceRemoveTimeoutById(FcitxInstance* instance, uint64_t id)
 FCITX_EXPORT_API
 int FcitxInstanceWaitForEnd(FcitxInstance* instance) {
     return pthread_join(instance->pid, NULL);
+}
+
+static void FcitxInstanceInitNoPreeditApps(FcitxInstance* instance) {
+    UT_array* no_preedit_app_list = NULL;
+    const char* default_no_preedit_apps = NO_PREEDIT_APPS;
+    const char* no_preedit_apps;
+    UT_array* app_pat_list;
+    regex_t* re = NULL;
+
+    no_preedit_apps = getenv("FCITX_NO_PREEDIT_APPS");
+    if (no_preedit_apps == NULL)
+        no_preedit_apps = default_no_preedit_apps;
+    app_pat_list = fcitx_utils_split_string(no_preedit_apps, ',');
+
+    utarray_new(no_preedit_app_list, fcitx_ptr_icd);
+    utarray_foreach(pat, app_pat_list, char*) {
+        if (re == NULL)
+            re = malloc(sizeof(regex_t));
+        if (regcomp(re, *pat, REG_EXTENDED | REG_ICASE | REG_NOSUB))
+            continue;
+        utarray_push_back(no_preedit_app_list, &re);
+        re = NULL;
+    }
+
+    instance->no_preedit_app_list = no_preedit_app_list;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

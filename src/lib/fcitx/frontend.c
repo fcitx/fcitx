@@ -21,6 +21,7 @@
 #include <dlfcn.h>
 #include <libintl.h>
 #include <pthread.h>
+#include <regex.h>
 
 #include "fcitx-utils/utarray.h"
 #include "frontend.h"
@@ -34,11 +35,14 @@
 #include "instance.h"
 #include "instance-internal.h"
 #include "addon-internal.h"
+#include "config.h"
 
 static void FcitxInstanceCleanUpIC(FcitxInstance* instance);
 static void NewICData(FcitxInstance* instance, FcitxInputContext* ic);
 static void FreeICData(FcitxInstance* instance, FcitxInputContext* ic);
 static void FillICData(FcitxInstance* instance, FcitxInputContext* ic);
+static boolean AppPreeditBlacklisted(
+    FcitxInstance* instance, FcitxInputContext* ic);
 
 void FillICData(FcitxInstance* instance, FcitxInputContext* ic)
 {
@@ -75,6 +79,7 @@ void FreeICData(FcitxInstance* instance, FcitxInputContext* ic)
         }
     }
     utarray_free(ic2->data);
+    fcitx_utils_free(ic2->prgname);
 }
 
 FCITX_EXPORT_API void*
@@ -165,6 +170,8 @@ FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid, void * priv)
     rec->frontendid = frontendid;
     rec->offset_x = -1;
     rec->offset_y = -1;
+    ((FcitxInputContext2*)rec)->prgname = NULL;
+    ((FcitxInputContext2*)rec)->mayUsePreedit = TriUnknown;
 
     NewICData(instance, rec);
     switch (instance->config->shareState) {
@@ -305,8 +312,8 @@ void FcitxInstanceDestroyIC(FcitxInstance* instance, int frontendid, void* filte
                 FcitxInstanceSetCurrentIC(instance, NULL);
             }
 
-            FreeICData(instance, rec);
             frontend->DestroyIC((*pfrontend)->addonInstance, rec);
+            FreeICData(instance, rec);
             return;
         }
     }
@@ -413,6 +420,9 @@ void FcitxInstanceUpdatePreedit(FcitxInstance* instance, FcitxInputContext* ic)
         return;
 
     if (ic == NULL)
+        return;
+
+    if (AppPreeditBlacklisted(instance, ic))
         return;
 
     if (!(ic->contextCaps & CAPACITY_PREEDIT))
@@ -552,10 +562,35 @@ boolean FcitxInstanceLoadFrontend(FcitxInstance* instance)
 FCITX_EXPORT_API
 boolean FcitxInstanceICSupportPreedit(FcitxInstance* instance, FcitxInputContext* ic)
 {
-    if (!ic || ((ic->contextCaps & CAPACITY_PREEDIT) == 0 || !instance->profile->bUsePreedit))
+    if (!ic || ((ic->contextCaps & CAPACITY_PREEDIT) == 0
+                || !instance->profile->bUsePreedit
+                || AppPreeditBlacklisted(instance, ic)))
         return false;
     return true;
 }
 
+static boolean AppPreeditBlacklisted(
+    FcitxInstance* instance, FcitxInputContext* ic)
+{
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    if (ic2->mayUsePreedit != TriUnknown)
+        return ic2->mayUsePreedit;
+
+    ic2->mayUsePreedit = false;
+
+    const char* prgname = ic2->prgname;
+    if (!prgname)
+        return false;
+
+    utarray_foreach(re, instance->no_preedit_app_list, regex_t*) {
+        if (regexec(*re, prgname, 0, NULL, 0) == 0) {
+            /* matched */
+            ic2->mayUsePreedit = true;
+            return true;
+        }
+    }
+
+    return false;
+}
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

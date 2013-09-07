@@ -42,6 +42,12 @@ extern "C" {
     typedef void (*FcitxICDataFreeCallback)(void* arg, void* data);
     typedef void* (*FcitxICDataCopyCallback)(void* arg, void* data, void* src);
 
+    typedef enum _TriBoolean {
+      TriFalse = false,
+      TriTrue = true,
+      TriUnknown
+    } TriBoolean;
+
     /**
      * Input Method State
      **/
@@ -98,7 +104,9 @@ extern "C" {
         char* imname;
         intptr_t switchBySwitchKey;
         UT_array* data;
-        void* padding[14];
+        char* prgname; /**< program name */
+        TriBoolean mayUsePreedit;
+        void* padding[12];
     } FcitxInputContext2;
 
     /**
