@@ -1070,11 +1070,13 @@ check_qt() {
     done
     if [ -z "${qt4_module_found}" ]; then
         __need_blank_line=0
-        write_error "$(_ 'Cannot find fcitx input method module for ${1}.')" Qt4
+        write_error_eval \
+            "$(_ 'Cannot find fcitx input method module for ${1}.')" Qt4
     fi
     if [ -z "${qt5_module_found}" ]; then
         __need_blank_line=0
-        write_error "$(_ 'Cannot find fcitx input method module for ${1}.')" Qt5
+        write_error_eval \
+            "$(_ 'Cannot find fcitx input method module for ${1}.')" Qt5
     fi
 }
 
