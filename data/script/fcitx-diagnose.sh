@@ -1000,9 +1000,13 @@ check_xim() {
 }
 
 _check_toolkit_env() {
-    local env_name="$1"
-    local name="$2"
-    write_order_list "$(code_inline '${'"${env_name}"'}'):"
+    local name="$1"
+    local env_names=("${@:2}")
+    local env_name
+    write_order_list "$(code_inline '${'"${env_names[0]}"'}'):"
+    for env_name in "${env_names[@]}"; do
+        [ -z "${!env_name}" ] || break
+    done
     if [ -z "${!env_name}" ]; then
         set_env_link "${env_name}" 'fcitx'
     elif [ "${!env_name}" = 'fcitx' ]; then
@@ -1037,7 +1041,8 @@ find_qt_modules() {
 
 check_qt() {
     write_title 2 "Qt:"
-    _check_toolkit_env QT_IM_MODULE qt
+    _check_toolkit_env qt4 QT4_IM_MODULE QT_IM_MODULE
+    _check_toolkit_env qt5 QT5_IM_MODULE QT_IM_MODULE
     find_qt_modules
     qt4_module_found=''
     qt5_module_found=''
@@ -1279,7 +1284,7 @@ check_gtk_immodule_cache() {
 
 check_gtk() {
     write_title 2 "Gtk:"
-    _check_toolkit_env GTK_IM_MODULE gtk
+    _check_toolkit_env gtk GTK_IM_MODULE
     write_order_list "$(code_inline gtk-query-immodules):"
     increase_cur_level 1
     check_gtk_query_immodule 2
