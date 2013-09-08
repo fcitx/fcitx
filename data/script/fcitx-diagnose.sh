@@ -383,6 +383,7 @@ run_ldd() {
 
 # tty and color
 __istty=0
+__use_color=0
 
 check_istty() {
     [ -t 1 ] && {
@@ -390,10 +391,21 @@ check_istty() {
     } || {
         __istty=0
     }
+    case "${_use_color}" in
+        true)
+            __use_color=1
+            ;;
+        false)
+            __use_color=0
+            ;;
+        auto)
+            __use_color=$__istty
+            ;;
+    esac
 }
 
 print_tty_ctrl() {
-    ((__istty)) || return
+    ((__use_color)) || return
     echo -ne '\e['"${1}"'m'
 }
 
@@ -513,23 +525,25 @@ write_paragraph() {
     local whole_prefix
     local IFS=$'\n'
     ((__need_blank_line)) && echo
-    [ -z "${code}" ] || print_tty_ctrl "${code}"
     {
         while read line; do
-            ((i == 0)) && {
-                whole_prefix="${prefix}${p1}"
-            } || {
-                whole_prefix="${prefix}${p2}"
-            }
-            ((i++))
-            [ -z "${line}" ] && {
-                echo
-            } || {
-                echo "${whole_prefix}${line}"
-            }
-        done | replace_reset "${code}"
+            [ -z "${code}" ] || print_tty_ctrl "${code}"
+            {
+                ((i == 0)) && {
+                    whole_prefix="${prefix}${p1}"
+                } || {
+                    whole_prefix="${prefix}${p2}"
+                }
+                ((i++))
+                [ -z "${line}" ] && {
+                    echo
+                } || {
+                    echo "${whole_prefix}${line}"
+                }
+            } | replace_reset "${code}"
+            [ -z "${code}" ] || print_tty_ctrl "0"
+        done
     } <<< "${str}"
-    [ -z "${code}" ] || print_tty_ctrl "0"
     __need_blank_line=1
 }
 
@@ -764,7 +778,7 @@ check_env() {
         locale_error="$(locale 2>&1 > /dev/null)"
         if [[ -n $locale_error ]]; then
             write_error_eval "$(_ 'Error occurs when running ${1}. Please check your locale settings.')" \
-            "$(code_inline "locale")"
+                "$(code_inline "locale")"
             write_quote_str "${locale_error}"
         fi
         increase_cur_level -1
@@ -1167,9 +1181,9 @@ check_gtk_query_immodule() {
                 "$(code_inline "${real_version}")" \
                 "$(code_inline "${query_immodule}")" \
                 "$(code_inline gtk-query-immodules)"
-            __need_blank_line=0
-            write_eval "$(_ 'Version Line:')"
-            write_quote_str "${version_line}"
+                __need_blank_line=0
+                write_eval "$(_ 'Version Line:')"
+                write_quote_str "${version_line}"
         else
             write_eval "$(_ 'Found ${2} for unknown gtk version at ${1}.')" \
                 "$(code_inline "${query_immodule}")" \
@@ -1250,9 +1264,9 @@ check_gtk_immodule_cache() {
                 "$(_ 'Found immodules cache for gtk ${1} at ${2}.')" \
                 "$(code_inline ${real_version})" \
                 "$(code_inline "${cache}")"
-            __need_blank_line=0
-            write_eval "$(_ 'Version Line:')"
-            write_quote_str "${version_line}"
+                __need_blank_line=0
+                write_eval "$(_ 'Version Line:')"
+                write_quote_str "${version_line}"
         else
             write_eval \
                 "$(_ 'Found immodule cache for unknown gtk version at ${1}.')" \
@@ -1509,6 +1523,26 @@ check_log() {
 _check_frontend=1
 _check_modules=1
 _check_log=1
+
+_use_color=auto
+
+while true; do
+    (($#)) || break
+    arg=$1
+    shift
+    case "${arg}" in
+        --color=@(never|false))
+        _use_color=false
+        ;;
+        --color=auto)
+            _use_color=auto
+            ;;
+        --color@(|=*))
+        _use_color=true
+        ;;
+    esac
+done
+
 [ -z "$1" ] || exec > "$1"
 
 
