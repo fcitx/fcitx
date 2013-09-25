@@ -1,3 +1,16 @@
+2013-09-25: CSSlayer <wengxt@gmail.com>
+	* 4.2.8.2
+	 - implement preedit blacklist, and gvim preedit is now blacklisted by
+	   default (thanks to lilydjwg)
+	 - add more unicode support to unicode addon
+	 - more fix on xmodmap loading, now we only load it if we did a layout
+	   reset.
+	 - fix some table punctuation related bug
+	 - install a dbus activatation file by default.
+	 - install more library based on prefix.
+	 - fix table configuration parsing
+	 - fix trigger on release
+
 2013-07-15: CSSlayer <wengxt@gmail.com>
 	* 4.2.8.1
 	  - udpate default skin
