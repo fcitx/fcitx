@@ -365,6 +365,7 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     }
     char* localepath = fcitx_utils_get_fcitx_path("localedir");
     bindtextdomain("xkeyboard-config", localepath);
+    bind_textdomain_codeset("xkeyboard-config", "UTF-8");
     free(localepath);
     union {
         short s;

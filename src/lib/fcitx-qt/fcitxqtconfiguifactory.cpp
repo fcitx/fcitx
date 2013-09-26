@@ -58,6 +58,7 @@ FcitxQtConfigUIWidget* FcitxQtConfigUIFactory::create(const QString& file)
 
     char* localepath = fcitx_utils_get_fcitx_path("localedir");
     bindtextdomain(d->plugins[file]->domain().toUtf8().data(), localepath);
+    bind_textdomain_codeset(d->plugins[file]->domain().toUtf8().data(), "UTF-8");
     free(localepath);
     return d->plugins[file]->create(file);
 }
