@@ -1,3 +1,8 @@
+2013-09-28: CSSlayer <wengxt@gmail.com>
+	* 4.2.8.3
+	 - fix for non-utf8 env
+	 - fix for classic ui cursor pos
+
 2013-09-25: CSSlayer <wengxt@gmail.com>
 	* 4.2.8.2
 	 - implement preedit blacklist, and gvim preedit is now blacklisted by
