@@ -160,7 +160,7 @@ void InputWindowCalculateContentSize(FcitxXlibWindow* window, unsigned int* widt
                     strGBKT = strTemp;
                     FcitxCairoTextContextStringSize(ctc, strGBKT, &strWidth, &strHeight);
                     // if the cursor is between two part, add extra pixel for pretty output
-                    pixelCursorPos = posUpX[i] + strWidth == 0? strWidth: strWidth + 2;
+                    pixelCursorPos = posUpX[i] + strWidth;
                 }
                 iChar -= length;
             }
