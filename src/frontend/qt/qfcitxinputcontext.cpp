@@ -273,7 +273,7 @@ void QFcitxInputContext::update()
         }
     }
 
-    QTimer::singleShot(0, this, SLOT(updateCursor()));
+    QMetaObject::invokeMethod(this, "updateCursor", Qt::QueuedConnection);
 }
 
 void QFcitxInputContext::updateCursor()
@@ -536,7 +536,7 @@ void QFcitxInputContext::x11ProcessKeyEventCallback(QDBusPendingCallWatcher* wat
         delete pkwatcher;
     else {
         pkwatcher->event->xkey.state |= FcitxKeyState_IgnoredMask;
-        QTimer::singleShot(0, pkwatcher, SLOT(processEvent()));
+        QMetaObject::invokeMethod(pkwatcher, "processEvent", Qt::QueuedConnection);
     }
 }
 

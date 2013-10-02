@@ -45,7 +45,6 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QToolButton>
-#include <QTimer>
 
 class FcitxQtKeySequenceWidgetPrivate;
 class FcitxQtKeySequenceButton: public QPushButton
