@@ -653,6 +653,7 @@ void fcitx_utils_start_process(char** args)
     if (child_pid < 0) {
         perror("fork");
     } else if (child_pid == 0) {         /* child process  */
+        setsid();
         pid_t grandchild_pid;
 
         grandchild_pid = fork();
