@@ -158,6 +158,7 @@ struct _FcitxInstance {
     volatile boolean loadingFatalError;
     volatile boolean quietQuit;
     volatile boolean destroy;
+    volatile boolean restart;
     int fd;
     int overrideDelay;
     

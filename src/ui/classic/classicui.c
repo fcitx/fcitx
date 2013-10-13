@@ -510,7 +510,7 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
     } else if (index == length - 1) { /* Exit */
         FcitxInstanceEnd(classicui->owner);
     } else if (index == length - 2) { /* Restart */
-        fcitx_utils_launch_restart();
+        FcitxInstanceRestart(instance);
     } else if (index == length - 3) { /* Configuration */
         fcitx_utils_launch_configure_tool();
     } else if (index == length - 4) { /* Configuration */

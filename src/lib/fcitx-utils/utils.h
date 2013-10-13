@@ -472,6 +472,13 @@ extern "C" {
     void fcitx_utils_launch_restart(void);
 
     /**
+     * helper function to execute in place
+     *
+     * @return void
+     **/
+    void fcitx_utils_restart_in_place(void);
+
+    /**
      * @brief launch a process
      *
      * @param args argument and command

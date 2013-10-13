@@ -232,7 +232,7 @@ void FcitxDBusMenuDoEvent(void* arg)
                     fcitx_utils_launch_configure_tool();
                     break;
                 case 6:
-                    fcitx_utils_launch_restart();
+                    FcitxInstanceRestart(instance);
                     break;
                 case 7:
                     FcitxInstanceEnd(instance);

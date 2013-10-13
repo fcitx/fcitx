@@ -314,7 +314,7 @@ void* RunInstance(void* arg)
                 if (signo == SIGINT || signo == SIGTERM || signo == SIGQUIT || signo == SIGXCPU)
                     FcitxInstanceEnd(instance);
                 else if (signo == SIGHUP)
-                    fcitx_utils_launch_restart();
+                    FcitxInstanceRestart(instance);
                 else if (signo == SIGUSR1)
                     FcitxInstanceReloadConfig(instance);
             }
@@ -361,7 +361,7 @@ void* RunInstance(void* arg)
 
         setjmp(FcitxRecover);
 
-        if (instance->destroy) {
+        if (instance->destroy || instance->restart) {
             FcitxInstanceRealEnd(instance);
             break;
         }
@@ -406,12 +406,20 @@ void* RunInstance(void* arg)
         select(instance->maxfd + 1, &instance->rfds, &instance->wfds,
                &instance->efds, ptval);
     }
+    if (instance->restart)
+        fcitx_utils_restart_in_place();
+
     return NULL;
 
 error_exit:
     sem_post(&instance->startUpSem);
     FcitxInstanceEnd(instance);
     return NULL;
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceRestart(FcitxInstance *instance){
+    instance->restart = true;
 }
 
 FCITX_EXPORT_API
