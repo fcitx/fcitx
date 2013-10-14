@@ -406,8 +406,9 @@ void* RunInstance(void* arg)
         select(instance->maxfd + 1, &instance->rfds, &instance->wfds,
                &instance->efds, ptval);
     }
-    if (instance->restart)
+    if (instance->restart) {
         fcitx_utils_restart_in_place();
+    }
 
     return NULL;
 
@@ -418,7 +419,8 @@ error_exit:
 }
 
 FCITX_EXPORT_API
-void FcitxInstanceRestart(FcitxInstance *instance){
+void FcitxInstanceRestart(FcitxInstance *instance)
+{
     instance->restart = true;
 }
 
