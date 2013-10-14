@@ -792,7 +792,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                             fcitx_utils_launch_configure_tool();
                     }
                     else if (strcmp(s0, "restart") == 0) {
-                        fcitx_utils_launch_restart();
+                        FcitxInstanceRestart(instance);
                     }
                 } else if (strcmp("keyboard", s0) == 0) {
                     FcitxInstanceCloseIM(instance,
@@ -883,7 +883,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "Restart")) {
         FcitxLog(DEBUG, "Restart");
-        fcitx_utils_launch_restart();
+        FcitxInstanceRestart(instance);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "Configure")) {
         FcitxLog(DEBUG, "Configure");

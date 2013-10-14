@@ -721,7 +721,7 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         reply = dbus_message_new_method_return(msg);
         flush = true;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Restart")) {
-        fcitx_utils_launch_restart();
+        FcitxInstanceRestart(instance);
         reply = dbus_message_new_method_return(msg);
         flush = true;
     }

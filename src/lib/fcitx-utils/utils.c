@@ -644,6 +644,20 @@ void fcitx_utils_launch_restart()
 }
 
 FCITX_EXPORT_API
+void fcitx_utils_restart_in_place(void)
+{
+    char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "fcitx");
+    char* const argv[] = {
+        command,
+        "-D", /* Don't start as daemon */
+        NULL
+    };
+    execvp(argv[0], argv);
+    perror("Restart failed: execvp:");
+    _exit(1);
+}
+
+FCITX_EXPORT_API
 void fcitx_utils_start_process(char** args)
 {
     /* exec command */
