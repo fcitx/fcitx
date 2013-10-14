@@ -62,12 +62,10 @@ int main(int argc, char* argv[])
     free(localedir);
     bind_textdomain_codeset("fcitx", "UTF-8");
     textdomain("fcitx");
-    if (pipe(selfpipe) < 0) {
+    if (pipe2(selfpipe, O_CLOEXEC | O_NONBLOCK) < 0) {
         fprintf(stderr, "Could not create self-pipe.\n");
         exit(1);
     }
-    fcntl(selfpipe[0], F_SETFL, O_NONBLOCK);
-    fcntl(selfpipe[1], F_SETFL, O_NONBLOCK);
 
     /* prepare filename first */
     FcitxXDGMakeDirUser("log");
