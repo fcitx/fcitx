@@ -652,7 +652,7 @@ void fcitx_utils_restart_in_place(void)
         "-D", /* Don't start as daemon */
         NULL
     };
-    execvp(argv[0], argv);
+    execv(argv[0], argv);
     perror("Restart failed: execvp:");
     _exit(1);
 }
