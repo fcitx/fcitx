@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-10-18 03:07-0400\n"
-"PO-Revision-Date: 2013-07-02 16:08+0000\n"
+"POT-Creation-Date: 2013-10-26 14:42-0400\n"
+"PO-Revision-Date: 2013-10-18 07:13+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
@@ -226,9 +226,8 @@ msgid "Addon Config Dir:"
 msgstr "附加元件設定目錄："
 
 #: data/script/fcitx-diagnose.sh:1361
-#, fuzzy
 msgid "Addon Libraries:"
-msgstr "附加元件清單："
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1322
 msgid "Addon List:"
@@ -518,9 +517,8 @@ msgid "Cannot find fcitx-configtool executable!"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1369
-#, fuzzy
 msgid "Cannot find file ${1} of addon ${2}."
-msgstr "找不到 ${1} 的 fcitx 輸入法模組。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1379
 msgid "Cannot find following required libraries for ${1} of addon ${2}."
@@ -812,9 +810,8 @@ msgid "Current locale:"
 msgstr "目前地區設定："
 
 #: data/script/fcitx-diagnose.sh:774
-#, fuzzy
 msgid "Current user:"
-msgstr "目前地區設定："
+msgstr ""
 
 #: data/config.desc:35
 msgid "Custom"
@@ -3136,9 +3133,8 @@ msgid "XMODIFIERS Error."
 msgstr "XMODIFIERS 錯誤。"
 
 #: data/script/fcitx-diagnose.sh:946
-#, fuzzy
 msgid "XMODIFIERS is not set"
-msgstr "XMODIFIERS 錯誤。"
+msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:10
 msgid "XiaoHe"
@@ -3196,13 +3192,10 @@ msgstr ""
 "入法作為第二個輸入法。"
 
 #: data/script/fcitx-diagnose.sh:1452
-#, fuzzy
 msgid ""
 "You only have one keyboard input method enabled. You may want to add another "
 "input method to input other languages."
 msgstr ""
-"您只有啟用一個輸入法。請加入一個鍵盤輸入法作為第一個輸入法，以及將你主要的輸"
-"入法作為第二個輸入法。"
 
 #: data/script/fcitx-configtool.sh:136
 msgid ""
@@ -3287,9 +3280,8 @@ msgid "pthread mutex init failed"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:782
-#, fuzzy
 msgid "sudo environment variables"
-msgstr "輸入法相關環境變數："
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:799
 msgid "version:"

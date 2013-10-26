@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
+# しろう, 2013
 # しろう <>, 2013
 # いくや あわしろ <ikunya@gmail.com>, 2013
 # いくや あわしろ <ikunya@gmail.com>, 2012-2013
 # mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>, 2012
 # しろう, 2013
 # Xuetian Weng <wengxt@gmail.com>, 2013
+# Xuetian Weng <wengxt@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-10-18 03:07-0400\n"
-"PO-Revision-Date: 2013-08-07 15:23+0000\n"
-"Last-Translator: しろう\n"
+"POT-Creation-Date: 2013-10-26 14:42-0400\n"
+"PO-Revision-Date: 2013-10-26 16:31+0000\n"
+"Last-Translator: いくや あわしろ <ikunya@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
 "Language: ja\n"
@@ -63,7 +65,7 @@ msgstr "インポート (&I)"
 
 #: tools/gui/quickphrase-editor/editor.cpp:57
 msgid "&Operation"
-msgstr ""
+msgstr "操作(&O)"
 
 #: tools/gui/wrapper/mainwindow.cpp:41
 msgid "&Reset"
@@ -226,9 +228,8 @@ msgid "Addon Config Dir:"
 msgstr "アドオン設定ディレクトリ:"
 
 #: data/script/fcitx-diagnose.sh:1361
-#, fuzzy
 msgid "Addon Libraries:"
-msgstr "アドオンリスト:"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1322
 msgid "Addon List:"
@@ -522,9 +523,8 @@ msgid "Cannot find fcitx-configtool executable!"
 msgstr "fcitx-configtoolが実行可能な状態で見つかりませんでした！"
 
 #: data/script/fcitx-diagnose.sh:1369
-#, fuzzy
 msgid "Cannot find file ${1} of addon ${2}."
-msgstr "gtk ${1} 用のFcitx im モジュールが見つかりません。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1379
 msgid "Cannot find following required libraries for ${1} of addon ${2}."
@@ -632,11 +632,11 @@ msgstr "クラシックUI"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
-msgstr ""
+msgstr "クリア"
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
-msgstr ""
+msgstr "頻度をクリア"
 
 #: src/module/imselector/fcitx-imselector.desc:14
 msgid "Clear local Input Method"
@@ -816,9 +816,8 @@ msgid "Current locale:"
 msgstr "現在のロケール:"
 
 #: data/script/fcitx-diagnose.sh:774
-#, fuzzy
 msgid "Current user:"
-msgstr "現在のロケール:"
+msgstr "現在のユーザー:"
 
 #: data/config.desc:35
 msgid "Custom"
@@ -826,7 +825,7 @@ msgstr "カスタム"
 
 #: data/config.desc:42
 msgid "Custom switch key"
-msgstr ""
+msgstr "カスタム切り替えキー"
 
 #: data/addon.desc:37
 msgid "DBus"
@@ -915,7 +914,7 @@ msgstr "フォーカスを外しても未確定文字をコミットしない"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:620
 msgid "Do not show again"
-msgstr ""
+msgstr "次回から表示しない"
 
 #: data/addon.desc:82
 msgid "Do not show in GUI"
@@ -970,7 +969,7 @@ msgstr "エクスポート (&x)"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr ""
+msgstr "空"
 
 #: src/im/table/table.desc:147
 msgid "Enable"
@@ -986,7 +985,7 @@ msgstr "有効"
 
 #: src/module/chttrans/fcitx-chttrans.desc:17
 msgid "Enabled state for im"
-msgstr ""
+msgstr "IMの状態を有効にする"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
 msgid "Enchance pinyin input in Fcitx"
@@ -1251,7 +1250,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1159
 msgid "Found ${3} for gtk ${1} at ${2}."
-msgstr ""
+msgstr "gtk ${1} 用の ${3} を ${2} に見つけました。"
 
 #: data/script/fcitx-diagnose.sh:1320
 msgid "Found fcitx addon config directory: ${1}."
@@ -1756,7 +1755,7 @@ msgstr "保存するクリップボード履歴の長さ"
 
 #: src/im/table/table.desc:28
 msgid "Level of simple code"
-msgstr ""
+msgstr "シンプルコードのレベル"
 
 #: data/addon.desc:31
 msgid "Library"
@@ -2046,7 +2045,7 @@ msgstr "オーバーレイのY座標オフセット"
 #: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
 #: src/ui/classic/skin.desc:373
 msgid "Overlay dock position"
-msgstr ""
+msgstr "オーバーレイドックの位置"
 
 #: src/ui/classic/skin.desc:122 src/ui/classic/skin.desc:228
 #: src/ui/classic/skin.desc:358
@@ -2949,7 +2948,7 @@ msgstr "Unicode"
 
 #: src/im/table/table.desc:2
 msgid "Unique Name for Table"
-msgstr ""
+msgstr "テーブルでの一意な名前"
 
 #: data/inputmethod.desc:3
 msgid "UniqueName"
@@ -3090,7 +3089,7 @@ msgstr "Wanfeng"
 
 #: data/script/fcitx-diagnose.sh:781
 msgid "Why is it bad to run as root"
-msgstr ""
+msgstr "なぜrootで実行することが危険なのか"
 
 #: src/im/table/data/wbx.conf.in:3
 msgid "Wubi"
@@ -3148,9 +3147,8 @@ msgid "XMODIFIERS Error."
 msgstr "XMODIFIERSのエラーです。"
 
 #: data/script/fcitx-diagnose.sh:946
-#, fuzzy
 msgid "XMODIFIERS is not set"
-msgstr "XMODIFIERSのエラーです。"
+msgstr "XMODIFIERSが設定されていません"
 
 #: src/im/pinyin/fcitx-pinyin.desc:10
 msgid "XiaoHe"
@@ -3209,13 +3207,10 @@ msgstr ""
 "し、主に使用する入力メソッドを二番目に追加してください。"
 
 #: data/script/fcitx-diagnose.sh:1452
-#, fuzzy
 msgid ""
 "You only have one keyboard input method enabled. You may want to add another "
 "input method to input other languages."
 msgstr ""
-"有効な入力メソッドがひとつしかありません。最初にキーボード入力メソッドを追加"
-"し、主に使用する入力メソッドを二番目に追加してください。"
 
 #: data/script/fcitx-configtool.sh:136
 msgid ""
@@ -3305,9 +3300,8 @@ msgid "pthread mutex init failed"
 msgstr "pthread の mutex 初期化に失敗しました"
 
 #: data/script/fcitx-diagnose.sh:782
-#, fuzzy
 msgid "sudo environment variables"
-msgstr "入力メソッド関連の環境変数:"
+msgstr "sudoの環境変数"
 
 #: data/script/fcitx-diagnose.sh:799
 msgid "version:"

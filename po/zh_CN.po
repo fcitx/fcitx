@@ -16,10 +16,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-10-18 03:07-0400\n"
-"PO-Revision-Date: 2013-07-13 17:40+0000\n"
+"POT-Creation-Date: 2013-10-26 14:42-0400\n"
+"PO-Revision-Date: 2013-10-18 08:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
-"Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/projects/p/fcitx/"
+"language/zh_CN/)\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -226,9 +227,8 @@ msgid "Addon Config Dir:"
 msgstr "插件配置文件目录:"
 
 #: data/script/fcitx-diagnose.sh:1361
-#, fuzzy
 msgid "Addon Libraries:"
-msgstr "插件列表:"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1322
 msgid "Addon List:"
@@ -518,9 +518,8 @@ msgid "Cannot find fcitx-configtool executable!"
 msgstr "无法找到 fcitx-configtool 的可执行文件！"
 
 #: data/script/fcitx-diagnose.sh:1369
-#, fuzzy
 msgid "Cannot find file ${1} of addon ${2}."
-msgstr "无法找到 gtk ${1} 的 ${2}."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1379
 msgid "Cannot find following required libraries for ${1} of addon ${2}."
@@ -812,9 +811,8 @@ msgid "Current locale:"
 msgstr "当前 locale:"
 
 #: data/script/fcitx-diagnose.sh:774
-#, fuzzy
 msgid "Current user:"
-msgstr "当前 locale:"
+msgstr "当前用户："
 
 #: data/config.desc:35
 msgid "Custom"
@@ -3143,9 +3141,8 @@ msgid "XMODIFIERS Error."
 msgstr "XMODIFIERS 错误。"
 
 #: data/script/fcitx-diagnose.sh:946
-#, fuzzy
 msgid "XMODIFIERS is not set"
-msgstr "XMODIFIERS 错误。"
+msgstr "XMODIFIERS 没有设置"
 
 #: src/im/pinyin/fcitx-pinyin.desc:10
 msgid "XiaoHe"
@@ -3203,13 +3200,10 @@ msgstr ""
 "二个."
 
 #: data/script/fcitx-diagnose.sh:1452
-#, fuzzy
 msgid ""
 "You only have one keyboard input method enabled. You may want to add another "
 "input method to input other languages."
 msgstr ""
-"您仅仅启用了一个输入法, 请将一个键盘输入法设为第一个并将您的主要输入法设为第"
-"二个."
 
 #: data/script/fcitx-configtool.sh:136
 msgid ""
@@ -3297,9 +3291,8 @@ msgid "pthread mutex init failed"
 msgstr "pthread mutex init failed"
 
 #: data/script/fcitx-diagnose.sh:782
-#, fuzzy
 msgid "sudo environment variables"
-msgstr "输入法相关的环境变量: "
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:799
 msgid "version:"
