@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-10-26 14:42-0400\n"
-"PO-Revision-Date: 2013-10-18 07:13+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2013-10-31 00:02-0400\n"
+"PO-Revision-Date: 2013-10-31 03:52+0000\n"
+"Last-Translator: mar well <marwell.1980@freenet.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
 "Language: de\n"
@@ -235,17 +235,17 @@ msgstr "Reihenfolge anpassen"
 #: src/im/pinyin/fcitx-pinyin.desc:59 src/im/pinyin/fcitx-pinyin.desc:68
 #: src/im/pinyin/fcitx-pinyin.desc:77 src/im/table/table.desc:24
 msgid "AdjustFast"
-msgstr ""
+msgstr "schnell"
 
 #: src/im/pinyin/fcitx-pinyin.desc:60 src/im/pinyin/fcitx-pinyin.desc:69
 #: src/im/pinyin/fcitx-pinyin.desc:78 src/im/table/table.desc:25
 msgid "AdjustFreq"
-msgstr ""
+msgstr "geschwindigkeitsangepasst"
 
 #: src/im/pinyin/fcitx-pinyin.desc:58 src/im/pinyin/fcitx-pinyin.desc:67
 #: src/im/pinyin/fcitx-pinyin.desc:76 src/im/table/table.desc:23
 msgid "AdjustNo"
-msgstr ""
+msgstr "Keine Einstellung"
 
 #: data/config.desc:170
 msgid "All"
@@ -1117,7 +1117,7 @@ msgstr ""
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
-msgstr "Fcitx DBus Frontend"
+msgstr "Fcitx DBus Schnittstelle"
 
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
@@ -1141,7 +1141,7 @@ msgstr "Fcitx Unicode Eingabeunterstützung"
 
 #: src/frontend/xim/fcitx-xim.conf.in:3
 msgid "Fcitx XIM Frontend"
-msgstr "Frontend für XIM"
+msgstr "Schnittstelle für XIM"
 
 #: data/script/fcitx-diagnose.sh:813
 msgid "Fcitx is not running."
@@ -1298,11 +1298,11 @@ msgstr ""
 
 #: data/addon.desc:19
 msgid "Frontend"
-msgstr ""
+msgstr "Schnittstelle"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:4
 msgid "Frontend Used by IM Modules"
-msgstr "Frontend für IM Modules"
+msgstr "Schnittstelle für IM Modules"
 
 #: src/lib/fcitx/frontend.c:533
 msgid "Frontend: bad frontend"
@@ -1315,7 +1315,7 @@ msgstr "Schnittstelle: Öffnen von %s fehlgeschlagen %s"
 
 #: data/script/fcitx-diagnose.sh:1525
 msgid "Frontends setup:"
-msgstr ""
+msgstr "Einrichtung Schnittstelle:"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1948,7 +1948,7 @@ msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:4
 msgid "Native"
-msgstr ""
+msgstr "nativ"
 
 #: data/config.desc:155
 msgid "Next Candidate Word"
@@ -2236,7 +2236,7 @@ msgstr ""
 
 #: data/profile.desc:12
 msgid "Prompt the phrases after input"
-msgstr ""
+msgstr "Phrasen nach der Eingabe anzeigen"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:4
 msgid "Provide extra feature for pinyin in Fcitx"
@@ -2521,7 +2521,7 @@ msgstr "Version zeigen"
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:9
 msgid "Shuang Pin Schema"
-msgstr "SChame Shuangpin"
+msgstr "Shuangpin Schema"
 
 #: src/im/pinyin/py.c:121 src/im/pinyin/shuangpin.conf.in:3
 msgid "Shuangpin"
