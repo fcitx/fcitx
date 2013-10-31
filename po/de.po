@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-10-31 00:02-0400\n"
-"PO-Revision-Date: 2013-10-31 03:52+0000\n"
+"POT-Creation-Date: 2013-10-31 06:02-0400\n"
+"PO-Revision-Date: 2013-10-31 05:45+0000\n"
 "Last-Translator: mar well <marwell.1980@freenet.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
@@ -59,7 +59,7 @@ msgstr "&Import"
 
 #: tools/gui/quickphrase-editor/editor.cpp:57
 msgid "&Operation"
-msgstr ""
+msgstr "&Operation"
 
 #: tools/gui/wrapper/mainwindow.cpp:41
 msgid "&Reset"
@@ -119,7 +119,7 @@ msgstr ""
 
 #: src/module/unicode/charselectdata.c:279
 msgid "<not assigned>"
-msgstr ""
+msgstr "<nicht ausgewählt>"
 
 #: src/im/keyboard/fcitx-keyboard.desc:33
 msgid ""
@@ -190,7 +190,7 @@ msgstr "Datei hinzufügen"
 
 #: src/module/lua/fcitx-lua.conf.in:4
 msgid "Add Lua script support to Fcitx"
-msgstr ""
+msgstr "Lua-Skript-Unterstützung für Fcitx hinzufügen"
 
 #: src/im/table/fcitx-table.desc:4
 msgid "Add Phrase"
@@ -222,7 +222,7 @@ msgstr "Verzeichnis Konfiguration Addons:"
 
 #: data/script/fcitx-diagnose.sh:1361
 msgid "Addon Libraries:"
-msgstr ""
+msgstr "Bibliotheken des Addons:"
 
 #: data/script/fcitx-diagnose.sh:1322
 msgid "Addon List:"
@@ -253,11 +253,11 @@ msgstr "Für alle Programme"
 
 #: data/script/fcitx-diagnose.sh:1126
 msgid "All found Gtk ${1} immodule files exist."
-msgstr ""
+msgstr "Alle Dateien gefundener Gtk ${1} Eingabemodule existieren."
 
 #: data/script/fcitx-diagnose.sh:1387
 msgid "All libraries for all addons are found."
-msgstr ""
+msgstr "Alle Bibliotheken für Addons gefunden."
 
 #: data/script/fcitx-diagnose.sh:760
 msgid "All locale:"
@@ -519,24 +519,26 @@ msgstr "Kann das Programm fcitx-configtool nicht finden!"
 
 #: data/script/fcitx-diagnose.sh:1369
 msgid "Cannot find file ${1} of addon ${2}."
-msgstr ""
+msgstr "Kann Datei ${1} von Addon ${2} nicht finden."
 
 #: data/script/fcitx-diagnose.sh:1379
 msgid "Cannot find following required libraries for ${1} of addon ${2}."
 msgstr ""
+"Die erforderlichen Bibliotheken für ${1} für Addon ${2} können nicht "
+"gefunden werden."
 
 #: data/script/fcitx-diagnose.sh:1270
 msgid "Cannot find immodules cache for gtk ${1}"
-msgstr ""
+msgstr "Kann den Eingabecache für gtk ${1} nicht finden"
 
 #: data/script/fcitx-diagnose.sh:1409
 msgid ""
 "Cannot find kimpanel dbus interface or enabled non-kimpanel user interface."
-msgstr ""
+msgstr "Kann keine kimpanel DBus- oder andere aktivierte Schnittstelle finden."
 
 #: data/script/fcitx-diagnose.sh:985
 msgid "Cannot find xim_server on root window."
-msgstr ""
+msgstr "Kann keinen xim-Server für dieses Fenster finden."
 
 #: src/im/table/table.c:641
 msgid "Cannot found Pinyin"
@@ -812,11 +814,11 @@ msgstr "Zur Zeit aktivierte Locale:"
 
 #: data/script/fcitx-diagnose.sh:774
 msgid "Current user:"
-msgstr ""
+msgstr "Aktueller Benutzer:"
 
 #: data/config.desc:35
 msgid "Custom"
-msgstr ""
+msgstr "Anwenderspezifisch"
 
 #: data/config.desc:42
 msgid "Custom switch key"
@@ -874,7 +876,7 @@ msgstr "Beschreibung Skin"
 
 #: data/script/fcitx-diagnose.sh:728
 msgid "Desktop Environment:"
-msgstr ""
+msgstr "Desktop Umgebung:"
 
 #: data/script/fcitx-diagnose.sh:733
 msgid "Desktop environment is ${1}."
@@ -934,7 +936,7 @@ msgstr "Keinen Rechtsschreibungshinweis zeigen"
 
 #: src/im/table/table.desc:29
 msgid "Do not sort word with code less than this level"
-msgstr ""
+msgstr "Wörter mit weniger Eingabe als diese Länge nicht sortieren"
 
 #: src/lib/fcitx-utils/desktop-parse.c:602
 #, c-format
@@ -985,7 +987,7 @@ msgstr "Aktivierter Status der IM"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
 msgid "Enchance pinyin input in Fcitx"
-msgstr ""
+msgstr "Erweiterte Pinyineingabe in Fcitx"
 
 #: src/im/table/table.desc:69
 msgid "End Key"
@@ -1025,7 +1027,7 @@ msgstr "Die Umgebungsvariable ${1} ist richtig auf \"${2}\" gesetzt."
 
 #: data/script/fcitx-diagnose.sh:739
 msgid "Environment:"
-msgstr ""
+msgstr "Umgebung:"
 
 #: src/im/table/data/erbi.conf.in:3
 msgid "Erbi"
@@ -1084,7 +1086,7 @@ msgstr "Extrataste zum Aktivieren der Eingabemethode"
 
 #: data/script/fcitx-diagnose.sh:1264
 msgid "Failed to find fcitx in immodule cache at ${1}"
-msgstr ""
+msgstr "In ${1} kein Eingabemethodencache gefunden"
 
 #: data/script/fcitx-diagnose.sh:1181
 msgid "Failed to find fcitx in the output of ${1}"
@@ -1113,7 +1115,7 @@ msgstr "Fcitx Konfiguration"
 
 #: data/script/fcitx-diagnose.sh:905
 msgid "Fcitx Configure UI:"
-msgstr ""
+msgstr "Konfigurationsoberfläche fcitx:"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -1121,7 +1123,7 @@ msgstr "Fcitx DBus Schnittstelle"
 
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
-msgstr ""
+msgstr "Fcitx Lua Unterstützung"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:3
 msgid "Fcitx Skin Installer"
@@ -1133,7 +1135,7 @@ msgstr "Vorschlagen von Wörtern"
 
 #: data/script/fcitx-diagnose.sh:788
 msgid "Fcitx State:"
-msgstr ""
+msgstr "Fcitx Status:"
 
 #: src/module/unicode/fcitx-unicode.conf.in:3
 msgid "Fcitx Unicode Typing Support"
@@ -1154,7 +1156,7 @@ msgstr "Fcitx-Version: ${1}"
 #: tools/gui/quickphrase-editor/editor.cpp:295
 #: tools/gui/quickphrase-editor/editor.cpp:342
 msgid "File Operation Failed"
-msgstr ""
+msgstr "Dateioperation fehlgeschlagen"
 
 #: tools/gui/quickphrase-editor/editor.cpp:285
 msgid "File name should not contain '/'."
@@ -1234,7 +1236,7 @@ msgstr "${1} Aktivierte Eingabemethoden gefunden:"
 
 #: data/script/fcitx-diagnose.sh:1392
 msgid "Found ${1} enabled user interface addons:"
-msgstr ""
+msgstr "Aktivierte Benutzeroberflächen-Addons ${1} gefunden:"
 
 #: data/script/fcitx-diagnose.sh:822
 msgid "Found ${1} fcitx process:"
@@ -1246,11 +1248,11 @@ msgstr "Gefundene Fcitxprozesse ${1}"
 
 #: data/script/fcitx-diagnose.sh:1167
 msgid "Found ${2} for unknown gtk version at ${1}."
-msgstr ""
+msgstr "${2} für unbekannte gtk Version hier gefunden: ${1}."
 
 #: data/script/fcitx-diagnose.sh:1159
 msgid "Found ${3} for gtk ${1} at ${2}."
-msgstr ""
+msgstr "${3} für gtk ${1} gefunden: ${2}."
 
 #: data/script/fcitx-diagnose.sh:1320
 msgid "Found fcitx addon config directory: ${1}."
@@ -1282,11 +1284,11 @@ msgstr "fcitx-configtool hiergefunden ${1}."
 
 #: data/script/fcitx-diagnose.sh:1251
 msgid "Found immodule cache for unknown gtk version at ${1}."
-msgstr ""
+msgstr "Unbekannte Version des Eingabemethodencaches gefunden: ${1}"
 
 #: data/script/fcitx-diagnose.sh:1243
 msgid "Found immodules cache for gtk ${1} at ${2}."
-msgstr ""
+msgstr "Eingabemodulcaches für gtk ${1} gefunden: ${2}"
 
 #: data/script/fcitx-diagnose.sh:1062
 msgid "Found unknown fcitx qt module: ${1}."
@@ -1294,7 +1296,7 @@ msgstr "Unbekanntes Fcitx QT Modul gefunden: ${1}"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:3
 msgid "Freedesktop.org Notification Support"
-msgstr ""
+msgstr "Unterstützung von Freedesktop.org Benachrichtigungen"
 
 #: data/addon.desc:19
 msgid "Frontend"
@@ -1412,7 +1414,7 @@ msgstr "Griechisch"
 
 #: data/script/fcitx-diagnose.sh:1120
 msgid "Gtk ${1} immodule file ${2} does not exist."
-msgstr ""
+msgstr "Datei für Gtk ${1} Eingabemodul ${2} existiert nicht."
 
 #: data/script/fcitx-diagnose.sh:1288
 msgid "Gtk IM module cache:"
@@ -1705,7 +1707,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1401
 msgid "Kimpanel process:"
-msgstr ""
+msgstr "Prozeß Kimpanel:"
 
 #: data/config.desc:24
 msgid "L_ALT"
@@ -1822,7 +1824,7 @@ msgstr "Pinyin nachsehen"
 
 #: src/im/pinyin/fcitx-pinyin.desc:5
 msgid "MS"
-msgstr ""
+msgstr "MS"
 
 #: src/ui/classic/skin.desc:117 src/ui/classic/skin.desc:223
 #: src/ui/classic/skin.desc:353
@@ -1912,10 +1914,14 @@ msgstr "Minimale Länge um Wordtip zu bekommen"
 msgid ""
 "Minimum length trigger auto send candidate when there will be no candidate"
 msgstr ""
+"Minimal Länge um einen Kandidaten automatisch zu senden, wenn kein Kandidat "
+"vorhanden ist"
 
 #: src/im/table/table.desc:54
 msgid "Minimum length trigger auto send candidate word when only one candidate"
 msgstr ""
+"Minimal Länge um einen Kandidaten automatisch zu senden, wenn nur ein "
+"Kandidat vorhanden ist"
 
 #: src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
@@ -1944,7 +1950,7 @@ msgstr "Name"
 
 #: data/addon.desc:7
 msgid "Name that can be display in UI"
-msgstr ""
+msgstr "Name der in der Benutzeroberfläche angezeigt werden kann"
 
 #: src/module/chttrans/fcitx-chttrans.desc:4
 msgid "Native"
@@ -1965,7 +1971,7 @@ msgstr "Icon für nächste Seite Kandidaten"
 
 #: data/config.desc:169
 msgid "No"
-msgstr ""
+msgstr "Keine"
 
 #: src/lib/fcitx/ime.c:535
 msgid "No available Input Method"
@@ -2048,7 +2054,7 @@ msgstr "Ebene X Offset"
 #: src/ui/classic/skin.desc:147 src/ui/classic/skin.desc:253
 #: src/ui/classic/skin.desc:383
 msgid "Overlay Y offset"
-msgstr ""
+msgstr "Overlay Y offset"
 
 #: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
 #: src/ui/classic/skin.desc:373
@@ -2240,7 +2246,7 @@ msgstr "Phrasen nach der Eingabe anzeigen"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:4
 msgid "Provide extra feature for pinyin in Fcitx"
-msgstr ""
+msgstr "Unterstützt weitere Funktionen für Pinyin in Fcitx"
 
 #: src/module/dbus/fcitx-dbus.conf.in:4
 msgid "Provides DBus Support (Used by other Addon)"
@@ -2249,6 +2255,8 @@ msgstr "Bietet DBus-Unterstützung (von anderem Addon verwendet)"
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
 msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
 msgstr ""
+"Unterstützt Freedesktop.org Benachrichtigungsunterstützung (Von anderem "
+"Addon verwendet)"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
 msgid "Provides Fullwidth Character Input Support"
@@ -2496,7 +2504,7 @@ msgstr "Shift"
 
 #: src/ui/classic/fcitx-classic-ui.desc:44
 msgid "Show"
-msgstr ""
+msgstr "Zeigen"
 
 #: data/config.desc:223
 msgid "Show Input Method Hint After Input method changed"
@@ -2625,7 +2633,7 @@ msgstr "Oberfläche Trayicons"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
-msgstr ""
+msgstr "Farbe Trennlinie"
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
@@ -2642,7 +2650,7 @@ msgstr "Position des Icons verschieben"
 
 #: src/module/spell/fcitx-spell.conf.in:3
 msgid "Spell"
-msgstr ""
+msgstr "Rechtschreibung"
 
 #: src/module/spell/fcitx-spell.desc:1 src/module/spell/fcitx-spell.desc:10
 msgid "Spell Hint"
@@ -2650,15 +2658,15 @@ msgstr "Rechtschreibungshinweis"
 
 #: src/im/keyboard/keyboard.c:957
 msgid "Spell hint"
-msgstr ""
+msgstr "Rechtschreibungshinweis"
 
 #: src/im/keyboard/keyboard.c:959
 msgid "Spell hint is disabled."
-msgstr ""
+msgstr "Rechtschreibungshinweis ist deaktiviert"
 
 #: src/im/keyboard/keyboard.c:958
 msgid "Spell hint is enabled."
-msgstr ""
+msgstr "Rechtschreibungshinweis ist aktiviert."
 
 #: data/fcitx-autostart.desktop.in:4 data/fcitx.desktop.in:4
 msgid "Start Input Method"
@@ -2813,7 +2821,7 @@ msgstr "Die Taste wird von Qt nicht unterstützt."
 
 #: data/script/fcitx-diagnose.sh:775
 msgid "The script is run as ${1} (${2})."
-msgstr ""
+msgstr "Das Script läuft als ${1} (${2})."
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
 msgid ""
@@ -3073,7 +3081,7 @@ msgstr "Benutzer definiert"
 
 #: data/script/fcitx-diagnose.sh:1388
 msgid "User Interface:"
-msgstr ""
+msgstr "Benutzeroberfläche:"
 
 #: src/ui/classic/skin.desc:49
 msgid "User Phrase Color"
@@ -3113,7 +3121,7 @@ msgstr "Wanfeng"
 
 #: data/script/fcitx-diagnose.sh:781
 msgid "Why is it bad to run as root"
-msgstr ""
+msgstr "Warum es schlecht ist, es mit root auszuführen"
 
 #: src/im/table/data/wbx.conf.in:3
 msgid "Wubi"
@@ -3135,7 +3143,7 @@ msgstr "X Keyboard Integration"
 #: src/module/xkbdbus/fcitx-xkbdbus.conf.in:3
 #: src/module/xkbdbus/fcitx-xkbdbus.conf.in:4
 msgid "X Keyboard Integration export with DBus"
-msgstr ""
+msgstr "X Keyboard Integration - Export per DBus"
 
 #: src/ui/classic/tray.c:159
 #, c-format
@@ -3172,7 +3180,7 @@ msgstr "Fehler XMODIFIERS"
 
 #: data/script/fcitx-diagnose.sh:946
 msgid "XMODIFIERS is not set"
-msgstr ""
+msgstr "XMODIFIERS ist nicht gesetzt"
 
 #: src/im/pinyin/fcitx-pinyin.desc:10
 msgid "XiaoHe"
@@ -3205,6 +3213,9 @@ msgid ""
 "either means you have security problems or the result of this script may not "
 "be accurate. See ${3} or ${4} for more information."
 msgstr ""
+"Sie scheinen sich als ${1} einzuloggen oder benutzen ${2} um das Skript "
+"anzuwenden. Das kann zu Sicherheitsproblemen führen oder das Ergebnis des "
+"Skripts ist nicht genau. Sehen Sie in ${3} oder ${4} für mehr Informationen."
 
 #: data/script/fcitx-diagnose.sh:1014
 msgid "You are using xim in ${1} programs."
@@ -3241,6 +3252,8 @@ msgid ""
 "You only have one keyboard input method enabled. You may want to add another "
 "input method to input other languages."
 msgstr ""
+"Sie haben nur eine Eingabemethode aktiviert. Sie wollen wahrscheinlich "
+"weitere für die Eingabe anderer Sprachen hinzufügen."
 
 #: data/script/fcitx-configtool.sh:136
 msgid ""
@@ -3334,7 +3347,7 @@ msgstr "Initialisierung von pthread mutex fehlgeschlagen"
 
 #: data/script/fcitx-diagnose.sh:782
 msgid "sudo environment variables"
-msgstr ""
+msgstr "sudo Umgebungsvariablen"
 
 #: data/script/fcitx-diagnose.sh:799
 msgid "version:"
