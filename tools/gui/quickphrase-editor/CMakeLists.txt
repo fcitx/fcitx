@@ -16,6 +16,7 @@ endif()
 include_directories(
   ${QT_QTCORE_INCLUDE_DIR}
   ${QT_QTGUI_INCLUDE_DIR}
+  ${LIBINTL_INCLUDE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
   )
 qt4_wrap_ui(QUICKPHRASE_EDITOR_SRCS editordialog.ui batchdialog.ui editor.ui)
