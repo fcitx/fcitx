@@ -40,8 +40,13 @@ fcitx_exts_match() {
 fcitx_msgid_to_varname() {
     local prefix="${1}"
     local msgid="${2}"
-    echo -n "${prefix}___"
-    echo -n "${msgid}" | "${_FCITX_PO_PARSER_EXECUTABLE}" --encode
+    if [ "x`echo -n`" = "x-n" ] ; then
+        echo "${prefix}___\c"
+        echo "${msgid}\c" | "${_FCITX_PO_PARSER_EXECUTABLE}" --encode
+    else
+        echo -n "${prefix}___"
+        echo -n "${msgid}" | "${_FCITX_PO_PARSER_EXECUTABLE}" --encode
+    fi
 }
 
 fcitx_parse_po_file() {
@@ -56,15 +61,24 @@ fcitx_find_str() {
     local prefix="${1}"
     local msgid="${2}"
     local varname="$(fcitx_msgid_to_varname "${prefix}" "${msgid}")"
-    eval "echo -n \"\${${varname}}\"" | \
-        "${_FCITX_PO_PARSER_EXECUTABLE}" --decode
+    if [ "x`echo -n`" = "x-n" ] ; then
+        eval "echo \"\${${varname}}\"\\c" | \
+            "${_FCITX_PO_PARSER_EXECUTABLE}" --decode
+    else
+        eval "echo -n \"\${${varname}}\"" | \
+            "${_FCITX_PO_PARSER_EXECUTABLE}" --decode
+    fi
 }
 
 all_po_langs=''
 
 fcitx_lang_to_prefix() {
     local lang="${1}"
-    echo -n "${lang}" | "${_FCITX_PO_PARSER_EXECUTABLE}" --encode
+    if [ "x`echo -n`" = "x-n" ] ; then
+        echo "${lang}\c" | "${_FCITX_PO_PARSER_EXECUTABLE}" --encode
+    else
+        echo -n "${lang}" | "${_FCITX_PO_PARSER_EXECUTABLE}" --encode
+    fi
 }
 
 fcitx_parse_all_pos() {
