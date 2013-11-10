@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-10-26 14:42-0400\n"
-"PO-Revision-Date: 2013-10-18 08:08+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2013-11-10 00:02-0500\n"
+"PO-Revision-Date: 2013-11-10 02:33+0000\n"
+"Last-Translator: wwj402 <wwj402@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
@@ -228,7 +228,7 @@ msgstr "插件配置文件目录:"
 
 #: data/script/fcitx-diagnose.sh:1361
 msgid "Addon Libraries:"
-msgstr ""
+msgstr "插件库: "
 
 #: data/script/fcitx-diagnose.sh:1322
 msgid "Addon List:"
@@ -263,7 +263,7 @@ msgstr "找到的全部 Gtk ${1} 输入法模块文件均存在."
 
 #: data/script/fcitx-diagnose.sh:1387
 msgid "All libraries for all addons are found."
-msgstr ""
+msgstr "所有插件所需的库都被找到。"
 
 #: data/script/fcitx-diagnose.sh:760
 msgid "All locale:"
@@ -519,11 +519,11 @@ msgstr "无法找到 fcitx-configtool 的可执行文件！"
 
 #: data/script/fcitx-diagnose.sh:1369
 msgid "Cannot find file ${1} of addon ${2}."
-msgstr ""
+msgstr "无法找到插件 ${2} 的文件 $ {1}。"
 
 #: data/script/fcitx-diagnose.sh:1379
 msgid "Cannot find following required libraries for ${1} of addon ${2}."
-msgstr ""
+msgstr "无法找到插件$ {2} 所需的库 $ {1}。"
 
 #: data/script/fcitx-diagnose.sh:1270
 msgid "Cannot find immodules cache for gtk ${1}"
@@ -2793,7 +2793,7 @@ msgstr "你刚刚按下的按键不被 Qt 支持。"
 
 #: data/script/fcitx-diagnose.sh:775
 msgid "The script is run as ${1} (${2})."
-msgstr ""
+msgstr "脚本作为 ${1} (${2}) 运行。"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
 msgid ""
@@ -3083,7 +3083,7 @@ msgstr "晚风"
 
 #: data/script/fcitx-diagnose.sh:781
 msgid "Why is it bad to run as root"
-msgstr ""
+msgstr "以root身份运行不好的原因"
 
 #: src/im/table/data/wbx.conf.in:3
 msgid "Wubi"
@@ -3172,6 +3172,8 @@ msgid ""
 "either means you have security problems or the result of this script may not "
 "be accurate. See ${3} or ${4} for more information."
 msgstr ""
+"你可能以 ${1} 或者 ${2} 登录运行此脚本。这意味着两种情况，要么你有安全问题或"
+"该脚本的结果可能不准确。有关更多信息，请参见 ${3} 或者 ${4} 。"
 
 #: data/script/fcitx-diagnose.sh:1014
 msgid "You are using xim in ${1} programs."
@@ -3203,7 +3205,7 @@ msgstr ""
 msgid ""
 "You only have one keyboard input method enabled. You may want to add another "
 "input method to input other languages."
-msgstr ""
+msgstr "你只有一个键盘输入法启用。你可能要添加其他输入法输入其他语言。"
 
 #: data/script/fcitx-configtool.sh:136
 msgid ""
@@ -3292,7 +3294,7 @@ msgstr "pthread mutex init failed"
 
 #: data/script/fcitx-diagnose.sh:782
 msgid "sudo environment variables"
-msgstr ""
+msgstr "sudo的环境变量"
 
 #: data/script/fcitx-diagnose.sh:799
 msgid "version:"
