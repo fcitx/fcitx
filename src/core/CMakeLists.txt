@@ -3,7 +3,14 @@ set(FCITX_SOURCES
   errorhandler.c
   )
 
-add_executable(fcitx ${FCITX_SOURCES})
+if(APPLE)
+    add_executable(fcitx MACOSX_BUNDLE ${FCITX_SOURCES})
+    #install(TARGETS fcitx DESTINATION ../MacOS)
+elseif(NOT APPLE)
+    add_executable(fcitx ${FCITX_SOURCES})
+    #install(TARGETS fcitx RUNTIME DESTINATION "${bindir}")
+endif()
+
 install(TARGETS fcitx RUNTIME DESTINATION "${bindir}")
 target_link_libraries(fcitx fcitx-core ${LIBEXECINFO_LIBRARIES})
 

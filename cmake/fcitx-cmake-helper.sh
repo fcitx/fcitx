@@ -115,7 +115,11 @@ get_md5sum() {
     local res
     file="$1"
     res=$("${FCITX_HELPER_CMAKE_CMD}" -E md5sum "${file}")
-    echo -n "${res%% *}"
+    if [ "x`echo -n`" = "x-n" ] ; then
+        echo "${res%% *}\c"
+    else
+        echo -n "${res%% *}"
+    fi
 }
 
 case "${action}" in

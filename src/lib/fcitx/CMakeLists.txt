@@ -46,11 +46,20 @@ fcitx_translate_add_sources(${LIBFCITX_SOURCES} ${FCITX_HEADERS}
 link_directories(${DL_LIBRARY_DIRS} ${PTHREAD_LIBRARY_DIRS})
 
 add_library(fcitx-core SHARED ${LIBFCITX_SOURCES})
-set_target_properties(fcitx-core
-  PROPERTIES VERSION 0.3
-  SOVERSION 0
-  COMPILE_FLAGS "-fvisibility=hidden"
-  LINK_FLAGS "-Wl,--no-undefined")
+
+if(APPLE)
+    set_target_properties(fcitx-core
+        PROPERTIES VERSION 0.3
+        SOVERSION 0
+        COMPILE_FLAGS "-fvisibility=hidden"
+        LINK_FLAGS "-flat_namespace -L /usr/local/opt/gettext/lib -lintl")
+elseif(NOT APPLE)
+    set_target_properties(fcitx-core
+        PROPERTIES VERSION 0.3
+        SOVERSION 0
+        COMPILE_FLAGS "-fvisibility=hidden"
+        LINK_FLAGS "-Wl,--no-undefined")
+endif()
 
 configure_file(fcitx.pc.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx.pc)
 
