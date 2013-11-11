@@ -53,7 +53,7 @@ if(APPLE)
         SOVERSION 0
         COMPILE_FLAGS "-fvisibility=hidden"
         LINK_FLAGS "-flat_namespace -L /usr/local/opt/gettext/lib -lintl")
-elseif(NOT APPLE)
+else()
     set_target_properties(fcitx-core
         PROPERTIES VERSION 0.3
         SOVERSION 0

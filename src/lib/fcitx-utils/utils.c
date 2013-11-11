@@ -66,7 +66,7 @@
 #if defined(__linux__) || defined(__GLIBC__)
 #include <endian.h>
 #elif defined(__APPLE__)
-#include "fcitx/endian.h"
+#include "endian.h"
 #else
 #include <sys/endian.h>
 #endif

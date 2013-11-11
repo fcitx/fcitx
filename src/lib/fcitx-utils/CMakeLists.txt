@@ -41,7 +41,7 @@ if(APPLE)
         COMPILE_FLAGS "-fvisibility=hidden"
         LINK_FLAGS "-flat_namespace"
         )
-elseif(NOT APPLE)
+else()
     set_target_properties(fcitx-utils
         PROPERTIES VERSION 0.1
         SOVERSION 0
