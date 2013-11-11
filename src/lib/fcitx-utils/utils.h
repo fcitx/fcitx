@@ -71,25 +71,8 @@
  * fcitx boolean
  **/
 typedef int32_t boolean;
-#if !defined(__cplusplus) && !defined(FCITX_DONOT_DEFINE_TRUE_FALSE)
-/**
- * fcitx true
- */
-#ifdef true
-#undef true
-#endif
 
-#define true (1)
-
-/**
- * fcitx false
- */
-#ifdef false
-#undef false
-#endif
-
-#define false (0)
-#endif
+#include <stdbool.h>
 
 #define FCITX_INT_LEN ((int)(sizeof(int) * 2.5) + 2)
 #define FCITX_LONG_LEN ((int)(sizeof(long) * 2.5) + 2)

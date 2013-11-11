@@ -4,9 +4,10 @@ set(FCITX_SOURCES
   )
 
 if(APPLE)
-    add_executable(fcitx MACOSX_BUNDLE ${FCITX_SOURCES})
+    add_executable(fcitx ${FCITX_SOURCES})
+    #add_executable(fcitx MACOSX_BUNDLE ${FCITX_SOURCES})
     #install(TARGETS fcitx DESTINATION ../MacOS)
-elseif(NOT APPLE)
+else()
     add_executable(fcitx ${FCITX_SOURCES})
     #install(TARGETS fcitx RUNTIME DESTINATION "${bindir}")
 endif()
