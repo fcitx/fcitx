@@ -23,6 +23,30 @@ fi
 # utility
 #############################
 
+__get_pretty_name() {
+    local _home=$(realpath ~ 2> /dev/null || echo ~)
+    local _orig=$(realpath "${1}" 2> /dev/null || echo "${1}")
+    if [[ ${_orig}/ =~ ^${_home}/ ]]; then
+        echo "~${_orig#${_home}}"
+    else
+        echo "${_orig}"
+    fi
+}
+
+__conf_dir_init() {
+    # Don't do any fancy check here, it's the user's fault, which we should detect
+    # later, if it is set to some non-sense value.
+    if [[ -n ${XDG_CONFIG_HOME} ]]; then
+        _xdg_conf_home=${XDG_CONFIG_HOME}
+    else
+        _xdg_conf_home=~/.config
+    fi
+    fx_conf_home=${_xdg_conf_home}/fcitx
+    xdg_conf_pretty_name=$(__get_pretty_name "${_xdg_conf_home}")
+    fx_conf_pretty_name=$(__get_pretty_name "${fx_conf_home}")
+}
+__conf_dir_init
+
 array_push() {
     eval "${1}"'=("${'"${1}"'[@]}" "${@:2}")'
 }
@@ -785,6 +809,31 @@ check_env() {
     else
         write_paragraph "$(print_not_found 'locale')"
     fi
+    write_order_list "$(_ 'Directories:')"
+    increase_cur_level 1
+    write_order_list "$(_ 'Home:')"
+    write_quote_str ~
+    write_order_list "$(code_inline '${XDG_CONFIG_HOME}'):"
+    if [[ -z ${XDG_CONFIG_HOME} ]]; then
+        write_eval "$(_ 'Environment variable ${1} is not set.')" \
+            "$(code_inline 'XDG_CONFIG_HOME')"
+    else
+        write_eval \
+            "$(_ 'Environment variable ${1} is set to ${2}.')" \
+            "$(code_inline 'XDG_CONFIG_HOME')" \
+            "$(code_inline "${XDG_CONFIG_HOME}")"
+    fi
+    write_eval "$(_ 'Current value of ${1} is ${2} (${3}).')" \
+        "$(code_inline 'XDG_CONFIG_HOME')" \
+        "$(code_inline "${xdg_conf_pretty_name}")" \
+        "$(code_inline "${_xdg_conf_home}")"
+    write_order_list "$(_ "Fcitx Settings Directory:")"
+    write_eval \
+        "$(_ 'Current fcitx settings directory is ${1} (${2}).')" \
+        "$(code_inline "${fx_conf_pretty_name}")" \
+        "$(code_inline "${fx_conf_home}")"
+    increase_cur_level -1
+
     write_order_list "$(_ 'Current user:')"
     write_eval "$(_ 'The script is run as ${1} (${2}).')" \
         "${cur_user}" "${cur_uid}"
@@ -1017,7 +1066,7 @@ _check_toolkit_env() {
     local name="$1"
     local env_names=("${@:2}")
     local env_name
-    write_order_list "$(code_inline '${'"${env_names[0]}"'}'):"
+    write_order_list "${name} - $(code_inline '${'"${env_names[0]}"'}'):"
     for env_name in "${env_names[@]}"; do
         [ -z "${!env_name}" ] || break
     done
@@ -1056,7 +1105,7 @@ find_qt_modules() {
 check_qt() {
     write_title 2 "Qt:"
     _check_toolkit_env qt4 QT4_IM_MODULE QT_IM_MODULE
-    _check_toolkit_env qt5 QT5_IM_MODULE QT_IM_MODULE
+    _check_toolkit_env qt5 QT_IM_MODULE
     find_qt_modules
     qt4_module_found=''
     qt5_module_found=''
@@ -1349,9 +1398,9 @@ check_modules() {
             continue
         fi
         enable=$(get_from_config_file "${file}" Enabled)
-        if [ -f ~/.config/fcitx/addon/${name}.conf ]; then
+        if [ -f ${fx_conf_home}/addon/${name}.conf ]; then
             _enable=$(get_from_config_file \
-                ~/.config/fcitx/addon/${name}.conf Enabled)
+                ${fx_conf_home}/addon/${name}.conf Enabled)
             [ -z "${_enable}" ] || enable="${_enable}"
         fi
         if [ $(echo "${enable}" | sed -e 's/.*/\L&/g') = false ]; then
@@ -1436,7 +1485,7 @@ check_input_methods() {
     write_title 2 "$(_ 'Input Methods:')"
     local IFS=','
     local imlist=($(get_from_config_file \
-        ~/.config/fcitx/profile EnabledIMList)) || {
+        ${fx_conf_home}/profile EnabledIMList)) || {
         write_error "$(_ 'Cannot read im list from fcitx profile.')"
         return 0
     }
@@ -1501,17 +1550,18 @@ check_log() {
     else
         write_error "$(print_not_found 'date')"
     fi
-    write_order_list "$(code_inline '~/.config/fcitx/log/'):"
-    [ -d ~/.config/fcitx/log/ ] || {
-        write_paragraph "$(print_not_found '~/.config/fcitx/log/')"
+    write_order_list "$(code_inline "${fx_conf_pretty_name}/log/"):"
+    [ -d ${fx_conf_home}/log/ ] || {
+        write_paragraph "$(print_not_found "${fx_conf_pretty_name}/log/")"
         return
     }
-    write_quote_cmd ls -AlF ~/.config/fcitx/log/
-    write_order_list "$(code_inline '~/.config/fcitx/log/crash.log'):"
-    if [ -f ~/.config/fcitx/log/crash.log ]; then
-        write_quote_cmd cat ~/.config/fcitx/log/crash.log
+    write_quote_cmd ls -AlF ${fx_conf_home}/log/
+    write_order_list "$(code_inline "${fx_conf_pretty_name}/log/crash.log"):"
+    if [ -f ${fx_conf_home}/log/crash.log ]; then
+        write_quote_cmd cat ${fx_conf_home}/log/crash.log
     else
-        write_paragraph "$(print_not_found '~/.config/fcitx/log/crash.log')"
+        write_paragraph \
+            "$(print_not_found "${fx_conf_pretty_name}/log/crash.log")"
     fi
 }
 
