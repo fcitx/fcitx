@@ -838,11 +838,38 @@ check_env() {
     write_eval "$(_ 'The script is run as ${1} (${2}).')" \
         "${cur_user}" "${cur_uid}"
     if check_is_root; then
-        write_error_eval \
-            "$(_ 'You are probably logging in as ${1} or using ${2} to run this script. This either means you have security problems or the result of this script may not be accurate. See ${3} or ${4} for more information.')" \
-            "$(code_inline 'root')" "$(code_inline 'sudo')" \
-            "$(print_google_link "$(_ "Why is it bad to run as root")")" \
-            "$(print_google_link "$(_ "sudo environment variables")")"
+        increase_cur_level 1
+        local has_sudo_var=0
+        write_order_list_eval "$(_ '${1} Environment Variables:')" \
+            "$(code_inline 'sudo')"
+        check_sudo_env() {
+            local env_name=${1}
+            if [[ -n ${!env_name} ]]; then
+                has_sudo_var=1
+                write_eval "$(_ '${1} is set to ${2}.')" \
+                    "${env_name}" "${!env_name}"
+            else
+                write_eval "$(_ '${1} is not set.')" "${env_name}"
+            fi
+        }
+        check_sudo_env SUDO_COMMAND
+        check_sudo_env SUDO_USER
+        check_sudo_env SUDO_UID
+        check_sudo_env SUDO_GID
+        write_order_list "$(_ 'Running as root:')"
+        if ((has_sudo_var)); then
+            write_error_eval \
+                "$(_ 'You are probably using ${1} to run this script. This means the result of this script may not be accurate. See ${2} for more information.')" \
+                "$(code_inline 'sudo')" \
+                "$(print_google_link "$(_ "sudo environment variables")")"
+        else
+            write_error_eval \
+                "$(_ 'You are probably logging in as ${1} or using ${2} to run this script. This either means you have security problems or the result of this script may not be accurate. See ${3} or ${4} for more information.')" \
+                "$(code_inline 'root')" "$(code_inline 'sudo')" \
+                "$(print_google_link "$(_ "Why is it bad to run as root")")" \
+                "$(print_google_link "$(_ "sudo environment variables")")"
+        fi
+        increase_cur_level -1
     fi
 }
 
