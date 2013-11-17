@@ -26,6 +26,7 @@
 #include "model.h"
 #include "common.h"
 #include "editor.h"
+#include "filelistmodel.h"
 #include <fcitx-config/xdg.h>
 
 namespace fcitx
@@ -241,6 +242,7 @@ bool QuickPhraseModel::saveData(const QString& file, const QStringPairList& list
 {
     char* name = NULL;
     QByteArray filenameArray = file.toLocal8Bit();
+    FcitxXDGMakeDirUser(QUICK_PHRASE_CONFIG_DIR);
     FcitxXDGGetFileUserWithPrefix("", filenameArray.constData(), NULL, &name);
     QString fileName = QString::fromLocal8Bit(name);
     QTemporaryFile tempFile(fileName);
