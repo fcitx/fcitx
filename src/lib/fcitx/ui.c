@@ -657,18 +657,18 @@ void FcitxMenuClear(FcitxUIMenu* menu)
     utarray_clear(&menu->shell);
 }
 
-static void FcitxUIUpdate(void *arg)
+static void FcitxUIUpdateOnUnFocus(void *arg)
 {
     FcitxInstance *instance = arg;
-    instance->ui->ui->OnInputFocus(instance->ui->addonInstance);
+    instance->ui->ui->OnInputUnFocus(instance->ui->addonInstance);
 }
 
 FCITX_EXPORT_API
 void FcitxUIOnInputFocus(FcitxInstance* instance)
 {
     if (UI_FUNC_IS_VALID(OnInputFocus)) {
-        FcitxInstanceRemoveTimeoutByFunc(instance, FcitxUIUpdate);
-        FcitxInstanceAddTimeout(instance, 100, FcitxUIUpdate, instance);
+        FcitxInstanceRemoveTimeoutByFunc(instance, FcitxUIUpdateOnUnFocus);
+        instance->ui->ui->OnInputFocus(instance->ui->addonInstance);
     }
 
     FcitxInstanceProcessInputFocusHook(instance);
@@ -686,9 +686,9 @@ void FcitxUIOnInputFocus(FcitxInstance* instance)
 FCITX_EXPORT_API
 void FcitxUIOnInputUnFocus(struct _FcitxInstance* instance)
 {
-    if (UI_FUNC_IS_VALID(OnInputFocus)) {
-        FcitxInstanceRemoveTimeoutByFunc(instance, FcitxUIUpdate);
-        FcitxInstanceAddTimeout(instance, 150, FcitxUIUpdate, instance);
+    if (UI_FUNC_IS_VALID(OnInputUnFocus)) {
+        FcitxInstanceRemoveTimeoutByFunc(instance, FcitxUIUpdateOnUnFocus);
+        FcitxInstanceAddTimeout(instance, 150, FcitxUIUpdateOnUnFocus, instance);
     }
 
     FcitxInstanceProcessInputUnFocusHook(instance);
