@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-11-10 00:02-0500\n"
+"POT-Creation-Date: 2013-12-12 12:01-0500\n"
 "PO-Revision-Date: 2013-11-10 02:33+0000\n"
 "Last-Translator: wwj402 <wwj402@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/fcitx/"
@@ -1679,7 +1679,7 @@ msgstr "键盘布局"
 msgid "Keyboard Layout:"
 msgstr "键盘布局:"
 
-#: tools/gui/quickphrase-editor/model.cpp:55
+#: tools/gui/quickphrase-editor/model.cpp:56
 msgid "Keyword"
 msgstr "关键字"
 
@@ -2060,7 +2060,7 @@ msgstr "所属附加组件"
 msgid "PerProgram"
 msgstr "按程序"
 
-#: tools/gui/quickphrase-editor/model.cpp:57
+#: tools/gui/quickphrase-editor/model.cpp:58
 msgid "Phrase"
 msgstr "词组"
 
@@ -3208,10 +3208,11 @@ msgid ""
 msgstr "你只有一个键盘输入法启用。你可能要添加其他输入法输入其他语言。"
 
 #: data/script/fcitx-configtool.sh:136
+#, fuzzy
 msgid ""
-"You're currently Fcitx with GUI, but fcitx-configtool couldn't be found, the "
-"package name is usually fcitx-config-gtk, fcitx-config-gtk3 or fcitx-"
-"configtool. Now it will open config file with default text editor."
+"You're currently running Fcitx with GUI, but fcitx-configtool couldn't be "
+"found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
+"fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
 "您正在图形界面下运行 fcitx，但是 fcitx-configtool 未被找到，软件包名通常为 "
 "fcitx-config-gtk，fcitx-config-gtk3，或者 fcitx-configtool。现在将用默认文本"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-10-31 06:02-0400\n"
+"POT-Creation-Date: 2013-12-12 12:01-0500\n"
 "PO-Revision-Date: 2013-10-31 05:45+0000\n"
 "Last-Translator: mar well <marwell.1980@freenet.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
@@ -1688,7 +1688,7 @@ msgstr "Zu benutzendes Tastaturlayout"
 msgid "Keyboard Layout:"
 msgstr "Tastatur Layout:"
 
-#: tools/gui/quickphrase-editor/model.cpp:55
+#: tools/gui/quickphrase-editor/model.cpp:56
 msgid "Keyword"
 msgstr "Schlüsselwort"
 
@@ -2078,7 +2078,7 @@ msgstr "Parent"
 msgid "PerProgram"
 msgstr "Für jedes Programm"
 
-#: tools/gui/quickphrase-editor/model.cpp:57
+#: tools/gui/quickphrase-editor/model.cpp:58
 msgid "Phrase"
 msgstr "Phrase"
 
@@ -3256,10 +3256,11 @@ msgstr ""
 "weitere für die Eingabe anderer Sprachen hinzufügen."
 
 #: data/script/fcitx-configtool.sh:136
+#, fuzzy
 msgid ""
-"You're currently Fcitx with GUI, but fcitx-configtool couldn't be found, the "
-"package name is usually fcitx-config-gtk, fcitx-config-gtk3 or fcitx-"
-"configtool. Now it will open config file with default text editor."
+"You're currently running Fcitx with GUI, but fcitx-configtool couldn't be "
+"found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
+"fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
 "Sie benutzen gegenwärtig Gnome, aber das Kontrollmodul für Fcitx kann nicht "
 "gefunden werden. Der Paketname ist normalerweise fcitx-config-gtk, fcitx-"

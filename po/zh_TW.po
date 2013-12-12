@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-10-26 14:42-0400\n"
+"POT-Creation-Date: 2013-12-12 12:01-0500\n"
 "PO-Revision-Date: 2013-10-18 07:13+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
@@ -1671,7 +1671,7 @@ msgstr "鍵盤配置"
 msgid "Keyboard Layout:"
 msgstr "鍵盤配置："
 
-#: tools/gui/quickphrase-editor/model.cpp:55
+#: tools/gui/quickphrase-editor/model.cpp:56
 msgid "Keyword"
 msgstr "關鍵字"
 
@@ -2052,7 +2052,7 @@ msgstr "所屬附加元件"
 msgid "PerProgram"
 msgstr "按程式"
 
-#: tools/gui/quickphrase-editor/model.cpp:57
+#: tools/gui/quickphrase-editor/model.cpp:58
 msgid "Phrase"
 msgstr "字詞"
 
@@ -3198,11 +3198,14 @@ msgid ""
 msgstr ""
 
 #: data/script/fcitx-configtool.sh:136
+#, fuzzy
 msgid ""
-"You're currently Fcitx with GUI, but fcitx-configtool couldn't be found, the "
-"package name is usually fcitx-config-gtk, fcitx-config-gtk3 or fcitx-"
-"configtool. Now it will open config file with default text editor."
+"You're currently running Fcitx with GUI, but fcitx-configtool couldn't be "
+"found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
+"fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
+"您正在執行 KDE，但找不到 fcitx 的 KCModule，此 KCModule 的套件名稱通常為 kcm-"
+"fcitx 或 kde-config-fcitx。現在將使用預設文字編輯器開啟設定檔。"
 
 #: data/script/fcitx-configtool.sh:133
 msgid ""

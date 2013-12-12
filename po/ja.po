@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-11-03 00:03-0400\n"
+"POT-Creation-Date: 2013-12-12 12:01-0500\n"
 "PO-Revision-Date: 2013-11-03 02:05+0000\n"
 "Last-Translator: いくや あわしろ <ikunya@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
@@ -1683,7 +1683,7 @@ msgstr "使用するキーボードレイアウト"
 msgid "Keyboard Layout:"
 msgstr "キーボードレイアウト:"
 
-#: tools/gui/quickphrase-editor/model.cpp:55
+#: tools/gui/quickphrase-editor/model.cpp:56
 msgid "Keyword"
 msgstr "キーワード"
 
@@ -2064,7 +2064,7 @@ msgstr "親"
 msgid "PerProgram"
 msgstr "プログラムごと"
 
-#: tools/gui/quickphrase-editor/model.cpp:57
+#: tools/gui/quickphrase-editor/model.cpp:58
 msgid "Phrase"
 msgstr "フレーズ"
 
@@ -3213,10 +3213,11 @@ msgid ""
 msgstr ""
 
 #: data/script/fcitx-configtool.sh:136
+#, fuzzy
 msgid ""
-"You're currently Fcitx with GUI, but fcitx-configtool couldn't be found, the "
-"package name is usually fcitx-config-gtk, fcitx-config-gtk3 or fcitx-"
-"configtool. Now it will open config file with default text editor."
+"You're currently running Fcitx with GUI, but fcitx-configtool couldn't be "
+"found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
+"fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
 "現在fcitxをGUIで使用していますが、fcitx-configtoolが見つかりません。パッケー"
 "ジ名は、たいていの場合fcitx-config-gtk、fcitx-config-gtk3あるいはfcitx-"

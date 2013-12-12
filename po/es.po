@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-10-18 03:07-0400\n"
+"POT-Creation-Date: 2013-12-12 12:01-0500\n"
 "PO-Revision-Date: 2013-07-02 16:08+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/fcitx/language/"
@@ -1662,7 +1662,7 @@ msgstr ""
 msgid "Keyboard Layout:"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/model.cpp:55
+#: tools/gui/quickphrase-editor/model.cpp:56
 msgid "Keyword"
 msgstr ""
 
@@ -2045,7 +2045,7 @@ msgstr "Padre"
 msgid "PerProgram"
 msgstr ""
 
-#: tools/gui/quickphrase-editor/model.cpp:57
+#: tools/gui/quickphrase-editor/model.cpp:58
 msgid "Phrase"
 msgstr ""
 
@@ -3182,9 +3182,9 @@ msgstr ""
 
 #: data/script/fcitx-configtool.sh:136
 msgid ""
-"You're currently Fcitx with GUI, but fcitx-configtool couldn't be found, the "
-"package name is usually fcitx-config-gtk, fcitx-config-gtk3 or fcitx-"
-"configtool. Now it will open config file with default text editor."
+"You're currently running Fcitx with GUI, but fcitx-configtool couldn't be "
+"found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
+"fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
 
 #: data/script/fcitx-configtool.sh:133
