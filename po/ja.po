@@ -8,16 +8,17 @@
 # いくや あわしろ <ikunya@gmail.com>, 2013
 # いくや あわしろ <ikunya@gmail.com>, 2012-2013
 # mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>, 2012
-# しろう, 2013
+# shirou - しろう, 2013
 # Xuetian Weng <wengxt@gmail.com>, 2013
 # Xuetian Weng <wengxt@gmail.com>, 2013
+# usingsystem8 <yuta.ooka@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-12-12 12:01-0500\n"
-"PO-Revision-Date: 2013-11-03 02:05+0000\n"
-"Last-Translator: いくや あわしろ <ikunya@gmail.com>\n"
+"POT-Creation-Date: 2014-01-01 00:02-0500\n"
+"PO-Revision-Date: 2014-01-01 08:57+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
 "Language: ja\n"
@@ -2220,7 +2221,7 @@ msgstr "プログラム"
 
 #: src/im/table/table.desc:113
 msgid "Prompt Table Code"
-msgstr ""
+msgstr "テーブルコードのダイアログを表示"
 
 #: data/profile.desc:12
 msgid "Prompt the phrases after input"
@@ -3213,15 +3214,11 @@ msgid ""
 msgstr ""
 
 #: data/script/fcitx-configtool.sh:136
-#, fuzzy
 msgid ""
 "You're currently running Fcitx with GUI, but fcitx-configtool couldn't be "
 "found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
 "fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
-"現在fcitxをGUIで使用していますが、fcitx-configtoolが見つかりません。パッケー"
-"ジ名は、たいていの場合fcitx-config-gtk、fcitx-config-gtk3あるいはfcitx-"
-"configtoolです。今は既定のテキストエディターで設定ファイルを開きます。"
 
 #: data/script/fcitx-configtool.sh:133
 msgid ""

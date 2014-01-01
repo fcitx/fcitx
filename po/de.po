@@ -5,13 +5,14 @@
 # Translators:
 # mar well <marwell.1980@freenet.de>, 2012-2013
 # Xuetian Weng <wengxt@gmail.com>, 2013
+# Xuetian Weng <wengxt@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-12-12 12:01-0500\n"
-"PO-Revision-Date: 2013-10-31 05:45+0000\n"
-"Last-Translator: mar well <marwell.1980@freenet.de>\n"
+"POT-Creation-Date: 2014-01-01 00:02-0500\n"
+"PO-Revision-Date: 2014-01-01 08:57+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
 "Language: de\n"
@@ -1506,6 +1507,9 @@ msgid ""
 "order to use any input method other than ${2}. See ${link} for more detail "
 "as well as alternative solutions."
 msgstr ""
+"Wenn Sie  ${1} benutzen, sollten Sie  ${2}, deinstallieren, ${3},  um andere "
+"Eingabemethoden als ${2} zu benutzen. Mehr Info und andere Lösungen hier: "
+"${link} "
 
 #: data/script/fcitx-diagnose.sh:646
 msgid ""
@@ -1513,6 +1517,9 @@ msgid ""
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
+"Wenn Sie  ${1} benutzen, sollten Sie  ${2}, deinstallieren, ${3} entfernen "
+"oder den Befehl ${g36_disable_ibus} um die iBus-Integration zu deaktivieren, "
+"um andere Eingabemethoden als ${2} zu benutzen. Mehr Info hier: ${link} "
 
 #: src/im/table/table.desc:197
 msgid "Ignore Punctuation"
@@ -3256,16 +3263,11 @@ msgstr ""
 "weitere für die Eingabe anderer Sprachen hinzufügen."
 
 #: data/script/fcitx-configtool.sh:136
-#, fuzzy
 msgid ""
 "You're currently running Fcitx with GUI, but fcitx-configtool couldn't be "
 "found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
 "fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
-"Sie benutzen gegenwärtig Gnome, aber das Kontrollmodul für Fcitx kann nicht "
-"gefunden werden. Der Paketname ist normalerweise fcitx-config-gtk, fcitx-"
-"config-gtk3 oder fcitx-configtool. Die Konfigurationsdatei wird nun mit dem "
-"Standart-Texteditor geöffnet."
 
 #: data/script/fcitx-configtool.sh:133
 msgid ""
