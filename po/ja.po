@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-01-06 00:02-0500\n"
-"PO-Revision-Date: 2014-01-06 06:32+0000\n"
+"POT-Creation-Date: 2014-01-06 06:02-0500\n"
+"PO-Revision-Date: 2014-01-06 13:15+0000\n"
 "Last-Translator: HANZUBON <ishikawa@hanzubon.jp>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -231,7 +231,7 @@ msgstr "アドオン設定ディレクトリ:"
 
 #: data/script/fcitx-diagnose.sh:1361
 msgid "Addon Libraries:"
-msgstr ""
+msgstr "アドオンリスト:"
 
 #: data/script/fcitx-diagnose.sh:1322
 msgid "Addon List:"
@@ -266,7 +266,7 @@ msgstr "見つけたGtk ${1} IMモジュールファイルはすべて存在し�
 
 #: data/script/fcitx-diagnose.sh:1387
 msgid "All libraries for all addons are found."
-msgstr ""
+msgstr "全てのアドオン用ライブラリが見つかりました。"
 
 #: data/script/fcitx-diagnose.sh:760
 msgid "All locale:"
@@ -487,7 +487,7 @@ msgstr "デスクトップ環境を決定できません。"
 
 #: data/script/fcitx-diagnose.sh:1187
 msgid "Cannot find ${2} for gtk ${1}"
-msgstr ""
+msgstr "gtk ${1} 用の ${2} が見つかりません"
 
 #: data/script/fcitx-diagnose.sh:918
 msgid ""
@@ -526,11 +526,11 @@ msgstr "fcitx-configtoolが実行可能な状態で見つかりませんでし�
 
 #: data/script/fcitx-diagnose.sh:1369
 msgid "Cannot find file ${1} of addon ${2}."
-msgstr ""
+msgstr "アドオン ${2} のファイル ${1} が見つかりません。"
 
 #: data/script/fcitx-diagnose.sh:1379
 msgid "Cannot find following required libraries for ${1} of addon ${2}."
-msgstr ""
+msgstr "アドオン ${2} の ${1} が要求するライブラリが見つかりません。"
 
 #: data/script/fcitx-diagnose.sh:1270
 msgid "Cannot find immodules cache for gtk ${1}"
@@ -1248,7 +1248,7 @@ msgstr "Fcitxのプロセス ${1} を見つけました:"
 
 #: data/script/fcitx-diagnose.sh:1167
 msgid "Found ${2} for unknown gtk version at ${1}."
-msgstr ""
+msgstr "未知のバージョンのgtk用の ${2} を ${1} に見つけました。"
 
 #: data/script/fcitx-diagnose.sh:1159
 msgid "Found ${3} for gtk ${1} at ${2}."
@@ -1284,7 +1284,7 @@ msgstr "fcitx-configtoolが ${1} を見つけました。"
 
 #: data/script/fcitx-diagnose.sh:1251
 msgid "Found immodule cache for unknown gtk version at ${1}."
-msgstr ""
+msgstr "未知の gtk 用の immodules キャッシュを ${1} に見つけました。"
 
 #: data/script/fcitx-diagnose.sh:1243
 msgid "Found immodules cache for gtk ${1} at ${2}."
@@ -1735,7 +1735,7 @@ msgstr "英数句読点"
 
 #: src/module/punc/punc.c:575
 msgid "Latin punctuations are used."
-msgstr ""
+msgstr "ラテン語の字句が使われています。"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
@@ -1761,7 +1761,7 @@ msgstr "シンプルコードのレベル"
 
 #: data/addon.desc:31
 msgid "Library"
-msgstr "ライブラリー"
+msgstr "ライブラリ"
 
 #: src/lib/fcitx/addon.c:151
 #, c-format
@@ -2802,7 +2802,7 @@ msgstr "押されたキーはQtでサポートされていません。"
 
 #: data/script/fcitx-diagnose.sh:775
 msgid "The script is run as ${1} (${2})."
-msgstr ""
+msgstr "${1} (${2})としてスクリプトを実行"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
 msgid ""
@@ -3036,6 +3036,8 @@ msgstr "リマインドを使用"
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Use the layout of first keyboard input method in list as default layout"
 msgstr ""
+"リストの最初のキーボードインプットメソッドのレイアウトがディフォルトのレイア"
+"ウトとして使用されます。"
 
 #: src/module/remote/fcitx-remote-module.conf.in:4
 msgid "Used by fcitx-remote to change Fcitx state from console"
@@ -3220,6 +3222,9 @@ msgid ""
 "found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
 "fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
+"現在fcitxをGUIで使用していますが、fcitx-configtoolが見つかりません。パッケー"
+"ジ名は、たいていの場合fcitx-config-gtk、fcitx-config-gtk3あるいはfcitx-"
+"configtoolです。今は既定のテキストエディターで設定ファイルを開きます。"
 
 #: data/script/fcitx-configtool.sh:133
 msgid ""
@@ -3279,7 +3284,7 @@ msgstr "ここ"
 
 #: src/lib/fcitx/ime.c:1759
 msgid "min Num of Characters: "
-msgstr ""
+msgstr "最低文字数:"
 
 #: src/lib/fcitx-config/fcitx-config.c:1200
 #, c-format
