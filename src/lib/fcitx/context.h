@@ -70,6 +70,8 @@ extern "C" {
     #define CONTEXT_DISABLE_AUTO_FIRST_CANDIDATE_HIGHTLIGHT "CONTEXT_DISABLE_AUTO_FIRST_CANDIDATE_HIGHTLIGHT"
     /** disable auto first candidate highlight */
     #define CONTEXT_DISABLE_FULLWIDTH "CONTEXT_DISABLE_FULLWIDTH"
+    /** disable punc module */
+    #define CONTEXT_DISABLE_PUNC "CONTEXT_DISABLE_PUNC"
 
     /**
      * @brief register a new global context variable

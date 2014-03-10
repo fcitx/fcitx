@@ -154,6 +154,8 @@ void* PuncCreate(FcitxInstance* instance)
                                                   PuncWhichCopy, PuncWhichFree,
                                                   puncState);
 
+    FcitxInstanceRegisterWatchableContext(instance, CONTEXT_DISABLE_PUNC, FCT_Boolean, FCF_ResetOnInputMethodChange);
+
     FcitxPuncAddFunctions(instance);
     return puncState;
 }
@@ -250,6 +252,11 @@ boolean PuncPreFilter(void* arg, FcitxKeySym sym, unsigned int state,
 {
     FCITX_UNUSED(retVal);
     FcitxPuncState *puncState = (FcitxPuncState*)arg;
+    boolean disablePunc = FcitxInstanceGetContextBoolean(
+        puncState->owner, CONTEXT_DISABLE_PUNC);
+    if (disablePunc)
+        return false;
+
     if (FcitxHotkeyIsHotKeySimple(sym, state) &&
         !FcitxHotkeyIsHotKeyDigit(sym, state) && !IsHotKeyPunc(sym, state))
         puncState->bLastIsNumber = false;
@@ -267,6 +274,11 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
     char *pPunc = NULL;
 
     if (*retVal != IRV_TO_PROCESS)
+        return false;
+
+    boolean disablePunc = FcitxInstanceGetContextBoolean(
+        puncState->owner, CONTEXT_DISABLE_PUNC);
+    if (disablePunc)
         return false;
 
     FcitxCandidateWordList *candList = FcitxInputStateGetCandidateList(input);
