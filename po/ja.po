@@ -5,11 +5,12 @@
 # Translators:
 # しろう, 2013
 # しろう <>, 2013
+# いくや あわしろ <ikunya@gmail.com>, 2014
 # いくや あわしろ <ikunya@gmail.com>, 2013
 # いくや あわしろ <ikunya@gmail.com>, 2012-2013
 # HANZUBON <ishikawa@hanzubon.jp>, 2014
 # mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>, 2012
-# shirou - しろう, 2013
+# shirou - しろう <shirou.faw@gmail.com>, 2013
 # Xuetian Weng <wengxt@gmail.com>, 2013
 # Xuetian Weng <wengxt@gmail.com>, 2013
 # usingsystem8 <yuta.ooka@gmail.com>, 2013
@@ -17,9 +18,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-01-06 06:02-0500\n"
-"PO-Revision-Date: 2014-01-06 13:15+0000\n"
-"Last-Translator: HANZUBON <ishikawa@hanzubon.jp>\n"
+"POT-Creation-Date: 2014-04-02 12:01+0000\n"
+"PO-Revision-Date: 2014-04-02 08:17+0000\n"
+"Last-Translator: いくや あわしろ <ikunya@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
 "Language: ja\n"
@@ -436,7 +437,7 @@ msgstr "%sスキンをロードできません、既定のスキンに戻りま�
 msgid "Can't Create imWindow"
 msgstr "imWindow を生成できません"
 
-#: src/module/punc/punc.c:398
+#: src/module/punc/punc.c:410
 msgid "Can't open punc file."
 msgstr "句読点ファイルを開けません"
 
@@ -1069,7 +1070,7 @@ msgstr "エラー: スキンファイルにスキン設定がありません。"
 
 #: src/ui/classic/fcitx-skin-installer.sh:50
 msgid "Error: skin file should only contain one directory."
-msgstr "エラー: スキンファイルはひとつの辞書しか持てません。"
+msgstr "エラー: スキンファイルはひとつのディレクトリしか持てません。"
 
 #: src/im/table/table.desc:84
 msgid "Exact Match"
@@ -1324,11 +1325,11 @@ msgstr "フロントエンド設定:"
 msgid "Full width Character"
 msgstr "全角文字"
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:555
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:567
 msgid "Full width punct"
 msgstr "全角句読点"
 
-#: src/module/punc/punc.c:574
+#: src/module/punc/punc.c:586
 msgid "Full width punctuations are used."
 msgstr ""
 
@@ -1729,11 +1730,11 @@ msgstr "このテーブルへの言語コード"
 msgid "Latin"
 msgstr "半角英数字"
 
-#: src/module/punc/punc.c:149 src/module/punc/punc.c:556
+#: src/module/punc/punc.c:149 src/module/punc/punc.c:568
 msgid "Latin punct"
 msgstr "英数句読点"
 
-#: src/module/punc/punc.c:575
+#: src/module/punc/punc.c:587
 msgid "Latin punctuations are used."
 msgstr "ラテン語の字句が使われています。"
 
@@ -2252,7 +2253,7 @@ msgstr "XIMサポートを提供"
 msgid "Punctuation Conversion Support"
 msgstr "句読点変換のサポート"
 
-#: src/module/punc/punc.c:573 src/module/punc/fcitx-punc.conf.in:3
+#: src/module/punc/punc.c:585 src/module/punc/fcitx-punc.conf.in:3
 msgid "Punctuation Support"
 msgstr "句読点サポート"
 
@@ -2837,7 +2838,7 @@ msgstr ""
 "あります。 ${link1} を参照してください。 アプリケーションのフリーズを含むXIM"
 "による一般的な問題については ${link2} を参照してください。"
 
-#: src/module/punc/punc.c:150 src/module/punc/punc.c:557
+#: src/module/punc/punc.c:150 src/module/punc/punc.c:569
 msgid "Toggle Full Width Punctuation"
 msgstr "全角/半角句読点を切り替え"
 
