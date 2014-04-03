@@ -14,7 +14,7 @@ set(PY_TABLE_VER 20121124)
 set(PY_TABLE_TGT "${CMAKE_CURRENT_BINARY_DIR}/py_table.mb")
 set(PY_TABLE_TAR "py_table-${PY_TABLE_VER}.tar.gz")
 set(PY_TABLE_URL
-  "http://fcitx.googlecode.com/files/py_table-${PY_TABLE_VER}.tar.gz")
+  "http://download.fcitx-im.org/data/py_table-${PY_TABLE_VER}.tar.gz")
 fcitx_download(py-table-download "${PY_TABLE_URL}" "${PY_TABLE_TAR}"
   MD5SUM a72e275fe1916d67d01a2f038ca5d920)
 fcitx_extract(py-table-extract "${PY_TABLE_TAR}" DEPENDS py-table-download
