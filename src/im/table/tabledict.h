@@ -5,6 +5,7 @@
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-config/hotkey.h"
 #include "fcitx-utils/memory.h"
+#include "fcitx/candidate.h"
 
 #define MAX_CODE_LENGTH  30
 #define PHRASE_MAX_LENGTH 10
@@ -153,6 +154,7 @@ typedef struct {
     FcitxHotkey     hkAlternativePrevPage[2];
     FcitxHotkey     hkAlternativeNextPage[2];
     FcitxHotkey     hkCommitKey[2];
+    FcitxCandidateLayoutHint layoutHint;
     boolean         bEnabled;
 
     struct _FcitxTableState* owner;
