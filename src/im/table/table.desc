@@ -168,7 +168,7 @@ Type=String
 DefaultValue=us
 
 [CodeTable/UseAlternativeCandidateWordNumber]
-Description=Use AlternativeNextPageve Candidate Word Number
+Description=Use Alternative Candidate Word Number
 Type=Boolean
 DefaultValue=False
 
@@ -180,7 +180,7 @@ Min=1
 Max=10
 
 [CodeTable/UseAlternativePageKey]
-Description=Use Alternative Page Key
+Description=Use Alternative Key for paging
 Type=Boolean
 DefaultValue=False
 
