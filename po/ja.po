@@ -18,9 +18,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-04-08 22:02+0200\n"
-"PO-Revision-Date: 2014-04-02 08:17+0000\n"
-"Last-Translator: いくや あわしろ <ikunya@gmail.com>\n"
+"POT-Creation-Date: 2014-04-08 23:02+0200\n"
+"PO-Revision-Date: 2014-04-08 20:03+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
 "Language: ja\n"
@@ -451,9 +451,8 @@ msgid "Candidate Index Color"
 msgstr "候補インデックスの色"
 
 #: src/im/table/table.desc:117
-#, fuzzy
 msgid "Candidate Table Layout"
-msgstr "候補インデックスの色"
+msgstr ""
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
@@ -2985,15 +2984,15 @@ msgstr "サポートされていないキー"
 msgid "Use <Keyword> <Phrase> format on every line."
 msgstr "各行では <Keyword> <Phrase> の形式を使用してください。"
 
-#: src/im/table/table.desc:183
-#, fuzzy
-msgid "Use Alternative Page Key"
-msgstr "別の前ページキー"
-
 #: src/im/table/table.desc:171
 #, fuzzy
-msgid "Use AlternativeNextPageve Candidate Word Number"
+msgid "Use Alternative Candidate Word Number"
 msgstr "候補の単語数"
+
+#: src/im/table/table.desc:183
+#, fuzzy
+msgid "Use Alternative Key for paging"
+msgstr "クイックフレーズのトリガーとなる別のキー"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"

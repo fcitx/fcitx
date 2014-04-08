@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-04-08 22:02+0200\n"
-"PO-Revision-Date: 2014-01-01 08:57+0000\n"
+"POT-Creation-Date: 2014-04-08 23:02+0200\n"
+"PO-Revision-Date: 2014-04-08 20:03+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/fcitx/language/"
 "es/)\n"
@@ -2952,14 +2952,14 @@ msgstr ""
 msgid "Use <Keyword> <Phrase> format on every line."
 msgstr ""
 
-#: src/im/table/table.desc:183
-msgid "Use Alternative Page Key"
-msgstr ""
-
 #: src/im/table/table.desc:171
 #, fuzzy
-msgid "Use AlternativeNextPageve Candidate Word Number"
+msgid "Use Alternative Candidate Word Number"
 msgstr "Número de palabra candidata"
+
+#: src/im/table/table.desc:183
+msgid "Use Alternative Key for paging"
+msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"

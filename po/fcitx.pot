@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-04-08 22:02+0200\n"
+"POT-Creation-Date: 2014-04-08 23:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2521,11 +2521,11 @@ msgid "Keyboard Layout to be used"
 msgstr ""
 
 #: src/im/table/table.desc:171
-msgid "Use AlternativeNextPageve Candidate Word Number"
+msgid "Use Alternative Candidate Word Number"
 msgstr ""
 
 #: src/im/table/table.desc:183
-msgid "Use Alternative Page Key"
+msgid "Use Alternative Key for paging"
 msgstr ""
 
 #: src/im/table/table.desc:188

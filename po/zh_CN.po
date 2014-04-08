@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-04-08 22:02+0200\n"
-"PO-Revision-Date: 2014-04-08 19:51+0000\n"
+"POT-Creation-Date: 2014-04-08 23:02+0200\n"
+"PO-Revision-Date: 2014-04-08 20:07+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_CN/)\n"
@@ -445,9 +445,8 @@ msgid "Candidate Index Color"
 msgstr "候选词索引颜色"
 
 #: src/im/table/table.desc:117
-#, fuzzy
 msgid "Candidate Table Layout"
-msgstr "候选词索引颜色"
+msgstr ""
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
@@ -1443,7 +1442,7 @@ msgstr "平假名"
 
 #: src/im/table/table.desc:123
 msgid "Horizontal"
-msgstr ""
+msgstr "横排"
 
 #: data/config.desc:1 data/config.desc:7 data/config.desc:13
 #: data/config.desc:39 data/config.desc:46 data/config.desc:53
@@ -2976,15 +2975,15 @@ msgstr "不支持的按键"
 msgid "Use <Keyword> <Phrase> format on every line."
 msgstr "每行使用 <关键词> <词组> 的格式。"
 
-#: src/im/table/table.desc:183
-#, fuzzy
-msgid "Use Alternative Page Key"
-msgstr "额外的上一页快捷键"
-
 #: src/im/table/table.desc:171
 #, fuzzy
-msgid "Use AlternativeNextPageve Candidate Word Number"
+msgid "Use Alternative Candidate Word Number"
 msgstr "候选词个数"
+
+#: src/im/table/table.desc:183
+#, fuzzy
+msgid "Use Alternative Key for paging"
+msgstr "额外的快速输入触发键"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
@@ -3080,7 +3079,7 @@ msgstr "版本行:"
 
 #: src/im/table/table.desc:122
 msgid "Vertical"
-msgstr ""
+msgstr "竖排"
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
