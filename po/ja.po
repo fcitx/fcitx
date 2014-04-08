@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-04-02 12:01+0000\n"
+"POT-Creation-Date: 2014-04-08 22:02+0200\n"
 "PO-Revision-Date: 2014-04-02 08:17+0000\n"
 "Last-Translator: いくや あわしろ <ikunya@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/im/table/table.c:1398
+#: src/im/table/table.c:1403
 msgid " Ctrl+Delete To Delete"
 msgstr "Ctrl+Delete で削除"
 
@@ -289,18 +289,18 @@ msgstr "最初の候補を置き換え可能にする"
 msgid "Allow to Override System XKB Settings"
 msgstr "システムの XKB 設定を上書き可能にする"
 
-#: src/im/keyboard/fcitx-keyboard.desc:12 src/im/table/table.desc:137
+#: src/im/keyboard/fcitx-keyboard.desc:12 src/im/table/table.desc:146
 #: src/module/autoeng/fcitx-autoeng.desc:7
 #: src/module/clipboard/fcitx-clipboard.desc:40
 #: src/module/quickphrase/fcitx-quickphrase.desc:21
 msgid "Alt"
 msgstr "Alt"
 
-#: src/im/table/table.desc:172
+#: src/im/table/table.desc:193
 msgid "Alternative Next Page Key"
 msgstr "別の次ページキー"
 
-#: src/im/table/table.desc:162 src/im/table/table.desc:167
+#: src/im/table/table.desc:188
 msgid "Alternative Prev Page Key"
 msgstr "別の前ページキー"
 
@@ -450,7 +450,12 @@ msgstr "ソケット %s を開けません: %s"
 msgid "Candidate Index Color"
 msgstr "候補インデックスの色"
 
-#: data/config.desc:204
+#: src/im/table/table.desc:117
+#, fuzzy
+msgid "Candidate Table Layout"
+msgstr "候補インデックスの色"
+
+#: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
 msgstr "候補の単語数"
 
@@ -546,7 +551,7 @@ msgstr ""
 msgid "Cannot find xim_server on root window."
 msgstr "ルートウィンドウで xim_server が見つかりません。"
 
-#: src/im/table/table.c:641
+#: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
 msgstr "Pinyin が見つかりません"
 
@@ -585,7 +590,7 @@ msgstr "右"
 msgid "Change Fcitx Configuration"
 msgstr "Fcitx 設定を変更"
 
-#: src/im/table/table.desc:127
+#: src/im/table/table.desc:136
 msgid "Choose"
 msgstr "選択"
 
@@ -593,22 +598,22 @@ msgstr "選択"
 msgid "Choose Second and Third Candidate Word"
 msgstr "二番目と三番目の候補を選択"
 
-#: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:132
+#: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:141
 #: src/module/autoeng/fcitx-autoeng.desc:2
 #: src/module/clipboard/fcitx-clipboard.desc:35
 #: src/module/quickphrase/fcitx-quickphrase.desc:16
 msgid "Choose key modifier"
 msgstr "修飾キーを選択"
 
-#: src/im/table/table.c:709
+#: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:701
+#: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:717
+#: src/im/table/table.c:721
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "入力履歴を削除するフレーズを選択、Escapeでキャンセル"
 
@@ -672,7 +677,7 @@ msgstr "コードテーブルファイル"
 msgid "Code Table Name"
 msgstr "コードテーブル名"
 
-#: src/im/table/table.c:1394
+#: src/im/table/table.c:1399
 msgid "Code is "
 msgstr "コードは"
 
@@ -688,14 +693,16 @@ msgstr "コードは"
 #: src/im/table/table.desc:92 src/im/table/table.desc:97
 #: src/im/table/table.desc:102 src/im/table/table.desc:107
 #: src/im/table/table.desc:112 src/im/table/table.desc:116
-#: src/im/table/table.desc:121 src/im/table/table.desc:126
-#: src/im/table/table.desc:131 src/im/table/table.desc:141
-#: src/im/table/table.desc:146 src/im/table/table.desc:151
-#: src/im/table/table.desc:156 src/im/table/table.desc:161
-#: src/im/table/table.desc:166 src/im/table/table.desc:171
-#: src/im/table/table.desc:176 src/im/table/table.desc:181
-#: src/im/table/table.desc:186 src/im/table/table.desc:191
-#: src/im/table/table.desc:196 src/im/table/table.desc:201
+#: src/im/table/table.desc:125 src/im/table/table.desc:130
+#: src/im/table/table.desc:135 src/im/table/table.desc:140
+#: src/im/table/table.desc:150 src/im/table/table.desc:155
+#: src/im/table/table.desc:160 src/im/table/table.desc:165
+#: src/im/table/table.desc:170 src/im/table/table.desc:175
+#: src/im/table/table.desc:182 src/im/table/table.desc:187
+#: src/im/table/table.desc:192 src/im/table/table.desc:197
+#: src/im/table/table.desc:202 src/im/table/table.desc:207
+#: src/im/table/table.desc:212 src/im/table/table.desc:217
+#: src/im/table/table.desc:222
 msgid "CodeTable"
 msgstr "コードテーブル"
 
@@ -707,15 +714,15 @@ msgstr "カーソルの色"
 msgid "Comment"
 msgstr "コメント"
 
-#: src/im/table/table.desc:182
+#: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
 msgstr "このテーブルの不正なキーが押された時に確定し、飛ばす"
 
-#: src/im/table/table.desc:187
+#: src/im/table/table.desc:208
 msgid "Commit key for select first candidate"
 msgstr "最初の候補を確定するキー"
 
-#: src/im/table/table.desc:192
+#: src/im/table/table.desc:213
 msgid "Commit string when there is no match"
 msgstr "一致しない場合文字列を確定する"
 
@@ -787,7 +794,7 @@ msgstr "コピー"
 msgid "Create new file"
 msgstr "ファイルの新規作成"
 
-#: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:138
+#: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:147
 #: src/module/autoeng/fcitx-autoeng.desc:8
 #: src/module/clipboard/fcitx-clipboard.desc:41
 #: src/module/quickphrase/fcitx-quickphrase.desc:22
@@ -974,7 +981,7 @@ msgstr "エクスポート (&x)"
 msgid "Empty"
 msgstr "空"
 
-#: src/im/table/table.desc:147
+#: src/im/table/table.desc:156
 msgid "Enable"
 msgstr "有効"
 
@@ -1180,7 +1187,7 @@ msgstr ""
 msgid "First Candidate Color"
 msgstr "最初の候補の色"
 
-#: src/im/table/table.desc:177
+#: src/im/table/table.desc:198
 msgid "First Candidate Display as Preedit"
 msgstr "最初の候補をプレエディットとして表示"
 
@@ -1446,6 +1453,10 @@ msgstr "トレイアイコンが有効なときに隠す"
 msgid "Hiragana"
 msgstr "ひらがな"
 
+#: src/im/table/table.desc:123
+msgid "Horizontal"
+msgstr ""
+
 #: data/config.desc:1 data/config.desc:7 data/config.desc:13
 #: data/config.desc:39 data/config.desc:46 data/config.desc:53
 #: data/config.desc:60 data/config.desc:65 data/config.desc:71
@@ -1515,7 +1526,7 @@ msgid ""
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
 
-#: src/im/table/table.desc:197
+#: src/im/table/table.desc:218
 msgid "Ignore Punctuation"
 msgstr "句読点を無視"
 
@@ -1523,7 +1534,7 @@ msgstr "句読点を無視"
 msgid "Ignore blank selections"
 msgstr "空白の選択を無視"
 
-#: src/im/table/table.desc:202
+#: src/im/table/table.desc:223
 msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
 msgstr ""
 
@@ -1678,7 +1689,7 @@ msgstr "キーボード"
 msgid "Keyboard Layout"
 msgstr "キーボードレイアウト"
 
-#: src/im/table/table.desc:157
+#: src/im/table/table.desc:166
 msgid "Keyboard Layout to be used"
 msgstr "使用するキーボードレイアウト"
 
@@ -1722,7 +1733,7 @@ msgstr "左Shift"
 msgid "LangCode"
 msgstr "言語コード"
 
-#: src/im/table/table.desc:142
+#: src/im/table/table.desc:151
 msgid "Language Code for this table"
 msgstr "このテーブルへの言語コード"
 
@@ -1746,7 +1757,7 @@ msgstr "左"
 msgid "Left Super"
 msgstr "左Super"
 
-#: src/im/table/table.c:592
+#: src/im/table/table.c:596
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1988,13 +1999,17 @@ msgstr "リマインドなし"
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr "コメントでない入力がグループに属していません %d 行目 %s"
 
-#: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:136
+#: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:145
 #: src/module/autoeng/fcitx-autoeng.desc:6
 #: src/module/clipboard/fcitx-clipboard.desc:39
 #: src/module/quickphrase/fcitx-quickphrase.desc:5
 #: src/module/quickphrase/fcitx-quickphrase.desc:20
 msgid "None"
 msgstr "なし"
+
+#: src/im/table/table.desc:121
+msgid "Not Set"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:639
 msgid "Note for GNOME Later than 3.6"
@@ -2071,7 +2086,7 @@ msgstr "プログラムごと"
 msgid "Phrase"
 msgstr "フレーズ"
 
-#: src/im/table/table.c:1390
+#: src/im/table/table.c:1395
 msgid "Phrase is already in Dict "
 msgstr "フレーズは既に辞書にあります"
 
@@ -2116,7 +2131,7 @@ msgstr ""
 msgid "Pinyin Key"
 msgstr "Pinyinキー"
 
-#: src/im/table/table.c:617
+#: src/im/table/table.c:621
 msgid "Pinyin: "
 msgstr "Pinyin: "
 
@@ -2317,7 +2332,7 @@ msgstr "IM登録"
 msgid "Reload configuration"
 msgstr "設定の再読み込み"
 
-#: src/im/table/table.c:1282
+#: src/im/table/table.c:1287
 msgid "Remind:"
 msgstr "リマインド:"
 
@@ -2478,7 +2493,7 @@ msgstr "ウィンドウ間で状態を共有"
 msgid "SharedLibrary"
 msgstr "共有ライブラリ"
 
-#: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:139
+#: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:148
 #: src/module/autoeng/fcitx-autoeng.desc:9
 #: src/module/clipboard/fcitx-clipboard.desc:42
 #: src/module/quickphrase/fcitx-quickphrase.desc:23
@@ -2761,11 +2776,11 @@ msgid "Switching Virtual Keyboard"
 msgstr "仮想キーボードに切り替え"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:9
-#: src/im/table/table.desc:117
+#: src/im/table/table.desc:126
 msgid "Symbol"
 msgstr "記号"
 
-#: src/im/table/table.desc:122
+#: src/im/table/table.desc:131
 msgid "Symbol File"
 msgstr "記号ファイル"
 
@@ -2970,11 +2985,21 @@ msgstr "サポートされていないキー"
 msgid "Use <Keyword> <Phrase> format on every line."
 msgstr "各行では <Keyword> <Phrase> の形式を使用してください。"
 
+#: src/im/table/table.desc:183
+#, fuzzy
+msgid "Use Alternative Page Key"
+msgstr "別の前ページキー"
+
+#: src/im/table/table.desc:171
+#, fuzzy
+msgid "Use AlternativeNextPageve Candidate Word Number"
+msgstr "候補の単語数"
+
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
 msgstr "完全なPinyinを使用"
 
-#: src/im/table/table.desc:152
+#: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
 msgstr ""
 
@@ -3063,6 +3088,10 @@ msgstr "ユーザーフレーズの色"
 #: data/script/fcitx-diagnose.sh:1164 data/script/fcitx-diagnose.sh:1247
 msgid "Version Line:"
 msgstr "バージョンライン:"
+
+#: src/im/table/table.desc:122
+msgid "Vertical"
+msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"

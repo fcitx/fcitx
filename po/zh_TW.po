@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-01-01 00:02-0500\n"
+"POT-Creation-Date: 2014-04-08 22:02+0200\n"
 "PO-Revision-Date: 2014-01-01 08:57+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/im/table/table.c:1398
+#: src/im/table/table.c:1403
 msgid " Ctrl+Delete To Delete"
 msgstr " 用 Ctrl+Delete 刪除"
 
@@ -282,18 +282,18 @@ msgstr "允許替換第一個候選字"
 msgid "Allow to Override System XKB Settings"
 msgstr "允許覆蓋系統的 XKB 設定"
 
-#: src/im/keyboard/fcitx-keyboard.desc:12 src/im/table/table.desc:137
+#: src/im/keyboard/fcitx-keyboard.desc:12 src/im/table/table.desc:146
 #: src/module/autoeng/fcitx-autoeng.desc:7
 #: src/module/clipboard/fcitx-clipboard.desc:40
 #: src/module/quickphrase/fcitx-quickphrase.desc:21
 msgid "Alt"
 msgstr "Alt"
 
-#: src/im/table/table.desc:172
+#: src/im/table/table.desc:193
 msgid "Alternative Next Page Key"
 msgstr "替代下一頁快捷鍵"
 
-#: src/im/table/table.desc:162 src/im/table/table.desc:167
+#: src/im/table/table.desc:188
 msgid "Alternative Prev Page Key"
 msgstr "替代上一頁快捷鍵"
 
@@ -430,7 +430,7 @@ msgstr ""
 msgid "Can't Create imWindow"
 msgstr "無法建立輸入法視窗"
 
-#: src/module/punc/punc.c:398
+#: src/module/punc/punc.c:410
 msgid "Can't open punc file."
 msgstr "無法開啟標點符號檔案"
 
@@ -443,7 +443,12 @@ msgstr "無法開啟 Socket %s：%s"
 msgid "Candidate Index Color"
 msgstr "候選字編號顏色"
 
-#: data/config.desc:204
+#: src/im/table/table.desc:117
+#, fuzzy
+msgid "Candidate Table Layout"
+msgstr "候選字編號顏色"
+
+#: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
 msgstr "候選字數"
 
@@ -537,7 +542,7 @@ msgstr "找不到 kimpanel dbus 介面或非 kimpanel 使用者介面。"
 msgid "Cannot find xim_server on root window."
 msgstr "在 root 視窗找不到 xim_server。"
 
-#: src/im/table/table.c:641
+#: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
 msgstr "找不到拼音"
 
@@ -576,7 +581,7 @@ msgstr ""
 msgid "Change Fcitx Configuration"
 msgstr "修改 Fcitx 設定"
 
-#: src/im/table/table.desc:127
+#: src/im/table/table.desc:136
 msgid "Choose"
 msgstr "選擇鍵"
 
@@ -584,22 +589,22 @@ msgstr "選擇鍵"
 msgid "Choose Second and Third Candidate Word"
 msgstr "選擇第二第三候選詞"
 
-#: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:132
+#: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:141
 #: src/module/autoeng/fcitx-autoeng.desc:2
 #: src/module/clipboard/fcitx-clipboard.desc:35
 #: src/module/quickphrase/fcitx-quickphrase.desc:16
 msgid "Choose key modifier"
 msgstr "選詞修飾鍵"
 
-#: src/im/table/table.c:709
+#: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr "選擇要刪除的字詞，Escape 鍵取消"
 
-#: src/im/table/table.c:701
+#: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "選擇放在前面的字詞，Escape 鍵取消"
 
-#: src/im/table/table.c:717
+#: src/im/table/table.c:721
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "選擇要清理輸入頻率的字詞，Escape 鍵取消"
 
@@ -663,7 +668,7 @@ msgstr "碼表檔案"
 msgid "Code Table Name"
 msgstr "碼表名稱"
 
-#: src/im/table/table.c:1394
+#: src/im/table/table.c:1399
 msgid "Code is "
 msgstr "編碼為 "
 
@@ -679,14 +684,16 @@ msgstr "編碼為 "
 #: src/im/table/table.desc:92 src/im/table/table.desc:97
 #: src/im/table/table.desc:102 src/im/table/table.desc:107
 #: src/im/table/table.desc:112 src/im/table/table.desc:116
-#: src/im/table/table.desc:121 src/im/table/table.desc:126
-#: src/im/table/table.desc:131 src/im/table/table.desc:141
-#: src/im/table/table.desc:146 src/im/table/table.desc:151
-#: src/im/table/table.desc:156 src/im/table/table.desc:161
-#: src/im/table/table.desc:166 src/im/table/table.desc:171
-#: src/im/table/table.desc:176 src/im/table/table.desc:181
-#: src/im/table/table.desc:186 src/im/table/table.desc:191
-#: src/im/table/table.desc:196 src/im/table/table.desc:201
+#: src/im/table/table.desc:125 src/im/table/table.desc:130
+#: src/im/table/table.desc:135 src/im/table/table.desc:140
+#: src/im/table/table.desc:150 src/im/table/table.desc:155
+#: src/im/table/table.desc:160 src/im/table/table.desc:165
+#: src/im/table/table.desc:170 src/im/table/table.desc:175
+#: src/im/table/table.desc:182 src/im/table/table.desc:187
+#: src/im/table/table.desc:192 src/im/table/table.desc:197
+#: src/im/table/table.desc:202 src/im/table/table.desc:207
+#: src/im/table/table.desc:212 src/im/table/table.desc:217
+#: src/im/table/table.desc:222
 msgid "CodeTable"
 msgstr "碼表"
 
@@ -698,15 +705,15 @@ msgstr "游標顏色"
 msgid "Comment"
 msgstr "描述"
 
-#: src/im/table/table.desc:182
+#: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
 msgstr "當輸入碼表中非法的按鍵時，提交輸入並且發送這個按鍵"
 
-#: src/im/table/table.desc:187
+#: src/im/table/table.desc:208
 msgid "Commit key for select first candidate"
 msgstr "第一個候選字的提交鍵"
 
-#: src/im/table/table.desc:192
+#: src/im/table/table.desc:213
 msgid "Commit string when there is no match"
 msgstr "當無符合時提交輸入"
 
@@ -778,7 +785,7 @@ msgstr "複製"
 msgid "Create new file"
 msgstr "建立新檔"
 
-#: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:138
+#: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:147
 #: src/module/autoeng/fcitx-autoeng.desc:8
 #: src/module/clipboard/fcitx-clipboard.desc:41
 #: src/module/quickphrase/fcitx-quickphrase.desc:22
@@ -961,7 +968,7 @@ msgstr "匯出 (&X)"
 msgid "Empty"
 msgstr ""
 
-#: src/im/table/table.desc:147
+#: src/im/table/table.desc:156
 msgid "Enable"
 msgstr "啟用"
 
@@ -1165,7 +1172,7 @@ msgstr "背景填滿規則（垂直）"
 msgid "First Candidate Color"
 msgstr "第一候選字顏色"
 
-#: src/im/table/table.desc:177
+#: src/im/table/table.desc:198
 msgid "First Candidate Display as Preedit"
 msgstr "顯示第一候選字為預編輯文字"
 
@@ -1310,11 +1317,11 @@ msgstr "前端設定："
 msgid "Full width Character"
 msgstr "全形字元"
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:555
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:567
 msgid "Full width punct"
 msgstr "全形標點符號"
 
-#: src/module/punc/punc.c:574
+#: src/module/punc/punc.c:586
 msgid "Full width punctuations are used."
 msgstr "已啟用全形標點符號。"
 
@@ -1431,6 +1438,10 @@ msgstr ""
 msgid "Hiragana"
 msgstr "平假名"
 
+#: src/im/table/table.desc:123
+msgid "Horizontal"
+msgstr ""
+
 #: data/config.desc:1 data/config.desc:7 data/config.desc:13
 #: data/config.desc:39 data/config.desc:46 data/config.desc:53
 #: data/config.desc:60 data/config.desc:65 data/config.desc:71
@@ -1500,7 +1511,7 @@ msgid ""
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
 
-#: src/im/table/table.desc:197
+#: src/im/table/table.desc:218
 msgid "Ignore Punctuation"
 msgstr "忽略標點"
 
@@ -1508,7 +1519,7 @@ msgstr "忽略標點"
 msgid "Ignore blank selections"
 msgstr "忽略空白的剪貼簿內容"
 
-#: src/im/table/table.desc:202
+#: src/im/table/table.desc:223
 msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
 msgstr "忽略部分標點，如果空白則忽略所有標點"
 
@@ -1663,7 +1674,7 @@ msgstr "鍵盤"
 msgid "Keyboard Layout"
 msgstr "鍵盤配置"
 
-#: src/im/table/table.desc:157
+#: src/im/table/table.desc:166
 msgid "Keyboard Layout to be used"
 msgstr "鍵盤配置"
 
@@ -1707,7 +1718,7 @@ msgstr "左 Shift"
 msgid "LangCode"
 msgstr "語言代碼"
 
-#: src/im/table/table.desc:142
+#: src/im/table/table.desc:151
 msgid "Language Code for this table"
 msgstr "這個碼表的語言代碼"
 
@@ -1715,11 +1726,11 @@ msgstr "這個碼表的語言代碼"
 msgid "Latin"
 msgstr "拉丁字母"
 
-#: src/module/punc/punc.c:149 src/module/punc/punc.c:556
+#: src/module/punc/punc.c:149 src/module/punc/punc.c:568
 msgid "Latin punct"
 msgstr "英文標點符號"
 
-#: src/module/punc/punc.c:575
+#: src/module/punc/punc.c:587
 msgid "Latin punctuations are used."
 msgstr "已啟用半形標點符號。"
 
@@ -1731,7 +1742,7 @@ msgstr ""
 msgid "Left Super"
 msgstr "左 Super"
 
-#: src/im/table/table.c:592
+#: src/im/table/table.c:596
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1973,13 +1984,17 @@ msgstr "沒有聯想"
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:136
+#: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:145
 #: src/module/autoeng/fcitx-autoeng.desc:6
 #: src/module/clipboard/fcitx-clipboard.desc:39
 #: src/module/quickphrase/fcitx-quickphrase.desc:5
 #: src/module/quickphrase/fcitx-quickphrase.desc:20
 msgid "None"
 msgstr "無"
+
+#: src/im/table/table.desc:121
+msgid "Not Set"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:639
 msgid "Note for GNOME Later than 3.6"
@@ -2056,7 +2071,7 @@ msgstr "按程式"
 msgid "Phrase"
 msgstr "字詞"
 
-#: src/im/table/table.c:1390
+#: src/im/table/table.c:1395
 msgid "Phrase is already in Dict "
 msgstr "字詞已在碼表中"
 
@@ -2101,7 +2116,7 @@ msgstr "拼音索引的Magic Number不相符"
 msgid "Pinyin Key"
 msgstr "拼音鍵"
 
-#: src/im/table/table.c:617
+#: src/im/table/table.c:621
 msgid "Pinyin: "
 msgstr "拼音："
 
@@ -2235,7 +2250,7 @@ msgstr "提供 XIM 支援"
 msgid "Punctuation Conversion Support"
 msgstr "標點符號轉換支援"
 
-#: src/module/punc/punc.c:573 src/module/punc/fcitx-punc.conf.in:3
+#: src/module/punc/punc.c:585 src/module/punc/fcitx-punc.conf.in:3
 msgid "Punctuation Support"
 msgstr "標點支援"
 
@@ -2299,7 +2314,7 @@ msgstr "註冊輸入法方法"
 msgid "Reload configuration"
 msgstr "重新載入設定"
 
-#: src/im/table/table.c:1282
+#: src/im/table/table.c:1287
 msgid "Remind:"
 msgstr "聯想："
 
@@ -2460,7 +2475,7 @@ msgstr "在視窗間共享狀態"
 msgid "SharedLibrary"
 msgstr "共享庫"
 
-#: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:139
+#: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:148
 #: src/module/autoeng/fcitx-autoeng.desc:9
 #: src/module/clipboard/fcitx-clipboard.desc:42
 #: src/module/quickphrase/fcitx-quickphrase.desc:23
@@ -2743,11 +2758,11 @@ msgid "Switching Virtual Keyboard"
 msgstr "切換虛擬鍵盤"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:9
-#: src/im/table/table.desc:117
+#: src/im/table/table.desc:126
 msgid "Symbol"
 msgstr "符號"
 
-#: src/im/table/table.desc:122
+#: src/im/table/table.desc:131
 msgid "Symbol File"
 msgstr "符號檔案"
 
@@ -2821,7 +2836,7 @@ msgstr ""
 "若要查看您在使用 xim 時，一些應用程式的特定問題，請檢查 ${link1}。使用 XIM 的"
 "其他一般性的問題包括應用程式凍結，請參閱 ${link2}。"
 
-#: src/module/punc/punc.c:150 src/module/punc/punc.c:557
+#: src/module/punc/punc.c:150 src/module/punc/punc.c:569
 msgid "Toggle Full Width Punctuation"
 msgstr "切換全形標點符號"
 
@@ -2953,11 +2968,21 @@ msgstr ""
 msgid "Use <Keyword> <Phrase> format on every line."
 msgstr "每一行請使用 <Keyword> <Phrase> 格式。"
 
+#: src/im/table/table.desc:183
+#, fuzzy
+msgid "Use Alternative Page Key"
+msgstr "替代上一頁快捷鍵"
+
+#: src/im/table/table.desc:171
+#, fuzzy
+msgid "Use AlternativeNextPageve Candidate Word Number"
+msgstr "候選字數"
+
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
 msgstr "使用完整拼音"
 
-#: src/im/table/table.desc:152
+#: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
 msgstr "使用碼表中自訂的提示文字"
 
@@ -3043,6 +3068,10 @@ msgstr "使用者詞彙顏色"
 
 #: data/script/fcitx-diagnose.sh:1164 data/script/fcitx-diagnose.sh:1247
 msgid "Version Line:"
+msgstr ""
+
+#: src/im/table/table.desc:122
+msgid "Vertical"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:54

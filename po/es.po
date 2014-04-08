@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-12-12 12:01-0500\n"
-"PO-Revision-Date: 2013-07-02 16:08+0000\n"
+"POT-Creation-Date: 2014-04-08 22:02+0200\n"
+"PO-Revision-Date: 2014-01-01 08:57+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/fcitx/language/"
 "es/)\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/im/table/table.c:1398
+#: src/im/table/table.c:1403
 msgid " Ctrl+Delete To Delete"
 msgstr "Ctrl+Supr para eliminar"
 
@@ -275,18 +275,18 @@ msgstr ""
 msgid "Allow to Override System XKB Settings"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:12 src/im/table/table.desc:137
+#: src/im/keyboard/fcitx-keyboard.desc:12 src/im/table/table.desc:146
 #: src/module/autoeng/fcitx-autoeng.desc:7
 #: src/module/clipboard/fcitx-clipboard.desc:40
 #: src/module/quickphrase/fcitx-quickphrase.desc:21
 msgid "Alt"
 msgstr ""
 
-#: src/im/table/table.desc:172
+#: src/im/table/table.desc:193
 msgid "Alternative Next Page Key"
 msgstr ""
 
-#: src/im/table/table.desc:162 src/im/table/table.desc:167
+#: src/im/table/table.desc:188
 msgid "Alternative Prev Page Key"
 msgstr ""
 
@@ -423,7 +423,7 @@ msgstr ""
 msgid "Can't Create imWindow"
 msgstr ""
 
-#: src/module/punc/punc.c:398
+#: src/module/punc/punc.c:410
 msgid "Can't open punc file."
 msgstr ""
 
@@ -436,7 +436,11 @@ msgstr ""
 msgid "Candidate Index Color"
 msgstr ""
 
-#: data/config.desc:204
+#: src/im/table/table.desc:117
+msgid "Candidate Table Layout"
+msgstr ""
+
+#: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
 msgstr "Número de palabra candidata"
 
@@ -530,7 +534,7 @@ msgstr ""
 msgid "Cannot find xim_server on root window."
 msgstr ""
 
-#: src/im/table/table.c:641
+#: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
 msgstr ""
 
@@ -569,7 +573,7 @@ msgstr ""
 msgid "Change Fcitx Configuration"
 msgstr ""
 
-#: src/im/table/table.desc:127
+#: src/im/table/table.desc:136
 msgid "Choose"
 msgstr ""
 
@@ -577,22 +581,22 @@ msgstr ""
 msgid "Choose Second and Third Candidate Word"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:132
+#: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:141
 #: src/module/autoeng/fcitx-autoeng.desc:2
 #: src/module/clipboard/fcitx-clipboard.desc:35
 #: src/module/quickphrase/fcitx-quickphrase.desc:16
 msgid "Choose key modifier"
 msgstr ""
 
-#: src/im/table/table.c:709
+#: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:701
+#: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: src/im/table/table.c:717
+#: src/im/table/table.c:721
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
@@ -656,7 +660,7 @@ msgstr ""
 msgid "Code Table Name"
 msgstr ""
 
-#: src/im/table/table.c:1394
+#: src/im/table/table.c:1399
 msgid "Code is "
 msgstr "El código es"
 
@@ -672,14 +676,16 @@ msgstr "El código es"
 #: src/im/table/table.desc:92 src/im/table/table.desc:97
 #: src/im/table/table.desc:102 src/im/table/table.desc:107
 #: src/im/table/table.desc:112 src/im/table/table.desc:116
-#: src/im/table/table.desc:121 src/im/table/table.desc:126
-#: src/im/table/table.desc:131 src/im/table/table.desc:141
-#: src/im/table/table.desc:146 src/im/table/table.desc:151
-#: src/im/table/table.desc:156 src/im/table/table.desc:161
-#: src/im/table/table.desc:166 src/im/table/table.desc:171
-#: src/im/table/table.desc:176 src/im/table/table.desc:181
-#: src/im/table/table.desc:186 src/im/table/table.desc:191
-#: src/im/table/table.desc:196 src/im/table/table.desc:201
+#: src/im/table/table.desc:125 src/im/table/table.desc:130
+#: src/im/table/table.desc:135 src/im/table/table.desc:140
+#: src/im/table/table.desc:150 src/im/table/table.desc:155
+#: src/im/table/table.desc:160 src/im/table/table.desc:165
+#: src/im/table/table.desc:170 src/im/table/table.desc:175
+#: src/im/table/table.desc:182 src/im/table/table.desc:187
+#: src/im/table/table.desc:192 src/im/table/table.desc:197
+#: src/im/table/table.desc:202 src/im/table/table.desc:207
+#: src/im/table/table.desc:212 src/im/table/table.desc:217
+#: src/im/table/table.desc:222
 msgid "CodeTable"
 msgstr ""
 
@@ -691,15 +697,15 @@ msgstr "Color del cursor"
 msgid "Comment"
 msgstr "Comentario"
 
-#: src/im/table/table.desc:182
+#: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
 msgstr ""
 
-#: src/im/table/table.desc:187
+#: src/im/table/table.desc:208
 msgid "Commit key for select first candidate"
 msgstr ""
 
-#: src/im/table/table.desc:192
+#: src/im/table/table.desc:213
 msgid "Commit string when there is no match"
 msgstr ""
 
@@ -771,7 +777,7 @@ msgstr "Copiar"
 msgid "Create new file"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:138
+#: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:147
 #: src/module/autoeng/fcitx-autoeng.desc:8
 #: src/module/clipboard/fcitx-clipboard.desc:41
 #: src/module/quickphrase/fcitx-quickphrase.desc:22
@@ -954,7 +960,7 @@ msgstr ""
 msgid "Empty"
 msgstr ""
 
-#: src/im/table/table.desc:147
+#: src/im/table/table.desc:156
 msgid "Enable"
 msgstr "Activar"
 
@@ -1156,7 +1162,7 @@ msgstr ""
 msgid "First Candidate Color"
 msgstr ""
 
-#: src/im/table/table.desc:177
+#: src/im/table/table.desc:198
 msgid "First Candidate Display as Preedit"
 msgstr ""
 
@@ -1301,11 +1307,11 @@ msgstr ""
 msgid "Full width Character"
 msgstr ""
 
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:555
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:567
 msgid "Full width punct"
 msgstr ""
 
-#: src/module/punc/punc.c:574
+#: src/module/punc/punc.c:586
 msgid "Full width punctuations are used."
 msgstr ""
 
@@ -1422,6 +1428,10 @@ msgstr ""
 msgid "Hiragana"
 msgstr ""
 
+#: src/im/table/table.desc:123
+msgid "Horizontal"
+msgstr ""
+
 #: data/config.desc:1 data/config.desc:7 data/config.desc:13
 #: data/config.desc:39 data/config.desc:46 data/config.desc:53
 #: data/config.desc:60 data/config.desc:65 data/config.desc:71
@@ -1491,7 +1501,7 @@ msgid ""
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
 
-#: src/im/table/table.desc:197
+#: src/im/table/table.desc:218
 msgid "Ignore Punctuation"
 msgstr ""
 
@@ -1499,7 +1509,7 @@ msgstr ""
 msgid "Ignore blank selections"
 msgstr ""
 
-#: src/im/table/table.desc:202
+#: src/im/table/table.desc:223
 msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
 msgstr ""
 
@@ -1654,7 +1664,7 @@ msgstr ""
 msgid "Keyboard Layout"
 msgstr ""
 
-#: src/im/table/table.desc:157
+#: src/im/table/table.desc:166
 msgid "Keyboard Layout to be used"
 msgstr ""
 
@@ -1698,7 +1708,7 @@ msgstr ""
 msgid "LangCode"
 msgstr ""
 
-#: src/im/table/table.desc:142
+#: src/im/table/table.desc:151
 msgid "Language Code for this table"
 msgstr ""
 
@@ -1706,11 +1716,11 @@ msgstr ""
 msgid "Latin"
 msgstr ""
 
-#: src/module/punc/punc.c:149 src/module/punc/punc.c:556
+#: src/module/punc/punc.c:149 src/module/punc/punc.c:568
 msgid "Latin punct"
 msgstr ""
 
-#: src/module/punc/punc.c:575
+#: src/module/punc/punc.c:587
 msgid "Latin punctuations are used."
 msgstr ""
 
@@ -1722,7 +1732,7 @@ msgstr ""
 msgid "Left Super"
 msgstr ""
 
-#: src/im/table/table.c:592
+#: src/im/table/table.c:596
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1966,12 +1976,16 @@ msgstr ""
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:136
+#: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:145
 #: src/module/autoeng/fcitx-autoeng.desc:6
 #: src/module/clipboard/fcitx-clipboard.desc:39
 #: src/module/quickphrase/fcitx-quickphrase.desc:5
 #: src/module/quickphrase/fcitx-quickphrase.desc:20
 msgid "None"
+msgstr ""
+
+#: src/im/table/table.desc:121
+msgid "Not Set"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:639
@@ -2049,7 +2063,7 @@ msgstr ""
 msgid "Phrase"
 msgstr ""
 
-#: src/im/table/table.c:1390
+#: src/im/table/table.c:1395
 msgid "Phrase is already in Dict "
 msgstr ""
 
@@ -2094,7 +2108,7 @@ msgstr ""
 msgid "Pinyin Key"
 msgstr ""
 
-#: src/im/table/table.c:617
+#: src/im/table/table.c:621
 msgid "Pinyin: "
 msgstr "Pinyin:"
 
@@ -2226,7 +2240,7 @@ msgstr ""
 msgid "Punctuation Conversion Support"
 msgstr ""
 
-#: src/module/punc/punc.c:573 src/module/punc/fcitx-punc.conf.in:3
+#: src/module/punc/punc.c:585 src/module/punc/fcitx-punc.conf.in:3
 msgid "Punctuation Support"
 msgstr ""
 
@@ -2290,7 +2304,7 @@ msgstr ""
 msgid "Reload configuration"
 msgstr ""
 
-#: src/im/table/table.c:1282
+#: src/im/table/table.c:1287
 msgid "Remind:"
 msgstr ""
 
@@ -2451,7 +2465,7 @@ msgstr ""
 msgid "SharedLibrary"
 msgstr ""
 
-#: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:139
+#: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:148
 #: src/module/autoeng/fcitx-autoeng.desc:9
 #: src/module/clipboard/fcitx-clipboard.desc:42
 #: src/module/quickphrase/fcitx-quickphrase.desc:23
@@ -2734,11 +2748,11 @@ msgid "Switching Virtual Keyboard"
 msgstr ""
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:9
-#: src/im/table/table.desc:117
+#: src/im/table/table.desc:126
 msgid "Symbol"
 msgstr ""
 
-#: src/im/table/table.desc:122
+#: src/im/table/table.desc:131
 msgid "Symbol File"
 msgstr ""
 
@@ -2806,7 +2820,7 @@ msgid ""
 "freezing, see ${link2}."
 msgstr ""
 
-#: src/module/punc/punc.c:150 src/module/punc/punc.c:557
+#: src/module/punc/punc.c:150 src/module/punc/punc.c:569
 msgid "Toggle Full Width Punctuation"
 msgstr ""
 
@@ -2938,11 +2952,20 @@ msgstr ""
 msgid "Use <Keyword> <Phrase> format on every line."
 msgstr ""
 
+#: src/im/table/table.desc:183
+msgid "Use Alternative Page Key"
+msgstr ""
+
+#: src/im/table/table.desc:171
+#, fuzzy
+msgid "Use AlternativeNextPageve Candidate Word Number"
+msgstr "Número de palabra candidata"
+
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
 msgstr "Usar pinyin completo"
 
-#: src/im/table/table.desc:152
+#: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
 msgstr ""
 
@@ -3028,6 +3051,10 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1164 data/script/fcitx-diagnose.sh:1247
 msgid "Version Line:"
+msgstr ""
+
+#: src/im/table/table.desc:122
+msgid "Vertical"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
