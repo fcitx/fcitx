@@ -158,8 +158,19 @@ Description=Keyboard Layout to be used
 Type=String
 DefaultValue=us
 
+[CodeTable/UseAlternativeCandidateWordNumber]
+Description=Use Alternative Candidate Word Number
+Type=Boolean
+DefaultValue=False
+
+[CodeTable/CandidateWordNumber]
+Description=Candidate Word Number
+Type=Integer
+Min=1
+Max=10
+
 [CodeTable/UseAlternativePageKey]
-Description=Alternative Prev Page Key
+Description=Use Alternative Page Key
 Type=Boolean
 DefaultValue=False
 

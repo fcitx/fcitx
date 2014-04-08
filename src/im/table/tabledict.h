@@ -143,6 +143,8 @@ typedef struct {
     char           *kbdlayout;
     boolean         customPrompt;
     boolean         bUseAlternativePageKey;
+    boolean         bUseAlternativeCandidateWordNumber;
+    int             iCandidateWordNumber;
     boolean         bFirstCandidateAsPreedit;
     boolean         bCommitAndPassByInvalidKey;
     boolean         bCommitKeyCommitWhenNoMatch;
