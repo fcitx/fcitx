@@ -500,7 +500,9 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
                                           event->xkey.time
                                       );
     if (Q_UNLIKELY(m_syncMode)) {
-        result.waitForFinished();
+        do {
+            QCoreApplication::processEvents (QEventLoop::WaitForMoreEvents);
+        } while (QCoreApplication::hasPendingEvents () || !result.isFinished ());
 
         if (!m_connection->isConnected() || !result.isFinished() || result.isError() || result.value() <= 0) {
             return x11FilterEventFallback(event, sym);
