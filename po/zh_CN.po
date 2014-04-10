@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-04-09 00:02+0200\n"
-"PO-Revision-Date: 2014-04-08 21:03+0000\n"
+"POT-Creation-Date: 2014-04-10 05:02+0200\n"
+"PO-Revision-Date: 2014-04-10 02:48+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_CN/)\n"
@@ -446,7 +446,7 @@ msgstr "候选词索引颜色"
 
 #: src/im/table/table.desc:117
 msgid "Candidate Table Layout"
-msgstr ""
+msgstr "候选词列表布局"
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
@@ -2001,7 +2001,7 @@ msgstr "无"
 
 #: src/im/table/table.desc:121
 msgid "Not Set"
-msgstr ""
+msgstr "未设定"
 
 #: data/script/fcitx-diagnose.sh:639
 msgid "Note for GNOME Later than 3.6"
@@ -2977,11 +2977,11 @@ msgstr "每行使用 <关键词> <词组> 的格式。"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
-msgstr ""
+msgstr "使用自定义的候选词个数"
 
 #: src/im/table/table.desc:183
 msgid "Use Alternative Key for paging"
-msgstr ""
+msgstr "使用自定义的翻页键"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
