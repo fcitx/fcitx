@@ -5,6 +5,7 @@
 # Translators:
 # Alisha <alisha.4m@gmail.com>, 2012
 # Alisha <alisha.4m@gmail.com>, 2012
+# fhoshino <fh@pinchia.com>, 2014
 # Hiunn_Hue <hiunnhue108@ymail.com>, 2012-2013
 # pellaeon <nfsmwlin@gmail.com>, 2013
 # pellaeon <nfsmwlin@gmail.com>, 2013
@@ -15,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-04-09 00:02+0200\n"
-"PO-Revision-Date: 2014-04-08 21:03+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2014-04-10 07:01+0200\n"
+"PO-Revision-Date: 2014-04-10 05:00+0000\n"
+"Last-Translator: fhoshino <fh@pinchia.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -167,11 +168,11 @@ msgstr "作用"
 
 #: src/ui/classic/skin.desc:387
 msgid "Active Menu Color"
-msgstr ""
+msgstr "使用中功能表項目的顏色"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
-msgstr "啓動的選項的字體的顏色"
+msgstr "使用中功能表項目的字體顏色"
 
 #: src/ui/classic/skin.desc:81
 msgid "Active Mode Icon"
@@ -419,12 +420,12 @@ msgstr "無法找到系統的拼音字庫！"
 
 #: src/ui/classic/skin.c:121
 msgid "Can not load default skin, is installion correct?"
-msgstr ""
+msgstr "未能載入預設外觀，請確認已正確安裝。"
 
 #: src/ui/classic/skin.c:126
 #, c-format
 msgid "Can not load skin %s, return to default"
-msgstr ""
+msgstr "未能載入 %s 外觀，已載入預設外觀。"
 
 #: src/frontend/xim/xim.c:146
 msgid "Can't Create imWindow"
@@ -630,7 +631,7 @@ msgstr "經典介面"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
-msgstr ""
+msgstr "清除"
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
@@ -965,7 +966,7 @@ msgstr "匯出 (&X)"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr ""
+msgstr "空"
 
 #: src/im/table/table.desc:156
 msgid "Enable"
@@ -1049,7 +1050,7 @@ msgstr ""
 
 #: src/ui/cairostuff/font.c:46
 msgid "Error: Load fontconfig failed"
-msgstr ""
+msgstr "錯誤：讀取 fontconfig 失敗"
 
 #: src/ui/classic/fcitx-skin-installer.sh:76
 msgid "Error: skin failed to install"
@@ -1532,7 +1533,7 @@ msgstr "非作用"
 
 #: src/ui/classic/skin.desc:65
 msgid "Inactive Menu Item Character Color"
-msgstr ""
+msgstr "非使用中功能表項目的字體顏色"
 
 #: src/ui/classic/skin.desc:177
 msgid "Inactive Text Icon Color"
@@ -1735,7 +1736,7 @@ msgstr "已啟用半形標點符號。"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
-msgstr ""
+msgstr "左"
 
 #: data/config.desc:27
 msgid "Left Super"
@@ -2366,7 +2367,7 @@ msgstr "重新啟動"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
-msgstr ""
+msgstr "右"
 
 #: data/config.desc:28
 msgid "Right Super"
@@ -2795,7 +2796,7 @@ msgstr ""
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
-msgstr ""
+msgstr "Qt 不支援你剛輸入的按鍵組合"
 
 #: data/script/fcitx-diagnose.sh:775
 msgid "The script is run as ${1} (${2})."
@@ -2957,11 +2958,11 @@ msgstr "唯一名稱"
 #: src/lib/fcitx-config/fcitx-config.c:406
 #, c-format
 msgid "Unknown type, take it as string: %s"
-msgstr ""
+msgstr "未知類型，作為字串處理: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr ""
+msgstr "不支援按鍵組合"
 
 #: tools/gui/quickphrase-editor/batchdialog.cpp:31
 msgid "Use <Keyword> <Phrase> format on every line."
@@ -3065,7 +3066,7 @@ msgstr "使用者詞彙顏色"
 
 #: data/script/fcitx-diagnose.sh:1164 data/script/fcitx-diagnose.sh:1247
 msgid "Version Line:"
-msgstr ""
+msgstr "版本："
 
 #: src/im/table/table.desc:122
 msgid "Vertical"
@@ -3295,7 +3296,7 @@ msgstr "選項 %s/%s 沒有預設選項"
 
 #: src/ui/cairostuff/font.c:121
 msgid "no valid font."
-msgstr ""
+msgstr "無可用的字體"
 
 #: data/script/fcitx-diagnose.sh:803
 msgid "process:"
@@ -3320,4 +3321,4 @@ msgstr "xmodmap 指令"
 #: src/ui/cairostuff/font.c:119
 #, c-format
 msgid "your current font is: %s"
-msgstr ""
+msgstr "目前使用的字形：%s"
