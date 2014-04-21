@@ -622,9 +622,31 @@ _fcitx_im_context_update_formatted_preedit_cb(FcitxClient* im, GPtrArray* array,
                                           (gpointer *)&widget);
                 if (GTK_IS_WIDGET(widget)) {
                     hasColor = true;
+#if GTK_CHECK_VERSION (3, 0, 0)
+                    GtkStyleContext* styleContext = gtk_widget_get_style_context(widget);
+                    GdkRGBA* fg_rgba = NULL;
+                    GdkRGBA* bg_rgba = NULL;
+                    gtk_style_context_get(styleContext, GTK_STATE_FLAG_SELECTED,
+                                          "background-color", &bg_rgba,
+                                          "color", &fg_rgba,
+                                          NULL
+                                         );
+
+                    fg.pixel = 0;
+                    fg.red = CLAMP ((guint) (fg_rgba->red * 65535), 0, 65535);
+                    fg.green = CLAMP ((guint) (fg_rgba->green * 65535), 0, 65535);
+                    fg.blue = CLAMP ((guint) (fg_rgba->blue * 65535), 0, 65535);
+                    bg.pixel = 0;
+                    bg.red = CLAMP ((guint) (bg_rgba->red * 65535), 0, 65535);
+                    bg.green = CLAMP ((guint) (bg_rgba->green * 65535), 0, 65535);
+                    bg.blue = CLAMP ((guint) (bg_rgba->blue * 65535), 0, 65535);
+                    gdk_rgba_free (fg_rgba);
+                    gdk_rgba_free (bg_rgba);
+#else
                     GtkStyle* style = gtk_widget_get_style(widget);
                     fg = style->text[GTK_STATE_SELECTED];
                     bg = style->bg[GTK_STATE_SELECTED];
+#endif
                 }
             }
 
