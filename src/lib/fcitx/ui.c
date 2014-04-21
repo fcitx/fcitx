@@ -667,7 +667,7 @@ void FcitxUIOnInputFocus(FcitxInstance* instance)
 
     FcitxInstanceResetInput(instance);
 
-    boolean changed = FcitxInstanceUpdateCurrentIM(instance, false);
+    boolean changed = FcitxInstanceUpdateCurrentIM(instance, false, false);
 
     if (instance->config->bShowInputWindowWhenFocusIn && changed)
         FcitxInstanceShowInputSpeed(instance);

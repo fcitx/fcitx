@@ -160,6 +160,8 @@ extern "C" {
          * want.
          *
          * And no matter in which case, Reset will be called after that.
+         *
+         * CET_ChangeByUser will not be emitted once CET_ChangeByInactivate is emitted.
          */
         CET_ChangeByInactivate,
         /**
@@ -180,9 +182,10 @@ extern "C" {
         /**
          * when user switch to a different input method by hand
          * such as ctrl+shift by default, or by ui,
-         * not implemented yet, default behavior is reset IM.
+         * default behavior is reset IM.
          */
-        CET_ChangeByUser,
+        CET_SwitchIM,
+        CET_ChangeByUser = CET_SwitchIM, // the old name is not accurate, but keep for compatible.
     } FcitxIMCloseEventType;
 
     typedef boolean(*FcitxIMInit)(void *arg); /**< FcitxIMInit */

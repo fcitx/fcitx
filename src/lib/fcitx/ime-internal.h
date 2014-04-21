@@ -121,13 +121,13 @@ boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime);
 
 void FcitxInstanceLoadIM(struct _FcitxInstance* instance, FcitxAddon* addon);
 
-void FcitxInstanceSwitchIMInternal(struct _FcitxInstance* instance, int index, boolean skipZero, boolean updateGlobal);
+void FcitxInstanceSwitchIMInternal(struct _FcitxInstance* instance, int index, boolean skipZero, boolean updateGlobal, boolean userSwitchIM);
 
 FcitxConfigFileDesc* GetIMConfigDesc();
 
 int IMPriorityCmp(const void *a, const void *b);
 
-boolean FcitxInstanceUpdateCurrentIM(struct _FcitxInstance* instance, boolean force);
+boolean FcitxInstanceUpdateCurrentIM(struct _FcitxInstance* instance, boolean force, boolean userSwitchIM);
 
 void HideInputSpeed(void* arg);
 
