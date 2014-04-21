@@ -284,6 +284,7 @@ void IMSelectorGetCands(IMSelector* imselector)
     FcitxInstance* instance = imselector->owner;
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     UT_array* imes = FcitxInstanceGetIMEs(instance);
+    FcitxInstanceSendCloseEvent(instance, CET_SwitchIM);
     FcitxInstanceCleanInputWindow(instance);
 
     FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);

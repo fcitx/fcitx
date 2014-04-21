@@ -416,6 +416,17 @@ extern "C" {
     void FcitxInstanceResetInput(struct _FcitxInstance* instance);
 
     /**
+     * send a close event, which can be used by standalone module which will do something link reset first.
+     *
+     * @param instance fcitx instance
+     * @param closeEvent close event type
+     * @return void
+     *
+     * @since 4.2.8.4
+     **/
+    void FcitxInstanceSendCloseEvent(struct _FcitxInstance* instance, FcitxIMCloseEventType closeEvent);
+
+    /**
      * clean whole input window
      *
      * @param instance fcitx instance

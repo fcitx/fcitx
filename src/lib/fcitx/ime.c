@@ -1222,6 +1222,15 @@ void FcitxInstanceResetInput(FcitxInstance* instance)
     FcitxInstanceProcessResetInputHook(instance);
 }
 
+FCITX_EXPORT_API
+void FcitxInstanceSendCloseEvent(struct _FcitxInstance* instance, FcitxIMCloseEventType closeEvent)
+{
+    FcitxIM* currentIM = FcitxInstanceGetCurrentIM(instance);
+    if (currentIM && currentIM->OnClose) {
+        currentIM->OnClose(currentIM->klass, closeEvent);
+    }
+}
+
 void FcitxInstanceDoPhraseTips(FcitxInstance* instance)
 {
     UT_array *ims = &instance->imes;
