@@ -373,7 +373,6 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     sprintf(ipcic->path, FCITX_IC_DBUS_PATH, ipcic->id);
 
     uint32_t arg1, arg2, arg3, arg4;
-    char* appname = NULL;
     arg1 = config->hkTrigger[0].sym;
     arg2 = config->hkTrigger[0].state;
     arg3 = config->hkTrigger[1].sym;
@@ -393,6 +392,7 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
 
         DBusError error;
         dbus_error_init(&error);
+        char* appname = NULL;
         if (!dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INVALID))
             appname = NULL;
         else {
@@ -402,9 +402,11 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
                 appname = strdup(appname);
             }
         }
+        ((FcitxInputContext2*)context)->prgname = appname;
 
-        if (config->shareState == ShareState_PerProgram)
+        if (config->shareState == ShareState_PerProgram) {
             FcitxInstanceSetICStateFromSameApplication(ipc->owner, ipc->frontendid, context);
+        }
 
         boolean arg0 = context->state != IS_CLOSED;
 
@@ -422,6 +424,7 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
         DBusError error;
         dbus_error_init(&error);
         int icpid = 0;
+        char* appname = NULL;
         if (!dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INT32, &icpid, DBUS_TYPE_INVALID))
             appname = NULL;
         else {
@@ -432,9 +435,11 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
             }
         }
         ipcic->pid = icpid;
+        ((FcitxInputContext2*)context)->prgname = appname;
 
-        if (config->shareState == ShareState_PerProgram)
+        if (config->shareState == ShareState_PerProgram) {
             FcitxInstanceSetICStateFromSameApplication(ipc->owner, ipc->frontendid, context);
+        }
 
         boolean arg0 = context->state != IS_CLOSED;
 
@@ -448,7 +453,6 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
                                  DBUS_TYPE_UINT32, &arg4,
                                  DBUS_TYPE_INVALID);
     }
-    ((FcitxInputContext2*)context)->prgname = appname;
     dbus_connection_send(ipcpriv->conn, reply, NULL);
     dbus_message_unref(reply);
 
