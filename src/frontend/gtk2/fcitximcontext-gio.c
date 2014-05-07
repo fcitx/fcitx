@@ -982,10 +982,13 @@ void
 _fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext, gboolean force)
 {
     if (fcitx_client_is_valid(fcitxcontext->client)) {
-        FcitxCapacityFlags flags = fcitxcontext->capacity & ~(CAPACITY_PREEDIT | CAPACITY_FORMATTED_PREEDIT | CAPACITY_PASSWORD);
-        if (fcitxcontext->use_preedit)
+        FcitxCapacityFlags flags = fcitxcontext->capacity & ~(CAPACITY_PREEDIT | CAPACITY_FORMATTED_PREEDIT);
+        if (fcitxcontext->use_preedit) {
             flags |= CAPACITY_PREEDIT | CAPACITY_FORMATTED_PREEDIT;
+        }
 
+#if !GTK_CHECK_VERSION(3, 6, 0)
+        flags = fcitxcontext->capacity & ~(CAPACITY_PASSWORD);
         if (fcitxcontext->client_window != NULL) {
             GtkWidget *widget;
             gdk_window_get_user_data (fcitxcontext->client_window,
@@ -995,6 +998,7 @@ _fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext, gboolean force)
                 flags |= CAPACITY_PASSWORD;
             }
         }
+#endif
 
         gboolean update = FALSE;
         if (G_UNLIKELY(fcitxcontext->capacity != flags)) {
