@@ -1120,14 +1120,26 @@ FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index,
     UT_array* imes = &instance->imes;
     const int iIMCount = utarray_len(imes);
 
-    FcitxInstanceCleanInputWindow(instance);
-    FcitxInstanceResetInput(instance);
-    FcitxUIUpdateInputWindow(instance);
-
     FcitxIM* lastIM, *newIM;
 
     /* set lastIM */
     lastIM = fcitx_array_eltptr(imes, instance->iIMIndex);
+
+    if (lastIM) {
+
+        if (userSwitchIM) {
+            if (lastIM->OnClose) {
+                lastIM->OnClose(lastIM->klass, CET_SwitchIM);
+            }
+        }
+        if (lastIM->Save) {
+            lastIM->Save(lastIM->klass);
+        }
+    }
+
+    FcitxInstanceCleanInputWindow(instance);
+    FcitxInstanceResetInput(instance);
+    FcitxUIUpdateInputWindow(instance);
 
     /* update instance->iIMIndex start */
     if (index >= iIMCount)
@@ -1147,18 +1159,6 @@ FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index,
 
     /* set newIM */
     newIM = fcitx_array_eltptr(imes, instance->iIMIndex);
-
-    if (lastIM) {
-
-        if (userSwitchIM) {
-            if (lastIM->OnClose) {
-                lastIM->OnClose(lastIM->klass, CET_ChangeByUser);
-            }
-        }
-        if (lastIM->Save) {
-            lastIM->Save(lastIM->klass);
-        }
-    }
 
     /* lazy load */
     if (newIM && !newIM->initialized) {
@@ -1665,10 +1665,7 @@ void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputConte
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
     ic2->switchBySwitchKey = withSwitchKey;
     if (ic == instance->CurrentIC) {
-        if (objectState == IS_ACTIVE) {
-            FcitxInstanceResetInput(instance);
-        } else {
-            FcitxInstanceResetInput(instance);
+        if (objectState != IS_ACTIVE) {
             FcitxUICloseInputWindow(instance);
         }
     }
