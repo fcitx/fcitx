@@ -39,9 +39,8 @@ void InitXErrorHandler(FcitxX11* x11priv)
     oldXIOErrorHandler = XSetIOErrorHandler(FcitxXIOErrorHandler);
 }
 
-void UnsetXErrorHandler(FcitxX11* x11priv)
+void UnsetXErrorHandler()
 {
-    FCITX_UNUSED(x11priv);
     x11handle = NULL;
     /* we don't set back to old handler, to avoid any x error  */
 }
