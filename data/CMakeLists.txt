@@ -60,4 +60,4 @@ if(_ENABLE_DBUS)
   install(FILES daemon.conf DESTINATION share/fcitx/dbus/)
 endif()
 
-install(FILES env_setup.sh share/fcitx/data/)
+install(FILES env_setup.sh DESTINATION share/fcitx/data/)
