@@ -5,20 +5,21 @@
 # Translators:
 # Alisha <alisha.4m@gmail.com>, 2012
 # Alisha <alisha.4m@gmail.com>, 2012
+# BrLi <rainman59118@gmail.com>, 2014
 # fhoshino <fh@pinchia.com>, 2014
-# Hiunn_Hue <hiunnhue108@ymail.com>, 2012-2013
-# pellaeon <nfsmwlin@gmail.com>, 2013
-# pellaeon <nfsmwlin@gmail.com>, 2013
-# Xuetian Weng <wengxt@gmail.com>, 2013
-# Xuetian Weng <wengxt@gmail.com>, 2012-2013
-# Xuetian Weng <wengxt@gmail.com>, 2013
+# Hiunn-hué <hiunnhue108@ymail.com>, 2012-2013
+# Pellaeon Lin <nfsmwlin@gmail.com>, 2013
+# Pellaeon Lin <nfsmwlin@gmail.com>, 2013
+# csslayer <wengxt@gmail.com>, 2013
+# csslayer <wengxt@gmail.com>, 2012-2013
+# csslayer <wengxt@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-04-10 07:01+0200\n"
-"PO-Revision-Date: 2014-04-10 05:00+0000\n"
-"Last-Translator: fhoshino <fh@pinchia.com>\n"
+"POT-Creation-Date: 2014-06-06 07:01+0200\n"
+"PO-Revision-Date: 2014-06-06 04:57+0000\n"
+"Last-Translator: BrLi <rainman59118@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -100,7 +101,7 @@ msgstr ""
 msgid "/XIM"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1756
+#: src/lib/fcitx/ime.c:1772
 msgid "/min  Time Used: "
 msgstr "/分 經過時間："
 
@@ -420,12 +421,12 @@ msgstr "無法找到系統的拼音字庫！"
 
 #: src/ui/classic/skin.c:121
 msgid "Can not load default skin, is installion correct?"
-msgstr "未能載入預設外觀，請確認已正確安裝。"
+msgstr "無法載入預設佈景，請確認已正確安裝。"
 
 #: src/ui/classic/skin.c:126
 #, c-format
 msgid "Can not load skin %s, return to default"
-msgstr "未能載入 %s 外觀，已載入預設外觀。"
+msgstr "無法載入 %s 佈景，切換為預設佈景。"
 
 #: src/frontend/xim/xim.c:146
 msgid "Can't Create imWindow"
@@ -614,7 +615,7 @@ msgstr "經典介面"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
-msgstr "支援皮膚的經典介面"
+msgstr "支援外觀主題的傳統介面"
 
 #: src/ui/classic/fcitx-classic-ui.desc:1
 #: src/ui/classic/fcitx-classic-ui.desc:7
@@ -641,7 +642,7 @@ msgstr "清除輸入頻率"
 msgid "Clear local Input Method"
 msgstr "清空局部輸入法"
 
-#: src/module/imselector/imselector.c:325
+#: src/module/imselector/imselector.c:326
 msgid "Clear local input method"
 msgstr "清空局部輸入法"
 
@@ -808,7 +809,7 @@ msgstr "目前啟用的輸入法清單"
 msgid "Current Input Method Name"
 msgstr "目前輸入法名稱"
 
-#: src/module/imselector/imselector.c:311
+#: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
 msgstr "目前輸入法為 "
 
@@ -1006,11 +1007,11 @@ msgstr ""
 
 #: src/lib/fcitx-config/fcitx-config.c:376
 msgid "Enum option duplicated."
-msgstr ""
+msgstr "Enum 選項重複。"
 
 #: src/lib/fcitx-config/fcitx-config.c:386
 msgid "Enum option number must larger than 0"
-msgstr ""
+msgstr "Enum 選項必須大於 0"
 
 #: data/script/fcitx-diagnose.sh:937
 msgid ""
@@ -1563,7 +1564,7 @@ msgstr "輸入字體尺寸"
 msgid "Input Message Color"
 msgstr "輸入訊息顏色"
 
-#: src/lib/fcitx/ime.c:1662 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1678 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "輸入法"
@@ -1589,7 +1590,7 @@ msgstr "輸入法相關環境變數："
 msgid "Input Methods:"
 msgstr "輸入法："
 
-#: src/lib/fcitx/ime.c:1753
+#: src/lib/fcitx/ime.c:1769
 msgid "Input Speed: "
 msgstr "輸入速度："
 
@@ -1605,7 +1606,7 @@ msgstr "輸入法"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:4
 msgid "Installer Script for Fcitx Skin"
-msgstr ""
+msgstr "Fcitx 佈景主題安裝器文本"
 
 #: data/config.desc:90
 msgid "Interval of Two Key Input"
@@ -1656,7 +1657,7 @@ msgstr "按鍵"
 
 #: src/ui/classic/skin.desc:416
 msgid "Key Color On Virutal Keyboard"
-msgstr ""
+msgstr "虛擬鍵盤按鍵顏色"
 
 #: src/im/keyboard/keyboard.c:418 src/im/keyboard/keyboard.c:435
 #: src/im/keyboard/keyboard.c:483 src/im/keyboard/keyboard.c:496
@@ -1971,7 +1972,7 @@ msgstr "無可用前端"
 msgid "No input window"
 msgstr "沒有輸入視窗"
 
-#: src/module/imselector/imselector.c:315
+#: src/module/imselector/imselector.c:316
 msgid "No local input method"
 msgstr "沒有局部輸入法"
 
@@ -2338,7 +2339,7 @@ msgstr "重新命名成功"
 #: src/ui/classic/skin.desc:296 src/ui/classic/skin.desc:304
 #: src/ui/classic/skin.desc:398 src/ui/classic/skin.desc:406
 msgid "Resize"
-msgstr ""
+msgstr "調整大小"
 
 #: src/ui/classic/skin.desc:97 src/ui/classic/skin.desc:203
 #: src/ui/classic/skin.desc:325
@@ -2435,11 +2436,11 @@ msgstr "搜尋 unicode"
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx 真正啟動前延遲的秒數"
 
-#: src/module/imselector/imselector.c:304
+#: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
 msgstr "選擇全域輸入法："
 
-#: src/module/imselector/imselector.c:305
+#: src/module/imselector/imselector.c:306
 msgid "Select local input method: "
 msgstr "選擇局部輸入法："
 
@@ -2533,7 +2534,7 @@ msgstr "已啟用簡體中文。"
 
 #: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
-msgstr "皮膚"
+msgstr "佈景"
 
 #: src/ui/classic/skin.desc:11
 msgid "Skin Author"
@@ -2541,7 +2542,7 @@ msgstr "佈景作者"
 
 #: src/ui/classic/fcitx-classic-ui.desc:59 src/ui/classic/skin.desc:3
 msgid "Skin Name"
-msgstr "皮膚名稱"
+msgstr "佈景名稱"
 
 #: src/ui/classic/skin.desc:7
 msgid "Skin Version"
@@ -2574,11 +2575,11 @@ msgstr "佈景資訊"
 #: src/ui/classic/skin.desc:283 src/ui/classic/skin.desc:287
 #: src/ui/classic/skin.desc:291 src/ui/classic/skin.desc:299
 msgid "SkinInputBar"
-msgstr ""
+msgstr "緩衝區佈景"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
 msgid "SkinKeyboard"
-msgstr ""
+msgstr "鍵盤佈景"
 
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
@@ -2592,7 +2593,7 @@ msgstr ""
 #: src/ui/classic/skin.desc:165 src/ui/classic/skin.desc:170
 #: src/ui/classic/skin.desc:175 src/ui/classic/skin.desc:180
 msgid "SkinMainBar"
-msgstr ""
+msgstr "主工具列佈景"
 
 #: src/ui/classic/skin.desc:315 src/ui/classic/skin.desc:319
 #: src/ui/classic/skin.desc:323 src/ui/classic/skin.desc:327
@@ -2604,11 +2605,11 @@ msgstr ""
 #: src/ui/classic/skin.desc:389 src/ui/classic/skin.desc:393
 #: src/ui/classic/skin.desc:401
 msgid "SkinMenu"
-msgstr ""
+msgstr "選單佈景"
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
-msgstr ""
+msgstr "系統匣小圖示佈景"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
@@ -3090,7 +3091,7 @@ msgstr "虛擬鍵盤"
 
 #: src/ui/classic/skin.desc:411
 msgid "Virtual Keyboard Image"
-msgstr ""
+msgstr "虛擬鍵盤圖示"
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
@@ -3129,7 +3130,7 @@ msgstr "透過 DBus 輸出的 X 鍵盤整合介面"
 #: src/ui/classic/tray.c:159
 #, c-format
 msgid "X error %i on opcode send"
-msgstr ""
+msgstr "Opcode 送出時發生 X error %i"
 
 #: src/module/x11/fcitx-x11.conf.in:3
 msgid "X11 Support"
@@ -3285,7 +3286,7 @@ msgstr "可執行檔："
 msgid "here"
 msgstr "在此"
 
-#: src/lib/fcitx/ime.c:1759
+#: src/lib/fcitx/ime.c:1775
 msgid "min Num of Characters: "
 msgstr "分 字元數："
 
