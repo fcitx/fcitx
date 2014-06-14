@@ -18,9 +18,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-06-14 15:01+0200\n"
-"PO-Revision-Date: 2014-05-20 05:51+0000\n"
-"Last-Translator: AWASHIRO Ikuya <ikunya@gmail.com>\n"
+"POT-Creation-Date: 2014-06-14 16:02+0200\n"
+"PO-Revision-Date: 2014-06-14 13:02+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
 "Language: ja\n"
@@ -482,9 +482,8 @@ msgid "Cannot find ${2} for gtk ${1}"
 msgstr "gtk ${1} 用の ${2} が見つかりません"
 
 #: src/im/pinyin/py.c:393
-#, fuzzy
 msgid "Cannot find System Database of Pinyin!"
-msgstr "Pinyinのシステムデータベースが見つかりません。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:918
 msgid ""
@@ -551,14 +550,13 @@ msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "XMODIFIERSを解釈できません: ${1}"
 
 #: src/ui/classic/skin.c:121
-#, fuzzy
 msgid "Cannot load default skin, is installion correct?"
-msgstr "既定のスキンをロードできません、インストールが失敗した可能性があります"
+msgstr ""
 
 #: src/ui/classic/skin.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load skin %s, return to default"
-msgstr "%sスキンをロードできません、既定のスキンに戻ります。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1419
 msgid "Cannot read im list from fcitx profile."
@@ -909,9 +907,9 @@ msgid "Disable Pinyin Symbol"
 msgstr "Pinyin 記号を無効にする"
 
 #: src/lib/fcitx/addon.c:298
-#, fuzzy, c-format
+#, c-format
 msgid "Disable addon %s, dependency %s cannot be satisfied."
-msgstr "アドオン %s を無効にしました。依存性 %s が解決されていません。"
+msgstr ""
 
 #: src/module/notificationitem/notificationitem.c:460
 #: src/ui/kimpanel/kimpanel.c:268 src/ui/kimpanel/kimpanel.c:273
@@ -3019,9 +3017,8 @@ msgid "Use Matching Key"
 msgstr "マッチングキーを使う"
 
 #: src/frontend/xim/fcitx-xim.desc:4
-#, fuzzy
 msgid "Use On The Spot Style for XIM (Cannot change during running)"
-msgstr "XIMで On The Spot スタイルを使う(起動中は変更できません)"
+msgstr ""
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"

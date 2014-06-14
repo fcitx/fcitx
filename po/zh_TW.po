@@ -17,9 +17,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-06-14 15:01+0200\n"
-"PO-Revision-Date: 2014-06-06 04:57+0000\n"
-"Last-Translator: BrLi <rainman59118@gmail.com>\n"
+"POT-Creation-Date: 2014-06-14 16:02+0200\n"
+"PO-Revision-Date: 2014-06-14 13:02+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -477,9 +477,8 @@ msgid "Cannot find ${2} for gtk ${1}"
 msgstr ""
 
 #: src/im/pinyin/py.c:393
-#, fuzzy
 msgid "Cannot find System Database of Pinyin!"
-msgstr "無法找到系統的拼音字庫！"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:918
 msgid ""
@@ -544,14 +543,13 @@ msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "無法解析 XMODIFIERS：${1}。"
 
 #: src/ui/classic/skin.c:121
-#, fuzzy
 msgid "Cannot load default skin, is installion correct?"
-msgstr "無法載入預設佈景，請確認已正確安裝。"
+msgstr ""
 
 #: src/ui/classic/skin.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load skin %s, return to default"
-msgstr "無法載入 %s 佈景，切換為預設佈景。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1419
 msgid "Cannot read im list from fcitx profile."
@@ -3004,9 +3002,8 @@ msgid "Use Matching Key"
 msgstr "使用模糊鍵"
 
 #: src/frontend/xim/fcitx-xim.desc:4
-#, fuzzy
 msgid "Use On The Spot Style for XIM (Cannot change during running)"
-msgstr "對 XIM 使用 On The Spot 風格（無法在執行時切換）"
+msgstr ""
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"

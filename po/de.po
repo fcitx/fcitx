@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-06-14 15:01+0200\n"
-"PO-Revision-Date: 2014-04-08 21:03+0000\n"
+"POT-Creation-Date: 2014-06-14 16:02+0200\n"
+"PO-Revision-Date: 2014-06-14 13:02+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
@@ -474,9 +474,8 @@ msgid "Cannot find ${2} for gtk ${1}"
 msgstr "${2} für gtk ${1} kann nicht gefunden werden"
 
 #: src/im/pinyin/py.c:393
-#, fuzzy
 msgid "Cannot find System Database of Pinyin!"
-msgstr "System Datenbasis für Fcitx nicht gefunden!"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:918
 msgid ""
@@ -545,15 +544,13 @@ msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "Kann  XMODIFIERS: ${1} nicht richtig interpretieren"
 
 #: src/ui/classic/skin.c:121
-#, fuzzy
 msgid "Cannot load default skin, is installion correct?"
 msgstr ""
-"Die Standardskin kann nicht geladen werden. Ist die Installation richtig?"
 
 #: src/ui/classic/skin.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load skin %s, return to default"
-msgstr "Die Skin %s kann nicht geladen werden. Zurück zur Standardskin"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1419
 msgid "Cannot read im list from fcitx profile."
@@ -904,10 +901,9 @@ msgid "Disable Pinyin Symbol"
 msgstr "Symbol für Pinyin deaktivieren"
 
 #: src/lib/fcitx/addon.c:298
-#, fuzzy, c-format
+#, c-format
 msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr ""
-"Deaktiviere Addon %s. Abhängigkeiten von %s können nicht erfüllt werden"
 
 #: src/module/notificationitem/notificationitem.c:460
 #: src/ui/kimpanel/kimpanel.c:268 src/ui/kimpanel/kimpanel.c:273
@@ -1214,9 +1210,8 @@ msgid "Font Size"
 msgstr "Fontgröße"
 
 #: src/ui/classic/skin.desc:28
-#, fuzzy
 msgid "Font sizes respect dpi setting"
-msgstr "Fontgröße beachtet dpi Einstellungen"
+msgstr ""
 
 #: src/module/xkb/fcitx-xkb.desc:10
 msgid ""
@@ -3052,9 +3047,8 @@ msgid "Use Matching Key"
 msgstr "Passende Taste benutzen"
 
 #: src/frontend/xim/fcitx-xim.desc:4
-#, fuzzy
 msgid "Use On The Spot Style for XIM (Cannot change during running)"
-msgstr "Eingabe im Programm für XIM (Neustart Fcitx erforderlich)"
+msgstr ""
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"

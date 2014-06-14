@@ -11,14 +11,14 @@
 # csslayer <wengxt@gmail.com>, 2013
 # wwj402 <wwj402@gmail.com>, 2013
 # yyc1992 <yyc1992@gmail.com>, 2012
-# yyc1992 <yyc1992@gmail.com>, 2013
+# yyc1992 <yyc1992@gmail.com>, 2013-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-06-14 15:01+0200\n"
-"PO-Revision-Date: 2014-04-10 02:48+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2014-06-14 16:02+0200\n"
+"PO-Revision-Date: 2014-06-14 13:39+0000\n"
+"Last-Translator: yyc1992 <yyc1992@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
@@ -476,9 +476,8 @@ msgid "Cannot find ${2} for gtk ${1}"
 msgstr "无法找到 gtk ${1} 的 ${2}."
 
 #: src/im/pinyin/py.c:393
-#, fuzzy
 msgid "Cannot find System Database of Pinyin!"
-msgstr "无法找到系统的拼音词库"
+msgstr "无法找到系统的拼音词库!"
 
 #: data/script/fcitx-diagnose.sh:918
 msgid ""
@@ -543,12 +542,11 @@ msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "无法解析 XMODIFIERS: ${1}."
 
 #: src/ui/classic/skin.c:121
-#, fuzzy
 msgid "Cannot load default skin, is installion correct?"
 msgstr "无法加载默认皮肤，安装是否正确？"
 
 #: src/ui/classic/skin.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
 
@@ -901,7 +899,7 @@ msgid "Disable Pinyin Symbol"
 msgstr "禁用拼音符号"
 
 #: src/lib/fcitx/addon.c:298
-#, fuzzy, c-format
+#, c-format
 msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr "禁用插件 %s，依赖 %s 无法满足。"
 
@@ -1203,7 +1201,6 @@ msgid "Font Size"
 msgstr "字体大小"
 
 #: src/ui/classic/skin.desc:28
-#, fuzzy
 msgid "Font sizes respect dpi setting"
 msgstr "字体大小遵守dpi设置"
 
@@ -3011,7 +3008,6 @@ msgid "Use Matching Key"
 msgstr "使用模糊键"
 
 #: src/frontend/xim/fcitx-xim.desc:4
-#, fuzzy
 msgid "Use On The Spot Style for XIM (Cannot change during running)"
 msgstr "对XIM使用On The Spot风格（无法在运行时切换）"
 
