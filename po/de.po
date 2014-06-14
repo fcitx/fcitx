@@ -4,15 +4,15 @@
 #
 # Translators:
 # mar well <m.wellendorf@gmx.de>, 2012-2013
-# Xuetian Weng <wengxt@gmail.com>, 2013
-# Xuetian Weng <wengxt@gmail.com>, 2013
+# csslayer <wengxt@gmail.com>, 2013
+# csslayer <wengxt@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-04-09 00:02+0200\n"
+"POT-Creation-Date: 2014-06-14 15:01+0200\n"
 "PO-Revision-Date: 2014-04-08 21:03+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
 "Language: de\n"
@@ -94,7 +94,7 @@ msgstr "/Hinweis_für_GNOME_höher_als_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1756
+#: src/lib/fcitx/ime.c:1772
 msgid "/min  Time Used: "
 msgstr "/min Verwendete Zeit:"
 
@@ -412,20 +412,6 @@ msgstr "CTRL_SHIFT"
 msgid "CTRL_SUPER"
 msgstr "CTRL_SUPER"
 
-#: src/im/pinyin/py.c:393
-msgid "Can not find System Database of Pinyin!"
-msgstr "System Datenbasis für Fcitx nicht gefunden!"
-
-#: src/ui/classic/skin.c:121
-msgid "Can not load default skin, is installion correct?"
-msgstr ""
-"Die Standardskin kann nicht geladen werden. Ist die Installation richtig?"
-
-#: src/ui/classic/skin.c:126
-#, c-format
-msgid "Can not load skin %s, return to default"
-msgstr "Die Skin %s kann nicht geladen werden. Zurück zur Standardskin"
-
 #: src/frontend/xim/xim.c:146
 msgid "Can't Create imWindow"
 msgstr "Kann Eigabemethodenfenster nicht erzeugen"
@@ -486,6 +472,11 @@ msgstr "Kann die Desktopumgebung micht feststellen"
 #: data/script/fcitx-diagnose.sh:1187
 msgid "Cannot find ${2} for gtk ${1}"
 msgstr "${2} für gtk ${1} kann nicht gefunden werden"
+
+#: src/im/pinyin/py.c:393
+#, fuzzy
+msgid "Cannot find System Database of Pinyin!"
+msgstr "System Datenbasis für Fcitx nicht gefunden!"
 
 #: data/script/fcitx-diagnose.sh:918
 msgid ""
@@ -552,6 +543,17 @@ msgstr "Pinyin kann nicht gefunden werden"
 #: data/script/fcitx-diagnose.sh:959
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "Kann  XMODIFIERS: ${1} nicht richtig interpretieren"
+
+#: src/ui/classic/skin.c:121
+#, fuzzy
+msgid "Cannot load default skin, is installion correct?"
+msgstr ""
+"Die Standardskin kann nicht geladen werden. Ist die Installation richtig?"
+
+#: src/ui/classic/skin.c:126
+#, fuzzy, c-format
+msgid "Cannot load skin %s, return to default"
+msgstr "Die Skin %s kann nicht geladen werden. Zurück zur Standardskin"
 
 #: data/script/fcitx-diagnose.sh:1419
 msgid "Cannot read im list from fcitx profile."
@@ -644,7 +646,7 @@ msgstr "Löschhäufigkeit"
 msgid "Clear local Input Method"
 msgstr "Lokale Eingabemethode zurücksetzen"
 
-#: src/module/imselector/imselector.c:325
+#: src/module/imselector/imselector.c:326
 msgid "Clear local input method"
 msgstr "Lokale Eingabemethode löschen"
 
@@ -811,7 +813,7 @@ msgstr "Liste der aktivierten Eingabemethoden"
 msgid "Current Input Method Name"
 msgstr "Name der aktivierten Eingabemethode"
 
-#: src/module/imselector/imselector.c:311
+#: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
 msgstr "Die gegenwärtig aktivierte Eingabemethode ist"
 
@@ -902,8 +904,8 @@ msgid "Disable Pinyin Symbol"
 msgstr "Symbol für Pinyin deaktivieren"
 
 #: src/lib/fcitx/addon.c:298
-#, c-format
-msgid "Disable addon %s, dependency %s can not be satisfied."
+#, fuzzy, c-format
+msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr ""
 "Deaktiviere Addon %s. Abhängigkeiten von %s können nicht erfüllt werden"
 
@@ -1212,7 +1214,8 @@ msgid "Font Size"
 msgstr "Fontgröße"
 
 #: src/ui/classic/skin.desc:28
-msgid "Font size repect dpi setting"
+#, fuzzy
+msgid "Font sizes respect dpi setting"
 msgstr "Fontgröße beachtet dpi Einstellungen"
 
 #: src/module/xkb/fcitx-xkb.desc:10
@@ -1585,7 +1588,7 @@ msgstr "Schriftgröße Eingabe"
 msgid "Input Message Color"
 msgstr "Farbe der Pinyineingabe"
 
-#: src/lib/fcitx/ime.c:1662 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1678 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Eingabemethode"
@@ -1612,7 +1615,7 @@ msgstr "Eingabemethodenbezogenen Umgebungsvariablen:"
 msgid "Input Methods:"
 msgstr "Eingabemethoden:"
 
-#: src/lib/fcitx/ime.c:1753
+#: src/lib/fcitx/ime.c:1769
 msgid "Input Speed: "
 msgstr "Eingabegeschwindigkeit"
 
@@ -2003,7 +2006,7 @@ msgstr "Keine Schnittstelle verfügbar"
 msgid "No input window"
 msgstr "Kein Eingabefenster"
 
-#: src/module/imselector/imselector.c:315
+#: src/module/imselector/imselector.c:316
 msgid "No local input method"
 msgstr "Keine lokale Eingabemethode"
 
@@ -2476,11 +2479,11 @@ msgstr "Unicode suchen"
 msgid "Seconds sleep before fcitx really start"
 msgstr "Warten, bevor fcitx started (sec.)"
 
-#: src/module/imselector/imselector.c:304
+#: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
 msgstr "Globale Eingabemethode auswählen:"
 
-#: src/module/imselector/imselector.c:305
+#: src/module/imselector/imselector.c:306
 msgid "Select local input method: "
 msgstr "Lokale Eingabemethode auswählen:"
 
@@ -3049,7 +3052,8 @@ msgid "Use Matching Key"
 msgstr "Passende Taste benutzen"
 
 #: src/frontend/xim/fcitx-xim.desc:4
-msgid "Use On The Spot Style for XIM (Can not change during running)"
+#, fuzzy
+msgid "Use On The Spot Style for XIM (Cannot change during running)"
 msgstr "Eingabe im Programm für XIM (Neustart Fcitx erforderlich)"
 
 #: src/im/table/table.desc:39
@@ -3353,7 +3357,7 @@ msgstr "Programm:"
 msgid "here"
 msgstr "hier"
 
-#: src/lib/fcitx/ime.c:1759
+#: src/lib/fcitx/ime.c:1775
 msgid "min Num of Characters: "
 msgstr "min Anzahl Zeichen:"
 

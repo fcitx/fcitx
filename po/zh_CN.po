@@ -4,21 +4,21 @@
 #
 # Translators:
 # Christopher Meng <cickumqt@gmail.com>, 2012
-# young0512 <cynthia.young0512@gmail.com>, 2013
+# Cynthia Young <cynthia.young0512@gmail.com>, 2013
 # marguerite su <i@marguerite.su>, 2012-2013
-# Xuetian Weng <wengxt@gmail.com>, 2013-2014
-# Xuetian Weng <wengxt@gmail.com>, 2010-2012
-# Xuetian Weng <wengxt@gmail.com>, 2013
+# csslayer <wengxt@gmail.com>, 2013-2014
+# csslayer <wengxt@gmail.com>, 2010-2012
+# csslayer <wengxt@gmail.com>, 2013
 # wwj402 <wwj402@gmail.com>, 2013
-# Yichao Yu <yyc1992@gmail.com>, 2012
-# Yichao Yu <yyc1992@gmail.com>, 2013
+# yyc1992 <yyc1992@gmail.com>, 2012
+# yyc1992 <yyc1992@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-04-10 05:02+0200\n"
+"POT-Creation-Date: 2014-06-14 15:01+0200\n"
 "PO-Revision-Date: 2014-04-10 02:48+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
@@ -100,7 +100,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM/zh-cn"
 
-#: src/lib/fcitx/ime.c:1756
+#: src/lib/fcitx/ime.c:1772
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -414,19 +414,6 @@ msgstr "Ctrl+Shift"
 msgid "CTRL_SUPER"
 msgstr "Ctrl+Super"
 
-#: src/im/pinyin/py.c:393
-msgid "Can not find System Database of Pinyin!"
-msgstr "无法找到系统的拼音词库"
-
-#: src/ui/classic/skin.c:121
-msgid "Can not load default skin, is installion correct?"
-msgstr "无法加载默认皮肤，安装是否正确？"
-
-#: src/ui/classic/skin.c:126
-#, c-format
-msgid "Can not load skin %s, return to default"
-msgstr "无法加载皮肤%s，回到默认皮肤"
-
 #: src/frontend/xim/xim.c:146
 msgid "Can't Create imWindow"
 msgstr "无法创建输入法窗口"
@@ -487,6 +474,11 @@ msgstr "无法确定桌面环境。"
 #: data/script/fcitx-diagnose.sh:1187
 msgid "Cannot find ${2} for gtk ${1}"
 msgstr "无法找到 gtk ${1} 的 ${2}."
+
+#: src/im/pinyin/py.c:393
+#, fuzzy
+msgid "Cannot find System Database of Pinyin!"
+msgstr "无法找到系统的拼音词库"
 
 #: data/script/fcitx-diagnose.sh:918
 msgid ""
@@ -549,6 +541,16 @@ msgstr "无法找到拼音"
 #: data/script/fcitx-diagnose.sh:959
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "无法解析 XMODIFIERS: ${1}."
+
+#: src/ui/classic/skin.c:121
+#, fuzzy
+msgid "Cannot load default skin, is installion correct?"
+msgstr "无法加载默认皮肤，安装是否正确？"
+
+#: src/ui/classic/skin.c:126
+#, fuzzy, c-format
+msgid "Cannot load skin %s, return to default"
+msgstr "无法加载皮肤%s，回到默认皮肤"
 
 #: data/script/fcitx-diagnose.sh:1419
 msgid "Cannot read im list from fcitx profile."
@@ -641,7 +643,7 @@ msgstr "清除输入频率"
 msgid "Clear local Input Method"
 msgstr "清除局部输入法"
 
-#: src/module/imselector/imselector.c:325
+#: src/module/imselector/imselector.c:326
 msgid "Clear local input method"
 msgstr "清除局部输入法"
 
@@ -808,7 +810,7 @@ msgstr "当前启用的输入法列表"
 msgid "Current Input Method Name"
 msgstr "当前输入法名称"
 
-#: src/module/imselector/imselector.c:311
+#: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
 msgstr "当前局部输入法为 "
 
@@ -899,8 +901,8 @@ msgid "Disable Pinyin Symbol"
 msgstr "禁用拼音符号"
 
 #: src/lib/fcitx/addon.c:298
-#, c-format
-msgid "Disable addon %s, dependency %s can not be satisfied."
+#, fuzzy, c-format
+msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr "禁用插件 %s，依赖 %s 无法满足。"
 
 #: src/module/notificationitem/notificationitem.c:460
@@ -1201,7 +1203,8 @@ msgid "Font Size"
 msgstr "字体大小"
 
 #: src/ui/classic/skin.desc:28
-msgid "Font size repect dpi setting"
+#, fuzzy
+msgid "Font sizes respect dpi setting"
 msgstr "字体大小遵守dpi设置"
 
 #: src/module/xkb/fcitx-xkb.desc:10
@@ -1570,7 +1573,7 @@ msgstr "输入字体大小"
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-#: src/lib/fcitx/ime.c:1662 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1678 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "输入法"
@@ -1596,7 +1599,7 @@ msgstr "输入法相关的环境变量: "
 msgid "Input Methods:"
 msgstr "输入法:"
 
-#: src/lib/fcitx/ime.c:1753
+#: src/lib/fcitx/ime.c:1769
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -1978,7 +1981,7 @@ msgstr "无可用前端"
 msgid "No input window"
 msgstr "无输入窗口"
 
-#: src/module/imselector/imselector.c:315
+#: src/module/imselector/imselector.c:316
 msgid "No local input method"
 msgstr "无局部输入法"
 
@@ -2442,11 +2445,11 @@ msgstr "搜索 unicode"
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx真正启动前延迟的秒数"
 
-#: src/module/imselector/imselector.c:304
+#: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
 msgstr "选择全局输入法："
 
-#: src/module/imselector/imselector.c:305
+#: src/module/imselector/imselector.c:306
 msgid "Select local input method: "
 msgstr "选择局部输入法："
 
@@ -3008,7 +3011,8 @@ msgid "Use Matching Key"
 msgstr "使用模糊键"
 
 #: src/frontend/xim/fcitx-xim.desc:4
-msgid "Use On The Spot Style for XIM (Can not change during running)"
+#, fuzzy
+msgid "Use On The Spot Style for XIM (Cannot change during running)"
 msgstr "对XIM使用On The Spot风格（无法在运行时切换）"
 
 #: src/im/table/table.desc:39
@@ -3297,7 +3301,7 @@ msgstr "可执行文件:"
 msgid "here"
 msgstr "这里"
 
-#: src/lib/fcitx/ime.c:1759
+#: src/lib/fcitx/ime.c:1775
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 

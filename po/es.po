@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Adolfo Jayme Barrientos <fitoschido@ubuntu.com>, 2012
+# Adolfo Jayme Barrientos <fitoschido@ubuntu.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-04-09 00:02+0200\n"
+"POT-Creation-Date: 2014-06-14 15:01+0200\n"
 "PO-Revision-Date: 2014-04-08 21:03+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/fcitx/language/"
 "es/)\n"
 "Language: es\n"
@@ -92,7 +92,7 @@ msgstr ""
 msgid "/XIM"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1756
+#: src/lib/fcitx/ime.c:1772
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -406,19 +406,6 @@ msgstr ""
 msgid "CTRL_SUPER"
 msgstr ""
 
-#: src/im/pinyin/py.c:393
-msgid "Can not find System Database of Pinyin!"
-msgstr ""
-
-#: src/ui/classic/skin.c:121
-msgid "Can not load default skin, is installion correct?"
-msgstr ""
-
-#: src/ui/classic/skin.c:126
-#, c-format
-msgid "Can not load skin %s, return to default"
-msgstr ""
-
 #: src/frontend/xim/xim.c:146
 msgid "Can't Create imWindow"
 msgstr ""
@@ -478,6 +465,10 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1187
 msgid "Cannot find ${2} for gtk ${1}"
+msgstr ""
+
+#: src/im/pinyin/py.c:393
+msgid "Cannot find System Database of Pinyin!"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:918
@@ -540,6 +531,15 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:959
 msgid "Cannot interpret XMODIFIERS: ${1}."
+msgstr ""
+
+#: src/ui/classic/skin.c:121
+msgid "Cannot load default skin, is installion correct?"
+msgstr ""
+
+#: src/ui/classic/skin.c:126
+#, c-format
+msgid "Cannot load skin %s, return to default"
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1419
@@ -633,7 +633,7 @@ msgstr ""
 msgid "Clear local Input Method"
 msgstr ""
 
-#: src/module/imselector/imselector.c:325
+#: src/module/imselector/imselector.c:326
 msgid "Clear local input method"
 msgstr ""
 
@@ -800,7 +800,7 @@ msgstr "Lista de métodos de entrada activados"
 msgid "Current Input Method Name"
 msgstr "Nombre del método de entrada actual"
 
-#: src/module/imselector/imselector.c:311
+#: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
 msgstr ""
 
@@ -892,7 +892,7 @@ msgstr ""
 
 #: src/lib/fcitx/addon.c:298
 #, c-format
-msgid "Disable addon %s, dependency %s can not be satisfied."
+msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr ""
 
 #: src/module/notificationitem/notificationitem.c:460
@@ -1191,7 +1191,7 @@ msgid "Font Size"
 msgstr ""
 
 #: src/ui/classic/skin.desc:28
-msgid "Font size repect dpi setting"
+msgid "Font sizes respect dpi setting"
 msgstr ""
 
 #: src/module/xkb/fcitx-xkb.desc:10
@@ -1553,7 +1553,7 @@ msgstr "Tamaño de letra de entrada"
 msgid "Input Message Color"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1662 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1678 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Método de entrada"
@@ -1579,7 +1579,7 @@ msgstr ""
 msgid "Input Methods:"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1753
+#: src/lib/fcitx/ime.c:1769
 msgid "Input Speed: "
 msgstr "Velocidad de entrada"
 
@@ -1963,7 +1963,7 @@ msgstr ""
 msgid "No input window"
 msgstr ""
 
-#: src/module/imselector/imselector.c:315
+#: src/module/imselector/imselector.c:316
 msgid "No local input method"
 msgstr ""
 
@@ -2425,11 +2425,11 @@ msgstr ""
 msgid "Seconds sleep before fcitx really start"
 msgstr ""
 
-#: src/module/imselector/imselector.c:304
+#: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
 msgstr ""
 
-#: src/module/imselector/imselector.c:305
+#: src/module/imselector/imselector.c:306
 msgid "Select local input method: "
 msgstr ""
 
@@ -2985,7 +2985,7 @@ msgid "Use Matching Key"
 msgstr ""
 
 #: src/frontend/xim/fcitx-xim.desc:4
-msgid "Use On The Spot Style for XIM (Can not change during running)"
+msgid "Use On The Spot Style for XIM (Cannot change during running)"
 msgstr ""
 
 #: src/im/table/table.desc:39
@@ -3259,7 +3259,7 @@ msgstr ""
 msgid "here"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1759
+#: src/lib/fcitx/ime.c:1775
 msgid "min Num of Characters: "
 msgstr ""
 

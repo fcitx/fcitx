@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-04-08 23:02+0200\n"
+"POT-Creation-Date: 2014-06-14 15:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -618,7 +618,7 @@ msgid "Shuangpin"
 msgstr ""
 
 #: src/im/pinyin/py.c:393
-msgid "Can not find System Database of Pinyin!"
+msgid "Cannot find System Database of Pinyin!"
 msgstr ""
 
 #: src/im/pinyin/py.c:457
@@ -748,7 +748,7 @@ msgstr ""
 
 #: src/lib/fcitx/addon.c:298
 #, c-format
-msgid "Disable addon %s, dependency %s can not be satisfied."
+msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr ""
 
 #: src/lib/fcitx-config/fcitx-config.c:376
@@ -839,20 +839,20 @@ msgstr ""
 msgid "No available Input Method"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1662 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1678 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1753
+#: src/lib/fcitx/ime.c:1769
 msgid "Input Speed: "
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1756
+#: src/lib/fcitx/ime.c:1772
 msgid "/min  Time Used: "
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1759
+#: src/lib/fcitx/ime.c:1775
 msgid "min Num of Characters: "
 msgstr ""
 
@@ -996,23 +996,23 @@ msgstr ""
 msgid "Toggle Half/Full width Character"
 msgstr ""
 
-#: src/module/imselector/imselector.c:304
+#: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
 msgstr ""
 
-#: src/module/imselector/imselector.c:305
+#: src/module/imselector/imselector.c:306
 msgid "Select local input method: "
 msgstr ""
 
-#: src/module/imselector/imselector.c:311
+#: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
 msgstr ""
 
-#: src/module/imselector/imselector.c:315
+#: src/module/imselector/imselector.c:316
 msgid "No local input method"
 msgstr ""
 
-#: src/module/imselector/imselector.c:325
+#: src/module/imselector/imselector.c:326
 msgid "Clear local input method"
 msgstr ""
 
@@ -1221,12 +1221,12 @@ msgid "Error: skin failed to install"
 msgstr ""
 
 #: src/ui/classic/skin.c:121
-msgid "Can not load default skin, is installion correct?"
+msgid "Cannot load default skin, is installion correct?"
 msgstr ""
 
 #: src/ui/classic/skin.c:126
 #, c-format
-msgid "Can not load skin %s, return to default"
+msgid "Cannot load skin %s, return to default"
 msgstr ""
 
 #: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
@@ -2122,7 +2122,7 @@ msgid "Xim"
 msgstr ""
 
 #: src/frontend/xim/fcitx-xim.desc:4
-msgid "Use On The Spot Style for XIM (Can not change during running)"
+msgid "Use On The Spot Style for XIM (Cannot change during running)"
 msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.desc:4
@@ -2999,7 +2999,7 @@ msgid "Menu Font Size"
 msgstr ""
 
 #: src/ui/classic/skin.desc:28
-msgid "Font size repect dpi setting"
+msgid "Font sizes respect dpi setting"
 msgstr ""
 
 #: src/ui/classic/skin.desc:33
