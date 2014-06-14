@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
     fpDict = fopen(argv[optind], "r");
 
     if (!fpDict) {
-        printf("\nCan not read source file!\n\n");
+        printf("\nCannot read source file!\n\n");
         exit(2);
     }
 

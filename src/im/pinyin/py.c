@@ -390,7 +390,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
 
     fp = FcitxXDGGetFileWithPrefix("pinyin", PY_PHRASE_FILE, "r", NULL);
     if (!fp)
-        FcitxLog(ERROR, _("Can not find System Database of Pinyin!"));
+        FcitxLog(ERROR, _("Cannot find System Database of Pinyin!"));
     else {
         LoadPYPhraseDict(pystate, fp, true, false);
         fclose(fp);

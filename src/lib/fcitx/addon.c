@@ -295,7 +295,7 @@ void FcitxInstanceResolveAddonDependencyInternal(FcitxInstance* instance, FcitxA
 
             utarray_free(dependlist);
             if (!valid) {
-                FcitxLog(WARNING, _("Disable addon %s, dependency %s can not be satisfied."), addon->name, addon->depend);
+                FcitxLog(WARNING, _("Disable addon %s, dependency %s cannot be satisfied."), addon->name, addon->depend);
                 addon->bEnabled = false;
             }
         }

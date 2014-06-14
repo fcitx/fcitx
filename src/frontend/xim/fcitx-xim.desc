@@ -1,7 +1,7 @@
 [Xim/UseOnTheSpotStyle]
 Type=Boolean
 DefaultValue=False
-Description=Use On The Spot Style for XIM (Can not change during running)
+Description=Use On The Spot Style for XIM (Cannot change during running)
 
 [DescriptionFile]
 LocaleDomain=fcitx
