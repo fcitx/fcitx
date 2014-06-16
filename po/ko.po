@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-06-16 02:02+0200\n"
-"PO-Revision-Date: 2014-06-14 13:02+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2014-06-16 11:01+0200\n"
+"PO-Revision-Date: 2014-06-16 08:59+0000\n"
+"Last-Translator: heavyuser <heavyuser73@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/projects/p/fcitx/language/"
 "ko/)\n"
 "Language: ko\n"
@@ -1758,19 +1758,19 @@ msgstr ""
 
 #: src/im/table/tabledict.c:341
 msgid "Load Autophrase OK"
-msgstr ""
+msgstr "Autophrase 로딩 OK"
 
 #: src/im/table/tabledict.c:248
 msgid "Load Table Dict OK"
-msgstr ""
+msgstr "테이블 사정 읽기 OK"
 
 #: src/im/table/tabledict.c:285
 msgid "Loading Autophrase."
-msgstr ""
+msgstr "Autophrase 로딩"
 
 #: src/im/table/tabledict.c:41
 msgid "Loading Table Dict"
-msgstr ""
+msgstr "테이블 사전 로딩"
 
 #: src/module/imselector/fcitx-imselector.desc:4
 msgid "Local Input Method SelectKey"
@@ -1880,7 +1880,7 @@ msgstr "메뉴 폰트 크기"
 
 #: src/im/pinyin/py.c:2141
 msgid "Migrate the old file path to the new one"
-msgstr ""
+msgstr "오래된 파일 경로를 새로운것으로 마이그레이션"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
@@ -2309,7 +2309,7 @@ msgstr ""
 
 #: src/im/pinyin/py.c:2059
 msgid "Remind: "
-msgstr ""
+msgstr "리마인드:"
 
 #: src/module/remote/fcitx-remote-module.conf.in:3
 msgid "Remote"
