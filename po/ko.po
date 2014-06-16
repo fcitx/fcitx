@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-06-16 11:01+0200\n"
-"PO-Revision-Date: 2014-06-16 08:59+0000\n"
+"POT-Creation-Date: 2014-06-16 12:02+0200\n"
+"PO-Revision-Date: 2014-06-16 09:15+0000\n"
 "Last-Translator: heavyuser <heavyuser73@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/projects/p/fcitx/language/"
 "ko/)\n"
@@ -360,7 +360,7 @@ msgstr ""
 
 #: src/im/table/table.desc:49
 msgid "Auto Send Candidate Word"
-msgstr ""
+msgstr "후보 단어 자동 보내기"
 
 #: src/lib/fcitx-config/fcitx-config.c:1180
 #: src/lib/fcitx-config/fcitx-config.c:1187
@@ -418,7 +418,7 @@ msgstr ""
 #: src/module/remote/remote.c:70
 #, c-format
 msgid "Can't open socket %s: %s"
-msgstr ""
+msgstr "소켓을 열수 없음 %s: %s"
 
 #: src/ui/classic/skin.desc:41
 msgid "Candidate Index Color"
@@ -528,7 +528,7 @@ msgstr ""
 
 #: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
-msgstr ""
+msgstr "Pinyin를 찾을 수 없음"
 
 #: data/script/fcitx-diagnose.sh:959
 msgid "Cannot interpret XMODIFIERS: ${1}."
@@ -591,11 +591,11 @@ msgstr ""
 
 #: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
-msgstr ""
+msgstr "지우기위해 문장을 선택하고, 취소를 위해서 ESC를 누르세요"
 
 #: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
-msgstr ""
+msgstr "앞에 넣기 위해 문장을 선택하고, 취소를 위해서 ESC를 누르세요"
 
 #: src/im/table/table.c:721
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
@@ -712,7 +712,7 @@ msgstr ""
 
 #: data/config.desc:198
 msgid "Commit when toggle state"
-msgstr ""
+msgstr "상태가 토글 될 때 커밋"
 
 #: src/im/keyboard/fcitx-keyboard.desc:4
 msgid "Commit with extra space when choose candidate word"
@@ -967,7 +967,7 @@ msgstr "활성"
 
 #: data/config.desc:63
 msgid "Enable Hotkey to scroll Between Input Method"
-msgstr ""
+msgstr "입력기 사이에 스크롤을 위한 단축키 활성"
 
 #: data/addon.desc:27
 msgid "Enabled"
@@ -999,7 +999,7 @@ msgstr ""
 
 #: src/lib/fcitx-config/fcitx-config.c:376
 msgid "Enum option duplicated."
-msgstr ""
+msgstr "Enum 옵션이 중복됨."
 
 #: src/lib/fcitx-config/fcitx-config.c:386
 msgid "Enum option number must larger than 0"
@@ -1041,7 +1041,7 @@ msgstr ""
 
 #: src/ui/cairostuff/font.c:46
 msgid "Error: Load fontconfig failed"
-msgstr ""
+msgstr "에러 : Load fontconfig failed"
 
 #: src/ui/classic/fcitx-skin-installer.sh:76
 msgid "Error: skin failed to install"
@@ -1532,7 +1532,7 @@ msgstr "비활성 텍스트 아이콘 색"
 
 #: data/config.desc:68
 msgid "Include Inactivate when scrolling between Input Method"
-msgstr ""
+msgstr "입력기 사이에 스크롤 할 때 비활성화 포함"
 
 #: src/module/clipboard/fcitx-clipboard.desc:31
 msgid "Include the text currently selected in clipboard history."
@@ -1738,6 +1738,8 @@ msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr ""
+"선택된 문자를 고르기위해 좌/우키를, 확인을 위해 엔터키를, 취소를 위해 ESC키"
+"를 선택하세요"
 
 #: src/module/clipboard/fcitx-clipboard.desc:11
 msgid "Length of Clipboard History to Save"
@@ -1762,7 +1764,7 @@ msgstr "Autophrase 로딩 OK"
 
 #: src/im/table/tabledict.c:248
 msgid "Load Table Dict OK"
-msgstr "테이블 사정 읽기 OK"
+msgstr "테이블 사전 로딩 OK"
 
 #: src/im/table/tabledict.c:285
 msgid "Loading Autophrase."
@@ -1981,7 +1983,7 @@ msgstr ""
 #: src/module/quickphrase/fcitx-quickphrase.desc:5
 #: src/module/quickphrase/fcitx-quickphrase.desc:20
 msgid "None"
-msgstr ""
+msgstr "없음"
 
 #: src/im/table/table.desc:121
 msgid "Not Set"
@@ -2064,7 +2066,7 @@ msgstr ""
 
 #: src/im/table/table.c:1395
 msgid "Phrase is already in Dict "
-msgstr ""
+msgstr "문장이 이미 사전에 있습니다"
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:31
 msgid "Phrase:"
@@ -2167,7 +2169,7 @@ msgstr ""
 
 #: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:456
 msgid "Press Enter to input text"
-msgstr ""
+msgstr "텍스트를 입력하기위해 엔터를 누르세요"
 
 #: src/im/pinyin/py.c:729
 msgid "Press index to delete user phrase (ESC for cancel)"
@@ -2305,7 +2307,7 @@ msgstr "설정 다시읽기"
 
 #: src/im/table/table.c:1287
 msgid "Remind:"
-msgstr ""
+msgstr "리마인드:"
 
 #: src/im/pinyin/py.c:2059
 msgid "Remind: "
@@ -2854,7 +2856,7 @@ msgstr "단어 힌트 전환"
 
 #: src/module/autoeng/AutoEng.c:557
 msgid "Too long item for AutoEng"
-msgstr "자동 영어를 위한 아이템이 너무 길음."
+msgstr "자동 영어를 위한 아이템이 너무 길음"
 
 #: src/ui/classic/skin.desc:129 src/ui/classic/skin.desc:235
 #: src/ui/classic/skin.desc:365
@@ -2997,7 +2999,7 @@ msgstr ""
 
 #: src/module/clipboard/fcitx-clipboard.desc:30
 msgid "Use Selection Text"
-msgstr ""
+msgstr "선택 텍스트 사용"
 
 #: src/ui/classic/fcitx-classic-ui.desc:39
 msgid "Use System Tray Icon"
