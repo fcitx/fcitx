@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-06-16 12:02+0200\n"
-"PO-Revision-Date: 2014-06-16 09:15+0000\n"
+"POT-Creation-Date: 2014-06-19 12:04+0200\n"
+"PO-Revision-Date: 2014-06-19 09:46+0000\n"
 "Last-Translator: heavyuser <heavyuser73@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/projects/p/fcitx/language/"
 "ko/)\n"
@@ -356,7 +356,7 @@ msgstr "자동 문구 길이"
 
 #: src/im/table/table.desc:103
 msgid "Auto Phrase Phrase"
-msgstr ""
+msgstr "자동 문장"
 
 #: src/im/table/table.desc:49
 msgid "Auto Send Candidate Word"
@@ -1201,6 +1201,8 @@ msgid ""
 "list, then English (US) will be applied to all other non keyboard input "
 "method layout"
 msgstr ""
+"예를 들면, 기보드 - English (US)가 리스트 안에 첫번째 입력기이면 English (US)"
+"가 다른 키보드가 아닌 입력기 레이아웃에 적용 될 것입니다."
 
 #: data/script/fcitx-diagnose.sh:883
 msgid "Found ${1} at ${2}."
@@ -2062,7 +2064,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/model.cpp:58
 msgid "Phrase"
-msgstr ""
+msgstr "문장"
 
 #: src/im/table/table.c:1395
 msgid "Phrase is already in Dict "
@@ -2070,7 +2072,7 @@ msgstr "문장이 이미 사전에 있습니다"
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:31
 msgid "Phrase:"
-msgstr ""
+msgstr "문장:"
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -3027,7 +3029,7 @@ msgstr ""
 
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Use the layout of first keyboard input method in list as default layout"
-msgstr ""
+msgstr "기본 레이아웃으로 리스트안에 첫번째 키보드 입력기를 사용"
 
 #: src/module/remote/fcitx-remote-module.conf.in:4
 msgid "Used by fcitx-remote to change Fcitx state from console"
