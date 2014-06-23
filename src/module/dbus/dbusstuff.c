@@ -410,6 +410,8 @@ void DBusDestroy(void* arg) {
 
     fcitx_handler_table_free(dbusmodule->handler);
 
+    dbus_shutdown();
+
     free(dbusmodule);
 }
 
