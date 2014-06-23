@@ -806,6 +806,8 @@ static void FcitxInstanceInitNoPreeditApps(FcitxInstance* instance) {
         re = NULL;
     }
 
+    fcitx_utils_free_string_list(app_pat_list);
+
     instance->no_preedit_app_list = no_preedit_app_list;
 }
 
