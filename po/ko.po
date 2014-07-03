@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-06-19 12:04+0200\n"
-"PO-Revision-Date: 2014-06-19 09:46+0000\n"
+"POT-Creation-Date: 2014-07-03 06:07+0200\n"
+"PO-Revision-Date: 2014-07-03 03:50+0000\n"
 "Last-Translator: heavyuser <heavyuser73@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/projects/p/fcitx/language/"
 "ko/)\n"
@@ -754,7 +754,7 @@ msgstr "현재 입력기 설정"
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
 msgid "Configure group name error: line %d"
-msgstr ""
+msgstr "그룹 이름 설정 에러 : 라인 %d"
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
 msgid "Confirm deletion"
@@ -946,12 +946,12 @@ msgstr ""
 #: src/lib/fcitx-config/fcitx-config.c:901
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
-msgstr ""
+msgstr "그룹 이름이 중복됨, 이전 것과 병합하세요: %s :라인 %d"
 
 #: src/lib/fcitx-config/fcitx-config.c:968
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
-msgstr ""
+msgstr "옵션이 중복됨, 겹쳐 쓰세요 : 라인 %d"
 
 #: tools/gui/quickphrase-editor/editor.cpp:56
 msgid "E&xport"
@@ -995,7 +995,7 @@ msgstr "영어 보드 아이콘"
 
 #: src/lib/fcitx-config/fcitx-config.c:400
 msgid "Enum Option is invalid, take it as string"
-msgstr ""
+msgstr "Enum 옵션이 유호하지 않습니다, 문자열을 가짐 "
 
 #: src/lib/fcitx-config/fcitx-config.c:376
 msgid "Enum option duplicated."
@@ -1003,7 +1003,7 @@ msgstr "Enum 옵션이 중복됨."
 
 #: src/lib/fcitx-config/fcitx-config.c:386
 msgid "Enum option number must larger than 0"
-msgstr ""
+msgstr "Enum 옵션 넘버는 0보다 커야 합니다"
 
 #: data/script/fcitx-diagnose.sh:937
 msgid ""
@@ -1607,7 +1607,7 @@ msgstr "두 입력 사이의 시간 간격"
 #: src/lib/fcitx-config/fcitx-config.c:922
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
-msgstr ""
+msgstr "잘못된 입력 : 라인 %d '=' 빠짐"
 
 #: data/script/fcitx-diagnose.sh:1326
 msgid "Invalid addon config file ${1}."
@@ -1758,7 +1758,7 @@ msgstr "라이브러리"
 #: src/lib/fcitx/addon.c:151
 #, c-format
 msgid "Load Addon Config File:%s"
-msgstr ""
+msgstr "에드온 설정 파일을 로드함 : %s"
 
 #: src/im/table/tabledict.c:341
 msgid "Load Autophrase OK"
@@ -1905,7 +1905,7 @@ msgstr ""
 
 #: src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
-msgstr ""
+msgstr "타입이 누락됨, 문자열을 가짐 "
 
 #: data/addon.desc:20
 msgid "Module"
@@ -2010,12 +2010,12 @@ msgstr "OpenCC"
 #: src/lib/fcitx-config/fcitx-config.c:1136
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
-msgstr ""
+msgstr "옵션 %s은 잘못되었습니다, 디폴트 값을 사용하세요 %s"
 
 #: src/lib/fcitx-config/fcitx-config.c:1144
 #, c-format
 msgid "Option %s is Invalid."
-msgstr ""
+msgstr "옵션 %s은 잘못되었습니다."
 
 #: src/im/table/table.desc:34
 msgid "Order of Code Table"
@@ -2945,7 +2945,7 @@ msgstr ""
 #: src/lib/fcitx-config/fcitx-config.c:406
 #, c-format
 msgid "Unknown type, take it as string: %s"
-msgstr ""
+msgstr "알 수 없는 타입, 문자열을 가짐 : %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
@@ -3269,7 +3269,7 @@ msgstr ""
 #: src/lib/fcitx-config/fcitx-config.c:1200
 #, c-format
 msgid "no default option for %s/%s"
-msgstr "%s/%s을(를) 위한 디폴트 옵션 없음"
+msgstr "%s/%s을 위한 디폴트 옵션 없음"
 
 #: src/ui/cairostuff/font.c:121
 msgid "no valid font."
