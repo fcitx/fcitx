@@ -5,7 +5,7 @@
 # Translators:
 # Christopher Meng <cickumqt@gmail.com>, 2012
 # Cynthia Young <cynthia.young0512@gmail.com>, 2013
-# marguerite su <i@marguerite.su>, 2012-2013
+# marguerite su <i@marguerite.su>, 2012-2014
 # csslayer <wengxt@gmail.com>, 2013-2014
 # csslayer <wengxt@gmail.com>, 2010-2012
 # csslayer <wengxt@gmail.com>, 2013
@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-06-14 16:02+0200\n"
-"PO-Revision-Date: 2014-06-14 13:39+0000\n"
-"Last-Translator: yyc1992 <yyc1992@gmail.com>\n"
+"POT-Creation-Date: 2014-07-14 13:03+0200\n"
+"PO-Revision-Date: 2014-07-14 10:28+0000\n"
+"Last-Translator: marguerite su <i@marguerite.su>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
@@ -2214,7 +2214,7 @@ msgstr "优先级"
 
 #: data/addon.desc:48
 msgid "Priority of addon"
-msgstr "插件的优先级"
+msgstr "附加组件优先级"
 
 #: data/profile.desc:1 data/profile.desc:6 data/profile.desc:11
 #: data/profile.desc:16 data/profile.desc:21 data/profile.desc:26
@@ -2440,7 +2440,7 @@ msgstr "搜索 unicode"
 
 #: data/config.desc:162
 msgid "Seconds sleep before fcitx really start"
-msgstr "Fcitx真正启动前延迟的秒数"
+msgstr "Fcitx 真正启动前延迟的秒数"
 
 #: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
@@ -2681,7 +2681,7 @@ msgstr "笔画输入触发长度"
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
-msgstr "子配置"
+msgstr "模块子配置"
 
 #: src/ui/classic/fcitx-skin-installer.sh:74
 msgid "Successfully Installed skin"
