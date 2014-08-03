@@ -38,14 +38,14 @@ add_source() {
 download_wget() {
     local url="$1"
     local output="$2"
-    wget -c -T 10 -O "${output}.part" "${url}" || return 1
+    wget -c --connect-timeout=10 -O "${output}.part" "${url}" || return 1
     mv "${output}.part" "${output}"
 }
 
 download_curl() {
     local url="$1"
     local output="$2"
-    curl -C - -L -m 10 -o "${output}.part" "${url}" || return 1
+    curl -C - -L --connect-timeout 10 -y 10 -o "${output}.part" "${url}" || return 1
     mv "${output}.part" "${output}"
 }
 
@@ -53,7 +53,7 @@ download_cmake() {
     local url="$1"
     local output="$2"
     __print_cmake_download_cmd() {
-        echo "file(DOWNLOAD \"${url}\" \"${output}\" TIMEOUT 10 STATUS result)"
+        echo "file(DOWNLOAD \"${url}\" \"${output}\" INACTIVITY_TIMEOUT 10 STATUS result)"
         echo 'list(GET result 0 code)'
         echo 'if(code)'
         echo '  list(GET result 1 message)'
