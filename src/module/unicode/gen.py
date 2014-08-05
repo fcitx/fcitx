@@ -102,256 +102,301 @@ import io
 
 # based on http://www.unicode.org/charts/
 sectiondata = '''
-SECTION European Alphabets
+SECTION European Scripts
+Armenian
+Caucasian Albanian
+Cypriot Syllabary
+Cyrillic
+Cyrillic Supplement
+Cyrillic Extended-A
+Cyrillic Extended-B
+Elbasan
+Georgian
+Georgian Supplement
+Glagolitic
+Gothic
+Greek and Coptic
+Greek Extended
 Basic Latin
 Latin-1 Supplement
 Latin Extended-A
 Latin Extended-B
 Latin Extended-C
 Latin Extended-D
+Latin Extended-E
 Latin Extended Additional
-Armenian
-Coptic
-Cyrillic
-Cyrillic Supplement
-Cyrillic Extended-A
-Cyrillic Extended-B
-Georgian
-Georgian Supplement
-Glagolitic
-Greek and Coptic
-Greek Extended
+Linear A
+Linear B Syllabary
+Linear B Ideograms
 Ogham
+Old Italic
+Old Permic
+Phaistos Disc
 Runic
+Shavian
+
+SECTION Phonetic & Shorthand Symbols
+Duployan
+Shorthand Format Controls
+IPA Extensions
+Phonetic Extensions
+Phonetic Extensions Supplement
+Modifier Tone Letters
+Spacing Modifier Letters
+Superscripts and Subscripts
+
+SECTION Combining Diacritics
+Combining Diacritical Marks
+Combining Diacritical Marks Supplement
+Combining Diacritical Marks Extended
+Combining Half Marks
 
 SECTION African Scripts
 Bamum
+Bamum Supplement
+Bassa Vah
+Coptic
+Coptic Epact Numbers
+Egyptian Hieroglyphs
 Ethiopic
 Ethiopic Supplement
 Ethiopic Extended
 Ethiopic Extended-A
+Mende Kikakui
+Meroitic Cursive
+Meroitic Hieroglyphs
 NKo
+Osmanya
 Tifinagh
 Vai
 
 SECTION Middle Eastern Scripts
 Arabic
-Arabic Extended-A
 Arabic Supplement
+Arabic Extended-A
 Arabic Presentation Forms-A
 Arabic Presentation Forms-B
+Imperial Aramaic
+Avestan
+Carian
+Cuneiform
+Cuneiform Numbers and Punctuation
+Old Persian
+Ugaritic
 Hebrew
+Lycian
+Lydian
 Mandaic
+Nabataean
+Old North Arabian
+Old South Arabian
+Inscriptional Pahlavi
+Psalter Pahlavi
+Palmyrene
+Inscriptional Parthian
+Phoenician
 Samaritan
 Syriac
 
+SECTION Central Asian Scripts
+Manichaean
+Mongolian
+Old Turkic
+Phags-pa
+Tibetan
+
 SECTION South Asian Scripts
 Bengali
-Common Indic Number Forms
+Brahmi
+Chakma
 Devanagari
 Devanagari Extended
+Grantha
 Gujarati
 Gurmukhi
+Kaithi
 Kannada
+Kharoshthi
+Khojki
+Khudawadi
 Lepcha
 Limbu
+Mahajani
 Malayalam
 Meetei Mayek
 Meetei Mayek Extensions
+Modi
+Mro
 Ol Chiki
 Oriya
 Saurashtra
+Sharada
+Siddham
 Sinhala
+Sinhala Archaic Numbers
+Sora Sompeng
 Syloti Nagri
+Takri
 Tamil
 Telugu
 Thaana
+Tirhuta
 Vedic Extensions
+Warang Citi
 
-SECTION Philippine Scripts
-Buhid
-Hanunoo
-Tagalog
-Tagbanwa
-
-
-SECTION South East Asian Scripts
-Balinese
-Batak
-Buginese
+SECTION Southeast Asian Scripts
 Cham
-Javanese
 Kayah Li
 Khmer
 Khmer Symbols
 Lao
 Myanmar
 Myanmar Extended-A
+Myanmar Extended-B
 New Tai Lue
-Rejang
-Sundanese
-Sundanese Supplement
+Pahawh Hmong
+Pau Cin Hau
 Tai Le
 Tai Tham
 Tai Viet
 Thai
+
+SECTION Indonesia &amp; Oceania Scripts
+Balinese
+Batak
+Buginese
+Buhid
+Hanunoo
+Javanese
+Rejang
+Sundanese
+Sundanese Supplement
+Tagalog
+Tagbanwa
 
 SECTION East Asian Scripts
 Bopomofo
 Bopomofo Extended
 CJK Unified Ideographs
 CJK Unified Ideographs Extension A
-CJK Compatibility
+CJK Unified Ideographs Extension B
+CJK Unified Ideographs Extension C
+CJK Unified Ideographs Extension D
 CJK Compatibility Ideographs
-CJK Compatibility Forms
+CJK Compatibility Ideographs Supplement
+Kangxi Radicals
 CJK Radicals Supplement
 CJK Strokes
-CJK Symbols and Punctuation
-Enclosed CJK Letters and Months
+Ideographic Description Characters
 Hangul Jamo
 Hangul Jamo Extended-A
 Hangul Jamo Extended-B
 Hangul Compatibility Jamo
 Hangul Syllables
 Hiragana
-Ideographic Description Characters
-Kanbun
-Kangxi Radicals
 Katakana
 Katakana Phonetic Extensions
+Kana Supplement
+Kanbun
 Lisu
-Yi Radicals
+Miao
 Yi Syllables
+Yi Radicals
 
-SECTION Central Asian Scripts
-Mongolian
-Phags-pa
-Tibetan
-
-SECTION Other Scripts
+SECTION American Scripts
 Cherokee
+Deseret
 Unified Canadian Aboriginal Syllabics
 Unified Canadian Aboriginal Syllabics Extended
 
-SECTION Symbols
-Braille Patterns
-Control Pictures
-Currency Symbols
-Dingbats
-Enclosed Alphanumerics
+SECTION Other
+Alphabetic Presentation Forms
+Halfwidth and Fullwidth Forms
+
+SECTION Punctuation
 General Punctuation
-Miscellaneous Symbols
-Miscellaneous Technical
-Optical Character Recognition
 Small Form Variants
 Supplemental Punctuation
+CJK Symbols and Punctuation
+CJK Compatibility Forms
 Vertical Forms
-Yijing Hexagram Symbols
+
+SECTION Alphanumeric Symbols
+Enclosed Alphanumerics
+Enclosed Alphanumeric Supplement
+Enclosed CJK Letters and Months
+Enclosed Ideographic Supplement
+CJK Compatibility
+
+SECTION Technical Symbols
+Control Pictures
+Miscellaneous Technical
+Optical Character Recognition
+
+SECTION Combining Diacritics
+Combining Diacritical Marks for Symbols
+
+SECTION Numbers and Digits
+Aegean Numbers
+Ancient Greek Numbers
+Common Indic Number Forms
+Counting Rod Numerals
+Number Forms
+Rumi Numeral Symbols
 
 SECTION Mathematical Symbols
 Arrows
-Block Elements
-Box Drawing
 Supplemental Arrows-A
 Supplemental Arrows-B
-Geometric Shapes
+Supplemental Arrows-C
+Mathematical Alphanumeric Symbols
+Arabic Mathematical Alphabetic Symbols
 Letterlike Symbols
 Mathematical Operators
 Supplemental Mathematical Operators
 Miscellaneous Mathematical Symbols-A
 Miscellaneous Mathematical Symbols-B
-Miscellaneous Symbols and Arrows
-Number Forms
-Superscripts and Subscripts
+Geometric Shapes
+Box Drawing
+Block Elements
+Geometric Shapes Extended
 
-SECTION Phonetic Symbols
-IPA Extensions
-Modifier Tone Letters
-Phonetic Extensions
-Phonetic Extensions Supplement
-Spacing Modifier Letters
-
-SECTION Combining Diacritical Marks
-Combining Diacritical Marks
-Combining Diacritical Marks Supplement
-Combining Diacritical Marks for Symbols
-Combining Half Marks
-
-SECTION Other
-Alphabetic Presentation Forms
-Halfwidth and Fullwidth Forms
-High Private Use Surrogates
-High Surrogates
-Low Surrogates
-Private Use Area
-Specials
-Variation Selectors
-
-SECTION SMP
-Linear B Syllabary
-Linear B Ideograms
-Aegean Numbers
-Ancient Greek Numbers
+SECTION Other Symbols
+Alchemical Symbols
 Ancient Symbols
-Phaistos Disc
-Lycian
-Carian
-Old Italic
-Gothic
-Ugaritic
-Old Persian
-Deseret
-Shavian
-Osmanya
-Cypriot Syllabary
-Imperial Aramaic
-Phoenician
-Lydian
-Meroitic Hieroglyphs
-Meroitic Cursive
-Kharoshthi
-Old South Arabian
-Avestan
-Inscriptional Parthian
-Inscriptional Pahlavi
-Old Turkic
-Rumi Numeral Symbols
-Brahmi
-Kaithi
-Sora Sompeng
-Chakma
-Sharada
-Takri
-Cuneiform
-Cuneiform Numbers and Punctuation
-Egyptian Hieroglyphs
-Bamum Supplement
-Miao
-Kana Supplement
-Byzantine Musical Symbols
+Braille Patterns
+Currency Symbols
+Dingbats
+Ornamental Dingbats
+Emoticons
+Domino Tiles
+Mahjong Tiles
+Playing Cards
+Miscellaneous Symbols
+Miscellaneous Symbols and Arrows
+Miscellaneous Symbols and Pictographs
 Musical Symbols
 Ancient Greek Musical Notation
+Byzantine Musical Symbols
+Transport and Map Symbols
+Yijing Hexagram Symbols
 Tai Xuan Jing Symbols
-Counting Rod Numerals
-Mathematical Alphanumeric Symbols
-Arabic Mathematical Alphabetic Symbols
-Mahjong Tiles
-Domino Tiles
-Playing Cards
-Enclosed Alphanumeric Supplement
-Enclosed Ideographic Supplement
-Miscellaneous Symbols And Pictographs
-Emoticons
-Transport And Map Symbols
-Alchemical Symbols
-CJK Unified Ideographs Extension B
-CJK Unified Ideographs Extension C
-CJK Unified Ideographs Extension D
-CJK Compatibility Ideographs Supplement
+
+SECTION Specials
+Specials
 Tags
+Variation Selectors
 Variation Selectors Supplement
+
+SECTION Private Use
+Private Use Area
 Supplementary Private Use Area-A
 Supplementary Private Use Area-B
+
+SECTION Surrogates
+High Surrogates
+High Private Use Surrogates
+Low Surrogates
 '''
 # TODO: rename "Other Scripts" to "American Scripts"
 
