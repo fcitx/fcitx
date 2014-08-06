@@ -849,8 +849,12 @@ void _Xi18nGetIC(XIMS ims, IMProtocol *call_data, unsigned char *p)
                                      &ic_attr[ic_count],
                                      &attrID_list[i],
                                      number);
-            i += read_number;
-            ic_count += read_number;
+            if (read_number == 0) {
+                i += 1;
+            } else {
+                i += read_number;
+                ic_count += read_number;
+            }
         }
         /*endif*/
     }
