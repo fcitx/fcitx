@@ -244,20 +244,11 @@ static void SetIMIcon(FcitxInstance* instance, char** prop)
     else if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
         FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
         if (im) {
-#if 0
             if (strncmp(im->uniqueName, "fcitx-keyboard-", strlen("fcitx-keyboard-")) == 0) {
                 icon = "";
-                if (*im->langCode) {
-                    strncpy(temp, im->langCode, LANGCODE_LENGTH);
-                    imname = temp;
-                    imname[0] = toupper(imname[0]);
-                }
-                else {
-                    imname = im->uniqueName + strlen("fcitx-keyboard");
-                }
+                imname = im->uniqueName + strlen("fcitx-keyboard-");
             }
             else
-#endif
             {
                 icon = im->strIconName;
                 imname = im->strName;
