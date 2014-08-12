@@ -23,6 +23,30 @@ fi
 # utility
 #############################
 
+__get_pretty_name() {
+    local _home=$(realpath ~ 2> /dev/null || echo ~)
+    local _orig=$(realpath "${1}" 2> /dev/null || echo "${1}")
+    if [[ ${_orig}/ =~ ^${_home}/ ]]; then
+        echo "~${_orig#${_home}}"
+    else
+        echo "${_orig}"
+    fi
+}
+
+__conf_dir_init() {
+    # Don't do any fancy check here, it's the user's fault, which we should detect
+    # later, if it is set to some non-sense value.
+    if [[ -n ${XDG_CONFIG_HOME} ]]; then
+        _xdg_conf_home=${XDG_CONFIG_HOME}
+    else
+        _xdg_conf_home=~/.config
+    fi
+    fx_conf_home=${_xdg_conf_home}/fcitx
+    xdg_conf_pretty_name=$(__get_pretty_name "${_xdg_conf_home}")
+    fx_conf_pretty_name=$(__get_pretty_name "${fx_conf_home}")
+}
+__conf_dir_init
+
 array_push() {
     eval "${1}"'=("${'"${1}"'[@]}" "${@:2}")'
 }
@@ -383,6 +407,7 @@ run_ldd() {
 
 # tty and color
 __istty=0
+__use_color=0
 
 check_istty() {
     [ -t 1 ] && {
@@ -390,10 +415,21 @@ check_istty() {
     } || {
         __istty=0
     }
+    case "${_use_color}" in
+        true)
+            __use_color=1
+            ;;
+        false)
+            __use_color=0
+            ;;
+        auto)
+            __use_color=$__istty
+            ;;
+    esac
 }
 
 print_tty_ctrl() {
-    ((__istty)) || return
+    ((__use_color)) || return
     echo -ne '\e['"${1}"'m'
 }
 
@@ -513,23 +549,25 @@ write_paragraph() {
     local whole_prefix
     local IFS=$'\n'
     ((__need_blank_line)) && echo
-    [ -z "${code}" ] || print_tty_ctrl "${code}"
     {
         while read line; do
-            ((i == 0)) && {
-                whole_prefix="${prefix}${p1}"
-            } || {
-                whole_prefix="${prefix}${p2}"
-            }
-            ((i++))
-            [ -z "${line}" ] && {
-                echo
-            } || {
-                echo "${whole_prefix}${line}"
-            }
-        done | replace_reset "${code}"
+            [ -z "${code}" ] || print_tty_ctrl "${code}"
+            {
+                ((i == 0)) && {
+                    whole_prefix="${prefix}${p1}"
+                } || {
+                    whole_prefix="${prefix}${p2}"
+                }
+                ((i++))
+                [ -z "${line}" ] && {
+                    echo
+                } || {
+                    echo "${whole_prefix}${line}"
+                }
+            } | replace_reset "${code}"
+            [ -z "${code}" ] || print_tty_ctrl "0"
+        done
     } <<< "${str}"
-    [ -z "${code}" ] || print_tty_ctrl "0"
     __need_blank_line=1
 }
 
@@ -764,22 +802,74 @@ check_env() {
         locale_error="$(locale 2>&1 > /dev/null)"
         if [[ -n $locale_error ]]; then
             write_error_eval "$(_ 'Error occurs when running ${1}. Please check your locale settings.')" \
-            "$(code_inline "locale")"
+                "$(code_inline "locale")"
             write_quote_str "${locale_error}"
         fi
         increase_cur_level -1
     else
         write_paragraph "$(print_not_found 'locale')"
     fi
+    write_order_list "$(_ 'Directories:')"
+    increase_cur_level 1
+    write_order_list "$(_ 'Home:')"
+    write_quote_str ~
+    write_order_list "$(code_inline '${XDG_CONFIG_HOME}'):"
+    if [[ -z ${XDG_CONFIG_HOME} ]]; then
+        write_eval "$(_ 'Environment variable ${1} is not set.')" \
+            "$(code_inline 'XDG_CONFIG_HOME')"
+    else
+        write_eval \
+            "$(_ 'Environment variable ${1} is set to ${2}.')" \
+            "$(code_inline 'XDG_CONFIG_HOME')" \
+            "$(code_inline "${XDG_CONFIG_HOME}")"
+    fi
+    write_eval "$(_ 'Current value of ${1} is ${2} (${3}).')" \
+        "$(code_inline 'XDG_CONFIG_HOME')" \
+        "$(code_inline "${xdg_conf_pretty_name}")" \
+        "$(code_inline "${_xdg_conf_home}")"
+    write_order_list "$(_ "Fcitx Settings Directory:")"
+    write_eval \
+        "$(_ 'Current fcitx settings directory is ${1} (${2}).')" \
+        "$(code_inline "${fx_conf_pretty_name}")" \
+        "$(code_inline "${fx_conf_home}")"
+    increase_cur_level -1
+
     write_order_list "$(_ 'Current user:')"
     write_eval "$(_ 'The script is run as ${1} (${2}).')" \
         "${cur_user}" "${cur_uid}"
     if check_is_root; then
-        write_error_eval \
-            "$(_ 'You are probably logging in as ${1} or using ${2} to run this script. This either means you have security problems or the result of this script may not be accurate. See ${3} or ${4} for more information.')" \
-            "$(code_inline 'root')" "$(code_inline 'sudo')" \
-            "$(print_google_link "$(_ "Why is it bad to run as root")")" \
-            "$(print_google_link "$(_ "sudo environment variables")")"
+        increase_cur_level 1
+        local has_sudo_var=0
+        write_order_list_eval "$(_ '${1} Environment Variables:')" \
+            "$(code_inline 'sudo')"
+        check_sudo_env() {
+            local env_name=${1}
+            if [[ -n ${!env_name} ]]; then
+                has_sudo_var=1
+                write_eval "$(_ '${1} is set to ${2}.')" \
+                    "${env_name}" "${!env_name}"
+            else
+                write_eval "$(_ '${1} is not set.')" "${env_name}"
+            fi
+        }
+        check_sudo_env SUDO_COMMAND
+        check_sudo_env SUDO_USER
+        check_sudo_env SUDO_UID
+        check_sudo_env SUDO_GID
+        write_order_list "$(_ 'Running as root:')"
+        if ((has_sudo_var)); then
+            write_error_eval \
+                "$(_ 'You are probably using ${1} to run this script. This means the result of this script may not be accurate. See ${2} for more information.')" \
+                "$(code_inline 'sudo')" \
+                "$(print_google_link "$(_ "sudo environment variables")")"
+        else
+            write_error_eval \
+                "$(_ 'You are probably logging in as ${1} or using ${2} to run this script. This either means you have security problems or the result of this script may not be accurate. See ${3} or ${4} for more information.')" \
+                "$(code_inline 'root')" "$(code_inline 'sudo')" \
+                "$(print_google_link "$(_ "Why is it bad to run as root")")" \
+                "$(print_google_link "$(_ "sudo environment variables")")"
+        fi
+        increase_cur_level -1
     fi
 }
 
@@ -1000,9 +1090,13 @@ check_xim() {
 }
 
 _check_toolkit_env() {
-    local env_name="$1"
-    local name="$2"
-    write_order_list "$(code_inline '${'"${env_name}"'}'):"
+    local name="$1"
+    local env_names=("${@:2}")
+    local env_name
+    write_order_list "${name} - $(code_inline '${'"${env_names[0]}"'}'):"
+    for env_name in "${env_names[@]}"; do
+        [ -z "${!env_name}" ] || break
+    done
     if [ -z "${!env_name}" ]; then
         set_env_link "${env_name}" 'fcitx'
     elif [ "${!env_name}" = 'fcitx' ]; then
@@ -1037,7 +1131,8 @@ find_qt_modules() {
 
 check_qt() {
     write_title 2 "Qt:"
-    _check_toolkit_env QT_IM_MODULE qt
+    _check_toolkit_env qt4 QT4_IM_MODULE QT_IM_MODULE
+    _check_toolkit_env qt5 QT_IM_MODULE
     find_qt_modules
     qt4_module_found=''
     qt5_module_found=''
@@ -1065,11 +1160,13 @@ check_qt() {
     done
     if [ -z "${qt4_module_found}" ]; then
         __need_blank_line=0
-        write_error "$(_ 'Cannot find fcitx input method module for ${1}.')" Qt4
+        write_error_eval \
+            "$(_ 'Cannot find fcitx input method module for ${1}.')" Qt4
     fi
     if [ -z "${qt5_module_found}" ]; then
         __need_blank_line=0
-        write_error "$(_ 'Cannot find fcitx input method module for ${1}.')" Qt5
+        write_error_eval \
+            "$(_ 'Cannot find fcitx input method module for ${1}.')" Qt5
     fi
 }
 
@@ -1160,9 +1257,9 @@ check_gtk_query_immodule() {
                 "$(code_inline "${real_version}")" \
                 "$(code_inline "${query_immodule}")" \
                 "$(code_inline gtk-query-immodules)"
-            __need_blank_line=0
-            write_eval "$(_ 'Version Line:')"
-            write_quote_str "${version_line}"
+                __need_blank_line=0
+                write_eval "$(_ 'Version Line:')"
+                write_quote_str "${version_line}"
         else
             write_eval "$(_ 'Found ${2} for unknown gtk version at ${1}.')" \
                 "$(code_inline "${query_immodule}")" \
@@ -1243,9 +1340,9 @@ check_gtk_immodule_cache() {
                 "$(_ 'Found immodules cache for gtk ${1} at ${2}.')" \
                 "$(code_inline ${real_version})" \
                 "$(code_inline "${cache}")"
-            __need_blank_line=0
-            write_eval "$(_ 'Version Line:')"
-            write_quote_str "${version_line}"
+                __need_blank_line=0
+                write_eval "$(_ 'Version Line:')"
+                write_quote_str "${version_line}"
         else
             write_eval \
                 "$(_ 'Found immodule cache for unknown gtk version at ${1}.')" \
@@ -1279,7 +1376,7 @@ check_gtk_immodule_cache() {
 
 check_gtk() {
     write_title 2 "Gtk:"
-    _check_toolkit_env GTK_IM_MODULE gtk
+    _check_toolkit_env gtk GTK_IM_MODULE
     write_order_list "$(code_inline gtk-query-immodules):"
     increase_cur_level 1
     check_gtk_query_immodule 2
@@ -1328,9 +1425,9 @@ check_modules() {
             continue
         fi
         enable=$(get_from_config_file "${file}" Enabled)
-        if [ -f ~/.config/fcitx/addon/${name}.conf ]; then
+        if [ -f ${fx_conf_home}/addon/${name}.conf ]; then
             _enable=$(get_from_config_file \
-                ~/.config/fcitx/addon/${name}.conf Enabled)
+                ${fx_conf_home}/addon/${name}.conf Enabled)
             [ -z "${_enable}" ] || enable="${_enable}"
         fi
         if [ $(echo "${enable}" | sed -e 's/.*/\L&/g') = false ]; then
@@ -1415,7 +1512,7 @@ check_input_methods() {
     write_title 2 "$(_ 'Input Methods:')"
     local IFS=','
     local imlist=($(get_from_config_file \
-        ~/.config/fcitx/profile EnabledIMList)) || {
+        ${fx_conf_home}/profile EnabledIMList)) || {
         write_error "$(_ 'Cannot read im list from fcitx profile.')"
         return 0
     }
@@ -1480,17 +1577,18 @@ check_log() {
     else
         write_error "$(print_not_found 'date')"
     fi
-    write_order_list "$(code_inline '~/.config/fcitx/log/'):"
-    [ -d ~/.config/fcitx/log/ ] || {
-        write_paragraph "$(print_not_found '~/.config/fcitx/log/')"
+    write_order_list "$(code_inline "${fx_conf_pretty_name}/log/"):"
+    [ -d ${fx_conf_home}/log/ ] || {
+        write_paragraph "$(print_not_found "${fx_conf_pretty_name}/log/")"
         return
     }
-    write_quote_cmd ls -AlF ~/.config/fcitx/log/
-    write_order_list "$(code_inline '~/.config/fcitx/log/crash.log'):"
-    if [ -f ~/.config/fcitx/log/crash.log ]; then
-        write_quote_cmd cat ~/.config/fcitx/log/crash.log
+    write_quote_cmd ls -AlF ${fx_conf_home}/log/
+    write_order_list "$(code_inline "${fx_conf_pretty_name}/log/crash.log"):"
+    if [ -f ${fx_conf_home}/log/crash.log ]; then
+        write_quote_cmd cat ${fx_conf_home}/log/crash.log
     else
-        write_paragraph "$(print_not_found '~/.config/fcitx/log/crash.log')"
+        write_paragraph \
+            "$(print_not_found "${fx_conf_pretty_name}/log/crash.log")"
     fi
 }
 
@@ -1502,6 +1600,26 @@ check_log() {
 _check_frontend=1
 _check_modules=1
 _check_log=1
+
+_use_color=auto
+
+while true; do
+    (($#)) || break
+    arg=$1
+    shift
+    case "${arg}" in
+        --color=@(never|false))
+        _use_color=false
+        ;;
+        --color=auto)
+            _use_color=auto
+            ;;
+        --color@(|=*))
+        _use_color=true
+        ;;
+    esac
+done
+
 [ -z "$1" ] || exec > "$1"
 
 
