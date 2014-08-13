@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-08-13 00:06+0200\n"
-"PO-Revision-Date: 2014-06-14 13:02+0000\n"
+"POT-Creation-Date: 2014-08-13 06:04+0200\n"
+"PO-Revision-Date: 2014-08-12 22:06+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -34,19 +34,16 @@ msgid " Ctrl+Delete To Delete"
 msgstr "Ctrl+Delete で削除"
 
 #: data/script/fcitx-diagnose.sh:843
-#, fuzzy
 msgid "${1} Environment Variables:"
-msgstr "sudoの環境変数"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:852
-#, fuzzy
 msgid "${1} is not set."
-msgstr "${1} は見つかりません"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:849
-#, fuzzy
 msgid "${1} is set to ${2}."
-msgstr "${1} を ${2} で見つけました。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:509
 msgid "${1} not found."
@@ -832,9 +829,8 @@ msgid "Current Input Method Name"
 msgstr "現在の入力メソッド名"
 
 #: data/script/fcitx-diagnose.sh:832
-#, fuzzy
 msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr "${1} (${2})としてスクリプトを実行"
+msgstr ""
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
@@ -1061,18 +1057,16 @@ msgstr ""
 "イルのどこかで間違って設定されていないか確認してください。"
 
 #: data/script/fcitx-diagnose.sh:818
-#, fuzzy
 msgid "Environment variable ${1} is not set."
-msgstr "環境変数 ${1} は \"{$2}\" に正しく設定されています。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1021
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
 msgstr "環境変数 ${1} は \"{$2}\" に正しく設定されています。"
 
 #: data/script/fcitx-diagnose.sh:822
-#, fuzzy
 msgid "Environment variable ${1} is set to ${2}."
-msgstr "環境変数 ${1} は \"{$2}\" に正しく設定されています。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:777
 msgid "Environment:"

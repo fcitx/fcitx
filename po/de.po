@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-08-13 00:06+0200\n"
-"PO-Revision-Date: 2014-06-14 13:02+0000\n"
+"POT-Creation-Date: 2014-08-13 06:04+0200\n"
+"PO-Revision-Date: 2014-08-12 22:06+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
@@ -26,19 +26,16 @@ msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete zum Löschen"
 
 #: data/script/fcitx-diagnose.sh:843
-#, fuzzy
 msgid "${1} Environment Variables:"
-msgstr "sudo Umgebungsvariablen"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:852
-#, fuzzy
 msgid "${1} is not set."
-msgstr "${1} nicht gefunden"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:849
-#, fuzzy
 msgid "${1} is set to ${2}."
-msgstr "${1} in ${2} gefunden."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:509
 msgid "${1} not found."
@@ -826,9 +823,8 @@ msgid "Current Input Method Name"
 msgstr "Name der aktivierten Eingabemethode"
 
 #: data/script/fcitx-diagnose.sh:832
-#, fuzzy
 msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr "Das Script läuft als ${1} (${2})."
+msgstr ""
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
@@ -1055,18 +1051,16 @@ msgstr ""
 "Sie, ob die Variable falsch in die Initfiles exportiert wurde."
 
 #: data/script/fcitx-diagnose.sh:818
-#, fuzzy
 msgid "Environment variable ${1} is not set."
-msgstr "Die Umgebungsvariable ${1} ist richtig auf \"${2}\" gesetzt."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1021
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
 msgstr "Die Umgebungsvariable ${1} ist richtig auf \"${2}\" gesetzt."
 
 #: data/script/fcitx-diagnose.sh:822
-#, fuzzy
 msgid "Environment variable ${1} is set to ${2}."
-msgstr "Die Umgebungsvariable ${1} ist richtig auf \"${2}\" gesetzt."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:777
 msgid "Environment:"
@@ -3299,14 +3293,10 @@ msgstr ""
 "Skripts ist nicht genau. Sehen Sie in ${3} oder ${4} für mehr Informationen."
 
 #: data/script/fcitx-diagnose.sh:862
-#, fuzzy
 msgid ""
 "You are probably using ${1} to run this script. This means the result of "
 "this script may not be accurate. See ${2} for more information."
 msgstr ""
-"Sie scheinen sich als ${1} einzuloggen oder benutzen ${2} um das Skript "
-"anzuwenden. Das kann zu Sicherheitsproblemen führen oder das Ergebnis des "
-"Skripts ist nicht genau. Sehen Sie in ${3} oder ${4} für mehr Informationen."
 
 #: data/script/fcitx-diagnose.sh:1108
 msgid "You are using xim in ${1} programs."

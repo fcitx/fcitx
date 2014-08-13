@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-08-13 00:06+0200\n"
-"PO-Revision-Date: 2014-07-14 10:28+0000\n"
-"Last-Translator: marguerite su <i@marguerite.su>\n"
+"POT-Creation-Date: 2014-08-13 06:04+0200\n"
+"PO-Revision-Date: 2014-08-12 22:06+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
@@ -32,19 +32,16 @@ msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
 #: data/script/fcitx-diagnose.sh:843
-#, fuzzy
 msgid "${1} Environment Variables:"
-msgstr "sudo的环境变量"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:852
-#, fuzzy
 msgid "${1} is not set."
-msgstr "${1} 未找到."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:849
-#, fuzzy
 msgid "${1} is set to ${2}."
-msgstr "在 ${2} 找到了 ${1}。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:509
 msgid "${1} not found."
@@ -824,9 +821,8 @@ msgid "Current Input Method Name"
 msgstr "当前输入法名称"
 
 #: data/script/fcitx-diagnose.sh:832
-#, fuzzy
 msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr "脚本作为 ${1} (${2}) 运行。"
+msgstr ""
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
@@ -1049,18 +1045,16 @@ msgstr ""
 "文件中错误的设置了它的值."
 
 #: data/script/fcitx-diagnose.sh:818
-#, fuzzy
 msgid "Environment variable ${1} is not set."
-msgstr "环境变量 ${1} 已经正确地设为了 \"${2}\"."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1021
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
 msgstr "环境变量 ${1} 已经正确地设为了 \"${2}\"."
 
 #: data/script/fcitx-diagnose.sh:822
-#, fuzzy
 msgid "Environment variable ${1} is set to ${2}."
-msgstr "环境变量 ${1} 已经正确地设为了 \"${2}\"."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:777
 msgid "Environment:"
@@ -3252,13 +3246,10 @@ msgstr ""
 "该脚本的结果可能不准确。有关更多信息，请参见 ${3} 或者 ${4} 。"
 
 #: data/script/fcitx-diagnose.sh:862
-#, fuzzy
 msgid ""
 "You are probably using ${1} to run this script. This means the result of "
 "this script may not be accurate. See ${2} for more information."
 msgstr ""
-"你可能以 ${1} 或者 ${2} 登录运行此脚本。这意味着两种情况，要么你有安全问题或"
-"该脚本的结果可能不准确。有关更多信息，请参见 ${3} 或者 ${4} 。"
 
 #: data/script/fcitx-diagnose.sh:1108
 msgid "You are using xim in ${1} programs."
