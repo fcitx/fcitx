@@ -1052,10 +1052,14 @@ void FcitxInstanceSwitchIMByName(FcitxInstance* instance, const char* name)
 {
     FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Enable, name);
     if (im) {
-        int idx = FcitxInstanceGetIMIndexByName(instance, name);
-        if (idx < 0)
-            return;
-        FcitxInstanceSwitchIMByIndex(instance, idx);
+        if (FcitxInstanceGetCurrentIC(instance)) {
+            int idx = FcitxInstanceGetIMIndexByName(instance, name);
+            if (idx < 0)
+                return;
+            FcitxInstanceSwitchIMByIndex(instance, idx);
+        } else {
+            FcitxInstanceSetDelayedIM(instance, name);
+        }
     }
 }
 
@@ -1687,7 +1691,11 @@ boolean IMMenuAction(FcitxUIMenu *menu, int index)
 {
     FcitxInstance* instance = (FcitxInstance*) menu->priv;
 
-    FcitxInstanceSwitchIMByIndex(instance, index);
+    FcitxIM* im = FcitxInstanceGetIMByIndex(instance, index);
+    // this contains delay support, so we don't use switch im by index here.
+    if (im) {
+        FcitxInstanceSwitchIMByName(instance, im->uniqueName);
+    }
     return true;
 }
 

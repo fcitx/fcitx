@@ -236,6 +236,11 @@ void FcitxInstanceCleanUpIC(FcitxInstance* instance)
             instance->free_list = todel;
             frontend->DestroyIC((*pfrontend)->addonInstance, todel);
             FreeICData(instance, todel);
+
+            if (todel == instance->lastIC) {
+                FcitxInstanceSetLastIC(instance, NULL);
+            }
+
             if (todel == instance->CurrentIC) {
                 instance->CurrentIC = NULL;
                 FcitxUICloseInputWindow(instance);
@@ -305,6 +310,10 @@ void FcitxInstanceDestroyIC(FcitxInstance* instance, int frontendid, void* filte
 
             rec->next = instance->free_list;
             instance->free_list = rec;
+
+            if (rec == instance->lastIC) {
+                FcitxInstanceSetLastIC(instance, NULL);
+            }
 
             if (rec == FcitxInstanceGetCurrentIC(instance)) {
                 FcitxUICloseInputWindow(instance);

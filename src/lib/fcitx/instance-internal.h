@@ -164,7 +164,13 @@ struct _FcitxInstance {
     
     UT_array eventQueue;
     UT_array* no_preedit_app_list;
+
+    FcitxInputContext* lastIC;
+    char* delayedIM;
 };
+
+void FcitxInstanceSetLastIC(FcitxInstance* instance, FcitxInputContext* ic);
+void FcitxInstanceSetDelayedIM(FcitxInstance* instance, const char* im);
 
 static inline FcitxAddon**
 FcitxInstanceGetPFrontend(FcitxInstance *instance, int id)
