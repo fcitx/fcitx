@@ -74,5 +74,8 @@
       <annotation name="com.trolltech.QtDBus.QtTypeName" value="FcitxQtInputMethodItemList" />
       <annotation name="org.qtproject.QtDBus.QtTypeName" value="FcitxQtInputMethodItemList" />
     </property>
+    <property access="readwrite" type="s" name="CurrentIM">
+    <annotation name="org.freedesktop.DBus.Property.EmitsChangedSignal" value="true"/>
+    </property>
   </interface>
 </node>
