@@ -74,9 +74,19 @@ static const gchar introspection_xml[] =
     "    <property access=\"readwrite\" type=\"a(sssb)\" name=\"IMList\">"
     "      <annotation name=\"org.freedesktop.DBus.Property.EmitsChangedSignal\" value=\"true\"/>"
     "    </property>"
+    "    <property access=\"readwrite\" type=\"s\" name=\"CurrentIM\">"
+    "      <annotation name=\"org.freedesktop.DBus.Property.EmitsChangedSignal\" value=\"true\"/>"
+    "    </property>"
     "  </interface>"
     "</node>";
 
+enum {
+    PROP_0,
+    PROP_CURRENT_IM,
+    N_PROPERTIES
+};
+
+static GParamSpec *properties[N_PROPERTIES];
 
 enum {
     IMLIST_CHANGED_SIGNAL,
@@ -252,6 +262,8 @@ fcitx_input_method_g_properties_changed(GDBusProxy          *proxy,
         while (g_variant_iter_next(iter, "{&sv}", &key, NULL)) {
             if (g_strcmp0(key, "IMList") == 0)
                 g_signal_emit(user, signals[IMLIST_CHANGED_SIGNAL], 0);
+            else if (g_strcmp0(key, "CurrentIM") == 0)
+                g_object_notify_by_pspec(G_OBJECT(user), properties[PROP_CURRENT_IM]);
         }
         g_variant_iter_free(iter);
     }
@@ -261,6 +273,8 @@ fcitx_input_method_g_properties_changed(GDBusProxy          *proxy,
         while (*item) {
             if (g_strcmp0(*item, "IMList") == 0)
                 g_signal_emit(user, signals[IMLIST_CHANGED_SIGNAL], 0);
+            else if (g_strcmp0(*item, "CurrentIM") == 0)
+                g_object_notify_by_pspec(G_OBJECT(user), properties[PROP_CURRENT_IM]);
             item++;
         }
     }
@@ -277,17 +291,74 @@ fcitx_input_method_g_signal(GDBusProxy *proxy, const gchar *sender_name,
 }
 
 static void
+fcitx_input_method_get_property(GObject    *object,
+                                guint       property_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+    FcitxInputMethod *proxy = FCITX_INPUT_METHOD(object);
+
+    switch (property_id) {
+    case PROP_CURRENT_IM:
+        g_value_take_string(value, fcitx_input_method_get_current_im(proxy));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+    }
+}
+
+static void
+fcitx_input_method_set_property(GObject      *object,
+                                guint         property_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+    FcitxInputMethod *proxy = FCITX_INPUT_METHOD(object);
+    gchar *current_im;
+
+    switch (property_id) {
+    case PROP_CURRENT_IM:
+        current_im = g_value_dup_string(value);
+        fcitx_input_method_set_current_im(proxy, current_im);
+        g_free(current_im);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+    }
+}
+
+static void
 fcitx_input_method_class_init(FcitxInputMethodClass *klass)
 {
     GObjectClass *gobject_class;
     GDBusProxyClass *proxy_class;
 
     gobject_class = G_OBJECT_CLASS(klass);
+    gobject_class->get_property = fcitx_input_method_get_property;
+    gobject_class->set_property = fcitx_input_method_set_property;
     gobject_class->finalize = fcitx_input_method_finalize;
 
     proxy_class = G_DBUS_PROXY_CLASS(klass);
     proxy_class->g_signal             = fcitx_input_method_g_signal;
     proxy_class->g_properties_changed = fcitx_input_method_g_properties_changed;
+
+    /* install properties */
+    /**
+     * FcitxInputMethod:current-im:
+     *
+     * The current IM.
+     */
+    properties[PROP_CURRENT_IM] = g_param_spec_string("current-im",
+                                                      "The current IM",
+                                                      "The current IM",
+                                                      "",
+                                                      G_PARAM_CONSTRUCT |
+                                                      G_PARAM_READWRITE |
+                                                      G_PARAM_STATIC_NAME |
+                                                      G_PARAM_STATIC_NICK |
+                                                      G_PARAM_STATIC_BLURB);
+
+    g_object_class_install_properties(gobject_class, N_PROPERTIES, properties);
 
     /* install signals */
     /**
