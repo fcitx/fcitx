@@ -218,8 +218,8 @@ FCITX_DEFINE_PLUGIN(fcitx_kimpanel_ui, ui, FcitxUI) = {
 static void SetIMMenu(FcitxIM *pim, char** prop)
 {
     const char *icon = "";
-    if (strncmp(pim->uniqueName, "fcitx-keyboard-",
-                strlen("fcitx-keyboard-")) != 0) {
+    if (fcitx_utils_strcmp0(getenv("XDG_CURRENT_DESKTOP"), "Unity") == 0 ||
+        strncmp(pim->uniqueName, "fcitx-keyboard-", strlen("fcitx-keyboard-")) != 0) {
         icon = pim->strIconName;
     }
     boolean result = CheckAddPrefix(&icon);
