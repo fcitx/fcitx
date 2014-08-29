@@ -214,13 +214,28 @@ FCITX_DEFINE_PLUGIN(fcitx_kimpanel_ui, ui, FcitxUI) = {
     NULL
 };
 
+#define INDICATOR_KEYBOARD_PREFIX "@indicator-keyboard-"
+#define INDICATOR_KEYBOARD_LENGTH 20
+
+static boolean
+isUnity()
+{
+    return fcitx_utils_strcmp0(getenv("XDG_CURRENT_DESKTOP"), "Unity") == 0;
+}
 
 static void SetIMMenu(FcitxIM *pim, char** prop)
 {
+    char layout[INDICATOR_KEYBOARD_LENGTH + 3];
     const char *icon = "";
-    if (fcitx_utils_strcmp0(getenv("XDG_CURRENT_DESKTOP"), "Unity") == 0 ||
-        strncmp(pim->uniqueName, "fcitx-keyboard-", strlen("fcitx-keyboard-")) != 0) {
+    if (strncmp(pim->uniqueName, "fcitx-keyboard-",
+                strlen("fcitx-keyboard-")) != 0) {
         icon = pim->strIconName;
+    } else if (isUnity()) {
+        strcpy(layout, INDICATOR_KEYBOARD_PREFIX);
+        layout[INDICATOR_KEYBOARD_LENGTH + 0] = toupper(pim->langCode[0]);
+        layout[INDICATOR_KEYBOARD_LENGTH + 1] = tolower(pim->langCode[1]);
+        layout[INDICATOR_KEYBOARD_LENGTH + 2] = '\0';
+        icon = layout;
     }
     boolean result = CheckAddPrefix(&icon);
     fcitx_utils_alloc_cat_str(*prop, "/Fcitx/im/", pim->uniqueName, ":",
@@ -230,6 +245,7 @@ static void SetIMMenu(FcitxIM *pim, char** prop)
 
 static void SetIMIcon(FcitxInstance* instance, char** prop)
 {
+    char layout[INDICATOR_KEYBOARD_LENGTH + 3];
     const char* icon;
     char* imname;
     char* description;
@@ -245,7 +261,15 @@ static void SetIMIcon(FcitxInstance* instance, char** prop)
         FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
         if (im) {
             if (strncmp(im->uniqueName, "fcitx-keyboard-", strlen("fcitx-keyboard-")) == 0) {
-                icon = "";
+                if (isUnity()) {
+                    strcpy(layout, INDICATOR_KEYBOARD_PREFIX);
+                    layout[INDICATOR_KEYBOARD_LENGTH + 0] = toupper(im->langCode[0]);
+                    layout[INDICATOR_KEYBOARD_LENGTH + 1] = tolower(im->langCode[1]);
+                    layout[INDICATOR_KEYBOARD_LENGTH + 2] = '\0';
+                    icon = layout;
+                } else {
+                    icon = "";
+                }
                 imname = im->uniqueName + strlen("fcitx-keyboard-");
             }
             else

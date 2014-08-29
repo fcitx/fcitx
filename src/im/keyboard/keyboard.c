@@ -271,27 +271,15 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
     iface.ReloadConfig = NULL;
     iface.OnClose = FcitxKeyboardOnClose;
 
-    char *icon;
-    /* Use indicator-keyboard icons under Unity. */
-    if (fcitx_utils_strcmp0(getenv("XDG_CURRENT_DESKTOP"), "Unity") == 0 && langCode && strlen(langCode) >= 2) {
-        fcitx_utils_alloc_cat_str(icon, "@indicator-keyboard-", langCode);
-        icon[20] = toupper(icon[20]);
-        icon[21] = tolower(icon[21]);
-        icon[22] = '\0';
-    } else {
-        icon = strdup("kbd");
-    }
-
     FcitxInstanceRegisterIMv2(
         keyboard->owner,
         layout,
         uniqueName,
         name,
-        icon,
+        "kbd",
         iface,
         iPriority,
         langCode);
-    free(icon);
     free(uniqueName);
 }
 
