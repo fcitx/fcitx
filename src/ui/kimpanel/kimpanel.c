@@ -215,7 +215,7 @@ FCITX_DEFINE_PLUGIN(fcitx_kimpanel_ui, ui, FcitxUI) = {
 };
 
 #define INDICATOR_KEYBOARD_PREFIX "@indicator-keyboard-"
-#define INDICATOR_KEYBOARD_LENGTH 20
+#define INDICATOR_KEYBOARD_LENGTH (strlen(INDICATOR_KEYBOARD_PREFIX))
 
 static inline boolean
 isUnity()
@@ -225,15 +225,14 @@ isUnity()
 
 static void SetIMMenu(FcitxIM *pim, char** prop)
 {
-    char layout[INDICATOR_KEYBOARD_LENGTH + 3] = INDICATOR_KEYBOARD_PREFIX;
+    char layout[] = INDICATOR_KEYBOARD_PREFIX "Xx";
     const char *icon = "";
     if (strncmp(pim->uniqueName, "fcitx-keyboard-",
                 strlen("fcitx-keyboard-")) != 0) {
         icon = pim->strIconName;
     } else if (isUnity()) {
-        layout[INDICATOR_KEYBOARD_LENGTH + 0] = toupper(pim->langCode[0]);
+        layout[INDICATOR_KEYBOARD_LENGTH] = toupper(pim->langCode[0]);
         layout[INDICATOR_KEYBOARD_LENGTH + 1] = tolower(pim->langCode[1]);
-        layout[INDICATOR_KEYBOARD_LENGTH + 2] = '\0';
         icon = layout;
     }
     boolean result = CheckAddPrefix(&icon);
@@ -244,7 +243,7 @@ static void SetIMMenu(FcitxIM *pim, char** prop)
 
 static void SetIMIcon(FcitxInstance* instance, char** prop)
 {
-    char layout[INDICATOR_KEYBOARD_LENGTH + 3] = INDICATOR_KEYBOARD_PREFIX;
+    char layout[] = INDICATOR_KEYBOARD_PREFIX "Xx";
     const char* icon;
     char* imname;
     char* description;
@@ -255,15 +254,16 @@ static void SetIMIcon(FcitxInstance* instance, char** prop)
         icon = "kbd";
         imname = _("No input window");
         description = _("No input window");
-    }
-    else if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
+    } else if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
         FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
         if (im) {
-            if (strncmp(im->uniqueName, "fcitx-keyboard-", strlen("fcitx-keyboard-")) == 0) {
+            if (strncmp(im->uniqueName, "fcitx-keyboard-",
+                        strlen("fcitx-keyboard-")) == 0) {
                 if (isUnity()) {
-                    layout[INDICATOR_KEYBOARD_LENGTH + 0] = toupper(im->langCode[0]);
-                    layout[INDICATOR_KEYBOARD_LENGTH + 1] = tolower(im->langCode[1]);
-                    layout[INDICATOR_KEYBOARD_LENGTH + 2] = '\0';
+                    layout[INDICATOR_KEYBOARD_LENGTH] =
+                        toupper(im->langCode[0]);
+                    layout[INDICATOR_KEYBOARD_LENGTH + 1] =
+                        tolower(im->langCode[1]);
                     icon = layout;
                 } else {
                     icon = "";

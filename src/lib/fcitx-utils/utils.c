@@ -823,16 +823,16 @@ fcitx_utils_cat_str_with_len(char *out, size_t len, size_t n,
     *out = '\0';
 }
 
-FCITX_EXPORT_API
-int
-fcitx_utils_strcmp0(const char* a, const char* b)
+FCITX_EXPORT_API int
+fcitx_utils_strcmp0(const char *a, const char *b)
 {
-    if (a == NULL && b == NULL)
-        return 0;
-    if (a == NULL && b)
+    if (!a) {
+        if (!b)
+            return 0;
         return -1;
-    if (a && b == NULL)
+    } else if (!b) {
         return 1;
+    }
     return strcmp(a, b);
 
 }
