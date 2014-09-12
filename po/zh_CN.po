@@ -9,16 +9,16 @@
 # csslayer <wengxt@gmail.com>, 2013-2014
 # csslayer <wengxt@gmail.com>, 2010-2012
 # csslayer <wengxt@gmail.com>, 2013
-# wwj402 <wwj402@gmail.com>, 2013
+# wwj402 <wwj402@gmail.com>, 2013-2014
 # yyc1992 <yyc1992@gmail.com>, 2012
 # yyc1992 <yyc1992@gmail.com>, 2013-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-08-13 06:04+0200\n"
-"PO-Revision-Date: 2014-08-12 22:06+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2014-09-12 12:02+0200\n"
+"PO-Revision-Date: 2014-09-12 06:37+0000\n"
+"Last-Translator: wwj402 <wwj402@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/fcitx/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
@@ -33,15 +33,15 @@ msgstr " Ctrl+Delete 删除"
 
 #: data/script/fcitx-diagnose.sh:843
 msgid "${1} Environment Variables:"
-msgstr ""
+msgstr "${1} 环境变量："
 
 #: data/script/fcitx-diagnose.sh:852
 msgid "${1} is not set."
-msgstr ""
+msgstr "${1} 没有设定。"
 
 #: data/script/fcitx-diagnose.sh:849
 msgid "${1} is set to ${2}."
-msgstr ""
+msgstr "${1} 设定为 ${2}."
 
 #: data/script/fcitx-diagnose.sh:509
 msgid "${1} not found."
@@ -112,7 +112,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM/zh-cn"
 
-#: src/lib/fcitx/ime.c:1772
+#: src/lib/fcitx/ime.c:1780
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -766,7 +766,7 @@ msgid "Configure"
 msgstr "配置"
 
 #: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
-#: src/ui/kimpanel/kimpanel.c:759
+#: src/ui/kimpanel/kimpanel.c:781
 msgid "Configure Current Input Method"
 msgstr "配置当前输入法"
 
@@ -822,7 +822,7 @@ msgstr "当前输入法名称"
 
 #: data/script/fcitx-diagnose.sh:832
 msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr ""
+msgstr "当前 fcitx 设置目录是 ${1} (${2})。"
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
@@ -838,7 +838,7 @@ msgstr "当前用户："
 
 #: data/script/fcitx-diagnose.sh:826
 msgid "Current value of ${1} is ${2} (${3})."
-msgstr ""
+msgstr "${1} 的当前值是 ${2} (${3})。"
 
 #: data/config.desc:35
 msgid "Custom"
@@ -912,7 +912,7 @@ msgstr "电报码"
 
 #: data/script/fcitx-diagnose.sh:812
 msgid "Directories:"
-msgstr ""
+msgstr "目录："
 
 #: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
@@ -928,7 +928,7 @@ msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr "禁用插件 %s，依赖 %s 无法满足。"
 
 #: src/module/notificationitem/notificationitem.c:460
-#: src/ui/kimpanel/kimpanel.c:259 src/ui/kimpanel/kimpanel.c:264
+#: src/ui/kimpanel/kimpanel.c:281 src/ui/kimpanel/kimpanel.c:286
 #: data/config.desc:34
 msgid "Disabled"
 msgstr "禁用"
@@ -1046,7 +1046,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:818
 msgid "Environment variable ${1} is not set."
-msgstr ""
+msgstr "环境变量 ${1} 没有设定。"
 
 #: data/script/fcitx-diagnose.sh:1021
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
@@ -1054,7 +1054,7 @@ msgstr "环境变量 ${1} 已经正确地设为了 \"${2}\"."
 
 #: data/script/fcitx-diagnose.sh:822
 msgid "Environment variable ${1} is set to ${2}."
-msgstr ""
+msgstr "环境变量 ${1} 是设定为 ${2} 。"
 
 #: data/script/fcitx-diagnose.sh:777
 msgid "Environment:"
@@ -1124,7 +1124,7 @@ msgstr "无法在 ${1} 的输出重找到 fcitx."
 msgid "Fallback UI Addon"
 msgstr "备选界面附加组件"
 
-#: src/ui/kimpanel/kimpanel.c:375 data/fcitx-autostart.desktop.in:2
+#: src/ui/kimpanel/kimpanel.c:397 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
 msgstr "Fcitx"
@@ -1155,7 +1155,7 @@ msgstr "Fcitx 的 Lua 支持"
 
 #: data/script/fcitx-diagnose.sh:830
 msgid "Fcitx Settings Directory:"
-msgstr ""
+msgstr "Fcitx 设置目录："
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:3
 msgid "Fcitx Skin Installer"
@@ -1337,11 +1337,11 @@ msgstr "前端"
 msgid "Frontend Used by IM Modules"
 msgstr "输入法模块使用的前端"
 
-#: src/lib/fcitx/frontend.c:533
+#: src/lib/fcitx/frontend.c:542
 msgid "Frontend: bad frontend"
 msgstr "前端: 有问题的前端"
 
-#: src/lib/fcitx/frontend.c:521
+#: src/lib/fcitx/frontend.c:530
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr "前端: 打开 %s 失败 %s"
@@ -1478,7 +1478,7 @@ msgstr "平假名"
 
 #: data/script/fcitx-diagnose.sh:814
 msgid "Home:"
-msgstr ""
+msgstr "主目录："
 
 #: src/im/table/table.desc:123
 msgid "Horizontal"
@@ -1610,7 +1610,7 @@ msgstr "输入字体大小"
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-#: src/lib/fcitx/ime.c:1678 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1682 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "输入法"
@@ -1620,7 +1620,7 @@ msgid "Input Method Configuration"
 msgstr "输入法配置"
 
 #: src/module/notificationitem/notificationitem.c:461
-#: src/ui/kimpanel/kimpanel.c:260 src/ui/kimpanel/kimpanel.c:265
+#: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
 
@@ -1636,7 +1636,7 @@ msgstr "输入法相关的环境变量: "
 msgid "Input Methods:"
 msgstr "输入法:"
 
-#: src/lib/fcitx/ime.c:1769
+#: src/lib/fcitx/ime.c:1777
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -2009,12 +2009,12 @@ msgstr "否"
 msgid "No available Input Method"
 msgstr "无用输入法"
 
-#: src/lib/fcitx/frontend.c:556
+#: src/lib/fcitx/frontend.c:565
 msgid "No available frontend"
 msgstr "无可用前端"
 
 #: src/module/notificationitem/notificationitem.c:454
-#: src/ui/kimpanel/kimpanel.c:241 src/ui/kimpanel/kimpanel.c:242
+#: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:256
 msgid "No input window"
 msgstr "无输入窗口"
 
@@ -2408,7 +2408,7 @@ msgid "Resize Margin Top"
 msgstr "上边距"
 
 #: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
-#: src/ui/kimpanel/kimpanel.c:764
+#: src/ui/kimpanel/kimpanel.c:786
 msgid "Restart"
 msgstr "重新启动"
 
@@ -2440,7 +2440,7 @@ msgstr "常用字顺序"
 
 #: data/script/fcitx-diagnose.sh:859
 msgid "Running as root:"
-msgstr ""
+msgstr "以管理员运行："
 
 #: src/module/vk/vk.c:54
 msgid "Russian"
@@ -2896,7 +2896,7 @@ msgstr "切换全角标点"
 msgid "Toggle Half/Full width Character"
 msgstr "切换半/全角字符"
 
-#: src/ui/kimpanel/kimpanel.c:756
+#: src/ui/kimpanel/kimpanel.c:778
 msgid "Toggle Input Method"
 msgstr "切换输入法"
 
@@ -3250,6 +3250,8 @@ msgid ""
 "You are probably using ${1} to run this script. This means the result of "
 "this script may not be accurate. See ${2} for more information."
 msgstr ""
+"你可能正在使用 ${1} 运行此脚本。这意味着这个脚本的结果可能不准确。见 ${2} 以"
+"获取更多信息。"
 
 #: data/script/fcitx-diagnose.sh:1108
 msgid "You are using xim in ${1} programs."
@@ -3347,7 +3349,7 @@ msgstr "可执行文件:"
 msgid "here"
 msgstr "这里"
 
-#: src/lib/fcitx/ime.c:1775
+#: src/lib/fcitx/ime.c:1783
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 

@@ -18,9 +18,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-08-13 06:04+0200\n"
-"PO-Revision-Date: 2014-08-12 22:06+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2014-09-12 12:02+0200\n"
+"PO-Revision-Date: 2014-09-12 06:41+0000\n"
+"Last-Translator: AWASHIRO Ikuya <ikunya@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
 "Language: ja\n"
@@ -114,7 +114,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1772
+#: src/lib/fcitx/ime.c:1780
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -451,7 +451,7 @@ msgstr "候補インデックスの色"
 
 #: src/im/table/table.desc:117
 msgid "Candidate Table Layout"
-msgstr ""
+msgstr "候補テーブルのレイアウト"
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
@@ -495,7 +495,7 @@ msgstr "gtk ${1} 用の ${2} が見つかりません"
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
-msgstr ""
+msgstr "Pinyinのシステムデータベースが見つかりません。"
 
 #: data/script/fcitx-diagnose.sh:1008
 msgid ""
@@ -563,12 +563,12 @@ msgstr "XMODIFIERSを解釈できません: ${1}"
 
 #: src/ui/classic/skin.c:121
 msgid "Cannot load default skin, is installion correct?"
-msgstr ""
+msgstr "デフォルトのスキンが読み込めません。インストールに間違いはないですか？"
 
 #: src/ui/classic/skin.c:126
 #, c-format
 msgid "Cannot load skin %s, return to default"
-msgstr ""
+msgstr "スキン %s を読み込めません。デフォルトのスキンに戻します。"
 
 #: data/script/fcitx-diagnose.sh:1516
 msgid "Cannot read im list from fcitx profile."
@@ -774,7 +774,7 @@ msgid "Configure"
 msgstr "設定"
 
 #: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
-#: src/ui/kimpanel/kimpanel.c:759
+#: src/ui/kimpanel/kimpanel.c:781
 msgid "Configure Current Input Method"
 msgstr "現在の入力メソッドの設定"
 
@@ -933,10 +933,10 @@ msgstr "Pinyin 記号を無効にする"
 #: src/lib/fcitx/addon.c:298
 #, c-format
 msgid "Disable addon %s, dependency %s cannot be satisfied."
-msgstr ""
+msgstr "アドオン %s を無効にしました。 %s の依存関係が解決されていません。"
 
 #: src/module/notificationitem/notificationitem.c:460
-#: src/ui/kimpanel/kimpanel.c:259 src/ui/kimpanel/kimpanel.c:264
+#: src/ui/kimpanel/kimpanel.c:281 src/ui/kimpanel/kimpanel.c:286
 #: data/config.desc:34
 msgid "Disabled"
 msgstr "無効"
@@ -1138,7 +1138,7 @@ msgstr ""
 msgid "Fallback UI Addon"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:375 data/fcitx-autostart.desktop.in:2
+#: src/ui/kimpanel/kimpanel.c:397 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
 msgstr "Fcitx"
@@ -1349,11 +1349,11 @@ msgstr "フロントエンド"
 msgid "Frontend Used by IM Modules"
 msgstr "IMモジュールで使われるフロントエンド"
 
-#: src/lib/fcitx/frontend.c:533
+#: src/lib/fcitx/frontend.c:542
 msgid "Frontend: bad frontend"
 msgstr "フロントエンド: 不良なフロントエンド"
 
-#: src/lib/fcitx/frontend.c:521
+#: src/lib/fcitx/frontend.c:530
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr "フロントエンド: %s を開くのに失敗しました %s"
@@ -1494,7 +1494,7 @@ msgstr ""
 
 #: src/im/table/table.desc:123
 msgid "Horizontal"
-msgstr ""
+msgstr "横"
 
 #: data/config.desc:1 data/config.desc:7 data/config.desc:13
 #: data/config.desc:39 data/config.desc:46 data/config.desc:53
@@ -1617,7 +1617,7 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1678 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1682 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "入力メソッド"
@@ -1627,7 +1627,7 @@ msgid "Input Method Configuration"
 msgstr "入力メソッドの設定"
 
 #: src/module/notificationitem/notificationitem.c:461
-#: src/ui/kimpanel/kimpanel.c:260 src/ui/kimpanel/kimpanel.c:265
+#: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 msgid "Input Method Disabled"
 msgstr "入力メソッドが無効"
 
@@ -1643,7 +1643,7 @@ msgstr "入力メソッド関連の環境変数:"
 msgid "Input Methods:"
 msgstr "入力メソッド:"
 
-#: src/lib/fcitx/ime.c:1769
+#: src/lib/fcitx/ime.c:1777
 msgid "Input Speed: "
 msgstr "入力スピード"
 
@@ -1701,6 +1701,8 @@ msgid ""
 "Keep current buffer when there is no match item and input length is equal "
 "code length"
 msgstr ""
+"一致するアイテムがなく入力の長さがコードの長さと同じときに現在のバッファを保"
+"持する"
 
 #: src/im/table/fcitx-table.desc:1 src/im/table/fcitx-table.desc:6
 #: src/im/table/fcitx-table.desc:11 src/im/table/fcitx-table.desc:16
@@ -2016,12 +2018,12 @@ msgstr "No"
 msgid "No available Input Method"
 msgstr "有効な入力メソッドがありません"
 
-#: src/lib/fcitx/frontend.c:556
+#: src/lib/fcitx/frontend.c:565
 msgid "No available frontend"
 msgstr "フロントエンドが見つかりません"
 
 #: src/module/notificationitem/notificationitem.c:454
-#: src/ui/kimpanel/kimpanel.c:241 src/ui/kimpanel/kimpanel.c:242
+#: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:256
 msgid "No input window"
 msgstr "入力ウィンドウなし"
 
@@ -2418,7 +2420,7 @@ msgid "Resize Margin Top"
 msgstr "上マージンを調整"
 
 #: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
-#: src/ui/kimpanel/kimpanel.c:764
+#: src/ui/kimpanel/kimpanel.c:786
 msgid "Restart"
 msgstr "再起動"
 
@@ -2905,7 +2907,7 @@ msgstr "全角/半角句読点を切り替え"
 msgid "Toggle Half/Full width Character"
 msgstr "全角/半角文字の切り替え"
 
-#: src/ui/kimpanel/kimpanel.c:756
+#: src/ui/kimpanel/kimpanel.c:778
 msgid "Toggle Input Method"
 msgstr "入力メソッドの切り替え"
 
@@ -3030,7 +3032,7 @@ msgstr "各行では <Keyword> <Phrase> の形式を使用してください。"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
-msgstr ""
+msgstr "代わりの候補単語番号を使用する"
 
 #: src/im/table/table.desc:183
 msgid "Use Alternative Key for paging"
@@ -3062,7 +3064,7 @@ msgstr "マッチングキーを使う"
 
 #: src/frontend/xim/fcitx-xim.desc:4
 msgid "Use On The Spot Style for XIM (Cannot change during running)"
-msgstr ""
+msgstr "XIMで On The Spot スタイルを使う(起動中は変更できません)"
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
@@ -3132,7 +3134,7 @@ msgstr "バージョンライン:"
 
 #: src/im/table/table.desc:122
 msgid "Vertical"
-msgstr ""
+msgstr "縦"
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
@@ -3359,7 +3361,7 @@ msgstr "実行可能:"
 msgid "here"
 msgstr "ここ"
 
-#: src/lib/fcitx/ime.c:1775
+#: src/lib/fcitx/ime.c:1783
 msgid "min Num of Characters: "
 msgstr "最低文字数:"
 
