@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.6)
 
 project(fcitx)
 
-set(version 4.2.8.4)
+set(version 4.2.8.5)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 set(CMAKE_AUTOMOC_RELAXED_MODE TRUE)
