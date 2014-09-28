@@ -638,6 +638,10 @@ function(fcitx_translate_add_apply_source in_file out_file)
     "Cannot find a rule to convert ${in_file} to ${out_file}")
 endfunction()
 
+if(NOT DEFINED FCITX_PO_INSTALL_DIR)
+  set(FCITX_PO_INSTALL_DIR share/locale/)
+endif()
+
 # Should be used in cmake modules, add a handler script to update a set of
 # certain type of files from the translated mo files.
 # The script must be executable.
@@ -719,7 +723,7 @@ function(fcitx_translate_set_pot_target target domain pot_file)
         -o "${po_dir}/${domain}.mo" "${po_file}"
         DEPENDS "${po_file}")
       install(FILES "${po_dir}/${domain}.mo"
-        DESTINATION "share/locale/${po_lang}/LC_MESSAGES")
+        DESTINATION "${FCITX_PO_INSTALL_DIR}/${po_lang}/LC_MESSAGES")
       list(APPEND all_mo_files "${po_dir}/${domain}.mo")
       list(APPEND all_po_files "${po_file}")
     endforeach()
