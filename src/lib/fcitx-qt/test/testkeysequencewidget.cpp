@@ -1,5 +1,6 @@
 #include "fcitx-qt/fcitxqtkeysequencewidget.h"
 #include <libintl.h>
+#include <locale.h>
 #include <fcitx-utils/utils.h>
 #include <QApplication>
 
