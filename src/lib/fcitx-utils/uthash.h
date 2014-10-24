@@ -32,7 +32,7 @@
 
 /* C++ requires extra stringent casting */
 #if defined __cplusplus
-#define TYPEOF(x) (typeof(x))
+#define TYPEOF(x) (__typeof__(x))
 #else
 #define TYPEOF(x)
 #endif
