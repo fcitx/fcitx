@@ -6,8 +6,13 @@
 #include <stdlib.h>
 #include <dlfcn.h>
 
-#define _OPENCC_DEFAULT_CONFIG_SIMP_TO_TRAD "zhs2zht.ini"
-#define _OPENCC_DEFAULT_CONFIG_TRAD_TO_SIMP "zht2zhs.ini"
+#define _OPENCC_DEFAULT_CONFIG_SIMP_TO_TRAD_OLD "zhs2zht.ini"
+#define _OPENCC_DEFAULT_CONFIG_TRAD_TO_SIMP_OLD "zht2zhs.ini"
+
+#define _OPENCC_DEFAULT_CONFIG_SIMP_TO_TRAD "s2t.json"
+#define _OPENCC_DEFAULT_CONFIG_TRAD_TO_SIMP "t2s.json"
+
+
 static void* _opencc_handle = NULL;
 static void* (*_opencc_open)(const char* config_file) = NULL;
 static char* (*_opencc_convert_utf8)(void* opencc, const char* inbuf, size_t length) = NULL;
@@ -49,6 +54,23 @@ OpenCCInit(FcitxChttrans* transState)
         return false;
     transState->ods2t = _opencc_open(_OPENCC_DEFAULT_CONFIG_SIMP_TO_TRAD);
     transState->odt2s = _opencc_open(_OPENCC_DEFAULT_CONFIG_TRAD_TO_SIMP);
+
+    if (transState->ods2t == (void*) -1) {
+        transState->ods2t = _opencc_open(_OPENCC_DEFAULT_CONFIG_SIMP_TO_TRAD_OLD);
+    }
+    if (transState->odt2s == (void*) -1) {
+        transState->odt2s = _opencc_open(_OPENCC_DEFAULT_CONFIG_TRAD_TO_SIMP_OLD);
+    }
+
+    // stupid opencc use -1 as failure
+    if (transState->ods2t == (void*) -1) {
+        transState->ods2t = NULL;
+    }
+
+    if (transState->odt2s == (void*) -1) {
+        transState->odt2s = NULL;
+    }
+
     if (!transState->ods2t && !transState->odt2s)
         return false;
     return true;
