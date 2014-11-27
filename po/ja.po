@@ -5,11 +5,13 @@
 # Translators:
 # しろう, 2013
 # しろう <>, 2013
-# AWASHIRO Ikuya <ikunya@gmail.com>, 2014
+# AWASHIRO Ikuya <ikunya@gmail.com>, 2013-2014
+# csslayer <wengxt@gmail.com>, 2013
 # AWASHIRO Ikuya <ikunya@gmail.com>, 2013
 # AWASHIRO Ikuya <ikunya@gmail.com>, 2012-2013
 # ISHIKAWA Mutsumi <ishikawa@hanzubon.jp>, 2014
 # mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>, 2012
+# usingsystem8 <yuta.ooka@gmail.com>, 2013
 # WAKAYAMA Shirou <shirou.faw@gmail.com>, 2013
 # csslayer <wengxt@gmail.com>, 2013
 # csslayer <wengxt@gmail.com>, 2013
@@ -18,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-11-27 12:02+0100\n"
-"PO-Revision-Date: 2014-11-27 06:28+0000\n"
+"POT-Creation-Date: 2014-11-27 18:03+0100\n"
+"PO-Revision-Date: 2014-11-27 13:21+0000\n"
 "Last-Translator: AWASHIRO Ikuya <ikunya@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -192,7 +194,7 @@ msgstr "選択中メニューアイテムの文字色"
 
 #: src/ui/classic/skin.desc:81
 msgid "Active Mode Icon"
-msgstr "有効なモードのアイコン"
+msgstr "有効時のモードのアイコン"
 
 #: src/ui/classic/skin.desc:172
 msgid "Active Text Icon Color"
@@ -200,7 +202,7 @@ msgstr "有効なテキストアイコンの色"
 
 #: src/ui/classic/skin.desc:309
 msgid "Active Tray Icon"
-msgstr "有効なトレイアイコン"
+msgstr "有効時のトレイアイコン"
 
 #: src/module/autoeng/fcitx-autoeng.desc:37
 msgid "Add Extra space when selecting a candidate word"
@@ -224,7 +226,7 @@ msgstr "ユニコード入力対応を追加します"
 
 #: src/im/keyboard/fcitx-keyboard.desc:44
 msgid "Add current input buffer to user dictionary"
-msgstr "現在の入力バッファーをユーザー辞書に追加"
+msgstr "現在の入力バッファをユーザー辞書に追加"
 
 #: data/addon.desc:1 data/addon.desc:5 data/addon.desc:10 data/addon.desc:15
 #: data/addon.desc:24 data/addon.desc:29 data/addon.desc:33 data/addon.desc:40
@@ -275,7 +277,7 @@ msgstr "すべて"
 
 #: data/script/fcitx-diagnose.sh:1223
 msgid "All found Gtk ${1} immodule files exist."
-msgstr "見つけたGtk ${1} IMモジュールファイルはすべて存在します。"
+msgstr "見つかった Gtk ${1} IMモジュールファイルはすべて存在します。"
 
 #: data/script/fcitx-diagnose.sh:1484
 msgid "All libraries for all addons are found."
@@ -542,7 +544,7 @@ msgstr "アドオン ${2} の ${1} が要求するライブラリが見つかり
 
 #: data/script/fcitx-diagnose.sh:1367
 msgid "Cannot find immodules cache for gtk ${1}"
-msgstr ""
+msgstr "gtk ${1} 用の immodule キャッシュが見つかりません"
 
 #: data/script/fcitx-diagnose.sh:1506
 msgid ""
@@ -585,7 +587,7 @@ msgstr "カテゴリ"
 #: src/ui/classic/skin.desc:132 src/ui/classic/skin.desc:238
 #: src/ui/classic/skin.desc:368
 msgid "Center"
-msgstr "真ん中"
+msgstr "中央"
 
 #: src/ui/classic/skin.desc:131 src/ui/classic/skin.desc:237
 #: src/ui/classic/skin.desc:367
@@ -1034,7 +1036,7 @@ msgstr "English (US)"
 
 #: src/ui/classic/skin.desc:77
 msgid "English Mode Icon"
-msgstr "英語モードのアイコン"
+msgstr "英語モード時のアイコン"
 
 #: src/lib/fcitx-config/fcitx-config.c:400
 msgid "Enum Option is invalid, take it as string"
@@ -1252,7 +1254,7 @@ msgstr "フォントサイズ"
 
 #: src/ui/classic/skin.desc:28
 msgid "Font sizes respect dpi setting"
-msgstr ""
+msgstr "DPI設定に応じたフォントサイズ補正"
 
 #: src/module/xkb/fcitx-xkb.desc:10
 msgid ""
@@ -1331,7 +1333,7 @@ msgstr "未知の gtk 用の immodules キャッシュを ${1} に見つけま�
 
 #: data/script/fcitx-diagnose.sh:1340
 msgid "Found immodules cache for gtk ${1} at ${2}."
-msgstr ""
+msgstr "gtk ${1} の immodule cache を$ {2} に見つけました。"
 
 #: data/script/fcitx-diagnose.sh:1157
 msgid "Found unknown fcitx qt module: ${1}."
@@ -1603,7 +1605,7 @@ msgstr "クリップボード履歴で現在選択されているテキストを
 
 #: src/ui/classic/skin.desc:313
 msgid "Inctive Tray Icon"
-msgstr "無効なトレイアイコン"
+msgstr "無効時のトレイアイコン"
 
 #: src/module/vk/vk.c:55
 msgid "Index"
@@ -1756,7 +1758,7 @@ msgstr "FcitxのKimpanelサポート"
 
 #: data/script/fcitx-diagnose.sh:1498
 msgid "Kimpanel process:"
-msgstr ""
+msgstr "Kimpanel のプロセス:"
 
 #: data/config.desc:24
 msgid "L_ALT"
@@ -2894,7 +2896,7 @@ msgid ""
 "${link1}. For other more general problems of using XIM including application "
 "freezing, see ${link2}."
 msgstr ""
-"ximを使っている場合、いくつかのアプリケーションが固有の問題を引き起こす場合が"
+"XIMを使っている場合、いくつかのアプリケーションが固有の問題を引き起こす場合が"
 "あります。 ${link1} を参照してください。 アプリケーションのフリーズを含むXIM"
 "による一般的な問題については ${link2} を参照してください。"
 
@@ -3036,7 +3038,7 @@ msgstr "代わりの候補単語番号を使用する"
 
 #: src/im/table/table.desc:183
 msgid "Use Alternative Key for paging"
-msgstr ""
+msgstr "ページ送りに別のキーを使用する"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
@@ -3105,8 +3107,8 @@ msgstr "リマインドを使用"
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Use the layout of first keyboard input method in list as default layout"
 msgstr ""
-"リストの最初のキーボードインプットメソッドのレイアウトがディフォルトのレイア"
-"ウトとして使用されます。"
+"リストの最初のキーボードインプットメソッドのレイアウトが既定のレイアウトとし"
+"て使用されます。"
 
 #: src/module/remote/fcitx-remote-module.conf.in:4
 msgid "Used by fcitx-remote to change Fcitx state from console"
@@ -3233,21 +3235,21 @@ msgstr "XiaoHe"
 
 #: src/frontend/xim/fcitx-xim.desc:1
 msgid "Xim"
-msgstr "Xim"
+msgstr "XIM"
 
 #: data/script/fcitx-diagnose.sh:1057
 msgid "Xim Server Name from Environment variable is ${1}."
-msgstr "環境変数から取得した Xim サーバー名は ${1} です。"
+msgstr "環境変数から取得した XIM サーバー名は ${1} です。"
 
 #: data/script/fcitx-diagnose.sh:1069
 msgid "Xim server name is the same with that set in the environment variable."
-msgstr "Xim サーバー名は環境変数で設定されたものと同じです。"
+msgstr "XIM サーバー名は環境変数で設定されたものと同じです。"
 
 #: data/script/fcitx-diagnose.sh:1071
 msgid ""
 "Xim server name: \"${1}\" is different from that set in the environment "
 "variable: \"${2}\"."
-msgstr "Xim サーバー名: \"{1}\" は環境変数で設定された \"{2} と異なります。"
+msgstr "XIM サーバー名: \"{1}\" は環境変数で設定された \"{2} と異なります。"
 
 #: data/script/fcitx-diagnose.sh:867
 msgid ""
@@ -3264,7 +3266,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1108
 msgid "You are using xim in ${1} programs."
-msgstr "xim を ${1} プログラムで使用しています。"
+msgstr "XIM を ${1} プログラムで使用しています。"
 
 #: data/script/fcitx-diagnose.sh:1545
 msgid "You don't have any input methods enabled."
