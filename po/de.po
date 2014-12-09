@@ -4,15 +4,16 @@
 #
 # Translators:
 # mar well <m.wellendorf@gmx.de>, 2012-2013
+# mar well <m.wellendorf@gmx.de>, 2014
 # csslayer <wengxt@gmail.com>, 2013
 # csslayer <wengxt@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-08-13 06:04+0200\n"
-"PO-Revision-Date: 2014-08-12 22:06+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2014-12-09 12:01+0100\n"
+"PO-Revision-Date: 2014-12-09 10:01+0000\n"
+"Last-Translator: mar well <m.wellendorf@gmx.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
 "de/)\n"
 "Language: de\n"
@@ -27,15 +28,15 @@ msgstr " Ctrl+Delete zum Löschen"
 
 #: data/script/fcitx-diagnose.sh:843
 msgid "${1} Environment Variables:"
-msgstr ""
+msgstr "${1} Umgebungsvariablen:"
 
 #: data/script/fcitx-diagnose.sh:852
 msgid "${1} is not set."
-msgstr ""
+msgstr "${1} ist nicht gesetzt."
 
 #: data/script/fcitx-diagnose.sh:849
 msgid "${1} is set to ${2}."
-msgstr ""
+msgstr "${1} ist auf ${2} eingestellt."
 
 #: data/script/fcitx-diagnose.sh:509
 msgid "${1} not found."
@@ -106,7 +107,7 @@ msgstr "/Hinweis_für_GNOME_höher_als_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1772
+#: src/lib/fcitx/ime.c:1780
 msgid "/min  Time Used: "
 msgstr "/min Verwendete Zeit:"
 
@@ -487,7 +488,7 @@ msgstr "${2} für gtk ${1} kann nicht gefunden werden"
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
-msgstr ""
+msgstr "Die Datenbank für Pinyin kann nicht gefunden werden!"
 
 #: data/script/fcitx-diagnose.sh:1008
 msgid ""
@@ -558,6 +559,8 @@ msgstr "Kann  XMODIFIERS: ${1} nicht richtig interpretieren"
 #: src/ui/classic/skin.c:121
 msgid "Cannot load default skin, is installion correct?"
 msgstr ""
+"die Standardoberfläche kann nicht geladen werden, ist die Installation "
+"vollstädnig?"
 
 #: src/ui/classic/skin.c:126
 #, c-format
@@ -768,14 +771,14 @@ msgid "Configure"
 msgstr "Konfigurieren"
 
 #: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
-#: src/ui/kimpanel/kimpanel.c:759
+#: src/ui/kimpanel/kimpanel.c:781
 msgid "Configure Current Input Method"
 msgstr "Aktuelle Eingabemethode konfigurieren"
 
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
 msgid "Configure group name error: line %d"
-msgstr ""
+msgstr "Fehler in der Konfiguration des Gruppennamens: Zeile %d"
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
 msgid "Confirm deletion"
@@ -824,7 +827,7 @@ msgstr "Name der aktivierten Eingabemethode"
 
 #: data/script/fcitx-diagnose.sh:832
 msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr ""
+msgstr "Das gegenwärtige Fcitz Konfigurationsverzeichnis ist ${1} (${2})."
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
@@ -840,7 +843,7 @@ msgstr "Aktueller Benutzer:"
 
 #: data/script/fcitx-diagnose.sh:826
 msgid "Current value of ${1} is ${2} (${3})."
-msgstr ""
+msgstr "Die gegenwärtige Einstellung von ${1} ist ${2} (${3})."
 
 #: data/config.desc:35
 msgid "Custom"
@@ -914,7 +917,7 @@ msgstr "Dianbaoma"
 
 #: data/script/fcitx-diagnose.sh:812
 msgid "Directories:"
-msgstr ""
+msgstr "Verzeichnisse:"
 
 #: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
@@ -927,10 +930,10 @@ msgstr "Symbol für Pinyin deaktivieren"
 #: src/lib/fcitx/addon.c:298
 #, c-format
 msgid "Disable addon %s, dependency %s cannot be satisfied."
-msgstr ""
+msgstr "Addon %s ausgeschaltet, die Abhängigkeit %s ist nicht erfüllt."
 
 #: src/module/notificationitem/notificationitem.c:460
-#: src/ui/kimpanel/kimpanel.c:259 src/ui/kimpanel/kimpanel.c:264
+#: src/ui/kimpanel/kimpanel.c:281 src/ui/kimpanel/kimpanel.c:286
 #: data/config.desc:34
 msgid "Disabled"
 msgstr "Ausgeschaltet"
@@ -984,6 +987,8 @@ msgstr ""
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
 msgstr ""
+"Gruppenname doppelt vorhanden, wird mit dem vorherigen zusammengeführt: %s :"
+"Zeile %d"
 
 #: src/lib/fcitx-config/fcitx-config.c:968
 #, c-format
@@ -1052,7 +1057,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:818
 msgid "Environment variable ${1} is not set."
-msgstr ""
+msgstr "Umgebungsvariable ${1} ist nicht gesetzt."
 
 #: data/script/fcitx-diagnose.sh:1021
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
@@ -1060,7 +1065,7 @@ msgstr "Die Umgebungsvariable ${1} ist richtig auf \"${2}\" gesetzt."
 
 #: data/script/fcitx-diagnose.sh:822
 msgid "Environment variable ${1} is set to ${2}."
-msgstr ""
+msgstr "Umgebungsvariable ${1} ist auf ${2} gesetzt."
 
 #: data/script/fcitx-diagnose.sh:777
 msgid "Environment:"
@@ -1127,13 +1132,13 @@ msgstr "In ${1} kein Eingabemethodencache gefunden"
 
 #: data/script/fcitx-diagnose.sh:1278
 msgid "Failed to find fcitx in the output of ${1}"
-msgstr ""
+msgstr "In der Ausgabe von ${1} wurde Fcitx nicht gefunden."
 
 #: data/addon.desc:72
 msgid "Fallback UI Addon"
 msgstr "Fallback UI Addon"
 
-#: src/ui/kimpanel/kimpanel.c:375 data/fcitx-autostart.desktop.in:2
+#: src/ui/kimpanel/kimpanel.c:397 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
 msgstr "Fcitx"
@@ -1164,7 +1169,7 @@ msgstr "Fcitx Lua Unterstützung"
 
 #: data/script/fcitx-diagnose.sh:830
 msgid "Fcitx Settings Directory:"
-msgstr ""
+msgstr "Fcitx Konfigurationsverzeichnis:"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:3
 msgid "Fcitx Skin Installer"
@@ -1247,7 +1252,7 @@ msgstr "Fontgröße"
 
 #: src/ui/classic/skin.desc:28
 msgid "Font sizes respect dpi setting"
-msgstr ""
+msgstr "Zeichengröße beachtet die dpi Einstellungen"
 
 #: src/module/xkb/fcitx-xkb.desc:10
 msgid ""
@@ -1347,11 +1352,11 @@ msgstr "Schnittstelle"
 msgid "Frontend Used by IM Modules"
 msgstr "Schnittstelle für IM Modules"
 
-#: src/lib/fcitx/frontend.c:533
+#: src/lib/fcitx/frontend.c:542
 msgid "Frontend: bad frontend"
 msgstr "Schnittstelle: Falsche Schnittstelle"
 
-#: src/lib/fcitx/frontend.c:521
+#: src/lib/fcitx/frontend.c:530
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr "Schnittstelle: Öffnen von %s fehlgeschlagen %s"
@@ -1488,11 +1493,11 @@ msgstr "Hiragana"
 
 #: data/script/fcitx-diagnose.sh:814
 msgid "Home:"
-msgstr ""
+msgstr "Home Verzeichnis:"
 
 #: src/im/table/table.desc:123
 msgid "Horizontal"
-msgstr ""
+msgstr "Horizontal"
 
 #: data/config.desc:1 data/config.desc:7 data/config.desc:13
 #: data/config.desc:39 data/config.desc:46 data/config.desc:53
@@ -1623,7 +1628,7 @@ msgstr "Schriftgröße Eingabe"
 msgid "Input Message Color"
 msgstr "Farbe der Pinyineingabe"
 
-#: src/lib/fcitx/ime.c:1678 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1682 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Eingabemethode"
@@ -1633,7 +1638,7 @@ msgid "Input Method Configuration"
 msgstr "Konfiguration Eingabemethode"
 
 #: src/module/notificationitem/notificationitem.c:461
-#: src/ui/kimpanel/kimpanel.c:260 src/ui/kimpanel/kimpanel.c:265
+#: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 msgid "Input Method Disabled"
 msgstr "Eingabemethode deaktiviert"
 
@@ -1650,7 +1655,7 @@ msgstr "Eingabemethodenbezogenen Umgebungsvariablen:"
 msgid "Input Methods:"
 msgstr "Eingabemethoden:"
 
-#: src/lib/fcitx/ime.c:1769
+#: src/lib/fcitx/ime.c:1777
 msgid "Input Speed: "
 msgstr "Eingabegeschwindigkeit"
 
@@ -2032,12 +2037,12 @@ msgstr "Keine"
 msgid "No available Input Method"
 msgstr "Keine verfügbare Eingabemethode"
 
-#: src/lib/fcitx/frontend.c:556
+#: src/lib/fcitx/frontend.c:565
 msgid "No available frontend"
 msgstr "Keine Schnittstelle verfügbar"
 
 #: src/module/notificationitem/notificationitem.c:454
-#: src/ui/kimpanel/kimpanel.c:241 src/ui/kimpanel/kimpanel.c:242
+#: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:256
 msgid "No input window"
 msgstr "Kein Eingabefenster"
 
@@ -2395,7 +2400,7 @@ msgstr "Konfiguration erneut laden"
 
 #: src/im/table/table.c:1287
 msgid "Remind:"
-msgstr ""
+msgstr "Beachte:"
 
 #: src/im/pinyin/py.c:2059
 msgid "Remind: "
@@ -2440,7 +2445,7 @@ msgid "Resize Margin Top"
 msgstr "Korrektur Größe Rand oben"
 
 #: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
-#: src/ui/kimpanel/kimpanel.c:764
+#: src/ui/kimpanel/kimpanel.c:786
 msgid "Restart"
 msgstr "Neustart"
 
@@ -2472,7 +2477,7 @@ msgstr "Regel Darstellung der Liste häufiger Wörter"
 
 #: data/script/fcitx-diagnose.sh:859
 msgid "Running as root:"
-msgstr ""
+msgstr "Als Root ausgeführt:"
 
 #: src/module/vk/vk.c:54
 msgid "Russian"
@@ -2556,7 +2561,7 @@ msgstr "Eingabemethode beibehalten"
 
 #: data/addon.desc:36
 msgid "SharedLibrary"
-msgstr ""
+msgstr "SharedLibrary"
 
 #: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:148
 #: src/module/autoeng/fcitx-autoeng.desc:9
@@ -2935,7 +2940,7 @@ msgstr "Wechsel Vollbreite Interpunktion"
 msgid "Toggle Half/Full width Character"
 msgstr "Zwischen halb- und vollbreiten Zeichen wechseln"
 
-#: src/ui/kimpanel/kimpanel.c:756
+#: src/ui/kimpanel/kimpanel.c:778
 msgid "Toggle Input Method"
 msgstr "Wechsel Eingabemethode"
 
@@ -3164,7 +3169,7 @@ msgstr ""
 
 #: src/im/table/table.desc:122
 msgid "Vertical"
-msgstr ""
+msgstr "Vertikal"
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
@@ -3297,6 +3302,8 @@ msgid ""
 "You are probably using ${1} to run this script. This means the result of "
 "this script may not be accurate. See ${2} for more information."
 msgstr ""
+"Sie benutzen wahrscheinlich ${1} um das Skript auszuführen. Das heißt, dass "
+"das Ergebnis des Skriptes falsch sein kann. Mehr Information hier: ${2}."
 
 #: data/script/fcitx-diagnose.sh:1108
 msgid "You are using xim in ${1} programs."
@@ -3342,6 +3349,10 @@ msgid ""
 "found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
 "fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
+"Sie benutzen Fcitx mit Benutzeroberfläche, aber das fcitx-configtool konnte "
+"nicht gefunden werden. Der Paketname ist normalerweise fcitx-config-gtk, "
+"fcitx-config-gtk3 oder fcitx-configtool. Fcitx wird die Konfiguration nun "
+"mit einem Texteditor öffnen."
 
 #: data/script/fcitx-configtool.sh:133
 msgid ""
@@ -3401,7 +3412,7 @@ msgstr "Programm:"
 msgid "here"
 msgstr "hier"
 
-#: src/lib/fcitx/ime.c:1775
+#: src/lib/fcitx/ime.c:1783
 msgid "min Num of Characters: "
 msgstr "min Anzahl Zeichen:"
 
