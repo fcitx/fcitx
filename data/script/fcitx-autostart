@@ -7,7 +7,7 @@ sleep 2
 fcitx-remote > /dev/null 2>&1
 
 if [ $? = "1" ]; then
-    echo "Fcitx seems is not running"
+    echo "Fcitx does not seem to be running"
     fcitx
 else
     echo "Fcitx is running correctly."
