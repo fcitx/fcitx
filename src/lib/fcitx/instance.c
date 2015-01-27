@@ -290,6 +290,9 @@ void* RunInstance(void* arg)
     FcitxUILoad(instance);
 
     instance->iIMIndex = FcitxInstanceGetIMIndexByName(instance, instance->profile->imName);
+    if (instance->iIMIndex < 0) {
+        instance->iIMIndex = 0;
+    }
 
     FcitxInstanceSwitchIMByIndex(instance, instance->iIMIndex);
 
