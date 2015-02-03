@@ -618,16 +618,24 @@ char* FcitxHotkeyGetReadableKeyString(FcitxKeySym sym, unsigned int state)
     char *str;
     size_t len = 0;
 
-    if (state & FcitxKeyState_Ctrl)
+    if ((state & FcitxKeyState_Ctrl) &&
+        sym != FcitxKey_Control_R &&
+        sym != FcitxKey_Control_L)
         len += strlen("Ctrl+");
 
-    if (state & FcitxKeyState_Alt)
+    if ((state & FcitxKeyState_Alt) &&
+        sym != FcitxKey_Alt_R &&
+        sym != FcitxKey_Alt_L)
         len += strlen("Alt+");
 
-    if (state & FcitxKeyState_Shift)
+    if ((state & FcitxKeyState_Shift) &&
+        sym != FcitxKey_Shift_R &&
+        sym != FcitxKey_Shift_L)
         len += strlen("Shift+");
 
-    if (state & FcitxKeyState_Super)
+    if ((state & FcitxKeyState_Super) &&
+        sym != FcitxKey_Super_L &&
+        sym != FcitxKey_Super_R)
         len += strlen("Super+");
 
     if (sym == FcitxKey_ISO_Left_Tab)
@@ -642,16 +650,24 @@ char* FcitxHotkeyGetReadableKeyString(FcitxKeySym sym, unsigned int state)
 
     str = fcitx_utils_malloc0(sizeof(char) * (len + keylen + 1));
 
-    if (state & FcitxKeyState_Ctrl)
+    if ((state & FcitxKeyState_Ctrl) &&
+        sym != FcitxKey_Control_R &&
+        sym != FcitxKey_Control_L)
         strcat(str, "Ctrl+");
 
-    if (state & FcitxKeyState_Alt)
+    if ((state & FcitxKeyState_Alt) &&
+        sym != FcitxKey_Alt_R &&
+        sym != FcitxKey_Alt_L)
         strcat(str, "Alt+");
 
-    if (state & FcitxKeyState_Shift)
+    if ((state & FcitxKeyState_Shift) &&
+        sym != FcitxKey_Shift_R &&
+        sym != FcitxKey_Shift_L)
         strcat(str, "Shift+");
 
-    if (state & FcitxKeyState_Super)
+    if ((state & FcitxKeyState_Super) &&
+        sym != FcitxKey_Super_L &&
+        sym != FcitxKey_Super_R)
         strcat(str, "Super+");
 
     int i = 0;
