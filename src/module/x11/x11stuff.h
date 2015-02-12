@@ -70,6 +70,7 @@ typedef struct _FcitxRect {
 typedef enum _FcitxXWindowType {
     FCITX_WINDOW_UNKNOWN,
     FCITX_WINDOW_DOCK,
+    FCITX_WINDOW_POPUP_MENU,
     FCITX_WINDOW_MENU,
     FCITX_WINDOW_DIALOG
 } FcitxXWindowType;

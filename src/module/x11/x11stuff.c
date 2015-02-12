@@ -288,6 +288,7 @@ X11InitAtoms(FcitxX11 *x11priv)
         "_NET_WM_WINDOW_TYPE_MENU",
         "_NET_WM_WINDOW_TYPE_DIALOG",
         "_NET_WM_WINDOW_TYPE_DOCK",
+        "_NET_WM_WINDOW_TYPE_POPUP_MENU",
         "_NET_WM_PID",
         "UTF8_STRING",
         "STRING",
@@ -303,11 +304,12 @@ X11InitAtoms(FcitxX11 *x11priv)
     x11priv->typeMenuAtom = atoms_return[1];
     x11priv->typeDialogAtom = atoms_return[2];
     x11priv->typeDockAtom = atoms_return[3];
-    x11priv->pidAtom = atoms_return[4];
-    x11priv->utf8Atom = atoms_return[5];
-    x11priv->stringAtom = atoms_return[6];
-    x11priv->compTextAtom = atoms_return[7];
-    x11priv->compManagerAtom = atoms_return[8];
+    x11priv->typePopupMenuAtom = atoms_return[4];
+    x11priv->pidAtom = atoms_return[5];
+    x11priv->utf8Atom = atoms_return[6];
+    x11priv->stringAtom = atoms_return[7];
+    x11priv->compTextAtom = atoms_return[8];
+    x11priv->compManagerAtom = atoms_return[9];
 }
 
 static boolean
@@ -399,6 +401,9 @@ X11SetWindowProperty(FcitxX11 *x11priv, Window window, FcitxXWindowType type,
         break;
     case FCITX_WINDOW_DOCK:
         wintype = &x11priv->typeDockAtom;
+        break;
+    case FCITX_WINDOW_POPUP_MENU:
+        wintype = &x11priv->typePopupMenuAtom;
         break;
     case FCITX_WINDOW_MENU:
         wintype = &x11priv->typeMenuAtom;
