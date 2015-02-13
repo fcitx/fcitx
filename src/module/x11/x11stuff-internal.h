@@ -50,6 +50,7 @@ typedef struct {
     Atom windowTypeAtom;
     Atom typeDialogAtom;
     Atom typeDockAtom;
+    Atom typePopupMenuAtom;
     Atom pidAtom;
     Atom utf8Atom;
     Atom stringAtom;

@@ -61,7 +61,7 @@ void InputWindowInit(InputWindow* inputWindow)
                         INPUTWND_HEIGHT,
                         0, 0,
                         "Fcitx Input Window",
-                        FCITX_WINDOW_DOCK,
+                        FCITX_WINDOW_POPUP_MENU,
                         &window->owner->skin.skinInputBar.background,
                         ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask | LeaveWindowMask,
                         InputWindowMoveWindow,
