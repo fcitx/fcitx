@@ -634,14 +634,14 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
         } else if (FcitxInputStateGetRawInputBufferSize(input) && FcitxHotkeyIsHotKey(sym, state, FCITX_DELETE)) {
             if (pystate->iPYInsertPoint == strlen(pystate->strFindString))
                 retVal = IRV_DO_NOTHING;
-            char *move_dst = (pystate->strFindString
-                                + pystate->iPYInsertPoint);
+            char *move_dst = pystate->strFindString + pystate->iPYInsertPoint;
             val = (move_dst[1] == PY_SEPARATOR) ? 2 : 1;
             memmove(move_dst, move_dst + val, strlen(move_dst + val) + 1);
 
             ParsePY(&pystate->pyconfig, pystate->strFindString,
                     &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
-            if (!strlen(pystate->strFindString)) {
+            // Nothing is selected and no more input
+            if (!pystate->iPYSelected && !strlen(pystate->strFindString)) {
                 retVal = IRV_CLEAN;
             } else {
                 retVal = IRV_DISPLAY_CANDWORDS;
