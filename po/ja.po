@@ -5,7 +5,7 @@
 # Translators:
 # しろう, 2013
 # しろう <>, 2013
-# AWASHIRO Ikuya <ikunya@gmail.com>, 2013-2014
+# AWASHIRO Ikuya <ikunya@gmail.com>, 2013-2015
 # csslayer <wengxt@gmail.com>, 2013
 # AWASHIRO Ikuya <ikunya@gmail.com>, 2013
 # AWASHIRO Ikuya <ikunya@gmail.com>, 2012-2013
@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2014-11-27 18:03+0100\n"
-"PO-Revision-Date: 2014-11-27 13:21+0000\n"
+"POT-Creation-Date: 2015-03-04 06:02+0100\n"
+"PO-Revision-Date: 2015-03-04 00:01+0000\n"
 "Last-Translator: AWASHIRO Ikuya <ikunya@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
@@ -118,7 +118,7 @@ msgstr "/XIM"
 
 #: src/lib/fcitx/ime.c:1780
 msgid "/min  Time Used: "
-msgstr ""
+msgstr "/分 使用時間: "
 
 #: src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
@@ -922,7 +922,7 @@ msgstr "Dianbaoma"
 
 #: data/script/fcitx-diagnose.sh:812
 msgid "Directories:"
-msgstr ""
+msgstr "ディレクトリ:"
 
 #: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
@@ -1060,7 +1060,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:818
 msgid "Environment variable ${1} is not set."
-msgstr ""
+msgstr "環境変数 ${1} がセットされていません。"
 
 #: data/script/fcitx-diagnose.sh:1021
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
@@ -1171,7 +1171,7 @@ msgstr "FcitxのLua サポート"
 
 #: data/script/fcitx-diagnose.sh:830
 msgid "Fcitx Settings Directory:"
-msgstr ""
+msgstr "Fcitx の設定ディレクトリ:"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:3
 msgid "Fcitx Skin Installer"
@@ -1492,7 +1492,7 @@ msgstr "ひらがな"
 
 #: data/script/fcitx-diagnose.sh:814
 msgid "Home:"
-msgstr ""
+msgstr "ホーム:"
 
 #: src/im/table/table.desc:123
 msgid "Horizontal"
@@ -1647,7 +1647,7 @@ msgstr "入力メソッド:"
 
 #: src/lib/fcitx/ime.c:1777
 msgid "Input Speed: "
-msgstr "入力スピード"
+msgstr "入力速度: "
 
 #: src/module/imselector/fcitx-imselector.conf.in:3
 msgid "Input method selector"
@@ -2033,7 +2033,7 @@ msgstr "入力ウィンドウなし"
 msgid "No local input method"
 msgstr "ローカル入力メソッドがありません"
 
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:549
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
 msgid "No remind"
 msgstr "リマインドなし"
 
@@ -2913,7 +2913,7 @@ msgstr "全角/半角文字の切り替え"
 msgid "Toggle Input Method"
 msgstr "入力メソッドの切り替え"
 
-#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:550
+#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:553
 msgid "Toggle Remind"
 msgstr "リマインドの切り替え"
 
@@ -3100,7 +3100,7 @@ msgstr "既存の文字列を確定するときに Enter を使う"
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr "アクティブでない時だけその他のトリガーキーを使用する"
 
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:549
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
 msgid "Use remind"
 msgstr "リマインドを使用"
 
@@ -3365,7 +3365,7 @@ msgstr "ここ"
 
 #: src/lib/fcitx/ime.c:1783
 msgid "min Num of Characters: "
-msgstr "最低文字数:"
+msgstr "分 文字数: "
 
 #: src/lib/fcitx-config/fcitx-config.c:1200
 #, c-format
@@ -3380,7 +3380,7 @@ msgstr "正しいフォントではありません"
 msgid "process:"
 msgstr "プロセス:"
 
-#: src/lib/fcitx/instance.c:525
+#: src/lib/fcitx/instance.c:528
 msgid "pthread mutex init failed"
 msgstr "pthread の mutex 初期化に失敗しました"
 
