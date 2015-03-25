@@ -106,6 +106,17 @@ detectDE() {
 }
 
 run_kde() {
+    if xprop -root KDE_SESSION_VERSION 2>&1 | grep -q "= 5"; then
+        if (kcmshell5 --list 2>/dev/null | grep ^kcm_fcitx > /dev/null 2>&1); then
+            if [ x"$1" != x ]; then
+                exec kcmshell5 kcm_fcitx --args "$1"
+            else
+                exec kcmshell5 kcm_fcitx
+            fi
+        fi
+    fi
+
+    # not harm to also check kde4 version on kf5
     if (kcmshell4 --list 2>/dev/null | grep ^kcm_fcitx > /dev/null 2>&1); then
         if [ x"$1" != x ]; then
             exec kcmshell4 kcm_fcitx --args "$1"
