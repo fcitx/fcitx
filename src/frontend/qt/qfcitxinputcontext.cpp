@@ -60,35 +60,18 @@ static const int XKeyRelease = KeyRelease;
 #define Q_UNLIKELY(x) (x)
 #endif
 
-static int
-compare_seq_index(const void *key, const void *value)
+static inline const char*
+get_locale()
 {
-    const uint *keysyms = (const uint *)key;
-    const quint32 *seq = (const quint32 *)value;
+    const char* locale = getenv("LC_ALL");
+    if (!locale)
+        locale = getenv("LC_CTYPE");
+    if (!locale)
+        locale = getenv("LANG");
+    if (!locale)
+        locale = "C";
 
-    if (keysyms[0] < seq[0])
-        return -1;
-    else if (keysyms[0] > seq[0])
-        return 1;
-    return 0;
-}
-
-static int
-compare_seq(const void *key, const void *value)
-{
-    int i = 0;
-    const uint *keysyms = (const uint *)key;
-    const quint32 *seq = (const quint32 *)value;
-
-    while (keysyms[i]) {
-        if (keysyms[i] < seq[i])
-            return -1;
-        else if (keysyms[i] > seq[i])
-            return 1;
-        i++;
-    }
-
-    return 0;
+    return locale;
 }
 
 typedef QInputMethodEvent::Attribute QAttribute;
@@ -98,7 +81,10 @@ QFcitxInputContext::QFcitxInputContext()
       m_cursorPos(0),
       m_useSurroundingText(false),
       m_syncMode(true),
-      m_connection(new FcitxQtConnection(this))
+      m_connection(new FcitxQtConnection(this)),
+      m_xkbContext(xkb_context_new(XKB_CONTEXT_NO_FLAGS)),
+      m_xkbComposeTable(m_xkbContext ? xkb_compose_table_new_from_locale(m_xkbContext.data(), get_locale(), XKB_COMPOSE_COMPILE_NO_FLAGS) : 0),
+      m_xkbComposeState(m_xkbComposeTable ? xkb_compose_state_new(m_xkbComposeTable.data(), XKB_COMPOSE_STATE_NO_FLAGS) : 0)
 {
     const char* locale = getenv("LC_ALL");
     if (!locale)
@@ -113,17 +99,11 @@ QFcitxInputContext::QFcitxInputContext()
     connect(m_connection, SIGNAL(disconnected()), this, SLOT(cleanUp()));
 
     m_connection->startConnection();
-    m_xkbContext = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
-    m_xkbComposeTable = xkb_compose_table_new_from_locale(m_xkbContext, locale, XKB_COMPOSE_COMPILE_NO_FLAGS);
-    m_xkbComposeState = xkb_compose_state_new(m_xkbComposeTable, XKB_COMPOSE_STATE_NO_FLAGS);
 }
 
 QFcitxInputContext::~QFcitxInputContext()
 {
     cleanUp();
-    xkb_compose_state_unref(m_xkbComposeState);
-    xkb_compose_table_unref(m_xkbComposeTable);
-    xkb_context_unref(m_xkbContext);
 }
 
 void QFcitxInputContext::connected()
@@ -781,27 +761,29 @@ QFcitxInputContext::processCompose(uint keyval, uint state, FcitxKeyEventType ev
 {
     Q_UNUSED(state);
 
-    if (event == FCITX_RELEASE_KEY)
+    if (!m_xkbComposeState || event == FCITX_RELEASE_KEY)
         return false;
 
-    enum xkb_compose_feed_result result = xkb_compose_state_feed(m_xkbComposeState, keyval);
+    struct xkb_compose_state* xkbComposeState = m_xkbComposeState.data();
+
+    enum xkb_compose_feed_result result = xkb_compose_state_feed(xkbComposeState, keyval);
     if (result == XKB_COMPOSE_FEED_IGNORED) {
         return false;
     }
 
-    enum xkb_compose_status status = xkb_compose_state_get_status(m_xkbComposeState);
+    enum xkb_compose_status status = xkb_compose_state_get_status(xkbComposeState);
     if (status == XKB_COMPOSE_NOTHING) {
         return 0;
     } else if (status == XKB_COMPOSE_COMPOSED) {
-        char buffer[UTF8_MAX_LENGTH + 1] = {'\0', '\0', '\0', '\0', '\0', '\0', '\0'};
-        int length = xkb_compose_state_get_utf8(m_xkbComposeState, buffer, sizeof(buffer));
-        xkb_compose_state_reset(m_xkbComposeState);
+        char buffer[] = {'\0', '\0', '\0', '\0', '\0', '\0', '\0'};
+        int length = xkb_compose_state_get_utf8(xkbComposeState, buffer, sizeof(buffer));
+        xkb_compose_state_reset(xkbComposeState);
         if (length != 0) {
             commitString(QString::fromUtf8(buffer));
         }
 
     } else if (status == XKB_COMPOSE_CANCELLED) {
-        xkb_compose_state_reset(m_xkbComposeState);
+        xkb_compose_state_reset(xkbComposeState);
     }
 
     return true;

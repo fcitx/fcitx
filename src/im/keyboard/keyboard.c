@@ -302,8 +302,8 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     FcitxKeyboard* keyboard = fcitx_utils_malloc0(sizeof(FcitxKeyboard));
     keyboard->owner = instance;
     keyboard->xkbContext = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
-    keyboard->xkbComposeTable = xkb_compose_table_new_from_locale(keyboard->xkbContext, locale, XKB_COMPOSE_COMPILE_NO_FLAGS);
-    keyboard->xkbComposeState = xkb_compose_state_new(keyboard->xkbComposeTable, XKB_COMPOSE_STATE_NO_FLAGS);
+    keyboard->xkbComposeTable = keyboard->xkbContext ? xkb_compose_table_new_from_locale(keyboard->xkbContext, locale, XKB_COMPOSE_COMPILE_NO_FLAGS) : NULL;
+    keyboard->xkbComposeState = keyboard->xkbComposeTable ? xkb_compose_state_new(keyboard->xkbComposeTable, XKB_COMPOSE_STATE_NO_FLAGS) : NULL;
     if (!LoadKeyboardConfig(keyboard, &keyboard->config))
     {
         free(keyboard);
@@ -524,7 +524,9 @@ void  FcitxKeyboardResetIM(void *arg)
     keyboard->cursor_moved = false;
     keyboard->buffer[0][0] = '\0';
     keyboard->cursorPos = 0;
-    xkb_compose_state_reset(keyboard->xkbComposeState);
+    if (keyboard->xkbComposeState) {
+        xkb_compose_state_reset(keyboard->xkbComposeState);
+    }
 }
 
 void FcitxKeyboardOnClose(void* arg, FcitxIMCloseEventType event)
@@ -2724,6 +2726,9 @@ uint32_t
 processCompose(FcitxKeyboardLayout* layout, uint32_t keyval, uint32_t state)
 {
     FcitxKeyboard* keyboard = layout->owner;
+    if (!keyboard->xkbComposeState) {
+        return 0;
+    }
 
     enum xkb_compose_feed_result result = xkb_compose_state_feed(keyboard->xkbComposeState, keyval);
     if (result == XKB_COMPOSE_FEED_IGNORED) {
