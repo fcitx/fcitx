@@ -56,6 +56,7 @@ target_link_libraries(
   optimized ${QT_QTGUI_LIBRARY_RELEASE}
   fcitx-config
   fcitx-qt
+  XKBCommon::XKBCommon
   )
 
 if(ENABLE_X11)

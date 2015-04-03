@@ -157,8 +157,6 @@ private:
     void createICData(QWidget* w);
 
     FcitxQtInputMethodProxy* m_improxy;
-    uint m_compose_buffer[FCITX_MAX_COMPOSE_LEN + 1];
-    int m_n_compose;
     QString m_preedit;
     QString m_commitPreedit;
     FcitxQtFormattedPreeditList m_preeditList;
@@ -167,6 +165,9 @@ private:
     bool m_syncMode;
     FcitxQtConnection* m_connection;
     QHash<WId, FcitxQtICData*> m_icMap;
+    struct xkb_context* m_xkbContext;
+    struct xkb_compose_table* m_xkbComposeTable;
+    struct xkb_compose_state* m_xkbComposeState;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_

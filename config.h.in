@@ -17,7 +17,6 @@
 #cmakedefine ENABLE_SNOOPER
 #cmakedefine ENABLE_X11
 #cmakedefine ENABLE_LIBXML2
-#cmakedefine ENABLE_ICU
 #cmakedefine ENABLE_BACKTRACE
 #define NO_SNOOPER_APPS "@NO_SNOOPER_APPS@"
 #define NO_PREEDIT_APPS "@NO_PREEDIT_APPS@"

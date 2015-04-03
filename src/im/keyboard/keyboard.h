@@ -62,13 +62,14 @@ typedef struct _FcitxKeyboard {
     char *initialVariant;
     char buffer[2][FCITX_KEYBOARD_MAX_BUFFER + UTF8_MAX_LENGTH + 1];
     int cursorPos;
-    uint composeBuffer[FCITX_MAX_COMPOSE_LEN + 1];
-    int n_compose;
     char *tempBuffer;
     int lastLength;
     int dataSlot;
     int enUSRegistered;
     boolean cursor_moved;
+    struct xkb_context* xkbContext;
+    struct xkb_compose_table* xkbComposeTable;
+    struct xkb_compose_state* xkbComposeState;
 } FcitxKeyboard;
 
 typedef struct _FcitxKeyboardLayout {

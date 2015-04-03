@@ -1,10 +1,12 @@
-cmake_minimum_required(VERSION 2.8.6)
+cmake_minimum_required(VERSION 2.8.12)
 
 project(fcitx)
 
-set(version 4.2.8.5)
+set(version 4.2.9)
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+
+find_package(ECM 0.0.11 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH "${ECM_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 set(CMAKE_AUTOMOC_RELAXED_MODE TRUE)
 
 set_property(GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD" On)
@@ -69,6 +71,7 @@ find_package(Libiconv REQUIRED)
 find_package(Pthread REQUIRED)
 find_package(Libexecinfo)
 find_package(GettextPo)
+find_package(XKBCommon 0.5.0 REQUIRED COMPONENTS XKBCommon)
 
 if(NOT ENABLE_GETTEXT OR NOT GETTEXTPO_FOUND)
   fcitx_disable_gettext()
@@ -100,9 +103,6 @@ if(ENABLE_PRESAGE)
   if(NOT (PRESAGE_FOUND OR FORCE_PRESAGE))
     set(ENABLE_PRESAGE Off)
   endif()
-endif()
-if(ENABLE_ICU)
-  find_package(ICU REQUIRED)
 endif()
 
 if(ENABLE_QT)
