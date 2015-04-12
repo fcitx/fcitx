@@ -95,6 +95,10 @@ QFcitxInputContext::QFcitxInputContext()
         locale = "C";
     FcitxQtFormattedPreedit::registerMetaType();
 
+    if (m_xkbContext) {
+        xkb_context_set_log_level(m_xkbContext.data(), XKB_LOG_LEVEL_CRITICAL);
+    }
+
     connect(m_connection, SIGNAL(connected()), this, SLOT(connected()));
     connect(m_connection, SIGNAL(disconnected()), this, SLOT(cleanUp()));
 

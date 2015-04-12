@@ -291,6 +291,12 @@ static const char* FindBestLanguage(FcitxIsoCodes* isocodes, const char* hint, U
 
 void* FcitxKeyboardCreate(FcitxInstance* instance)
 {
+    FcitxKeyboard* keyboard = fcitx_utils_malloc0(sizeof(FcitxKeyboard));
+    if (!LoadKeyboardConfig(keyboard, &keyboard->config))
+    {
+        free(keyboard);
+        return NULL;
+    }
     const char* locale = getenv("LC_ALL");
     if (!locale)
         locale = getenv("LC_CTYPE");
@@ -299,16 +305,15 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     if (!locale)
         locale = "C";
 
-    FcitxKeyboard* keyboard = fcitx_utils_malloc0(sizeof(FcitxKeyboard));
     keyboard->owner = instance;
     keyboard->xkbContext = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
     keyboard->xkbComposeTable = keyboard->xkbContext ? xkb_compose_table_new_from_locale(keyboard->xkbContext, locale, XKB_COMPOSE_COMPILE_NO_FLAGS) : NULL;
     keyboard->xkbComposeState = keyboard->xkbComposeTable ? xkb_compose_state_new(keyboard->xkbComposeTable, XKB_COMPOSE_STATE_NO_FLAGS) : NULL;
-    if (!LoadKeyboardConfig(keyboard, &keyboard->config))
-    {
-        free(keyboard);
-        return NULL;
+
+    if (keyboard->xkbContext) {
+        xkb_context_set_log_level(keyboard->xkbContext, XKB_LOG_LEVEL_CRITICAL);
     }
+
     char* localepath = fcitx_utils_get_fcitx_path("localedir");
     bindtextdomain("xkeyboard-config", localepath);
     bind_textdomain_codeset("xkeyboard-config", "UTF-8");
