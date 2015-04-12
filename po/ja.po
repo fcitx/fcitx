@@ -16,13 +16,14 @@
 # csslayer <wengxt@gmail.com>, 2013
 # csslayer <wengxt@gmail.com>, 2013
 # usingsystem8 <yuta.ooka@gmail.com>, 2013
+# yyc1992 <yyc1992@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2014-08-13 00:06+0200\n"
-"PO-Revision-Date: 2015-03-04 00:01+0000\n"
-"Last-Translator: AWASHIRO Ikuya <ikunya@gmail.com>\n"
+"PO-Revision-Date: 2015-04-12 20:36+0000\n"
+"Last-Translator: yyc1992 <yyc1992@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -455,7 +456,7 @@ msgstr "gtk ${1} 用のFcitx im モジュールが見つかりません。"
 
 #: data/script/fcitx-diagnose.sh:1340
 msgid "Found immodules cache for gtk ${1} at ${2}."
-msgstr "gtk ${1} の immodule cache を$ {2} に見つけました。"
+msgstr "gtk ${1} の immodule cache を ${2} に見つけました。"
 
 #: data/script/fcitx-diagnose.sh:1348
 msgid "Found immodule cache for unknown gtk version at ${1}."
