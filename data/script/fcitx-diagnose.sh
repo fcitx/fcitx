@@ -771,6 +771,8 @@ check_system() {
         write_eval "$(_ 'Desktop environment is ${1}.')" \
             "$(code_inline "${DE}")"
     fi
+    write_order_list "$(_ 'Bash Version:')"
+    write_quote_str "BASH_VERSION='${BASH_VERSION}'"
 }
 
 check_env() {
