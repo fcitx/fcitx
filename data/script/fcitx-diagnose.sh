@@ -60,6 +60,8 @@ _find_file() {
 }
 
 find_file() {
+    # Avoid variable name conflict (Not that anyone is using the internal
+    # variable name though...)
     if [[ ${1} = __find_file_line ]]; then
         _find_file __find_file_line2 "$@"
     else
