@@ -11,14 +11,14 @@
 # csslayer <wengxt@gmail.com>, 2013
 # wwj402 <wwj402@gmail.com>, 2013-2014
 # yyc1992 <yyc1992@gmail.com>, 2012
-# yyc1992 <yyc1992@gmail.com>, 2013-2014
+# yyc1992 <yyc1992@gmail.com>, 2013-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2014-08-13 00:06+0200\n"
-"PO-Revision-Date: 2014-09-12 06:37+0000\n"
-"Last-Translator: wwj402 <wwj402@gmail.com>\n"
+"PO-Revision-Date: 2015-04-12 12:19+0000\n"
+"Last-Translator: yyc1992 <yyc1992@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/fcitx/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -515,11 +515,11 @@ msgstr "插件库: "
 
 #: data/script/fcitx-diagnose.sh:1466
 msgid "Cannot find file ${1} of addon ${2}."
-msgstr "无法找到插件 ${2} 的文件 $ {1}。"
+msgstr "无法找到插件 ${2} 的文件 ${1}。"
 
 #: data/script/fcitx-diagnose.sh:1476
 msgid "Cannot find following required libraries for ${1} of addon ${2}."
-msgstr "无法找到插件$ {2} 所需的库 $ {1}。"
+msgstr "无法找到插件 ${2} 所需的库 ${1}。"
 
 #: data/script/fcitx-diagnose.sh:1484
 msgid "All libraries for all addons are found."
