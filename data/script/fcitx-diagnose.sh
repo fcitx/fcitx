@@ -56,7 +56,7 @@ _find_file() {
     eval "${2}"'=()'
     while IFS= read -r -d '' "${1}"; do
         array_push "${2}" "${!1}"
-    done < <(find "${@:3}" -print0)
+    done < <(find "${@:3}" -print0 2> /dev/null)
 }
 
 find_file() {
