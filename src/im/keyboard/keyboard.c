@@ -307,12 +307,13 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
 
     keyboard->owner = instance;
     keyboard->xkbContext = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
-    keyboard->xkbComposeTable = keyboard->xkbContext ? xkb_compose_table_new_from_locale(keyboard->xkbContext, locale, XKB_COMPOSE_COMPILE_NO_FLAGS) : NULL;
-    keyboard->xkbComposeState = keyboard->xkbComposeTable ? xkb_compose_state_new(keyboard->xkbComposeTable, XKB_COMPOSE_STATE_NO_FLAGS) : NULL;
 
     if (keyboard->xkbContext) {
         xkb_context_set_log_level(keyboard->xkbContext, XKB_LOG_LEVEL_CRITICAL);
     }
+
+    keyboard->xkbComposeTable = keyboard->xkbContext ? xkb_compose_table_new_from_locale(keyboard->xkbContext, locale, XKB_COMPOSE_COMPILE_NO_FLAGS) : NULL;
+    keyboard->xkbComposeState = keyboard->xkbComposeTable ? xkb_compose_state_new(keyboard->xkbComposeTable, XKB_COMPOSE_STATE_NO_FLAGS) : NULL;
 
     char* localepath = fcitx_utils_get_fcitx_path("localedir");
     bindtextdomain("xkeyboard-config", localepath);

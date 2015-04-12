@@ -74,6 +74,16 @@ get_locale()
     return locale;
 }
 
+struct xkb_context* _xkb_context_new_helper()
+{
+    struct xkb_context* context = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
+    if (context) {
+        xkb_context_set_log_level(context, XKB_LOG_LEVEL_CRITICAL);
+    }
+
+    return context;
+}
+
 typedef QInputMethodEvent::Attribute QAttribute;
 
 QFcitxInputContext::QFcitxInputContext()
@@ -82,17 +92,10 @@ QFcitxInputContext::QFcitxInputContext()
       m_useSurroundingText(false),
       m_syncMode(true),
       m_connection(new FcitxQtConnection(this)),
-      m_xkbContext(xkb_context_new(XKB_CONTEXT_NO_FLAGS)),
+      m_xkbContext(_xkb_context_new_helper()),
       m_xkbComposeTable(m_xkbContext ? xkb_compose_table_new_from_locale(m_xkbContext.data(), get_locale(), XKB_COMPOSE_COMPILE_NO_FLAGS) : 0),
       m_xkbComposeState(m_xkbComposeTable ? xkb_compose_state_new(m_xkbComposeTable.data(), XKB_COMPOSE_STATE_NO_FLAGS) : 0)
 {
-    const char* locale = getenv("LC_ALL");
-    if (!locale)
-        locale = getenv("LC_CTYPE");
-    if (!locale)
-        locale = getenv("LANG");
-    if (!locale)
-        locale = "C";
     FcitxQtFormattedPreedit::registerMetaType();
 
     if (m_xkbContext) {
