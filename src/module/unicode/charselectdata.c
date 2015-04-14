@@ -412,7 +412,7 @@ UT_array* CharSelectDataFind(CharSelectData* charselect, const char* needle)
         // try to parse string as decimal number
         end = NULL;
         uint32_t unicode = (uint32_t) strtoul(*s, &end, 10);
-        if (end == NULL) {
+        if (*end == '\0') {
             utarray_push_back(returnRes, &unicode);
         }
     }
