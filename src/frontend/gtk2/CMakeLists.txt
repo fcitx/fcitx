@@ -59,7 +59,7 @@ set_target_properties( im-fcitx PROPERTIES PREFIX ""
   COMPILE_FLAGS "-fvisibility=hidden" LINK_FLAGS "-Wl,--no-undefined")
 target_link_libraries(im-fcitx ${GTK2_LIBRARIES} fcitx-utils)
 if(GIO2_FOUND)
-  target_link_libraries(im-fcitx ${GTK2_LIBRARIES} ${GIO2_LIBRARIES}
+  target_link_libraries(im-fcitx XKBCommon::XKBCommon ${GTK2_LIBRARIES} ${GIO2_LIBRARIES}
     fcitx-gclient fcitx-utils)
 else()
   target_link_libraries(im-fcitx ${GTK2_LIBRARIES} ${DBUS_GLIB_LIBRARIES}

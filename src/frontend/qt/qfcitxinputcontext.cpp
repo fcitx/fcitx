@@ -180,6 +180,10 @@ void QFcitxInputContext::reset()
     FcitxQtInputContextProxy* proxy = validIC();
     if (proxy)
         proxy->Reset();
+
+    if (m_xkbComposeState) {
+        xkb_compose_state_reset(m_xkbComposeState.data());
+    }
 }
 
 void QFcitxInputContext::update()
@@ -781,7 +785,7 @@ QFcitxInputContext::processCompose(uint keyval, uint state, FcitxKeyEventType ev
 
     enum xkb_compose_status status = xkb_compose_state_get_status(xkbComposeState);
     if (status == XKB_COMPOSE_NOTHING) {
-        return 0;
+        return false;
     } else if (status == XKB_COMPOSE_COMPOSED) {
         char buffer[] = {'\0', '\0', '\0', '\0', '\0', '\0', '\0'};
         int length = xkb_compose_state_get_utf8(xkbComposeState, buffer, sizeof(buffer));

@@ -49,7 +49,7 @@ set_target_properties( im-fcitx-gtk3 PROPERTIES PREFIX ""
   LINK_FLAGS "-Wl,--no-undefined")
 
 if(GIO2_FOUND)
-  target_link_libraries(im-fcitx-gtk3 ${GTK3_LIBRARIES} ${GIO2_LIBRARIES}
+  target_link_libraries(im-fcitx-gtk3 XKBCommon::XKBCommon ${GTK3_LIBRARIES} ${GIO2_LIBRARIES}
     fcitx-gclient fcitx-utils)
 else()
   target_link_libraries(im-fcitx-gtk3 ${GTK3_LIBRARIES}

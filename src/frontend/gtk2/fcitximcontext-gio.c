@@ -31,6 +31,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include <xkbcommon/xkbcommon-compose.h>
 
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/log.h"
@@ -86,6 +87,9 @@ struct _FcitxIMContext {
     PangoAttrList* attrlist;
     gint last_cursor_pos;
     gint last_anchor_pos;
+    struct xkb_context* xkbContext;
+    struct xkb_compose_table* xkbComposeTable;
+    struct xkb_compose_state* xkbComposeState;
 };
 
 struct _FcitxIMContextClass {
@@ -433,6 +437,23 @@ fcitx_im_context_init(FcitxIMContext *context)
     g_signal_connect(context->client, "commit-string", G_CALLBACK(_fcitx_im_context_commit_string_cb), context);
     g_signal_connect(context->client, "delete-surrounding-text", G_CALLBACK(_fcitx_im_context_delete_surrounding_text_cb), context);
     g_signal_connect(context->client, "update-formatted-preedit", G_CALLBACK(_fcitx_im_context_update_formatted_preedit_cb), context);
+
+    const char* locale = getenv("LC_ALL");
+    if (!locale)
+        locale = getenv("LC_CTYPE");
+    if (!locale)
+        locale = getenv("LANG");
+    if (!locale)
+        locale = "C";
+
+    context->xkbContext = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
+
+    if (context->xkbContext) {
+        xkb_context_set_log_level(context->xkbContext, XKB_LOG_LEVEL_CRITICAL);
+    }
+
+    context->xkbComposeTable = context->xkbContext ? xkb_compose_table_new_from_locale(context->xkbContext, locale, XKB_COMPOSE_COMPILE_NO_FLAGS) : NULL;
+    context->xkbComposeState = context->xkbComposeTable ? xkb_compose_state_new(context->xkbComposeTable, XKB_COMPOSE_STATE_NO_FLAGS) : NULL;
 }
 
 static void
@@ -447,6 +468,19 @@ fcitx_im_context_finalize(GObject *obj)
 #define g_signal_handlers_disconnect_by_data(instance, data) \
     g_signal_handlers_disconnect_matched ((instance), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, (data))
 #endif
+
+    if (context->xkbComposeState) {
+        xkb_compose_state_unref(context->xkbComposeState);
+        context->xkbComposeState = NULL;
+    }
+    if (context->xkbComposeTable) {
+        xkb_compose_table_unref(context->xkbComposeTable);
+        context->xkbComposeTable = NULL;
+    }
+    if (context->xkbContext) {
+        xkb_context_unref(context->xkbContext);
+        context->xkbContext = NULL;
+    }
 
     if (context->client) {
         g_signal_handlers_disconnect_by_data(context->client, context);
@@ -505,6 +539,38 @@ fcitx_im_context_set_client_window(GtkIMContext          *context,
     set_ic_client_window(fcitxcontext, client_window);
 }
 
+static gboolean
+fcitx_im_context_filter_keypress_fallback(FcitxIMContext *context, GdkEventKey *event)
+{
+    if (!context->xkbComposeState || event->type == GDK_KEY_RELEASE) {
+        return gtk_im_context_filter_keypress(context->slave, event);;
+    }
+
+    struct xkb_compose_state* xkbComposeState = context->xkbComposeState;
+
+    enum xkb_compose_feed_result result = xkb_compose_state_feed(xkbComposeState, event->keyval);
+    if (result == XKB_COMPOSE_FEED_IGNORED) {
+        return gtk_im_context_filter_keypress(context->slave, event);
+    }
+
+    enum xkb_compose_status status = xkb_compose_state_get_status(xkbComposeState);
+    if (status == XKB_COMPOSE_NOTHING) {
+        return gtk_im_context_filter_keypress(context->slave, event);
+    } else if (status == XKB_COMPOSE_COMPOSED) {
+        char buffer[] = {'\0', '\0', '\0', '\0', '\0', '\0', '\0'};
+        int length = xkb_compose_state_get_utf8(xkbComposeState, buffer, sizeof(buffer));
+        xkb_compose_state_reset(xkbComposeState);
+        if (length != 0) {
+            g_signal_emit(context, _signal_commit_id, 0, buffer);
+        }
+
+    } else if (status == XKB_COMPOSE_CANCELLED) {
+        xkb_compose_state_reset(xkbComposeState);
+    }
+
+    return TRUE;
+}
+
 ///
 static gboolean
 fcitx_im_context_filter_keypress(GtkIMContext *context,
@@ -532,7 +598,7 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
         return TRUE;
 
     if (G_UNLIKELY(event->state & FcitxKeyState_IgnoredMask))
-        return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
+        return fcitx_im_context_filter_keypress_fallback(fcitxcontext, event);
 
     if (fcitx_client_is_valid(fcitxcontext->client) && fcitxcontext->has_focus) {
         _request_surrounding_text (&fcitxcontext);
@@ -550,7 +616,7 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
                                                     event->time);
             if (ret <= 0) {
                 event->state |= FcitxKeyState_IgnoredMask;
-                return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
+                return fcitx_im_context_filter_keypress_fallback(fcitxcontext, event);
             } else {
                 event->state |= FcitxKeyState_HandledMask;
                 return TRUE;
@@ -571,7 +637,7 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
             return TRUE;
         }
     } else {
-        return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
+        return fcitx_im_context_filter_keypress_fallback(fcitxcontext, event);
     }
     return FALSE;
 }
