@@ -442,16 +442,17 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
         return false;
 
     FcitxQtICData* data = m_icMap.value(keywidget->effectiveWinId());
-    if (!data)
-        return false;
 
     //if (keywidget != focusWidget())
     //    return false;
 
-    if (keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
-        addCapacity(data, CAPACITY_PASSWORD);
-    else
-        removeCapacity(data, CAPACITY_PASSWORD);
+    if (data) {
+        if (keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText)) {
+            addCapacity(data, CAPACITY_PASSWORD);
+        } else {
+            removeCapacity(data, CAPACITY_PASSWORD);
+        }
+    }
 
     if (Q_UNLIKELY(event->xkey.state & FcitxKeyState_IgnoredMask))
         return false;
