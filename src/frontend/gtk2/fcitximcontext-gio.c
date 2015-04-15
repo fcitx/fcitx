@@ -1112,6 +1112,10 @@ fcitx_im_context_reset(GtkIMContext *context)
         fcitx_client_reset(fcitxcontext->client);
     }
 
+    if (fcitxcontext->xkbComposeState) {
+        xkb_compose_state_reset(fcitxcontext->xkbComposeState);
+    }
+
     gtk_im_context_reset(fcitxcontext->slave);
 }
 
