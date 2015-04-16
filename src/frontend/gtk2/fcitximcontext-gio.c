@@ -38,6 +38,7 @@
 #include "fcitx/frontend.h"
 
 #include "fcitximcontext.h"
+#include "fcitx-gclient/fcitxconnection.h"
 #include "fcitx-gclient/fcitxclient.h"
 
 #if !GTK_CHECK_VERSION (2, 91, 0)
@@ -87,8 +88,6 @@ struct _FcitxIMContext {
     PangoAttrList* attrlist;
     gint last_cursor_pos;
     gint last_anchor_pos;
-    struct xkb_context* xkbContext;
-    struct xkb_compose_table* xkbComposeTable;
     struct xkb_compose_state* xkbComposeState;
 };
 
@@ -207,6 +206,9 @@ static GtkIMContext *_focus_im_context = NULL;
 static const gchar *_no_snooper_apps = NO_SNOOPER_APPS;
 static gboolean _use_key_snooper = _ENABLE_SNOOPER;
 static guint    _key_snooper_id = 0;
+static FcitxConnection* _connection = NULL;
+static struct xkb_context* xkbContext = NULL;
+static struct xkb_compose_table* xkbComposeTable = NULL;
 
 /* Copied from gtk+2.0-2.20.1/modules/input/imcedilla.c to fix crosbug.com/11421.
 * Overwrite the original Gtk+'s compose table in gtk+-2.x.y/gtk/gtkimcontextsimple.c. */
@@ -429,7 +431,31 @@ fcitx_im_context_init(FcitxIMContext *context)
 
     context->time = GDK_CURRENT_TIME;
 
-    context->client = fcitx_client_new();
+    static gsize has_info = 0;
+    if (g_once_init_enter(&has_info)) {
+        _connection = fcitx_connection_new();
+        g_object_ref_sink(_connection);
+
+        xkbContext = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
+
+        if (xkbContext) {
+            xkb_context_set_log_level(xkbContext, XKB_LOG_LEVEL_CRITICAL);
+        }
+
+        const char* locale = getenv("LC_ALL");
+        if (!locale)
+            locale = getenv("LC_CTYPE");
+        if (!locale)
+            locale = getenv("LANG");
+        if (!locale)
+            locale = "C";
+
+        xkbComposeTable = xkbContext ? xkb_compose_table_new_from_locale(xkbContext, locale, XKB_COMPOSE_COMPILE_NO_FLAGS) : NULL;
+
+        g_once_init_leave(&has_info, 1);
+    }
+
+    context->client = fcitx_client_new_with_connection(_connection);
     g_signal_connect(context->client, "connected", G_CALLBACK(_fcitx_im_context_connect_cb), context);
     g_signal_connect(context->client, "enable-im", G_CALLBACK(_fcitx_im_context_enable_im_cb), context);
     g_signal_connect(context->client, "close-im", G_CALLBACK(_fcitx_im_context_close_im_cb), context);
@@ -438,22 +464,7 @@ fcitx_im_context_init(FcitxIMContext *context)
     g_signal_connect(context->client, "delete-surrounding-text", G_CALLBACK(_fcitx_im_context_delete_surrounding_text_cb), context);
     g_signal_connect(context->client, "update-formatted-preedit", G_CALLBACK(_fcitx_im_context_update_formatted_preedit_cb), context);
 
-    const char* locale = getenv("LC_ALL");
-    if (!locale)
-        locale = getenv("LC_CTYPE");
-    if (!locale)
-        locale = getenv("LANG");
-    if (!locale)
-        locale = "C";
-
-    context->xkbContext = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
-
-    if (context->xkbContext) {
-        xkb_context_set_log_level(context->xkbContext, XKB_LOG_LEVEL_CRITICAL);
-    }
-
-    context->xkbComposeTable = context->xkbContext ? xkb_compose_table_new_from_locale(context->xkbContext, locale, XKB_COMPOSE_COMPILE_NO_FLAGS) : NULL;
-    context->xkbComposeState = context->xkbComposeTable ? xkb_compose_state_new(context->xkbComposeTable, XKB_COMPOSE_STATE_NO_FLAGS) : NULL;
+    context->xkbComposeState = xkbComposeTable ? xkb_compose_state_new(xkbComposeTable, XKB_COMPOSE_STATE_NO_FLAGS) : NULL;
 }
 
 static void
@@ -472,14 +483,6 @@ fcitx_im_context_finalize(GObject *obj)
     if (context->xkbComposeState) {
         xkb_compose_state_unref(context->xkbComposeState);
         context->xkbComposeState = NULL;
-    }
-    if (context->xkbComposeTable) {
-        xkb_compose_table_unref(context->xkbComposeTable);
-        context->xkbComposeTable = NULL;
-    }
-    if (context->xkbContext) {
-        xkb_context_unref(context->xkbContext);
-        context->xkbContext = NULL;
     }
 
     if (context->client) {

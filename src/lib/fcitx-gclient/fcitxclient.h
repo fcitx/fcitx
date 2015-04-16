@@ -22,6 +22,7 @@
 
 
 #include <gio/gio.h>
+#include "fcitxconnection.h"
 
 /*
  * Type macros
@@ -66,6 +67,7 @@ struct _FcitxPreeditItem {
 
 GType        fcitx_client_get_type(void) G_GNUC_CONST;
 FcitxClient* fcitx_client_new();
+FcitxClient* fcitx_client_new_with_connection(FcitxConnection* connection);
 gboolean fcitx_client_is_valid(FcitxClient* self);
 int fcitx_client_process_key_sync(FcitxClient* self, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);
 void fcitx_client_process_key(FcitxClient* self, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);

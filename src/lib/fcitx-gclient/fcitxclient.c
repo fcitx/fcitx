@@ -43,6 +43,11 @@ typedef struct _ProcessKeyStruct ProcessKeyStruct;
  * A #FcitxClient allow to create a input context via DBus
  */
 
+enum {
+    PROP_0,
+    PROP_CONNECTION,
+};
+
 struct _ProcessKeyStruct {
     FcitxClient* self;
     GAsyncReadyCallback callback;
@@ -181,7 +186,14 @@ static void _fcitx_client_g_signal(GDBusProxy *proxy, gchar *sender_name, gchar 
 static void fcitx_client_init(FcitxClient *self);
 static void fcitx_client_finalize(GObject *object);
 static void fcitx_client_dispose(GObject *object);
+static void fcitx_client_constructed(GObject *object);
 static void _fcitx_client_clean_up(FcitxClient* self, gboolean dont_emit_disconn);
+
+static void
+fcitx_client_set_property(GObject      *gobject,
+                          guint         prop_id,
+                          const GValue *value,
+                          GParamSpec   *pspec);
 
 static void fcitx_client_class_init(FcitxClientClass *klass);
 
@@ -551,8 +563,21 @@ fcitx_client_init(FcitxClient *self)
     self->priv->cancellable = NULL;
     self->priv->improxy = NULL;
     self->priv->icproxy = NULL;
-    self->priv->connection = fcitx_connection_new();
+}
 
+static void
+fcitx_client_constructed(GObject* object)
+{
+    FcitxClient *self = FCITX_CLIENT(object);
+    G_OBJECT_CLASS (fcitx_client_parent_class)->constructed (object);
+    if (!self->priv->connection) {
+        self->priv->connection = fcitx_connection_new();
+        g_object_ref_sink(self->priv->connection);
+    }
+
+    if (fcitx_connection_is_valid(self->priv->connection)) {
+        _fcitx_client_create_ic(self->priv->connection, self);
+    }
     g_signal_connect (self->priv->connection, "connected", (GCallback) _fcitx_client_create_ic, self);
     g_signal_connect (self->priv->connection, "disconnected", (GCallback) _fcitx_client_disconnect, self);
 }
@@ -800,10 +825,20 @@ fcitx_client_class_init(FcitxClientClass *klass)
     GObjectClass *gobject_class;
 
     gobject_class = G_OBJECT_CLASS(klass);
+    gobject_class->set_property = fcitx_client_set_property;
     gobject_class->dispose = fcitx_client_dispose;
     gobject_class->finalize = fcitx_client_finalize;
+    gobject_class->constructed = fcitx_client_constructed;
 
     g_type_class_add_private (klass, sizeof (FcitxClientPrivate));
+
+    g_object_class_install_property(gobject_class,
+                                    PROP_CONNECTION,
+                                    g_param_spec_object("connection",
+                                            "Fcitx Connection",
+                                            "Fcitx Connection",
+                                            FCITX_TYPE_CONNECTION,
+                                            G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
     /* install signals */
     /**
@@ -995,6 +1030,13 @@ fcitx_client_new()
     return FCITX_CLIENT(self);
 }
 
+FCITX_EXPORT_API
+FcitxClient* fcitx_client_new_with_connection(FcitxConnection* connection)
+{
+    FcitxClient* self = g_object_new(FCITX_TYPE_CLIENT, "connection", connection, NULL);
+    return FCITX_CLIENT(self);
+}
+
 /**
  * fcitx_client_is_valid:
  * @self: A #FcitxClient
@@ -1008,6 +1050,25 @@ gboolean
 fcitx_client_is_valid(FcitxClient* self)
 {
     return self->priv->icproxy != NULL;
+}
+
+static
+void fcitx_client_set_property(GObject* gobject, guint prop_id, const GValue* value, GParamSpec* pspec)
+{
+    FcitxClient* self = FCITX_CLIENT(gobject);
+    FcitxConnection* connection;
+    switch (prop_id) {
+    case PROP_CONNECTION:
+        connection = g_value_get_object(value);
+        if (connection) {
+            self->priv->connection = connection;
+            g_object_ref_sink(self->priv->connection);
+        }
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, pspec);
+        break;
+    }
 }
 
 static void
