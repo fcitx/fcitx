@@ -1030,6 +1030,14 @@ fcitx_client_new()
     return FCITX_CLIENT(self);
 }
 
+/**
+ * fcitx_client_new_with_connection:
+ * @connection: the #FcitxConnection to be used with this client
+ *
+ * New a #FcitxClient
+ *
+ * Returns: A newly allocated #FcitxClient
+ **/
 FCITX_EXPORT_API
 FcitxClient* fcitx_client_new_with_connection(FcitxConnection* connection)
 {

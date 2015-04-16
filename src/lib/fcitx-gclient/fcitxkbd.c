@@ -138,7 +138,7 @@ fcitx_kbd_new(GBusType             bus_type,
 }
 
 /**
- * fcitx_kbd_get_layouts_nofree:
+ * fcitx_kbd_get_layouts_nofree: (rename-to fcitx_kbd_get_layouts)
  * @kbd: A #FcitxKbd
  *
  * Get Fcitx all im list
