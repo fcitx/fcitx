@@ -1461,7 +1461,7 @@ boolean FcitxInstanceUpdateCurrentIM(FcitxInstance* instance, boolean force, boo
     boolean forceSwtich = force;
     boolean updateGlobal = false;
     /* global index is not valid, that's why we need to fix it. */
-    if (globalIndex == 0) {
+    if (globalIndex <= 0) {
         UT_array *ime = &instance->imes;
         FcitxIM *im = (FcitxIM*)utarray_eltptr(ime, 1);
         if (im) {
