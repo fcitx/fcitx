@@ -927,7 +927,7 @@ _set_cursor_location_internal(FcitxIMContext *fcitxcontext)
 #if GTK_CHECK_VERSION (2, 91, 0)
         area.x = 0;
         int scale = 1;
-        area.y += gdk_window_get_height(fcitxcontext->client_window) * scale;
+        area.y += gdk_window_get_height(fcitxcontext->client_window);
 #else
         gint w, h;
         gdk_drawable_get_size(fcitxcontext->client_window, &w, &h);
@@ -944,10 +944,14 @@ _set_cursor_location_internal(FcitxIMContext *fcitxcontext)
     {
         int rootx, rooty;
         gdk_window_get_origin(fcitxcontext->client_window, &rootx, &rooty);
-        area.x += rootx * scale;
-        area.y += rooty * scale;
+        area.x += rootx;
+        area.y += rooty;
     }
 #endif
+    area.x *= scale;
+    area.y *= scale;
+    area.width *= scale;
+    area.height *= scale;
 
     fcitx_client_set_cusor_rect(fcitxcontext->client, area.x, area.y, area.width, area.height);
     return FALSE;
