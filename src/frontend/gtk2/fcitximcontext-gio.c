@@ -812,11 +812,17 @@ fcitx_im_context_focus_in(GtkIMContext *context)
 
     fcitxcontext->has_focus = true;
 
+    /*
+     * Do not call gtk_im_context_focus_out() here.
+     * This might workaround some chrome issue
+     */
+#if 0
     if (_focus_im_context != NULL) {
         g_assert (_focus_im_context != context);
         gtk_im_context_focus_out (_focus_im_context);
         g_assert (_focus_im_context == NULL);
     }
+#endif
 
     if (fcitx_client_is_valid(fcitxcontext->client)) {
         fcitx_client_focus_in(fcitxcontext->client);
