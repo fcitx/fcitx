@@ -858,7 +858,9 @@ fcitx_im_context_focus_out(GtkIMContext *context)
         return;
     }
 
+#if 0
     g_assert (context == _focus_im_context);
+#endif
     g_object_remove_weak_pointer ((GObject *) context,
                                   (gpointer *) &_focus_im_context);
     _focus_im_context = NULL;
