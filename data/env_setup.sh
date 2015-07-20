@@ -31,7 +31,7 @@ detect_qt()
 detect_qt_im_module()
 {
     QTPATH=`qmake -query QT_INSTALL_PLUGINS`
-    ls $QTPATH/inputmethods/*fcitx* &> /dev/null
+    ls $QTPATH/inputmethods/*fcitx* > /dev/null 2>&1
 }
 
 if [ -z "$XMODIFIERS" ]; then
