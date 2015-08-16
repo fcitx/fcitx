@@ -7,6 +7,7 @@
 # Alisha <alisha.4m@gmail.com>, 2012
 # BrLi <rainman59118@gmail.com>, 2014
 # fhoshino <fh@pinchia.com>, 2014
+# Gerald Du <frozenmouse@gmail.com>, 2015
 # Hiunn-hué <hiunnhue108@ymail.com>, 2012-2013
 # Pellaeon Lin <nfsmwlin@gmail.com>, 2013
 # Pellaeon Lin <nfsmwlin@gmail.com>, 2013
@@ -19,9 +20,9 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2014-08-13 00:06+0200\n"
-"PO-Revision-Date: 2015-04-12 20:37+0000\n"
-"Last-Translator: yyc1992 <yyc1992@gmail.com>\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/language/zh_TW/)\n"
+"PO-Revision-Date: 2015-08-16 07:19+0000\n"
+"Last-Translator: Gerald Du <frozenmouse@gmail.com>\n"
+"Language-Team: Chinese (Taiwan) (http://www.transifex.com/fcitx/fcitx/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -40,7 +41,7 @@ msgid ""
 "You're currently running Fcitx with GUI, but fcitx-configtool couldn't be "
 "found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
 "fcitx-configtool. Now it will open config file with default text editor."
-msgstr ""
+msgstr "您正在 GUI 下執行 Fcitx，但找不到 fcitx-configtool，該套件名稱通常為 fcitx-config-gtx、fcitx-config-gtk3 或 fcitx-configtool。現在將使用預設文字編輯器開啟設定檔。"
 
 #: data/script/fcitx-diagnose.sh:509
 msgid "${1} not found."
@@ -81,14 +82,14 @@ msgid ""
 "If you are using ${1}, you may want to uninstall ${2}, remove ${3} or use "
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
 "any input method other than ${2}. See ${link} for more detail."
-msgstr ""
+msgstr "如果您正在使用 ${1}，您可能需要反安裝 ${2}、移除 ${3} 或使用 ${g36_disable_ibus} 指令停用 IBus 整合以使用 ${2} 以外的任何輸入法。更多細節參見 ${link}。"
 
 #: data/script/fcitx-diagnose.sh:686
 msgid ""
 "If you are using ${1}, you may want to uninstall ${2} or remove ${3} in "
 "order to use any input method other than ${2}. See ${link} for more detail "
 "as well as alternative solutions."
-msgstr ""
+msgstr "如果您正在使用 ${1}，您可能需要反安裝 ${2} 或者移除 ${3} 以使用 ${2} 以外的任何輸入法。更多細節和其它的解決方法參見 ${link}。"
 
 #: data/script/fcitx-diagnose.sh:694
 #, sh-format
@@ -156,61 +157,61 @@ msgstr "執行 ${1} 時發生錯誤。請檢查您的地區設定。"
 
 #: data/script/fcitx-diagnose.sh:812
 msgid "Directories:"
-msgstr ""
+msgstr "目錄："
 
 #: data/script/fcitx-diagnose.sh:814
 msgid "Home:"
-msgstr ""
+msgstr "家目錄："
 
 #: data/script/fcitx-diagnose.sh:818
 msgid "Environment variable ${1} is not set."
-msgstr ""
+msgstr "環境變數 ${1} 未設定。"
 
 #: data/script/fcitx-diagnose.sh:822
 msgid "Environment variable ${1} is set to ${2}."
-msgstr ""
+msgstr "環境變數 ${1} 被設定為 ${2}。"
 
 #: data/script/fcitx-diagnose.sh:826
 msgid "Current value of ${1} is ${2} (${3})."
-msgstr ""
+msgstr "${1} 目前的值為 ${2} (${3})。"
 
 #: data/script/fcitx-diagnose.sh:830
 msgid "Fcitx Settings Directory:"
-msgstr ""
+msgstr "Fcitx 設定目錄："
 
 #: data/script/fcitx-diagnose.sh:832
 msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr ""
+msgstr "目前的 fcitx 設定目錄為 ${1} (${2})。"
 
 #: data/script/fcitx-diagnose.sh:837
 msgid "Current user:"
-msgstr ""
+msgstr "目前使用者："
 
 #: data/script/fcitx-diagnose.sh:838
 msgid "The script is run as ${1} (${2})."
-msgstr ""
+msgstr "此腳本以 ${1} (${2}) 執行。"
 
 #: data/script/fcitx-diagnose.sh:843
 msgid "${1} Environment Variables:"
-msgstr ""
+msgstr "${1} 環境變數："
 
 #: data/script/fcitx-diagnose.sh:849
 msgid "${1} is set to ${2}."
-msgstr ""
+msgstr "${1} 被設定為 ${2}。"
 
 #: data/script/fcitx-diagnose.sh:852
 msgid "${1} is not set."
-msgstr ""
+msgstr "${1} 未設定。"
 
 #: data/script/fcitx-diagnose.sh:859
 msgid "Running as root:"
-msgstr ""
+msgstr "以 root 執行："
 
 #: data/script/fcitx-diagnose.sh:862
 msgid ""
 "You are probably using ${1} to run this script. This means the result of "
 "this script may not be accurate. See ${2} for more information."
-msgstr ""
+msgstr "您可能正以 ${1} 執行這個腳本。這表示此腳本的結果可能不準確。詳情請參照 ${2}。"
 
 #: data/script/fcitx-diagnose.sh:864 data/script/fcitx-diagnose.sh:870
 msgid "sudo environment variables"
@@ -221,11 +222,11 @@ msgid ""
 "You are probably logging in as ${1} or using ${2} to run this script. This "
 "either means you have security problems or the result of this script may not"
 " be accurate. See ${3} or ${4} for more information."
-msgstr ""
+msgstr "您可能正登入為 ${1} 或以 ${2} 執行這個腳本。這可能表示有安全問題或是此腳本的結果不準確。詳情請參照 ${3} 或 ${4}。"
 
 #: data/script/fcitx-diagnose.sh:869
 msgid "Why is it bad to run as root"
-msgstr ""
+msgstr "為何不宜以 root 執行"
 
 #: data/script/fcitx-diagnose.sh:878
 msgid "Fcitx State:"
@@ -257,7 +258,7 @@ msgstr "Fcitx 版本：${1}"
 
 #: data/script/fcitx-diagnose.sh:893
 msgid "process:"
-msgstr "行程："
+msgstr "程序："
 
 #: data/script/fcitx-diagnose.sh:903
 msgid "Fcitx is not running."
@@ -271,11 +272,11 @@ msgstr "請在 ${1} 檢查您的發行版的設定連結是如何設定 fcitx �
 
 #: data/script/fcitx-diagnose.sh:910
 msgid "Found ${1} fcitx processes:"
-msgstr "找到 ${1} fcitx 行程："
+msgstr "找到 ${1} 個 fcitx 程序："
 
 #: data/script/fcitx-diagnose.sh:912
 msgid "Found ${1} fcitx process:"
-msgstr "找到 ${1} fcitx 行程："
+msgstr "找到 ${1} 個 fcitx 程序："
 
 #: data/script/fcitx-diagnose.sh:918
 msgid "Cannot connect to fcitx correctly."
@@ -287,11 +288,11 @@ msgstr "${1} 運作正常。"
 
 #: data/script/fcitx-diagnose.sh:960
 msgid "Config GUI for gtk${1}:"
-msgstr ""
+msgstr "gtk${1} 的設定介面："
 
 #: data/script/fcitx-diagnose.sh:964
 msgid "Config GUI for gtk${1} not found."
-msgstr ""
+msgstr "找不到 gtk${1} 的設定介面。"
 
 #: data/script/fcitx-diagnose.sh:973
 msgid "Found ${1} at ${2}."
@@ -299,7 +300,7 @@ msgstr "在 ${2} 找到了 ${1}。"
 
 #: data/script/fcitx-diagnose.sh:980
 msgid "Config GUI for kde:"
-msgstr "KDE 的設定界面："
+msgstr "KDE 的設定介面："
 
 #: data/script/fcitx-diagnose.sh:986
 msgid "Found fcitx kcm module."
@@ -307,7 +308,7 @@ msgstr "找到了 fcitx 的 kcm 模組。"
 
 #: data/script/fcitx-diagnose.sh:995
 msgid "Fcitx Configure UI:"
-msgstr "Fcitx 設定界面："
+msgstr "Fcitx 設定介面："
 
 #: data/script/fcitx-diagnose.sh:996
 msgid "Config Tool Wrapper:"
@@ -315,16 +316,16 @@ msgstr "設定工具封裝："
 
 #: data/script/fcitx-diagnose.sh:998
 msgid "Cannot find fcitx-configtool executable!"
-msgstr ""
+msgstr "找不到 fcitx-configtool 可執行檔！"
 
 #: data/script/fcitx-diagnose.sh:1000
 msgid "Found fcitx-configtool at ${1}."
-msgstr ""
+msgstr "在 ${1} 找到 fcitx-configtool。"
 
 #: data/script/fcitx-diagnose.sh:1008
 msgid ""
 "Cannot find a GUI config tool, please install one of ${1}, ${2}, or ${3}."
-msgstr ""
+msgstr "找不到設定介面，請安裝 ${1}、${2} 或 ${3} 其中之一。"
 
 #: data/script/fcitx-diagnose.sh:1021
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
@@ -338,7 +339,7 @@ msgstr "環境變數 ${1} 的值為「${2}」而不是「${3}」。請檢查您�
 
 #: data/script/fcitx-diagnose.sh:1036
 msgid "XMODIFIERS is not set"
-msgstr ""
+msgstr "XMODIFIERS 未設定"
 
 #: data/script/fcitx-diagnose.sh:1049
 msgid "Cannot interpret XMODIFIERS: ${1}."
@@ -346,7 +347,7 @@ msgstr "無法解析 XMODIFIERS：${1}。"
 
 #: data/script/fcitx-diagnose.sh:1057
 msgid "Xim Server Name from Environment variable is ${1}."
-msgstr "環境變數中 XIM 伺服器名稱為 ${1}。"
+msgstr "環境變數中 XIM 服務名稱為 ${1}。"
 
 #: data/script/fcitx-diagnose.sh:1059
 msgid "XIM_SERVERS on root window:"
@@ -401,7 +402,7 @@ msgstr "Qt 輸入法模組檔案："
 
 #: data/script/fcitx-diagnose.sh:1145 data/script/fcitx-diagnose.sh:1150
 msgid "Found fcitx im module for ${2}: ${1}."
-msgstr "找到了 ${2} 的輸入法模組：${1}。"
+msgstr "找到了 ${2} 的 fcitx 輸入法模組：${1}。"
 
 #: data/script/fcitx-diagnose.sh:1154
 msgid "Found fcitx qt module: ${1}."
@@ -409,7 +410,7 @@ msgstr "找到了 fcitx 的 qt 模組：${1}。"
 
 #: data/script/fcitx-diagnose.sh:1157
 msgid "Found unknown fcitx qt module: ${1}."
-msgstr "找到未知的 fcitx Qt 模組：${1}。"
+msgstr "找到未知的 fcitx qt 模組：${1}。"
 
 #: data/script/fcitx-diagnose.sh:1164 data/script/fcitx-diagnose.sh:1169
 msgid "Cannot find fcitx input method module for ${1}."
@@ -417,15 +418,15 @@ msgstr "找不到 ${1} 的 fcitx 輸入法模組。"
 
 #: data/script/fcitx-diagnose.sh:1217
 msgid "Gtk ${1} immodule file ${2} does not exist."
-msgstr ""
+msgstr "Gtk ${1} 輸入法模組檔案 ${2} 不存在。"
 
 #: data/script/fcitx-diagnose.sh:1223
 msgid "All found Gtk ${1} immodule files exist."
-msgstr ""
+msgstr "所有找到的 gtk ${1} 輸入法模組檔案皆存在。"
 
 #: data/script/fcitx-diagnose.sh:1256
 msgid "Found ${3} for gtk ${1} at ${2}."
-msgstr ""
+msgstr "在 ${2} 找到 gtk ${1} 的 ${3}。"
 
 #: data/script/fcitx-diagnose.sh:1261 data/script/fcitx-diagnose.sh:1344
 msgid "Version Line:"
@@ -433,51 +434,51 @@ msgstr "版本："
 
 #: data/script/fcitx-diagnose.sh:1264
 msgid "Found ${2} for unknown gtk version at ${1}."
-msgstr ""
+msgstr "在 ${1} 找到未知 gtk 版本的 ${2}。"
 
 #: data/script/fcitx-diagnose.sh:1272 data/script/fcitx-diagnose.sh:1355
 msgid "Found fcitx im modules for gtk ${1}."
-msgstr ""
+msgstr "找到了 gtk ${1} 的 fcitx 輸入法模組。"
 
 #: data/script/fcitx-diagnose.sh:1278
 msgid "Failed to find fcitx in the output of ${1}"
-msgstr ""
+msgstr "無法在 ${1} 的輸出中找到 fcitx。"
 
 #: data/script/fcitx-diagnose.sh:1284
 msgid "Cannot find ${2} for gtk ${1}"
-msgstr ""
+msgstr "找不到 gtk ${1} 的 ${2}"
 
 #: data/script/fcitx-diagnose.sh:1290
 msgid "Cannot find fcitx im module for gtk ${1}."
-msgstr ""
+msgstr "找不到 gtk ${1} 的 fcitx 輸入法模組。"
 
 #: data/script/fcitx-diagnose.sh:1340
 msgid "Found immodules cache for gtk ${1} at ${2}."
-msgstr ""
+msgstr "在 ${2} 找到 gtk ${1} 的輸入法模組快取。"
 
 #: data/script/fcitx-diagnose.sh:1348
 msgid "Found immodule cache for unknown gtk version at ${1}."
-msgstr ""
+msgstr "在 ${1} 找到未知 gtk 版本的輸入法模組快取。"
 
 #: data/script/fcitx-diagnose.sh:1361
 msgid "Failed to find fcitx in immodule cache at ${1}"
-msgstr ""
+msgstr "無法在 ${1} 的輸入法模組快取中找到 fcitx"
 
 #: data/script/fcitx-diagnose.sh:1367
 msgid "Cannot find immodules cache for gtk ${1}"
-msgstr ""
+msgstr "找不到 gtk ${1} 的輸入法模組快取"
 
 #: data/script/fcitx-diagnose.sh:1372
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
-msgstr ""
+msgstr "在快取中找不到 gtk ${1} 的 fcitx 輸入法模組。"
 
 #: data/script/fcitx-diagnose.sh:1385
 msgid "Gtk IM module cache:"
-msgstr ""
+msgstr "Gtk 輸入法模組快取："
 
 #: data/script/fcitx-diagnose.sh:1390
 msgid "Gtk IM module files:"
-msgstr ""
+msgstr "Gtk 輸入法模組檔案："
 
 #: data/script/fcitx-diagnose.sh:1404
 msgid "Fcitx Addons:"
@@ -501,47 +502,47 @@ msgstr "附加元件清單："
 
 #: data/script/fcitx-diagnose.sh:1423
 msgid "Invalid addon config file ${1}."
-msgstr "不正確外掛程式設定檔：${1}。"
+msgstr "不正確的附加元件設定檔：${1}。"
 
 #: data/script/fcitx-diagnose.sh:1447
 msgid "Found ${1} enabled addons:"
-msgstr "找到 ${1} 啟用附加元件："
+msgstr "找到 ${1} 個啟用的附加元件："
 
 #: data/script/fcitx-diagnose.sh:1452
 msgid "Found ${1} disabled addons:"
-msgstr "找到 ${1} 停用附加元件："
+msgstr "找到 ${1} 個停用的附加元件："
 
 #: data/script/fcitx-diagnose.sh:1458
 msgid "Addon Libraries:"
-msgstr ""
+msgstr "附加元件函式庫："
 
 #: data/script/fcitx-diagnose.sh:1466
 msgid "Cannot find file ${1} of addon ${2}."
-msgstr ""
+msgstr "找不到附加元件 ${2} 的檔案 ${1}。"
 
 #: data/script/fcitx-diagnose.sh:1476
 msgid "Cannot find following required libraries for ${1} of addon ${2}."
-msgstr ""
+msgstr "找不到附加元件 ${2} 的 ${1} 所需之以下函式庫。"
 
 #: data/script/fcitx-diagnose.sh:1484
 msgid "All libraries for all addons are found."
-msgstr ""
+msgstr "找到了所有附加元件的函式庫。"
 
 #: data/script/fcitx-diagnose.sh:1485
 msgid "User Interface:"
-msgstr "使用者界面："
+msgstr "使用者介面："
 
 #: data/script/fcitx-diagnose.sh:1487
 msgid "Cannot find enabled fcitx user interface!"
-msgstr ""
+msgstr "找不到啟用的 fcitx 使用者介面！"
 
 #: data/script/fcitx-diagnose.sh:1489
 msgid "Found ${1} enabled user interface addons:"
-msgstr ""
+msgstr "找到 ${1} 個啟用的使用者介面附加元件："
 
 #: data/script/fcitx-diagnose.sh:1498
 msgid "Kimpanel process:"
-msgstr "Kimpanel 行程："
+msgstr "Kimpanel 程序："
 
 #: data/script/fcitx-diagnose.sh:1506
 msgid ""
@@ -562,7 +563,7 @@ msgstr "輸入法清單中無效的項目：${1}。"
 
 #: data/script/fcitx-diagnose.sh:1537
 msgid "Found ${1} enabled input methods:"
-msgstr "找到 ${1} 啟用輸入法："
+msgstr "找到 ${1} 個啟用的輸入法："
 
 #: data/script/fcitx-diagnose.sh:1542
 msgid "Default input methods:"
@@ -576,7 +577,7 @@ msgstr "你沒有啟用任何輸入法。"
 msgid ""
 "You only have one keyboard input method enabled. You may want to add another"
 " input method to input other languages."
-msgstr ""
+msgstr "您只有啟用一個鍵盤輸入法。您可能會想加入其他的輸入法以輸入其他語言。"
 
 #: data/script/fcitx-diagnose.sh:1551
 msgid ""
@@ -627,7 +628,7 @@ msgstr "請設定環境變數 XMOIFIERS。"
 #: src/frontend/xim/xim.c:239
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
-msgstr "啟動 XIM 錯誤。是否有另一個名為 %s 的 XIM 守護程式正在執行？"
+msgstr "啟動 XIM 錯誤。是否有另一個名為 %s 的 XIM 背景程式正在執行？"
 
 #: src/im/keyboard/keyboard.c:418 src/im/keyboard/keyboard.c:435
 #: src/im/keyboard/keyboard.c:483 src/im/keyboard/keyboard.c:496
@@ -680,7 +681,7 @@ msgstr "雙拼"
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
-msgstr ""
+msgstr "找不到拼音的系統字庫！"
 
 #: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
@@ -800,17 +801,17 @@ msgstr "重新命名成功"
 #: src/lib/fcitx/addon.c:138
 #, c-format
 msgid "Addon Config %s is %s"
-msgstr ""
+msgstr "附加元件設定 %s 為 %s"
 
 #: src/lib/fcitx/addon.c:151
 #, c-format
 msgid "Load Addon Config File:%s"
-msgstr ""
+msgstr "載入附加元件設定檔：%s"
 
 #: src/lib/fcitx/addon.c:298
 #, c-format
 msgid "Disable addon %s, dependency %s cannot be satisfied."
-msgstr ""
+msgstr "停用附加元件 %s，無法滿足 %s 的相依性。"
 
 #: src/lib/fcitx-config/fcitx-config.c:376
 msgid "Enum option duplicated."
@@ -822,41 +823,41 @@ msgstr "Enum 選項必須大於 0"
 
 #: src/lib/fcitx-config/fcitx-config.c:400
 msgid "Enum Option is invalid, take it as string"
-msgstr ""
+msgstr "Enum 選項不正確，作為字串處理"
 
 #: src/lib/fcitx-config/fcitx-config.c:406
 #, c-format
 msgid "Unknown type, take it as string: %s"
-msgstr "未知類型，作為字串處理: %s"
+msgstr "未知類型，作為字串處理：%s"
 
 #: src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
-msgstr "類型缺失，作為字串處理"
+msgstr "遺失類型，作為字串處理"
 
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
 msgid "Configure group name error: line %d"
-msgstr ""
+msgstr "設定群組名稱出錯：第 %d 行"
 
 #: src/lib/fcitx-config/fcitx-config.c:901
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
-msgstr ""
+msgstr "群組名稱重複，與先前的合併：%s：第 %d 行"
 
 #: src/lib/fcitx-config/fcitx-config.c:922
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
-msgstr ""
+msgstr "無效的內容：第 %d 行缺少「=」"
 
 #: src/lib/fcitx-config/fcitx-config.c:968
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
-msgstr ""
+msgstr "選項重複，覆寫：第 %d 行"
 
 #: src/lib/fcitx-config/fcitx-config.c:1136
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
-msgstr ""
+msgstr "選項 %s 無效，使用預設值 %s"
 
 #: src/lib/fcitx-config/fcitx-config.c:1144
 #, c-format
@@ -931,7 +932,7 @@ msgstr "切換聯想"
 
 #: src/lib/fcitx/instance.c:525
 msgid "pthread mutex init failed"
-msgstr ""
+msgstr "pthread mutex 初始化失敗"
 
 #: src/lib/fcitx/module.c:61
 #, c-format
@@ -964,16 +965,16 @@ msgstr "Qt 不支援你剛輸入的按鍵組合"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr "不支援按鍵組合"
+msgstr "不支援的按鍵組合"
 
 #: src/lib/fcitx/ui.c:192
 #, c-format
 msgid "UI: open %s fail %s"
-msgstr "使用者界面：開啟 %s 失敗 %s"
+msgstr "使用者介面：開啟 %s 失敗 %s"
 
 #: src/lib/fcitx/ui.c:205
 msgid "UI: bad ui"
-msgstr "界面：有問題的界面"
+msgstr "介面：有問題的介面"
 
 #: src/lib/fcitx-utils/desktop-parse.c:550
 #, c-format
@@ -989,17 +990,17 @@ msgstr ""
 #: src/lib/fcitx-utils/desktop-parse.c:586
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
-msgstr ""
+msgstr "不屬於任一群組的非註解出現在第 %d 行：%s"
 
 #: src/lib/fcitx-utils/desktop-parse.c:592
 #, c-format
 msgid "Invalid entry line @ line %d %s"
-msgstr ""
+msgstr "無效的內容於行 %d %s"
 
 #: src/lib/fcitx-utils/desktop-parse.c:602
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
-msgstr ""
+msgstr "重複的內容 %s 於群組 %s 中，於第 %d 行，覆寫前一個。"
 
 #: src/module/autoeng/AutoEng.c:557
 msgid "Too long item for AutoEng"
@@ -1015,7 +1016,7 @@ msgstr "正體中文"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
 msgid "Simplified Chinese"
-msgstr "至簡體中文"
+msgstr "簡體中文"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 msgid "Toggle Simp/Trad Chinese Conversion"
@@ -1055,7 +1056,7 @@ msgstr "半形字元"
 #: src/module/fullwidthchar/fullwidthchar.c:115
 #: src/module/fullwidthchar/fullwidthchar.c:192
 msgid "Toggle Half/Full width Character"
-msgstr "切換全形半形字元"
+msgstr "切換全半形字元"
 
 #: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
@@ -1252,43 +1253,43 @@ msgstr "錯誤：讀取 fontconfig 失敗"
 #: src/ui/cairostuff/font.c:119
 #, c-format
 msgid "your current font is: %s"
-msgstr "目前使用的字形：%s"
+msgstr "目前使用的字型：%s"
 
 #: src/ui/cairostuff/font.c:121
 msgid "no valid font."
-msgstr "無可用的字體"
+msgstr "無可用的字型"
 
 #: src/ui/classic/fcitx-skin-installer.sh:50
 msgid "Error: skin file should only contain one directory."
-msgstr ""
+msgstr "錯誤：佈景檔只能包含一個目錄。"
 
 #: src/ui/classic/fcitx-skin-installer.sh:55
 msgid "Error: skin file doesn't contain skin config."
-msgstr ""
+msgstr "錯誤：佈景檔未包含佈景設定。"
 
 #: src/ui/classic/fcitx-skin-installer.sh:64
 #, sh-format
 msgid ""
 "Error: $HOME or $XDG_CONFIG_HOME is not set, cannot determine the install "
 "path"
-msgstr ""
+msgstr "錯誤：$HOME 或 $XDG_CONFIG_HOME 未設定，無法得知安裝路徑"
 
 #: src/ui/classic/fcitx-skin-installer.sh:74
 msgid "Successfully Installed skin"
-msgstr ""
+msgstr "佈景安裝成功"
 
 #: src/ui/classic/fcitx-skin-installer.sh:76
 msgid "Error: skin failed to install"
-msgstr ""
+msgstr "錯誤：佈景安裝失敗"
 
 #: src/ui/classic/skin.c:121
 msgid "Cannot load default skin, is installion correct?"
-msgstr ""
+msgstr "無法載入預設佈景，安裝正確嗎？"
 
 #: src/ui/classic/skin.c:126
 #, c-format
 msgid "Cannot load skin %s, return to default"
-msgstr ""
+msgstr "無法載入佈景 %s，使用預設"
 
 #: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
@@ -1844,11 +1845,11 @@ msgstr "只在用額外切換鍵取消啟動後才使用它進行切換"
 
 #: data/config.desc:16
 msgid "R_CTRL"
-msgstr "右Ctrl"
+msgstr "右 Ctrl"
 
 #: data/config.desc:17
 msgid "R_SHIFT"
-msgstr "右Shift"
+msgstr "右 Shift"
 
 #: data/config.desc:18
 msgid "L_SHIFT"
@@ -1860,11 +1861,11 @@ msgstr "左 Ctrl"
 
 #: data/config.desc:20
 msgid "ALT_L_SHIFT"
-msgstr "Alt+左Shift"
+msgstr "Alt+左 Shift"
 
 #: data/config.desc:21
 msgid "ALT_R_SHIFT"
-msgstr "Alt+右Shift"
+msgstr "Alt+右 Shift"
 
 #: data/config.desc:22
 msgid "CTRL Both"
@@ -2314,7 +2315,7 @@ msgstr "快捷鍵：刪除常用字"
 
 #: src/im/pinyin/fcitx-pinyin.desc:53
 msgid "Hotkey of Delete User Phrase"
-msgstr "快捷鍵: 刪除使用者字詞"
+msgstr "快捷鍵：刪除使用者字詞"
 
 #: src/im/pinyin/fcitx-pinyin.desc:58 src/im/pinyin/fcitx-pinyin.desc:67
 #: src/im/pinyin/fcitx-pinyin.desc:76 src/im/table/table.desc:23
@@ -2544,19 +2545,19 @@ msgstr "提示碼表編碼"
 
 #: src/im/table/table.desc:117
 msgid "Candidate Table Layout"
-msgstr ""
+msgstr "候選字表佈局"
 
 #: src/im/table/table.desc:121
 msgid "Not Set"
-msgstr ""
+msgstr "未設定"
 
 #: src/im/table/table.desc:122
 msgid "Vertical"
-msgstr ""
+msgstr "垂直"
 
 #: src/im/table/table.desc:123
 msgid "Horizontal"
-msgstr ""
+msgstr "水平"
 
 #: src/im/table/table.desc:131
 msgid "Symbol File"
@@ -2584,11 +2585,11 @@ msgstr "鍵盤配置"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
-msgstr ""
+msgstr "使用替代的選字碼"
 
 #: src/im/table/table.desc:183
 msgid "Use Alternative Key for paging"
-msgstr ""
+msgstr "使用替代的翻頁按鍵"
 
 #: src/im/table/table.desc:188
 msgid "Alternative Prev Page Key"
@@ -2937,14 +2938,14 @@ msgstr "允許覆蓋系統的 XKB 設定"
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid ""
 "Use the layout of first keyboard input method in list as default layout"
-msgstr ""
+msgstr "使用第一個鍵盤輸入法的配置為預設配置"
 
 #: src/module/xkb/fcitx-xkb.desc:10
 msgid ""
 "For example, if Keyboard - English (US) is the first input method in the "
 "list, then English (US) will be applied to all other non keyboard input "
 "method layout"
-msgstr ""
+msgstr "比方說，若鍵盤 - 英語 (美式) 為列表中第一個輸入法，則英語 (美式) 將被套用為所有非鍵盤輸入法的配置"
 
 #: src/module/xkb/fcitx-xkb.desc:15
 msgid "xmodmap command"
@@ -2969,7 +2970,7 @@ msgstr "經典介面"
 
 #: src/ui/classic/fcitx-classic-ui.desc:2
 msgid "Status Panel Position X"
-msgstr "狀態面板 X 位置"
+msgstr "狀態面板 X 軸位置"
 
 #: src/ui/classic/fcitx-classic-ui.desc:8
 msgid "Status Panel Position Y"
@@ -2981,7 +2982,7 @@ msgstr "字型大小"
 
 #: src/ui/classic/fcitx-classic-ui.desc:18
 msgid "Override the skin font size"
-msgstr ""
+msgstr "覆寫佈景字型大小"
 
 #: src/ui/classic/fcitx-classic-ui.desc:23
 msgid "Font"
@@ -2993,7 +2994,7 @@ msgstr "選單字型"
 
 #: src/ui/classic/fcitx-classic-ui.desc:33
 msgid "Font Locale to display"
-msgstr "要顯示的字形語系"
+msgstr "要顯示的字型語系"
 
 #: src/ui/classic/fcitx-classic-ui.desc:39
 msgid "Use System Tray Icon"
@@ -3009,7 +3010,7 @@ msgstr "自動"
 
 #: src/ui/classic/fcitx-classic-ui.desc:46
 msgid "Hide when tray icon is available"
-msgstr ""
+msgstr "當系統匣圖示可用時隱藏"
 
 #: src/ui/classic/fcitx-classic-ui.desc:47
 msgid "Hide"
@@ -3051,19 +3052,19 @@ msgstr "佈景說明"
 #: src/ui/classic/skin.desc:51 src/ui/classic/skin.desc:55
 #: src/ui/classic/skin.desc:59 src/ui/classic/skin.desc:63
 msgid "SkinFont"
-msgstr "佈景字形"
+msgstr "佈景字型"
 
 #: src/ui/classic/skin.desc:19
 msgid "Input Font Size"
-msgstr "輸入字體尺寸"
+msgstr "輸入字型大小"
 
 #: src/ui/classic/skin.desc:23
 msgid "Menu Font Size"
-msgstr "選單字體尺寸"
+msgstr "選單字型大小"
 
 #: src/ui/classic/skin.desc:28
 msgid "Font sizes respect dpi setting"
-msgstr ""
+msgstr "字型大小按照 dpi 設定"
 
 #: src/ui/classic/skin.desc:33
 msgid "Tip Message Color"
@@ -3130,7 +3131,7 @@ msgstr "英文模式圖示"
 
 #: src/ui/classic/skin.desc:81
 msgid "Active Mode Icon"
-msgstr ""
+msgstr "使用中模式圖示"
 
 #: src/ui/classic/skin.desc:85 src/ui/classic/skin.desc:191
 #: src/ui/classic/skin.desc:329
@@ -3155,22 +3156,22 @@ msgstr "下邊界寬度"
 #: src/ui/classic/skin.desc:102 src/ui/classic/skin.desc:208
 #: src/ui/classic/skin.desc:338
 msgid "Margin Left for clickable region"
-msgstr ""
+msgstr "可點擊區域的左邊界寬度"
 
 #: src/ui/classic/skin.desc:107 src/ui/classic/skin.desc:213
 #: src/ui/classic/skin.desc:343
 msgid "Margin Right for clickable region"
-msgstr ""
+msgstr "可點擊區域的右邊界寬度"
 
 #: src/ui/classic/skin.desc:112 src/ui/classic/skin.desc:218
 #: src/ui/classic/skin.desc:348
 msgid "Margin Top for clickable region"
-msgstr ""
+msgstr "可點擊區域的上邊界寬度"
 
 #: src/ui/classic/skin.desc:117 src/ui/classic/skin.desc:223
 #: src/ui/classic/skin.desc:353
 msgid "Margin Bottom for clickable region"
-msgstr ""
+msgstr "可點擊區域的下邊界寬度"
 
 #: src/ui/classic/skin.desc:122 src/ui/classic/skin.desc:228
 #: src/ui/classic/skin.desc:358
@@ -3180,47 +3181,47 @@ msgstr ""
 #: src/ui/classic/skin.desc:128 src/ui/classic/skin.desc:234
 #: src/ui/classic/skin.desc:364
 msgid "TopLeft"
-msgstr ""
+msgstr "左上"
 
 #: src/ui/classic/skin.desc:129 src/ui/classic/skin.desc:235
 #: src/ui/classic/skin.desc:365
 msgid "TopCenter"
-msgstr ""
+msgstr "中上"
 
 #: src/ui/classic/skin.desc:130 src/ui/classic/skin.desc:236
 #: src/ui/classic/skin.desc:366
 msgid "TopRight"
-msgstr ""
+msgstr "右上"
 
 #: src/ui/classic/skin.desc:131 src/ui/classic/skin.desc:237
 #: src/ui/classic/skin.desc:367
 msgid "CenterLeft"
-msgstr ""
+msgstr "左中"
 
 #: src/ui/classic/skin.desc:132 src/ui/classic/skin.desc:238
 #: src/ui/classic/skin.desc:368
 msgid "Center"
-msgstr ""
+msgstr "正中"
 
 #: src/ui/classic/skin.desc:133 src/ui/classic/skin.desc:239
 #: src/ui/classic/skin.desc:369
 msgid "CenterRight"
-msgstr ""
+msgstr "右中"
 
 #: src/ui/classic/skin.desc:134 src/ui/classic/skin.desc:240
 #: src/ui/classic/skin.desc:370
 msgid "BottomLeft"
-msgstr ""
+msgstr "左下"
 
 #: src/ui/classic/skin.desc:135 src/ui/classic/skin.desc:241
 #: src/ui/classic/skin.desc:371
 msgid "BottomCenter"
-msgstr ""
+msgstr "中下"
 
 #: src/ui/classic/skin.desc:136 src/ui/classic/skin.desc:242
 #: src/ui/classic/skin.desc:372
 msgid "BottomRight"
-msgstr ""
+msgstr "右下"
 
 #: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
 #: src/ui/classic/skin.desc:373
