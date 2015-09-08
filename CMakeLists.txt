@@ -39,7 +39,6 @@ option(FORCE_ENCHANT
   "Enable enchant even if the library is not found at compile time" Off)
 option(FORCE_PRESAGE
   "Enable presage even if the library is not found at compile time" Off)
-option(ENABLE_ICU "Enable icu for qt/keyboard compose" On)
 option(ENABLE_BACKTRACE "Enable backtrace support" On)
 option(ENABLE_XDGAUTOSTART "Enable xdg autostart desktop file installion" On)
 option(ENABLE_GETTEXT "Enable gettext support." On)

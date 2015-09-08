@@ -23,7 +23,6 @@
 
 #include <libintl.h>
 #include <errno.h>
-#include <iconv.h>
 #include <ctype.h>
 
 #include <xkbcommon/xkbcommon-compose.h>
@@ -319,16 +318,6 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     bindtextdomain("xkeyboard-config", localepath);
     bind_textdomain_codeset("xkeyboard-config", "UTF-8");
     free(localepath);
-    union {
-        short s;
-        unsigned char b[2];
-    } endian;
-
-    endian.s = 0x1234;
-    if (endian.b[0] == 0x12)
-        keyboard->iconv = iconv_open("utf-8", "ucs-4be");
-    else
-        keyboard->iconv = iconv_open("utf-8", "ucs-4le");
 
     FcitxHotkeyHook hk;
     hk.arg = keyboard;

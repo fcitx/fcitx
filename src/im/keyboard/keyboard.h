@@ -23,8 +23,6 @@
 
 #include "config.h"
 
-#include <iconv.h>
-
 #include <fcitx/ime.h>
 #include <fcitx-utils/utarray.h>
 #include <fcitx-config/fcitx-config.h>
@@ -57,7 +55,6 @@ typedef struct _FcitxKeyboard {
     char dictLang[6];
     FcitxKeyboardConfig config;
     FcitxXkbRules* rules;
-    iconv_t iconv;
     char *initialLayout;
     char *initialVariant;
     char buffer[2][FCITX_KEYBOARD_MAX_BUFFER + UTF8_MAX_LENGTH + 1];
