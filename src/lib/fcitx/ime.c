@@ -1058,8 +1058,8 @@ void FcitxInstanceSwitchIMByName(FcitxInstance* instance, const char* name)
             // Another possibility is to add it to FcitxInstanceSwitchIMInternal,
             // but that part of code is too hack and some initialization may
             // relies on it.
-            // This specific function is only used in UI and DBus remote control,
-            // Thus it is save to change it here.
+            // This function is only used in UI and DBus remote control,
+            // Thus it is safe to change it here.
             FcitxIM* currentIM = FcitxInstanceGetCurrentIM(instance);
             if (currentIM && strcmp(currentIM->strName, name) == 0) {
                 return;
