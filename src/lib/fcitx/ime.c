@@ -1053,6 +1053,18 @@ void FcitxInstanceSwitchIMByName(FcitxInstance* instance, const char* name)
     FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Enable, name);
     if (im) {
         if (FcitxInstanceGetCurrentIC(instance)) {
+            // Ignore the request if current IM is already same with the name
+            // Add such check here is mainly for GitHub Issue #203.
+            // Another possibility is to add it to FcitxInstanceSwitchIMInternal,
+            // but that part of code is too hack and some initialization may
+            // relies on it.
+            // This specific function is only used in UI and DBus remote control,
+            // Thus it is save to change it here.
+            FcitxIM* currentIM = FcitxInstanceGetCurrentIM(instance);
+            if (currentIM && strcmp(currentIM->strName, name) == 0) {
+                return;
+            }
+
             int idx = FcitxInstanceGetIMIndexByName(instance, name);
             if (idx < 0)
                 return;
