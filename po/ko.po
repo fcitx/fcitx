@@ -1273,7 +1273,7 @@ msgid "Error: skin failed to install"
 msgstr ""
 
 #: src/ui/classic/skin.c:121
-msgid "Cannot load default skin, is installion correct?"
+msgid "Cannot load default skin, is installation correct?"
 msgstr ""
 
 #: src/ui/classic/skin.c:126

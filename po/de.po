@@ -1275,7 +1275,7 @@ msgid "Error: skin failed to install"
 msgstr "Fehler: Skin konnte nicht installiert werden"
 
 #: src/ui/classic/skin.c:121
-msgid "Cannot load default skin, is installion correct?"
+msgid "Cannot load default skin, is installation correct?"
 msgstr "die Standardoberfläche kann nicht geladen werden, ist die Installation vollstädnig?"
 
 #: src/ui/classic/skin.c:126

@@ -1280,7 +1280,7 @@ msgid "Error: skin failed to install"
 msgstr "错误：皮肤安装失败"
 
 #: src/ui/classic/skin.c:121
-msgid "Cannot load default skin, is installion correct?"
+msgid "Cannot load default skin, is installation correct?"
 msgstr "无法加载默认皮肤，安装是否正确？"
 
 #: src/ui/classic/skin.c:126

@@ -1283,7 +1283,7 @@ msgid "Error: skin failed to install"
 msgstr "錯誤：佈景安裝失敗"
 
 #: src/ui/classic/skin.c:121
-msgid "Cannot load default skin, is installion correct?"
+msgid "Cannot load default skin, is installation correct?"
 msgstr "無法載入預設佈景，安裝正確嗎？"
 
 #: src/ui/classic/skin.c:126

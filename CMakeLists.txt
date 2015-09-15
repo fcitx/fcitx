@@ -40,7 +40,7 @@ option(FORCE_ENCHANT
 option(FORCE_PRESAGE
   "Enable presage even if the library is not found at compile time" Off)
 option(ENABLE_BACKTRACE "Enable backtrace support" On)
-option(ENABLE_XDGAUTOSTART "Enable xdg autostart desktop file installion" On)
+option(ENABLE_XDGAUTOSTART "Enable xdg autostart desktop file installation" On)
 option(ENABLE_GETTEXT "Enable gettext support." On)
 
 if(NOT NO_SNOOPER_APPS)

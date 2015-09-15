@@ -118,7 +118,7 @@ reload:
 
     if (!fp) {
         if (isreload) {
-            FcitxLog(FATAL, _("Cannot load default skin, is installion correct?"));
+            FcitxLog(FATAL, _("Cannot load default skin, is installation correct?"));
             perror("fopen");
             ret = 1;    // 如果安装目录里面也没有配置文件，那就只好告诉用户，无法运行了
         } else {
