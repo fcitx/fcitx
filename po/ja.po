@@ -24,7 +24,7 @@ msgstr ""
 "POT-Creation-Date: 2014-08-13 00:06+0200\n"
 "PO-Revision-Date: 2015-04-14 01:46+0000\n"
 "Last-Translator: AWASHIRO Ikuya <ikunya@gmail.com>\n"
-"Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/ja/)\n"
+"Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1285,7 +1285,7 @@ msgid "Error: skin failed to install"
 msgstr "エラー: スキンのインストールに失敗しました"
 
 #: src/ui/classic/skin.c:121
-msgid "Cannot load default skin, is installation correct?"
+msgid "Cannot load default skin, is installion correct?"
 msgstr "デフォルトのスキンが読み込めません。インストールに間違いはないですか？"
 
 #: src/ui/classic/skin.c:126

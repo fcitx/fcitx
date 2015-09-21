@@ -14,7 +14,7 @@ msgstr ""
 "POT-Creation-Date: 2014-08-13 00:06+0200\n"
 "PO-Revision-Date: 2014-12-09 10:01+0000\n"
 "Last-Translator: mar well <m.wellendorf@gmx.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/de/)\n"
+"Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1275,7 +1275,7 @@ msgid "Error: skin failed to install"
 msgstr "Fehler: Skin konnte nicht installiert werden"
 
 #: src/ui/classic/skin.c:121
-msgid "Cannot load default skin, is installation correct?"
+msgid "Cannot load default skin, is installion correct?"
 msgstr "die Standardoberfläche kann nicht geladen werden, ist die Installation vollstädnig?"
 
 #: src/ui/classic/skin.c:126
