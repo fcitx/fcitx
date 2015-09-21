@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2014-08-13 00:06+0200\n"
-"PO-Revision-Date: 2014-08-12 22:06+0000\n"
+"PO-Revision-Date: 2015-09-21 00:52+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "MIME-Version: 1.0\n"
@@ -1273,7 +1273,7 @@ msgid "Error: skin failed to install"
 msgstr ""
 
 #: src/ui/classic/skin.c:121
-msgid "Cannot load default skin, is installion correct?"
+msgid "Cannot load default skin, is installation correct?"
 msgstr ""
 
 #: src/ui/classic/skin.c:126
