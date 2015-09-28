@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2014-08-13 00:06+0200\n"
-"PO-Revision-Date: 2015-09-21 00:54+0000\n"
+"PO-Revision-Date: 2015-09-28 14:36+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/fcitx/fcitx/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
@@ -3343,7 +3343,7 @@ msgstr "使用中功能表項目的顏色"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
-msgstr ""
+msgstr "空白行顏色"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
 msgid "SkinKeyboard"
