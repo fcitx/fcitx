@@ -117,6 +117,7 @@ Glagolitic
 Gothic
 Greek and Coptic
 Greek Extended
+Ancient Greek Numbers
 Basic Latin
 Latin-1 Supplement
 Latin Extended-A
@@ -125,30 +126,31 @@ Latin Extended-C
 Latin Extended-D
 Latin Extended-E
 Latin Extended Additional
+IPA Extensions
+Phonetic Extensions
+Phonetic Extensions Supplement
 Linear A
 Linear B Syllabary
 Linear B Ideograms
+Aegean Numbers
 Ogham
+Old Hungarian
 Old Italic
 Old Permic
 Phaistos Disc
 Runic
 Shavian
 
-SECTION Phonetic & Shorthand Symbols
-Duployan
-Shorthand Format Controls
-IPA Extensions
-Phonetic Extensions
-Phonetic Extensions Supplement
+SECTION Modifier Letters
 Modifier Tone Letters
 Spacing Modifier Letters
 Superscripts and Subscripts
 
-SECTION Combining Diacritics
+SECTION Combining Marks
 Combining Diacritical Marks
-Combining Diacritical Marks Supplement
 Combining Diacritical Marks Extended
+Combining Diacritical Marks Supplement
+Combining Diacritical Marks for Symbols
 Combining Half Marks
 
 SECTION African Scripts
@@ -171,6 +173,7 @@ Tifinagh
 Vai
 
 SECTION Middle Eastern Scripts
+Anatolian Hieroglyphs
 Arabic
 Arabic Supplement
 Arabic Extended-A
@@ -181,8 +184,10 @@ Avestan
 Carian
 Cuneiform
 Cuneiform Numbers and Punctuation
+Early Dynastic Cuneiform
 Old Persian
 Ugaritic
+Hatran
 Hebrew
 Lycian
 Lydian
@@ -206,6 +211,7 @@ Phags-pa
 Tibetan
 
 SECTION South Asian Scripts
+Ahom
 Bengali
 Brahmi
 Chakma
@@ -227,6 +233,7 @@ Meetei Mayek
 Meetei Mayek Extensions
 Modi
 Mro
+Multani
 Ol Chiki
 Oriya
 Saurashtra
@@ -282,6 +289,7 @@ CJK Unified Ideographs Extension A
 CJK Unified Ideographs Extension B
 CJK Unified Ideographs Extension C
 CJK Unified Ideographs Extension D
+CJK Unified Ideographs Extension E
 CJK Compatibility Ideographs
 CJK Compatibility Ideographs Supplement
 Kangxi Radicals
@@ -305,6 +313,7 @@ Yi Radicals
 
 SECTION American Scripts
 Cherokee
+Cherokee Supplement
 Deseret
 Unified Canadian Aboriginal Syllabics
 Unified Canadian Aboriginal Syllabics Extended
@@ -313,15 +322,28 @@ SECTION Other
 Alphabetic Presentation Forms
 Halfwidth and Fullwidth Forms
 
+SECTION Notational Systems
+Braille Patterns
+Musical Symbols
+Ancient Greek Musical Notation
+Byzantine Musical Symbols
+Duployan
+Shorthand Format Controls
+Sutton SignWriting
+
 SECTION Punctuation
 General Punctuation
-Small Form Variants
 Supplemental Punctuation
 CJK Symbols and Punctuation
 CJK Compatibility Forms
+Halfwidth and Fullwidth Forms
+Small Form Variants
 Vertical Forms
 
 SECTION Alphanumeric Symbols
+Letterlike Symbols
+Mathematical Alphanumeric Symbols
+Arabic Mathematical Alphabetic Symbols
 Enclosed Alphanumerics
 Enclosed Alphanumeric Supplement
 Enclosed CJK Letters and Months
@@ -333,22 +355,21 @@ Control Pictures
 Miscellaneous Technical
 Optical Character Recognition
 
-SECTION Combining Diacritics
-Combining Diacritical Marks for Symbols
-
-SECTION Numbers and Digits
-Aegean Numbers
-Ancient Greek Numbers
+SECTION Numbers &amp; Digits
 Common Indic Number Forms
+Coptic Epact Numbers
 Counting Rod Numerals
+Cuneiform Numbers and Punctuation
 Number Forms
 Rumi Numeral Symbols
+Sinhala Archaic Numbers
 
 SECTION Mathematical Symbols
 Arrows
 Supplemental Arrows-A
 Supplemental Arrows-B
 Supplemental Arrows-C
+Miscellaneous Symbols and Arrows
 Mathematical Alphanumeric Symbols
 Arabic Mathematical Alphabetic Symbols
 Letterlike Symbols
@@ -361,24 +382,23 @@ Box Drawing
 Block Elements
 Geometric Shapes Extended
 
-SECTION Other Symbols
-Alchemical Symbols
-Ancient Symbols
-Braille Patterns
-Currency Symbols
+SECTION Emoji & Pictographs
 Dingbats
 Ornamental Dingbats
 Emoticons
+Miscellaneous Symbols
+Miscellaneous Symbols and Pictographs
+Supplemental Symbols and Pictographs
+Transport and Map Symbols
+
+SECTION Other Symbols
+Alchemical Symbols
+Ancient Symbols
+Currency Symbols
 Domino Tiles
 Mahjong Tiles
 Playing Cards
-Miscellaneous Symbols
 Miscellaneous Symbols and Arrows
-Miscellaneous Symbols and Pictographs
-Musical Symbols
-Ancient Greek Musical Notation
-Byzantine Musical Symbols
-Transport and Map Symbols
 Yijing Hexagram Symbols
 Tai Xuan Jing Symbols
 
