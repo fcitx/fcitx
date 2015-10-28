@@ -39,6 +39,13 @@ typedef struct _FcitxIPCCreateICPriv {
     DBusConnection* conn;
 } FcitxIPCCreateICPriv;
 
+typedef struct _FcitxLastSentIMInfo
+{
+    char* name;
+    char* uniqueName;
+    char* langCode;
+} FcitxLastSentIMInfo;
+
 typedef struct _FcitxIPCIC {
     int id;
     char path[32];
@@ -50,6 +57,7 @@ typedef struct _FcitxIPCIC {
     unsigned int cursor;
     boolean lastPreeditIsEmpty;
     boolean isPriv;
+    FcitxLastSentIMInfo lastSentIMInfo;
 } FcitxIPCIC;
 
 typedef struct _FcitxIPCFrontend {
@@ -96,6 +104,7 @@ static void IPCUpdateIMList(void* arg);
 static void IPCGetPropertyCurrentIM(void* arg, DBusMessageIter* iter);
 static void IPCSetPropertyCurrentIM(void* arg, DBusMessageIter* iter);
 static void IPCUpdateCurrentIM(void* arg);
+static void IPCUpdateIMInfoForIC(void* arg);
 static pid_t IPCGetPid(void* arg, FcitxInputContext* ic);
 
 const FcitxDBusPropertyTable propertTable[] = {
@@ -275,6 +284,11 @@ const char * ic_introspection_xml =
     "<signal name=\"CommitString\">"
     "<arg name=\"str\" type=\"s\"/>"
     "</signal>"
+    "<signal name=\"CurrentIM\">"
+    "<arg name=\"name\" type=\"s\"/>"
+    "<arg name=\"uniqueName\" type=\"s\"/>"
+    "<arg name=\"langCode\" type=\"s\"/>"
+    "</signal>"
     "<signal name=\"UpdatePreedit\">"
     "<arg name=\"str\" type=\"s\"/>"
     "<arg name=\"cursorpos\" type=\"i\"/>"
@@ -356,6 +370,8 @@ void* IPCCreate(FcitxInstance* instance, int frontendid)
     FcitxInstanceRegisterUpdateIMListHook(instance, hook);
     hook.func = IPCUpdateCurrentIM;
     FcitxInstanceRegisterIMChangedHook(instance, hook);
+    hook.func = IPCUpdateIMInfoForIC;
+    FcitxInstanceRegisterInputFocusHook(instance, hook);
 
     return ipc;
 }
@@ -504,6 +520,9 @@ void IPCDestroyIC(void* arg, FcitxInputContext* context)
         if (ipc->_privconn)
             dbus_connection_unregister_object_path(ipc->_privconn, GetIPCIC(context)->path);
     }
+    fcitx_utils_free(ipcic->lastSentIMInfo.name);
+    fcitx_utils_free(ipcic->lastSentIMInfo.uniqueName);
+    fcitx_utils_free(ipcic->lastSentIMInfo.langCode);
     fcitx_utils_free(ipcic->surroundingText);
     free(context->privateic);
     context->privateic = NULL;
@@ -817,6 +836,9 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                     if (GetIPCIC(ic)->surroundingText)
                         free(GetIPCIC(ic)->surroundingText);
                     GetIPCIC(ic)->surroundingText = NULL;
+                }
+                if (ic->contextCaps & CAPACITY_GET_IM_INFO_ON_FOCUS) {
+                    IPCUpdateIMInfoForIC(ipc);
                 }
                 reply = dbus_message_new_method_return(msg);
             } else {
@@ -1379,6 +1401,36 @@ void IPCSetPropertyCurrentIM(void* arg, DBusMessageIter* args)
 void IPCUpdateCurrentIM(void* arg)
 {
     IPCEmitPropertyChanged(arg, "CurrentIM");
+    IPCUpdateIMInfoForIC(arg);
+}
+
+void IPCUpdateIMInfoForIC(void* arg)
+{
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(ipc->owner);
+    if (ic && (ic->contextCaps & CAPACITY_GET_IM_INFO_ON_FOCUS)) {
+        FcitxIM* im = FcitxInstanceGetCurrentIM(ipc->owner);
+        const char* name = (im && im->strName && fcitx_utf8_check_string(im->strName)) ? im->strName : "";
+        const char* uniqueName = (im && im->uniqueName && fcitx_utf8_check_string(im->uniqueName)) ? im->uniqueName : "";
+        const char* langCode = (im && im->langCode && fcitx_utf8_check_string(im->langCode)) ? im->langCode : "";
+
+        if (fcitx_utils_strcmp0(GetIPCIC(ic)->lastSentIMInfo.name, name) == 0 &&
+            fcitx_utils_strcmp0(GetIPCIC(ic)->lastSentIMInfo.uniqueName, uniqueName) == 0 &&
+            fcitx_utils_strcmp0(GetIPCIC(ic)->lastSentIMInfo.langCode, langCode) == 0) {
+            return;
+        }
+
+        DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
+                        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
+                        "CurrentIM"); // name of the signal
+
+        fcitx_utils_string_swap(&GetIPCIC(ic)->lastSentIMInfo.name, name);
+        fcitx_utils_string_swap(&GetIPCIC(ic)->lastSentIMInfo.uniqueName, uniqueName);
+        fcitx_utils_string_swap(&GetIPCIC(ic)->lastSentIMInfo.langCode, langCode);
+
+        dbus_message_append_args(msg, DBUS_TYPE_STRING, &name, DBUS_TYPE_STRING, &uniqueName, DBUS_TYPE_STRING, &langCode, DBUS_TYPE_INVALID);
+        IPCSendSignal(ipc, GetIPCIC(ic), msg);
+    }
 }
 
 pid_t IPCGetPid(void* arg, FcitxInputContext* ic)
