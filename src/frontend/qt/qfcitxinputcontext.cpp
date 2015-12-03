@@ -413,16 +413,13 @@ void QFcitxInputContext::setFocusWidget(QWidget* w)
     if (!m_improxy || !m_improxy->isValid())
         return;
 
-    FcitxQtICData* data = m_icMap.value(w->effectiveWinId());
-    if (!data) {
-        createICData(w);
-        return;
-    }
-
     FcitxQtInputContextProxy* newproxy = validICByWidget(w);
 
     if (newproxy) {
         newproxy->FocusIn();
+    } else {
+        // This will also create IC if IC Data exists
+        createICData(w);
     }
 }
 
