@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2015-12-11 23:17-0800\n"
-"PO-Revision-Date: 2015-09-21 00:55+0000\n"
+"POT-Creation-Date: 2015-12-12 00:02-0800\n"
+"PO-Revision-Date: 2015-12-12 07:18+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
@@ -390,9 +390,8 @@ msgid "Background Image"
 msgstr "Hintergrundgraphik"
 
 #: data/script/fcitx-diagnose.sh:776
-#, fuzzy
 msgid "Bash Version:"
-msgstr "Version zeigen"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:652
 msgid "Beginner's Guide"
