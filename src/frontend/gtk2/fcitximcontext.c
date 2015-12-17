@@ -1190,6 +1190,7 @@ _create_gdk_event(FcitxIMContext *fcitxcontext,
 {
     gunichar c = 0;
     gchar buf[8];
+    int keyval_void_symbol;
 
     GdkEventKey *event = (GdkEventKey *)gdk_event_new((type == FCITX_RELEASE_KEY) ? GDK_KEY_RELEASE : GDK_KEY_PRESS);
 
@@ -1245,10 +1246,11 @@ _create_gdk_event(FcitxIMContext *fcitxcontext,
     event->is_modifier = _key_is_modifier(keyval);
 
 #ifdef DEPRECATED_GDK_KEYSYMS
-    if (keyval != GDK_VoidSymbol)
+    keyval_void_symbol = (keyval != GDK_VoidSymbol);
 #else
-    if (keyval != GDK_KEY_VoidSymbol)
+    keyval_void_symbol =  (keyval != GDK_KEY_VoidSymbol);
 #endif
+    if (keyval_void_symbol)
         c = gdk_keyval_to_unicode(keyval);
 
     if (c) {
