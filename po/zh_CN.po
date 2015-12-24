@@ -9,16 +9,16 @@
 # csslayer <wengxt@gmail.com>, 2013-2015
 # csslayer <wengxt@gmail.com>, 2010-2012
 # csslayer <wengxt@gmail.com>, 2013
-# wwj402 <wwj402@gmail.com>, 2013-2014
+# wwj402 <wwj402@gmail.com>, 2013-2015
 # yyc1992 <yyc1992@gmail.com>, 2012
 # yyc1992 <yyc1992@gmail.com>, 2013-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2015-12-12 00:02-0800\n"
-"PO-Revision-Date: 2015-12-12 07:18+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2015-12-24 06:01-0800\n"
+"PO-Revision-Date: 2015-12-24 13:58+0000\n"
+"Last-Translator: wwj402 <wwj402@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
@@ -393,7 +393,7 @@ msgstr "背景图片"
 
 #: data/script/fcitx-diagnose.sh:776
 msgid "Bash Version:"
-msgstr ""
+msgstr "Bash 版本:"
 
 #: data/script/fcitx-diagnose.sh:652
 msgid "Beginner's Guide"
