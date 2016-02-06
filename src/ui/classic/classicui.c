@@ -168,7 +168,7 @@ void* ClassicUICreate(FcitxInstance* instance)
 void ClassicUIDelayedInitTray(void* arg) {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     // FcitxLog(INFO, "yeah we delayed!");
-    if (!classicui->bUseTrayIcon)
+    if (!classicui->bUseTrayIcon || classicui->isSuspend)
         return;
     /*
      * if this return false, something wrong happened and callback
@@ -187,7 +187,7 @@ void ClassicUIDelayedShowTray(void* arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     classicui->trayTimeout = 0;
-    if (!classicui->bUseTrayIcon)
+    if (!classicui->bUseTrayIcon || classicui->isSuspend)
         return;
 
     if (!classicui->trayWindow->bTrayMapped) {

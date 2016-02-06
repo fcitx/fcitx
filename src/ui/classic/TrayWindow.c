@@ -226,11 +226,11 @@ boolean TrayEventHandler(void *arg, XEvent* event)
         if (event->xclient.message_type == trayWindow->atoms[ATOM_MANAGER]
             && event->xclient.data.l[1] == trayWindow->atoms[ATOM_SELECTION]
             && trayWindow->dockWindow == None) {
-            if (classicui->notificationItemAvailable)
-                return true;
             trayWindow->dockWindow = event->xclient.data.l[2];
             TrayWindowRelease(trayWindow);
-            TrayWindowInit(trayWindow);
+            if (!classicui->notificationItemAvailable && !classicui->isSuspend) {
+                TrayWindowInit(trayWindow);
+            }
             return true;
         }
         break;

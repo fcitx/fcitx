@@ -565,8 +565,17 @@ void FcitxNotificationItemUpdateIMList(void* arg)
 
 boolean FcitxNotificationItemEnable(FcitxNotificationItem* notificationitem, FcitxNotificationItemAvailableCallback callback, void* data)
 {
-    if (!callback || notificationitem->callback)
+    if (!callback)
         return false;
+
+    if (notificationitem->callback == callback) {
+        return true;
+    }
+
+    if (notificationitem->callback) {
+        return false;
+    }
+
     if (notificationitem->serviceName) {
         FcitxLog(ERROR, "This should not happen, please report bug.");
         return false;
