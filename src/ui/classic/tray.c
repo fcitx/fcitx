@@ -106,8 +106,9 @@ TrayInitAtom(TrayWindow* tray)
 
     XWindowAttributes attr;
     XGetWindowAttributes(dpy, DefaultRootWindow(dpy), &attr);
-    if ((attr.your_event_mask & StructureNotifyMask) != StructureNotifyMask) {
-        XSelectInput(dpy, DefaultRootWindow(dpy), attr.your_event_mask | StructureNotifyMask); // for MANAGER selection
+    int neededMask = StructureNotifyMask;
+    if ((attr.your_event_mask & neededMask) != neededMask) {
+        XSelectInput(dpy, DefaultRootWindow(dpy), attr.your_event_mask | neededMask); // for MANAGER selection
     }
     return True;
 }
@@ -123,7 +124,7 @@ TrayFindDock(TrayWindow* tray)
     Display* dpy = tray->owner->dpy;
 
     if (tray->dockWindow != None) {
-        XSelectInput(dpy, tray->dockWindow, StructureNotifyMask);
+        XSelectInput(dpy, tray->dockWindow, PropertyChangeMask | StructureNotifyMask);
         TraySendOpcode(tray, SYSTEM_TRAY_REQUEST_DOCK, tray->window, 0, 0);
         tray->bTrayMapped = True;
         return 1;
