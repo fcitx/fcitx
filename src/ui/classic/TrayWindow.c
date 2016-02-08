@@ -275,6 +275,17 @@ boolean TrayEventHandler(void *arg, XEvent* event)
         }
     }
     break;
+    case DestroyNotify:
+        if (event->xdestroywindow.window == trayWindow->dockWindow) {
+            trayWindow->dockWindow = TrayGetDock(trayWindow);
+            trayWindow->bTrayMapped = False;
+            TrayWindowRelease(trayWindow);
+            if (trayWindow->dockWindow != None) {
+                TrayWindowInit(trayWindow);
+            }
+            return true;
+        }
+        break;
     case PropertyNotify:
         if (event->xproperty.atom == trayWindow->atoms[ATOM_VISUAL] &&
             event->xproperty.window == trayWindow->dockWindow) {
