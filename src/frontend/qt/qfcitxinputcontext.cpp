@@ -729,7 +729,8 @@ void QFcitxInputContext::deleteSurroundingText(int offset, uint _nchar)
     // validates
     if (nchar >= 0 && cursor + offset >= 0 && cursor + offset + nchar < ucsText.size()) {
         // order matters
-        nchar = QString::fromUcs4(ucsText.mid(cursor + offset, nchar).data()).size();
+        QVector<uint> replacedChars = ucsText.mid(cursor + offset, nchar);
+        nchar = QString::fromUcs4(replacedChars.data(), replacedChars.size()).size();
 
         int start, len;
         if (offset >= 0) {
@@ -739,7 +740,9 @@ void QFcitxInputContext::deleteSurroundingText(int offset, uint _nchar)
             start = cursor;
             len = -offset;
         }
-        offset = QString::fromUcs4(ucsText.mid(start, len).data()).size() * (offset >= 0 ? 1 : -1);
+
+        QVector<uint> prefixedChars = ucsText.mid(start, len);
+        offset = QString::fromUcs4(prefixedChars.data(), prefixedChars.size()).size() * (offset >= 0 ? 1 : -1);
         event.setCommitString("", offset, nchar);
         sendEvent(event);
     }
