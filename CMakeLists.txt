@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.12)
 
 project(fcitx)
 
-set(version 4.2.9.1)
+set(version 4.2.9.2)
 
 
 find_package(ECM 0.0.11 REQUIRED NO_MODULE)

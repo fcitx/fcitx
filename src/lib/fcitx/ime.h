@@ -198,6 +198,7 @@ extern "C" {
     typedef INPUT_RETURN_VALUE (*FcitxIMKeyBlocker)(void* arg, FcitxKeySym, unsigned int); /**< FcitxIMKeyBlocker */
     typedef void (*FcitxIMUpdateSurroundingText)(void* arg); /**< FcitxIMKeyBlocker */
     typedef void (*FcitxIMOnClose)(void* arg, FcitxIMCloseEventType);
+    typedef const char *(*FcitxIMGetSubModeName)(void* arg);
 
     /**
      * a more fexible interface for input method
@@ -216,7 +217,8 @@ extern "C" {
         FcitxIMUpdateSurroundingText UpdateSurroundingText; /**< surrounding text update trigger */
         FcitxIMDoInput DoReleaseInput; /**< process key release event */
         FcitxIMOnClose OnClose; /**< process when im being switched away */
-        void* padding[62]; /**< padding */
+        FcitxIMGetSubModeName GetSubModeName; /**< return a string owned by im */
+        void* padding[61]; /**< padding */
     } FcitxIMIFace;
 
     /**
@@ -299,7 +301,8 @@ extern "C" {
 
         FcitxIMOnClose OnClose;
 
-        void* padding[8]; /**< padding */
+        FcitxIMGetSubModeName GetSubModeName; /**< return a string owned by im */
+        void* padding[7]; /**< padding */
     } FcitxIM;
 
     /** a key event is press or release */
@@ -948,6 +951,17 @@ extern "C" {
      * @since 4.2.6
      */
     void FcitxInstanceUnregisterIM(struct _FcitxInstance* instance, const char* name);
+
+    /**
+     * show current input method infomation, notably it will use GetSubModeName to show the
+     * sub mode name
+     *
+     * There need to be no other aux preedit string, otherwise it will be rejected.
+     *
+     * @param instance Fcitx Instance
+     * @since 4.2.9.2
+     */
+    void FcitxInstanceShowCurrentIMInfo(struct _FcitxInstance* instance);
 
 #ifdef __cplusplus
 }

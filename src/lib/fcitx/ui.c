@@ -677,9 +677,9 @@ void FcitxUIOnInputFocus(FcitxInstance* instance)
     }
 
     if (instance->config->bShowInputWindowWhenFocusIn && changed)
-        FcitxInstanceShowInputSpeed(instance);
+       FcitxInstanceShowInputSpeed(instance, false);
     else
-        FcitxUICloseInputWindow(instance);
+       FcitxUICloseInputWindow(instance);
 }
 
 FCITX_EXPORT_API
@@ -742,7 +742,7 @@ void FcitxUIOnTriggerOn(FcitxInstance* instance)
 
     instance->timeStart = time(NULL);
 
-    FcitxInstanceShowInputSpeed(instance);
+    FcitxInstanceShowInputSpeed(instance, false);
 }
 
 FCITX_EXPORT_API
