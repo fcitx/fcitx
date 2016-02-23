@@ -5,7 +5,7 @@
 # Translators:
 # しろう, 2013
 # しろう <>, 2013
-# AWASHIRO Ikuya <ikunya@gmail.com>, 2013-2015
+# AWASHIRO Ikuya <ikunya@gmail.com>, 2013-2016
 # csslayer <wengxt@gmail.com>, 2013
 # AWASHIRO Ikuya <ikunya@gmail.com>, 2013
 # AWASHIRO Ikuya <ikunya@gmail.com>, 2012-2013
@@ -21,9 +21,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2015-12-12 00:02-0800\n"
-"PO-Revision-Date: 2015-12-12 07:18+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2016-02-23 07:02-0800\n"
+"PO-Revision-Date: 2016-02-23 14:06+0000\n"
+"Last-Translator: AWASHIRO Ikuya <ikunya@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -116,7 +116,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1792
+#: src/lib/fcitx/ime.c:1800
 msgid "/min  Time Used: "
 msgstr "/分 使用時間: "
 
@@ -1623,7 +1623,7 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1694 src/module/notificationitem/notificationitem.c:409
+#: src/lib/fcitx/ime.c:1695 src/module/notificationitem/notificationitem.c:409
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "入力メソッド"
@@ -1639,7 +1639,7 @@ msgstr "入力メソッドが無効"
 
 #: data/config.desc:235
 msgid "Input Method Hint will be only shown when state is active"
-msgstr "オンの時だけ入力メソッドのヒントを表示"
+msgstr "有効の時だけ入力メソッドのヒントを表示"
 
 #: data/script/fcitx-diagnose.sh:663
 msgid "Input Method Related Environment Variables: "
@@ -1649,7 +1649,7 @@ msgstr "入力メソッド関連の環境変数:"
 msgid "Input Methods:"
 msgstr "入力メソッド:"
 
-#: src/lib/fcitx/ime.c:1789
+#: src/lib/fcitx/ime.c:1797
 msgid "Input Speed: "
 msgstr "入力速度: "
 
@@ -2020,7 +2020,7 @@ msgstr "次ページのアイコン"
 msgid "No"
 msgstr "No"
 
-#: src/lib/fcitx/ime.c:535
+#: src/lib/fcitx/ime.c:536
 msgid "No available Input Method"
 msgstr "有効な入力メソッドがありません"
 
@@ -2557,11 +2557,11 @@ msgstr "表示"
 
 #: data/config.desc:223
 msgid "Show Input Method Hint After Input method changed"
-msgstr "入力メソッドを切換後にヒントを表示"
+msgstr "入力メソッドを切換後に入力メソッドのヒントを表示"
 
 #: data/config.desc:229
 msgid "Show Input Method Hint After Input method changed and Focus in"
-msgstr "入力メソッドを切換え、フォーカスした時にヒントを表示"
+msgstr "入力メソッドを切換え、フォーカスした際に入力メソッドのヒントを表示"
 
 #: data/config.desc:241
 msgid "Show Input Speed"
@@ -3196,7 +3196,7 @@ msgstr "X Keyboard連携"
 msgid "X Keyboard Integration export with DBus"
 msgstr "DBus と X Keyboard との連携"
 
-#: src/ui/classic/tray.c:159
+#: src/ui/classic/tray.c:160
 #, c-format
 msgid "X error %i on opcode send"
 msgstr "Xのエラー %i がopcodeの送信の時に起きました"
@@ -3367,7 +3367,7 @@ msgstr "実行可能:"
 msgid "here"
 msgstr "ここ"
 
-#: src/lib/fcitx/ime.c:1795
+#: src/lib/fcitx/ime.c:1803
 msgid "min Num of Characters: "
 msgstr "分 文字数: "
 
