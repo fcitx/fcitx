@@ -23,6 +23,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <wchar.h>
+#include <libgen.h>
 
 #include "config.h"
 #include "fcitx/fcitx.h"
@@ -136,7 +137,7 @@ FcitxLogFunc(FcitxLogLevel e, const char* filename, const int line,
 {
     va_list ap;
     va_start(ap, fmt);
-    FcitxLogFuncV(e, filename, line, fmt, ap);
+    FcitxLogFuncV(e, basename(filename), line, fmt, ap);
     va_end(ap);
 }
 
