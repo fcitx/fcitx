@@ -812,12 +812,10 @@ FcitxQtInputContextProxy* QFcitxInputContext::validICByWidget(QWidget* w)
     FcitxQtICData* icData = m_icMap.value(w->effectiveWinId());
     if (!icData)
         return 0;
-    if (icData->proxy.isNull()) {
+    if (!icData->proxy || !icData->proxy->isValid()) {
         return 0;
-    } else if (icData->proxy->isValid()) {
-        return icData->proxy.data();
     }
-    return 0;
+    return icData->proxy;
 }
 
 FcitxQtInputContextProxy* QFcitxInputContext::validIC()

@@ -50,7 +50,7 @@ struct FcitxQtICData {
         }
     }
     QFlags<FcitxCapacityFlags> capacity;
-    QPointer<FcitxQtInputContextProxy> proxy;
+    FcitxQtInputContextProxy *proxy;
     QRect rect;
     QString surroundingText;
     int surroundingAnchor;
