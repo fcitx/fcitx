@@ -245,6 +245,8 @@ void* FcitxNotificationItemCreate(FcitxInstance* instance)
 
         FcitxNotificationItemAddFunctions(instance);
 
+        notificationitem->isUnity = fcitx_utils_strcmp0(getenv("XDG_CURRENT_DESKTOP"), "Unity") == 0;
+
         return notificationitem;
     } while(0);
 
@@ -473,15 +475,19 @@ void FcitxNotificationItemGetToolTip(void* arg, DBusMessageIter* iter)
 const char* FcitxNotificationItemGetLabel(FcitxNotificationItem* notificationitem)
 {
     const char* label = "";
-#if 0
+
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(notificationitem->owner);
     if (ic) {
         FcitxIM* im = FcitxInstanceGetCurrentIM(notificationitem->owner);
         if (im) {
-            label = im->strName;
+            if (strncmp(im->uniqueName, "fcitx-keyboard-",
+                        strlen("fcitx-keyboard-")) == 0) {
+                strncpy(notificationitem->layoutNameBuffer, im->uniqueName + strlen("fcitx-keyboard-"), 2);
+                notificationitem->layoutNameBuffer[2] = '\0';
+                label = notificationitem->layoutNameBuffer;
+            }
         }
     }
-#endif
     return label;
 }
 
@@ -494,7 +500,8 @@ void FcitxNotificationItemGetXAyatanaLabel(void* arg, DBusMessageIter* iter)
 
 void FcitxNotificationItemGetXAyatanaLabelGuide(void* arg, DBusMessageIter* iter)
 {
-    const char* label = "";
+    FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) arg;
+    const char* label = FcitxNotificationItemGetLabel(notificationitem);
     dbus_message_iter_append_basic(iter, DBUS_TYPE_STRING, &label);
 }
 
@@ -520,23 +527,21 @@ void FcitxNotificationItemIMChanged(void* arg)
 
     SEND_SIGNAL("NewIcon");
     SEND_SIGNAL("NewToolTip");
-#if 0
-    do {
+
+    if (notificationitem->isUnity) {
         DBusMessage* msg = dbus_message_new_signal(NOTIFICATION_ITEM_DEFAULT_OBJ,
                                                    NOTIFICATION_ITEM_DBUS_IFACE,
                                                    "XAyatanaNewLabel");
         if (msg) {
             const char* label = FcitxNotificationItemGetLabel(notificationitem);
-            const char* guide = "XXXXXXXXXXXXXXX";
             dbus_message_append_args(msg,
                                      DBUS_TYPE_STRING, &label,
-                                     DBUS_TYPE_STRING, &guide,
+                                     DBUS_TYPE_STRING, &label,
                                      DBUS_TYPE_INVALID);
             dbus_connection_send(notificationitem->conn, msg, NULL);
             dbus_message_unref(msg);
         }
-    } while(0);
-#endif
+    }
 }
 
 void FcitxNotificationItemUpdateIMList(void* arg)

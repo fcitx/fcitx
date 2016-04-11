@@ -34,6 +34,8 @@ typedef struct _FcitxNotificationItem {
     char* serviceName;
     uint32_t revision;
     int pendingActionId;
+    boolean isUnity;
+    char layoutNameBuffer[3];
 } FcitxNotificationItem;
 
 boolean FcitxDBusMenuCreate(FcitxNotificationItem* notificationitem);
