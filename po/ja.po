@@ -21,9 +21,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-02-23 14:06+0000\n"
-"Last-Translator: AWASHIRO Ikuya <ikunya@gmail.com>\n"
+"POT-Creation-Date: 2016-04-18 12:01-0700\n"
+"PO-Revision-Date: 2016-04-18 18:04+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -500,9 +500,8 @@ msgid "Cannot find ${2} for gtk ${1}"
 msgstr "gtk ${1} 用の ${2} が見つかりません"
 
 #: data/script/fcitx-diagnose.sh:944
-#, fuzzy
 msgid "Cannot find DBus name ${1} owner."
-msgstr "アドオン ${2} のファイル ${1} が見つかりません。"
+msgstr ""
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
@@ -561,9 +560,8 @@ msgid ""
 msgstr ""
 
 #: data/script/fcitx-diagnose.sh:952
-#, fuzzy
 msgid "Cannot find pid of DBus name ${1} owner."
-msgstr "アドオン ${2} のファイル ${1} が見つかりません。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1107
 msgid "Cannot find xim_server on root window."
@@ -886,9 +884,8 @@ msgid "DBus based new Freedesktop.org tray icon"
 msgstr "新しい Freedesktop.org の DBus のトレイアイコン"
 
 #: data/script/fcitx-diagnose.sh:933
-#, fuzzy
 msgid "DBus interface:"
-msgstr "ユーザーインターフェース:"
+msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"

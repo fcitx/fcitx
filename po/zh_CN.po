@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2015-12-24 14:02+0000\n"
-"Last-Translator: wwj402 <wwj402@gmail.com>\n"
+"POT-Creation-Date: 2016-04-18 12:01-0700\n"
+"PO-Revision-Date: 2016-04-18 18:04+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
@@ -492,9 +492,8 @@ msgid "Cannot find ${2} for gtk ${1}"
 msgstr "无法找到 gtk ${1} 的 ${2}."
 
 #: data/script/fcitx-diagnose.sh:944
-#, fuzzy
 msgid "Cannot find DBus name ${1} owner."
-msgstr "无法找到插件 ${2} 的文件 ${1}。"
+msgstr ""
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
@@ -551,9 +550,8 @@ msgid ""
 msgstr "无法找到 kimpanel dbus 接口或非 kimpanel 用户界面."
 
 #: data/script/fcitx-diagnose.sh:952
-#, fuzzy
 msgid "Cannot find pid of DBus name ${1} owner."
-msgstr "无法找到插件 ${2} 的文件 ${1}。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1107
 msgid "Cannot find xim_server on root window."
@@ -876,9 +874,8 @@ msgid "DBus based new Freedesktop.org tray icon"
 msgstr "基于 DBus 的新 Freedesktop.org 托盘图标"
 
 #: data/script/fcitx-diagnose.sh:933
-#, fuzzy
 msgid "DBus interface:"
-msgstr "用户界面:"
+msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"

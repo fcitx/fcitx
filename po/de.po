@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2015-12-12 07:18+0000\n"
+"POT-Creation-Date: 2016-04-18 12:01-0700\n"
+"PO-Revision-Date: 2016-04-18 18:04+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
@@ -490,9 +490,8 @@ msgid "Cannot find ${2} for gtk ${1}"
 msgstr "${2} für gtk ${1} kann nicht gefunden werden"
 
 #: data/script/fcitx-diagnose.sh:944
-#, fuzzy
 msgid "Cannot find DBus name ${1} owner."
-msgstr "Kann Datei ${1} von Addon ${2} nicht finden."
+msgstr ""
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
@@ -553,9 +552,8 @@ msgid ""
 msgstr "Kann keine kimpanel DBus- oder andere aktivierte Schnittstelle finden."
 
 #: data/script/fcitx-diagnose.sh:952
-#, fuzzy
 msgid "Cannot find pid of DBus name ${1} owner."
-msgstr "Kann Datei ${1} von Addon ${2} nicht finden."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1107
 msgid "Cannot find xim_server on root window."
@@ -880,9 +878,8 @@ msgid "DBus based new Freedesktop.org tray icon"
 msgstr "DBus basiertes, neues Trayicon von Freedesktop.org"
 
 #: data/script/fcitx-diagnose.sh:933
-#, fuzzy
 msgid "DBus interface:"
-msgstr "Benutzeroberfläche:"
+msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"
