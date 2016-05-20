@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# heavyuser <heavyuser73@gmail.com>, 2014
+# heavyuser <heavyuser73@gmail.com>, 2014,2016
 # JeongHun Kim <jhkim@hancom.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-04-18 12:01-0700\n"
-"PO-Revision-Date: 2016-04-18 18:04+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2016-05-19 23:01-0700\n"
+"PO-Revision-Date: 2016-05-20 05:42+0000\n"
+"Last-Translator: heavyuser <heavyuser73@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -908,11 +908,11 @@ msgstr "스킨 설명"
 
 #: data/script/fcitx-diagnose.sh:771
 msgid "Desktop Environment:"
-msgstr "데스크탑 환경:"
+msgstr "데스크톱 환경:"
 
 #: data/script/fcitx-diagnose.sh:776
 msgid "Desktop environment is ${1}."
-msgstr "데스크탑 환경은 ${1}."
+msgstr "데스크톱 환경은 ${1}."
 
 #: src/im/table/data/db.conf.in:3
 msgid "Dianbaoma"
