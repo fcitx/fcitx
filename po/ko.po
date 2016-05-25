@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-05-19 23:01-0700\n"
-"PO-Revision-Date: 2016-05-20 05:42+0000\n"
+"POT-Creation-Date: 2016-05-24 20:01-0700\n"
+"PO-Revision-Date: 2016-05-25 02:22+0000\n"
 "Last-Translator: heavyuser <heavyuser73@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -1447,7 +1447,7 @@ msgstr "Grave"
 
 #: src/module/vk/vk.c:53
 msgid "Greek"
-msgstr ""
+msgstr "그리스"
 
 #: data/script/fcitx-diagnose.sh:1250
 msgid "Gtk ${1} immodule file ${2} does not exist."
@@ -1480,7 +1480,7 @@ msgstr "트레이 아이콘이 사용가능할 때 숨기기"
 
 #: src/module/vk/vk.c:59
 msgid "Hiragana"
-msgstr ""
+msgstr "히라가나"
 
 #: data/script/fcitx-diagnose.sh:821
 msgid "Home:"
@@ -1688,7 +1688,7 @@ msgstr "im 리스트에서 잘못된 아이템 ${1}."
 
 #: src/module/vk/vk.c:60
 msgid "Katakana"
-msgstr ""
+msgstr "가타카나"
 
 #: src/im/table/table.desc:93
 msgid ""
@@ -1772,7 +1772,7 @@ msgstr "이 테이블을 위한 언어 코드"
 
 #: src/module/vk/vk.c:51
 msgid "Latin"
-msgstr ""
+msgstr "라틴"
 
 #: src/module/punc/punc.c:149 src/module/punc/punc.c:568
 msgid "Latin punct"
@@ -1893,7 +1893,7 @@ msgstr "매칭 키"
 
 #: src/module/vk/vk.c:56
 msgid "Math"
-msgstr ""
+msgstr "수학"
 
 #: src/module/autoeng/fcitx-autoeng.desc:22
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:23
@@ -2052,7 +2052,7 @@ msgstr ""
 
 #: src/module/vk/vk.c:57
 msgid "Number"
-msgstr ""
+msgstr "숫자"
 
 #: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:431
 msgid "Online Help"
@@ -2453,7 +2453,7 @@ msgstr ""
 
 #: src/module/vk/vk.c:54
 msgid "Russian"
-msgstr ""
+msgstr "러시아"
 
 #: data/config.desc:23
 msgid "SHIFT Both"
