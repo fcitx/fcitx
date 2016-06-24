@@ -402,22 +402,33 @@ FcitxUIComplexStatus *FcitxUIGetComplexStatusByName(FcitxInstance* instance, con
     return compstatus;
 }
 
+static inline void FcitxUICallUpdateStatus(FcitxInstance* instance, FcitxUIStatus* status)
+{
+    if (UI_FUNC_IS_VALID(UpdateStatus))
+        instance->ui->ui->UpdateStatus(instance->ui->addonInstance, status);
+    FcitxInstanceProcessUIStatusChangedHook(instance, status->name);
+}
+
+static inline void FcitxUICallUpdateComplexStatus(FcitxInstance* instance, FcitxUIComplexStatus* status)
+{
+    if (UI_FUNC_IS_VALID(UpdateComplexStatus))
+        instance->ui->ui->UpdateComplexStatus(instance->ui->addonInstance, status);
+    FcitxInstanceProcessUIStatusChangedHook(instance, status->name);
+}
+
 FCITX_EXPORT_API
 void FcitxUIRefreshStatus(FcitxInstance* instance, const char* name)
 {
     FcitxUIStatus *status = FcitxUIGetStatusByName(instance, name);
 
     if (status != NULL) {
-        if (UI_FUNC_IS_VALID(UpdateStatus))
-            instance->ui->ui->UpdateStatus(instance->ui->addonInstance , status);
+        FcitxUICallUpdateStatus(instance, status);
     }
     else {
         FcitxUIComplexStatus *compstatus = FcitxUIGetComplexStatusByName(instance, name);
         if (!compstatus)
             return;
-
-        if (UI_FUNC_IS_VALID(UpdateComplexStatus))
-            instance->ui->ui->UpdateComplexStatus(instance->ui->addonInstance , compstatus);
+        FcitxUICallUpdateComplexStatus(instance, compstatus);
     }
 }
 
@@ -432,8 +443,7 @@ void FcitxUIUpdateStatus(FcitxInstance* instance, const char* name)
         if (status->toggleStatus)
             status->toggleStatus(status->arg);
 
-        if (UI_FUNC_IS_VALID(UpdateStatus))
-            instance->ui->ui->UpdateStatus(instance->ui->addonInstance , status);
+        FcitxUICallUpdateStatus(instance, status);
     }
     else {
         FcitxUIComplexStatus *compstatus = FcitxUIGetComplexStatusByName(instance, name);
@@ -442,8 +452,8 @@ void FcitxUIUpdateStatus(FcitxInstance* instance, const char* name)
 
         if (compstatus->toggleStatus)
             compstatus->toggleStatus(compstatus->arg);
-        if (UI_FUNC_IS_VALID(UpdateComplexStatus))
-            instance->ui->ui->UpdateComplexStatus(instance->ui->addonInstance , compstatus);
+
+        FcitxUICallUpdateComplexStatus(instance, compstatus);
     }
 }
 
@@ -476,12 +486,10 @@ void FcitxUISetStatusString(FcitxInstance* instance, const char* name, const cha
     *pLong = strdup(longDesc);
 
     if (status){
-        if (UI_FUNC_IS_VALID(UpdateStatus))
-            instance->ui->ui->UpdateStatus(instance->ui->addonInstance, status);
+        FcitxUICallUpdateStatus(instance, status);
     }
     else if (compstatus) {
-        if (UI_FUNC_IS_VALID(UpdateComplexStatus))
-            instance->ui->ui->UpdateComplexStatus(instance->ui->addonInstance, compstatus);
+        FcitxUICallUpdateComplexStatus(instance, compstatus);
     }
 }
 
@@ -497,8 +505,7 @@ void FcitxUISetStatusVisable(FcitxInstance* instance, const char* name, boolean 
         if (compstatus->visible != visible) {
             compstatus->visible = visible;
 
-            if (UI_FUNC_IS_VALID(UpdateComplexStatus))
-                instance->ui->ui->UpdateComplexStatus(instance->ui->addonInstance, compstatus);
+            FcitxUICallUpdateComplexStatus(instance, compstatus);
         }
         return;
     }
@@ -506,8 +513,7 @@ void FcitxUISetStatusVisable(FcitxInstance* instance, const char* name, boolean 
     if (status->visible != visible) {
         status->visible = visible;
 
-        if (UI_FUNC_IS_VALID(UpdateStatus))
-            instance->ui->ui->UpdateStatus(instance->ui->addonInstance, status);
+        FcitxUICallUpdateStatus(instance, status);
     }
 }
 

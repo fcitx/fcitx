@@ -117,6 +117,7 @@ struct _FcitxInstance {
     struct _HookStack* hookCommitFilter;
     struct _HookStack* hookICStateChangedHook;
     struct _HookStack* hookIMChangedHook;
+    struct _HookStack* hookUIStatusChangedHook;
 
     uint32_t eventflag;
 
