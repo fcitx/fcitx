@@ -86,6 +86,12 @@ FcitxHotkey FCITX_ENTER[2] = {
 };
 
 FCITX_EXPORT_API
+FcitxHotkey FCITX_CTRL_M[2] = {
+  {NULL, FcitxKey_M, FcitxKeyState_Ctrl},
+  {NULL, 0, 0},
+};
+
+FCITX_EXPORT_API
 FcitxHotkey FCITX_LCTRL_LSHIFT[2] = {
     {NULL, FcitxKey_Shift_L, FcitxKeyState_Ctrl_Shift},
     {NULL, FcitxKey_Control_L, FcitxKeyState_Ctrl_Shift},

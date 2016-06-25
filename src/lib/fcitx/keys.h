@@ -41,6 +41,7 @@ extern "C" {
     extern FcitxHotkey FCITX_LEFT[2];
     extern FcitxHotkey FCITX_ESCAPE[2];
     extern FcitxHotkey FCITX_ENTER[2];
+    extern FcitxHotkey FCITX_CTRL_M[2];
     extern FcitxHotkey FCITX_LCTRL_LSHIFT[2];
     extern FcitxHotkey FCITX_LCTRL_LSHIFT2[2];
     extern FcitxHotkey FCITX_RCTRL_RSHIFT[2];
