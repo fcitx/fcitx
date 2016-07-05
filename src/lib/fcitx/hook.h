@@ -63,6 +63,11 @@ extern "C" {
     typedef void (*FcitxICEventHookFunc)(void* arg, struct _FcitxInputContext* ic);
 
     /**
+     * ui status changed hook function
+     **/
+    typedef void (*FcitxUIStatusHookFunc)(void* arg, const char* statusName);
+
+    /**
      * Hotkey process struct
      **/
     typedef struct _FcitxHotkeyHook {
@@ -125,6 +130,15 @@ extern "C" {
         FcitxICEventHookFunc func; /**< callback function */
         void *arg; /**< argument for callback */
     } FcitxICEventHook;
+
+    /**
+     * UI Event hook
+     **/
+    typedef struct _FcitxUIStatusHook {
+        FcitxUIStatusHookFunc func; /**< callback function */
+        void *arg; /**< argument for callback */
+    } FcitxUIStatusHook;
+
     /**
      * register pre input filter
      *
@@ -283,6 +297,17 @@ extern "C" {
      * @since 4.2.6
      **/
     void FcitxInstanceRegisterICStateChangedHook(struct _FcitxInstance* instance, FcitxICEventHook hook);
+
+    /**
+     * register a hook for watching when ui status changed
+     *
+     * @param instance fcitx instance
+     * @param hook new hook
+     * @return void
+     *
+     * @since TBD
+     **/
+    void FcitxInstanceRegisterUIStatusChangedHook(struct _FcitxInstance* instance, FcitxUIStatusHook hook);
 
     boolean FcitxDummyReleaseInputHook(void* arg, FcitxKeySym sym,
                                         unsigned int state,

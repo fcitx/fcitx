@@ -43,6 +43,7 @@ typedef struct _HookStack {
         FcitxIMEventHook eventhook;
         FcitxICEventHook ichook;
         FcitxHotkeyHook hotkey;
+        FcitxUIStatusHook uistatushook;
     };
     /**
      * stack next
@@ -90,6 +91,7 @@ DEFINE_HOOK(IMChangedHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(UpdateCandidateWordHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(UpdateIMListHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(ICStateChangedHook, FcitxICEventHook, ichook);
+DEFINE_HOOK(UIStatusChangedHook, FcitxUIStatusHook, uistatushook);
 
 void FcitxInstanceProcessPreInputFilter(FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
 {
@@ -294,6 +296,16 @@ INPUT_RETURN_VALUE FcitxInstanceProcessHotkey(FcitxInstance* instance, FcitxKeyS
         stack = stack->next;
     }
     return out;
+}
+
+void FcitxInstanceProcessUIStatusChangedHook(FcitxInstance* instance, const char* statusName)
+{
+    HookStack* stack = GetUIStatusChangedHook(instance);
+    stack = stack->next;
+    while (stack) {
+        stack->uistatushook.func(stack->uistatushook.arg, statusName);
+        stack = stack->next;
+    }
 }
 
 FCITX_EXPORT_API

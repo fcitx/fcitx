@@ -137,4 +137,12 @@ void FcitxInstanceProcessICStateChangedHook(struct _FcitxInstance* instance, str
 
 void FcitxInstanceProcessIMChangedHook(struct _FcitxInstance* instance);
 
+/**
+ * process ui status changed
+ *
+ * @param instance fcitx instance
+ * @return void
+ **/
+void FcitxInstanceProcessUIStatusChangedHook(struct _FcitxInstance* instance, const char* statusName);
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
