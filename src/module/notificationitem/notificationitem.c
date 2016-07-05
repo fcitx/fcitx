@@ -123,9 +123,9 @@ static void FcitxNotificationItemDestroy(void* arg);
 
 FCITX_DEFINE_PLUGIN(fcitx_notificationitem, module, FcitxModule) = {
     FcitxNotificationItemCreate,
+    NULL,
+    NULL,
     FcitxNotificationItemDestroy,
-    NULL,
-    NULL,
     NULL
 };
 
