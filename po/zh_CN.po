@@ -9,16 +9,16 @@
 # csslayer <wengxt@gmail.com>, 2013-2015
 # csslayer <wengxt@gmail.com>, 2010-2012
 # csslayer <wengxt@gmail.com>, 2013
-# wwj402 <wwj402@gmail.com>, 2013-2015
+# wwj402 <wwj402@gmail.com>, 2013-2016
 # yyc1992 <yyc1992@gmail.com>, 2012
 # yyc1992 <yyc1992@gmail.com>, 2013-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-04-18 12:01-0700\n"
-"PO-Revision-Date: 2016-04-18 18:04+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2016-07-09 08:02-0700\n"
+"PO-Revision-Date: 2016-07-09 14:20+0000\n"
+"Last-Translator: wwj402 <wwj402@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
@@ -493,7 +493,7 @@ msgstr "无法找到 gtk ${1} 的 ${2}."
 
 #: data/script/fcitx-diagnose.sh:944
 msgid "Cannot find DBus name ${1} owner."
-msgstr ""
+msgstr "找不到 DBus 名称 ${1} 的所有者。"
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
@@ -551,7 +551,7 @@ msgstr "无法找到 kimpanel dbus 接口或非 kimpanel 用户界面."
 
 #: data/script/fcitx-diagnose.sh:952
 msgid "Cannot find pid of DBus name ${1} owner."
-msgstr ""
+msgstr "找不到 DBus 名称 ${1} 的 pid 所有者。"
 
 #: data/script/fcitx-diagnose.sh:1107
 msgid "Cannot find xim_server on root window."
@@ -875,7 +875,7 @@ msgstr "基于 DBus 的新 Freedesktop.org 托盘图标"
 
 #: data/script/fcitx-diagnose.sh:933
 msgid "DBus interface:"
-msgstr ""
+msgstr "DBus 界面:"
 
 #: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"
@@ -2124,11 +2124,11 @@ msgstr "覆盖皮肤的字号设置"
 
 #: data/script/fcitx-diagnose.sh:940
 msgid "Owner of DBus name ${1} is ${2}."
-msgstr ""
+msgstr "DBus 名称 ${1} 的所有者是 ${2}。"
 
 #: data/script/fcitx-diagnose.sh:948
 msgid "PID of DBus name ${1} owner is ${2}."
-msgstr ""
+msgstr "DBus 名称 ${1} 的 PID 所有者是 ${2}。"
 
 #: data/inputmethod.desc:23
 msgid "Parent"
@@ -3020,7 +3020,7 @@ msgstr "界面: 打开 %s 失败 %s"
 
 #: data/script/fcitx-diagnose.sh:956
 msgid "Unable to find a program to check dbus."
-msgstr ""
+msgstr "无法找到程序检查 dbus。"
 
 #: src/module/unicode/fcitx-unicode.desc:1
 msgid "Unicode"
@@ -3145,7 +3145,7 @@ msgstr "用户词组颜色"
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
-msgstr ""
+msgstr "使用 ${1} 来检查 dbus。"
 
 #: data/script/fcitx-diagnose.sh:1294 data/script/fcitx-diagnose.sh:1377
 msgid "Version Line:"
