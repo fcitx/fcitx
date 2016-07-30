@@ -416,7 +416,9 @@ void* RunInstance(void* arg)
     return NULL;
 
 error_exit:
-    sem_post(&instance->startUpSem);
+    if (instance->sem) {
+        sem_post(&instance->startUpSem);
+    }
     FcitxInstanceEnd(instance);
     return NULL;
 }
