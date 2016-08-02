@@ -31,6 +31,7 @@ Bool XIMGetICValuesHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data);
 Bool XIMSetICValuesHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data);
 Bool XIMSetFocusHandler(FcitxXimFrontend* xim, IMChangeFocusStruct * call_data);
 Bool XIMUnsetFocusHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data);
+Bool XIMResetICHandler(FcitxXimFrontend* xim, IMResetICStruct * call_data);
 Bool XIMCloseHandler(FcitxXimFrontend* xim, IMOpenStruct * call_data);
 Bool XIMCreateICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data);
 Bool XIMDestroyICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data);

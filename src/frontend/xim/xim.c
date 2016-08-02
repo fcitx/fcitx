@@ -319,9 +319,9 @@ Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data)
     case XIM_SET_IC_FOCUS:
         return XIMSetFocusHandler(ximfrontend, (IMChangeFocusStruct *) call_data);
     case XIM_UNSET_IC_FOCUS:
-        return XIMUnsetFocusHandler(ximfrontend, (IMChangeICStruct *) call_data);;
+        return XIMUnsetFocusHandler(ximfrontend, (IMChangeICStruct *) call_data);
     case XIM_RESET_IC:
-        return True;
+        return XIMResetICHandler(ximfrontend, (IMResetICStruct *) call_data);
     case XIM_PREEDIT_START_REPLY:
         return 0;
     case XIM_PREEDIT_CARET_REPLY:
