@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-05-24 20:01-0700\n"
-"PO-Revision-Date: 2016-05-25 02:22+0000\n"
+"POT-Creation-Date: 2016-09-06 23:02-0700\n"
+"PO-Revision-Date: 2016-09-07 05:23+0000\n"
 "Last-Translator: heavyuser <heavyuser73@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -385,7 +385,7 @@ msgstr "배경 이미지"
 
 #: data/script/fcitx-diagnose.sh:779
 msgid "Bash Version:"
-msgstr ""
+msgstr "Bash 버전:"
 
 #: data/script/fcitx-diagnose.sh:655
 msgid "Beginner's Guide"
@@ -842,7 +842,7 @@ msgstr "현재 사용자:"
 
 #: data/script/fcitx-diagnose.sh:833
 msgid "Current value of ${1} is ${2} (${3})."
-msgstr ""
+msgstr "${1}의 현재 값은 ${2}(${3})."
 
 #: data/config.desc:35
 msgid "Custom"
@@ -920,7 +920,7 @@ msgstr "Dianbaoma"
 
 #: data/script/fcitx-diagnose.sh:819
 msgid "Directories:"
-msgstr ""
+msgstr "디렉터리:"
 
 #: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
@@ -1052,7 +1052,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:825
 msgid "Environment variable ${1} is not set."
-msgstr ""
+msgstr "환경 변수 ${1}이 설정 안됨."
 
 #: data/script/fcitx-diagnose.sh:1053
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
@@ -1060,7 +1060,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:829
 msgid "Environment variable ${1} is set to ${2}."
-msgstr ""
+msgstr "환경 변수 ${1}이 ${2}로 설정됨."
 
 #: data/script/fcitx-diagnose.sh:784
 msgid "Environment:"
@@ -1161,7 +1161,7 @@ msgstr "Fcitx Lua 지원"
 
 #: data/script/fcitx-diagnose.sh:837
 msgid "Fcitx Settings Directory:"
-msgstr ""
+msgstr "Fcitx 설정 디렉터리:"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:3
 msgid "Fcitx Skin Installer"
@@ -1484,7 +1484,7 @@ msgstr "히라가나"
 
 #: data/script/fcitx-diagnose.sh:821
 msgid "Home:"
-msgstr ""
+msgstr "홈:"
 
 #: src/im/table/table.desc:123
 msgid "Horizontal"
@@ -1631,7 +1631,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:666
 msgid "Input Method Related Environment Variables: "
-msgstr ""
+msgstr "환경 변수들과 관련된 입력 방법 :"
 
 #: data/script/fcitx-diagnose.sh:1545
 msgid "Input Methods:"
