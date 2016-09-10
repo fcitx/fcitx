@@ -22,7 +22,7 @@ OpenCCLoadLib()
 {
     if (_opencc_handle)
         return true;
-    _opencc_handle = dlopen(OPENCC_LIBRARY_FILENAME, RTLD_NOW | RTLD_GLOBAL);
+    _opencc_handle = dlopen(OPENCC_LIBRARY_FILENAME, RTLD_NOW | RTLD_NODELETE | RTLD_GLOBAL);
     if (!_opencc_handle)
         goto fail;
 #define OPENCC_LOAD_SYMBOL(sym) do {            \

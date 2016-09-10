@@ -56,7 +56,7 @@ SpellPresageLoadLib()
 {
     if (_presage_handle)
         return true;
-    _presage_handle = dlopen(PRESAGE_LIBRARY_FILENAME, RTLD_NOW | RTLD_GLOBAL);
+    _presage_handle = dlopen(PRESAGE_LIBRARY_FILENAME, RTLD_NOW | RTLD_NODELETE | RTLD_GLOBAL);
     if (!_presage_handle)
         goto fail;
 #define PRESAGE_LOAD_SYMBOL(sym) do {            \
