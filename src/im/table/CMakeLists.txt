@@ -13,10 +13,12 @@ set(FCITX_TABLE_SOURCES
   tabledict.c
   table.c
   tableconfig.c
+  assocdict.c
   )
 set(FCITX_TABLE_HEADERS
   tabledict.h
   table.h
+  assocdict.h
   utf8_in_gb18030.h
   )
 if(ENABLE_TABLE)
