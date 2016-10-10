@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-09-06 23:02-0700\n"
-"PO-Revision-Date: 2016-09-07 05:23+0000\n"
+"POT-Creation-Date: 2016-10-10 03:01-0700\n"
+"PO-Revision-Date: 2016-10-10 09:33+0000\n"
 "Last-Translator: heavyuser <heavyuser73@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -468,7 +468,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:925
 msgid "Cannot connect to fcitx correctly."
-msgstr ""
+msgstr "fcitx에 연결할 수 없습니다."
 
 #: tools/gui/quickphrase-editor/editor.cpp:296
 #, kde-format
@@ -506,7 +506,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:888
 msgid "Cannot find fcitx executable!"
-msgstr ""
+msgstr "fcitx 실행 파일을 찾을 수 없습니다!"
 
 #: data/script/fcitx-diagnose.sh:1405
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
@@ -522,7 +522,7 @@ msgstr "。"
 
 #: data/script/fcitx-diagnose.sh:1030
 msgid "Cannot find fcitx-configtool executable!"
-msgstr ""
+msgstr "fcitx-configtool 실행 파일을 찾을 수 없습니다!"
 
 #: data/script/fcitx-diagnose.sh:1499
 msgid "Cannot find file ${1} of addon ${2}."
@@ -867,7 +867,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:933
 msgid "DBus interface:"
-msgstr ""
+msgstr "DBus 인터페이스:"
 
 #: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"
@@ -1297,7 +1297,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:894
 msgid "Found fcitx at ${1}."
-msgstr ""
+msgstr "${1}에서 fcitx를 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1178 data/script/fcitx-diagnose.sh:1183
 msgid "Found fcitx im module for ${2}: ${1}."
@@ -1309,7 +1309,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1018
 msgid "Found fcitx kcm module."
-msgstr ""
+msgstr "fcitx kcm 모듈을 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1187
 msgid "Found fcitx qt module: ${1}."
@@ -2025,7 +2025,7 @@ msgstr "입력창 없음"
 msgid "No local input method"
 msgstr "로컬 입력기 없음"
 
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:554
 msgid "No remind"
 msgstr ""
 
@@ -2903,7 +2903,7 @@ msgstr "Half/Full 글자 넓이 전환"
 msgid "Toggle Input Method"
 msgstr "입력기 전환"
 
-#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:553
+#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:555
 msgid "Toggle Remind"
 msgstr ""
 
@@ -3094,7 +3094,7 @@ msgstr ""
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr ""
 
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:554
 msgid "Use remind"
 msgstr ""
 
@@ -3124,7 +3124,7 @@ msgstr "사용자 문구 색"
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
-msgstr ""
+msgstr "dbus 체크를 위해 ${1}를 이용하십시오."
 
 #: data/script/fcitx-diagnose.sh:1294 data/script/fcitx-diagnose.sh:1377
 msgid "Version Line:"
@@ -3296,6 +3296,9 @@ msgid ""
 "found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
 "fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
+"당신은 GUI 환경에서 Fcitx을 실행하고 있지만,  fcitx-configtool을 찾을 수 없습"
+"니다.  패키지 이름은 일반적으로 fcitx-config-gtk, fcitx-config-gtk3 또는 "
+"fcitx-configtool입니다.  지금은 기본 텍스트 편집기로 설정 파일을 엽니다."
 
 #: data/script/fcitx-configtool.sh:144
 msgid ""
@@ -3303,6 +3306,9 @@ msgid ""
 "package name of this KCModule is usually kcm-fcitx or kde-config-fcitx. Now "
 "it will open config file with default text editor."
 msgstr ""
+"당신은 KDE에서 실행 중이지만, fcitx 실행에 필요한 KCModule을 찾을 수 없습니"
+"다.  이 KCModule의 패키지 이름은 일반적으로 kcm-fcitx 또는 kde-config-fcitx입"
+"니다.  지금은 기본 텍스트 편집기로 설정 파일을 엽니다."
 
 #: data/script/fcitx-diagnose.sh:1115
 msgid ""
@@ -3360,7 +3366,7 @@ msgstr "가능한 폰트 없음."
 msgid "process:"
 msgstr "프로세스:"
 
-#: src/lib/fcitx/instance.c:528
+#: src/lib/fcitx/instance.c:530
 msgid "pthread mutex init failed"
 msgstr ""
 
