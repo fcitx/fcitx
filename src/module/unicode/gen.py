@@ -110,10 +110,12 @@ Cyrillic
 Cyrillic Supplement
 Cyrillic Extended-A
 Cyrillic Extended-B
+Cyrillic Extended-C
 Elbasan
 Georgian
 Georgian Supplement
 Glagolitic
+Glagolitic Supplement
 Gothic
 Greek and Coptic
 Greek Extended
@@ -154,6 +156,7 @@ Combining Diacritical Marks for Symbols
 Combining Half Marks
 
 SECTION African Scripts
+Adlam
 Bamum
 Bamum Supplement
 Bassa Vah
@@ -205,7 +208,9 @@ Syriac
 
 SECTION Central Asian Scripts
 Manichaean
+Marchen
 Mongolian
+Mongolian Supplement
 Old Turkic
 Phags-pa
 Tibetan
@@ -213,6 +218,7 @@ Tibetan
 SECTION South Asian Scripts
 Ahom
 Bengali
+Bhaiksuki
 Brahmi
 Chakma
 Devanagari
@@ -234,6 +240,7 @@ Meetei Mayek Extensions
 Modi
 Mro
 Multani
+Newa
 Ol Chiki
 Oriya
 Saurashtra
@@ -308,6 +315,8 @@ Kana Supplement
 Kanbun
 Lisu
 Miao
+Tangut
+Tangut Components
 Yi Syllables
 Yi Radicals
 
@@ -315,6 +324,7 @@ SECTION American Scripts
 Cherokee
 Cherokee Supplement
 Deseret
+Osage
 Unified Canadian Aboriginal Syllabics
 Unified Canadian Aboriginal Syllabics Extended
 
@@ -335,6 +345,7 @@ SECTION Punctuation
 General Punctuation
 Supplemental Punctuation
 CJK Symbols and Punctuation
+Ideographic Symbols and Punctuation
 CJK Compatibility Forms
 Halfwidth and Fullwidth Forms
 Small Form Variants
