@@ -86,7 +86,7 @@ int FcitxXErrorHandler(Display * dpy, XErrorEvent * event)
 
     if (fp)
         fclose(fp);
-    if (event->error_code != 3 && event->error_code != BadMatch) {
+    if (event->error_code != 3 && event->error_code != BadMatch && event->error_code != BadValue) {
         // xterm will generate 3
         FcitxInstanceEnd(x11handle->owner);
     }
