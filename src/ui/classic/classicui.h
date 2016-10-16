@@ -84,6 +84,7 @@ typedef struct _FcitxClassicUI {
     boolean isfallback;
 
     int dpi;
+    boolean hasXShape;
     uint64_t trayTimeout;
     boolean notificationItemAvailable;
 

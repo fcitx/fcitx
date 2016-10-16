@@ -173,24 +173,26 @@ void FcitxXlibWindowPaintBackground(FcitxXlibWindow* window,
         cairo_restore(c);
     } while (0);
 
-    if (overlay
-        || window->background->clickMarginLeft != 0
-        || window->background->clickMarginRight != 0
-        || window->background->clickMarginTop != 0
-        || window->background->clickMarginBottom != 0) {
-        XRectangle r[1];
-        r[0].x = 0;
-        r[0].y = 0;
-        r[0].width = backgrondWidth - window->background->clickMarginLeft - window->background->clickMarginRight;
-        r[0].height = backgrondHeight - window->background->clickMarginTop - window->background->clickMarginBottom;
-        XShapeCombineRectangles(classicui->dpy, window->wId, ShapeInput,
-                                offX + window->background->clickMarginLeft,
-                                offY + window->background->clickMarginTop,
-                                r, 1, ShapeSet, Unsorted
-                               );
-    } else {
-        XShapeCombineMask(classicui->dpy, window->wId, ShapeInput, 0, 0,
-                          None, ShapeSet);
+    if (classicui->hasXShape) {
+        if (overlay
+            || window->background->clickMarginLeft != 0
+            || window->background->clickMarginRight != 0
+            || window->background->clickMarginTop != 0
+            || window->background->clickMarginBottom != 0) {
+            XRectangle r[1];
+            r[0].x = 0;
+            r[0].y = 0;
+            r[0].width = backgrondWidth - window->background->clickMarginLeft - window->background->clickMarginRight;
+            r[0].height = backgrondHeight - window->background->clickMarginTop - window->background->clickMarginBottom;
+            XShapeCombineRectangles(classicui->dpy, window->wId, ShapeInput,
+                                    offX + window->background->clickMarginLeft,
+                                    offY + window->background->clickMarginTop,
+                                    r, 1, ShapeSet, Unsorted
+                                   );
+        } else {
+            XShapeCombineMask(classicui->dpy, window->wId, ShapeInput, 0, 0,
+                              None, ShapeSet);
+        }
     }
 }
 

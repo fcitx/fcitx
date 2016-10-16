@@ -20,6 +20,7 @@
 
 #include <X11/Xutil.h>
 #include <X11/extensions/Xrender.h>
+#include <X11/extensions/shape.h>
 #include <X11/Xatom.h>
 #include <unistd.h>
 #include <cairo.h>
@@ -123,6 +124,14 @@ void* ClassicUICreate(FcitxInstance* instance)
     FcitxX11GetDPI(instance, &classicui->dpi, NULL);
     if (classicui->dpi <= 0)
         classicui->dpi = 96;
+
+    int dummy1 = 0, dummy2 = 0, major, minor;
+    if (XShapeQueryExtension(classicui->dpy, &dummy1, &dummy2) == True &&
+        XShapeQueryVersion(classicui->dpy, &major, &minor)) {
+        if (major >=1 && minor >= 1) {
+            classicui->hasXShape = true;
+        }
+    }
 
     if (LoadSkinConfig(&classicui->skin, &classicui->skinType)) {
         free(classicui);
