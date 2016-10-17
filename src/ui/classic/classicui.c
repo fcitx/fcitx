@@ -128,7 +128,7 @@ void* ClassicUICreate(FcitxInstance* instance)
     int dummy1 = 0, dummy2 = 0, major, minor;
     if (XShapeQueryExtension(classicui->dpy, &dummy1, &dummy2) == True &&
         XShapeQueryVersion(classicui->dpy, &major, &minor)) {
-        if (major >=1 && minor >= 1) {
+        if (major > 1 || (major == 1 && minor >= 1)) {
             classicui->hasXShape = true;
         }
     }
