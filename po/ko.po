@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-10-10 03:01-0700\n"
-"PO-Revision-Date: 2016-10-10 09:33+0000\n"
+"POT-Creation-Date: 2016-11-21 21:02-0800\n"
+"PO-Revision-Date: 2016-11-22 04:27+0000\n"
 "Last-Translator: heavyuser <heavyuser73@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -477,7 +477,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:774
 msgid "Cannot determine desktop environment."
-msgstr ""
+msgstr "데스크톱 환경을 확인할 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:1317
 msgid "Cannot find ${2} for gtk ${1}"
@@ -765,11 +765,11 @@ msgstr "설정 파일"
 msgid "Configuration:"
 msgstr "설정:"
 
-#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:493
+#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:502
 msgid "Configure"
 msgstr "설정"
 
-#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
+#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:501
 #: src/ui/kimpanel/kimpanel.c:781
 msgid "Configure Current Input Method"
 msgstr "현재 입력기 설정"
@@ -1110,7 +1110,7 @@ msgstr "정확한 일치"
 msgid "Exec"
 msgstr "실행"
 
-#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:495
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:504
 msgid "Exit"
 msgstr "나가기"
 
@@ -1551,6 +1551,9 @@ msgid ""
 "order to use any input method other than ${2}. See ${link} for more detail "
 "as well as alternative solutions."
 msgstr ""
+"${1}을 사용하는 경우 ${2} 이외의 입력 방법을 사용하려면 ${2}을 제거하거나 "
+"${3}을 제거 할 수 있습니다.  대체 솔루션뿐 아니라 자세한 내용은 ${link}를 참"
+"조하십시오."
 
 #: data/script/fcitx-diagnose.sh:689
 msgid ""
@@ -1558,6 +1561,9 @@ msgid ""
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
+"${1}을 사용하는 경우 ${2} 이외의 입력 방법을 사용하기 위해 ${2}를 제거하거나 "
+"${3}을 제거하거나 ${g36_disable_ibus} 명령을 사용하여 IBus 통합을 비활성화 "
+"할 수 있습니다. 자세한 내용은 ${link}를 참조하십시오."
 
 #: src/im/table/table.desc:218
 msgid "Ignore Punctuation"
@@ -2048,13 +2054,13 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:682
 msgid "Note for GNOME Later than 3.6"
-msgstr ""
+msgstr "3.6 이후의 GNOME 에 대한 주의사항"
 
 #: src/module/vk/vk.c:57
 msgid "Number"
 msgstr "숫자"
 
-#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:431
+#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:440
 msgid "Online Help"
 msgstr "온라인 도움말"
 
@@ -2205,6 +2211,8 @@ msgid ""
 "Please set environment variable ${env_name} to \"${value}\" using the tool "
 "your distribution provides or add ${1} to your ${2}. See ${link}."
 msgstr ""
+"배포판에서 제공하는 도구를 사용하여 환경 변수 ${env_name}을 \"${value}\"로 설"
+"정하거나 ${2}에 ${1}를 추가하십시오. $ {link} 참조하십시오."
 
 #: src/ui/classic/skin.desc:265
 msgid "Position or offset of LookupTable"
@@ -2416,7 +2424,7 @@ msgstr "오른쪽 마진 조절"
 msgid "Resize Margin Top"
 msgstr "위쪽 마진 조절"
 
-#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
+#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:503
 #: src/ui/kimpanel/kimpanel.c:786
 msgid "Restart"
 msgstr "재시작"
@@ -2889,6 +2897,9 @@ msgid ""
 "${link1}. For other more general problems of using XIM including application "
 "freezing, see ${link2}."
 msgstr ""
+"XIM을 사용할 때 발생할 수있는 응용 프로그램 특정 문제점을 보려면 ${link1}을 "
+"확인하십시오.  응용 프로그램 멈춤을 포함하여 XIM을 사용하는 다른 일반적인 문"
+"제는 ${link2}를 참조하십시오."
 
 #: src/module/punc/punc.c:150 src/module/punc/punc.c:569
 msgid "Toggle Full Width Punctuation"
