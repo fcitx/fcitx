@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-24 08:59+0000\n"
+"PO-Revision-Date: 2016-11-24 09:02+0000\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -1000,28 +1000,28 @@ msgstr "UI: ui incorrecte"
 #: src/lib/fcitx-utils/desktop-parse.c:550
 #, c-format
 msgid "Invalid group name line @ line %d %s"
-msgstr ""
+msgstr "Línia no vàlida de nom de grup @ línia %d %s"
 
 #: src/lib/fcitx-utils/desktop-parse.c:562
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
-msgstr ""
+msgstr "Grup %s duplicat a un fitxer d'escriptori, @ línia %d, fusiona'l amb l'anterior."
 
 #: src/lib/fcitx-utils/desktop-parse.c:586
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
-msgstr ""
+msgstr "El comentari nul no pertany a cap grup @ %d %s"
 
 #: src/lib/fcitx-utils/desktop-parse.c:592
 #, c-format
 msgid "Invalid entry line @ line %d %s"
-msgstr ""
+msgstr "Línia no vàlida d'entrada @ línia %d %s"
 
 #: src/lib/fcitx-utils/desktop-parse.c:602
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
-msgstr ""
+msgstr "Entrada %s duplicada al grup %s, @ line %d, anul·la l'anterior."
 
 #: src/module/autoeng/AutoEng.c:557
 msgid "Too long item for AutoEng"
