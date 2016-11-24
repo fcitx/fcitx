@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-23 08:15+0000\n"
+"PO-Revision-Date: 2016-11-24 08:59+0000\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -1067,7 +1067,7 @@ msgstr "No ho mostris un altre cop"
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
 msgid "Full width Character"
-msgstr "Caràcter d'amplada total"
+msgstr "Caràcter d'amplada completa"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1077,7 +1077,7 @@ msgstr "Caràcter de mitja amplada"
 #: src/module/fullwidthchar/fullwidthchar.c:115
 #: src/module/fullwidthchar/fullwidthchar.c:192
 msgid "Toggle Half/Full width Character"
-msgstr "Commuta caràcter d'amplada mitja/total"
+msgstr "Commuta caràcter d'amplada mitja/completa"
 
 #: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
@@ -1139,7 +1139,7 @@ msgstr "Mètode d'entrada desactivat"
 
 #: src/module/punc/punc.c:148 src/module/punc/punc.c:567
 msgid "Full width punct"
-msgstr "Puntuació d'amplada total"
+msgstr "Puntuació d'amplada completa"
 
 #: src/module/punc/punc.c:149 src/module/punc/punc.c:568
 msgid "Latin punct"
@@ -1147,7 +1147,7 @@ msgstr "Puntuació llatina"
 
 #: src/module/punc/punc.c:150 src/module/punc/punc.c:569
 msgid "Toggle Full Width Punctuation"
-msgstr "Commuta la puntuació d'amplada total"
+msgstr "Commuta la puntuació d'amplada completa"
 
 #: src/module/punc/punc.c:410
 msgid "Can't open punc file."
@@ -1159,7 +1159,7 @@ msgstr "Suport de puntuació"
 
 #: src/module/punc/punc.c:586
 msgid "Full width punctuations are used."
-msgstr "S'usen les puntuacions d'amplada total"
+msgstr "S'usen les puntuacions d'amplada completa"
 
 #: src/module/punc/punc.c:587
 msgid "Latin punctuations are used."
@@ -1209,7 +1209,7 @@ msgstr "Llatí"
 
 #: src/module/vk/vk.c:52
 msgid "Fullwidth"
-msgstr "Amplada total"
+msgstr "Amplada completa"
 
 #: src/module/vk/vk.c:53
 msgid "Greek"
@@ -1576,7 +1576,7 @@ msgstr "Paraula activadora automàtica d'anglès"
 
 #: src/module/chttrans/fcitx-chttrans.conf.in:4
 msgid "Convert Simplified Chinese To Traditional Chinese"
-msgstr ""
+msgstr "Converteix xinès simplificat a xinès tradicional"
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:3
 #: src/module/clipboard/fcitx-clipboard.desc:1
@@ -1587,35 +1587,35 @@ msgstr ""
 #: src/module/clipboard/fcitx-clipboard.desc:34
 #: src/module/clipboard/fcitx-clipboard.desc:44
 msgid "Clipboard"
-msgstr ""
+msgstr "Porta-retalls"
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:4
 msgid "Fcitx Clipboard access"
-msgstr ""
+msgstr "Accés al porta-retalls del fcitx"
 
 #: src/module/dbus/fcitx-dbus.conf.in:3
 msgid "DBus Support"
-msgstr ""
+msgstr "Suport del DBus"
 
 #: src/module/dbus/fcitx-dbus.conf.in:4
 msgid "Provides DBus Support (Used by other Addon)"
-msgstr ""
+msgstr "Proveeix suport del DBus (usat per altres complements)"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:3
 msgid "Freedesktop.org Notification Support"
-msgstr ""
+msgstr "Suport de notificacions del freedesktop.org"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
 msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
-msgstr ""
+msgstr "Proveeix suport de notificacions del freedesktop.org (usat per altres complements)"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:3
 msgid "Fullwidth Character"
-msgstr ""
+msgstr "Caràcter d'amplada completa"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
 msgid "Provides Fullwidth Character Input Support"
-msgstr ""
+msgstr "Proveeix suport d'entrada de caràcter d'amplada completa"
 
 #: src/module/imselector/fcitx-imselector.conf.in:3
 msgid "Input method selector"
