@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-25 06:46+0000\n"
+"PO-Revision-Date: 2016-11-25 15:44+0000\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -2002,23 +2002,23 @@ msgstr "S'està canviant el mode de recordatori"
 
 #: data/config.desc:108
 msgid "Switching Full Width Character Mode"
-msgstr ""
+msgstr "S'està canviant a mode de caràcter d'amplada completa"
 
 #: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
-msgstr ""
+msgstr "Canvia a mode de puntuació d'amplada completa"
 
 #: data/config.desc:120
 msgid "Prev Page"
-msgstr ""
+msgstr "Pàgina prèvia"
 
 #: data/config.desc:125
 msgid "Next Page"
-msgstr ""
+msgstr "Pàgina següent"
 
 #: data/config.desc:130
 msgid "Choose Second and Third Candidate Word"
-msgstr ""
+msgstr "Escolliu la segona i tercera paraula candidata"
 
 #: data/config.desc:136
 msgid "Saving All Config and Input History"
