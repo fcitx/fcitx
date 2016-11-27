@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-25 15:44+0000\n"
+"PO-Revision-Date: 2016-11-27 19:48+0000\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -2022,15 +2022,15 @@ msgstr "Escolliu la segona i tercera paraula candidata"
 
 #: data/config.desc:136
 msgid "Saving All Config and Input History"
-msgstr ""
+msgstr "S'està desant tota la història de configuració i entrada"
 
 #: data/config.desc:142
 msgid "Switch Embeded Preedit"
-msgstr ""
+msgstr "Commuta la pre-edició incrustada"
 
 #: data/config.desc:148
 msgid "Previous Candidate Word"
-msgstr ""
+msgstr "Paraula candidata prèvia"
 
 #: data/config.desc:149
 msgid ""
@@ -2040,78 +2040,78 @@ msgstr ""
 
 #: data/config.desc:155
 msgid "Next Candidate Word"
-msgstr ""
+msgstr "Pròxima paraula candidata"
 
 #: data/config.desc:156
 msgid ""
 "This is used in some modules and input methods to navigate to the next "
 "candidate word"
-msgstr ""
+msgstr "Això s'usa en alguns mòduls i mètodes d'entada per navegar a la pròxima paraula candidata"
 
 #: data/config.desc:159 data/config.desc:165 data/config.desc:174
 msgid "Program"
-msgstr ""
+msgstr "Programa"
 
 #: data/config.desc:162
 msgid "Seconds sleep before fcitx really start"
-msgstr ""
+msgstr "Segons d'espera abans que el fcitx realment s'iniciï"
 
 #: data/config.desc:169
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: data/config.desc:170
 msgid "All"
-msgstr ""
+msgstr "Tot"
 
 #: data/config.desc:171
 msgid "PerProgram"
-msgstr ""
+msgstr "PerProgram"
 
 #: data/config.desc:172
 msgid "Share State Among Window"
-msgstr ""
+msgstr "Comparteix l'estat entre finestres"
 
 #: data/config.desc:178
 msgid "Inactive"
-msgstr ""
+msgstr "Inactiu"
 
 #: data/config.desc:179
 msgid "Active"
-msgstr ""
+msgstr "Actiu"
 
 #: data/config.desc:180
 msgid "Default Input Method State"
-msgstr ""
+msgstr "Estat predeterminat de mètode d'entrada"
 
 #: data/config.desc:183 data/config.desc:189 data/config.desc:195
 #: data/config.desc:201 data/config.desc:208 data/config.desc:214
 msgid "Output"
-msgstr ""
+msgstr "Sortida"
 
 #: data/config.desc:186
 msgid "Type half width Punc After a Number"
-msgstr ""
+msgstr "Escriu puntuació d'amplada mitja després d'un número"
 
 #: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
-msgstr ""
+msgstr "Desactiva la paginació al mode de recordatori"
 
 #: data/config.desc:198
 msgid "Commit when toggle state"
-msgstr ""
+msgstr "Envia quan s'estigui en estat commutat"
 
 #: data/config.desc:199
 msgid "Send typed raw text if Switch to inactive Mode"
-msgstr ""
+msgstr "Envia el text en brut si Commuta a mode inactiu"
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
-msgstr ""
+msgstr "Número de paraula candidata"
 
 #: data/config.desc:211
 msgid "Give the tips of Phrase"
-msgstr ""
+msgstr "Dona les pistes de la frase"
 
 #: data/config.desc:217
 msgid "Do not commit preedit text when unfocus a window"
