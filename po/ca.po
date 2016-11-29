@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-28 07:59+0000\n"
+"PO-Revision-Date: 2016-11-29 07:00+0000\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -2474,175 +2474,175 @@ msgstr "Nom únic per a la taula"
 
 #: src/im/table/table.desc:7
 msgid "Code Table Name"
-msgstr ""
+msgstr "Nom de la taula de codis"
 
 #: src/im/table/table.desc:11
 msgid "Icon Name"
-msgstr ""
+msgstr "Nom de la icona"
 
 #: src/im/table/table.desc:15
 msgid "Code Table File"
-msgstr ""
+msgstr "Fitxer de la taula de codis"
 
 #: src/im/table/table.desc:28
 msgid "Level of simple code"
-msgstr ""
+msgstr "Nivell del codi simple"
 
 #: src/im/table/table.desc:29
 msgid "Do not sort word with code less than this level"
-msgstr ""
+msgstr "No ordenis la paraula amb un codi inferior a aquest nivell"
 
 #: src/im/table/table.desc:34
 msgid "Order of Code Table"
-msgstr ""
+msgstr "Ordre de la taula de codis"
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
-msgstr ""
+msgstr "Usa Pinyin"
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
-msgstr ""
+msgstr "Clau de Pinyin"
 
 #: src/im/table/table.desc:49
 msgid "Auto Send Candidate Word"
-msgstr ""
+msgstr "Envia la paraula candidata automàticament"
 
 #: src/im/table/table.desc:54
 msgid ""
 "Minimum length trigger auto send candidate word when only one candidate"
-msgstr ""
+msgstr "Longitud mínima d'activació de l'enviament automàtic de paraula candidata quan hi ha una sola candidata"
 
 #: src/im/table/table.desc:59
 msgid ""
 "Minimum length trigger auto send candidate when there will be no candidate"
-msgstr ""
+msgstr "Longitud mínima d'activació de l'enviament automàtic de paraula candidata quan hi ha cap candidata"
 
 #: src/im/table/table.desc:64
 msgid "Send Raw Preedit"
-msgstr ""
+msgstr "Envia la pre-edició en brut"
 
 #: src/im/table/table.desc:69
 msgid "End Key"
-msgstr ""
+msgstr "Clau final"
 
 #: src/im/table/table.desc:74
 msgid "Use Matching Key"
-msgstr ""
+msgstr "Usa la clau concordant"
 
 #: src/im/table/table.desc:79
 msgid "Matching Key"
-msgstr ""
+msgstr "Clau concordant"
 
 #: src/im/table/table.desc:84
 msgid "Exact Match"
-msgstr ""
+msgstr "Concordança exacta"
 
 #: src/im/table/table.desc:88
 msgid "Auto Phrase"
-msgstr ""
+msgstr "Frase automàtica"
 
 #: src/im/table/table.desc:93
 msgid ""
 "Keep current buffer when there is no match item and input length is equal "
 "code length"
-msgstr ""
+msgstr "Manté la memòria intermèdia actual quan no hi cap element que concordi i la longitud de l'entrada és igual a la longitud del codi"
 
 #: src/im/table/table.desc:98
 msgid "Auto Phrase Length"
-msgstr ""
+msgstr "Longitud de la frase automàtica"
 
 #: src/im/table/table.desc:103
 msgid "Auto Phrase Phrase"
-msgstr ""
+msgstr "Frase de la frase automàtica"
 
 #: src/im/table/table.desc:108
 msgid "Save Auto Phrase"
-msgstr ""
+msgstr "Desa la frase automàtica"
 
 #: src/im/table/table.desc:113
 msgid "Prompt Table Code"
-msgstr ""
+msgstr "Demana la taula de codis"
 
 #: src/im/table/table.desc:117
 msgid "Candidate Table Layout"
-msgstr ""
+msgstr "Disposició de la taula de candidates"
 
 #: src/im/table/table.desc:121
 msgid "Not Set"
-msgstr ""
+msgstr "No està establert"
 
 #: src/im/table/table.desc:122
 msgid "Vertical"
-msgstr ""
+msgstr "Vertical"
 
 #: src/im/table/table.desc:123
 msgid "Horizontal"
-msgstr ""
+msgstr "Horitzontal"
 
 #: src/im/table/table.desc:131
 msgid "Symbol File"
-msgstr ""
+msgstr "Fitxer de símbols"
 
 #: src/im/table/table.desc:136
 msgid "Choose"
-msgstr ""
+msgstr "Escull"
 
 #: src/im/table/table.desc:151
 msgid "Language Code for this table"
-msgstr ""
+msgstr "Codi de llengua per a aquesta taula"
 
 #: src/im/table/table.desc:156
 msgid "Enable"
-msgstr ""
+msgstr "Activa"
 
 #: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
-msgstr ""
+msgstr "Usa la cadena personalitzada de caràcters de demanda definida a la taula"
 
 #: src/im/table/table.desc:166
 msgid "Keyboard Layout to be used"
-msgstr ""
+msgstr "Disposició de teclat a usar"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
-msgstr ""
+msgstr "Usa el número alternatiu de paraula candidata"
 
 #: src/im/table/table.desc:183
 msgid "Use Alternative Key for paging"
-msgstr ""
+msgstr "Usa la clau alternativa per a la paginació"
 
 #: src/im/table/table.desc:188
 msgid "Alternative Prev Page Key"
-msgstr ""
+msgstr "Clau alternativa de pàgina prèvia"
 
 #: src/im/table/table.desc:193
 msgid "Alternative Next Page Key"
-msgstr ""
+msgstr "Clau alternativa de pàgina següent"
 
 #: src/im/table/table.desc:198
 msgid "First Candidate Display as Preedit"
-msgstr ""
+msgstr "Primera visualització candidata com a pre-edició"
 
 #: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
-msgstr ""
+msgstr "Envia i passa quan es prem la clau no vàlida d'aquesta taula"
 
 #: src/im/table/table.desc:208
 msgid "Commit key for select first candidate"
-msgstr ""
+msgstr "Envia la clau per a la primera candidata seleccionada"
 
 #: src/im/table/table.desc:213
 msgid "Commit string when there is no match"
-msgstr ""
+msgstr "Cadena de caràcters a enviar quan no hi ha cap concordança"
 
 #: src/im/table/table.desc:218
 msgid "Ignore Punctuation"
-msgstr ""
+msgstr "Ignora la puntuació"
 
 #: src/im/table/table.desc:223
 msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
-msgstr ""
+msgstr "Ignora alguna puntuació, si està buida, després ignora tota la puntuació"
 
 #: src/module/autoeng/fcitx-autoeng.desc:1
 #: src/module/autoeng/fcitx-autoeng.desc:11
@@ -2650,69 +2650,69 @@ msgstr ""
 #: src/module/autoeng/fcitx-autoeng.desc:26
 #: src/module/autoeng/fcitx-autoeng.desc:34
 msgid "Auto English"
-msgstr ""
+msgstr "Anglès automàtic"
 
 #: src/module/autoeng/fcitx-autoeng.desc:12
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
 #: src/module/quickphrase/fcitx-quickphrase.desc:26
 msgid "Do not show spell hint"
-msgstr ""
+msgstr "No mostris la pista d'ortografia"
 
 #: src/module/autoeng/fcitx-autoeng.desc:22
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:23
 #: src/module/quickphrase/fcitx-quickphrase.desc:36
 msgid "Maximum hint length"
-msgstr ""
+msgstr "Longitud màxima de la pista"
 
 #: src/module/autoeng/fcitx-autoeng.desc:23
 msgid "Maximum length of spell hint list for Auto English"
-msgstr ""
+msgstr "Longitud màxima de la pista d'ortografia per a l'anglès automàtic"
 
 #: src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
-msgstr ""
+msgstr "Número del màxim de paraules mantingut a la pre-edició"
 
 #: src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
-msgstr ""
+msgstr "0 per a enviar immediatament, -1 per mantenir totes les paraules"
 
 #: src/module/autoeng/fcitx-autoeng.desc:37
 msgid "Add Extra space when selecting a candidate word"
-msgstr ""
+msgstr "Afegeix espai addicional quan s'estigui seleccionant una paraula candidata"
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
 #: src/module/chttrans/fcitx-chttrans.desc:14
 msgid "TraditionalChinese"
-msgstr ""
+msgstr "Xinès tradicional"
 
 #: src/module/chttrans/fcitx-chttrans.desc:4
 msgid "Native"
-msgstr ""
+msgstr "Natiu"
 
 #: src/module/chttrans/fcitx-chttrans.desc:5
 msgid "OpenCC"
-msgstr ""
+msgstr "OpenCC"
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
-msgstr ""
+msgstr "Motor de traducció del xinès tradicional"
 
 #: src/module/chttrans/fcitx-chttrans.desc:12
 msgid "Toggle for enable or disable"
-msgstr ""
+msgstr "Commutació per activar o desactivar"
 
 #: src/module/chttrans/fcitx-chttrans.desc:17
 msgid "Enabled state for im"
-msgstr ""
+msgstr "Activa l'estat per al mètode d'entrada"
 
 #: src/module/clipboard/fcitx-clipboard.desc:4
 msgid "Save Clipboard History To File"
-msgstr ""
+msgstr "Desa la història del porta-retalls a un fitxer"
 
 #: src/module/clipboard/fcitx-clipboard.desc:11
 msgid "Length of Clipboard History to Save"
-msgstr ""
+msgstr "Longitud de la història del porta-retalls a desar"
 
 #: src/module/clipboard/fcitx-clipboard.desc:19
 msgid "Maximum length of each candidate word"
@@ -2722,41 +2722,41 @@ msgstr ""
 msgid ""
 "Roughly the same length with this number of english letters, the actual "
 "length depends on the font and the content"
-msgstr ""
+msgstr "Aproximadament la mateixa longitud amb aquest nombre de lletres angleses, la longitud real depèn del tipus de lletra i del contingut"
 
 #: src/module/clipboard/fcitx-clipboard.desc:25
 msgid "Trigger Key for Clipboard History List"
-msgstr ""
+msgstr "Tecla d'activació per a la llista d'història del porta-retalls"
 
 #: src/module/clipboard/fcitx-clipboard.desc:30
 msgid "Use Selection Text"
-msgstr ""
+msgstr "Usa el text de selecció"
 
 #: src/module/clipboard/fcitx-clipboard.desc:31
 msgid "Include the text currently selected in clipboard history."
-msgstr ""
+msgstr "Inclou el text seleccionat actualment a la història del porta-retalls."
 
 #: src/module/clipboard/fcitx-clipboard.desc:45
 msgid "Ignore blank selections"
-msgstr ""
+msgstr "Ignora les seleccions buides"
 
 #: src/module/imselector/fcitx-imselector.desc:1
 #: src/module/imselector/fcitx-imselector.desc:6
 #: src/module/imselector/fcitx-imselector.desc:11
 msgid "IMSelector"
-msgstr ""
+msgstr "IMSelector"
 
 #: src/module/imselector/fcitx-imselector.desc:4
 msgid "Local Input Method SelectKey"
-msgstr ""
+msgstr "Tecla de selecció del mètode local d'entrada"
 
 #: src/module/imselector/fcitx-imselector.desc:9
 msgid "Global Input Method SelectKey"
-msgstr ""
+msgstr "Tecla de selecció del mètode global d'entrada"
 
 #: src/module/imselector/fcitx-imselector.desc:14
 msgid "Clear local Input Method"
-msgstr ""
+msgstr "Esborra el mètode local d'entrada"
 
 #: src/module/imselector/fcitx-imselector.desc:16
 #: src/module/imselector/fcitx-imselector.desc:21
@@ -2768,32 +2768,32 @@ msgstr ""
 #: src/module/imselector/fcitx-imselector.desc:51
 #: src/module/imselector/fcitx-imselector.desc:56
 msgid "GlobalSelector"
-msgstr ""
+msgstr "Selector global"
 
 #: src/module/imselector/fcitx-imselector.desc:19
 #: src/module/imselector/fcitx-imselector.desc:64
 msgid "Switch to the First Input Method"
-msgstr ""
+msgstr "Canvia al primer mètode d'entrada"
 
 #: src/module/imselector/fcitx-imselector.desc:24
 #: src/module/imselector/fcitx-imselector.desc:69
 msgid "Switch to the Second Input Method"
-msgstr ""
+msgstr "Canvia al segon mètode de entrada"
 
 #: src/module/imselector/fcitx-imselector.desc:29
 #: src/module/imselector/fcitx-imselector.desc:74
 msgid "Switch to the Third Input Method"
-msgstr ""
+msgstr "Canvia al tercer mètode de entrada"
 
 #: src/module/imselector/fcitx-imselector.desc:34
 #: src/module/imselector/fcitx-imselector.desc:79
 msgid "Switch to the Fourth Input Method"
-msgstr ""
+msgstr "Canvia al quart mètode de entrada"
 
 #: src/module/imselector/fcitx-imselector.desc:39
 #: src/module/imselector/fcitx-imselector.desc:84
 msgid "Switch to the Fifth Input Method"
-msgstr ""
+msgstr "Canvia al cinquè mètode de entrada"
 
 #: src/module/imselector/fcitx-imselector.desc:44
 #: src/module/imselector/fcitx-imselector.desc:89
