@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-29 21:56+0000\n"
+"PO-Revision-Date: 2016-11-29 22:42+0000\n"
 "Last-Translator: TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -1831,11 +1831,11 @@ msgstr "Файл конфигурации"
 
 #: data/addon.desc:67
 msgid "Argument for InputMethod Register"
-msgstr ""
+msgstr "Аргумент для регистра метода ввода"
 
 #: data/addon.desc:72
 msgid "Fallback UI Addon"
-msgstr ""
+msgstr "Дополнение Fallback UI"
 
 #: data/addon.desc:77
 msgid "Use RTLD_LOCAL to load library"
@@ -2036,7 +2036,7 @@ msgstr "Предыдущее слово-кандидат"
 msgid ""
 "This is used in some modules and input methods to navigate to the previous "
 "candidate word"
-msgstr ""
+msgstr "Используется в некоторых модулях и методах ввода для перехода к предыдущему слову-кандидату"
 
 #: data/config.desc:155
 msgid "Next Candidate Word"
@@ -2046,7 +2046,7 @@ msgstr "Следующее слово-кандидат"
 msgid ""
 "This is used in some modules and input methods to navigate to the next "
 "candidate word"
-msgstr ""
+msgstr "Используется в некоторых модулях и методах ввода для перехода к следующему слову-кандидату"
 
 #: data/config.desc:159 data/config.desc:165 data/config.desc:174
 msgid "Program"
@@ -2165,16 +2165,16 @@ msgstr "Приоритет"
 
 #: data/inputmethod.desc:19
 msgid "LangCode"
-msgstr ""
+msgstr "Код языка"
 
 #: data/inputmethod.desc:23
 msgid "Parent"
-msgstr ""
+msgstr "Родитель"
 
 #: data/profile.desc:1 data/profile.desc:6 data/profile.desc:11
 #: data/profile.desc:16 data/profile.desc:21 data/profile.desc:26
 msgid "Profile"
-msgstr ""
+msgstr "Профиль"
 
 #: data/profile.desc:2
 msgid "Use Full Width Character"
@@ -2186,7 +2186,7 @@ msgstr "Использовать полноширинную пунктуацию
 
 #: data/profile.desc:12
 msgid "Prompt the phrases after input"
-msgstr ""
+msgstr "Подсказывать фразы после ввода"
 
 #: data/profile.desc:17
 msgid "Current Input Method Name"
@@ -2421,27 +2421,27 @@ msgstr ""
 #: src/im/table/fcitx-table.desc:11 src/im/table/fcitx-table.desc:16
 #: src/im/table/fcitx-table.desc:21 src/module/unicode/fcitx-unicode.desc:3
 msgid "Key"
-msgstr ""
+msgstr "Клавиша"
 
 #: src/im/table/fcitx-table.desc:4
 msgid "Add Phrase"
-msgstr ""
+msgstr "Добавить фразу"
 
 #: src/im/table/fcitx-table.desc:9
 msgid "Delete Phrase"
-msgstr ""
+msgstr "Удалить фразу"
 
 #: src/im/table/fcitx-table.desc:14 src/im/table/table.desc:19
 msgid "Adjust Order"
-msgstr ""
+msgstr "Определить порядок"
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
-msgstr ""
+msgstr "Очистить последовательность"
 
 #: src/im/table/fcitx-table.desc:24
 msgid "Lookup Pinyin"
-msgstr ""
+msgstr "Исследовать пиньинь"
 
 #: src/im/table/table.desc:1 src/im/table/table.desc:6
 #: src/im/table/table.desc:10 src/im/table/table.desc:14
@@ -2478,7 +2478,7 @@ msgstr "Название кодовой таблицы"
 
 #: src/im/table/table.desc:11
 msgid "Icon Name"
-msgstr ""
+msgstr "Имя значка"
 
 #: src/im/table/table.desc:15
 msgid "Code Table File"
@@ -2486,11 +2486,11 @@ msgstr "Файл кодовой таблицы"
 
 #: src/im/table/table.desc:28
 msgid "Level of simple code"
-msgstr ""
+msgstr "Уровень простого кода"
 
 #: src/im/table/table.desc:29
 msgid "Do not sort word with code less than this level"
-msgstr ""
+msgstr "Не сортировать слово с кодом ниже этого уровня"
 
 #: src/im/table/table.desc:34
 msgid "Order of Code Table"
@@ -2498,11 +2498,11 @@ msgstr "Порядок кодовой таблицы"
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
-msgstr ""
+msgstr "Использовать пиньинь"
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
-msgstr ""
+msgstr "Клавиша пиньинь"
 
 #: src/im/table/table.desc:49
 msgid "Auto Send Candidate Word"
@@ -2511,54 +2511,54 @@ msgstr "Автоматическая отправка слова-кандида�
 #: src/im/table/table.desc:54
 msgid ""
 "Minimum length trigger auto send candidate word when only one candidate"
-msgstr ""
+msgstr "Минимальная длина переключателя автоматической отправки слова-кандидата (при единственном слове-кандидате)"
 
 #: src/im/table/table.desc:59
 msgid ""
 "Minimum length trigger auto send candidate when there will be no candidate"
-msgstr ""
+msgstr "Минимальная длина переключателя автоматической отправки слова-кандидата (при отсутствии слова-кандидата)"
 
 #: src/im/table/table.desc:64
 msgid "Send Raw Preedit"
-msgstr ""
+msgstr "Отправлять черновое предварительное редактирование"
 
 #: src/im/table/table.desc:69
 msgid "End Key"
-msgstr ""
+msgstr "Клавиша End"
 
 #: src/im/table/table.desc:74
 msgid "Use Matching Key"
-msgstr ""
+msgstr "Использовать подходящую клавишу"
 
 #: src/im/table/table.desc:79
 msgid "Matching Key"
-msgstr ""
+msgstr "Подходящая клавиша"
 
 #: src/im/table/table.desc:84
 msgid "Exact Match"
-msgstr ""
+msgstr "Точное совпадение"
 
 #: src/im/table/table.desc:88
 msgid "Auto Phrase"
-msgstr ""
+msgstr "Автоматическая фраза"
 
 #: src/im/table/table.desc:93
 msgid ""
 "Keep current buffer when there is no match item and input length is equal "
 "code length"
-msgstr ""
+msgstr "Сохранять текущий буфер при отсутствии совпадающего элемента и равенства длин ввода и кода"
 
 #: src/im/table/table.desc:98
 msgid "Auto Phrase Length"
-msgstr ""
+msgstr "Длина автоматической фразы"
 
 #: src/im/table/table.desc:103
 msgid "Auto Phrase Phrase"
-msgstr ""
+msgstr "Фраза автоматической фразы"
 
 #: src/im/table/table.desc:108
 msgid "Save Auto Phrase"
-msgstr ""
+msgstr "Сохранить автоматическую фразу"
 
 #: src/im/table/table.desc:113
 msgid "Prompt Table Code"
@@ -2570,23 +2570,23 @@ msgstr "Подложка таблицы кандидатов"
 
 #: src/im/table/table.desc:121
 msgid "Not Set"
-msgstr ""
+msgstr "Не установлено"
 
 #: src/im/table/table.desc:122
 msgid "Vertical"
-msgstr ""
+msgstr "Вертикально"
 
 #: src/im/table/table.desc:123
 msgid "Horizontal"
-msgstr ""
+msgstr "Горизонтально"
 
 #: src/im/table/table.desc:131
 msgid "Symbol File"
-msgstr ""
+msgstr "Файл символа"
 
 #: src/im/table/table.desc:136
 msgid "Choose"
-msgstr ""
+msgstr "Выбрать"
 
 #: src/im/table/table.desc:151
 msgid "Language Code for this table"
@@ -2594,7 +2594,7 @@ msgstr "Языковой код для данной таблицы"
 
 #: src/im/table/table.desc:156
 msgid "Enable"
-msgstr ""
+msgstr "Включить"
 
 #: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
@@ -2602,27 +2602,27 @@ msgstr "Использовать пользовательскую строку �
 
 #: src/im/table/table.desc:166
 msgid "Keyboard Layout to be used"
-msgstr ""
+msgstr "Подложка клавиатуры для использования"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
-msgstr ""
+msgstr "Использовать число альтернативных слов-кандидатов"
 
 #: src/im/table/table.desc:183
 msgid "Use Alternative Key for paging"
-msgstr ""
+msgstr "Использовать альтернативную клавишу для перехода по страницам"
 
 #: src/im/table/table.desc:188
 msgid "Alternative Prev Page Key"
-msgstr ""
+msgstr "Альтернативная клавиша предыдущей страницы"
 
 #: src/im/table/table.desc:193
 msgid "Alternative Next Page Key"
-msgstr ""
+msgstr "Альтернативная клавиша следующей страницы"
 
 #: src/im/table/table.desc:198
 msgid "First Candidate Display as Preedit"
-msgstr ""
+msgstr "Первый кандидат для отображения в предварительном редактировании"
 
 #: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
@@ -2630,19 +2630,19 @@ msgstr "Ввести и перейти дальше при нажатии нев
 
 #: src/im/table/table.desc:208
 msgid "Commit key for select first candidate"
-msgstr ""
+msgstr "Ввести клавишу для выбора первого слова-кандидата"
 
 #: src/im/table/table.desc:213
 msgid "Commit string when there is no match"
-msgstr ""
+msgstr "Ввести строку, если нет совпадений"
 
 #: src/im/table/table.desc:218
 msgid "Ignore Punctuation"
-msgstr ""
+msgstr "Игнорировать пунктуацию"
 
 #: src/im/table/table.desc:223
 msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
-msgstr ""
+msgstr "Игнорировать некоторую пунктуацию, если пусто, а затем всю пунктуацию"
 
 #: src/module/autoeng/fcitx-autoeng.desc:1
 #: src/module/autoeng/fcitx-autoeng.desc:11
@@ -2650,73 +2650,73 @@ msgstr ""
 #: src/module/autoeng/fcitx-autoeng.desc:26
 #: src/module/autoeng/fcitx-autoeng.desc:34
 msgid "Auto English"
-msgstr ""
+msgstr "Автоматический английский"
 
 #: src/module/autoeng/fcitx-autoeng.desc:12
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
 #: src/module/quickphrase/fcitx-quickphrase.desc:26
 msgid "Do not show spell hint"
-msgstr ""
+msgstr "Не показывать подсказки по написанию"
 
 #: src/module/autoeng/fcitx-autoeng.desc:22
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:23
 #: src/module/quickphrase/fcitx-quickphrase.desc:36
 msgid "Maximum hint length"
-msgstr ""
+msgstr "Максимальная длина подсказки"
 
 #: src/module/autoeng/fcitx-autoeng.desc:23
 msgid "Maximum length of spell hint list for Auto English"
-msgstr ""
+msgstr "Максимальная длина списка подсказок по написанию для автоматического английского"
 
 #: src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
-msgstr ""
+msgstr "Максимальное количество слов для сохранения в предварительном редактировании"
 
 #: src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
-msgstr ""
+msgstr "0 для немедленного ввода, -1 для сохранения всех слов"
 
 #: src/module/autoeng/fcitx-autoeng.desc:37
 msgid "Add Extra space when selecting a candidate word"
-msgstr ""
+msgstr "Добавлять дополнительное место при выборе слова-кандидата"
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
 #: src/module/chttrans/fcitx-chttrans.desc:14
 msgid "TraditionalChinese"
-msgstr ""
+msgstr "Традиционный китайский"
 
 #: src/module/chttrans/fcitx-chttrans.desc:4
 msgid "Native"
-msgstr ""
+msgstr "Родной"
 
 #: src/module/chttrans/fcitx-chttrans.desc:5
 msgid "OpenCC"
-msgstr ""
+msgstr "OpenCC"
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
-msgstr ""
+msgstr "Движок перевода на традиционный китайский"
 
 #: src/module/chttrans/fcitx-chttrans.desc:12
 msgid "Toggle for enable or disable"
-msgstr ""
+msgstr "Переключить для вкл./выкл."
 
 #: src/module/chttrans/fcitx-chttrans.desc:17
 msgid "Enabled state for im"
-msgstr ""
+msgstr "Включено состояние для im"
 
 #: src/module/clipboard/fcitx-clipboard.desc:4
 msgid "Save Clipboard History To File"
-msgstr ""
+msgstr "Сохранять историю буфера обмена в файл"
 
 #: src/module/clipboard/fcitx-clipboard.desc:11
 msgid "Length of Clipboard History to Save"
-msgstr ""
+msgstr "Длина истории буфера обмена для сохранения"
 
 #: src/module/clipboard/fcitx-clipboard.desc:19
 msgid "Maximum length of each candidate word"
-msgstr ""
+msgstr "Максимальная длина каждого слова-кандидата"
 
 #: src/module/clipboard/fcitx-clipboard.desc:20
 msgid ""
@@ -2730,15 +2730,15 @@ msgstr ""
 
 #: src/module/clipboard/fcitx-clipboard.desc:30
 msgid "Use Selection Text"
-msgstr ""
+msgstr "Использовать текст выбора"
 
 #: src/module/clipboard/fcitx-clipboard.desc:31
 msgid "Include the text currently selected in clipboard history."
-msgstr ""
+msgstr "Включая текст текущего выбора в истории буфера обмена."
 
 #: src/module/clipboard/fcitx-clipboard.desc:45
 msgid "Ignore blank selections"
-msgstr ""
+msgstr "Игнорировать пустые выделения"
 
 #: src/module/imselector/fcitx-imselector.desc:1
 #: src/module/imselector/fcitx-imselector.desc:6
