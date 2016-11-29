@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-29 19:55+0000\n"
+"PO-Revision-Date: 2016-11-29 21:00+0000\n"
 "Last-Translator: TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -281,31 +281,31 @@ msgstr "${1} работает правильно."
 
 #: data/script/fcitx-diagnose.sh:933
 msgid "DBus interface:"
-msgstr ""
+msgstr "Интерфейс DBus:"
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
-msgstr ""
+msgstr "Использование ${1} для проверки dbus."
 
 #: data/script/fcitx-diagnose.sh:940
 msgid "Owner of DBus name ${1} is ${2}."
-msgstr ""
+msgstr "Владелец имени DBus ${1} — ${2}."
 
 #: data/script/fcitx-diagnose.sh:944
 msgid "Cannot find DBus name ${1} owner."
-msgstr ""
+msgstr "Не удается найти владельца имени DBus ${1}."
 
 #: data/script/fcitx-diagnose.sh:948
 msgid "PID of DBus name ${1} owner is ${2}."
-msgstr ""
+msgstr "PID владельца имени DBus ${1} — ${2}."
 
 #: data/script/fcitx-diagnose.sh:952
 msgid "Cannot find pid of DBus name ${1} owner."
-msgstr ""
+msgstr "Не удается найти PID владельца имени DBus ${1}."
 
 #: data/script/fcitx-diagnose.sh:956
 msgid "Unable to find a program to check dbus."
-msgstr ""
+msgstr "Не удается найти программу для проверки dbus."
 
 #: data/script/fcitx-diagnose.sh:992
 msgid "Config GUI for gtk${1}:"
@@ -479,15 +479,15 @@ msgstr "Найден immodules-кэш для GTK ${1} в ${2}."
 
 #: data/script/fcitx-diagnose.sh:1381
 msgid "Found immodule cache for unknown gtk version at ${1}."
-msgstr ""
+msgstr "Найден immodules-кэш для неизвестной версии GTK в ${1}."
 
 #: data/script/fcitx-diagnose.sh:1394
 msgid "Failed to find fcitx in immodule cache at ${1}"
-msgstr ""
+msgstr "Не удалось найти fcitx в immodules-кэше в ${1}"
 
 #: data/script/fcitx-diagnose.sh:1400
 msgid "Cannot find immodules cache for gtk ${1}"
-msgstr ""
+msgstr "Не удалось найти immodules-кэш для GTK ${1}"
 
 #: data/script/fcitx-diagnose.sh:1405
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
@@ -710,7 +710,7 @@ msgstr ""
 
 #: src/im/pinyin/py.c:729
 msgid "Press index to delete user phrase (ESC for cancel)"
-msgstr ""
+msgstr "Нажмите индекс для удаления пользовательской фразы (Esc — для отмены)"
 
 #: src/im/pinyin/py.c:743
 msgid "Press number to make word in frequent list"
@@ -836,7 +836,7 @@ msgstr "Отключить аддоны %s, зависимости %s не мо�
 
 #: src/lib/fcitx-config/fcitx-config.c:376
 msgid "Enum option duplicated."
-msgstr ""
+msgstr "Дубликат опции Enum."
 
 #: src/lib/fcitx-config/fcitx-config.c:386
 msgid "Enum option number must larger than 0"
@@ -863,7 +863,7 @@ msgstr "Ошибка в названии группы: строка %d"
 #: src/lib/fcitx-config/fcitx-config.c:901
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
-msgstr ""
+msgstr "Дубликат названия группы, объединение с предыдущим: %s :строка %d"
 
 #: src/lib/fcitx-config/fcitx-config.c:922
 #, c-format
@@ -898,7 +898,7 @@ msgstr "параметр по умолчанию для %s/%s отсутству
 #: src/lib/fcitx/frontend.c:530
 #, c-format
 msgid "Frontend: open %s fail %s"
-msgstr ""
+msgstr "Интерфейс: не удалось %s открыть %s"
 
 #: src/lib/fcitx/frontend.c:542
 msgid "Frontend: bad frontend"
@@ -906,17 +906,17 @@ msgstr "Интерфейс: некорректный интерфейс"
 
 #: src/lib/fcitx/frontend.c:565
 msgid "No available frontend"
-msgstr ""
+msgstr "Нет доступного интерфейса"
 
 #: src/lib/fcitx/ime.c:303
 #, c-format
 msgid "IM: open %s fail %s"
-msgstr ""
+msgstr "МВ: не удалось %s открыть %s"
 
 #: src/lib/fcitx/ime.c:322
 #, c-format
 msgid "IM: bad im %s"
-msgstr ""
+msgstr "МВ: некорректный метод ввода %s"
 
 #: src/lib/fcitx/ime.c:536
 msgid "No available Input Method"
@@ -933,11 +933,11 @@ msgstr "Скорость ввода:"
 
 #: src/lib/fcitx/ime.c:1800
 msgid "/min  Time Used: "
-msgstr ""
+msgstr "минимальное время:"
 
 #: src/lib/fcitx/ime.c:1803
 msgid "min Num of Characters: "
-msgstr ""
+msgstr "минимальное число символов:"
 
 #: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
 msgid "Use remind"
@@ -958,74 +958,74 @@ msgstr "ошибка pthread mutex init"
 #: src/lib/fcitx/module.c:61
 #, c-format
 msgid "Module: open %s fail %s"
-msgstr ""
+msgstr "Модуль: не удалось %s открыть %s"
 
 #: src/lib/fcitx/module.c:73
 msgid "Module: bad module"
-msgstr ""
+msgstr "Модуль: некорректный модель"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
-msgstr ""
+msgstr "Очистить"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
-msgstr ""
+msgstr "Влево"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
-msgstr ""
+msgstr "Вправо"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr ""
+msgstr "Пусто"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
-msgstr ""
+msgstr "Нажатая клавиша не поддерживается Qt."
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr ""
+msgstr "Клавиша не поддерживается"
 
 #: src/lib/fcitx/ui.c:192
 #, c-format
 msgid "UI: open %s fail %s"
-msgstr ""
+msgstr "Графический интерфейс: не удалось %s открыть %s"
 
 #: src/lib/fcitx/ui.c:205
 msgid "UI: bad ui"
-msgstr ""
+msgstr "Графический интерфейс: некорректный графический интерфейс"
 
 #: src/lib/fcitx-utils/desktop-parse.c:550
 #, c-format
 msgid "Invalid group name line @ line %d %s"
-msgstr ""
+msgstr "Некорректное название группы line @ line %d %s"
 
 #: src/lib/fcitx-utils/desktop-parse.c:562
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
-msgstr ""
+msgstr "Дубликат группы %s в файле desktop, строка %d, объединение с предыдущей."
 
 #: src/lib/fcitx-utils/desktop-parse.c:586
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
-msgstr ""
+msgstr "Не комментарий не принадлежит ни к какой группе %d %s"
 
 #: src/lib/fcitx-utils/desktop-parse.c:592
 #, c-format
 msgid "Invalid entry line @ line %d %s"
-msgstr ""
+msgstr "Неверная строка записи %d %s"
 
 #: src/lib/fcitx-utils/desktop-parse.c:602
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
-msgstr ""
+msgstr "Дубликат записи %s в группе %s, строка %d, перезапись предыдущей."
 
 #: src/module/autoeng/AutoEng.c:557
 msgid "Too long item for AutoEng"
-msgstr ""
+msgstr "Слишком длинный объект для AutoEng"
 
 #: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:456
 msgid "Press Enter to input text"
@@ -1062,7 +1062,7 @@ msgstr "Выберите для вставки"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:620
 msgid "Do not show again"
-msgstr ""
+msgstr "Больше не показывать"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1115,7 +1115,7 @@ msgstr "Настроить"
 #: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
 #: src/ui/kimpanel/kimpanel.c:786
 msgid "Restart"
-msgstr ""
+msgstr "Перезапустить"
 
 #: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:495
 msgid "Exit"
