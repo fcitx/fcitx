@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-29 07:00+0000\n"
+"PO-Revision-Date: 2016-11-29 07:05+0000\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -702,7 +702,7 @@ msgstr "Shuangpin"
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
-msgstr "No es pot trobar la base de dades de sistema del Pinyin."
+msgstr "No es pot trobar la base de dades de sistema del pinyin."
 
 #: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
@@ -729,7 +729,7 @@ msgstr "Premeu 1-%d per esborrar %s a la llista de freqüents (ESC per cancel·l
 #: src/im/pinyin/py.c:1672
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
-msgstr "No es pot desar la base de dades d'usuari del Pinyin: %s"
+msgstr "No es pot desar la base de dades d'usuari del pinyin: %s"
 
 #: src/im/pinyin/py.c:1735
 #, c-format
@@ -739,7 +739,7 @@ msgstr "No es pot desar la paraula freqüent: %s"
 #: src/im/pinyin/py.c:1798
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
-msgstr "No es pot desar l'índex del Pinyin: %s"
+msgstr "No es pot desar l'índex del pinyin: %s"
 
 #: src/im/pinyin/py.c:2059
 msgid "Remind: "
@@ -765,7 +765,7 @@ msgstr "Pinyin: "
 
 #: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
-msgstr "No s'ha pogut trobar el Pinyin"
+msgstr "No s'ha pogut trobar el pinyin"
 
 #: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
@@ -1512,7 +1512,7 @@ msgstr "Usa la disposició del teclat com a mètode d'entrada"
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:4
 msgid "Simple Pinyin support for Fcitx"
-msgstr "Suport Pinyin simple per al fcitx"
+msgstr "Suport pinyin simple per al fcitx"
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:9
 msgid "Shuang Pin Schema"
@@ -2316,7 +2316,7 @@ msgstr "Usa V per activar la frase ràpida"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
-msgstr "Usa el Pinyin complet"
+msgstr "Usa el pinyin complet"
 
 #: src/im/pinyin/fcitx-pinyin.desc:33
 msgid "Auto Create Phrase"
@@ -2441,7 +2441,7 @@ msgstr "Neteja la freqüència"
 
 #: src/im/table/fcitx-table.desc:24
 msgid "Lookup Pinyin"
-msgstr "Cerca Pinyin"
+msgstr "Cerca pinyin"
 
 #: src/im/table/table.desc:1 src/im/table/table.desc:6
 #: src/im/table/table.desc:10 src/im/table/table.desc:14
@@ -2498,11 +2498,11 @@ msgstr "Ordre de la taula de codis"
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
-msgstr "Usa Pinyin"
+msgstr "Usa pinyin"
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
-msgstr "Clau de Pinyin"
+msgstr "Clau de pinyin"
 
 #: src/im/table/table.desc:49
 msgid "Auto Send Candidate Word"
@@ -2798,22 +2798,22 @@ msgstr "Canvia al cinquè mètode de entrada"
 #: src/module/imselector/fcitx-imselector.desc:44
 #: src/module/imselector/fcitx-imselector.desc:89
 msgid "Switch to the Sixth Input Method"
-msgstr ""
+msgstr "Canvia al sisè mètode de entrada"
 
 #: src/module/imselector/fcitx-imselector.desc:49
 #: src/module/imselector/fcitx-imselector.desc:94
 msgid "Switch to the Seventh Input Method"
-msgstr ""
+msgstr "Canvia al setè mètode de entrada"
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
 msgid "Switch to the Eighth Input Method"
-msgstr ""
+msgstr "Canvia al vuitè mètode de entrada"
 
 #: src/module/imselector/fcitx-imselector.desc:59
 #: src/module/imselector/fcitx-imselector.desc:104
 msgid "Switch to the Ninth Input Method"
-msgstr ""
+msgstr "Canvia al novè mètode de entrada"
 
 #: src/module/imselector/fcitx-imselector.desc:61
 #: src/module/imselector/fcitx-imselector.desc:66
@@ -2825,7 +2825,7 @@ msgstr ""
 #: src/module/imselector/fcitx-imselector.desc:96
 #: src/module/imselector/fcitx-imselector.desc:101
 msgid "LocalSelector"
-msgstr ""
+msgstr "Selector local"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:1
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:7
@@ -2837,29 +2837,29 @@ msgstr ""
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:42
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:50
 msgid "Pinyin Enhance"
-msgstr ""
+msgstr "Millora de pinyin"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
 msgid "Treating abbreviated Pinyin as English"
-msgstr ""
+msgstr "Es tractarà el pinyin abreujat com a anglès"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
 msgid "Useful when you hardly ever use abbreviated pinyin."
-msgstr ""
+msgstr "Útil quan useu molt poc el pinyin abreujat"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
 msgid "Allow replacing the first candidate"
-msgstr ""
+msgstr "Permet el reemplaçament de la primera candidata"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:11
 msgid ""
 "Allow Pinyin Enhance to replace the first candidate word when the input "
 "string is very closed to English."
-msgstr ""
+msgstr "Permet la millora de pinyin reemplaçar la primera paraula candidata quan la cadena de caràcters d'entrada és molt propera a l'anglès."
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 msgid "Maximum length of spell hint list for Pinyin Enhance"
-msgstr ""
+msgstr "Longitud màxima de la pista d'ortografia per a la millora de pinyin"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:30
 msgid "Hotkey for Inputing Character From Phrase"
