@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-29 07:05+0000\n"
+"PO-Revision-Date: 2016-11-29 11:59+0000\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -2863,23 +2863,23 @@ msgstr "Longitud màxima de la pista d'ortografia per a la millora de pinyin"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:30
 msgid "Hotkey for Inputing Character From Phrase"
-msgstr ""
+msgstr "Drecera de teclat per entrar un caràcter des d'una frase"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:35
 msgid "Hotkey for switching to Inputing Character From Phrase mode"
-msgstr ""
+msgstr "Drecera de teclat per a canviar al mode d'entrar caràcters des d'una frase"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
 msgid "Disable Pinyin Symbol"
-msgstr ""
+msgstr "Desactiva el símbol de pinyin"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
-msgstr ""
+msgstr "Longitud mínima d'entrada per activar l'entrada per traços (establiu a -1 per desactivar)"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
-msgstr ""
+msgstr "Longitud de l'activador d'entrada per traços"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
 msgid "Maximum results from stroke input."
