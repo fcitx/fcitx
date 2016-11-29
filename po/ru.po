@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-29 21:00+0000\n"
+"PO-Revision-Date: 2016-11-29 21:56+0000\n"
 "Last-Translator: TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -1119,18 +1119,18 @@ msgstr "Перезапустить"
 
 #: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:495
 msgid "Exit"
-msgstr ""
+msgstr "Выход"
 
 #: src/module/notificationitem/notificationitem.c:456
 #: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:256
 msgid "No input window"
-msgstr ""
+msgstr "Нет окна ввода"
 
 #: src/module/notificationitem/notificationitem.c:462
 #: src/ui/kimpanel/kimpanel.c:281 src/ui/kimpanel/kimpanel.c:286
 #: data/config.desc:34
 msgid "Disabled"
-msgstr ""
+msgstr "Отключено"
 
 #: src/module/notificationitem/notificationitem.c:463
 #: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
@@ -1168,7 +1168,7 @@ msgstr "Используется латинская пунктуация."
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
 msgid "Space for %s Enter for %s"
-msgstr ""
+msgstr "Пробел для %s Enter для %s"
 
 #: src/module/quickphrase/quickphrase.c:378
 msgid "Quick Phrase: "
@@ -1245,7 +1245,7 @@ msgstr "Катакана"
 
 #: src/module/vk/vk.c:61
 msgid "Table Symbol"
-msgstr ""
+msgstr "Символы таблицы"
 
 #: src/module/vk/vk.c:154
 msgid "Toggle Virtual Keyboard"
@@ -1488,7 +1488,7 @@ msgstr ""
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
-msgstr ""
+msgstr "Интерфейс Fcitx DBus"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:4
 msgid "Frontend Used by IM Modules"
@@ -1556,11 +1556,11 @@ msgstr "Цзыжаньма (Ziranma)"
 
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
 msgid "Table"
-msgstr ""
+msgstr "Таблица"
 
 #: src/im/table/fcitx-table.conf.in:4
 msgid "Table Input Method for Fcitx"
-msgstr ""
+msgstr "Метод ввода таблиц для Fcitx"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:3
 msgid "Auto English Mode"
@@ -1636,7 +1636,7 @@ msgstr "Добавляет в Fcitx поддержку Lua-скриптов"
 #: src/module/notificationitem/fcitx-notificationitem.conf.in:3
 #: src/module/notificationitem/fcitx-notificationitem.conf.in:4
 msgid "DBus based new Freedesktop.org tray icon"
-msgstr ""
+msgstr "Новый значок области уведомлений DBus, основанный на Freedesktop.org"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
 msgid "Enchance pinyin input in Fcitx"
@@ -1661,7 +1661,7 @@ msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
-msgstr ""
+msgstr "Удобный ввод английской или пользовательской простой таблицы"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
@@ -1710,7 +1710,7 @@ msgstr ""
 #: src/module/xkbdbus/fcitx-xkbdbus.conf.in:3
 #: src/module/xkbdbus/fcitx-xkbdbus.conf.in:4
 msgid "X Keyboard Integration export with DBus"
-msgstr ""
+msgstr "Интеграция экспорта X Keyboard с DBus"
 
 #: src/module/xkb/fcitx-xkb.conf.in:3 src/module/xkb/fcitx-xkb.conf.in:4
 msgid "X Keyboard Integration"
@@ -1718,7 +1718,7 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
-msgstr ""
+msgstr "Классический"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
@@ -1726,11 +1726,11 @@ msgstr "Классический интерфейс с поддержкой ск
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:3
 msgid "Fcitx Skin Installer"
-msgstr ""
+msgstr "Мастер установки скинов Fcitx"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:4
 msgid "Installer Script for Fcitx Skin"
-msgstr ""
+msgstr "Скрипт для установки скинов Fcitx"
 
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:3
 msgid "Kimpanel"
@@ -1783,7 +1783,7 @@ msgstr "Категория"
 
 #: data/addon.desc:27
 msgid "Enabled"
-msgstr ""
+msgstr "Включено"
 
 #: data/addon.desc:31
 msgid "Library"
@@ -1862,7 +1862,7 @@ msgstr "Активация метода ввода"
 
 #: data/config.desc:10
 msgid "Use extra trigger key only after using it to inactivate"
-msgstr ""
+msgstr "Использовать дополнительную клавишу для активации метода ввода только после деактивации ей"
 
 #: data/config.desc:16
 msgid "R_CTRL"
@@ -1962,7 +1962,7 @@ msgstr "Задать горячую клавишу для пролистыван
 
 #: data/config.desc:68
 msgid "Include Inactivate when scrolling between Input Method"
-msgstr ""
+msgstr "Включая деактивацию при прокрутке между методами ввода"
 
 #: data/config.desc:74
 msgid "CTRL_SHIFT"
@@ -1986,7 +1986,7 @@ msgstr "Пролистывание методов ввода"
 
 #: data/config.desc:84
 msgid "Reload configuration"
-msgstr ""
+msgstr "Перезагрузить конфигурацию"
 
 #: data/config.desc:90
 msgid "Interval of Two Key Input"
@@ -2010,15 +2010,15 @@ msgstr "Переключение режима ввода полноширинн�
 
 #: data/config.desc:120
 msgid "Prev Page"
-msgstr ""
+msgstr "Предыдущая страница"
 
 #: data/config.desc:125
 msgid "Next Page"
-msgstr ""
+msgstr "Следующая страница"
 
 #: data/config.desc:130
 msgid "Choose Second and Third Candidate Word"
-msgstr ""
+msgstr "Выбор 2-го и 3-го слов-кандидатов"
 
 #: data/config.desc:136
 msgid "Saving All Config and Input History"
@@ -2026,11 +2026,11 @@ msgstr "Сохранение всех настроек и истории вво�
 
 #: data/config.desc:142
 msgid "Switch Embeded Preedit"
-msgstr ""
+msgstr "Переключение встроенного предварительного редактирования"
 
 #: data/config.desc:148
 msgid "Previous Candidate Word"
-msgstr ""
+msgstr "Предыдущее слово-кандидат"
 
 #: data/config.desc:149
 msgid ""
@@ -2040,7 +2040,7 @@ msgstr ""
 
 #: data/config.desc:155
 msgid "Next Candidate Word"
-msgstr ""
+msgstr "Следующее слово-кандидат"
 
 #: data/config.desc:156
 msgid ""
@@ -2050,7 +2050,7 @@ msgstr ""
 
 #: data/config.desc:159 data/config.desc:165 data/config.desc:174
 msgid "Program"
-msgstr ""
+msgstr "Программа"
 
 #: data/config.desc:162
 msgid "Seconds sleep before fcitx really start"
@@ -2058,27 +2058,27 @@ msgstr "Задержка в секундах перед запуском fcitx"
 
 #: data/config.desc:169
 msgid "No"
-msgstr ""
+msgstr "Нет"
 
 #: data/config.desc:170
 msgid "All"
-msgstr ""
+msgstr "Все"
 
 #: data/config.desc:171
 msgid "PerProgram"
-msgstr ""
+msgstr "Внутри программы"
 
 #: data/config.desc:172
 msgid "Share State Among Window"
-msgstr ""
+msgstr "Сообщать состояние другим окнам"
 
 #: data/config.desc:178
 msgid "Inactive"
-msgstr ""
+msgstr "Неактивно"
 
 #: data/config.desc:179
 msgid "Active"
-msgstr ""
+msgstr "Активно"
 
 #: data/config.desc:180
 msgid "Default Input Method State"
@@ -2087,7 +2087,7 @@ msgstr "Состояние метода ввода по умолчанию"
 #: data/config.desc:183 data/config.desc:189 data/config.desc:195
 #: data/config.desc:201 data/config.desc:208 data/config.desc:214
 msgid "Output"
-msgstr ""
+msgstr "Вывод"
 
 #: data/config.desc:186
 msgid "Type half width Punc After a Number"
@@ -2095,19 +2095,19 @@ msgstr "После чисел вводить полуширинные знаки
 
 #: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
-msgstr ""
+msgstr "Отключить пейджинг в режиме напоминания"
 
 #: data/config.desc:198
 msgid "Commit when toggle state"
-msgstr ""
+msgstr "Вводить при изменении состояния"
 
 #: data/config.desc:199
 msgid "Send typed raw text if Switch to inactive Mode"
-msgstr ""
+msgstr "Отправить напечатанный черновой текст при переключении в неактивный режим"
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
-msgstr ""
+msgstr "Номер слова-кандидата"
 
 #: data/config.desc:211
 msgid "Give the tips of Phrase"
@@ -2115,25 +2115,25 @@ msgstr "Давать подсказки для фразы"
 
 #: data/config.desc:217
 msgid "Do not commit preedit text when unfocus a window"
-msgstr ""
+msgstr "Не вводить предварительное редактирование, если окно неактивно"
 
 #: data/config.desc:220 data/config.desc:226 data/config.desc:232
 #: data/config.desc:238 data/config.desc:244 data/config.desc:250
 #: data/config.desc:256
 msgid "Appearance"
-msgstr ""
+msgstr "Внешний вид"
 
 #: data/config.desc:223
 msgid "Show Input Method Hint After Input method changed"
-msgstr ""
+msgstr "Показывать подсказку метода ввода после его изменения"
 
 #: data/config.desc:229
 msgid "Show Input Method Hint After Input method changed and Focus in"
-msgstr ""
+msgstr "Показывать подсказку метода ввода после его изменения и фокусироваться на нем"
 
 #: data/config.desc:235
 msgid "Input Method Hint will be only shown when state is active"
-msgstr ""
+msgstr "Подсказка метода ввода будет отображаться только при его активности"
 
 #: data/config.desc:241
 msgid "Show Input Speed"
@@ -2145,11 +2145,11 @@ msgstr "Показывать версию"
 
 #: data/config.desc:253
 msgid "Do not show input window if there is only preedit string"
-msgstr ""
+msgstr "Не показывать окно ввода, если в нем только строка предварительного редактирования"
 
 #: data/config.desc:259
 msgid "Do not show input window if there is only one candidate and preedit"
-msgstr ""
+msgstr "Не показывать окно ввода, если в нем только одно слово-кандидат и строка предварительного редактирования"
 
 #: data/inputmethod.desc:3
 msgid "UniqueName"
@@ -2178,11 +2178,11 @@ msgstr ""
 
 #: data/profile.desc:2
 msgid "Use Full Width Character"
-msgstr ""
+msgstr "Использовать полноширинный знак"
 
 #: data/profile.desc:7
 msgid "Use Wide Punctuation"
-msgstr ""
+msgstr "Использовать полноширинную пунктуацию"
 
 #: data/profile.desc:12
 msgid "Prompt the phrases after input"
@@ -2190,19 +2190,19 @@ msgstr ""
 
 #: data/profile.desc:17
 msgid "Current Input Method Name"
-msgstr ""
+msgstr "Текущее название метода ввода"
 
 #: data/profile.desc:22
 msgid "Current Enabled Input Method List"
-msgstr ""
+msgstr "Текущий список включенных методов ввода"
 
 #: data/profile.desc:29
 msgid "Show Preedit String in Client Window"
-msgstr ""
+msgstr "Отображать строку предварительного редактирования в окне клиента"
 
 #: src/frontend/xim/fcitx-xim.desc:1
 msgid "Xim"
-msgstr ""
+msgstr "Xim"
 
 #: src/frontend/xim/fcitx-xim.desc:4
 msgid "Use On The Spot Style for XIM (Cannot change during running)"
@@ -2466,15 +2466,15 @@ msgstr ""
 #: src/im/table/table.desc:212 src/im/table/table.desc:217
 #: src/im/table/table.desc:222
 msgid "CodeTable"
-msgstr ""
+msgstr "Кодовая таблица"
 
 #: src/im/table/table.desc:2
 msgid "Unique Name for Table"
-msgstr ""
+msgstr "Уникальное имя таблицы"
 
 #: src/im/table/table.desc:7
 msgid "Code Table Name"
-msgstr ""
+msgstr "Название кодовой таблицы"
 
 #: src/im/table/table.desc:11
 msgid "Icon Name"
@@ -2482,7 +2482,7 @@ msgstr ""
 
 #: src/im/table/table.desc:15
 msgid "Code Table File"
-msgstr ""
+msgstr "Файл кодовой таблицы"
 
 #: src/im/table/table.desc:28
 msgid "Level of simple code"
@@ -2494,7 +2494,7 @@ msgstr ""
 
 #: src/im/table/table.desc:34
 msgid "Order of Code Table"
-msgstr ""
+msgstr "Порядок кодовой таблицы"
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
@@ -2506,7 +2506,7 @@ msgstr ""
 
 #: src/im/table/table.desc:49
 msgid "Auto Send Candidate Word"
-msgstr ""
+msgstr "Автоматическая отправка слова-кандидата"
 
 #: src/im/table/table.desc:54
 msgid ""
@@ -2562,11 +2562,11 @@ msgstr ""
 
 #: src/im/table/table.desc:113
 msgid "Prompt Table Code"
-msgstr ""
+msgstr "Подсказка кодовой таблицы"
 
 #: src/im/table/table.desc:117
 msgid "Candidate Table Layout"
-msgstr ""
+msgstr "Подложка таблицы кандидатов"
 
 #: src/im/table/table.desc:121
 msgid "Not Set"
@@ -2590,7 +2590,7 @@ msgstr ""
 
 #: src/im/table/table.desc:151
 msgid "Language Code for this table"
-msgstr ""
+msgstr "Языковой код для данной таблицы"
 
 #: src/im/table/table.desc:156
 msgid "Enable"
@@ -2598,7 +2598,7 @@ msgstr ""
 
 #: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
-msgstr ""
+msgstr "Использовать пользовательскую строку подсказки из таблицы"
 
 #: src/im/table/table.desc:166
 msgid "Keyboard Layout to be used"
@@ -2626,7 +2626,7 @@ msgstr ""
 
 #: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
-msgstr ""
+msgstr "Ввести и перейти дальше при нажатии неверной клавиши в данной таблице"
 
 #: src/im/table/table.desc:208
 msgid "Commit key for select first candidate"
@@ -3109,7 +3109,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:53
 msgid "Table Code Color"
-msgstr ""
+msgstr "Код цвета таблицы"
 
 #: src/ui/classic/skin.desc:57
 msgid "Other Color"
@@ -3322,7 +3322,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:265
 msgid "Position or offset of LookupTable"
-msgstr ""
+msgstr "Положение или смещение LookupTable"
 
 #: src/ui/classic/skin.desc:269 src/ui/classic/skin.desc:277
 #: src/ui/classic/skin.desc:285
