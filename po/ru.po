@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-30 00:59+0000\n"
+"PO-Revision-Date: 2016-11-30 22:26+0000\n"
 "Last-Translator: TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -2367,47 +2367,47 @@ msgstr "Правило часто повторяющегося слова"
 
 #: src/im/pinyin/fcitx-pinyin.desc:85
 msgid "Fuzzy an and ang"
-msgstr "Fuzzy an и ang"
+msgstr "Нечеткое an и ang"
 
 #: src/im/pinyin/fcitx-pinyin.desc:90
 msgid "Fuzzy en and eng"
-msgstr "Fuzzy en и eng"
+msgstr "Нечеткое en и eng"
 
 #: src/im/pinyin/fcitx-pinyin.desc:95
 msgid "Fuzzy ian and iang"
-msgstr "Fuzzy ian и iang"
+msgstr "Нечеткое ian и iang"
 
 #: src/im/pinyin/fcitx-pinyin.desc:100
 msgid "Fuzzy in and ing"
-msgstr "Fuzzy in и ing"
+msgstr "Нечеткое in и ing"
 
 #: src/im/pinyin/fcitx-pinyin.desc:105
 msgid "Fuzzy ou and u"
-msgstr "Fuzzy ou и u"
+msgstr "Нечеткое ou и u"
 
 #: src/im/pinyin/fcitx-pinyin.desc:110
 msgid "Fuzzy uan and uang"
-msgstr "Fuzzy uan и uang"
+msgstr "Нечеткое uan и uang"
 
 #: src/im/pinyin/fcitx-pinyin.desc:115
 msgid "Fuzzy c and ch"
-msgstr "Fuzzy c и ch"
+msgstr "Нечеткое c и ch"
 
 #: src/im/pinyin/fcitx-pinyin.desc:120
 msgid "Fuzzy f and h"
-msgstr "Fuzzy f и h"
+msgstr "Нечеткое f и h"
 
 #: src/im/pinyin/fcitx-pinyin.desc:125
 msgid "Fuzzy l and n"
-msgstr "Fuzzy l и n"
+msgstr "Нечеткое l и n"
 
 #: src/im/pinyin/fcitx-pinyin.desc:130
 msgid "Fuzzy s and sh"
-msgstr "Fuzzy s и sh"
+msgstr "Нечеткое s и sh"
 
 #: src/im/pinyin/fcitx-pinyin.desc:135
 msgid "Fuzzy z and zh"
-msgstr "Fuzzy z и zh"
+msgstr "Нечеткое z и zh"
 
 #: src/im/pinyin/fcitx-pinyin.desc:140
 msgid "Fix misstype gn/ng"
