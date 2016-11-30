@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-29 22:42+0000\n"
+"PO-Revision-Date: 2016-11-30 00:00+0000\n"
 "Last-Translator: TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -2722,11 +2722,11 @@ msgstr "Максимальная длина каждого слова-канди
 msgid ""
 "Roughly the same length with this number of english letters, the actual "
 "length depends on the font and the content"
-msgstr ""
+msgstr "Почти одинаковая длина с количеством английских букв, настоящая длина зависит от шрифта и содержимого"
 
 #: src/module/clipboard/fcitx-clipboard.desc:25
 msgid "Trigger Key for Clipboard History List"
-msgstr ""
+msgstr "Клавиша переключения для списка историй буфера обмена"
 
 #: src/module/clipboard/fcitx-clipboard.desc:30
 msgid "Use Selection Text"
@@ -2744,19 +2744,19 @@ msgstr "Игнорировать пустые выделения"
 #: src/module/imselector/fcitx-imselector.desc:6
 #: src/module/imselector/fcitx-imselector.desc:11
 msgid "IMSelector"
-msgstr ""
+msgstr "IMSelector"
 
 #: src/module/imselector/fcitx-imselector.desc:4
 msgid "Local Input Method SelectKey"
-msgstr ""
+msgstr "Клавиша выбора локального метода ввода"
 
 #: src/module/imselector/fcitx-imselector.desc:9
 msgid "Global Input Method SelectKey"
-msgstr ""
+msgstr "Клавиша выбора глобального метода ввода"
 
 #: src/module/imselector/fcitx-imselector.desc:14
 msgid "Clear local Input Method"
-msgstr ""
+msgstr "Очистить локальный метод ввода"
 
 #: src/module/imselector/fcitx-imselector.desc:16
 #: src/module/imselector/fcitx-imselector.desc:21
@@ -2768,52 +2768,52 @@ msgstr ""
 #: src/module/imselector/fcitx-imselector.desc:51
 #: src/module/imselector/fcitx-imselector.desc:56
 msgid "GlobalSelector"
-msgstr ""
+msgstr "GlobalSelector"
 
 #: src/module/imselector/fcitx-imselector.desc:19
 #: src/module/imselector/fcitx-imselector.desc:64
 msgid "Switch to the First Input Method"
-msgstr ""
+msgstr "Переключиться на первый метод ввода"
 
 #: src/module/imselector/fcitx-imselector.desc:24
 #: src/module/imselector/fcitx-imselector.desc:69
 msgid "Switch to the Second Input Method"
-msgstr ""
+msgstr "Переключиться на второй метод ввода"
 
 #: src/module/imselector/fcitx-imselector.desc:29
 #: src/module/imselector/fcitx-imselector.desc:74
 msgid "Switch to the Third Input Method"
-msgstr ""
+msgstr "Переключиться на третий метод ввода"
 
 #: src/module/imselector/fcitx-imselector.desc:34
 #: src/module/imselector/fcitx-imselector.desc:79
 msgid "Switch to the Fourth Input Method"
-msgstr ""
+msgstr "Переключиться на четвертый метод ввода"
 
 #: src/module/imselector/fcitx-imselector.desc:39
 #: src/module/imselector/fcitx-imselector.desc:84
 msgid "Switch to the Fifth Input Method"
-msgstr ""
+msgstr "Переключиться на пятый метод ввода"
 
 #: src/module/imselector/fcitx-imselector.desc:44
 #: src/module/imselector/fcitx-imselector.desc:89
 msgid "Switch to the Sixth Input Method"
-msgstr ""
+msgstr "Переключиться на шестой метод ввода"
 
 #: src/module/imselector/fcitx-imselector.desc:49
 #: src/module/imselector/fcitx-imselector.desc:94
 msgid "Switch to the Seventh Input Method"
-msgstr ""
+msgstr "Переключиться на седьмой метод ввода"
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
 msgid "Switch to the Eighth Input Method"
-msgstr ""
+msgstr "Переключиться на восьмой метод ввода"
 
 #: src/module/imselector/fcitx-imselector.desc:59
 #: src/module/imselector/fcitx-imselector.desc:104
 msgid "Switch to the Ninth Input Method"
-msgstr ""
+msgstr "Переключиться на девятый метод ввода"
 
 #: src/module/imselector/fcitx-imselector.desc:61
 #: src/module/imselector/fcitx-imselector.desc:66
@@ -2825,7 +2825,7 @@ msgstr ""
 #: src/module/imselector/fcitx-imselector.desc:96
 #: src/module/imselector/fcitx-imselector.desc:101
 msgid "LocalSelector"
-msgstr ""
+msgstr "LocalSelector"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:1
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:7
@@ -2837,59 +2837,59 @@ msgstr ""
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:42
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:50
 msgid "Pinyin Enhance"
-msgstr ""
+msgstr "Расширенный пиньинь"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
 msgid "Treating abbreviated Pinyin as English"
-msgstr ""
+msgstr "Обрабатывать сокращенный пиньинь как английский"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
 msgid "Useful when you hardly ever use abbreviated pinyin."
-msgstr ""
+msgstr "Полезно при трудностях с использованием сокращенного пиньинь."
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
 msgid "Allow replacing the first candidate"
-msgstr ""
+msgstr "Разрешать замену первого слова-кандидата"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:11
 msgid ""
 "Allow Pinyin Enhance to replace the first candidate word when the input "
 "string is very closed to English."
-msgstr ""
+msgstr "Разрешать расширенному пиньинь заменять первое слово-кандидат, когда строка ввода очень похожа на английский."
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 msgid "Maximum length of spell hint list for Pinyin Enhance"
-msgstr ""
+msgstr "Максимальная длина подсказки по написанию для расширенного пиньинь"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:30
 msgid "Hotkey for Inputing Character From Phrase"
-msgstr ""
+msgstr "Горячая клавиша для ввода симола из фразы"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:35
 msgid "Hotkey for switching to Inputing Character From Phrase mode"
-msgstr ""
+msgstr "Горячая клавиша для переключения символа ввода из режима фразы"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
 msgid "Disable Pinyin Symbol"
-msgstr ""
+msgstr "Отключить символ пиньинь"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
-msgstr ""
+msgstr "Минимальная длина ввода для переключения (установите -1 для отключения)"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
-msgstr ""
+msgstr "Длина переключения ввода"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
 msgid "Maximum results from stroke input."
-msgstr ""
+msgstr "Максимальный результат ввода."
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
 msgid ""
 "This is only a soft limit, the actually number of candidate words may be "
 "larger than this when multiple characters have the same order of strokes."
-msgstr ""
+msgstr "Это только программное ограничение, на самом деле количество слов-кандидатов может быть больше, когда множество символов имеют одинаковый порядок."
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:1
 #: src/module/quickphrase/fcitx-quickphrase.desc:10
@@ -2897,64 +2897,64 @@ msgstr ""
 #: src/module/quickphrase/fcitx-quickphrase.desc:25
 #: src/module/quickphrase/fcitx-quickphrase.desc:31
 msgid "QuickPhrase"
-msgstr ""
+msgstr "Быстрая фраза"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:6
 msgid "Semicolon"
-msgstr ""
+msgstr "Точка с запятой"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:7
 msgid "Grave"
-msgstr ""
+msgstr "Grave"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:8
 msgid "Trigger Key for QuickPhrase"
-msgstr ""
+msgstr "Клавиша переключения быстрой фразы"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:13
 msgid "Alternative Trigger Key for QuickPhrase"
-msgstr ""
+msgstr "Альтернативная клавиша переключения быстрой фразы"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:37
 msgid "Maximum length of spell hint list for Quick Phrase"
-msgstr ""
+msgstr "Максимальная длина списка подсказок по написанию для быстрой фразы"
 
 #: src/module/spell/fcitx-spell.desc:1 src/module/spell/fcitx-spell.desc:10
 msgid "Spell Hint"
-msgstr ""
+msgstr "Подсказка по написанию"
 
 #: src/module/spell/fcitx-spell.desc:6
 msgid "Aspell"
-msgstr ""
+msgstr "Aspell"
 
 #: src/module/spell/fcitx-spell.desc:7
 msgid "Myspell"
-msgstr ""
+msgstr "Myspell"
 
 #: src/module/spell/fcitx-spell.desc:8
 msgid "Preferred Enchant provider"
-msgstr ""
+msgstr "Предпочитаемый поставщик Enchant"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
-msgstr ""
+msgstr "Стандартный порядок подсказок по написанию"
 
 #: src/module/spell/fcitx-spell.desc:14
 msgid "Possible Providers: presage, custom, enchant (separate with comma)"
-msgstr ""
+msgstr "Возможные поставщики: presage, custom, enchant (отдельно с comma)"
 
 #: src/module/unicode/fcitx-unicode.desc:1
 msgid "Unicode"
-msgstr ""
+msgstr "Unicode"
 
 #: src/module/xkb/fcitx-xkb.desc:1 src/module/xkb/fcitx-xkb.desc:6
 #: src/module/xkb/fcitx-xkb.desc:12 src/module/xkb/fcitx-xkb.desc:17
 msgid "X Keyboard"
-msgstr ""
+msgstr "X Keyboard"
 
 #: src/module/xkb/fcitx-xkb.desc:4
 msgid "Allow to Override System XKB Settings"
-msgstr ""
+msgstr "Разрешать перезаписывать системные настройки XKB"
 
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid ""
@@ -2970,11 +2970,11 @@ msgstr ""
 
 #: src/module/xkb/fcitx-xkb.desc:15
 msgid "xmodmap command"
-msgstr ""
+msgstr "команда xmodmap"
 
 #: src/module/xkb/fcitx-xkb.desc:20
 msgid "Apply this custom xmodmap script after layout change"
-msgstr ""
+msgstr "Применить данный пользовательский скрипт xmodmap после изменения подложки"
 
 #: src/ui/classic/fcitx-classic-ui.desc:1
 #: src/ui/classic/fcitx-classic-ui.desc:7
@@ -2987,15 +2987,15 @@ msgstr ""
 #: src/ui/classic/fcitx-classic-ui.desc:51
 #: src/ui/classic/fcitx-classic-ui.desc:56
 msgid "ClassicUI"
-msgstr ""
+msgstr "Классический интерфейс"
 
 #: src/ui/classic/fcitx-classic-ui.desc:2
 msgid "Status Panel Position X"
-msgstr ""
+msgstr "Позиция X панели состояния"
 
 #: src/ui/classic/fcitx-classic-ui.desc:8
 msgid "Status Panel Position Y"
-msgstr ""
+msgstr "Позиция Y панели состояния"
 
 #: src/ui/classic/fcitx-classic-ui.desc:16
 msgid "Font Size"
@@ -3003,7 +3003,7 @@ msgstr "Размер шрифта"
 
 #: src/ui/classic/fcitx-classic-ui.desc:18
 msgid "Override the skin font size"
-msgstr ""
+msgstr "Перезаписывать размер шрифта скина"
 
 #: src/ui/classic/fcitx-classic-ui.desc:23
 msgid "Font"
@@ -3015,56 +3015,56 @@ msgstr "Шрифт меню"
 
 #: src/ui/classic/fcitx-classic-ui.desc:33
 msgid "Font Locale to display"
-msgstr ""
+msgstr "Шрифт локали для отображения"
 
 #: src/ui/classic/fcitx-classic-ui.desc:39
 msgid "Use System Tray Icon"
-msgstr ""
+msgstr "Использовать значок в области уведомлений"
 
 #: src/ui/classic/fcitx-classic-ui.desc:44
 msgid "Show"
-msgstr ""
+msgstr "Показывать"
 
 #: src/ui/classic/fcitx-classic-ui.desc:45
 msgid "Auto"
-msgstr ""
+msgstr "Автоматически"
 
 #: src/ui/classic/fcitx-classic-ui.desc:46
 msgid "Hide when tray icon is available"
-msgstr ""
+msgstr "Скрывать при включенном значке в области уведомлений"
 
 #: src/ui/classic/fcitx-classic-ui.desc:47
 msgid "Hide"
-msgstr ""
+msgstr "Скрывать"
 
 #: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
-msgstr ""
+msgstr "Режим скрытия панели состояния"
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
-msgstr ""
+msgstr "Вертикальный список слов-кандидатов"
 
 #: src/ui/classic/fcitx-classic-ui.desc:59 src/ui/classic/skin.desc:3
 msgid "Skin Name"
-msgstr ""
+msgstr "Название скина"
 
 #: src/ui/classic/skin.desc:1 src/ui/classic/skin.desc:5
 #: src/ui/classic/skin.desc:9 src/ui/classic/skin.desc:13
 msgid "SkinInfo"
-msgstr ""
+msgstr "Информация о скине"
 
 #: src/ui/classic/skin.desc:7
 msgid "Skin Version"
-msgstr ""
+msgstr "Версия скина"
 
 #: src/ui/classic/skin.desc:11
 msgid "Skin Author"
-msgstr ""
+msgstr "Автор скина"
 
 #: src/ui/classic/skin.desc:15
 msgid "Description of Skin"
-msgstr ""
+msgstr "Описание скина"
 
 #: src/ui/classic/skin.desc:17 src/ui/classic/skin.desc:21
 #: src/ui/classic/skin.desc:26 src/ui/classic/skin.desc:31
@@ -3073,51 +3073,51 @@ msgstr ""
 #: src/ui/classic/skin.desc:51 src/ui/classic/skin.desc:55
 #: src/ui/classic/skin.desc:59 src/ui/classic/skin.desc:63
 msgid "SkinFont"
-msgstr ""
+msgstr "Шрифт скина"
 
 #: src/ui/classic/skin.desc:19
 msgid "Input Font Size"
-msgstr ""
+msgstr "Размер шрифта ввода"
 
 #: src/ui/classic/skin.desc:23
 msgid "Menu Font Size"
-msgstr ""
+msgstr "Размер шрифта меню"
 
 #: src/ui/classic/skin.desc:28
 msgid "Font sizes respect dpi setting"
-msgstr ""
+msgstr "Настройка отношения рамера шрифта в точках на дюйм"
 
 #: src/ui/classic/skin.desc:33
 msgid "Tip Message Color"
-msgstr ""
+msgstr "Цвет сообщения подсказки"
 
 #: src/ui/classic/skin.desc:37
 msgid "Input Message Color"
-msgstr ""
+msgstr "Цвет сообщения ввода"
 
 #: src/ui/classic/skin.desc:41
 msgid "Candidate Index Color"
-msgstr ""
+msgstr "Цвет индекса кандидата"
 
 #: src/ui/classic/skin.desc:45
 msgid "First Candidate Color"
-msgstr ""
+msgstr "Цвет первого кандидата"
 
 #: src/ui/classic/skin.desc:49
 msgid "User Phrase Color"
-msgstr ""
+msgstr "Цвет фразы пользователя"
 
 #: src/ui/classic/skin.desc:53
 msgid "Table Code Color"
-msgstr "Код цвета таблицы"
+msgstr "Цвет кода таблицы"
 
 #: src/ui/classic/skin.desc:57
 msgid "Other Color"
-msgstr ""
+msgstr "Другой цвет"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
-msgstr ""
+msgstr "Цвет символов активного меню"
 
 #: src/ui/classic/skin.desc:65
 msgid "Inactive Menu Item Character Color"
