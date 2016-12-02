@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2016-11-30 22:26+0000\n"
+"PO-Revision-Date: 2016-12-02 00:55+0000\n"
 "Last-Translator: TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -1221,15 +1221,15 @@ msgstr "Русская"
 
 #: src/module/vk/vk.c:55
 msgid "Index"
-msgstr "Индекс"
+msgstr "Индексная"
 
 #: src/module/vk/vk.c:56
 msgid "Math"
-msgstr "Математические"
+msgstr "Математическая"
 
 #: src/module/vk/vk.c:57
 msgid "Number"
-msgstr "Числовые"
+msgstr "Числовая"
 
 #: src/module/vk/vk.c:58
 msgid "Special"
