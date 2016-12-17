@@ -188,7 +188,7 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
     spell->dictLang = strdup(lang);
 }
 
-#define GET_NTH(p, size, i) (*((typeof(p))(((void*)p) + size * i)))
+#define GET_NTH(p, size, i) (*((__typeof__(p))(((void*)p) + size * i)))
 
 int
 SpellCalListSizeWithSize(char **list, int count, int size)
