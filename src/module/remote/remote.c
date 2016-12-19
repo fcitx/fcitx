@@ -121,7 +121,7 @@ int CreateSocket(const char *name)
 
 int UdAccept(int listenfd)
 {
-    for (;;) {
+    for (int i =0;i<20;i++) {
         int newsock = 0;
         struct sockaddr_un cliaddr;
         socklen_t len = sizeof(struct sockaddr_un);
@@ -135,6 +135,7 @@ int UdAccept(int listenfd)
 
         return newsock;
     }
+    return -1;
 }
 
 static void SendIMState(FcitxRemote* remote, int fd)
