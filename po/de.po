@@ -4,16 +4,16 @@
 #
 # Translators:
 # mar well <m.wellendorf@gmx.de>, 2012-2013
-# mar well <m.wellendorf@gmx.de>, 2014
+# mar well <m.wellendorf@gmx.de>, 2014,2017
 # csslayer <wengxt@gmail.com>, 2013,2015
 # csslayer <wengxt@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-04-18 12:01-0700\n"
-"PO-Revision-Date: 2016-04-18 18:04+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2017-01-21 23:01-0800\n"
+"PO-Revision-Date: 2017-01-22 06:06+0000\n"
+"Last-Translator: mar well <m.wellendorf@gmx.de>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -128,7 +128,7 @@ msgstr "<Private Use High Surrogate>"
 
 #: src/module/unicode/charselectdata.c:251
 msgid "<Private Use>"
-msgstr ""
+msgstr "<Private Use>"
 
 #: src/module/unicode/charselectdata.c:279
 msgid "<not assigned>"
@@ -391,7 +391,7 @@ msgstr "Hintergrundgraphik"
 
 #: data/script/fcitx-diagnose.sh:779
 msgid "Bash Version:"
-msgstr ""
+msgstr "Bash Version:"
 
 #: data/script/fcitx-diagnose.sh:655
 msgid "Beginner's Guide"
@@ -491,7 +491,7 @@ msgstr "${2} für gtk ${1} kann nicht gefunden werden"
 
 #: data/script/fcitx-diagnose.sh:944
 msgid "Cannot find DBus name ${1} owner."
-msgstr ""
+msgstr "Kann den Eigentümer vom dbus mit Namen $(1) nicht finden."
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
@@ -553,7 +553,7 @@ msgstr "Kann keine kimpanel DBus- oder andere aktivierte Schnittstelle finden."
 
 #: data/script/fcitx-diagnose.sh:952
 msgid "Cannot find pid of DBus name ${1} owner."
-msgstr ""
+msgstr "Kann die PID des Eigentümers des dbus mit Namen $(1) nicht finden."
 
 #: data/script/fcitx-diagnose.sh:1107
 msgid "Cannot find xim_server on root window."
@@ -576,7 +576,7 @@ msgstr ""
 #: src/ui/classic/skin.c:126
 #, c-format
 msgid "Cannot load skin %s, return to default"
-msgstr ""
+msgstr "Kann die Oberfläche %s nicht finden, zurück zu Default"
 
 #: data/script/fcitx-diagnose.sh:1549
 msgid "Cannot read im list from fcitx profile."
@@ -777,11 +777,11 @@ msgstr "Konfigurationsdatei"
 msgid "Configuration:"
 msgstr "Konfiguration:"
 
-#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:493
+#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:502
 msgid "Configure"
 msgstr "Konfigurieren"
 
-#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
+#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:501
 #: src/ui/kimpanel/kimpanel.c:781
 msgid "Configure Current Input Method"
 msgstr "Aktuelle Eingabemethode konfigurieren"
@@ -879,7 +879,7 @@ msgstr "DBus basiertes, neues Trayicon von Freedesktop.org"
 
 #: data/script/fcitx-diagnose.sh:933
 msgid "DBus interface:"
-msgstr ""
+msgstr "DBus Interface:"
 
 #: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"
@@ -1133,7 +1133,7 @@ msgstr "Genaue Übereinstimmung"
 msgid "Exec"
 msgstr "Exec"
 
-#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:495
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:504
 msgid "Exit"
 msgstr "Beenden"
 
@@ -2065,9 +2065,9 @@ msgstr "Kein Eingabefenster"
 msgid "No local input method"
 msgstr "Keine lokale Eingabemethode"
 
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:554
 msgid "No remind"
-msgstr ""
+msgstr "Nicht erinnern"
 
 #: src/lib/fcitx-utils/desktop-parse.c:586
 #, c-format
@@ -2084,7 +2084,7 @@ msgstr "Nicht beibehalten"
 
 #: src/im/table/table.desc:121
 msgid "Not Set"
-msgstr ""
+msgstr "Nicht ausgewählt"
 
 #: data/script/fcitx-diagnose.sh:682
 msgid "Note for GNOME Later than 3.6"
@@ -2094,7 +2094,7 @@ msgstr "Hinweis für GNOME höher als 3.6"
 msgid "Number"
 msgstr "Nummer"
 
-#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:431
+#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:440
 msgid "Online Help"
 msgstr "Online Hilfe"
 
@@ -2151,11 +2151,11 @@ msgstr "Fontgröße der Skin ignorieren"
 
 #: data/script/fcitx-diagnose.sh:940
 msgid "Owner of DBus name ${1} is ${2}."
-msgstr ""
+msgstr "Eigentümer des dbus mit dem Namen ${1} ist ${2}."
 
 #: data/script/fcitx-diagnose.sh:948
 msgid "PID of DBus name ${1} owner is ${2}."
-msgstr ""
+msgstr "Die PID vom Eigentümer des dbus mit Namen $(1) ist $(2)."
 
 #: data/inputmethod.desc:23
 msgid "Parent"
@@ -2467,7 +2467,7 @@ msgstr "Korrektur Größe Rand rechts"
 msgid "Resize Margin Top"
 msgstr "Korrektur Größe Rand oben"
 
-#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
+#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:503
 #: src/ui/kimpanel/kimpanel.c:786
 msgid "Restart"
 msgstr "Neustart"
@@ -2967,9 +2967,9 @@ msgstr "Zwischen halb- und vollbreiten Zeichen wechseln"
 msgid "Toggle Input Method"
 msgstr "Wechsel Eingabemethode"
 
-#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:553
+#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:555
 msgid "Toggle Remind"
-msgstr ""
+msgstr "Erinnern ausblenden"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 msgid "Toggle Simp/Trad Chinese Conversion"
@@ -3063,7 +3063,7 @@ msgstr "UI: Das öffnen von %s ist fehlgeschlagen %s"
 
 #: data/script/fcitx-diagnose.sh:956
 msgid "Unable to find a program to check dbus."
-msgstr ""
+msgstr "Kann kein Programm zum Überprüfen des dbusses finden."
 
 #: src/module/unicode/fcitx-unicode.desc:1
 msgid "Unicode"
@@ -3160,9 +3160,9 @@ msgstr ""
 "Extra Triggertaste nur benutzen, wenn sie vorher zum inaktivieren benutzt "
 "wurde"
 
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:554
 msgid "Use remind"
-msgstr ""
+msgstr "Erinnern"
 
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Use the layout of first keyboard input method in list as default layout"
@@ -3192,11 +3192,11 @@ msgstr "Farbe nutzerdefinierter Phrasen"
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
-msgstr ""
+msgstr "Benutze $(1) um dbus zu überprüfen"
 
 #: data/script/fcitx-diagnose.sh:1294 data/script/fcitx-diagnose.sh:1377
 msgid "Version Line:"
-msgstr ""
+msgstr "Version Line:"
 
 #: src/im/table/table.desc:122
 msgid "Vertical"
@@ -3460,7 +3460,7 @@ msgstr "kein gültiger Font"
 msgid "process:"
 msgstr "Prozess:"
 
-#: src/lib/fcitx/instance.c:528
+#: src/lib/fcitx/instance.c:530
 msgid "pthread mutex init failed"
 msgstr "Initialisierung von pthread mutex fehlgeschlagen"
 
