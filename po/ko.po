@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-02-02 19:02-0800\n"
-"PO-Revision-Date: 2017-02-03 02:32+0000\n"
+"POT-Creation-Date: 2017-02-02 21:02-0800\n"
+"PO-Revision-Date: 2017-02-03 04:24+0000\n"
 "Last-Translator: heavyuser <heavyuser73@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -304,7 +304,7 @@ msgstr "다른 이전 페이지 키"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:13
 msgid "Alternative Trigger Key for QuickPhrase"
-msgstr "QuickPhrase를 위한 다른 트리거 키"
+msgstr "QuickPhrase의 대체 트리거 키"
 
 #: data/config.desc:220 data/config.desc:226 data/config.desc:232
 #: data/config.desc:238 data/config.desc:244 data/config.desc:250
@@ -603,7 +603,7 @@ msgstr "선택"
 
 #: data/config.desc:130
 msgid "Choose Second and Third Candidate Word"
-msgstr ""
+msgstr "두 번째 및 세 번째 후보 단어 선택"
 
 #: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:141
 #: src/module/autoeng/fcitx-autoeng.desc:2
@@ -643,7 +643,7 @@ msgstr ""
 #: src/ui/classic/fcitx-classic-ui.desc:51
 #: src/ui/classic/fcitx-classic-ui.desc:56
 msgid "ClassicUI"
-msgstr ""
+msgstr "클래식UI"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
@@ -924,7 +924,7 @@ msgstr "디렉터리:"
 
 #: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
-msgstr "Remind 모드에서 페이징 끄기"
+msgstr "다시 알림 모드에서 페이징 사용 안 함"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
 msgid "Disable Pinyin Symbol"
@@ -1423,7 +1423,7 @@ msgstr ""
 
 #: data/config.desc:211
 msgid "Give the tips of Phrase"
-msgstr "Phrase의 팀 주기"
+msgstr "구문의 팁 주기"
 
 #: src/module/imselector/fcitx-imselector.desc:9
 msgid "Global Input Method SelectKey"
@@ -1806,7 +1806,7 @@ msgstr ""
 
 #: src/module/clipboard/fcitx-clipboard.desc:11
 msgid "Length of Clipboard History to Save"
-msgstr ""
+msgstr "저장할 클립보드 히스토리의 길이"
 
 #: src/im/table/table.desc:28
 msgid "Level of simple code"
@@ -2726,15 +2726,15 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
-msgstr ""
+msgstr "상태 패널 숨기기 모드"
 
 #: src/ui/classic/fcitx-classic-ui.desc:2
 msgid "Status Panel Position X"
-msgstr ""
+msgstr "상태 패널 위치 X"
 
 #: src/ui/classic/fcitx-classic-ui.desc:8
 msgid "Status Panel Position Y"
-msgstr ""
+msgstr "상태 패널 위치 Y"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
@@ -2762,7 +2762,7 @@ msgstr ""
 
 #: data/config.desc:142
 msgid "Switch Embeded Preedit"
-msgstr "Embeded Preedit 전환"
+msgstr "내장 사전 전환"
 
 #: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
@@ -2819,7 +2819,7 @@ msgstr "Full Width Character 모드 전환"
 
 #: data/config.desc:102
 msgid "Switching Remind Mode"
-msgstr "Remind 모드 전환"
+msgstr "다시 알림 모드 전환"
 
 #: data/config.desc:96
 msgid "Switching Virtual Keyboard"
@@ -2981,11 +2981,11 @@ msgstr "입력기 전환"
 
 #: src/module/clipboard/fcitx-clipboard.desc:25
 msgid "Trigger Key for Clipboard History List"
-msgstr ""
+msgstr "클립보드 히스토리 목록의 트리거 키"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:8
 msgid "Trigger Key for QuickPhrase"
-msgstr "ー"
+msgstr "QuickPhrase에 대한 트리거 키"
 
 #: data/addon.desc:38
 msgid "Type"
