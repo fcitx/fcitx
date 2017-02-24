@@ -594,7 +594,7 @@ FcitxXkbFindOrAddLayout(FcitxXkb *xkb, const char *layout, const char *variant, 
         return index;
     if (!(index < 0 || (index > 0 && toDefault)))
         return index;
-    if (xkb->blockOverride) {
+    if (!xkb->blockOverride) {
         FcitxXkbAddNewLayout(xkb, layout, variant, toDefault, index);
     }
     FcitxXkbInitDefaultLayout(xkb);
@@ -837,6 +837,7 @@ static void FcitxXkbScheduleRefresh(void* arg) {
     FcitxUIUpdateInputWindow(xkb->owner);
     FcitxXkbInitDefaultLayout(xkb);
     // we shall now ignore all outside world change, apply only if we do it on our own
+    FcitxLog(INFO, "REFRESH!!!");
     xkb->blockOverride = true;
     FcitxXkbCurrentStateChanged(xkb);
     if (xkb->waitingForRefresh) {
