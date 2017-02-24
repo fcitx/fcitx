@@ -837,7 +837,6 @@ static void FcitxXkbScheduleRefresh(void* arg) {
     FcitxUIUpdateInputWindow(xkb->owner);
     FcitxXkbInitDefaultLayout(xkb);
     // we shall now ignore all outside world change, apply only if we do it on our own
-    FcitxLog(INFO, "REFRESH!!!");
     xkb->blockOverride = true;
     FcitxXkbCurrentStateChanged(xkb);
     if (xkb->waitingForRefresh) {
