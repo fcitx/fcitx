@@ -594,7 +594,9 @@ FcitxXkbFindOrAddLayout(FcitxXkb *xkb, const char *layout, const char *variant, 
         return index;
     if (!(index < 0 || (index > 0 && toDefault)))
         return index;
-    FcitxXkbAddNewLayout(xkb, layout, variant, toDefault, index);
+    if (xkb->blockOverride) {
+        FcitxXkbAddNewLayout(xkb, layout, variant, toDefault, index);
+    }
     FcitxXkbInitDefaultLayout(xkb);
     return FcitxXkbFindLayoutIndex(xkb, layout, variant);
 }
@@ -705,8 +707,10 @@ static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
                 }
             }
         }
-        if (!FcitxXkbSetLayoutByName(xkb, layoutString, variantString, false)) {
-            FcitxXkbRetrieveCloseGroup(xkb);
+        if (layoutString) {
+            if (!FcitxXkbSetLayoutByName(xkb, layoutString, variantString, false)) {
+                FcitxXkbRetrieveCloseGroup(xkb);
+            }
         }
         if (s) {
             fcitx_utils_free_string_list(s);
@@ -833,10 +837,13 @@ static void FcitxXkbScheduleRefresh(void* arg) {
     FcitxUIUpdateInputWindow(xkb->owner);
     FcitxXkbInitDefaultLayout(xkb);
     // we shall now ignore all outside world change, apply only if we do it on our own
+    xkb->blockOverride = true;
+    FcitxXkbCurrentStateChanged(xkb);
     if (xkb->waitingForRefresh) {
         xkb->waitingForRefresh = false;
         FcitxXkbApplyCustomScript(xkb);
     }
+    xkb->blockOverride = false;
 }
 
 static boolean FcitxXkbEventHandler(void* arg, XEvent* event)
