@@ -397,6 +397,9 @@ dbus_init_failed:
 
 void DBusDestroy(void* arg) {
     FcitxDBus* dbusmodule = (FcitxDBus*)arg;
+
+    fcitx_handler_table_free(dbusmodule->handler);
+
     if (dbusmodule->conn) {
         dbus_bus_release_name(dbusmodule->conn, dbusmodule->serviceName, NULL);
         dbus_connection_unref(dbusmodule->conn);
@@ -407,8 +410,6 @@ void DBusDestroy(void* arg) {
     }
     DBusKill(&dbusmodule->daemon);
     free(dbusmodule->serviceName);
-
-    fcitx_handler_table_free(dbusmodule->handler);
 
     dbus_shutdown();
 
