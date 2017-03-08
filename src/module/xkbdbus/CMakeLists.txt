@@ -14,6 +14,6 @@ endif()
 set(FCITX_XKBDBUS_SOURCES
   xkbdbus.c
   ../../im/keyboard/isocodes.c)
-fcitx_add_addon_full(xkbdbus ${xkbdbus_noinstall}
+fcitx_add_addon_full(xkbdbus SCAN SCAN_PRIV ${xkbdbus_noinstall}
   SOURCES ${FCITX_XKBDBUS_SOURCES}
   LINK_LIBS ${FCITX_XKBDBUS_LINK_LIBS})

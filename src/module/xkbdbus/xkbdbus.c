@@ -28,14 +28,22 @@
 #include "fcitx/module.h"
 #include "im/keyboard/isocodes.h"
 
+#define GNOME_HELPER_NAME "org.fcitx.GnomeHelper"
+#define GNOME_HELPER_PATH "/org/fcitx/GnomeHelper"
+#define GNOME_HELPER_INTERFACE "org.fcitx.GnomeHelper"
+
 static void* FcitxXkbDBusCreate(struct _FcitxInstance* instance);
 static void FcitxXkbDBusDestroy(void* arg);
+static void FcitxXkbDBusHelperOwnerChanged(void* user_data, void* arg, const char* serviceName, const char* oldName, const char* newName);
+DECLARE_ADDFUNCTIONS(XkbDBus)
 typedef struct _FcitxXkbDBus {
     FcitxInstance* owner;
     FcitxXkbRules* rules;
     FcitxIsoCodes* isocodes;
     DBusConnection* conn;
     DBusConnection* privconn;
+    int watcherId;
+    boolean hasHelper;
 } FcitxXkbDBus;
 
 FCITX_DEFINE_PLUGIN(fcitx_xkbdbus, module, FcitxModule) = {
@@ -120,8 +128,17 @@ void* FcitxXkbDBusCreate(FcitxInstance* instance)
         if (!rules)
             break;
 
+        int id = FcitxDBusWatchName(instance, "org.fcitx.GnomeHelper", xkbdbus,
+                                    FcitxXkbDBusHelperOwnerChanged, NULL, NULL);
+        if (id == 0) {
+            break;
+        }
+
+        xkbdbus->watcherId = id;
+
         xkbdbus->rules = rules;
         xkbdbus->isocodes = FcitxXkbReadIsoCodes(ISOCODES_ISO639_XML, ISOCODES_ISO3166_XML);
+        FcitxXkbDBusAddFunctions(instance);
         return xkbdbus;
     } while(0);
 
@@ -133,6 +150,10 @@ void* FcitxXkbDBusCreate(FcitxInstance* instance)
 void FcitxXkbDBusDestroy(void* arg)
 {
     FcitxXkbDBus* xkbdbus = arg;
+
+    if (xkbdbus->watcherId) {
+        FcitxDBusUnwatchName(xkbdbus->owner, xkbdbus->watcherId);
+    }
 
     if (xkbdbus->conn) {
         dbus_connection_unregister_object_path(xkbdbus->conn, FCITX_XKB_PATH);
@@ -286,3 +307,44 @@ DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
     }
     return result;
 }
+
+void FcitxXkbDBusHelperOwnerChanged(void* user_data, void* arg, const char* serviceName, const char* oldName, const char* newName) {
+    FCITX_UNUSED(oldName);
+    FcitxXkbDBus* xkbdbus = user_data;
+    /* old die and no new one */
+    if (strcmp(serviceName, GNOME_HELPER_NAME) == 0) {
+        if (strlen(newName) > 0) {
+            xkbdbus->hasHelper = true;
+        } else {
+            xkbdbus->hasHelper = false;
+        }
+    }
+}
+
+boolean FcitxXkbDBusLockGroupByHelper(FcitxXkbDBus *xkbdbus, int idx) {
+    DBusMessage* msg;
+    if (!xkbdbus->hasHelper) {
+        return false;
+    }
+    // create a signal and check for errors
+    msg = dbus_message_new_method_call(GNOME_HELPER_NAME,
+                                       GNOME_HELPER_PATH,
+                                       GNOME_HELPER_INTERFACE,
+                                       "LockXkbGroup");
+    do {
+        if (!msg) {
+            break;
+        }
+        if (!dbus_message_append_args(
+                msg,
+                DBUS_TYPE_INT32, &idx,
+                DBUS_TYPE_INVALID
+                )) {
+            break;
+        }
+        dbus_connection_send(xkbdbus->conn, msg, NULL);
+    } while(0);
+    return true;
+}
+
+#include "fcitx-xkbdbus-addfunctions.h"
