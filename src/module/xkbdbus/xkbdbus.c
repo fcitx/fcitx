@@ -35,6 +35,7 @@
 static void* FcitxXkbDBusCreate(struct _FcitxInstance* instance);
 static void FcitxXkbDBusDestroy(void* arg);
 static void FcitxXkbDBusHelperOwnerChanged(void* user_data, void* arg, const char* serviceName, const char* oldName, const char* newName);
+static void FcitxXkbDBusHelperServiceExistCallback(DBusPendingCall *call, void *data);
 DECLARE_ADDFUNCTIONS(XkbDBus)
 typedef struct _FcitxXkbDBus {
     FcitxInstance* owner;
@@ -135,6 +136,24 @@ void* FcitxXkbDBusCreate(FcitxInstance* instance)
         }
 
         xkbdbus->watcherId = id;
+
+        const char* helper = GNOME_HELPER_NAME;
+        DBusMessage* message = dbus_message_new_method_call(DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, DBUS_INTERFACE_DBUS, "NameHasOwner");
+        dbus_message_append_args(message, DBUS_TYPE_STRING, &helper, DBUS_TYPE_INVALID);
+
+        DBusPendingCall* call = NULL;
+        dbus_bool_t reply =
+            dbus_connection_send_with_reply(xkbdbus->conn, message,
+                                            &call, DBUS_TIMEOUT_USE_DEFAULT);
+        if (reply == TRUE) {
+            dbus_pending_call_set_notify(call,
+                                         FcitxXkbDBusHelperServiceExistCallback,
+                                         xkbdbus,
+                                         NULL);
+            dbus_pending_call_unref(call);
+        }
+        dbus_connection_flush(xkbdbus->conn);
+        dbus_message_unref(message);
 
         xkbdbus->rules = rules;
         xkbdbus->isocodes = FcitxXkbReadIsoCodes(ISOCODES_ISO639_XML, ISOCODES_ISO3166_XML);
@@ -346,5 +365,26 @@ boolean FcitxXkbDBusLockGroupByHelper(FcitxXkbDBus *xkbdbus, int idx) {
     } while(0);
     return true;
 }
+
+
+void FcitxXkbDBusHelperServiceExistCallback(DBusPendingCall *call, void *data)
+{
+    FcitxXkbDBus* xkbdbus = (FcitxXkbDBus*) data;
+    DBusMessage *msg = dbus_pending_call_steal_reply(call);
+
+    if (msg) {
+        dbus_bool_t has = FALSE;
+        DBusError error;
+        dbus_error_init(&error);
+        dbus_message_get_args(msg, &error, DBUS_TYPE_BOOLEAN, &has,
+                              DBUS_TYPE_INVALID);
+        dbus_message_unref(msg);
+        if (!dbus_error_is_set(&error)) {
+            xkbdbus->hasHelper = has;
+        }
+        dbus_error_free(&error);
+    }
+}
+
 
 #include "fcitx-xkbdbus-addfunctions.h"
