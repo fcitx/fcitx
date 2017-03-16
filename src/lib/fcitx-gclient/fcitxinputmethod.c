@@ -319,7 +319,9 @@ fcitx_input_method_set_property(GObject      *object,
     switch (property_id) {
     case PROP_CURRENT_IM:
         current_im = g_value_dup_string(value);
-        fcitx_input_method_set_current_im(proxy, current_im);
+        if (current_im && current_im[0]) {
+            fcitx_input_method_set_current_im(proxy, current_im);
+        }
         g_free(current_im);
         break;
     default:
