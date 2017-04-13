@@ -168,7 +168,6 @@ void OnException(int signo)
     _write_string(fd, "\n");
 
 #if defined(ENABLE_BACKTRACE)
-#define BACKTRACE_SIZE 32
     void *array[BACKTRACE_SIZE] = { NULL, };
 
     int size = backtrace(array, BACKTRACE_SIZE);
