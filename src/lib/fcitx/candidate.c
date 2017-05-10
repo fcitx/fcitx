@@ -303,8 +303,14 @@ boolean FcitxCandidateWordGoPrevPage(FcitxCandidateWordList* candList)
     if (!FcitxCandidateWordPageCount(candList))
         return false;
     if (FcitxCandidateWordHasPrev(candList)) {
+        FcitxCandidateWordGetFocus(candList, true);
+        
         candList->currentPage -- ;
         candList->hasGonePrevPage = true;
+
+        FcitxCandidateWordSetType(FcitxCandidateWordGetCurrentWindow(candList), 
+            MSG_CANDIATE_CURSOR);
+        
         return true;
     }
     return false;
@@ -324,8 +330,14 @@ boolean FcitxCandidateWordGoNextPage(FcitxCandidateWordList* candList)
     if (!FcitxCandidateWordPageCount(candList))
         return false;
     if (FcitxCandidateWordHasNext(candList)) {
+        FcitxCandidateWordGetFocus(candList, true);
+
         candList->currentPage ++ ;
         candList->hasGoneNextPage = true;
+
+        FcitxCandidateWordSetType(FcitxCandidateWordGetCurrentWindow(candList), 
+            MSG_CANDIATE_CURSOR);
+
         return true;
     }
     return false;
