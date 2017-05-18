@@ -1522,7 +1522,7 @@ _request_surrounding_text (FcitxIMContext **context)
         /* some unref can happen here */
         g_signal_emit (*context, _signal_retrieve_surrounding_id, 0,
                        &return_value);
-        if (context)
+        if (*context)
             g_object_remove_weak_pointer ((GObject *) *context,
                                           (gpointer *) context);
         else
