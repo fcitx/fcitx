@@ -156,8 +156,6 @@ fcitx_input_method_get_imlist(FcitxInputMethod* im)
  * Get Fcitx all im list
  *
  * Returns: (transfer full) (element-type FcitxIMItem): A #FcitxIMItem List
- *
- * Rename to: fcitx_input_method_get_imlist
  **/
 FCITX_EXPORT_API
 GPtrArray*
