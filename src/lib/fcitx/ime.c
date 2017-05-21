@@ -219,6 +219,11 @@ void FcitxInstanceInitBuiltInHotkey(FcitxInstance *instance)
     hk.arg = instance;
     FcitxInstanceRegisterHotkeyFilter(instance, hk);
 
+    hk.hotkey = FCITX_CTRL_M;
+    hk.hotkeyhandle = ImProcessEnter;
+    hk.arg = instance;
+    FcitxInstanceRegisterHotkeyFilter(instance, hk);
+
     hk.hotkey = FCITX_ESCAPE;
     hk.hotkeyhandle = ImProcessEscape;
     hk.arg = instance;
