@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-07-08 02:02-0700\n"
-"PO-Revision-Date: 2017-07-08 08:59+0000\n"
+"POT-Creation-Date: 2017-07-08 04:02-0700\n"
+"PO-Revision-Date: 2017-07-08 10:54+0000\n"
 "Last-Translator: Bon Keun Seo <scobyseo@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -268,7 +268,7 @@ msgstr "발견한 GTK ${1} 입력 모듈 파일이 모두 존재합니다."
 
 #: data/script/fcitx-diagnose.sh:1517
 msgid "All libraries for all addons are found."
-msgstr ""
+msgstr "모든 애드온을 위한 모든 라이브러리를 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:805
 msgid "All locale:"
@@ -425,7 +425,7 @@ msgstr "Ctrl+Super"
 
 #: src/frontend/xim/xim.c:146
 msgid "Can't Create imWindow"
-msgstr ""
+msgstr "imWindow를 만들 수 없음"
 
 #: src/module/punc/punc.c:410
 msgid "Can't open punc file."
@@ -455,17 +455,17 @@ msgstr "Cangjie"
 #: src/im/pinyin/py.c:1735
 #, c-format
 msgid "Cannot Save Frequent word: %s"
-msgstr ""
+msgstr "자주 사용되는 단어를 저장할 수 없음: %s"
 
 #: src/im/pinyin/py.c:1798
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
-msgstr ""
+msgstr "병음 일련번호를 저장할 수 없음: %s"
 
 #: src/im/pinyin/py.c:1672
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
-msgstr ""
+msgstr "사용자 병음 데이터 베이스를 저장할 수 없음: %s"
 
 #: data/script/fcitx-diagnose.sh:925
 msgid "Cannot connect to fcitx correctly."
@@ -490,7 +490,7 @@ msgstr "DBus ${1}의 소유자를 찾을 수 없습니다."
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
-msgstr ""
+msgstr "병음 시스템 데이터 베이스를 찾을 수 없습니다!"
 
 #: data/script/fcitx-diagnose.sh:1040
 msgid ""
@@ -500,7 +500,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1520
 msgid "Cannot find enabled fcitx user interface!"
-msgstr ""
+msgstr "활성화된 fcitx 사용자 인터페이스를 찾을 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:1440
 msgid "Cannot find fcitx addon config directory."
@@ -528,11 +528,11 @@ msgstr "fcitx-configtool 실행 파일을 찾을 수 없습니다!"
 
 #: data/script/fcitx-diagnose.sh:1499
 msgid "Cannot find file ${1} of addon ${2}."
-msgstr ""
+msgstr "애드온 ${2}의 파일 ${1}을 찾을 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:1509
 msgid "Cannot find following required libraries for ${1} of addon ${2}."
-msgstr ""
+msgstr "애드온 ${2}의 ${1}을 위한 다음 라이브러리를 찾을 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:1400
 msgid "Cannot find immodules cache for gtk ${1}"
@@ -542,6 +542,8 @@ msgstr "GTK ${1}의 입력 모듈 캐시를 찾을 수 없음"
 msgid ""
 "Cannot find kimpanel dbus interface or enabled non-kimpanel user interface."
 msgstr ""
+"kimpanel DBus 인터베이스나 활성화된 기타 사용자 인터페이스를 찾을 수 없습니"
+"다."
 
 #: data/script/fcitx-diagnose.sh:952
 msgid "Cannot find pid of DBus name ${1} owner."
@@ -570,7 +572,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1549
 msgid "Cannot read im list from fcitx profile."
-msgstr ""
+msgstr "fcitx ᅟ프로파일에서 입력도구 목록을 읽을 수 없습니다."
 
 #: tools/gui/quickphrase-editor/editor.cpp:322
 msgid "Cannot remove system file"
@@ -1273,11 +1275,11 @@ msgstr "${1}개의 활성화된 애드온:"
 
 #: data/script/fcitx-diagnose.sh:1570
 msgid "Found ${1} enabled input methods:"
-msgstr ""
+msgstr "${1}개의 활성화된 입력 방식을 찾음:"
 
 #: data/script/fcitx-diagnose.sh:1522
 msgid "Found ${1} enabled user interface addons:"
-msgstr ""
+msgstr "${1}개의 활성화된 사용자 인터페이스 애드온을 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:919
 msgid "Found ${1} fcitx process:"
@@ -1358,7 +1360,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1676
 msgid "Frontends setup:"
-msgstr ""
+msgstr "프론트엔드 설정:"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1758,7 +1760,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1531
 msgid "Kimpanel process:"
-msgstr ""
+msgstr "kimpanel 프로세스:"
 
 #: data/config.desc:24
 msgid "L_ALT"
@@ -1863,7 +1865,7 @@ msgstr "지역화:"
 
 #: data/script/fcitx-diagnose.sh:1689
 msgid "Log:"
-msgstr "로그"
+msgstr "로그:"
 
 #: src/ui/classic/skin.desc:73
 msgid "Logo Icon"
@@ -1949,7 +1951,7 @@ msgstr "메뉴 폰트 크기"
 
 #: src/im/pinyin/py.c:2141
 msgid "Migrate the old file path to the new one"
-msgstr "오래된 파일 경로를 새로운것으로 마이그레이션"
+msgstr "오래된 파일 경로를 새로운 곳으로 이전하기"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
@@ -2162,7 +2164,7 @@ msgstr "문장:"
 #: src/im/pinyin/fcitx-pinyin.desc:127 src/im/pinyin/fcitx-pinyin.desc:132
 #: src/im/pinyin/fcitx-pinyin.desc:137 src/im/pinyin/fcitx-pinyin.desc:142
 msgid "Pinyin"
-msgstr "Pinyin"
+msgstr "병음(Pinyin)"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:1
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:7
@@ -2178,7 +2180,7 @@ msgstr ""
 
 #: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
-msgstr ""
+msgstr "병음 매직 일련번호가 일치하지 않음"
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
@@ -2209,7 +2211,7 @@ msgstr ""
 
 #: src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
-msgstr ""
+msgstr "XMODIFIERS를 설정하세요."
 
 #: data/script/fcitx-diagnose.sh:663
 msgid ""
@@ -2238,12 +2240,12 @@ msgstr ""
 #: src/im/pinyin/py.c:769
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
-msgstr ""
+msgstr "%s을 자주 사용하는 목록에서 지우려면 1을 누르세요 (취소는 ESC)"
 
 #: src/im/pinyin/py.c:771
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
-msgstr ""
+msgstr "%s을 자주 사용하는 목록에서 지우려면 1-%d을 누르세요 (취소는 ESC)"
 
 #: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:456
 msgid "Press Enter to input text"
@@ -2251,11 +2253,11 @@ msgstr "텍스트를 입력하기위해 엔터를 누르세요"
 
 #: src/im/pinyin/py.c:729
 msgid "Press index to delete user phrase (ESC for cancel)"
-msgstr ""
+msgstr "사용자 문구를 삭제하려면 일련번호를 누르세요 (취소는 ESC)"
 
 #: src/im/pinyin/py.c:743
 msgid "Press number to make word in frequent list"
-msgstr ""
+msgstr "단어를 자주 사용하는 목록에 넣으려면 숫자를 누르세요"
 
 #: data/config.desc:120
 msgid "Prev Page"
@@ -2727,7 +2729,7 @@ msgstr "입력기 시작"
 #: src/frontend/xim/xim.c:239
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
-msgstr ""
+msgstr "XIM 시작 에러. %s이라는 이름의 다른 XIM 데몬이 동작 중입니다."
 
 #: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
@@ -3235,7 +3237,7 @@ msgstr "루트 창의 XIM_SERVERS:"
 
 #: src/frontend/xim/xim.c:157
 msgid "XMODIFIERS Error."
-msgstr ""
+msgstr "XMODIFIERS 에러."
 
 #: data/script/fcitx-diagnose.sh:1068
 msgid "XMODIFIERS is not set"
@@ -3287,13 +3289,13 @@ msgstr "xim을 ${1} 프로그램에서 사용 중입니다."
 
 #: data/script/fcitx-diagnose.sh:1578
 msgid "You don't have any input methods enabled."
-msgstr ""
+msgstr "활성화된 입력 방식이 없습니다."
 
 #: data/script/fcitx-diagnose.sh:1590
 msgid ""
 "You have a keyboard input method \"${1}\" correctly added as your default "
 "input method."
-msgstr ""
+msgstr "키보드 입력 방식 \"${1}\"을 기본 입력 방식으로 등록했습니다."
 
 #: data/script/fcitx-diagnose.sh:1145
 msgid "You may have trouble using fcitx in ${1} programs."
@@ -3304,12 +3306,16 @@ msgid ""
 "You only have one input method enabled, please add a keyboard input method "
 "as the first one and your main input method as the second one."
 msgstr ""
+"하나의 입력 방식만 활성화되었습니다. 새 키보드 입력 방식을 기본으로 등록하"
+"고, 현재 입력 방식을 두 번째로 설정하세요."
 
 #: data/script/fcitx-diagnose.sh:1582
 msgid ""
 "You only have one keyboard input method enabled. You may want to add another "
 "input method to input other languages."
 msgstr ""
+"하나의 키보드 입력 방식만 활성화되었습니다. 다른 언어를 입력하기 위해 새로운 "
+"입력 방식을 추가할 수 있습니다."
 
 #: data/script/fcitx-configtool.sh:147
 msgid ""
@@ -3354,6 +3360,8 @@ msgid ""
 "Your first (default) input method is ${1} instead of a keyboard input "
 "method. You may have trouble deactivate fcitx."
 msgstr ""
+"첫번째 (기본) 입력 방식은 ${1}이며 키보드 입력 방식이 아닙니다. fcitx를 비활"
+"성화할 때 문제가 발생할 수 있습니다."
 
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"
