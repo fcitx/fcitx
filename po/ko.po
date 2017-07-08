@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
+# Bon Keun Seo <scobyseo@gmail.com>, 2017
 # heavyuser <heavyuser73@gmail.com>, 2014,2016-2017
 # JeongHun Kim <jhkim@hancom.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-02-02 21:02-0800\n"
-"PO-Revision-Date: 2017-02-03 04:24+0000\n"
-"Last-Translator: heavyuser <heavyuser73@gmail.com>\n"
+"POT-Creation-Date: 2017-07-08 02:02-0700\n"
+"PO-Revision-Date: 2017-07-08 08:59+0000\n"
+"Last-Translator: Bon Keun Seo <scobyseo@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -25,15 +26,15 @@ msgstr "Ctrl+Delete 지우기"
 
 #: data/script/fcitx-diagnose.sh:850
 msgid "${1} Environment Variables:"
-msgstr ""
+msgstr "${1} 환경변수값:"
 
 #: data/script/fcitx-diagnose.sh:859
 msgid "${1} is not set."
-msgstr ""
+msgstr "${1}은 설정되지 않았습니다."
 
 #: data/script/fcitx-diagnose.sh:856
 msgid "${1} is set to ${2}."
-msgstr ""
+msgstr "${1}은 ${2}로 설정되었습니다."
 
 #: data/script/fcitx-diagnose.sh:514
 msgid "${1} not found."
@@ -228,15 +229,15 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1438
 msgid "Addon Config Dir:"
-msgstr ""
+msgstr "애드온 설정 경로:"
 
 #: data/script/fcitx-diagnose.sh:1491
 msgid "Addon Libraries:"
-msgstr ""
+msgstr "애드온 모음집:"
 
 #: data/script/fcitx-diagnose.sh:1452
 msgid "Addon List:"
-msgstr ""
+msgstr "애드온 목록:"
 
 #: src/im/table/fcitx-table.desc:14 src/im/table/table.desc:19
 msgid "Adjust Order"
@@ -263,7 +264,7 @@ msgstr "모두"
 
 #: data/script/fcitx-diagnose.sh:1256
 msgid "All found Gtk ${1} immodule files exist."
-msgstr ""
+msgstr "발견한 GTK ${1} 입력 모듈 파일이 모두 존재합니다."
 
 #: data/script/fcitx-diagnose.sh:1517
 msgid "All libraries for all addons are found."
@@ -271,7 +272,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:805
 msgid "All locale:"
-msgstr ""
+msgstr "모든 지역화:"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:11
 msgid ""
@@ -481,11 +482,11 @@ msgstr "데스크톱 환경을 확인할 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:1317
 msgid "Cannot find ${2} for gtk ${1}"
-msgstr ""
+msgstr "GTK ${1}의 ${2}를 찾을 수 없음"
 
 #: data/script/fcitx-diagnose.sh:944
 msgid "Cannot find DBus name ${1} owner."
-msgstr ""
+msgstr "DBus ${1}의 소유자를 찾을 수 없습니다."
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
@@ -495,6 +496,7 @@ msgstr ""
 msgid ""
 "Cannot find a GUI config tool, please install one of ${1}, ${2}, or ${3}."
 msgstr ""
+"GUI 설정 도구를 찾을 수 없습니다. ${1}, ${2}, ${3} 중 하나를 설치해 주세요."
 
 #: data/script/fcitx-diagnose.sh:1520
 msgid "Cannot find enabled fcitx user interface!"
@@ -502,7 +504,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1440
 msgid "Cannot find fcitx addon config directory."
-msgstr ""
+msgstr "fcitx 애드온 설정 경로를 찾을 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:888
 msgid "Cannot find fcitx executable!"
@@ -510,15 +512,15 @@ msgstr "fcitx 실행 파일을 찾을 수 없습니다!"
 
 #: data/script/fcitx-diagnose.sh:1405
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
-msgstr ""
+msgstr "캐시에서 GTK ${1}의 fcitx 입력 모듈을 찾을 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:1323
 msgid "Cannot find fcitx im module for gtk ${1}."
-msgstr ""
+msgstr "GTK ${1}의 fcitx 입력 모듈을 찾을 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:1197 data/script/fcitx-diagnose.sh:1202
 msgid "Cannot find fcitx input method module for ${1}."
-msgstr "。"
+msgstr "${1}을 위한 입력 방식 모듈을 찾지 못했습니다."
 
 #: data/script/fcitx-diagnose.sh:1030
 msgid "Cannot find fcitx-configtool executable!"
@@ -534,7 +536,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1400
 msgid "Cannot find immodules cache for gtk ${1}"
-msgstr ""
+msgstr "GTK ${1}의 입력 모듈 캐시를 찾을 수 없음"
 
 #: data/script/fcitx-diagnose.sh:1539
 msgid ""
@@ -543,11 +545,11 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:952
 msgid "Cannot find pid of DBus name ${1} owner."
-msgstr ""
+msgstr "DBus ${1} 소유자의 PID를 찾을 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:1107
 msgid "Cannot find xim_server on root window."
-msgstr ""
+msgstr "루트 창에서 xim_server를 찾을 수 없습니다."
 
 #: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
@@ -555,7 +557,7 @@ msgstr "Pinyin를 찾을 수 없음"
 
 #: data/script/fcitx-diagnose.sh:1081
 msgid "Cannot interpret XMODIFIERS: ${1}."
-msgstr ""
+msgstr "XMODIFIERS를 해석할 수 없음: ${1}"
 
 #: src/ui/classic/skin.c:121
 msgid "Cannot load default skin, is installation correct?"
@@ -826,7 +828,7 @@ msgstr "현재 입력기 이름"
 
 #: data/script/fcitx-diagnose.sh:839
 msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr ""
+msgstr "현재 fcitx 설정 경로는 ${1} (${2}) 입니다."
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
@@ -834,7 +836,7 @@ msgstr "현재 로컬 입력기는 "
 
 #: data/script/fcitx-diagnose.sh:807
 msgid "Current locale:"
-msgstr "현재 로케일:"
+msgstr "현재 지역화:"
 
 #: data/script/fcitx-diagnose.sh:844
 msgid "Current user:"
@@ -1024,7 +1026,7 @@ msgstr ""
 msgid "End Key"
 msgstr "End 키"
 
-#: src/module/xkbdbus/xkbdbus.c:218
+#: src/module/xkbdbus/xkbdbus.c:258
 msgid "English (US)"
 msgstr ""
 
@@ -1049,6 +1051,8 @@ msgid ""
 "Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
 "you have exported it incorrectly in any of your init files."
 msgstr ""
+"환경변수 ${1}은 \"${3}\"이 아니라 \"${2}\"입니다. 초기설정 파일에서 잘못 설정"
+"하지 않았는지 확인하세요."
 
 #: data/script/fcitx-diagnose.sh:825
 msgid "Environment variable ${1} is not set."
@@ -1056,7 +1060,7 @@ msgstr "환경 변수 ${1}이 설정 안됨."
 
 #: data/script/fcitx-diagnose.sh:1053
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
-msgstr ""
+msgstr "환경변수 ${1}이 ${2}로 올바로 설정되었습니다."
 
 #: data/script/fcitx-diagnose.sh:829
 msgid "Environment variable ${1} is set to ${2}."
@@ -1072,7 +1076,7 @@ msgstr "Erbi"
 
 #: data/script/fcitx-diagnose.sh:811
 msgid "Error occurs when running ${1}. Please check your locale settings."
-msgstr ""
+msgstr "${1} 을 수행하는 중 에러가 발생하였습니다. 지역화 설정을 확인하세요."
 
 #: tools/gui/quickphrase-editor/editor.cpp:343
 #, kde-format
@@ -1120,11 +1124,11 @@ msgstr "트리거 입력 방법을 위한 추가 키"
 
 #: data/script/fcitx-diagnose.sh:1394
 msgid "Failed to find fcitx in immodule cache at ${1}"
-msgstr ""
+msgstr "${1}의 입력 모듈 캐시에서 fcitx를 찾을 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:1311
 msgid "Failed to find fcitx in the output of ${1}"
-msgstr ""
+msgstr "${1}의 출력 내용에서 fcitx를 찾을 수 없음"
 
 #: data/addon.desc:72
 msgid "Fallback UI Addon"
@@ -1257,15 +1261,15 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1005
 msgid "Found ${1} at ${2}."
-msgstr ""
+msgstr "${1}을 ${2}에서 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1485
 msgid "Found ${1} disabled addons:"
-msgstr ""
+msgstr "${1}개의 비활성화된 애드온 발견:"
 
 #: data/script/fcitx-diagnose.sh:1480
 msgid "Found ${1} enabled addons:"
-msgstr ""
+msgstr "${1}개의 활성화된 애드온:"
 
 #: data/script/fcitx-diagnose.sh:1570
 msgid "Found ${1} enabled input methods:"
@@ -1277,23 +1281,23 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:919
 msgid "Found ${1} fcitx process:"
-msgstr ""
+msgstr "${1}개의 fcitx 프로세스를 발견하였습니다."
 
 #: data/script/fcitx-diagnose.sh:917
 msgid "Found ${1} fcitx processes:"
-msgstr ""
+msgstr "${1}개의 fcitx 프로세스를 발견하였습니다:"
 
 #: data/script/fcitx-diagnose.sh:1297
 msgid "Found ${2} for unknown gtk version at ${1}."
-msgstr ""
+msgstr "${1}에서 알 수 없는 GTK 버전의 ${2}를 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1289
 msgid "Found ${3} for gtk ${1} at ${2}."
-msgstr ""
+msgstr "GTK ${1}을 위한 ${3}을 ${2}에서 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1450
 msgid "Found fcitx addon config directory: ${1}."
-msgstr ""
+msgstr "fcitx 애드온 설정 디렉토리를 찾음: ${1}."
 
 #: data/script/fcitx-diagnose.sh:894
 msgid "Found fcitx at ${1}."
@@ -1301,11 +1305,11 @@ msgstr "${1}에서 fcitx를 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1178 data/script/fcitx-diagnose.sh:1183
 msgid "Found fcitx im module for ${2}: ${1}."
-msgstr ""
+msgstr "${2}의 fcitx 입력 모듈을 찾았습니다: ${1}"
 
 #: data/script/fcitx-diagnose.sh:1305 data/script/fcitx-diagnose.sh:1388
 msgid "Found fcitx im modules for gtk ${1}."
-msgstr ""
+msgstr "GTK ${1}의 fcitx 입력 모듈을 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1018
 msgid "Found fcitx kcm module."
@@ -1313,23 +1317,23 @@ msgstr "fcitx kcm 모듈을 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1187
 msgid "Found fcitx qt module: ${1}."
-msgstr ""
+msgstr "fcitx Qt 모듈을 찾았ᅟ습니다: ${1}"
 
 #: data/script/fcitx-diagnose.sh:1032
 msgid "Found fcitx-configtool at ${1}."
-msgstr ""
+msgstr "${1}에서 fcitx-configtool을 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1381
 msgid "Found immodule cache for unknown gtk version at ${1}."
-msgstr ""
+msgstr "알 수 없는 GTK 버전의 입력 모듈 캐시를 ${1}에서 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1373
 msgid "Found immodules cache for gtk ${1} at ${2}."
-msgstr ""
+msgstr "GTK ${1}의 입력 모듈 캐시를 ${2}에서 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1190
 msgid "Found unknown fcitx qt module: ${1}."
-msgstr ""
+msgstr "알 수 없는 fcitx Qt 모듈을 찾았습니다: ${1}"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:3
 msgid "Freedesktop.org Notification Support"
@@ -1451,15 +1455,15 @@ msgstr "그리스"
 
 #: data/script/fcitx-diagnose.sh:1250
 msgid "Gtk ${1} immodule file ${2} does not exist."
-msgstr ""
+msgstr "GTK ${1} 입력 모듈 파일 ${2}이 존재하지 않습니다."
 
 #: data/script/fcitx-diagnose.sh:1418
 msgid "Gtk IM module cache:"
-msgstr ""
+msgstr "GTK 입력 모듈 캐시:"
 
 #: data/script/fcitx-diagnose.sh:1423
 msgid "Gtk IM module files:"
-msgstr ""
+msgstr "GTK 입력 모듈 파일:"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1468,7 +1472,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:702
 msgid "Hall of Shame for Linux IME Support"
-msgstr ""
+msgstr "리눅스 입력기 지원에 대한 불명예의 전당"
 
 #: src/ui/classic/fcitx-classic-ui.desc:47
 msgid "Hide"
@@ -1672,7 +1676,7 @@ msgstr "잘못된 입력 : 라인 %d '=' 빠짐"
 
 #: data/script/fcitx-diagnose.sh:1456
 msgid "Invalid addon config file ${1}."
-msgstr ""
+msgstr "잘못된 애드온 설정 파일 ${1}."
 
 #: src/lib/fcitx-utils/desktop-parse.c:592
 #, c-format
@@ -1734,7 +1738,7 @@ msgstr "사용되는 키보드 레이아웃"
 
 #: data/script/fcitx-diagnose.sh:787
 msgid "Keyboard Layout:"
-msgstr "키보드 레이아웃:"
+msgstr "키보드 배열:"
 
 #: tools/gui/quickphrase-editor/model.cpp:56
 msgid "Keyword"
@@ -1855,7 +1859,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:802
 msgid "Locale:"
-msgstr ""
+msgstr "지역화:"
 
 #: data/script/fcitx-diagnose.sh:1689
 msgid "Log:"
@@ -2117,11 +2121,11 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:940
 msgid "Owner of DBus name ${1} is ${2}."
-msgstr ""
+msgstr "DBus ${1}의 소유자는 ${2}입니다."
 
 #: data/script/fcitx-diagnose.sh:948
 msgid "PID of DBus name ${1} owner is ${2}."
-msgstr ""
+msgstr "DBus ${1} 소유자의 PID는 ${2}입니다."
 
 #: data/inputmethod.desc:23
 msgid "Parent"
@@ -2190,13 +2194,14 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:890
 msgid "Please check ${1} for how to install fcitx."
-msgstr ""
+msgstr "fcitx 설치방법은 ${1}을 확인하세요."
 
 #: data/script/fcitx-diagnose.sh:912
 msgid ""
 "Please check the Configure link of your distribution in ${1} for how to "
 "setup fcitx autostart."
 msgstr ""
+"fcitx가 자동실행되게 하려면, ${1}에서 해당 배포판의 설정 정보를 확인하세요."
 
 #: tools/gui/quickphrase-editor/editor.cpp:280
 msgid "Please input a filename for newfile"
@@ -2320,7 +2325,7 @@ msgstr "Punctuation 지원"
 
 #: data/script/fcitx-diagnose.sh:1171
 msgid "Qt IM module files:"
-msgstr ""
+msgstr "Qt 입력 모듈 파일:"
 
 #: tools/gui/quickphrase-editor/editor.cpp:148
 msgid "Quick Phrase Editor"
@@ -2457,7 +2462,7 @@ msgstr "자주사용하는 단어 순서 룰"
 
 #: data/script/fcitx-diagnose.sh:866
 msgid "Running as root:"
-msgstr ""
+msgstr "루트 계정으로 실행:"
 
 #: src/module/vk/vk.c:54
 msgid "Russian"
@@ -2495,7 +2500,7 @@ msgstr "모든 입력정보 및 설정 저장"
 msgid "Scroll between Input Method"
 msgstr "입력기 사이에 스크롤"
 
-#: src/module/unicode/unicode.c:230
+#: src/module/unicode/unicode.c:272
 msgid "Search unicode"
 msgstr "Unicode 찾기"
 
@@ -2866,7 +2871,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:845
 msgid "The script is run as ${1} (${2})."
-msgstr ""
+msgstr "스크립트는 ${1} (${2}) 계정으로 실행됩니다."
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
 msgid ""
@@ -3010,7 +3015,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:956
 msgid "Unable to find a program to check dbus."
-msgstr ""
+msgstr "DBus를 확인하기 위한 프로그램을 찾을 수 없습니다."
 
 #: src/module/unicode/fcitx-unicode.desc:1
 msgid "Unicode"
@@ -3175,7 +3180,7 @@ msgstr "Wanfeng"
 
 #: data/script/fcitx-diagnose.sh:876
 msgid "Why is it bad to run as root"
-msgstr ""
+msgstr "루트 계정으로 실행하는 게 좋지 않은 이유"
 
 #: src/im/table/data/wbx.conf.in:3
 msgid "Wubi"
@@ -3218,15 +3223,15 @@ msgstr "X11이 초기화되지 않았습니다"
 
 #: data/script/fcitx-diagnose.sh:1118
 msgid "XIM encoding:"
-msgstr ""
+msgstr "XIM 인코딩:"
 
 #: data/script/fcitx-diagnose.sh:1113
 msgid "XIM for Emacs:"
-msgstr ""
+msgstr "Emacs의 XIM:"
 
 #: data/script/fcitx-diagnose.sh:1091
 msgid "XIM_SERVERS on root window:"
-msgstr ""
+msgstr "루트 창의 XIM_SERVERS:"
 
 #: src/frontend/xim/xim.c:157
 msgid "XMODIFIERS Error."
@@ -3234,7 +3239,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1068
 msgid "XMODIFIERS is not set"
-msgstr ""
+msgstr "XMODIFIERS가 설정되지 않음"
 
 #: src/im/pinyin/fcitx-pinyin.desc:10
 msgid "XiaoHe"
@@ -3246,17 +3251,17 @@ msgstr "Xim"
 
 #: data/script/fcitx-diagnose.sh:1089
 msgid "Xim Server Name from Environment variable is ${1}."
-msgstr ""
+msgstr "환경변수의 Xim 서버 이름은 ${1}입니다."
 
 #: data/script/fcitx-diagnose.sh:1101
 msgid "Xim server name is the same with that set in the environment variable."
-msgstr ""
+msgstr "Xim 서버 이름이 환경변수값과 일치합니다."
 
 #: data/script/fcitx-diagnose.sh:1103
 msgid ""
 "Xim server name: \"${1}\" is different from that set in the environment "
 "variable: \"${2}\"."
-msgstr ""
+msgstr "Xim 서버 이름: \"${1}\"은 환경변수에 설정된 \"${2}\"와 다릅니다."
 
 #: data/script/fcitx-diagnose.sh:874
 msgid ""
@@ -3264,16 +3269,21 @@ msgid ""
 "either means you have security problems or the result of this script may not "
 "be accurate. See ${3} or ${4} for more information."
 msgstr ""
+"${1} 계정으로 로그인 하셨거나, ${2}를 사용하여 이 스크립트를 실행 중입니다. "
+"보안 문제가 있거나, 실행결과가 올바르지 않을 수 있습니다. 자세한 내용은 ${3} "
+"또는 ${4}를 참조하세요."
 
 #: data/script/fcitx-diagnose.sh:869
 msgid ""
 "You are probably using ${1} to run this script. This means the result of "
 "this script may not be accurate. See ${2} for more information."
 msgstr ""
+"이 스크립트를 실행하는데 ${1}을 사용하나요? 실행결과가 올바르지 않을 수 있습"
+"니다. 자세한 정보는 ${2}를 참조하세요."
 
 #: data/script/fcitx-diagnose.sh:1140
 msgid "You are using xim in ${1} programs."
-msgstr ""
+msgstr "xim을 ${1} 프로그램에서 사용 중입니다."
 
 #: data/script/fcitx-diagnose.sh:1578
 msgid "You don't have any input methods enabled."
@@ -3287,7 +3297,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1145
 msgid "You may have trouble using fcitx in ${1} programs."
-msgstr ""
+msgstr "${1} 프로그램에서 fcitx를 사용하는데 문제가 발생할 수 있습니다."
 
 #: data/script/fcitx-diagnose.sh:1584
 msgid ""
@@ -3327,12 +3337,17 @@ msgid ""
 "able to use input method in emacs because of an really old emacs bug that "
 "upstream refuse to fix for years."
 msgstr ""
+"LC_CTYPE이 zh, ja, ko가 아닌 ${1}으로 설정되어 있습니다. Emacs에서 입력 도구"
+"를 사용할 수 없을지도 모릅니다. 이것은 수년간 수정하지 않고 버티고 있는 emacs"
+"의 매우 오랜 버그 때문입니다."
 
 #: data/script/fcitx-diagnose.sh:1120
 msgid ""
 "Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have "
 "trouble committing strings using XIM."
 msgstr ""
+"LC_CTYPE이 UTF-8을 사용하지 않는 ${1}으로 설정되었습니다. XIM으로 문자열을 전"
+"송하는데 문제가 발생할 수 있습니다."
 
 #: data/script/fcitx-diagnose.sh:1594
 msgid ""
@@ -3354,7 +3369,7 @@ msgstr "Ziranma"
 
 #: data/script/fcitx-diagnose.sh:886
 msgid "executable:"
-msgstr "실행가능한:"
+msgstr "실행가능:"
 
 #: data/script/fcitx-diagnose.sh:706
 msgid "here"
@@ -3383,7 +3398,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:871 data/script/fcitx-diagnose.sh:877
 msgid "sudo environment variables"
-msgstr ""
+msgstr "sudo 환경 변수"
 
 #: data/script/fcitx-diagnose.sh:896
 msgid "version:"
