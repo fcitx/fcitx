@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-07-09 15:02-0700\n"
-"PO-Revision-Date: 2017-07-09 21:56+0000\n"
+"POT-Creation-Date: 2017-07-09 16:02-0700\n"
+"PO-Revision-Date: 2017-07-09 22:20+0000\n"
 "Last-Translator: Bon Keun Seo <scobyseo@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -38,7 +38,7 @@ msgstr "${1}은 ${2}로 설정되었습니다."
 
 #: data/script/fcitx-diagnose.sh:514
 msgid "${1} not found."
-msgstr "${1} 찾지못함."
+msgstr "${1}이 없습니다."
 
 #: data/script/fcitx-diagnose.sh:927
 msgid "${1} works properly."
@@ -111,7 +111,7 @@ msgstr "/분, 사용 시간:"
 
 #: src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
-msgstr "즉시 commit을 원하면 0, 모든 단어를 유지하기 원하면 -1"
+msgstr "즉시 입력을 원하면 0, 모든 단어를 유지하기 원하면 -1"
 
 #: src/module/unicode/charselectdata.c:249
 msgid "<Low Surrogate>"
@@ -741,7 +741,7 @@ msgstr "일치하는 것이 없으면 입력완료"
 
 #: data/config.desc:198
 msgid "Commit when toggle state"
-msgstr "상태가 토글 될 때 커밋"
+msgstr "상태가 전환되면 입력완료"
 
 #: src/im/keyboard/fcitx-keyboard.desc:4
 msgid "Commit with extra space when choose candidate word"
@@ -783,7 +783,7 @@ msgstr "현재 입력기 설정"
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
 msgid "Configure group name error: line %d"
-msgstr "그룹 이름 설정 에러 : 라인 %d"
+msgstr "그룹 이름 설정 오류 : 라인 %d"
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
 msgid "Confirm deletion"
@@ -1040,7 +1040,7 @@ msgstr "영어 모드 아이콘"
 
 #: src/lib/fcitx-config/fcitx-config.c:400
 msgid "Enum Option is invalid, take it as string"
-msgstr "Enum 옵션이 유호하지 않습니다, 문자열을 가짐 "
+msgstr "Enum 옵션이 유효하지 않고, 문자열을 가짐 "
 
 #: src/lib/fcitx-config/fcitx-config.c:376
 msgid "Enum option duplicated."
@@ -1080,7 +1080,7 @@ msgstr "Erbi"
 
 #: data/script/fcitx-diagnose.sh:811
 msgid "Error occurs when running ${1}. Please check your locale settings."
-msgstr "${1} 을 수행하는 중 에러가 발생하였습니다. 지역화 설정을 확인하세요."
+msgstr "${1} 을 수행하는 중 오류가 발생하였습니다. 지역화 설정을 확인하세요."
 
 #: tools/gui/quickphrase-editor/editor.cpp:343
 #, kde-format
@@ -1098,7 +1098,7 @@ msgstr ""
 
 #: src/ui/cairostuff/font.c:46
 msgid "Error: Load fontconfig failed"
-msgstr "에러: fontconfig 불러오기 실패"
+msgstr "오류: fontconfig 불러오기 실패"
 
 #: src/ui/classic/fcitx-skin-installer.sh:76
 msgid "Error: skin failed to install"
@@ -1976,7 +1976,7 @@ msgstr "하나의 후보만 있을 때 후보 단어를 자동 입력하기 위�
 
 #: src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
-msgstr "타입이 누락됨, 문자열을 가짐 "
+msgstr "형식이 누락되어 문자열로 취급함 "
 
 #: data/addon.desc:20
 msgid "Module"
@@ -2496,7 +2496,7 @@ msgstr "클립보드 기록 파일에 저장"
 
 #: src/im/table/tabledict.c:372
 msgid "Save dict error"
-msgstr "사전 저장 에러"
+msgstr "사전 저장 오류"
 
 #: data/config.desc:136
 msgid "Saving All Config and Input History"
@@ -2929,7 +2929,7 @@ msgstr "입력기 전환"
 
 #: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:555
 msgid "Toggle Remind"
-msgstr "리마인드 토글"
+msgstr "리마인드 젼환"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 msgid "Toggle Simp/Trad Chinese Conversion"
@@ -3040,7 +3040,7 @@ msgstr "고유명칭"
 #: src/lib/fcitx-config/fcitx-config.c:406
 #, c-format
 msgid "Unknown type, take it as string: %s"
-msgstr "알 수 없는 타입, 문자열을 가짐 : %s"
+msgstr "알 수 없는 형식, 문자열로 취급함: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
