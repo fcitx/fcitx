@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-07-09 14:02-0700\n"
-"PO-Revision-Date: 2017-07-09 20:18+0000\n"
+"POT-Creation-Date: 2017-07-09 15:02-0700\n"
+"PO-Revision-Date: 2017-07-09 21:56+0000\n"
 "Last-Translator: Bon Keun Seo <scobyseo@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -205,7 +205,7 @@ msgstr "Fcitx를 위한 Lua 스크립스 지원 추가"
 
 #: src/im/table/fcitx-table.desc:4
 msgid "Add Phrase"
-msgstr "Phrase 추가"
+msgstr "문구 추가"
 
 #: src/module/unicode/fcitx-unicode.conf.in:4
 msgid "Add Unicode Typing Support"
@@ -358,7 +358,7 @@ msgstr "자동 영어 모드"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:9
 msgid "Auto English Trigger Word"
-msgstr "자동 영어 트리거 단어"
+msgstr "자동 영어 발동 단어"
 
 #: src/im/table/table.desc:88
 msgid "Auto Phrase"
@@ -374,7 +374,7 @@ msgstr "자동 문구 문구"
 
 #: src/im/table/table.desc:49
 msgid "Auto Send Candidate Word"
-msgstr "후보 단어 자동 보내기"
+msgstr "후보 단어 자동 입력"
 
 #: src/lib/fcitx-config/fcitx-config.c:1180
 #: src/lib/fcitx-config/fcitx-config.c:1187
@@ -431,7 +431,7 @@ msgstr "imWindow를 만들 수 없음"
 
 #: src/module/punc/punc.c:410
 msgid "Can't open punc file."
-msgstr "기호 파일을 열 수 없음"
+msgstr "부호 파일을 열 수 없음"
 
 #: src/module/remote/remote.c:70
 #, c-format
@@ -886,7 +886,7 @@ msgstr "기본값"
 
 #: data/config.desc:180
 msgid "Default Input Method State"
-msgstr "디폴트 입력기 상태"
+msgstr "기본 입력기 상태"
 
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
@@ -1517,7 +1517,7 @@ msgstr "상용구 입력키"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:35
 msgid "Hotkey for switching to Inputing Character From Phrase mode"
-msgstr "상용구 입력모드로 전환"
+msgstr "상용구 입력모드 해제"
 
 #: src/im/pinyin/fcitx-pinyin.desc:43
 msgid "Hotkey of Adding Frequent Word"
@@ -1792,11 +1792,11 @@ msgstr "로마자"
 
 #: src/module/punc/punc.c:149 src/module/punc/punc.c:568
 msgid "Latin punct"
-msgstr "로마자 기호"
+msgstr "로마자 부호"
 
 #: src/module/punc/punc.c:587
 msgid "Latin punctuations are used."
-msgstr "로마자 기호입력 사용중."
+msgstr "로마자 부호 입력 사용중."
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
@@ -1833,7 +1833,7 @@ msgstr "부가기능 설정 파일을 로드함 : %s"
 
 #: src/im/table/tabledict.c:341
 msgid "Load Autophrase OK"
-msgstr "Autophrase 로딩 OK"
+msgstr "자동 문구 로딩 OK"
 
 #: src/im/table/tabledict.c:248
 msgid "Load Table Dict OK"
@@ -1841,7 +1841,7 @@ msgstr "표 사전 로딩 OK"
 
 #: src/im/table/tabledict.c:285
 msgid "Loading Autophrase."
-msgstr "Autophrase 로딩"
+msgstr "자동 문구 로딩"
 
 #: src/im/table/tabledict.c:41
 msgid "Loading Table Dict"
@@ -2081,7 +2081,7 @@ msgstr "OpenCC"
 #: src/lib/fcitx-config/fcitx-config.c:1136
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
-msgstr "옵션 %s은 잘못되었습니다, 디폴트 값을 사용하세요 %s"
+msgstr "옵션 %s은 잘못되었습니다, 기본 값 %s을 사용"
 
 #: src/lib/fcitx-config/fcitx-config.c:1144
 #, c-format
@@ -2323,11 +2323,11 @@ msgstr "XIM 지원 제공"
 
 #: src/module/punc/fcitx-punc.conf.in:4
 msgid "Punctuation Conversion Support"
-msgstr "문장기호 변환 지원"
+msgstr "문장부호 변환 지원"
 
 #: src/module/punc/punc.c:585 src/module/punc/fcitx-punc.conf.in:3
 msgid "Punctuation Support"
-msgstr "기호입력 지원"
+msgstr "부호 입력 지원"
 
 #: data/script/fcitx-diagnose.sh:1171
 msgid "Qt IM module files:"
@@ -2351,7 +2351,7 @@ msgstr "상용구:"
 #: src/module/quickphrase/fcitx-quickphrase.desc:25
 #: src/module/quickphrase/fcitx-quickphrase.desc:31
 msgid "QuickPhrase"
-msgstr "QuickPhrase"
+msgstr "상용구"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:3
 msgid "Quickphrase"
@@ -2456,7 +2456,7 @@ msgstr "글꼴이나 내용에 따라 달라지지만, 다음 영어 문자 수�
 
 #: src/im/pinyin/fcitx-pinyin.desc:71
 msgid "Rule of Candidate Phrase Order"
-msgstr "후보 문장 순서 룰"
+msgstr "후보 문구 순서 규칙"
 
 #: src/im/pinyin/fcitx-pinyin.desc:62
 msgid "Rule of Candidate Word Order"
@@ -2949,7 +2949,7 @@ msgstr "단어 힌트 전환"
 
 #: src/module/autoeng/AutoEng.c:557
 msgid "Too long item for AutoEng"
-msgstr "자동 영어 입력을 위한 아이템이 너무 길음"
+msgstr "자동 영어 입력을 위한 항목이 너무 길음"
 
 #: src/ui/classic/skin.desc:129 src/ui/classic/skin.desc:235
 #: src/ui/classic/skin.desc:365
@@ -3396,7 +3396,7 @@ msgstr "분, 문자 수:"
 #: src/lib/fcitx-config/fcitx-config.c:1200
 #, c-format
 msgid "no default option for %s/%s"
-msgstr "%s/%s을 위한 디폴트 옵션 없음"
+msgstr "%s/%s을 위한 기본 옵션 없음"
 
 #: src/ui/cairostuff/font.c:121
 msgid "no valid font."
