@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-07-09 13:02-0700\n"
-"PO-Revision-Date: 2017-07-09 20:00+0000\n"
+"POT-Creation-Date: 2017-07-09 14:02-0700\n"
+"PO-Revision-Date: 2017-07-09 20:18+0000\n"
 "Last-Translator: Bon Keun Seo <scobyseo@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -115,15 +115,15 @@ msgstr "즉시 commit을 원하면 0, 모든 단어를 유지하기 원하면 -1
 
 #: src/module/unicode/charselectdata.c:249
 msgid "<Low Surrogate>"
-msgstr ""
+msgstr "<Low Surrogate>"
 
 #: src/module/unicode/charselectdata.c:245
 msgid "<Non Private Use High Surrogate>"
-msgstr ""
+msgstr "<Non Private Use High Surrogate>"
 
 #: src/module/unicode/charselectdata.c:247
 msgid "<Private Use High Surrogate>"
-msgstr ""
+msgstr "<Private Use High Surrogate>"
 
 #: src/module/unicode/charselectdata.c:251
 msgid "<Private Use>"
@@ -220,7 +220,7 @@ msgstr "사용자 사전에 현재 입력 버퍼 추가"
 #: data/addon.desc:45 data/addon.desc:50 data/addon.desc:55 data/addon.desc:64
 #: data/addon.desc:69 data/addon.desc:74 data/addon.desc:79
 msgid "Addon"
-msgstr "애드온"
+msgstr "부가기능"
 
 #: src/lib/fcitx/addon.c:138
 #, c-format
@@ -1138,7 +1138,7 @@ msgstr "${1}의 출력 내용에서 fcitx를 찾을 수 없음"
 
 #: data/addon.desc:72
 msgid "Fallback UI Addon"
-msgstr "대체 UI 애드온"
+msgstr "대체 UI 부가기능"
 
 #: src/ui/kimpanel/kimpanel.c:397 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
@@ -1242,15 +1242,15 @@ msgstr "사전편집 커서를 앞에 고정"
 
 #: src/ui/classic/fcitx-classic-ui.desc:23
 msgid "Font"
-msgstr "폰트"
+msgstr "글꼴"
 
 #: src/ui/classic/fcitx-classic-ui.desc:33
 msgid "Font Locale to display"
-msgstr "보이기위한 폰트 로케일"
+msgstr "표시할 글꼴 로케일"
 
 #: src/ui/classic/fcitx-classic-ui.desc:16
 msgid "Font Size"
-msgstr "폰트 크기"
+msgstr "글꼴 크기"
 
 #: src/ui/classic/skin.desc:28
 msgid "Font sizes respect dpi setting"
@@ -1377,15 +1377,15 @@ msgstr "전각 부호"
 
 #: src/module/punc/punc.c:586
 msgid "Full width punctuations are used."
-msgstr "전자 기호입력 사용중."
+msgstr "전각 부호 사용중."
 
 #: src/module/vk/vk.c:52
 msgid "Fullwidth"
-msgstr "전자"
+msgstr "전각"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:3
 msgid "Fullwidth Character"
-msgstr "전자"
+msgstr "전각 문자"
 
 #: src/im/pinyin/fcitx-pinyin.desc:85
 msgid "Fuzzy an and ang"
@@ -1474,7 +1474,7 @@ msgstr "GTK 입력 모듈 파일:"
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
 msgid "Half width Character"
-msgstr "반자"
+msgstr "반각 문자"
 
 #: data/script/fcitx-diagnose.sh:702
 msgid "Hall of Shame for Linux IME Support"
@@ -1947,7 +1947,7 @@ msgstr "ᅟ"
 
 #: src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
-msgstr "메뉴 폰트"
+msgstr "메뉴 글꼴"
 
 #: src/ui/classic/skin.desc:23
 msgid "Menu Font Size"
@@ -2282,7 +2282,7 @@ msgstr "우선순위"
 
 #: data/addon.desc:48
 msgid "Priority of addon"
-msgstr "애드온의 우선순위"
+msgstr "부가기능의 우선순위"
 
 #: data/profile.desc:1 data/profile.desc:6 data/profile.desc:11
 #: data/profile.desc:16 data/profile.desc:21 data/profile.desc:26
@@ -2307,15 +2307,15 @@ msgstr "Fcitx에서 병음입력 추가기능 제공"
 
 #: src/module/dbus/fcitx-dbus.conf.in:4
 msgid "Provides DBus Support (Used by other Addon)"
-msgstr "DBus 지원 제공 (다른 애드온에 의해 사용)"
+msgstr "DBus 지원 제공 (다른 부가기능에 의해 사용)"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
 msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
-msgstr "Freedesktop.org 알림 지원 제공 (다른 애드온에 의해 사용)"
+msgstr "Freedesktop.org 알림 지원 제공 (다른 부가기능에 의해 사용)"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
 msgid "Provides Fullwidth Character Input Support"
-msgstr "전자 입력 지원 제공"
+msgstr "전각 문자 입력 기능 제공"
 
 #: src/frontend/xim/fcitx-xim.conf.in:4
 msgid "Provides XIM support"
@@ -2633,7 +2633,7 @@ msgstr "스킨 버전"
 #: src/ui/classic/skin.desc:51 src/ui/classic/skin.desc:55
 #: src/ui/classic/skin.desc:59 src/ui/classic/skin.desc:63
 msgid "SkinFont"
-msgstr "스킨폰트"
+msgstr "스킨글꼴"
 
 #: src/ui/classic/skin.desc:1 src/ui/classic/skin.desc:5
 #: src/ui/classic/skin.desc:9 src/ui/classic/skin.desc:13
@@ -2777,7 +2777,7 @@ msgstr "내장 사전 전환"
 
 #: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
-msgstr "Full Width Punc 모드 전환"
+msgstr "전각 부호 모드 전환"
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
@@ -2826,7 +2826,7 @@ msgstr "세번째 입력기 전환"
 
 #: data/config.desc:108
 msgid "Switching Full Width Character Mode"
-msgstr "Full Width Character 모드 전환"
+msgstr "전각 문자 모드 전환"
 
 #: data/config.desc:102
 msgid "Switching Remind Mode"
@@ -3006,7 +3006,7 @@ msgstr "타입"
 
 #: data/config.desc:186
 msgid "Type half width Punc After a Number"
-msgstr "숫자 뒤에 반자 문장기호 입력"
+msgstr "숫자 뒤에 반각 문장부호 입력"
 
 #: data/addon.desc:21
 msgid "UI"
@@ -3072,7 +3072,7 @@ msgstr "사용자 문자열 아이콘 색 사용"
 
 #: data/profile.desc:2
 msgid "Use Full Width Character"
-msgstr "전자 사용"
+msgstr "전각 문자 사용"
 
 #: src/im/keyboard/fcitx-keyboard.conf.in:4
 msgid "Use Keyboard Layout as Input Method"
