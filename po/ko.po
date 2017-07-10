@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-07-09 16:02-0700\n"
-"PO-Revision-Date: 2017-07-09 22:20+0000\n"
+"POT-Creation-Date: 2017-07-09 17:02-0700\n"
+"PO-Revision-Date: 2017-07-09 23:35+0000\n"
 "Last-Translator: Bon Keun Seo <scobyseo@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -115,15 +115,15 @@ msgstr "즉시 입력을 원하면 0, 모든 단어를 유지하기 원하면 -1
 
 #: src/module/unicode/charselectdata.c:249
 msgid "<Low Surrogate>"
-msgstr "<Low Surrogate>"
+msgstr "<하위 확장코드>"
 
 #: src/module/unicode/charselectdata.c:245
 msgid "<Non Private Use High Surrogate>"
-msgstr "<Non Private Use High Surrogate>"
+msgstr "<비 개인용 상위 확장코드>"
 
 #: src/module/unicode/charselectdata.c:247
 msgid "<Private Use High Surrogate>"
-msgstr "<Private Use High Surrogate>"
+msgstr "<개인용 상위 확장코드>"
 
 #: src/module/unicode/charselectdata.c:251
 msgid "<Private Use>"
