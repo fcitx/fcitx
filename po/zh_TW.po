@@ -6,6 +6,7 @@
 # Alisha <alisha.4m@gmail.com>, 2012
 # Alisha <alisha.4m@gmail.com>, 2012
 # BrLi <rainman59118@gmail.com>, 2014
+# PHLin <Cypressyew@gmail.com>, 2017
 # fhoshino <fh@pinchia.com>, 2014
 # Gerald Du <frozenmouse@gmail.com>, 2015
 # Hiunn-hué <hiunnhue108@ymail.com>, 2012-2013
@@ -19,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-04-18 12:01-0700\n"
-"PO-Revision-Date: 2016-04-18 18:04+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2017-07-12 10:02-0700\n"
+"PO-Revision-Date: 2017-07-12 16:37+0000\n"
+"Last-Translator: PHLin <Cypressyew@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -97,23 +98,23 @@ msgstr "(不可用)"
 
 #: data/script/fcitx-diagnose.sh:656
 msgid "/Beginner%27s_Guide"
-msgstr ""
+msgstr "/Beginner%27s_Guide"
 
 #: data/script/fcitx-diagnose.sh:703
 msgid "/Hall_of_Shame_for_Linux_IME_Support"
-msgstr ""
+msgstr "/Hall_of_Shame_for_Linux_IME_Support"
 
 #: data/script/fcitx-diagnose.sh:667
 msgid "/Input_method_related_environment_variables"
-msgstr ""
+msgstr "/Input_method_related_environment_variables"
 
 #: data/script/fcitx-diagnose.sh:683
 msgid "/Note_for_GNOME_Later_than_3.6"
-msgstr ""
+msgstr "/Note_for_GNOME_Later_than_3.6"
 
 #: data/script/fcitx-diagnose.sh:707
 msgid "/XIM"
-msgstr ""
+msgstr "/XIM"
 
 #: src/lib/fcitx/ime.c:1800
 msgid "/min  Time Used: "
@@ -776,11 +777,11 @@ msgstr "設定檔"
 msgid "Configuration:"
 msgstr "設定："
 
-#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:493
+#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:502
 msgid "Configure"
 msgstr "設定"
 
-#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
+#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:501
 #: src/ui/kimpanel/kimpanel.c:781
 msgid "Configure Current Input Method"
 msgstr "設定目前輸入法"
@@ -878,7 +879,7 @@ msgstr "基於 DBus 的新 Freedesktop.org 系統匣圖示"
 
 #: data/script/fcitx-diagnose.sh:933
 msgid "DBus interface:"
-msgstr ""
+msgstr "DBus 介面："
 
 #: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"
@@ -1035,7 +1036,7 @@ msgstr "增強 Fcitx 的拼音輸入"
 msgid "End Key"
 msgstr "中止鍵"
 
-#: src/module/xkbdbus/xkbdbus.c:218
+#: src/module/xkbdbus/xkbdbus.c:258
 msgid "English (US)"
 msgstr "英文 (美國)"
 
@@ -1123,7 +1124,7 @@ msgstr "精確相符"
 msgid "Exec"
 msgstr "Exec"
 
-#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:495
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:504
 msgid "Exit"
 msgstr "離開"
 
@@ -2041,7 +2042,7 @@ msgstr "沒有輸入視窗"
 msgid "No local input method"
 msgstr "沒有局部輸入法"
 
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:554
 msgid "No remind"
 msgstr "沒有聯想"
 
@@ -2070,7 +2071,7 @@ msgstr ""
 msgid "Number"
 msgstr "數字"
 
-#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:431
+#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:440
 msgid "Online Help"
 msgstr "線上說明"
 
@@ -2434,7 +2435,7 @@ msgstr "右邊界寬度"
 msgid "Resize Margin Top"
 msgstr "上邊界寬度"
 
-#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
+#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:503
 #: src/ui/kimpanel/kimpanel.c:786
 msgid "Restart"
 msgstr "重新啟動"
@@ -2505,7 +2506,7 @@ msgstr "保存所有設定及輸入歷史"
 msgid "Scroll between Input Method"
 msgstr "輸入法切換鍵"
 
-#: src/module/unicode/unicode.c:230
+#: src/module/unicode/unicode.c:272
 msgid "Search unicode"
 msgstr "搜尋 unicode"
 
@@ -2927,7 +2928,7 @@ msgstr "切換全半形字元"
 msgid "Toggle Input Method"
 msgstr "切換輸入法"
 
-#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:553
+#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:555
 msgid "Toggle Remind"
 msgstr "切換聯想"
 
@@ -3118,7 +3119,7 @@ msgstr "使用 enter 鍵確認輸入字串"
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr "只在用額外切換鍵取消啟動後才使用它進行切換"
 
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:554
 msgid "Use remind"
 msgstr "使用聯想"
 
@@ -3400,7 +3401,7 @@ msgstr "無可用的字型"
 msgid "process:"
 msgstr "程序："
 
-#: src/lib/fcitx/instance.c:528
+#: src/lib/fcitx/instance.c:530
 msgid "pthread mutex init failed"
 msgstr "pthread mutex 初始化失敗"
 
