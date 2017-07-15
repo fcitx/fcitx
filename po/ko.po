@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-07-09 17:02-0700\n"
-"PO-Revision-Date: 2017-07-09 23:35+0000\n"
+"POT-Creation-Date: 2017-07-15 10:02-0700\n"
+"PO-Revision-Date: 2017-07-15 16:16+0000\n"
 "Last-Translator: Bon Keun Seo <scobyseo@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -452,7 +452,7 @@ msgstr "후보 단어 수"
 
 #: src/im/table/data/cangjie.conf.in:3
 msgid "Cangjie"
-msgstr "Cangjie"
+msgstr "창힐"
 
 #: src/im/pinyin/py.c:1735
 #, c-format
@@ -574,7 +574,7 @@ msgstr "스킨 %s을 읽을 수 없어서, 기본으로 돌아갑니다."
 
 #: data/script/fcitx-diagnose.sh:1549
 msgid "Cannot read im list from fcitx profile."
-msgstr "fcitx ᅟ프로파일에서 입력기 목록을 읽을 수 없습니다."
+msgstr "fcitx 프로파일에서 입력기 목록을 읽을 수 없습니다."
 
 #: tools/gui/quickphrase-editor/editor.cpp:322
 msgid "Cannot remove system file"
@@ -1028,7 +1028,7 @@ msgstr "향상된 Fcitx 병음 입력"
 
 #: src/im/table/table.desc:69
 msgid "End Key"
-msgstr "End 키"
+msgstr "중지  키"
 
 #: src/module/xkbdbus/xkbdbus.c:258
 msgid "English (US)"
@@ -1262,8 +1262,8 @@ msgid ""
 "list, then English (US) will be applied to all other non keyboard input "
 "method layout"
 msgstr ""
-"예를 들면, 키보드 - English (US)가 리스트 안에 첫번째 입력기이면 English (US)"
-"가 다른 키보드가 아닌 입력기 배열로 적용될 것입니다."
+"예를 들면, 키보드 - 영어 (US)가 리스트 안에 첫번째 입력기이면 영어 (US)가 다"
+"른 키보드가 아닌 입력기 배열로 적용될 것입니다."
 
 #: data/script/fcitx-diagnose.sh:1005
 msgid "Found ${1} at ${2}."
@@ -1323,7 +1323,7 @@ msgstr "fcitx kcm 모듈을 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1187
 msgid "Found fcitx qt module: ${1}."
-msgstr "fcitx Qt 모듈을 찾았ᅟ습니다: ${1}"
+msgstr "fcitx Qt 모듈을 찾았습니다: ${1}"
 
 #: data/script/fcitx-diagnose.sh:1032
 msgid "Found fcitx-configtool at ${1}."
@@ -1881,7 +1881,7 @@ msgstr "병음 검색"
 
 #: src/im/pinyin/fcitx-pinyin.desc:5
 msgid "MS"
-msgstr "MS"
+msgstr "마이크로소프트"
 
 #: src/ui/classic/skin.desc:117 src/ui/classic/skin.desc:223
 #: src/ui/classic/skin.desc:353
@@ -1943,7 +1943,7 @@ msgstr "필획 입력 가능한 최대 길이"
 
 #: src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
-msgstr "ᅟ"
+msgstr "preedit에 보관될 최대 단어 수"
 
 #: src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
@@ -2508,7 +2508,7 @@ msgstr "입력기 사이에 스크롤"
 
 #: src/module/unicode/unicode.c:272
 msgid "Search unicode"
-msgstr "Unicode 찾기"
+msgstr "유니코드 찾기"
 
 #: data/config.desc:162
 msgid "Seconds sleep before fcitx really start"
@@ -2972,7 +2972,7 @@ msgstr "번체"
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
-msgstr "Traditional Chinese 번역 엔진"
+msgstr "중국어 번체 번역 엔진"
 
 #: src/module/chttrans/chttrans.c:177
 msgid "Traditional Chinese is enabled."
@@ -2982,7 +2982,7 @@ msgstr "번체가 활성화됨"
 #: src/module/chttrans/fcitx-chttrans.desc:9
 #: src/module/chttrans/fcitx-chttrans.desc:14
 msgid "TraditionalChinese"
-msgstr "TraditionalChinese"
+msgstr "중국어 번체"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
 msgid "Treating abbreviated Pinyin as English"
@@ -3379,7 +3379,7 @@ msgstr "자광(Ziguang)"
 
 #: src/im/table/data/zrm.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:4
 msgid "Ziranma"
-msgstr "Ziranma"
+msgstr "지란마"
 
 #: data/script/fcitx-diagnose.sh:886
 msgid "executable:"
