@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# scootergrisen, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2011-11-16 01:54+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2017-07-21 13:14+0000\n"
+"Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -129,7 +130,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:787
 msgid "Keyboard Layout:"
-msgstr ""
+msgstr "Tastaturlayout:"
 
 #: data/script/fcitx-diagnose.sh:802
 msgid "Locale:"
@@ -660,7 +661,7 @@ msgstr ""
 #: src/im/keyboard/fcitx-keyboard.desc:36
 #: src/im/keyboard/fcitx-keyboard.desc:41
 msgid "Keyboard"
-msgstr ""
+msgstr "Tastatur"
 
 #: src/im/keyboard/keyboard.c:426 src/im/keyboard/keyboard.c:443
 msgid "(Unavailable)"
@@ -1503,11 +1504,11 @@ msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.conf.in:3
 msgid "Keyboard Layout"
-msgstr ""
+msgstr "Tastaturlayout"
 
 #: src/im/keyboard/fcitx-keyboard.conf.in:4
 msgid "Use Keyboard Layout as Input Method"
-msgstr ""
+msgstr "Brug tastaturlayout som inputmetode"
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:4
 msgid "Simple Pinyin support for Fcitx"
@@ -1586,7 +1587,7 @@ msgstr ""
 #: src/module/clipboard/fcitx-clipboard.desc:34
 #: src/module/clipboard/fcitx-clipboard.desc:44
 msgid "Clipboard"
-msgstr ""
+msgstr "Udklipsholder"
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:4
 msgid "Fcitx Clipboard access"
@@ -1717,7 +1718,7 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
-msgstr ""
+msgstr "Klassisk"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
@@ -1853,7 +1854,7 @@ msgstr ""
 #: data/config.desc:133 data/config.desc:139 data/config.desc:145
 #: data/config.desc:152
 msgid "Hotkey"
-msgstr ""
+msgstr "Hottast"
 
 #: data/config.desc:5
 msgid "Trigger Input Method"
@@ -2009,11 +2010,11 @@ msgstr ""
 
 #: data/config.desc:120
 msgid "Prev Page"
-msgstr ""
+msgstr "Forrige side"
 
 #: data/config.desc:125
 msgid "Next Page"
-msgstr ""
+msgstr "Næste side"
 
 #: data/config.desc:130
 msgid "Choose Second and Third Candidate Word"
@@ -2049,7 +2050,7 @@ msgstr ""
 
 #: data/config.desc:159 data/config.desc:165 data/config.desc:174
 msgid "Program"
-msgstr ""
+msgstr "Program"
 
 #: data/config.desc:162
 msgid "Seconds sleep before fcitx really start"
@@ -2086,7 +2087,7 @@ msgstr ""
 #: data/config.desc:183 data/config.desc:189 data/config.desc:195
 #: data/config.desc:201 data/config.desc:208 data/config.desc:214
 msgid "Output"
-msgstr ""
+msgstr "Output"
 
 #: data/config.desc:186
 msgid "Type half width Punc After a Number"
@@ -2601,7 +2602,7 @@ msgstr ""
 
 #: src/im/table/table.desc:166
 msgid "Keyboard Layout to be used"
-msgstr ""
+msgstr "Tastaturlayout som skal bruges"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
@@ -2986,7 +2987,7 @@ msgstr ""
 #: src/ui/classic/fcitx-classic-ui.desc:51
 #: src/ui/classic/fcitx-classic-ui.desc:56
 msgid "ClassicUI"
-msgstr ""
+msgstr "Klassisk grænseflade"
 
 #: src/ui/classic/fcitx-classic-ui.desc:2
 msgid "Status Panel Position X"
@@ -2998,7 +2999,7 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:16
 msgid "Font Size"
-msgstr ""
+msgstr "Skriftstørrelse"
 
 #: src/ui/classic/fcitx-classic-ui.desc:18
 msgid "Override the skin font size"
@@ -3006,7 +3007,7 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:23
 msgid "Font"
-msgstr ""
+msgstr "Skrifttype"
 
 #: src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
