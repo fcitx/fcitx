@@ -1174,7 +1174,7 @@ INPUT_RETURN_VALUE PYGetCandWord(void* arg, FcitxCandidateWord* candWord)
 
     char *pBase = NULL, *pPhrase = NULL;
     char *pBaseMap = NULL, *pPhraseMap = NULL;
-    uint *pIndex = NULL;
+    unsigned int *pIndex = NULL;
     boolean bAddNewPhrase = true;
     int i;
     char strHZString[MAX_WORDS_USER_INPUT * UTF8_MAX_LENGTH + 1];
