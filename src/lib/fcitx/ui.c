@@ -72,7 +72,7 @@ struct _FcitxMessages {
     /**
      * number of message strings
      **/
-    uint msgCount;
+    unsigned int msgCount;
     /**
      * the messages is updated or not
      **/
