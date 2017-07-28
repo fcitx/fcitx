@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-07-28 05:02-0700\n"
-"PO-Revision-Date: 2017-07-28 12:00+0000\n"
+"POT-Creation-Date: 2017-07-28 06:02-0700\n"
+"PO-Revision-Date: 2017-07-28 12:48+0000\n"
 "Last-Translator: mar well <m.wellendorf@gmx.de>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
@@ -147,7 +147,7 @@ msgstr "ABC"
 
 #: data/config.desc:26
 msgid "ALT Both"
-msgstr "ALT Beide"
+msgstr "Beide ALT-Tasten"
 
 #: data/config.desc:20
 msgid "ALT_L_SHIFT"
@@ -248,7 +248,7 @@ msgstr "Reihenfolge anpassen"
 #: src/im/pinyin/fcitx-pinyin.desc:59 src/im/pinyin/fcitx-pinyin.desc:68
 #: src/im/pinyin/fcitx-pinyin.desc:77 src/im/table/table.desc:24
 msgid "AdjustFast"
-msgstr "schnell"
+msgstr "Schnell einstellen"
 
 #: src/im/pinyin/fcitx-pinyin.desc:60 src/im/pinyin/fcitx-pinyin.desc:69
 #: src/im/pinyin/fcitx-pinyin.desc:78 src/im/table/table.desc:25
@@ -353,7 +353,7 @@ msgstr "Phrasen selbst vorschlagen"
 #: src/module/autoeng/fcitx-autoeng.desc:26
 #: src/module/autoeng/fcitx-autoeng.desc:34
 msgid "Auto English"
-msgstr "Auto Englisch"
+msgstr "Englisch automatisch"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:3
 msgid "Auto English Mode"
@@ -663,7 +663,7 @@ msgstr "Löschen"
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
-msgstr "Löschhäufigkeit"
+msgstr "Frequenz leeren"
 
 #: src/module/imselector/fcitx-imselector.desc:14
 msgid "Clear local Input Method"
@@ -963,7 +963,7 @@ msgstr "Nicht mehr zeigen"
 
 #: data/addon.desc:82
 msgid "Do not show in GUI"
-msgstr "Nichts in Gnome-Anwendungen zeigen"
+msgstr "Nicht in grafischen Anwendungen zeigen"
 
 #: data/config.desc:259
 msgid "Do not show input window if there is only one candidate and preedit"
@@ -1247,7 +1247,7 @@ msgstr "Autokorrektur gn/ng"
 
 #: src/im/pinyin/fcitx-pinyin.desc:145
 msgid "Fix misstype v/u like jv, qv, xv, yv"
-msgstr "Falscheingaben korrigieren wie: v/u like jv, qv, xv, yv"
+msgstr "Falscheingaben korrigieren wie: v/u oder jv, qv, xv, yv"
 
 #: src/im/pinyin/fcitx-pinyin.desc:18
 msgid "Fix preedit cursor at head"
@@ -1626,7 +1626,7 @@ msgstr ""
 
 #: src/module/clipboard/fcitx-clipboard.desc:31
 msgid "Include the text currently selected in clipboard history."
-msgstr "Den kürzlich in der Zwischenablage ausgewählten Text einschließen"
+msgstr "Den gerade in der Zwischenablage ausgewählten Text einschließen"
 
 #: src/ui/classic/skin.desc:313
 msgid "Inctive Tray Icon"
@@ -1823,7 +1823,7 @@ msgstr "Links"
 
 #: data/config.desc:27
 msgid "Left Super"
-msgstr "Links Super"
+msgstr "Linke Super-Taste"
 
 #: src/im/table/table.c:596
 msgid ""
@@ -1946,7 +1946,7 @@ msgstr "Maximale Anzahl von Wortvorschlägen"
 
 #: src/module/autoeng/fcitx-autoeng.desc:23
 msgid "Maximum length of spell hint list for Auto English"
-msgstr "Maximale Länge der Rechtschreibungshinweise für Auto Englisch"
+msgstr "Maximale Länge der Rechtschreibungshinweise für automatisches Englisch"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 msgid "Maximum length of spell hint list for Pinyin Enhance"
@@ -2139,7 +2139,7 @@ msgstr "Overlay Y offset"
 #: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
 #: src/ui/classic/skin.desc:373
 msgid "Overlay dock position"
-msgstr "Dock Ebene Position"
+msgstr "Position des Ebenen-Docks"
 
 #: src/ui/classic/skin.desc:122 src/ui/classic/skin.desc:228
 #: src/ui/classic/skin.desc:358
@@ -2479,7 +2479,7 @@ msgstr "Rechts"
 
 #: data/config.desc:28
 msgid "Right Super"
-msgstr "Rechts Super"
+msgstr "Rechte Super-Taste"
 
 #: src/module/clipboard/fcitx-clipboard.desc:20
 msgid ""
@@ -2864,7 +2864,7 @@ msgstr "Wechsel zum Modus Vollbreite Zeichen"
 
 #: data/config.desc:102
 msgid "Switching Remind Mode"
-msgstr ""
+msgstr "Erinnerungsmodus wechseln"
 
 #: data/config.desc:96
 msgid "Switching Virtual Keyboard"
@@ -2893,7 +2893,7 @@ msgstr "Farbe Eingabe Tabelle"
 
 #: src/im/table/fcitx-table.conf.in:4
 msgid "Table Input Method for Fcitx"
-msgstr "Table Einggabemethode für Fcitx"
+msgstr "Table Eingabemethode für Fcitx"
 
 #: src/module/vk/vk.c:61
 msgid "Table Symbol"
@@ -3177,7 +3177,7 @@ msgstr ""
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
 msgid "Useful when you hardly ever use abbreviated pinyin."
-msgstr "VOn NUtzen, wenn man quasi nie verkürztes Pinyin benutzt."
+msgstr "Nützlich, wenn man quasi nie verkürztes Pinyin benutzt."
 
 #: src/im/pinyin/fcitx-pinyin.desc:11
 msgid "User Defined"
