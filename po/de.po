@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-07-28 04:02-0700\n"
-"PO-Revision-Date: 2017-07-28 11:00+0000\n"
+"POT-Creation-Date: 2017-07-28 05:02-0700\n"
+"PO-Revision-Date: 2017-07-28 12:00+0000\n"
 "Last-Translator: mar well <m.wellendorf@gmx.de>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
@@ -43,7 +43,7 @@ msgstr "${1} nicht gefunden"
 
 #: data/script/fcitx-diagnose.sh:927
 msgid "${1} works properly."
-msgstr "${1} läuft ohne Fehler"
+msgstr "${1} läuft ohne Fehler."
 
 #: tools/gui/quickphrase-editor/editor.cpp:323
 #, kde-format
@@ -52,7 +52,7 @@ msgstr "%1 ist eine Systemdatei, wollen Sie stattdessen alle Phrasen löschen?"
 
 #: tools/gui/quickphrase-editor/editor.cpp:51
 msgid "&Add"
-msgstr "&Add"
+msgstr "&Hinzufügen"
 
 #: tools/gui/quickphrase-editor/editor.cpp:52
 msgid "&Batch Edit"
@@ -64,11 +64,11 @@ msgstr "&Schließen"
 
 #: tools/gui/quickphrase-editor/editor.cpp:53
 msgid "&Delete"
-msgstr "&Delete"
+msgstr "&Löschen"
 
 #: tools/gui/quickphrase-editor/editor.cpp:55
 msgid "&Import"
-msgstr "&Import"
+msgstr "&Importieren"
 
 #: tools/gui/quickphrase-editor/editor.cpp:57
 msgid "&Operation"
@@ -88,7 +88,7 @@ msgstr "(Nicht erreichbar)"
 
 #: data/script/fcitx-diagnose.sh:656
 msgid "/Beginner%27s_Guide"
-msgstr "/Beginner%27s_Guide"
+msgstr "/Anfänger %27s_Handbuch"
 
 #: data/script/fcitx-diagnose.sh:703
 msgid "/Hall_of_Shame_for_Linux_IME_Support"
@@ -96,7 +96,7 @@ msgstr "/Hall_of_Shame_für_Linux_IME_Support"
 
 #: data/script/fcitx-diagnose.sh:667
 msgid "/Input_method_related_environment_variables"
-msgstr "/Eingabemethodenbezogenen_Umgebungsvariablen"
+msgstr "/Eingabemethodenbezogene_Umgebungsvariablen"
 
 #: data/script/fcitx-diagnose.sh:683
 msgid "/Note_for_GNOME_Later_than_3.6"
@@ -132,7 +132,7 @@ msgstr "<Private Use>"
 
 #: src/module/unicode/charselectdata.c:279
 msgid "<not assigned>"
-msgstr "<nicht ausgewählt>"
+msgstr "<not assigned>"
 
 #: src/im/keyboard/fcitx-keyboard.desc:33
 msgid ""
@@ -211,7 +211,7 @@ msgstr "Phrase hinzufügen"
 
 #: src/module/unicode/fcitx-unicode.conf.in:4
 msgid "Add Unicode Typing Support"
-msgstr "Unicode Eingabe unterstützen"
+msgstr "Unicode-Unterstützung hinzufügen"
 
 #: src/im/keyboard/fcitx-keyboard.desc:44
 msgid "Add current input buffer to user dictionary"
@@ -474,16 +474,16 @@ msgstr "Die Benutzerdaten können nicht gesichert werden: %s"
 
 #: data/script/fcitx-diagnose.sh:925
 msgid "Cannot connect to fcitx correctly."
-msgstr "Kann nicht richtig mit Fcitx verbinden"
+msgstr "Kann nicht richtig mit Fcitx verbinden."
 
 #: tools/gui/quickphrase-editor/editor.cpp:296
 #, kde-format
 msgid "Cannot create file %1."
-msgstr "Datei %1 kann nciht erstellt werden."
+msgstr "Datei %1 kann nicht erstellt werden."
 
 #: data/script/fcitx-diagnose.sh:774
 msgid "Cannot determine desktop environment."
-msgstr "Kann die Desktopumgebung nicht feststellen"
+msgstr "Kann die Desktopumgebung nicht feststellen."
 
 #: data/script/fcitx-diagnose.sh:1317
 msgid "Cannot find ${2} for gtk ${1}"
@@ -491,7 +491,7 @@ msgstr "${2} für gtk ${1} kann nicht gefunden werden"
 
 #: data/script/fcitx-diagnose.sh:944
 msgid "Cannot find DBus name ${1} owner."
-msgstr "Kann den Eigentümer vom dbus mit Namen $(1) nicht finden."
+msgstr "Kann den Eigentümer vom dbus mit Namen ${1} nicht finden."
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
@@ -514,7 +514,7 @@ msgstr "Kann das Fcitz Addon Konfigurationsverzeichnis nicht finden."
 
 #: data/script/fcitx-diagnose.sh:888
 msgid "Cannot find fcitx executable!"
-msgstr "Kann das Programm Fcitx nicht finden"
+msgstr "Kann das Programm Fcitx nicht finden!"
 
 #: data/script/fcitx-diagnose.sh:1405
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
@@ -553,11 +553,11 @@ msgstr "Kann keine kimpanel DBus- oder andere aktivierte Schnittstelle finden."
 
 #: data/script/fcitx-diagnose.sh:952
 msgid "Cannot find pid of DBus name ${1} owner."
-msgstr "Kann die PID des Eigentümers des dbus mit Namen $(1) nicht finden."
+msgstr "Kann die PID des Eigentümers des dbus mit Namen ${1} nicht finden."
 
 #: data/script/fcitx-diagnose.sh:1107
 msgid "Cannot find xim_server on root window."
-msgstr "Kann keinen xim-Server für root finden."
+msgstr "Kann keinen xim_Server für root finden."
 
 #: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
@@ -571,7 +571,7 @@ msgstr "Kann  XMODIFIERS: ${1} nicht richtig interpretieren"
 msgid "Cannot load default skin, is installation correct?"
 msgstr ""
 "die Standardoberfläche kann nicht geladen werden, ist die Installation "
-"vollstädnig?"
+"vollständig?"
 
 #: src/ui/classic/skin.c:126
 #, c-format
@@ -671,7 +671,7 @@ msgstr "Lokale Eingabemethode zurücksetzen"
 
 #: src/module/imselector/imselector.c:326
 msgid "Clear local input method"
-msgstr "Lokale Eingabemethode löschen"
+msgstr "Lokale Eingabemethode leeren"
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:3
 #: src/module/clipboard/fcitx-clipboard.desc:1
@@ -755,11 +755,11 @@ msgstr "Auswahl eines Kandidaten zusätzlich mit SPACE bestätigen"
 
 #: data/script/fcitx-diagnose.sh:996
 msgid "Config GUI for gtk${1} not found."
-msgstr "Konfigurationsoberfläche für gtk${1} nicht gefunden"
+msgstr "Konfigurationsoberfläche für gtk${1} nicht gefunden."
 
 #: data/script/fcitx-diagnose.sh:992
 msgid "Config GUI for gtk${1}:"
-msgstr "Konfigurationsoberfläche für gtk${1}"
+msgstr "Konfigurationsoberfläche für gtk${1}:"
 
 #: data/script/fcitx-diagnose.sh:1012
 msgid "Config GUI for kde:"
@@ -838,7 +838,7 @@ msgstr "Name der aktivierten Eingabemethode"
 
 #: data/script/fcitx-diagnose.sh:839
 msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr "Das gegenwärtige Fcitz Konfigurationsverzeichnis ist ${1} (${2})."
+msgstr "Das gegenwärtige Fcitx Konfigurationsverzeichnis ist ${1} (${2})."
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
@@ -924,7 +924,7 @@ msgstr "Desktop Umgebung:"
 
 #: data/script/fcitx-diagnose.sh:776
 msgid "Desktop environment is ${1}."
-msgstr "Die Desktopumgebung ist ${1}"
+msgstr "Die Desktopumgebung ist ${1}."
 
 #: src/im/table/data/db.conf.in:3
 msgid "Dianbaoma"
@@ -1301,15 +1301,15 @@ msgstr "Aktivierte Benutzeroberflächen-Addons ${1} gefunden:"
 
 #: data/script/fcitx-diagnose.sh:919
 msgid "Found ${1} fcitx process:"
-msgstr "Gefundener Fcitxprozess ${1}"
+msgstr "Gefundener Fcitxprozess ${1}:"
 
 #: data/script/fcitx-diagnose.sh:917
 msgid "Found ${1} fcitx processes:"
-msgstr "Gefundene Fcitxprozesse ${1}"
+msgstr "Gefundene Fcitxprozesse ${1}:"
 
 #: data/script/fcitx-diagnose.sh:1297
 msgid "Found ${2} for unknown gtk version at ${1}."
-msgstr "${2} für unbekannte gtk Version hier gefunden: ${1}."
+msgstr "${2} für unbekannte gtk-Version hier gefunden: ${1}."
 
 #: data/script/fcitx-diagnose.sh:1289
 msgid "Found ${3} for gtk ${1} at ${2}."
@@ -1349,7 +1349,7 @@ msgstr "Unbekannte Version des Eingabemethodencaches gefunden: ${1}"
 
 #: data/script/fcitx-diagnose.sh:1373
 msgid "Found immodules cache for gtk ${1} at ${2}."
-msgstr "Eingabemodulcaches für gtk ${1} gefunden: ${2}"
+msgstr "Eingabemodulcache für gtk ${1} gefunden: ${2}"
 
 #: data/script/fcitx-diagnose.sh:1190
 msgid "Found unknown fcitx qt module: ${1}."
@@ -1575,9 +1575,9 @@ msgid ""
 "order to use any input method other than ${2}. See ${link} for more detail "
 "as well as alternative solutions."
 msgstr ""
-"Wenn Sie  ${1} benutzen, sollten Sie  ${2}, deinstallieren, ${3},  um andere "
-"Eingabemethoden als ${2} zu benutzen. Mehr Info und andere Lösungen hier: "
-"${link} "
+"Wenn Sie  ${1} benutzen wollen, sollten Sie ${2} deinstallieren, oder ${3} "
+"entfernen, um andere Eingabemethoden als ${2} zu benutzen. Mehr Info und "
+"andere Lösungen hier: ${link} "
 
 #: data/script/fcitx-diagnose.sh:689
 msgid ""
@@ -1585,9 +1585,10 @@ msgid ""
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
-"Wenn Sie  ${1} benutzen, sollten Sie  ${2}, deinstallieren, ${3} entfernen "
-"oder den Befehl ${g36_disable_ibus} um die iBus-Integration zu deaktivieren, "
-"um andere Eingabemethoden als ${2} zu benutzen. Mehr Info hier: ${link} "
+"Wenn Sie  ${1} benutzen, sollten Sie ${2} deinstallieren, ${3} entfernen "
+"oder den Befehl ${g36_disable_ibus} ausführen, um die iBus-Integration zu "
+"deaktivieren und andere Eingabemethoden als ${2} zu benutzen. Mehr Info "
+"hier: ${link} "
 
 #: src/im/table/table.desc:218
 msgid "Ignore Punctuation"
@@ -1664,7 +1665,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:666
 msgid "Input Method Related Environment Variables: "
-msgstr "Eingabemethodenbezogenen Umgebungsvariablen:"
+msgstr "Eingabemethodenbezogenene Umgebungsvariablen:"
 
 #: data/script/fcitx-diagnose.sh:1545
 msgid "Input Methods:"
@@ -2155,7 +2156,7 @@ msgstr "Eigentümer des dbus mit dem Namen ${1} ist ${2}."
 
 #: data/script/fcitx-diagnose.sh:948
 msgid "PID of DBus name ${1} owner is ${2}."
-msgstr "Die PID vom Eigentümer des dbus mit Namen $(1) ist $(2)."
+msgstr "Die PID vom Eigentümer des dbus mit Namen ${1} ist ${2}."
 
 #: data/inputmethod.desc:23
 msgid "Parent"
@@ -2584,7 +2585,7 @@ msgstr "Eingabemethode beibehalten"
 
 #: data/addon.desc:36
 msgid "SharedLibrary"
-msgstr "SharedLibrary"
+msgstr "Gemeinsam genutzte Bibliotheken"
 
 #: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:148
 #: src/module/autoeng/fcitx-autoeng.desc:9
@@ -2753,7 +2754,7 @@ msgstr "Rechtschreibungshinweis"
 
 #: src/im/keyboard/keyboard.c:902
 msgid "Spell hint is disabled."
-msgstr "Rechtschreibungshinweis ist deaktiviert"
+msgstr "Rechtschreibungshinweis ist deaktiviert."
 
 #: src/im/keyboard/keyboard.c:901
 msgid "Spell hint is enabled."
@@ -2952,7 +2953,7 @@ msgid ""
 msgstr ""
 "Um anwendungsspezifische Probleme nachzusehen, die eventuell bei der "
 "Verwendung von xim auftreten, siehe ${link1}. Für mehr Infos zu generellen "
-"Problemen mit xim, einschließlich Abstürzen von Programmen siehe ${link2}"
+"Problemen mit xim, einschließlich Abstürzen von Programmen, siehe ${link2}"
 
 #: src/module/punc/punc.c:150 src/module/punc/punc.c:569
 msgid "Toggle Full Width Punctuation"
@@ -3192,7 +3193,7 @@ msgstr "Farbe nutzerdefinierter Phrasen"
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
-msgstr "Benutze $(1) um dbus zu überprüfen"
+msgstr "Benutze ${1} um dbus zu überprüfen."
 
 #: data/script/fcitx-diagnose.sh:1294 data/script/fcitx-diagnose.sh:1377
 msgid "Version Line:"
@@ -3232,7 +3233,7 @@ msgstr "Wanfeng"
 
 #: data/script/fcitx-diagnose.sh:876
 msgid "Why is it bad to run as root"
-msgstr "Warum es schlecht ist, es mit root auszuführen"
+msgstr "Warum es schlecht ist, es als root auszuführen"
 
 #: src/im/table/data/wbx.conf.in:3
 msgid "Wubi"
@@ -3279,11 +3280,11 @@ msgstr "XIM Encoding:"
 
 #: data/script/fcitx-diagnose.sh:1113
 msgid "XIM for Emacs:"
-msgstr "XIM für Emacs"
+msgstr "XIM für Emacs:"
 
 #: data/script/fcitx-diagnose.sh:1091
 msgid "XIM_SERVERS on root window:"
-msgstr "XIM-Server im Root-Fenster"
+msgstr "XIM_Server im Root-Fenster:"
 
 #: src/frontend/xim/xim.c:157
 msgid "XMODIFIERS Error."
@@ -3362,9 +3363,9 @@ msgid ""
 "You only have one input method enabled, please add a keyboard input method "
 "as the first one and your main input method as the second one."
 msgstr ""
-"Es ist nur eine Eingabemethode aktiviert, bitte aktivieren Sie wenigstens "
-"eine \"Tastatureingabemethode\" als ersten Eintrag und die "
-"Haupteingabemethode 2 als zweiten Eintrag."
+"Es ist nur eine Eingabemethode aktiviert. Bitte aktivieren Sie wenigstens "
+"eine Tastatureingabemethode als ersten Eintrag und die Haupteingabemethode "
+"als zweiten Eintrag."
 
 #: data/script/fcitx-diagnose.sh:1582
 msgid ""
@@ -3383,7 +3384,7 @@ msgstr ""
 "Sie benutzen Fcitx mit Benutzeroberfläche, aber das fcitx-configtool konnte "
 "nicht gefunden werden. Der Paketname ist normalerweise fcitx-config-gtk, "
 "fcitx-config-gtk3 oder fcitx-configtool. Fcitx wird die Konfiguration nun "
-"mit einem Texteditor öffnen."
+"mit dem Standard-Texteditor öffnen."
 
 #: data/script/fcitx-configtool.sh:144
 msgid ""
@@ -3393,7 +3394,7 @@ msgid ""
 msgstr ""
 "Sie benutzen gegenwärtig KDE, aber das Kontrollmodul für Fcitx kann nicht "
 "gefunden werden. Der Paketname ist normalerweise kcm-fcitx oder kde-config-"
-"fcitx. Die Konfigurationsdatei wird nun mit dem Standart-Texteditor geöffnet."
+"fcitx. Die Konfigurationsdatei wird nun mit dem Standard-Texteditor geöffnet."
 
 #: data/script/fcitx-diagnose.sh:1115
 msgid ""
