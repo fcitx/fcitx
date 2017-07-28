@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-01-21 23:01-0800\n"
-"PO-Revision-Date: 2017-01-22 06:06+0000\n"
+"POT-Creation-Date: 2017-07-28 04:02-0700\n"
+"PO-Revision-Date: 2017-07-28 11:00+0000\n"
 "Last-Translator: mar well <m.wellendorf@gmx.de>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
@@ -483,7 +483,7 @@ msgstr "Datei %1 kann nciht erstellt werden."
 
 #: data/script/fcitx-diagnose.sh:774
 msgid "Cannot determine desktop environment."
-msgstr "Kann die Desktopumgebung micht feststellen"
+msgstr "Kann die Desktopumgebung nicht feststellen"
 
 #: data/script/fcitx-diagnose.sh:1317
 msgid "Cannot find ${2} for gtk ${1}"
@@ -557,7 +557,7 @@ msgstr "Kann die PID des Eigentümers des dbus mit Namen $(1) nicht finden."
 
 #: data/script/fcitx-diagnose.sh:1107
 msgid "Cannot find xim_server on root window."
-msgstr "Kann keinen xim-Server für dieses Fenster finden."
+msgstr "Kann keinen xim-Server für root finden."
 
 #: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
@@ -755,7 +755,7 @@ msgstr "Auswahl eines Kandidaten zusätzlich mit SPACE bestätigen"
 
 #: data/script/fcitx-diagnose.sh:996
 msgid "Config GUI for gtk${1} not found."
-msgstr "Oberfläche für die Konfiguration von gtk${1} nicht gefunden"
+msgstr "Konfigurationsoberfläche für gtk${1} nicht gefunden"
 
 #: data/script/fcitx-diagnose.sh:992
 msgid "Config GUI for gtk${1}:"
@@ -1042,7 +1042,7 @@ msgstr "Erweiterte Pinyineingabe in Fcitx"
 msgid "End Key"
 msgstr "Taste ENDE"
 
-#: src/module/xkbdbus/xkbdbus.c:218
+#: src/module/xkbdbus/xkbdbus.c:258
 msgid "English (US)"
 msgstr "English (US)"
 
@@ -1341,7 +1341,7 @@ msgstr "QT-Eingabemodul für fcitx gefunden: ${1}."
 
 #: data/script/fcitx-diagnose.sh:1032
 msgid "Found fcitx-configtool at ${1}."
-msgstr "fcitx-configtool hiergefunden ${1}."
+msgstr "fcitx-configtool hier gefunden: ${1}."
 
 #: data/script/fcitx-diagnose.sh:1381
 msgid "Found immodule cache for unknown gtk version at ${1}."
@@ -2538,7 +2538,7 @@ msgstr "Konfiguration und Eingabeverlauf sichern"
 msgid "Scroll between Input Method"
 msgstr "Durch Eingabemethoden scrollen"
 
-#: src/module/unicode/unicode.c:230
+#: src/module/unicode/unicode.c:272
 msgid "Search unicode"
 msgstr "Unicode suchen"
 
@@ -3157,7 +3157,7 @@ msgstr "Benutzte ENTER um den existierenden String zu bestätigen"
 #: data/config.desc:10
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr ""
-"Extra Triggertaste nur benutzen, wenn sie vorher zum inaktivieren benutzt "
+"Extra Triggertaste nur benutzen, wenn sie vorher zum Inaktivieren benutzt "
 "wurde"
 
 #: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:554
@@ -3315,8 +3315,8 @@ msgid ""
 "Xim server name: \"${1}\" is different from that set in the environment "
 "variable: \"${2}\"."
 msgstr ""
-"Der Name des Xim-Servers \"${1}\" ist unterschiedlich von dem in der "
-"Umgebungsvariablen gesetzen: \"${2}\"."
+"Der Name des xim-Servers \"${1}\" ist unterschiedlich von dem in der "
+"Umgebungsvariablen gesetzten: \"${2}\"."
 
 #: data/script/fcitx-diagnose.sh:874
 msgid ""
@@ -3411,7 +3411,7 @@ msgid ""
 "Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have "
 "trouble committing strings using XIM."
 msgstr ""
-"Ihr LC_CTYPE isf auf ${1} gesetzt, dessen Encoding nicht UTF-8 ist. Sie "
+"Ihr LC_CTYPE ist auf ${1} gesetzt, dessen Encoding nicht UTF-8 ist. Sie "
 "werden eventuell Schwierigkeiten haben, Strings mit XIM einzugeben."
 
 #: data/script/fcitx-diagnose.sh:1594
