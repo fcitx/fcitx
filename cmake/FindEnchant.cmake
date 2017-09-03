@@ -52,7 +52,7 @@ if(ENCHANT_INCLUDE_DIR AND ENCHANT_LIBRARIES)
   void enchant_broker_set_ordering(EnchantBroker *broker,
                                    const char *const tag,
                                    const char *const ordering);
-  void enchant_dict_add_to_personal(EnchantDict *dict, const char *const word,
+  void enchant_dict_add(EnchantDict *dict, const char *const word,
                                     ssize_t len);
 
   int main()
@@ -64,7 +64,7 @@ if(ENCHANT_INCLUDE_DIR AND ENCHANT_LIBRARIES)
       enchant = enchant_broker_init();
       enchant_broker_set_ordering(enchant, \"*\", \"aspell,myspell,ispell\");
       dict = enchant_broker_request_dict(enchant, \"en\");
-      enchant_dict_add_to_personal(dict, \"Fcitx\", strlen(\"Fcitx\"));
+      enchant_dict_add(dict, \"Fcitx\", strlen(\"Fcitx\"));
       suggestions = enchant_dict_suggest(dict, \"Fcitx\", strlen(\"Fcitx\"),
                                          &number);
       enchant_dict_free_string_list(dict, suggestions);

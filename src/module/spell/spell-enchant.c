@@ -49,7 +49,7 @@ static void *(*_enchant_broker_request_dict)(void *broker,
 static void (*_enchant_broker_set_ordering)(void *broker,
                                             const char *const tag,
                                             const char *const ordering) = NULL;
-static void (*_enchant_dict_add_to_personal)(void *dict, const char *const word,
+static void (*_enchant_dict_add)(void *dict, const char *const word,
                                              ssize_t len) = NULL;
 
 static boolean
@@ -72,7 +72,7 @@ SpellEnchantLoadLib()
     ENCHANT_LOAD_SYMBOL(enchant_broker_free);
     ENCHANT_LOAD_SYMBOL(enchant_broker_request_dict);
     ENCHANT_LOAD_SYMBOL(enchant_broker_set_ordering);
-    ENCHANT_LOAD_SYMBOL(enchant_dict_add_to_personal);
+    ENCHANT_LOAD_SYMBOL(enchant_dict_add);
     return true;
 fail:
     if (_enchant_handle) {
@@ -230,7 +230,7 @@ SpellEnchantAddPersonal(FcitxSpell *spell, const char *new_word)
     if (!SpellEnchantInit(spell))
         return;
     if (spell->enchant_dict && !spell->enchant_saved_lang) {
-        _enchant_dict_add_to_personal(spell->enchant_dict, new_word,
+        _enchant_dict_add(spell->enchant_dict, new_word,
                                       strlen(new_word));
         return;
     }
