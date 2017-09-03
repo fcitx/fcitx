@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2017-07-21 13:14+0000\n"
+"PO-Revision-Date: 2017-09-03 14:32+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:514
 msgid "${1} not found."
-msgstr ""
+msgstr "${1} ikke fundet."
 
 #: data/script/fcitx-diagnose.sh:655
 msgid "Beginner's Guide"
@@ -1336,7 +1336,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:51
 msgid "&Add"
-msgstr ""
+msgstr "&Tilføj"
 
 #: tools/gui/quickphrase-editor/editor.cpp:52
 msgid "&Batch Edit"
@@ -1344,7 +1344,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:53
 msgid "&Delete"
-msgstr ""
+msgstr "&Slet"
 
 #: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"
@@ -1352,31 +1352,31 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:55
 msgid "&Import"
-msgstr ""
+msgstr "&Importér"
 
 #: tools/gui/quickphrase-editor/editor.cpp:56
 msgid "E&xport"
-msgstr ""
+msgstr "&Eksportér"
 
 #: tools/gui/quickphrase-editor/editor.cpp:57
 msgid "&Operation"
-msgstr ""
+msgstr "&Handling"
 
 #: tools/gui/quickphrase-editor/editor.cpp:68
 msgid "Add File"
-msgstr ""
+msgstr "Tilføj fil"
 
 #: tools/gui/quickphrase-editor/editor.cpp:69
 msgid "Remove File"
-msgstr ""
+msgstr "Fjern fil"
 
 #: tools/gui/quickphrase-editor/editor.cpp:70
 msgid "Refresh List"
-msgstr ""
+msgstr "Genopfrisk liste"
 
 #: tools/gui/quickphrase-editor/editor.cpp:131
 msgid "Save Changes"
-msgstr ""
+msgstr "Gem ændringer"
 
 #: tools/gui/quickphrase-editor/editor.cpp:132
 msgid ""
@@ -1390,7 +1390,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:279
 msgid "Create new file"
-msgstr ""
+msgstr "Opret ny fil"
 
 #: tools/gui/quickphrase-editor/editor.cpp:280
 msgid "Please input a filename for newfile"
@@ -1398,7 +1398,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:285
 msgid "Invalid filename"
-msgstr ""
+msgstr "Ugyldigt filnavn"
 
 #: tools/gui/quickphrase-editor/editor.cpp:285
 msgid "File name should not contain '/'."
@@ -1407,16 +1407,16 @@ msgstr ""
 #: tools/gui/quickphrase-editor/editor.cpp:295
 #: tools/gui/quickphrase-editor/editor.cpp:342
 msgid "File Operation Failed"
-msgstr ""
+msgstr "Filhandling mislykkedes"
 
 #: tools/gui/quickphrase-editor/editor.cpp:296
 #, kde-format
 msgid "Cannot create file %1."
-msgstr ""
+msgstr "Kan ikke oprette filen %1."
 
 #: tools/gui/quickphrase-editor/editor.cpp:322
 msgid "Cannot remove system file"
-msgstr ""
+msgstr "Kan ikke fjerne systemfil"
 
 #: tools/gui/quickphrase-editor/editor.cpp:323
 #, kde-format
@@ -1425,12 +1425,12 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editor.cpp:334
 msgid "Confirm deletion"
-msgstr ""
+msgstr "Bekræft sletning"
 
 #: tools/gui/quickphrase-editor/editor.cpp:335
 #, kde-format
 msgid "Are you sure to delete %1?"
-msgstr ""
+msgstr "Er du sikker på, at du vil slette %1?"
 
 #: tools/gui/quickphrase-editor/editor.cpp:343
 #, kde-format
@@ -1439,7 +1439,7 @@ msgstr ""
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:30
 msgid "Keyword:"
-msgstr ""
+msgstr "Nøgleord:"
 
 #: tools/gui/quickphrase-editor/editordialog.cpp:31
 msgid "Phrase:"
@@ -1448,11 +1448,11 @@ msgstr ""
 #: tools/gui/quickphrase-editor/filelistmodel.cpp:47
 #: src/module/spell/fcitx-spell.desc:5
 msgid "Default"
-msgstr ""
+msgstr "Standard"
 
 #: tools/gui/quickphrase-editor/model.cpp:56
 msgid "Keyword"
-msgstr ""
+msgstr "Nøgleord"
 
 #: tools/gui/quickphrase-editor/model.cpp:58
 msgid "Phrase"
@@ -1460,23 +1460,23 @@ msgstr ""
 
 #: tools/gui/wrapper/mainwindow.cpp:40
 msgid "&Save"
-msgstr ""
+msgstr "&Gem"
 
 #: tools/gui/wrapper/mainwindow.cpp:41
 msgid "&Reset"
-msgstr ""
+msgstr "&Nulstil"
 
 #: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
-msgstr ""
+msgstr "&Luk"
 
 #: data/fcitx-autostart.desktop.in:4 data/fcitx.desktop.in:4
 msgid "Start Input Method"
-msgstr ""
+msgstr "Start inputmetode"
 
 #: data/fcitx-configtool.desktop.in:2
 msgid "Fcitx Configuration"
-msgstr ""
+msgstr "Fcitx-konfiguration"
 
 #: data/fcitx-configtool.desktop.in:3
 msgid "Input Method Configuration"
@@ -1745,11 +1745,11 @@ msgstr ""
 #: data/addon.desc:45 data/addon.desc:50 data/addon.desc:55 data/addon.desc:64
 #: data/addon.desc:69 data/addon.desc:74 data/addon.desc:79
 msgid "Addon"
-msgstr ""
+msgstr "Tilføjelse"
 
 #: data/addon.desc:3 data/inputmethod.desc:7
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: data/addon.desc:7
 msgid "Name that can be display in UI"
@@ -1757,13 +1757,13 @@ msgstr ""
 
 #: data/addon.desc:12
 msgid "Comment"
-msgstr ""
+msgstr "Kommentar"
 
 #: data/addon.desc:18 data/inputmethod.desc:1 data/inputmethod.desc:5
 #: data/inputmethod.desc:9 data/inputmethod.desc:13 data/inputmethod.desc:17
 #: data/inputmethod.desc:21
 msgid "InputMethod"
-msgstr ""
+msgstr "InputMetode"
 
 #: data/addon.desc:19
 msgid "Frontend"
@@ -1771,43 +1771,43 @@ msgstr ""
 
 #: data/addon.desc:20
 msgid "Module"
-msgstr ""
+msgstr "Modul"
 
 #: data/addon.desc:21
 msgid "UI"
-msgstr ""
+msgstr "Brugerflade"
 
 #: data/addon.desc:22
 msgid "Category"
-msgstr ""
+msgstr "Kategori"
 
 #: data/addon.desc:27
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiveret"
 
 #: data/addon.desc:31
 msgid "Library"
-msgstr ""
+msgstr "Bibliotek"
 
 #: data/addon.desc:36
 msgid "SharedLibrary"
-msgstr ""
+msgstr "DeltBibliotek"
 
 #: data/addon.desc:37
 msgid "DBus"
-msgstr ""
+msgstr "DBus"
 
 #: data/addon.desc:38
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: data/addon.desc:43
 msgid "Dependency"
-msgstr ""
+msgstr "Afhængighed"
 
 #: data/addon.desc:48
 msgid "Priority of addon"
-msgstr ""
+msgstr "Prioritet af tilføjelse"
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
@@ -1827,7 +1827,7 @@ msgstr ""
 
 #: data/addon.desc:62
 msgid "ConfigFile"
-msgstr ""
+msgstr "KonfigurationsFil"
 
 #: data/addon.desc:67
 msgid "Argument for InputMethod Register"
@@ -1858,7 +1858,7 @@ msgstr "Hottast"
 
 #: data/config.desc:5
 msgid "Trigger Input Method"
-msgstr ""
+msgstr "Udløs inputmetode"
 
 #: data/config.desc:10
 msgid "Use extra trigger key only after using it to inactivate"
@@ -1866,79 +1866,79 @@ msgstr ""
 
 #: data/config.desc:16
 msgid "R_CTRL"
-msgstr ""
+msgstr "H_CTRL"
 
 #: data/config.desc:17
 msgid "R_SHIFT"
-msgstr ""
+msgstr "H_SKIFT"
 
 #: data/config.desc:18
 msgid "L_SHIFT"
-msgstr ""
+msgstr "V_SKIFT"
 
 #: data/config.desc:19
 msgid "L_CTRL"
-msgstr ""
+msgstr "V_CTRL"
 
 #: data/config.desc:20
 msgid "ALT_L_SHIFT"
-msgstr ""
+msgstr "ALT_V_SKIFT"
 
 #: data/config.desc:21
 msgid "ALT_R_SHIFT"
-msgstr ""
+msgstr "ALT_H_SKIFT"
 
 #: data/config.desc:22
 msgid "CTRL Both"
-msgstr ""
+msgstr "CTRL begge"
 
 #: data/config.desc:23
 msgid "SHIFT Both"
-msgstr ""
+msgstr "SKIFT begge"
 
 #: data/config.desc:24
 msgid "L_ALT"
-msgstr ""
+msgstr "V_ALT"
 
 #: data/config.desc:25
 msgid "R_ALT"
-msgstr ""
+msgstr "H_ALT"
 
 #: data/config.desc:26
 msgid "ALT Both"
-msgstr ""
+msgstr "ALT begge"
 
 #: data/config.desc:27
 msgid "Left Super"
-msgstr ""
+msgstr "Venstre Super"
 
 #: data/config.desc:28
 msgid "Right Super"
-msgstr ""
+msgstr "Højre Super"
 
 #: data/config.desc:29
 msgid "Super Both"
-msgstr ""
+msgstr "Super begge"
 
 #: data/config.desc:30
 msgid "Ctrl+Left Super"
-msgstr ""
+msgstr "Ctrl+Venstre Super"
 
 #: data/config.desc:31
 msgid "Ctrl+Right Super"
-msgstr ""
+msgstr "Ctrl+Højre Super"
 
 #: data/config.desc:32
 msgid "Super+Left Ctrl"
-msgstr ""
+msgstr "Super+Venstre Ctrl"
 
 #: data/config.desc:33
 msgid "Super+Right Ctrl"
-msgstr ""
+msgstr "Super+Højre Ctrl"
 
 #: data/config.desc:35
 msgid "Custom"
-msgstr ""
+msgstr "Tilpasset"
 
 #: data/config.desc:37
 msgid "Extra key for trigger input method"
@@ -1966,19 +1966,19 @@ msgstr ""
 
 #: data/config.desc:74
 msgid "CTRL_SHIFT"
-msgstr ""
+msgstr "CTRL_SKIFT"
 
 #: data/config.desc:75
 msgid "ALT_SHIFT"
-msgstr ""
+msgstr "ALT_SKIFT"
 
 #: data/config.desc:76
 msgid "CTRL_SUPER"
-msgstr ""
+msgstr "CTRL_SUPER"
 
 #: data/config.desc:77
 msgid "ALT_SUPER"
-msgstr ""
+msgstr "ALT_SUPER"
 
 #: data/config.desc:79
 msgid "Scroll between Input Method"
@@ -2058,7 +2058,7 @@ msgstr ""
 
 #: data/config.desc:169
 msgid "No"
-msgstr ""
+msgstr "Nej"
 
 #: data/config.desc:170
 msgid "All"
@@ -2066,7 +2066,7 @@ msgstr ""
 
 #: data/config.desc:171
 msgid "PerProgram"
-msgstr ""
+msgstr "PrProgram"
 
 #: data/config.desc:172
 msgid "Share State Among Window"
@@ -2074,11 +2074,11 @@ msgstr ""
 
 #: data/config.desc:178
 msgid "Inactive"
-msgstr ""
+msgstr "Inaktiv"
 
 #: data/config.desc:179
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: data/config.desc:180
 msgid "Default Input Method State"
@@ -2121,7 +2121,7 @@ msgstr ""
 #: data/config.desc:238 data/config.desc:244 data/config.desc:250
 #: data/config.desc:256
 msgid "Appearance"
-msgstr ""
+msgstr "Udseende"
 
 #: data/config.desc:223
 msgid "Show Input Method Hint After Input method changed"
@@ -2141,7 +2141,7 @@ msgstr ""
 
 #: data/config.desc:247
 msgid "Show Version"
-msgstr ""
+msgstr "Vis version"
 
 #: data/config.desc:253
 msgid "Do not show input window if there is only preedit string"
@@ -2153,28 +2153,28 @@ msgstr ""
 
 #: data/inputmethod.desc:3
 msgid "UniqueName"
-msgstr ""
+msgstr "UniktNavn"
 
 #: data/inputmethod.desc:11
 msgid "IconName"
-msgstr ""
+msgstr "IkonNavn"
 
 #: data/inputmethod.desc:15
 msgid "Priority"
-msgstr ""
+msgstr "Proritet"
 
 #: data/inputmethod.desc:19
 msgid "LangCode"
-msgstr ""
+msgstr "SprogKode"
 
 #: data/inputmethod.desc:23
 msgid "Parent"
-msgstr ""
+msgstr "Forælder"
 
 #: data/profile.desc:1 data/profile.desc:6 data/profile.desc:11
 #: data/profile.desc:16 data/profile.desc:21 data/profile.desc:26
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: data/profile.desc:2
 msgid "Use Full Width Character"
@@ -2202,7 +2202,7 @@ msgstr ""
 
 #: src/frontend/xim/fcitx-xim.desc:1
 msgid "Xim"
-msgstr ""
+msgstr "Xim"
 
 #: src/frontend/xim/fcitx-xim.desc:4
 msgid "Use On The Spot Style for XIM (Cannot change during running)"
@@ -2225,28 +2225,28 @@ msgstr ""
 #: src/module/quickphrase/fcitx-quickphrase.desc:5
 #: src/module/quickphrase/fcitx-quickphrase.desc:20
 msgid "None"
-msgstr ""
+msgstr "Ingen"
 
 #: src/im/keyboard/fcitx-keyboard.desc:12 src/im/table/table.desc:146
 #: src/module/autoeng/fcitx-autoeng.desc:7
 #: src/module/clipboard/fcitx-clipboard.desc:40
 #: src/module/quickphrase/fcitx-quickphrase.desc:21
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:147
 #: src/module/autoeng/fcitx-autoeng.desc:8
 #: src/module/clipboard/fcitx-clipboard.desc:41
 #: src/module/quickphrase/fcitx-quickphrase.desc:22
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:148
 #: src/module/autoeng/fcitx-autoeng.desc:9
 #: src/module/clipboard/fcitx-clipboard.desc:42
 #: src/module/quickphrase/fcitx-quickphrase.desc:23
 msgid "Shift"
-msgstr ""
+msgstr "Skift"
 
 #: src/im/keyboard/fcitx-keyboard.desc:19
 msgid "Toggle the word hint"
