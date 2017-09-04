@@ -1,7 +1,6 @@
 #!/bin/sh
 
-function download_file()
-{
+download_file() {
     if [ "x$3" != "xf" ]; then
         if [ -f $1 ]; then
             return

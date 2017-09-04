@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #   Copyright (C) 2012~2013 by Yichao Yu
 #   yyc1992@gmail.com
 #

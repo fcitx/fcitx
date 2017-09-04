@@ -25,7 +25,7 @@ else
     }
 fi
 
-if type gettext > /dev/null 2>&1; then
+if which gettext > /dev/null 2>&1; then
     _() {
         gettext "$@"
     }
