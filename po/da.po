@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2017-09-03 14:32+0000\n"
+"PO-Revision-Date: 2017-09-11 22:00+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -38,11 +38,11 @@ msgstr "${1} ikke fundet."
 
 #: data/script/fcitx-diagnose.sh:655
 msgid "Beginner's Guide"
-msgstr ""
+msgstr "Begynderguide"
 
 #: data/script/fcitx-diagnose.sh:656
 msgid "/Beginner%27s_Guide"
-msgstr ""
+msgstr "/Begynder%27s_guide"
 
 #: data/script/fcitx-diagnose.sh:663
 msgid ""
@@ -52,19 +52,19 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:666
 msgid "Input Method Related Environment Variables: "
-msgstr ""
+msgstr "Inputmetode som er har relation til miljøvariabler:"
 
 #: data/script/fcitx-diagnose.sh:667
 msgid "/Input_method_related_environment_variables"
-msgstr ""
+msgstr "/Inputmetode_som_er_har_relation_til_miljøvariabler"
 
 #: data/script/fcitx-diagnose.sh:682
 msgid "Note for GNOME Later than 3.6"
-msgstr ""
+msgstr "Bemærkning til GNOME senere end 3.6"
 
 #: data/script/fcitx-diagnose.sh:683
 msgid "/Note_for_GNOME_Later_than_3.6"
-msgstr ""
+msgstr "/Bemærkning_til_GNOME_senere_end_3.6"
 
 #: data/script/fcitx-diagnose.sh:689
 msgid ""
@@ -98,7 +98,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:706
 msgid "here"
-msgstr ""
+msgstr "her"
 
 #: data/script/fcitx-diagnose.sh:707
 msgid "/XIM"
@@ -106,27 +106,27 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:743
 msgid "System Info:"
-msgstr ""
+msgstr "Systeminfo:"
 
 #: data/script/fcitx-diagnose.sh:771
 msgid "Desktop Environment:"
-msgstr ""
+msgstr "Skrivebordsmiljø:"
 
 #: data/script/fcitx-diagnose.sh:774
 msgid "Cannot determine desktop environment."
-msgstr ""
+msgstr "Kan ikke bestemme skrivebordsmiljø."
 
 #: data/script/fcitx-diagnose.sh:776
 msgid "Desktop environment is ${1}."
-msgstr ""
+msgstr "Skrivebordsmiljø er ${1}."
 
 #: data/script/fcitx-diagnose.sh:779
 msgid "Bash Version:"
-msgstr ""
+msgstr "Bash-version:"
 
 #: data/script/fcitx-diagnose.sh:784
 msgid "Environment:"
-msgstr ""
+msgstr "Miljø:"
 
 #: data/script/fcitx-diagnose.sh:787
 msgid "Keyboard Layout:"
@@ -134,15 +134,15 @@ msgstr "Tastaturlayout:"
 
 #: data/script/fcitx-diagnose.sh:802
 msgid "Locale:"
-msgstr ""
+msgstr "Sprog:"
 
 #: data/script/fcitx-diagnose.sh:805
 msgid "All locale:"
-msgstr ""
+msgstr "Alle sprog:"
 
 #: data/script/fcitx-diagnose.sh:807
 msgid "Current locale:"
-msgstr ""
+msgstr "Nuværende sprog:"
 
 #: data/script/fcitx-diagnose.sh:811
 msgid "Error occurs when running ${1}. Please check your locale settings."
@@ -150,11 +150,11 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:819
 msgid "Directories:"
-msgstr ""
+msgstr "Mapper:"
 
 #: data/script/fcitx-diagnose.sh:821
 msgid "Home:"
-msgstr ""
+msgstr "Hjem:"
 
 #: data/script/fcitx-diagnose.sh:825
 msgid "Environment variable ${1} is not set."
@@ -178,7 +178,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:844
 msgid "Current user:"
-msgstr ""
+msgstr "Nuværende bruger:"
 
 #: data/script/fcitx-diagnose.sh:845
 msgid "The script is run as ${1} (${2})."
@@ -198,7 +198,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:866
 msgid "Running as root:"
-msgstr ""
+msgstr "Kører som root:"
 
 #: data/script/fcitx-diagnose.sh:869
 msgid ""
@@ -208,7 +208,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:871 data/script/fcitx-diagnose.sh:877
 msgid "sudo environment variables"
-msgstr ""
+msgstr "sudo-miljøvariabler"
 
 #: data/script/fcitx-diagnose.sh:874
 msgid ""
@@ -219,19 +219,19 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:876
 msgid "Why is it bad to run as root"
-msgstr ""
+msgstr "Hvorfor det er en dårlig ide at køre som root"
 
 #: data/script/fcitx-diagnose.sh:885
 msgid "Fcitx State:"
-msgstr ""
+msgstr "Fcitx-tilstand:"
 
 #: data/script/fcitx-diagnose.sh:886
 msgid "executable:"
-msgstr ""
+msgstr "eksekverbar:"
 
 #: data/script/fcitx-diagnose.sh:888
 msgid "Cannot find fcitx executable!"
-msgstr ""
+msgstr "Kan ikke finde fcitx-eksekverbar!"
 
 #: data/script/fcitx-diagnose.sh:890
 msgid "Please check ${1} for how to install fcitx."
@@ -239,23 +239,23 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:894
 msgid "Found fcitx at ${1}."
-msgstr ""
+msgstr "Fandt fcitx ved ${1}."
 
 #: data/script/fcitx-diagnose.sh:896
 msgid "version:"
-msgstr ""
+msgstr "version:"
 
 #: data/script/fcitx-diagnose.sh:899
 msgid "Fcitx version: ${1}"
-msgstr ""
+msgstr "Fcitx-version: ${1}"
 
 #: data/script/fcitx-diagnose.sh:900
 msgid "process:"
-msgstr ""
+msgstr "proces:"
 
 #: data/script/fcitx-diagnose.sh:910
 msgid "Fcitx is not running."
-msgstr ""
+msgstr "Fcitx kører ikke."
 
 #: data/script/fcitx-diagnose.sh:912
 msgid ""
@@ -281,7 +281,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:933
 msgid "DBus interface:"
-msgstr ""
+msgstr "DBus-grænseflade:"
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
@@ -360,11 +360,11 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1068
 msgid "XMODIFIERS is not set"
-msgstr ""
+msgstr "XMODIFIERS er ikke sat"
 
 #: data/script/fcitx-diagnose.sh:1081
 msgid "Cannot interpret XMODIFIERS: ${1}."
-msgstr ""
+msgstr "Kan ikke fortolke XMODIFIERS: ${1}."
 
 #: data/script/fcitx-diagnose.sh:1089
 msgid "Xim Server Name from Environment variable is ${1}."
@@ -401,7 +401,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1118
 msgid "XIM encoding:"
-msgstr ""
+msgstr "XIM-kodning:"
 
 #: data/script/fcitx-diagnose.sh:1120
 msgid ""
@@ -451,7 +451,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1294 data/script/fcitx-diagnose.sh:1377
 msgid "Version Line:"
-msgstr ""
+msgstr "Versionslinje:"
 
 #: data/script/fcitx-diagnose.sh:1297
 msgid "Found ${2} for unknown gtk version at ${1}."
@@ -503,7 +503,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1437
 msgid "Fcitx Addons:"
-msgstr ""
+msgstr "Fcitx-tilføjelser:"
 
 #: data/script/fcitx-diagnose.sh:1438
 msgid "Addon Config Dir:"
@@ -551,7 +551,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1518
 msgid "User Interface:"
-msgstr ""
+msgstr "Brugerflade:"
 
 #: data/script/fcitx-diagnose.sh:1520
 msgid "Cannot find enabled fcitx user interface!"
@@ -563,7 +563,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1531
 msgid "Kimpanel process:"
-msgstr ""
+msgstr "Kimpanel-proces:"
 
 #: data/script/fcitx-diagnose.sh:1539
 msgid ""
@@ -572,7 +572,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1545
 msgid "Input Methods:"
-msgstr ""
+msgstr "Inputmetoder:"
 
 #: data/script/fcitx-diagnose.sh:1549
 msgid "Cannot read im list from fcitx profile."
@@ -588,7 +588,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1575
 msgid "Default input methods:"
-msgstr ""
+msgstr "Standard inputmetoder:"
 
 #: data/script/fcitx-diagnose.sh:1578
 msgid "You don't have any input methods enabled."
@@ -624,27 +624,27 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1683
 msgid "Configuration:"
-msgstr ""
+msgstr "Konfiguration:"
 
 #: data/script/fcitx-diagnose.sh:1689
 msgid "Log:"
-msgstr ""
+msgstr "Log:"
 
 #: src/frontend/xim/xim.c:134
 msgid "X11 not initialized"
-msgstr ""
+msgstr "X11 er ikke initialiseret"
 
 #: src/frontend/xim/xim.c:146
 msgid "Can't Create imWindow"
-msgstr ""
+msgstr "Kan ikke oprette imWindow"
 
 #: src/frontend/xim/xim.c:157
 msgid "XMODIFIERS Error."
-msgstr ""
+msgstr "XMODIFIERS-fejl."
 
 #: src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
-msgstr ""
+msgstr "Sæt venligst XMODIFIERS."
 
 #: src/frontend/xim/xim.c:239
 #, c-format
@@ -665,19 +665,19 @@ msgstr "Tastatur"
 
 #: src/im/keyboard/keyboard.c:426 src/im/keyboard/keyboard.c:443
 msgid "(Unavailable)"
-msgstr ""
+msgstr "(utilgængelig)"
 
 #: src/im/keyboard/keyboard.c:900
 msgid "Spell hint"
-msgstr ""
+msgstr "Stavetip"
 
 #: src/im/keyboard/keyboard.c:901
 msgid "Spell hint is enabled."
-msgstr ""
+msgstr "Stavetip er aktiveret."
 
 #: src/im/keyboard/keyboard.c:902
 msgid "Spell hint is disabled."
-msgstr ""
+msgstr "Stavetip er deaktiveret."
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -694,11 +694,11 @@ msgstr ""
 #: src/im/pinyin/fcitx-pinyin.desc:127 src/im/pinyin/fcitx-pinyin.desc:132
 #: src/im/pinyin/fcitx-pinyin.desc:137 src/im/pinyin/fcitx-pinyin.desc:142
 msgid "Pinyin"
-msgstr ""
+msgstr "Pinyin"
 
 #: src/im/pinyin/py.c:121 src/im/pinyin/shuangpin.conf.in:3
 msgid "Shuangpin"
-msgstr ""
+msgstr "Shuangpin"
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
@@ -743,7 +743,7 @@ msgstr ""
 
 #: src/im/pinyin/py.c:2059
 msgid "Remind: "
-msgstr ""
+msgstr "Påmind:"
 
 #: src/im/pinyin/py.c:2141
 msgid "Migrate the old file path to the new one"
@@ -761,7 +761,7 @@ msgstr ""
 
 #: src/im/table/table.c:621
 msgid "Pinyin: "
-msgstr ""
+msgstr "Pinyin: "
 
 #: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
