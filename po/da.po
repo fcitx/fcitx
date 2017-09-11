@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2017-09-11 22:00+0000\n"
+"PO-Revision-Date: 2017-09-11 22:07+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -743,7 +743,7 @@ msgstr ""
 
 #: src/im/pinyin/py.c:2059
 msgid "Remind: "
-msgstr "Påmind:"
+msgstr "Påmindelse:"
 
 #: src/im/pinyin/py.c:2141
 msgid "Migrate the old file path to the new one"
@@ -765,7 +765,7 @@ msgstr "Pinyin: "
 
 #: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
-msgstr ""
+msgstr "Kan ikke finde Pinyin"
 
 #: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
@@ -781,7 +781,7 @@ msgstr ""
 
 #: src/im/table/table.c:1287
 msgid "Remind:"
-msgstr ""
+msgstr "Påmindelse:"
 
 #: src/im/table/table.c:1395
 msgid "Phrase is already in Dict "
@@ -789,11 +789,11 @@ msgstr ""
 
 #: src/im/table/table.c:1399
 msgid "Code is "
-msgstr ""
+msgstr "Kode is"
 
 #: src/im/table/table.c:1403
 msgid " Ctrl+Delete To Delete"
-msgstr ""
+msgstr " Ctrl+Delete for at slette"
 
 #: src/im/table/tabledict.c:41
 msgid "Loading Table Dict"
@@ -817,7 +817,7 @@ msgstr ""
 
 #: src/im/table/tabledict.c:466
 msgid "Rename OK"
-msgstr ""
+msgstr "Omdøbning OK"
 
 #: src/lib/fcitx/addon.c:138
 #, c-format
@@ -888,7 +888,7 @@ msgstr ""
 #: src/lib/fcitx-config/fcitx-config.c:1180
 #: src/lib/fcitx-config/fcitx-config.c:1187
 msgid "Available Value:"
-msgstr ""
+msgstr "Tilgængelig værdi:"
 
 #: src/lib/fcitx-config/fcitx-config.c:1200
 #, c-format
@@ -925,11 +925,11 @@ msgstr ""
 #: src/lib/fcitx/ime.c:1695 src/module/notificationitem/notificationitem.c:411
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
-msgstr ""
+msgstr "Inputmetode"
 
 #: src/lib/fcitx/ime.c:1797
 msgid "Input Speed: "
-msgstr ""
+msgstr "Inputhastighed:"
 
 #: src/lib/fcitx/ime.c:1800
 msgid "/min  Time Used: "
@@ -941,15 +941,15 @@ msgstr ""
 
 #: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
 msgid "Use remind"
-msgstr ""
+msgstr "Brug påmindelse"
 
 #: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
 msgid "No remind"
-msgstr ""
+msgstr "Ingen påmindelse"
 
 #: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:553
 msgid "Toggle Remind"
-msgstr ""
+msgstr "Påmindelse til/fra"
 
 #: src/lib/fcitx/instance.c:528
 msgid "pthread mutex init failed"
@@ -1998,7 +1998,7 @@ msgstr ""
 
 #: data/config.desc:102
 msgid "Switching Remind Mode"
-msgstr ""
+msgstr "Skifter påmindelsestilstand"
 
 #: data/config.desc:108
 msgid "Switching Full Width Character Mode"
@@ -2300,7 +2300,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:11
 msgid "User Defined"
-msgstr ""
+msgstr "Brugerdefineret"
 
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
@@ -2570,15 +2570,15 @@ msgstr ""
 
 #: src/im/table/table.desc:121
 msgid "Not Set"
-msgstr ""
+msgstr "Ikke sat"
 
 #: src/im/table/table.desc:122
 msgid "Vertical"
-msgstr ""
+msgstr "Lodret"
 
 #: src/im/table/table.desc:123
 msgid "Horizontal"
-msgstr ""
+msgstr "Vandret"
 
 #: src/im/table/table.desc:131
 msgid "Symbol File"
@@ -2586,15 +2586,15 @@ msgstr ""
 
 #: src/im/table/table.desc:136
 msgid "Choose"
-msgstr ""
+msgstr "Vælg"
 
 #: src/im/table/table.desc:151
 msgid "Language Code for this table"
-msgstr ""
+msgstr "Sprogkode for denne tabel"
 
 #: src/im/table/table.desc:156
 msgid "Enable"
-msgstr ""
+msgstr "Aktivér"
 
 #: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
@@ -2684,7 +2684,7 @@ msgstr ""
 #: src/module/chttrans/fcitx-chttrans.desc:9
 #: src/module/chttrans/fcitx-chttrans.desc:14
 msgid "TraditionalChinese"
-msgstr ""
+msgstr "Traditionel kinesisk"
 
 #: src/module/chttrans/fcitx-chttrans.desc:4
 msgid "Native"
@@ -2945,12 +2945,12 @@ msgstr ""
 
 #: src/module/unicode/fcitx-unicode.desc:1
 msgid "Unicode"
-msgstr ""
+msgstr "Unicode"
 
 #: src/module/xkb/fcitx-xkb.desc:1 src/module/xkb/fcitx-xkb.desc:6
 #: src/module/xkb/fcitx-xkb.desc:12 src/module/xkb/fcitx-xkb.desc:17
 msgid "X Keyboard"
-msgstr ""
+msgstr "X-tastatur"
 
 #: src/module/xkb/fcitx-xkb.desc:4
 msgid "Allow to Override System XKB Settings"
@@ -2970,7 +2970,7 @@ msgstr ""
 
 #: src/module/xkb/fcitx-xkb.desc:15
 msgid "xmodmap command"
-msgstr ""
+msgstr "xmodmap-kommando"
 
 #: src/module/xkb/fcitx-xkb.desc:20
 msgid "Apply this custom xmodmap script after layout change"
@@ -3011,7 +3011,7 @@ msgstr "Skrifttype"
 
 #: src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
-msgstr ""
+msgstr "Menuens skrifttype"
 
 #: src/ui/classic/fcitx-classic-ui.desc:33
 msgid "Font Locale to display"
@@ -3019,15 +3019,15 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:39
 msgid "Use System Tray Icon"
-msgstr ""
+msgstr "Brug systembakkeikon"
 
 #: src/ui/classic/fcitx-classic-ui.desc:44
 msgid "Show"
-msgstr ""
+msgstr "Vis"
 
 #: src/ui/classic/fcitx-classic-ui.desc:45
 msgid "Auto"
-msgstr ""
+msgstr "Automatisk"
 
 #: src/ui/classic/fcitx-classic-ui.desc:46
 msgid "Hide when tray icon is available"
@@ -3035,7 +3035,7 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:47
 msgid "Hide"
-msgstr ""
+msgstr "Skjul"
 
 #: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
@@ -3047,24 +3047,24 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:59 src/ui/classic/skin.desc:3
 msgid "Skin Name"
-msgstr ""
+msgstr "Skinnavn"
 
 #: src/ui/classic/skin.desc:1 src/ui/classic/skin.desc:5
 #: src/ui/classic/skin.desc:9 src/ui/classic/skin.desc:13
 msgid "SkinInfo"
-msgstr ""
+msgstr "Skininfo"
 
 #: src/ui/classic/skin.desc:7
 msgid "Skin Version"
-msgstr ""
+msgstr "Skin-version"
 
 #: src/ui/classic/skin.desc:11
 msgid "Skin Author"
-msgstr ""
+msgstr "Skin-forfatter"
 
 #: src/ui/classic/skin.desc:15
 msgid "Description of Skin"
-msgstr ""
+msgstr "Beskrivelse af skin"
 
 #: src/ui/classic/skin.desc:17 src/ui/classic/skin.desc:21
 #: src/ui/classic/skin.desc:26 src/ui/classic/skin.desc:31
@@ -3113,7 +3113,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:57
 msgid "Other Color"
-msgstr ""
+msgstr "Anden farve"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -3140,11 +3140,11 @@ msgstr ""
 #: src/ui/classic/skin.desc:69 src/ui/classic/skin.desc:187
 #: src/ui/classic/skin.desc:317
 msgid "Background Image"
-msgstr ""
+msgstr "Baggrundsbillede"
 
 #: src/ui/classic/skin.desc:73
 msgid "Logo Icon"
-msgstr ""
+msgstr "Logoikon"
 
 #: src/ui/classic/skin.desc:77
 msgid "English Mode Icon"
