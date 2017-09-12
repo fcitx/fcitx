@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2016-04-18 11:01-0700\n"
-"PO-Revision-Date: 2017-09-11 22:07+0000\n"
+"PO-Revision-Date: 2017-09-12 20:30+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -411,11 +411,11 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1140
 msgid "You are using xim in ${1} programs."
-msgstr ""
+msgstr "Du bruger xim i ${1} programmer."
 
 #: data/script/fcitx-diagnose.sh:1145
 msgid "You may have trouble using fcitx in ${1} programs."
-msgstr ""
+msgstr "Det kan være at du har problemer med at bruge fcitx i ${1} programmer."
 
 #: data/script/fcitx-diagnose.sh:1171
 msgid "Qt IM module files:"
@@ -427,11 +427,11 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1187
 msgid "Found fcitx qt module: ${1}."
-msgstr ""
+msgstr "Fandt fcitx qt-modul: ${1}."
 
 #: data/script/fcitx-diagnose.sh:1190
 msgid "Found unknown fcitx qt module: ${1}."
-msgstr ""
+msgstr "Fandt ukendt fcitx qt-modul: ${1}."
 
 #: data/script/fcitx-diagnose.sh:1197 data/script/fcitx-diagnose.sh:1202
 msgid "Cannot find fcitx input method module for ${1}."
@@ -519,7 +519,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1452
 msgid "Addon List:"
-msgstr ""
+msgstr "Tilføjelsesliste:"
 
 #: data/script/fcitx-diagnose.sh:1456
 msgid "Invalid addon config file ${1}."
@@ -535,7 +535,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1491
 msgid "Addon Libraries:"
-msgstr ""
+msgstr "Tilføjelsesbiblioteker:"
 
 #: data/script/fcitx-diagnose.sh:1499
 msgid "Cannot find file ${1} of addon ${2}."
@@ -751,7 +751,7 @@ msgstr ""
 
 #: src/im/qw/qw.c:64 src/im/qw/fcitx-qw.conf.in:3 src/im/qw/qw.conf.in:3
 msgid "Quwei"
-msgstr ""
+msgstr "Quwei"
 
 #: src/im/table/table.c:596
 msgid ""
@@ -906,7 +906,7 @@ msgstr ""
 
 #: src/lib/fcitx/frontend.c:565
 msgid "No available frontend"
-msgstr ""
+msgstr "Ingen tilgængelig frontend"
 
 #: src/lib/fcitx/ime.c:303
 #, c-format
@@ -966,19 +966,19 @@ msgstr ""
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
-msgstr ""
+msgstr "Ryd"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
-msgstr ""
+msgstr "Venstre"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
-msgstr ""
+msgstr "Højre"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr ""
+msgstr "Tøm"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
@@ -986,7 +986,7 @@ msgstr ""
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr ""
+msgstr "Ikke-understøttet tast"
 
 #: src/lib/fcitx/ui.c:192
 #, c-format
@@ -1029,15 +1029,15 @@ msgstr ""
 
 #: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:456
 msgid "Press Enter to input text"
-msgstr ""
+msgstr "Tryk på Enter for at indtaste tekst"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:196
 msgid "Traditional Chinese"
-msgstr ""
+msgstr "Traditionel kinesisk"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
 msgid "Simplified Chinese"
-msgstr ""
+msgstr "Forenklet kinesisk"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 msgid "Toggle Simp/Trad Chinese Conversion"
@@ -1058,11 +1058,11 @@ msgstr ""
 
 #: src/module/clipboard/clipboard.c:372
 msgid "Select to paste"
-msgstr ""
+msgstr "Vælg for at indsætte"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:620
 msgid "Do not show again"
-msgstr ""
+msgstr "Vis ikke igen"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1101,7 +1101,7 @@ msgstr ""
 
 #: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:431
 msgid "Online Help"
-msgstr ""
+msgstr "Onlinehjælp"
 
 #: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
 #: src/ui/kimpanel/kimpanel.c:781
@@ -1110,32 +1110,32 @@ msgstr ""
 
 #: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:493
 msgid "Configure"
-msgstr ""
+msgstr "Konfigurer"
 
 #: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
 #: src/ui/kimpanel/kimpanel.c:786
 msgid "Restart"
-msgstr ""
+msgstr "Genstart"
 
 #: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:495
 msgid "Exit"
-msgstr ""
+msgstr "Afslut"
 
 #: src/module/notificationitem/notificationitem.c:456
 #: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:256
 msgid "No input window"
-msgstr ""
+msgstr "Intet inputvindue"
 
 #: src/module/notificationitem/notificationitem.c:462
 #: src/ui/kimpanel/kimpanel.c:281 src/ui/kimpanel/kimpanel.c:286
 #: data/config.desc:34
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktiveret"
 
 #: src/module/notificationitem/notificationitem.c:463
 #: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 msgid "Input Method Disabled"
-msgstr ""
+msgstr "Inputmetode deaktiveret"
 
 #: src/module/punc/punc.c:148 src/module/punc/punc.c:567
 msgid "Full width punct"
@@ -1181,31 +1181,31 @@ msgstr ""
 
 #: src/module/unicode/charselectdata.c:245
 msgid "<Non Private Use High Surrogate>"
-msgstr ""
+msgstr "<Non Private Use High Surrogate>"
 
 #: src/module/unicode/charselectdata.c:247
 msgid "<Private Use High Surrogate>"
-msgstr ""
+msgstr "<Private Use High Surrogate>"
 
 #: src/module/unicode/charselectdata.c:249
 msgid "<Low Surrogate>"
-msgstr ""
+msgstr "<Low Surrogate>"
 
 #: src/module/unicode/charselectdata.c:251
 msgid "<Private Use>"
-msgstr ""
+msgstr "<Private Use>"
 
 #: src/module/unicode/charselectdata.c:279
 msgid "<not assigned>"
-msgstr ""
+msgstr "<not assigned>"
 
 #: src/module/unicode/unicode.c:230
 msgid "Search unicode"
-msgstr ""
+msgstr "Søg efter unicode"
 
 #: src/module/vk/vk.c:51
 msgid "Latin"
-msgstr ""
+msgstr "Latinsk"
 
 #: src/module/vk/vk.c:52
 msgid "Fullwidth"
@@ -1213,23 +1213,23 @@ msgstr ""
 
 #: src/module/vk/vk.c:53
 msgid "Greek"
-msgstr ""
+msgstr "Græsk"
 
 #: src/module/vk/vk.c:54
 msgid "Russian"
-msgstr ""
+msgstr "Russisk"
 
 #: src/module/vk/vk.c:55
 msgid "Index"
-msgstr ""
+msgstr "Indeks"
 
 #: src/module/vk/vk.c:56
 msgid "Math"
-msgstr ""
+msgstr "Matematik"
 
 #: src/module/vk/vk.c:57
 msgid "Number"
-msgstr ""
+msgstr "Tal"
 
 #: src/module/vk/vk.c:58
 msgid "Special"
@@ -1261,11 +1261,11 @@ msgstr ""
 
 #: src/module/vk/vk.c:212
 msgid "Close virtual keyboard"
-msgstr ""
+msgstr "Luk virtuelt tastatur"
 
 #: src/module/xkbdbus/xkbdbus.c:218
 msgid "English (US)"
-msgstr ""
+msgstr "Engelsk (USA)"
 
 #: src/ui/cairostuff/font.c:46
 msgid "Error: Load fontconfig failed"
@@ -1274,11 +1274,11 @@ msgstr ""
 #: src/ui/cairostuff/font.c:119
 #, c-format
 msgid "your current font is: %s"
-msgstr ""
+msgstr "din nuværende skrifttype er: %s"
 
 #: src/ui/cairostuff/font.c:121
 msgid "no valid font."
-msgstr ""
+msgstr "ingen gyldig skrifttype."
 
 #: src/ui/classic/fcitx-skin-installer.sh:50
 msgid "Error: skin file should only contain one directory."
@@ -1480,11 +1480,11 @@ msgstr "Fcitx-konfiguration"
 
 #: data/fcitx-configtool.desktop.in:3
 msgid "Input Method Configuration"
-msgstr ""
+msgstr "Konfiguration af inputmetode"
 
 #: data/fcitx-configtool.desktop.in:4
 msgid "Change Fcitx Configuration"
-msgstr ""
+msgstr "Skift Fcitx-konfiguration"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -2925,11 +2925,11 @@ msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:6
 msgid "Aspell"
-msgstr ""
+msgstr "Aspell"
 
 #: src/module/spell/fcitx-spell.desc:7
 msgid "Myspell"
-msgstr ""
+msgstr "Myspell"
 
 #: src/module/spell/fcitx-spell.desc:8
 msgid "Preferred Enchant provider"
@@ -3197,7 +3197,7 @@ msgstr ""
 #: src/ui/classic/skin.desc:122 src/ui/classic/skin.desc:228
 #: src/ui/classic/skin.desc:358
 msgid "Overlay image"
-msgstr ""
+msgstr "Overlægningsbillede"
 
 #: src/ui/classic/skin.desc:128 src/ui/classic/skin.desc:234
 #: src/ui/classic/skin.desc:364
@@ -3268,13 +3268,13 @@ msgstr ""
 #: src/ui/classic/skin.desc:295 src/ui/classic/skin.desc:303
 #: src/ui/classic/skin.desc:397 src/ui/classic/skin.desc:405
 msgid "Copy"
-msgstr ""
+msgstr "Kopiér"
 
 #: src/ui/classic/skin.desc:154 src/ui/classic/skin.desc:162
 #: src/ui/classic/skin.desc:296 src/ui/classic/skin.desc:304
 #: src/ui/classic/skin.desc:398 src/ui/classic/skin.desc:406
 msgid "Resize"
-msgstr ""
+msgstr "Tilpas størrelse"
 
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
 #: src/ui/classic/skin.desc:403
@@ -3327,12 +3327,12 @@ msgstr ""
 #: src/ui/classic/skin.desc:269 src/ui/classic/skin.desc:277
 #: src/ui/classic/skin.desc:285
 msgid "Prev Page Icon"
-msgstr ""
+msgstr "Forrige side-ikon"
 
 #: src/ui/classic/skin.desc:273 src/ui/classic/skin.desc:281
 #: src/ui/classic/skin.desc:289
 msgid "Next Page Icon"
-msgstr ""
+msgstr "Næste side-ikon"
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
