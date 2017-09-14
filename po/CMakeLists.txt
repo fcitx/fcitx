@@ -1,6 +1,8 @@
-set(PO_LANGS de es ja zh_CN zh_TW ko)
-foreach(lang ${PO_LANGS})
-  fcitx_translate_add_po_file("${lang}" "${lang}.po")
+file(GLOB PO_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" *.po)
+
+foreach(po_file ${PO_FILES})
+  string(REPLACE ".po" "" po_lang "${po_file}")
+  fcitx_translate_add_po_file("${po_lang}" "${po_file}")
 endforeach()
 fcitx_translate_set_pot_target(pot fcitx fcitx.pot)
 
