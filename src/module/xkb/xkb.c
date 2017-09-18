@@ -200,52 +200,8 @@ static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
         if (rulesName[0] == '/') {
             fcitx_utils_alloc_cat_str(rulesFile, rulesName, ".xml");
         } else {
-            int count = 0, i = 0;
-            const char* base = XLIBDIR;
-            char *parent_to_free = NULL;
-            while (base[i]) {
-                if (base[i] == '/')
-                    count++;
-                i++;
-            }
-
-            /**
-             * guess X11 data base directory.
-             **/
-            if (count >= 3) {
-                // .../usr/lib/X11 -> /usr/share/X11/xkb vs
-                // .../usr/X11/lib -> /usr/X11/share/X11/xkb
-                const char* delta = StringEndsWith(base, "X11") ?
-                    "/../../share/X11" : "/../share/X11";
-                fcitx_utils_alloc_cat_str(parent_to_free, base, delta);
-                if(!fcitx_utils_isdir(parent_to_free)) {
-                    // fallback to ${base}/X11
-                    fcitx_utils_set_cat_str(parent_to_free, base, "/X11");
-                    if(!fcitx_utils_isdir(parent_to_free)) {
-                        free(parent_to_free);
-                        parent_to_free = NULL;
-                    }
-                }
-            }
-            const char *parent_path;
-            if (parent_to_free) {
-                /**
-                 * Found a existing dir, simplify it.
-                 * Using realpath() on rules files' name can change the base
-                 * name of the file (due to symlink), so it is only safe
-                 * to do it for directory's name. T-T..
-                 **/
-                char *tmp = realpath(parent_to_free, NULL);
-                parent_path = tmp;
-                free(parent_to_free);
-                parent_to_free = tmp;
-            } else {
-                // last fallback for known rules name.
-                parent_path = "/usr/share/X11";
-            }
-            fcitx_utils_alloc_cat_str(rulesFile, parent_path,
-                                      "/xkb/rules/", rulesName, ".xml");
-            fcitx_utils_free(parent_to_free);
+            fcitx_utils_alloc_cat_str(rulesFile, XKEYBOARDCONFIG_XKBBASE,
+                                      "/rules/", rulesName, ".xml");
         }
         free(rulesName);
     } else {
@@ -317,7 +273,7 @@ FcitxXkbSetRules(FcitxXkb* xkb, const char *rules_file, const char *model,
     if (rules == NULL) {
         char *rulesPath = FcitxXkbFindXkbRulesFile(xkb);
         size_t rulesBaseLen = strlen(rulesPath) - strlen(".xml");
-        if (strcmp(rulesPath + rulesBaseLen, ".xml") == 0) {
+        if (strlen(rulesPath) > strlen(".xml") && strcmp(rulesPath + rulesBaseLen, ".xml") == 0) {
             rulesPath[rulesBaseLen] = '\0';
         }
         rules = XkbRF_Load(rulesPath, "C", True, True);
