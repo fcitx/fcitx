@@ -365,6 +365,7 @@ void* RunInstance(void* arg)
         setjmp(FcitxRecover);
 
         if (instance->destroy || instance->restart) {
+            FcitxInstanceEnd(instance);
             FcitxInstanceRealEnd(instance);
             break;
         }
