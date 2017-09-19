@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-09-14 17:02-0700\n"
-"PO-Revision-Date: 2017-09-12 20:30+0000\n"
+"POT-Creation-Date: 2017-09-19 14:02-0700\n"
+"PO-Revision-Date: 2017-09-19 20:36+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -24,15 +24,15 @@ msgstr " Ctrl+Delete for at slette"
 
 #: data/script/fcitx-diagnose.sh:850
 msgid "${1} Environment Variables:"
-msgstr ""
+msgstr "${1} miljøvariabler:"
 
 #: data/script/fcitx-diagnose.sh:859
 msgid "${1} is not set."
-msgstr ""
+msgstr "${1} er ikke sat."
 
 #: data/script/fcitx-diagnose.sh:856
 msgid "${1} is set to ${2}."
-msgstr ""
+msgstr "${1} er sat til ${2}."
 
 #: data/script/fcitx-diagnose.sh:514
 msgid "${1} not found."
@@ -40,7 +40,7 @@ msgstr "${1} ikke fundet."
 
 #: data/script/fcitx-diagnose.sh:927
 msgid "${1} works properly."
-msgstr ""
+msgstr "${1} virker korrekt."
 
 #: tools/gui/quickphrase-editor/editor.cpp:323
 #, kde-format
@@ -53,7 +53,7 @@ msgstr "&Tilføj"
 
 #: tools/gui/quickphrase-editor/editor.cpp:52
 msgid "&Batch Edit"
-msgstr ""
+msgstr "&Batch-redigering"
 
 #: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
@@ -101,7 +101,7 @@ msgstr "/Bemærkning_til_GNOME_senere_end_3.6"
 
 #: data/script/fcitx-diagnose.sh:707
 msgid "/XIM"
-msgstr ""
+msgstr "/XIM"
 
 #: src/lib/fcitx/ime.c:1800
 msgid "/min  Time Used: "
@@ -139,7 +139,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:7
 msgid "ABC"
-msgstr ""
+msgstr "ABC"
 
 #: data/config.desc:26
 msgid "ALT Both"
@@ -258,7 +258,7 @@ msgstr ""
 
 #: data/config.desc:170
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: data/script/fcitx-diagnose.sh:1256
 msgid "All found Gtk ${1} immodule files exist."
@@ -392,7 +392,7 @@ msgstr "Begynderguide"
 
 #: src/im/table/data/qxm.conf.in:3
 msgid "Bingchan"
-msgstr ""
+msgstr "Bingchan"
 
 #: src/ui/classic/skin.desc:135 src/ui/classic/skin.desc:241
 #: src/ui/classic/skin.desc:371
@@ -432,7 +432,7 @@ msgstr ""
 #: src/module/remote/remote.c:70
 #, c-format
 msgid "Can't open socket %s: %s"
-msgstr ""
+msgstr "Kan ikke åbne socket %s: %s"
 
 #: src/ui/classic/skin.desc:41
 msgid "Candidate Index Color"
@@ -448,7 +448,7 @@ msgstr ""
 
 #: src/im/table/data/cangjie.conf.in:3
 msgid "Cangjie"
-msgstr ""
+msgstr "Cangjie"
 
 #: src/im/pinyin/py.c:1735
 #, c-format
@@ -771,7 +771,7 @@ msgstr "Konfigurer"
 #: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:501
 #: src/ui/kimpanel/kimpanel.c:781
 msgid "Configure Current Input Method"
-msgstr ""
+msgstr "Konfigurer nuværende inputmetode"
 
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
@@ -841,7 +841,7 @@ msgstr "Nuværende bruger:"
 
 #: data/script/fcitx-diagnose.sh:833
 msgid "Current value of ${1} is ${2} (${3})."
-msgstr ""
+msgstr "Nuværende værdi af ${1} er ${2} (${3})."
 
 #: data/config.desc:35
 msgid "Custom"
@@ -857,7 +857,7 @@ msgstr "DBus"
 
 #: src/module/dbus/fcitx-dbus.conf.in:3
 msgid "DBus Support"
-msgstr ""
+msgstr "DBus-understøttelse"
 
 #: src/module/notificationitem/fcitx-notificationitem.conf.in:3
 #: src/module/notificationitem/fcitx-notificationitem.conf.in:4
@@ -870,7 +870,7 @@ msgstr "DBus-grænseflade:"
 
 #: tools/gui/quickphrase-editor/editor.cpp:54
 msgid "De&lete All"
-msgstr ""
+msgstr "Slet &alle"
 
 #: tools/gui/quickphrase-editor/filelistmodel.cpp:47
 #: src/module/spell/fcitx-spell.desc:5
@@ -915,7 +915,7 @@ msgstr "Skrivebordsmiljø er ${1}."
 
 #: src/im/table/data/db.conf.in:3
 msgid "Dianbaoma"
-msgstr ""
+msgstr "Dianbaoma"
 
 #: data/script/fcitx-diagnose.sh:819
 msgid "Directories:"
@@ -950,7 +950,7 @@ msgstr "Vis ikke igen"
 
 #: data/addon.desc:82
 msgid "Do not show in GUI"
-msgstr ""
+msgstr "Vis ikke i grafisk brugerflade"
 
 #: data/config.desc:259
 msgid "Do not show input window if there is only one candidate and preedit"
@@ -1051,7 +1051,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:825
 msgid "Environment variable ${1} is not set."
-msgstr ""
+msgstr "Miljøvariablen ${1} er ikke sat."
 
 #: data/script/fcitx-diagnose.sh:1053
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
@@ -1059,7 +1059,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:829
 msgid "Environment variable ${1} is set to ${2}."
-msgstr ""
+msgstr "Miljøvariablen ${1} er ikke sat ${2}."
 
 #: data/script/fcitx-diagnose.sh:784
 msgid "Environment:"
@@ -1067,16 +1067,18 @@ msgstr "Miljø:"
 
 #: src/im/table/data/erbi.conf.in:3
 msgid "Erbi"
-msgstr ""
+msgstr "Erbi"
 
 #: data/script/fcitx-diagnose.sh:811
 msgid "Error occurs when running ${1}. Please check your locale settings."
 msgstr ""
+"Der opstod en fejl under kørsel af ${1}. Tjek venligst dine lokale "
+"indstillinger."
 
 #: tools/gui/quickphrase-editor/editor.cpp:343
 #, kde-format
 msgid "Error while deleting %1."
-msgstr ""
+msgstr "Fejl ved sletning af %1."
 
 #: src/ui/classic/fcitx-skin-installer.sh:64
 #, sh-format
@@ -1132,7 +1134,7 @@ msgstr ""
 #: src/ui/kimpanel/kimpanel.c:397 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
-msgstr ""
+msgstr "Fcitx"
 
 #: data/script/fcitx-diagnose.sh:1437
 msgid "Fcitx Addons:"
@@ -1152,7 +1154,7 @@ msgstr ""
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
-msgstr ""
+msgstr "Fcitx DBus-frontend"
 
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
@@ -1180,7 +1182,7 @@ msgstr ""
 
 #: src/frontend/xim/fcitx-xim.conf.in:3
 msgid "Fcitx XIM Frontend"
-msgstr ""
+msgstr "Fcitx XIM-frontend"
 
 #: data/script/fcitx-diagnose.sh:910
 msgid "Fcitx is not running."
@@ -1197,7 +1199,7 @@ msgstr "Filhandling mislykkedes"
 
 #: tools/gui/quickphrase-editor/editor.cpp:285
 msgid "File name should not contain '/'."
-msgstr ""
+msgstr "Filnavn må ikke indeholde '/'."
 
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
 #: src/ui/classic/skin.desc:403
@@ -1274,11 +1276,11 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:919
 msgid "Found ${1} fcitx process:"
-msgstr ""
+msgstr "Fandt ${1} fcitx-processer:"
 
 #: data/script/fcitx-diagnose.sh:917
 msgid "Found ${1} fcitx processes:"
-msgstr ""
+msgstr "Fandt ${1} fcitx-processer:"
 
 #: data/script/fcitx-diagnose.sh:1297
 msgid "Found ${2} for unknown gtk version at ${1}."
@@ -1334,11 +1336,11 @@ msgstr ""
 
 #: data/addon.desc:19
 msgid "Frontend"
-msgstr ""
+msgstr "Frontend"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:4
 msgid "Frontend Used by IM Modules"
-msgstr ""
+msgstr "Frontend brugt af IM-moduler"
 
 #: src/lib/fcitx/frontend.c:542
 msgid "Frontend: bad frontend"
@@ -1356,7 +1358,7 @@ msgstr ""
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
 msgid "Full width Character"
-msgstr ""
+msgstr "Fuld tegnbrede"
 
 #: src/module/punc/punc.c:148 src/module/punc/punc.c:567
 msgid "Full width punct"
@@ -1368,7 +1370,7 @@ msgstr ""
 
 #: src/module/vk/vk.c:52
 msgid "Fullwidth"
-msgstr ""
+msgstr "Fuld brede"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:3
 msgid "Fullwidth Character"
@@ -1461,7 +1463,7 @@ msgstr ""
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
 msgid "Half width Character"
-msgstr ""
+msgstr "Halv tegnbrede"
 
 #: data/script/fcitx-diagnose.sh:702
 msgid "Hall of Shame for Linux IME Support"
@@ -1477,7 +1479,7 @@ msgstr ""
 
 #: src/module/vk/vk.c:59
 msgid "Hiragana"
-msgstr ""
+msgstr "Hiragana"
 
 #: data/script/fcitx-diagnose.sh:821
 msgid "Home:"
@@ -1685,7 +1687,7 @@ msgstr ""
 
 #: src/module/vk/vk.c:60
 msgid "Katakana"
-msgstr ""
+msgstr "Katakana"
 
 #: src/im/table/table.desc:93
 msgid ""
@@ -1697,7 +1699,7 @@ msgstr ""
 #: src/im/table/fcitx-table.desc:11 src/im/table/fcitx-table.desc:16
 #: src/im/table/fcitx-table.desc:21 src/module/unicode/fcitx-unicode.desc:3
 msgid "Key"
-msgstr ""
+msgstr "Tast"
 
 #: src/ui/classic/skin.desc:416
 msgid "Key Color On Virutal Keyboard"
@@ -1860,7 +1862,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:5
 msgid "MS"
-msgstr ""
+msgstr "MS"
 
 #: src/ui/classic/skin.desc:117 src/ui/classic/skin.desc:223
 #: src/ui/classic/skin.desc:353
@@ -2020,7 +2022,7 @@ msgstr "Intet inputvindue"
 msgid "No local input method"
 msgstr ""
 
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:554
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:555
 msgid "No remind"
 msgstr "Ingen påmindelse"
 
@@ -2175,7 +2177,7 @@ msgstr "Pinyin: "
 
 #: src/im/pinyin/fcitx-pinyin.desc:9
 msgid "PinyinJiaJia"
-msgstr ""
+msgstr "PinyinJiaJia"
 
 #: data/script/fcitx-diagnose.sh:890
 msgid "Please check ${1} for how to install fcitx."
@@ -2295,7 +2297,7 @@ msgstr ""
 
 #: src/frontend/xim/fcitx-xim.conf.in:4
 msgid "Provides XIM support"
-msgstr ""
+msgstr "Leverer XIM-understøttelse"
 
 #: src/module/punc/fcitx-punc.conf.in:4
 msgid "Punctuation Conversion Support"
@@ -2363,7 +2365,7 @@ msgstr ""
 
 #: data/config.desc:84
 msgid "Reload configuration"
-msgstr ""
+msgstr "Genindlæs konfiguration"
 
 #: src/im/table/table.c:1287
 msgid "Remind:"
@@ -2375,7 +2377,7 @@ msgstr "Påmindelse:"
 
 #: src/module/remote/fcitx-remote-module.conf.in:3
 msgid "Remote"
-msgstr ""
+msgstr "Fjern"
 
 #: tools/gui/quickphrase-editor/editor.cpp:69
 msgid "Remove File"
@@ -2480,7 +2482,7 @@ msgstr ""
 
 #: data/config.desc:79
 msgid "Scroll between Input Method"
-msgstr ""
+msgstr "Rul mellem inputmetode"
 
 #: src/module/unicode/unicode.c:272
 msgid "Search unicode"
@@ -2512,7 +2514,7 @@ msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:6
 msgid "Semicolon"
-msgstr ""
+msgstr "Semikolon"
 
 #: src/im/table/table.desc:64
 msgid "Send Raw Preedit"
@@ -2588,7 +2590,7 @@ msgstr ""
 
 #: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
-msgstr ""
+msgstr "Skin"
 
 #: src/ui/classic/skin.desc:11
 msgid "Skin Author"
@@ -2676,7 +2678,7 @@ msgstr ""
 
 #: src/module/vk/vk.c:58
 msgid "Special"
-msgstr ""
+msgstr "Special"
 
 #: src/ui/classic/skin.desc:182
 msgid "Special Icon position"
@@ -2810,12 +2812,12 @@ msgstr "Skifter påmindelsestilstand"
 
 #: data/config.desc:96
 msgid "Switching Virtual Keyboard"
-msgstr ""
+msgstr "Skifter virtuelt tastatur"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:9
 #: src/im/table/table.desc:126
 msgid "Symbol"
-msgstr ""
+msgstr "Symbol"
 
 #: src/im/table/table.desc:131
 msgid "Symbol File"
@@ -2827,7 +2829,7 @@ msgstr "Systeminfo:"
 
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
 msgid "Table"
-msgstr ""
+msgstr "Tabel"
 
 #: src/ui/classic/skin.desc:53
 msgid "Table Code Color"
@@ -2839,7 +2841,7 @@ msgstr ""
 
 #: src/module/vk/vk.c:61
 msgid "Table Symbol"
-msgstr ""
+msgstr "Tabelsymbol"
 
 #: tools/gui/quickphrase-editor/editor.cpp:132
 msgid ""
@@ -2853,7 +2855,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:845
 msgid "The script is run as ${1} (${2})."
-msgstr ""
+msgstr "Scriptet køres som ${1} (${2})."
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
 msgid ""
@@ -2896,9 +2898,9 @@ msgstr ""
 
 #: src/ui/kimpanel/kimpanel.c:778
 msgid "Toggle Input Method"
-msgstr ""
+msgstr "Skift inputmetode"
 
-#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:555
+#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:556
 msgid "Toggle Remind"
 msgstr "Påmindelse til/fra"
 
@@ -2908,7 +2910,7 @@ msgstr ""
 
 #: src/module/vk/vk.c:154
 msgid "Toggle Virtual Keyboard"
-msgstr ""
+msgstr "Virtuelt tastatur til/fra"
 
 #: src/module/chttrans/fcitx-chttrans.desc:12
 msgid "Toggle for enable or disable"
@@ -3089,7 +3091,7 @@ msgstr ""
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr ""
 
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:554
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:555
 msgid "Use remind"
 msgstr "Brug påmindelse"
 
@@ -3119,7 +3121,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
-msgstr ""
+msgstr "Bruger ${1} til at tjekke dbus."
 
 #: data/script/fcitx-diagnose.sh:1294 data/script/fcitx-diagnose.sh:1377
 msgid "Version Line:"
@@ -3143,7 +3145,7 @@ msgstr ""
 
 #: src/module/vk/vk.c:179
 msgid "Virtual Keyboard"
-msgstr ""
+msgstr "Virtuelt tastatur"
 
 #: src/ui/classic/skin.desc:411
 msgid "Virtual Keyboard Image"
@@ -3151,11 +3153,11 @@ msgstr ""
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
-msgstr ""
+msgstr "Virtuelt tastatur tilstand"
 
 #: src/im/table/data/wanfeng.conf.in:3
 msgid "Wanfeng"
-msgstr ""
+msgstr "Wanfeng"
 
 #: data/script/fcitx-diagnose.sh:876
 msgid "Why is it bad to run as root"
@@ -3163,11 +3165,11 @@ msgstr "Hvorfor det er en dårlig ide at køre som root"
 
 #: src/im/table/data/wbx.conf.in:3
 msgid "Wubi"
-msgstr ""
+msgstr "Wubi"
 
 #: src/im/table/data/wbpy.conf.in:3
 msgid "WubiPinyin"
-msgstr ""
+msgstr "WubiPinyin"
 
 #: src/module/xkb/fcitx-xkb.desc:1 src/module/xkb/fcitx-xkb.desc:6
 #: src/module/xkb/fcitx-xkb.desc:12 src/module/xkb/fcitx-xkb.desc:17
@@ -3222,7 +3224,7 @@ msgstr "XMODIFIERS er ikke sat"
 
 #: src/im/pinyin/fcitx-pinyin.desc:10
 msgid "XiaoHe"
-msgstr ""
+msgstr "XiaoHe"
 
 #: src/frontend/xim/fcitx-xim.desc:1
 msgid "Xim"
@@ -3320,15 +3322,15 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"
-msgstr ""
+msgstr "Zhongwenzhixing"
 
 #: src/im/pinyin/fcitx-pinyin.desc:6
 msgid "Ziguang"
-msgstr ""
+msgstr "Ziguang"
 
 #: src/im/table/data/zrm.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:4
 msgid "Ziranma"
-msgstr ""
+msgstr "Ziranma"
 
 #: data/script/fcitx-diagnose.sh:886
 msgid "executable:"
@@ -3355,7 +3357,7 @@ msgstr "ingen gyldig skrifttype."
 msgid "process:"
 msgstr "proces:"
 
-#: src/lib/fcitx/instance.c:530
+#: src/lib/fcitx/instance.c:531
 msgid "pthread mutex init failed"
 msgstr ""
 
