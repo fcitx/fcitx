@@ -1730,6 +1730,7 @@ void KimpanelSuspend(void* arg)
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
     kimpanel->version = 1;
     kimpanel->hasSetLookupTable = false;
+    kimpanel->hasSetRelativeSpotRect = false;
 }
 
 
