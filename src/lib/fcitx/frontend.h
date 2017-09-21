@@ -79,6 +79,7 @@ extern "C" {
         CAPACITY_ALPHA = (1 << 21),
         CAPACITY_NAME = (1 << 22),
         CAPACITY_GET_IM_INFO_ON_FOCUS = (1 << 23),
+        CAPACITY_RELATIVE_CURSOR_RECT = (1 << 24),
     } FcitxCapacityFlags;
 
     /**

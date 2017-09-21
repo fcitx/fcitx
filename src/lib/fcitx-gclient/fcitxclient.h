@@ -85,6 +85,7 @@ void fcitx_client_focus_in(FcitxClient* self);
 void fcitx_client_focus_out(FcitxClient* self);
 void fcitx_client_set_cusor_rect(FcitxClient* self, int x, int y, int w, int h);
 void fcitx_client_set_cursor_rect(FcitxClient* self, int x, int y, int w, int h);
+void fcitx_client_set_relative_cursor_rect(FcitxClient* self, int x, int y, int w, int h);
 void fcitx_client_set_surrounding_text(FcitxClient* self, gchar* text, guint cursor, guint anchor);
 void fcitx_client_set_capacity(FcitxClient* self, guint flags);
 

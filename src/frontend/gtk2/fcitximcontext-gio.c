@@ -33,6 +33,10 @@
 #include <gdk/gdkkeysyms.h>
 #include <xkbcommon/xkbcommon-compose.h>
 
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/gdkwayland.h>
+#endif
+
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/frontend.h"
@@ -80,6 +84,7 @@ struct _FcitxIMContext {
     gboolean use_preedit;
     gboolean support_surrounding_text;
     gboolean is_inpreedit;
+    gboolean is_wayland;
     gchar* preedit_string;
     gchar* surrounding_text;
     int cursor_pos;
@@ -393,6 +398,11 @@ fcitx_im_context_init(FcitxIMContext *context)
     context->attrlist = NULL;
     context->last_updated_capacity = CAPACITY_SURROUNDING_TEXT;
 
+#ifdef GDK_WINDOWING_WAYLAND
+    if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ())) {
+        context->is_wayland = TRUE;
+    }
+#endif
     context->slave = gtk_im_context_simple_new();
     gtk_im_context_simple_add_table(GTK_IM_CONTEXT_SIMPLE(context->slave),
                                     cedilla_compose_seqs,
@@ -920,30 +930,47 @@ _set_cursor_location_internal(FcitxIMContext *fcitxcontext)
 
     area = fcitxcontext->area;
 
-    if (area.x == -1 && area.y == -1 && area.width == 0 && area.height == 0) {
-#if GTK_CHECK_VERSION (2, 91, 0)
-        area.x = 0;
-        area.y += gdk_window_get_height(fcitxcontext->client_window);
-#else
-        gint w, h;
-        gdk_drawable_get_size(fcitxcontext->client_window, &w, &h);
-        area.y += h;
-        area.x = 0;
-#endif
+#ifdef GDK_WINDOWING_WAYLAND
+    if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ())) {
+        gdouble px, py;
+        GdkWindow *parent;
+        GdkWindow *window = fcitxcontext->client_window;
+
+        while ((parent = gdk_window_get_effective_parent (window)) != NULL) {
+            gdk_window_coords_to_parent (window, area.x, area.y, &px, &py);
+            area.x = px;
+            area.y = py;
+            window = parent;
+        }
     }
+    else
+#endif
+    {
+        if (area.x == -1 && area.y == -1 && area.width == 0 && area.height == 0) {
+#if GTK_CHECK_VERSION (2, 91, 0)
+            area.x = 0;
+            area.y += gdk_window_get_height(fcitxcontext->client_window);
+#else
+            gint w, h;
+            gdk_drawable_get_size(fcitxcontext->client_window, &w, &h);
+            area.y += h;
+            area.x = 0;
+#endif
+        }
 
 #if GTK_CHECK_VERSION (2, 18, 0)
-    gdk_window_get_root_coords(fcitxcontext->client_window,
-                               area.x, area.y,
-                               &area.x, &area.y);
+        gdk_window_get_root_coords(fcitxcontext->client_window,
+                                area.x, area.y,
+                                &area.x, &area.y);
 #else
-    {
-        int rootx, rooty;
-        gdk_window_get_origin(fcitxcontext->client_window, &rootx, &rooty);
-        area.x += rootx;
-        area.y += rooty;
-    }
+        {
+            int rootx, rooty;
+            gdk_window_get_origin(fcitxcontext->client_window, &rootx, &rooty);
+            area.x += rootx;
+            area.y += rooty;
+        }
 #endif
+    }
     int scale = 1;
 #if GTK_CHECK_VERSION (3, 10, 0)
     scale = gdk_window_get_scale_factor(fcitxcontext->client_window);
@@ -1097,6 +1124,9 @@ _fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext, gboolean force)
         }
         if (fcitxcontext->support_surrounding_text) {
             flags |= CAPACITY_SURROUNDING_TEXT;
+        }
+        if (fcitxcontext->is_wayland) {
+            flags |= CAPACITY_RELATIVE_CURSOR_RECT;
         }
 
         // always run this code against all gtk version
