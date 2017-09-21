@@ -495,6 +495,9 @@ void KimpanelMoveInputWindow(void* arg)
     int x = 0, y = 0, w = 0, h = 0;
 
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(kimpanel->owner);
+    if (!ic) {
+        return;
+    }
     FcitxInstanceGetWindowRect(kimpanel->owner, ic, &x, &y, &w, &h);
 
     if (kimpanel->version == 1)
