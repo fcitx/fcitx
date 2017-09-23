@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-09-19 14:02-0700\n"
-"PO-Revision-Date: 2017-09-19 20:36+0000\n"
+"POT-Creation-Date: 2017-09-23 04:02-0700\n"
+"PO-Revision-Date: 2017-09-23 10:41+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -262,7 +262,7 @@ msgstr "Alle"
 
 #: data/script/fcitx-diagnose.sh:1256
 msgid "All found Gtk ${1} immodule files exist."
-msgstr ""
+msgstr "Alle fundne Gtk ${1} immodule-filer findes."
 
 #: data/script/fcitx-diagnose.sh:1517
 msgid "All libraries for all addons are found."
@@ -467,7 +467,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:925
 msgid "Cannot connect to fcitx correctly."
-msgstr ""
+msgstr "Kan ikke oprette forbindelse til fcitx korrekt."
 
 #: tools/gui/quickphrase-editor/editor.cpp:296
 #, kde-format
@@ -480,11 +480,11 @@ msgstr "Kan ikke bestemme skrivebordsmiljø."
 
 #: data/script/fcitx-diagnose.sh:1317
 msgid "Cannot find ${2} for gtk ${1}"
-msgstr ""
+msgstr "Kan ikke finde ${2} til gtk ${1}"
 
 #: data/script/fcitx-diagnose.sh:944
 msgid "Cannot find DBus name ${1} owner."
-msgstr ""
+msgstr "Kan ikke finde ejer af DBus-navnet ${1}."
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
@@ -769,7 +769,7 @@ msgid "Configure"
 msgstr "Konfigurer"
 
 #: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:501
-#: src/ui/kimpanel/kimpanel.c:781
+#: src/ui/kimpanel/kimpanel.c:785
 msgid "Configure Current Input Method"
 msgstr "Konfigurer nuværende inputmetode"
 
@@ -825,7 +825,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:839
 msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr ""
+msgstr "Nuværende fcitx-indstillingsmappe er ${1} (${2})."
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
@@ -935,7 +935,7 @@ msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr ""
 
 #: src/module/notificationitem/notificationitem.c:462
-#: src/ui/kimpanel/kimpanel.c:281 src/ui/kimpanel/kimpanel.c:286
+#: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 #: data/config.desc:34
 msgid "Disabled"
 msgstr "Deaktiveret"
@@ -1125,13 +1125,13 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1311
 msgid "Failed to find fcitx in the output of ${1}"
-msgstr ""
+msgstr "Kunne ikke finde fcitx i outputtet af ${1}"
 
 #: data/addon.desc:72
 msgid "Fallback UI Addon"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:397 data/fcitx-autostart.desktop.in:2
+#: src/ui/kimpanel/kimpanel.c:398 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
 msgstr "Fcitx"
@@ -1162,7 +1162,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:837
 msgid "Fcitx Settings Directory:"
-msgstr ""
+msgstr "Fcitx-indstillingsmappe:"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:3
 msgid "Fcitx Skin Installer"
@@ -1256,7 +1256,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1005
 msgid "Found ${1} at ${2}."
-msgstr ""
+msgstr "Fandt ${1} ved ${2}."
 
 #: data/script/fcitx-diagnose.sh:1485
 msgid "Found ${1} disabled addons:"
@@ -1284,11 +1284,11 @@ msgstr "Fandt ${1} fcitx-processer:"
 
 #: data/script/fcitx-diagnose.sh:1297
 msgid "Found ${2} for unknown gtk version at ${1}."
-msgstr ""
+msgstr "Fandt ${2} til ukendt gtk-version ved ${1}."
 
 #: data/script/fcitx-diagnose.sh:1289
 msgid "Found ${3} for gtk ${1} at ${2}."
-msgstr ""
+msgstr "Fandt ${3} til gtk ${1} ved ${2}."
 
 #: data/script/fcitx-diagnose.sh:1450
 msgid "Found fcitx addon config directory: ${1}."
@@ -1300,15 +1300,15 @@ msgstr "Fandt fcitx ved ${1}."
 
 #: data/script/fcitx-diagnose.sh:1178 data/script/fcitx-diagnose.sh:1183
 msgid "Found fcitx im module for ${2}: ${1}."
-msgstr ""
+msgstr "Fandt fcitx im-modul til ${2}: ${1}."
 
 #: data/script/fcitx-diagnose.sh:1305 data/script/fcitx-diagnose.sh:1388
 msgid "Found fcitx im modules for gtk ${1}."
-msgstr ""
+msgstr "Fandt fcitx im-modul til gtk ${1}."
 
 #: data/script/fcitx-diagnose.sh:1018
 msgid "Found fcitx kcm module."
-msgstr ""
+msgstr "Fandt fcitx kcm-modul."
 
 #: data/script/fcitx-diagnose.sh:1187
 msgid "Found fcitx qt module: ${1}."
@@ -1620,7 +1620,7 @@ msgid "Input Method Configuration"
 msgstr "Konfiguration af inputmetode"
 
 #: src/module/notificationitem/notificationitem.c:463
-#: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
+#: src/ui/kimpanel/kimpanel.c:283 src/ui/kimpanel/kimpanel.c:288
 msgid "Input Method Disabled"
 msgstr "Inputmetode deaktiveret"
 
@@ -2014,7 +2014,7 @@ msgid "No available frontend"
 msgstr "Ingen tilgængelig frontend"
 
 #: src/module/notificationitem/notificationitem.c:456
-#: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:256
+#: src/ui/kimpanel/kimpanel.c:256 src/ui/kimpanel/kimpanel.c:257
 msgid "No input window"
 msgstr "Intet inputvindue"
 
@@ -2108,11 +2108,11 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:940
 msgid "Owner of DBus name ${1} is ${2}."
-msgstr ""
+msgstr "Ejer af DBus-navnet ${1} er ${2}."
 
 #: data/script/fcitx-diagnose.sh:948
 msgid "PID of DBus name ${1} owner is ${2}."
-msgstr ""
+msgstr "PID af ejeren af DBus-navnet ${1} er ${2}."
 
 #: data/inputmethod.desc:23
 msgid "Parent"
@@ -2414,7 +2414,7 @@ msgid "Resize Margin Top"
 msgstr ""
 
 #: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:503
-#: src/ui/kimpanel/kimpanel.c:786
+#: src/ui/kimpanel/kimpanel.c:790
 msgid "Restart"
 msgstr "Genstart"
 
@@ -2896,7 +2896,7 @@ msgstr ""
 msgid "Toggle Half/Full width Character"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:778
+#: src/ui/kimpanel/kimpanel.c:782
 msgid "Toggle Input Method"
 msgstr "Skift inputmetode"
 
@@ -3208,7 +3208,7 @@ msgstr "XIM-kodning:"
 
 #: data/script/fcitx-diagnose.sh:1113
 msgid "XIM for Emacs:"
-msgstr ""
+msgstr "XIM til Emacs:"
 
 #: data/script/fcitx-diagnose.sh:1091
 msgid "XIM_SERVERS on root window:"
