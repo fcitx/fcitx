@@ -162,7 +162,6 @@ DBusHandlerResult FcitxDBusMenuEventHandler(DBusConnection* connection, DBusMess
     } else if (dbus_message_is_method_call(message, DBUS_MENU_IFACE, "Event")) {
         FcitxDBusMenuEvent(notificationitem, message);
         reply = dbus_message_new_method_return(message);
-        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(message, DBUS_MENU_IFACE, "GetProperty")) {
         reply = FcitxDBusMenuGetProperty(notificationitem, message);
     } else if (dbus_message_is_method_call(message, DBUS_MENU_IFACE, "GetLayout")) {
