@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Christopher Meng <i@cicku.me>, 2012
 # Cynthia Young <cynthia.young0512@gmail.com>, 2013
@@ -16,448 +16,728 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-07-09 08:02-0700\n"
-"PO-Revision-Date: 2016-07-09 14:20+0000\n"
+"POT-Creation-Date: 2016-04-18 11:01-0700\n"
+"PO-Revision-Date: 2017-09-23 18:05+0000\n"
 "Last-Translator: wwj402 <wwj402@gmail.com>\n"
-"Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
-"language/zh_CN/)\n"
-"Language: zh_CN\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/im/table/table.c:1403
-msgid " Ctrl+Delete To Delete"
-msgstr " Ctrl+Delete 删除"
+#: data/script/fcitx-configtool.sh:144
+msgid ""
+"You're currently running KDE, but KCModule for fcitx couldn't be found, the "
+"package name of this KCModule is usually kcm-fcitx or kde-config-fcitx. Now "
+"it will open config file with default text editor."
+msgstr "您正在运行 KDE，但是 fcitx 的 KCModule 未被找到，此 KCModule 的软件包名通常为 kcm-fcitx 或 kde-config-fcitx。现在将用默认文本编辑器打开配置文件。"
 
-#: data/script/fcitx-diagnose.sh:850
-msgid "${1} Environment Variables:"
-msgstr "${1} 环境变量："
-
-#: data/script/fcitx-diagnose.sh:859
-msgid "${1} is not set."
-msgstr "${1} 没有设定。"
-
-#: data/script/fcitx-diagnose.sh:856
-msgid "${1} is set to ${2}."
-msgstr "${1} 设定为 ${2}."
+#: data/script/fcitx-configtool.sh:147
+msgid ""
+"You're currently running Fcitx with GUI, but fcitx-configtool couldn't be "
+"found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
+"fcitx-configtool. Now it will open config file with default text editor."
+msgstr "您正在图形界面下运行 fcitx，但是 fcitx-configtool 未被找到，软件包名通常为 fcitx-config-gtk，fcitx-config-gtk3，或者 fcitx-configtool。现在将用默认文本编辑器打开配置文件。"
 
 #: data/script/fcitx-diagnose.sh:514
 msgid "${1} not found."
 msgstr "${1} 未找到."
 
-#: data/script/fcitx-diagnose.sh:927
-msgid "${1} works properly."
-msgstr "${1} 工作正常."
-
-#: tools/gui/quickphrase-editor/editor.cpp:323
-#, kde-format
-msgid "%1 is a system file, do you want to delete all phrases instead?"
-msgstr "%1 是系统文件，您是否想要改为清空所有词组？"
-
-#: tools/gui/quickphrase-editor/editor.cpp:51
-msgid "&Add"
-msgstr "添加(&A)"
-
-#: tools/gui/quickphrase-editor/editor.cpp:52
-msgid "&Batch Edit"
-msgstr "批量编辑(&B)"
-
-#: tools/gui/wrapper/mainwindow.cpp:42
-msgid "&Close"
-msgstr "关闭(&C)"
-
-#: tools/gui/quickphrase-editor/editor.cpp:53
-msgid "&Delete"
-msgstr "删除(&D)"
-
-#: tools/gui/quickphrase-editor/editor.cpp:55
-msgid "&Import"
-msgstr "导入(&I)"
-
-#: tools/gui/quickphrase-editor/editor.cpp:57
-msgid "&Operation"
-msgstr "操作(&O)"
-
-#: tools/gui/wrapper/mainwindow.cpp:41
-msgid "&Reset"
-msgstr "重置(&R)"
-
-#: tools/gui/wrapper/mainwindow.cpp:40
-msgid "&Save"
-msgstr "保存(&S)"
-
-#: src/im/keyboard/keyboard.c:426 src/im/keyboard/keyboard.c:443
-msgid "(Unavailable)"
-msgstr "(不可用)"
+#: data/script/fcitx-diagnose.sh:655
+msgid "Beginner's Guide"
+msgstr "入门指南"
 
 #: data/script/fcitx-diagnose.sh:656
 msgid "/Beginner%27s_Guide"
 msgstr "/Beginner%27s_Guide/zh-cn"
 
-#: data/script/fcitx-diagnose.sh:703
-msgid "/Hall_of_Shame_for_Linux_IME_Support"
-msgstr "/Hall_of_Shame_for_Linux_IME_Support"
+#: data/script/fcitx-diagnose.sh:663
+msgid ""
+"Please set environment variable ${env_name} to \"${value}\" using the tool "
+"your distribution provides or add ${1} to your ${2}. See ${link}."
+msgstr "请使用您发行版提供的工具将环境变量 ${env_name} 设为 \"${value}\" 或者将 ${1} 添加到您的 ${2} 中. 参见 ${link}."
+
+#: data/script/fcitx-diagnose.sh:666
+msgid "Input Method Related Environment Variables: "
+msgstr "输入法相关的环境变量: "
 
 #: data/script/fcitx-diagnose.sh:667
 msgid "/Input_method_related_environment_variables"
 msgstr "/Input_method_related_environment_variables/zh-cn"
 
+#: data/script/fcitx-diagnose.sh:682
+msgid "Note for GNOME Later than 3.6"
+msgstr "有关 3.6 之后版本 GNOME 的备注"
+
 #: data/script/fcitx-diagnose.sh:683
 msgid "/Note_for_GNOME_Later_than_3.6"
 msgstr "/Note_for_GNOME_Later_than_3.6"
+
+#: data/script/fcitx-diagnose.sh:689
+msgid ""
+"If you are using ${1}, you may want to uninstall ${2}, remove ${3} or use "
+"the command ${g36_disable_ibus} to disable IBus integration in order to use "
+"any input method other than ${2}. See ${link} for more detail."
+msgstr "如果您正在使用 ${1}, 您可能需要卸载 ${2}, 删除 ${3} 或者使用命令 ${g36_disable_ibus} 禁用 IBus 集成已使用除 ${2} 之外的任何输入法. 更多细节参见 ${link}."
+
+#: data/script/fcitx-diagnose.sh:691
+msgid ""
+"If you are using ${1}, you may want to uninstall ${2} or remove ${3} in "
+"order to use any input method other than ${2}. See ${link} for more detail "
+"as well as alternative solutions."
+msgstr "如果您正在使用 ${1}, 您可能需要卸载 ${2} 或者删除 ${3} 已使用除 ${2} 之外的任何输入法. 更多细节和其它的解决方法参见 ${link}."
+
+#: data/script/fcitx-diagnose.sh:699
+#, sh-format
+msgid ""
+"To see some application specific problems you may have when using xim, check"
+" ${link1}. For other more general problems of using XIM including "
+"application freezing, see ${link2}."
+msgstr "您可以在 ${link1} 找到一些会在使用 xim 时出现问题的应用程序. 包括应用程序卡死在内的更多使用 xim 可能出现的普遍问题请参见 ${link2}."
+
+#: data/script/fcitx-diagnose.sh:702
+msgid "Hall of Shame for Linux IME Support"
+msgstr "Linux 输入法支持耻辱堂"
+
+#: data/script/fcitx-diagnose.sh:703
+msgid "/Hall_of_Shame_for_Linux_IME_Support"
+msgstr "/Hall_of_Shame_for_Linux_IME_Support"
+
+#: data/script/fcitx-diagnose.sh:706
+msgid "here"
+msgstr "这里"
 
 #: data/script/fcitx-diagnose.sh:707
 msgid "/XIM"
 msgstr "/XIM/zh-cn"
 
-#: src/lib/fcitx/ime.c:1800
-msgid "/min  Time Used: "
-msgstr "/分  经过时间: "
+#: data/script/fcitx-diagnose.sh:743
+msgid "System Info:"
+msgstr "系统信息:"
 
-#: src/module/autoeng/fcitx-autoeng.desc:31
-msgid "0 for commit immediately, -1 for keep all words"
-msgstr "0 代表立即提交, -1 代表保留全部已选单词."
+#: data/script/fcitx-diagnose.sh:771
+msgid "Desktop Environment:"
+msgstr "桌面环境:"
 
-#: src/module/unicode/charselectdata.c:249
-msgid "<Low Surrogate>"
-msgstr "<低半代理区>"
+#: data/script/fcitx-diagnose.sh:774
+msgid "Cannot determine desktop environment."
+msgstr "无法确定桌面环境。"
 
-#: src/module/unicode/charselectdata.c:245
-msgid "<Non Private Use High Surrogate>"
-msgstr "<非专用高半代理区>"
-
-#: src/module/unicode/charselectdata.c:247
-msgid "<Private Use High Surrogate>"
-msgstr "<专用高半代理区>"
-
-#: src/module/unicode/charselectdata.c:251
-msgid "<Private Use>"
-msgstr "<专用区>"
-
-#: src/module/unicode/charselectdata.c:279
-msgid "<not assigned>"
-msgstr "<未指派>"
-
-#: src/im/keyboard/fcitx-keyboard.desc:33
-msgid ""
-"A different value from the global one may be useful when using horizontal "
-"candidate list"
-msgstr "如果您使用横排候选词, 一个与全局不同的设定可能会有所帮助"
-
-#: src/im/pinyin/fcitx-pinyin.desc:7
-msgid "ABC"
-msgstr "智能ABC"
-
-#: data/config.desc:26
-msgid "ALT Both"
-msgstr "两侧 Alt"
-
-#: data/config.desc:20
-msgid "ALT_L_SHIFT"
-msgstr "Alt+左Shift"
-
-#: data/config.desc:21
-msgid "ALT_R_SHIFT"
-msgstr "Alt+右Shift"
-
-#: data/config.desc:75
-msgid "ALT_SHIFT"
-msgstr "Alt+Shift"
-
-#: data/config.desc:77
-msgid "ALT_SUPER"
-msgstr "Alt+Super"
-
-#: data/config.desc:49
-msgid "Activate input method"
-msgstr "激活输入法"
-
-#: data/config.desc:179
-msgid "Active"
-msgstr "激活"
-
-#: src/ui/classic/skin.desc:387
-msgid "Active Menu Color"
-msgstr "活动菜单颜色"
-
-#: src/ui/classic/skin.desc:61
-msgid "Active Menu Item Character Color"
-msgstr "活动菜单项颜色"
-
-#: src/ui/classic/skin.desc:81
-msgid "Active Mode Icon"
-msgstr "激活状态输入法图标"
-
-#: src/ui/classic/skin.desc:172
-msgid "Active Text Icon Color"
-msgstr "活动的文本图标颜色"
-
-#: src/ui/classic/skin.desc:309
-msgid "Active Tray Icon"
-msgstr "活动输入法图标"
-
-#: src/module/autoeng/fcitx-autoeng.desc:37
-msgid "Add Extra space when selecting a candidate word"
-msgstr "选择候选词时输入额外空格"
-
-#: tools/gui/quickphrase-editor/editor.cpp:68
-msgid "Add File"
-msgstr "添加文件"
-
-#: src/module/lua/fcitx-lua.conf.in:4
-msgid "Add Lua script support to Fcitx"
-msgstr "为 Fcitx 增加 Lua 支持"
-
-#: src/im/table/fcitx-table.desc:4
-msgid "Add Phrase"
-msgstr "添加词组"
-
-#: src/module/unicode/fcitx-unicode.conf.in:4
-msgid "Add Unicode Typing Support"
-msgstr "添加 Unicode 输入支持"
-
-#: src/im/keyboard/fcitx-keyboard.desc:44
-msgid "Add current input buffer to user dictionary"
-msgstr "当前输入内容加入用户词典"
-
-#: data/addon.desc:1 data/addon.desc:5 data/addon.desc:10 data/addon.desc:15
-#: data/addon.desc:24 data/addon.desc:29 data/addon.desc:33 data/addon.desc:40
-#: data/addon.desc:45 data/addon.desc:50 data/addon.desc:55 data/addon.desc:64
-#: data/addon.desc:69 data/addon.desc:74 data/addon.desc:79
-msgid "Addon"
-msgstr "附加组件"
-
-#: src/lib/fcitx/addon.c:138
-#, c-format
-msgid "Addon Config %s is %s"
-msgstr "Addon Config %s is %s"
-
-#: data/script/fcitx-diagnose.sh:1438
-msgid "Addon Config Dir:"
-msgstr "插件配置文件目录:"
-
-#: data/script/fcitx-diagnose.sh:1491
-msgid "Addon Libraries:"
-msgstr "插件库: "
-
-#: data/script/fcitx-diagnose.sh:1452
-msgid "Addon List:"
-msgstr "插件列表:"
-
-#: src/im/table/fcitx-table.desc:14 src/im/table/table.desc:19
-msgid "Adjust Order"
-msgstr "输入顺序"
-
-#: src/im/pinyin/fcitx-pinyin.desc:59 src/im/pinyin/fcitx-pinyin.desc:68
-#: src/im/pinyin/fcitx-pinyin.desc:77 src/im/table/table.desc:24
-msgid "AdjustFast"
-msgstr "快速"
-
-#: src/im/pinyin/fcitx-pinyin.desc:60 src/im/pinyin/fcitx-pinyin.desc:69
-#: src/im/pinyin/fcitx-pinyin.desc:78 src/im/table/table.desc:25
-msgid "AdjustFreq"
-msgstr "按频率"
-
-#: src/im/pinyin/fcitx-pinyin.desc:58 src/im/pinyin/fcitx-pinyin.desc:67
-#: src/im/pinyin/fcitx-pinyin.desc:76 src/im/table/table.desc:23
-msgid "AdjustNo"
-msgstr "不调整"
-
-#: data/config.desc:170
-msgid "All"
-msgstr "所有"
-
-#: data/script/fcitx-diagnose.sh:1256
-msgid "All found Gtk ${1} immodule files exist."
-msgstr "找到的全部 Gtk ${1} 输入法模块文件均存在."
-
-#: data/script/fcitx-diagnose.sh:1517
-msgid "All libraries for all addons are found."
-msgstr "所有插件所需的库都被找到。"
-
-#: data/script/fcitx-diagnose.sh:805
-msgid "All locale:"
-msgstr "全部可用 locale:"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:11
-msgid ""
-"Allow Pinyin Enhance to replace the first candidate word when the input "
-"string is very closed to English."
-msgstr "允许在输入字符串十分接近英文的时候替换第一个候选词"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
-msgid "Allow replacing the first candidate"
-msgstr "允许替换第一个候选词"
-
-#: src/module/xkb/fcitx-xkb.desc:4
-msgid "Allow to Override System XKB Settings"
-msgstr "允许覆盖系统的 XKB 设置"
-
-#: src/im/keyboard/fcitx-keyboard.desc:12 src/im/table/table.desc:146
-#: src/module/autoeng/fcitx-autoeng.desc:7
-#: src/module/clipboard/fcitx-clipboard.desc:40
-#: src/module/quickphrase/fcitx-quickphrase.desc:21
-msgid "Alt"
-msgstr "Alt"
-
-#: src/im/table/table.desc:193
-msgid "Alternative Next Page Key"
-msgstr "额外的下一页快捷键"
-
-#: src/im/table/table.desc:188
-msgid "Alternative Prev Page Key"
-msgstr "额外的上一页快捷键"
-
-#: src/module/quickphrase/fcitx-quickphrase.desc:13
-msgid "Alternative Trigger Key for QuickPhrase"
-msgstr "额外的快速输入触发键"
-
-#: data/config.desc:220 data/config.desc:226 data/config.desc:232
-#: data/config.desc:238 data/config.desc:244 data/config.desc:250
-#: data/config.desc:256
-msgid "Appearance"
-msgstr "外观"
-
-#: src/module/xkb/fcitx-xkb.desc:20
-msgid "Apply this custom xmodmap script after layout change"
-msgstr "在键盘布局修改之后应用自定义的 xmodmap 脚本"
-
-#: tools/gui/quickphrase-editor/editor.cpp:335
-#, kde-format
-msgid "Are you sure to delete %1?"
-msgstr "您确定要删除 %1？"
-
-#: data/addon.desc:67
-msgid "Argument for InputMethod Register"
-msgstr "注册输入法的参数"
-
-#: src/module/spell/fcitx-spell.desc:6
-msgid "Aspell"
-msgstr "Aspell"
-
-#: src/ui/classic/fcitx-classic-ui.desc:45
-msgid "Auto"
-msgstr "自动"
-
-#: src/module/autoeng/fcitx-autoeng.conf.in:4
-msgid "Auto Change to English Mode while Input Specific String"
-msgstr "在输入特定字符串时切换到英文模式"
-
-#: src/im/pinyin/fcitx-pinyin.desc:33
-msgid "Auto Create Phrase"
-msgstr "自动组词"
-
-#: src/module/autoeng/fcitx-autoeng.desc:1
-#: src/module/autoeng/fcitx-autoeng.desc:11
-#: src/module/autoeng/fcitx-autoeng.desc:17
-#: src/module/autoeng/fcitx-autoeng.desc:26
-#: src/module/autoeng/fcitx-autoeng.desc:34
-msgid "Auto English"
-msgstr "自动英文模式"
-
-#: src/module/autoeng/fcitx-autoeng.conf.in:3
-msgid "Auto English Mode"
-msgstr "自动英文模式"
-
-#: src/module/autoeng/fcitx-autoeng.conf.in:9
-msgid "Auto English Trigger Word"
-msgstr "自动英文模式触发词"
-
-#: src/im/table/table.desc:88
-msgid "Auto Phrase"
-msgstr "自动词组"
-
-#: src/im/table/table.desc:98
-msgid "Auto Phrase Length"
-msgstr "自动词组长度"
-
-#: src/im/table/table.desc:103
-msgid "Auto Phrase Phrase"
-msgstr "词组参与自动造词"
-
-#: src/im/table/table.desc:49
-msgid "Auto Send Candidate Word"
-msgstr "自动上屏"
-
-#: src/lib/fcitx-config/fcitx-config.c:1180
-#: src/lib/fcitx-config/fcitx-config.c:1187
-msgid "Available Value:"
-msgstr "可选值："
-
-#: src/ui/classic/skin.desc:69 src/ui/classic/skin.desc:187
-#: src/ui/classic/skin.desc:317
-msgid "Background Image"
-msgstr "背景图片"
+#: data/script/fcitx-diagnose.sh:776
+msgid "Desktop environment is ${1}."
+msgstr "桌面环境为 ${1}。"
 
 #: data/script/fcitx-diagnose.sh:779
 msgid "Bash Version:"
 msgstr "Bash 版本:"
 
-#: data/script/fcitx-diagnose.sh:655
-msgid "Beginner's Guide"
-msgstr "入门指南"
+#: data/script/fcitx-diagnose.sh:784
+msgid "Environment:"
+msgstr "环境:"
 
-#: src/im/table/data/qxm.conf.in:3
-msgid "Bingchan"
-msgstr "冰蟾全息"
+#: data/script/fcitx-diagnose.sh:787
+msgid "Keyboard Layout:"
+msgstr "键盘布局:"
 
-#: src/ui/classic/skin.desc:135 src/ui/classic/skin.desc:241
-#: src/ui/classic/skin.desc:371
-msgid "BottomCenter"
-msgstr "底部居中"
+#: data/script/fcitx-diagnose.sh:802
+msgid "Locale:"
+msgstr "Locale:"
 
-#: src/ui/classic/skin.desc:134 src/ui/classic/skin.desc:240
-#: src/ui/classic/skin.desc:370
-msgid "BottomLeft"
-msgstr "左下角"
+#: data/script/fcitx-diagnose.sh:805
+msgid "All locale:"
+msgstr "全部可用 locale:"
 
-#: src/ui/classic/skin.desc:136 src/ui/classic/skin.desc:242
-#: src/ui/classic/skin.desc:372
-msgid "BottomRight"
-msgstr "右下角"
+#: data/script/fcitx-diagnose.sh:807
+msgid "Current locale:"
+msgstr "当前 locale:"
 
-#: data/config.desc:22
-msgid "CTRL Both"
-msgstr "两侧 Ctrl"
+#: data/script/fcitx-diagnose.sh:811
+msgid "Error occurs when running ${1}. Please check your locale settings."
+msgstr "运行 ${1} 时发生错误. 请检查您的区域设置."
 
-#: data/config.desc:74
-msgid "CTRL_SHIFT"
-msgstr "Ctrl+Shift"
+#: data/script/fcitx-diagnose.sh:819
+msgid "Directories:"
+msgstr "目录："
 
-#: data/config.desc:76
-msgid "CTRL_SUPER"
-msgstr "Ctrl+Super"
+#: data/script/fcitx-diagnose.sh:821
+msgid "Home:"
+msgstr "主目录："
+
+#: data/script/fcitx-diagnose.sh:825
+msgid "Environment variable ${1} is not set."
+msgstr "环境变量 ${1} 没有设定。"
+
+#: data/script/fcitx-diagnose.sh:829
+msgid "Environment variable ${1} is set to ${2}."
+msgstr "环境变量 ${1} 是设定为 ${2} 。"
+
+#: data/script/fcitx-diagnose.sh:833
+msgid "Current value of ${1} is ${2} (${3})."
+msgstr "${1} 的当前值是 ${2} (${3})。"
+
+#: data/script/fcitx-diagnose.sh:837
+msgid "Fcitx Settings Directory:"
+msgstr "Fcitx 设置目录："
+
+#: data/script/fcitx-diagnose.sh:839
+msgid "Current fcitx settings directory is ${1} (${2})."
+msgstr "当前 fcitx 设置目录是 ${1} (${2})。"
+
+#: data/script/fcitx-diagnose.sh:844
+msgid "Current user:"
+msgstr "当前用户："
+
+#: data/script/fcitx-diagnose.sh:845
+msgid "The script is run as ${1} (${2})."
+msgstr "脚本作为 ${1} (${2}) 运行。"
+
+#: data/script/fcitx-diagnose.sh:850
+msgid "${1} Environment Variables:"
+msgstr "${1} 环境变量："
+
+#: data/script/fcitx-diagnose.sh:856
+msgid "${1} is set to ${2}."
+msgstr "${1} 设定为 ${2}."
+
+#: data/script/fcitx-diagnose.sh:859
+msgid "${1} is not set."
+msgstr "${1} 没有设定。"
+
+#: data/script/fcitx-diagnose.sh:866
+msgid "Running as root:"
+msgstr "以管理员运行："
+
+#: data/script/fcitx-diagnose.sh:869
+msgid ""
+"You are probably using ${1} to run this script. This means the result of "
+"this script may not be accurate. See ${2} for more information."
+msgstr "你可能正在使用 ${1} 运行此脚本。这意味着这个脚本的结果可能不准确。见 ${2} 以获取更多信息。"
+
+#: data/script/fcitx-diagnose.sh:871 data/script/fcitx-diagnose.sh:877
+msgid "sudo environment variables"
+msgstr "sudo的环境变量"
+
+#: data/script/fcitx-diagnose.sh:874
+msgid ""
+"You are probably logging in as ${1} or using ${2} to run this script. This "
+"either means you have security problems or the result of this script may not"
+" be accurate. See ${3} or ${4} for more information."
+msgstr "你可能以 ${1} 或者 ${2} 登录运行此脚本。这意味着两种情况，要么你有安全问题或该脚本的结果可能不准确。有关更多信息，请参见 ${3} 或者 ${4} 。"
+
+#: data/script/fcitx-diagnose.sh:876
+msgid "Why is it bad to run as root"
+msgstr "以root身份运行不好的原因"
+
+#: data/script/fcitx-diagnose.sh:885
+msgid "Fcitx State:"
+msgstr "Fcitx 状态:"
+
+#: data/script/fcitx-diagnose.sh:886
+msgid "executable:"
+msgstr "可执行文件:"
+
+#: data/script/fcitx-diagnose.sh:888
+msgid "Cannot find fcitx executable!"
+msgstr "无法找到 fcitx 可执行文件!"
+
+#: data/script/fcitx-diagnose.sh:890
+msgid "Please check ${1} for how to install fcitx."
+msgstr "请访问 ${1} 查看如何安装 fcitx."
+
+#: data/script/fcitx-diagnose.sh:894
+msgid "Found fcitx at ${1}."
+msgstr "在 ${1} 找到了 fcitx."
+
+#: data/script/fcitx-diagnose.sh:896
+msgid "version:"
+msgstr "版本:"
+
+#: data/script/fcitx-diagnose.sh:899
+msgid "Fcitx version: ${1}"
+msgstr "Fcitx 版本: ${1}"
+
+#: data/script/fcitx-diagnose.sh:900
+msgid "process:"
+msgstr "进程:"
+
+#: data/script/fcitx-diagnose.sh:910
+msgid "Fcitx is not running."
+msgstr "Fcitx 没有在运行."
+
+#: data/script/fcitx-diagnose.sh:912
+msgid ""
+"Please check the Configure link of your distribution in ${1} for how to "
+"setup fcitx autostart."
+msgstr "请访问 ${1} 页面上对应您发行版的配置链接查看如何配置 fcitx 的自动启动."
+
+#: data/script/fcitx-diagnose.sh:917
+msgid "Found ${1} fcitx processes:"
+msgstr "找到了 ${1} 个 fcitx 进程:"
+
+#: data/script/fcitx-diagnose.sh:919
+msgid "Found ${1} fcitx process:"
+msgstr "找到了 ${1} 个 fcitx 进程:"
+
+#: data/script/fcitx-diagnose.sh:925
+msgid "Cannot connect to fcitx correctly."
+msgstr "无法连接到 fcitx."
+
+#: data/script/fcitx-diagnose.sh:927
+msgid "${1} works properly."
+msgstr "${1} 工作正常."
+
+#: data/script/fcitx-diagnose.sh:933
+msgid "DBus interface:"
+msgstr "DBus 界面:"
+
+#: data/script/fcitx-diagnose.sh:935
+msgid "Using ${1} to check dbus."
+msgstr "使用 ${1} 来检查 dbus。"
+
+#: data/script/fcitx-diagnose.sh:940
+msgid "Owner of DBus name ${1} is ${2}."
+msgstr "DBus 名称 ${1} 的所有者是 ${2}。"
+
+#: data/script/fcitx-diagnose.sh:944
+msgid "Cannot find DBus name ${1} owner."
+msgstr "找不到 DBus 名称 ${1} 的所有者。"
+
+#: data/script/fcitx-diagnose.sh:948
+msgid "PID of DBus name ${1} owner is ${2}."
+msgstr "DBus 名称 ${1} 的 PID 所有者是 ${2}。"
+
+#: data/script/fcitx-diagnose.sh:952
+msgid "Cannot find pid of DBus name ${1} owner."
+msgstr "找不到 DBus 名称 ${1} 的 pid 所有者。"
+
+#: data/script/fcitx-diagnose.sh:956
+msgid "Unable to find a program to check dbus."
+msgstr "无法找到程序检查 dbus。"
+
+#: data/script/fcitx-diagnose.sh:992
+msgid "Config GUI for gtk${1}:"
+msgstr "用于 GTK+-${1}.0 的配置界面："
+
+#: data/script/fcitx-diagnose.sh:996
+msgid "Config GUI for gtk${1} not found."
+msgstr "未找到 gtk${1} 的配置界面."
+
+#: data/script/fcitx-diagnose.sh:1005
+msgid "Found ${1} at ${2}."
+msgstr "在 ${2} 找到了 ${1}。"
+
+#: data/script/fcitx-diagnose.sh:1012
+msgid "Config GUI for kde:"
+msgstr "KDE 的配置界面："
+
+#: data/script/fcitx-diagnose.sh:1018
+msgid "Found fcitx kcm module."
+msgstr "找到了 fcitx 的 kcm 模块。"
+
+#: data/script/fcitx-diagnose.sh:1027
+msgid "Fcitx Configure UI:"
+msgstr "Fcitx 配置界面:"
+
+#: data/script/fcitx-diagnose.sh:1028
+msgid "Config Tool Wrapper:"
+msgstr "配置工具封装："
+
+#: data/script/fcitx-diagnose.sh:1030
+msgid "Cannot find fcitx-configtool executable!"
+msgstr "无法找到 fcitx-configtool 的可执行文件！"
+
+#: data/script/fcitx-diagnose.sh:1032
+msgid "Found fcitx-configtool at ${1}."
+msgstr "在 ${1} 找到了 fcitx-configtool。"
+
+#: data/script/fcitx-diagnose.sh:1040
+msgid ""
+"Cannot find a GUI config tool, please install one of ${1}, ${2}, or ${3}."
+msgstr "无法找到一个图形界面的配置工具，请安装 ${1}，${2}，${3} 之一。"
+
+#: data/script/fcitx-diagnose.sh:1053
+msgid "Environment variable ${1} is set to \"${2}\" correctly."
+msgstr "环境变量 ${1} 已经正确地设为了 \"${2}\"."
+
+#: data/script/fcitx-diagnose.sh:1059
+msgid ""
+"Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
+"you have exported it incorrectly in any of your init files."
+msgstr "环境变量 ${1} 的值被设为了 \"${2}\" 而不是 \"${3}\". 请检查您是否在某个初始化文件中错误的设置了它的值."
+
+#: data/script/fcitx-diagnose.sh:1068
+msgid "XMODIFIERS is not set"
+msgstr "XMODIFIERS 没有设置"
+
+#: data/script/fcitx-diagnose.sh:1081
+msgid "Cannot interpret XMODIFIERS: ${1}."
+msgstr "无法解析 XMODIFIERS: ${1}."
+
+#: data/script/fcitx-diagnose.sh:1089
+msgid "Xim Server Name from Environment variable is ${1}."
+msgstr "从环境变量中获取的 Xim 服务名称为 ${1}."
+
+#: data/script/fcitx-diagnose.sh:1091
+msgid "XIM_SERVERS on root window:"
+msgstr "根窗口上的 XIM_SERVERS:"
+
+#: data/script/fcitx-diagnose.sh:1101
+msgid "Xim server name is the same with that set in the environment variable."
+msgstr "Xim 服务的名称与环境变量中设置的相同."
+
+#: data/script/fcitx-diagnose.sh:1103
+msgid ""
+"Xim server name: \"${1}\" is different from that set in the environment "
+"variable: \"${2}\"."
+msgstr "Xim 服务名称: \"${1}\" 与环境变量中设置的值 \"${2}\" 不同."
+
+#: data/script/fcitx-diagnose.sh:1107
+msgid "Cannot find xim_server on root window."
+msgstr "无法在根窗口找到 xim_server."
+
+#: data/script/fcitx-diagnose.sh:1113
+msgid "XIM for Emacs:"
+msgstr "用于 Emacs 的 XIM："
+
+#: data/script/fcitx-diagnose.sh:1115
+msgid ""
+"Your LC_CTYPE is set to ${1} instead of one of zh, ja, ko. You may not be "
+"able to use input method in emacs because of an really old emacs bug that "
+"upstream refuse to fix for years."
+msgstr "您的 LC_CTYPE 设置为 ${1} 而不是 zh, ja, ko 之一。您可能无法在 Emacs 中使用输入法，其根本是源自上游拒绝修复多年的一个超老的故障。"
+
+#: data/script/fcitx-diagnose.sh:1118
+msgid "XIM encoding:"
+msgstr "XIM 编码："
+
+#: data/script/fcitx-diagnose.sh:1120
+msgid ""
+"Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have "
+"trouble committing strings using XIM."
+msgstr "您的 LC_CTYPE 设置为 ${1}，它的编码不是 UTF-8。您可能会在使用 XIM 提交字符串时遇到问题。"
+
+#: data/script/fcitx-diagnose.sh:1140
+msgid "You are using xim in ${1} programs."
+msgstr "您正在 ${1} 程序中使用 xim."
+
+#: data/script/fcitx-diagnose.sh:1145
+msgid "You may have trouble using fcitx in ${1} programs."
+msgstr "您可能会在 ${1} 程序中使用 fcitx 时遇到问题."
+
+#: data/script/fcitx-diagnose.sh:1171
+msgid "Qt IM module files:"
+msgstr "Qt 输入法模块文件:"
+
+#: data/script/fcitx-diagnose.sh:1178 data/script/fcitx-diagnose.sh:1183
+msgid "Found fcitx im module for ${2}: ${1}."
+msgstr "找到了 ${2} 的输入法模块: ${1}."
+
+#: data/script/fcitx-diagnose.sh:1187
+msgid "Found fcitx qt module: ${1}."
+msgstr "找到了 fcitx 的 qt 模块: ${1}."
+
+#: data/script/fcitx-diagnose.sh:1190
+msgid "Found unknown fcitx qt module: ${1}."
+msgstr "找到了未知的 fcitx qt 模块: ${1}."
+
+#: data/script/fcitx-diagnose.sh:1197 data/script/fcitx-diagnose.sh:1202
+msgid "Cannot find fcitx input method module for ${1}."
+msgstr "无法找到 ${1} 的 fcitx 输入法模块."
+
+#: data/script/fcitx-diagnose.sh:1250
+msgid "Gtk ${1} immodule file ${2} does not exist."
+msgstr "Gtk ${1} 输入法模块文件 ${2} 不存在."
+
+#: data/script/fcitx-diagnose.sh:1256
+msgid "All found Gtk ${1} immodule files exist."
+msgstr "找到的全部 Gtk ${1} 输入法模块文件均存在."
+
+#: data/script/fcitx-diagnose.sh:1289
+msgid "Found ${3} for gtk ${1} at ${2}."
+msgstr "在 ${2} 找到了 gtk ${1} 的 ${3}."
+
+#: data/script/fcitx-diagnose.sh:1294 data/script/fcitx-diagnose.sh:1377
+msgid "Version Line:"
+msgstr "版本行:"
+
+#: data/script/fcitx-diagnose.sh:1297
+msgid "Found ${2} for unknown gtk version at ${1}."
+msgstr "在 ${1} 找到了未知 gtk 版本的 ${2}."
+
+#: data/script/fcitx-diagnose.sh:1305 data/script/fcitx-diagnose.sh:1388
+msgid "Found fcitx im modules for gtk ${1}."
+msgstr "已找到 gtk ${1} 的 fcitx 输入法模块."
+
+#: data/script/fcitx-diagnose.sh:1311
+msgid "Failed to find fcitx in the output of ${1}"
+msgstr "无法在 ${1} 的输出重找到 fcitx."
+
+#: data/script/fcitx-diagnose.sh:1317
+msgid "Cannot find ${2} for gtk ${1}"
+msgstr "无法找到 gtk ${1} 的 ${2}."
+
+#: data/script/fcitx-diagnose.sh:1323
+msgid "Cannot find fcitx im module for gtk ${1}."
+msgstr "无法找到 gtk ${1} 的 fcitx 输入法模块."
+
+#: data/script/fcitx-diagnose.sh:1373
+msgid "Found immodules cache for gtk ${1} at ${2}."
+msgstr "在 ${2} 找到了 gtk ${1} 的输入法模块缓存."
+
+#: data/script/fcitx-diagnose.sh:1381
+msgid "Found immodule cache for unknown gtk version at ${1}."
+msgstr "在 ${1} 找到了未知 gtk 版本的输入法模块缓存."
+
+#: data/script/fcitx-diagnose.sh:1394
+msgid "Failed to find fcitx in immodule cache at ${1}"
+msgstr "无法输入法模块缓存 ${1} 中找到 fcitx"
+
+#: data/script/fcitx-diagnose.sh:1400
+msgid "Cannot find immodules cache for gtk ${1}"
+msgstr "无法找到 gtk ${1} 的输入法模块缓存"
+
+#: data/script/fcitx-diagnose.sh:1405
+msgid "Cannot find fcitx im module for gtk ${1} in cache."
+msgstr "无法在缓存中找到 gtk ${1} 的 fcitx 输入法模块."
+
+#: data/script/fcitx-diagnose.sh:1418
+msgid "Gtk IM module cache:"
+msgstr "Gtk 输入法模块缓存:"
+
+#: data/script/fcitx-diagnose.sh:1423
+msgid "Gtk IM module files:"
+msgstr "Gtk 输入法模块文件:"
+
+#: data/script/fcitx-diagnose.sh:1437
+msgid "Fcitx Addons:"
+msgstr "Fcitx 插件:"
+
+#: data/script/fcitx-diagnose.sh:1438
+msgid "Addon Config Dir:"
+msgstr "插件配置文件目录:"
+
+#: data/script/fcitx-diagnose.sh:1440
+msgid "Cannot find fcitx addon config directory."
+msgstr "无法找到插件配置目录."
+
+#: data/script/fcitx-diagnose.sh:1450
+msgid "Found fcitx addon config directory: ${1}."
+msgstr "找到了 fcitx 插件配置目录: ${1}."
+
+#: data/script/fcitx-diagnose.sh:1452
+msgid "Addon List:"
+msgstr "插件列表:"
+
+#: data/script/fcitx-diagnose.sh:1456
+msgid "Invalid addon config file ${1}."
+msgstr "无效的插件配置文件: ${1}."
+
+#: data/script/fcitx-diagnose.sh:1480
+msgid "Found ${1} enabled addons:"
+msgstr "找到了 ${1} 个已启用的插件:"
+
+#: data/script/fcitx-diagnose.sh:1485
+msgid "Found ${1} disabled addons:"
+msgstr "找到了 ${1} 个被禁用的插件:"
+
+#: data/script/fcitx-diagnose.sh:1491
+msgid "Addon Libraries:"
+msgstr "插件库: "
+
+#: data/script/fcitx-diagnose.sh:1499
+msgid "Cannot find file ${1} of addon ${2}."
+msgstr "无法找到插件 ${2} 的文件 ${1}。"
+
+#: data/script/fcitx-diagnose.sh:1509
+msgid "Cannot find following required libraries for ${1} of addon ${2}."
+msgstr "无法找到插件 ${2} 所需的库 ${1}。"
+
+#: data/script/fcitx-diagnose.sh:1517
+msgid "All libraries for all addons are found."
+msgstr "所有插件所需的库都被找到。"
+
+#: data/script/fcitx-diagnose.sh:1518
+msgid "User Interface:"
+msgstr "用户界面:"
+
+#: data/script/fcitx-diagnose.sh:1520
+msgid "Cannot find enabled fcitx user interface!"
+msgstr "无法找到启用的 fcitx 用户界面!"
+
+#: data/script/fcitx-diagnose.sh:1522
+msgid "Found ${1} enabled user interface addons:"
+msgstr "找到了 ${1} 个已启用的用户界面插件:"
+
+#: data/script/fcitx-diagnose.sh:1531
+msgid "Kimpanel process:"
+msgstr "Kimpanel 进程:"
+
+#: data/script/fcitx-diagnose.sh:1539
+msgid ""
+"Cannot find kimpanel dbus interface or enabled non-kimpanel user interface."
+msgstr "无法找到 kimpanel dbus 接口或非 kimpanel 用户界面."
+
+#: data/script/fcitx-diagnose.sh:1545
+msgid "Input Methods:"
+msgstr "输入法:"
+
+#: data/script/fcitx-diagnose.sh:1549
+msgid "Cannot read im list from fcitx profile."
+msgstr "无法从 fcitx 配置文件中读取输入法列表."
+
+#: data/script/fcitx-diagnose.sh:1559
+msgid "Invalid item ${1} in im list."
+msgstr "输入法列表中无效的项目: ${1}."
+
+#: data/script/fcitx-diagnose.sh:1570
+msgid "Found ${1} enabled input methods:"
+msgstr "找到了 ${1} 个启用的输入法:"
+
+#: data/script/fcitx-diagnose.sh:1575
+msgid "Default input methods:"
+msgstr "默认输入法:"
+
+#: data/script/fcitx-diagnose.sh:1578
+msgid "You don't have any input methods enabled."
+msgstr "您没有任何启用的输入法."
+
+#: data/script/fcitx-diagnose.sh:1582
+msgid ""
+"You only have one keyboard input method enabled. You may want to add another"
+" input method to input other languages."
+msgstr "你只有一个键盘输入法启用。你可能要添加其他输入法输入其他语言。"
+
+#: data/script/fcitx-diagnose.sh:1584
+msgid ""
+"You only have one input method enabled, please add a keyboard input method "
+"as the first one and your main input method as the second one."
+msgstr "您仅仅启用了一个输入法, 请将一个键盘输入法设为第一个并将您的主要输入法设为第二个."
+
+#: data/script/fcitx-diagnose.sh:1590
+msgid ""
+"You have a keyboard input method \"${1}\" correctly added as your default "
+"input method."
+msgstr "您已经正确的将一个键盘输入法 \"${1}\" 设为默认."
+
+#: data/script/fcitx-diagnose.sh:1594
+msgid ""
+"Your first (default) input method is ${1} instead of a keyboard input "
+"method. You may have trouble deactivate fcitx."
+msgstr "您的第一个 (默认) 输入法是 ${1} 而不是一个键盘输入法. 您可能无法禁用 fcitx 输入法."
+
+#: data/script/fcitx-diagnose.sh:1676
+msgid "Frontends setup:"
+msgstr "前端设置:"
+
+#: data/script/fcitx-diagnose.sh:1683
+msgid "Configuration:"
+msgstr "配置:"
+
+#: data/script/fcitx-diagnose.sh:1689
+msgid "Log:"
+msgstr "日志:"
+
+#: src/frontend/xim/xim.c:134
+msgid "X11 not initialized"
+msgstr "X11 未初始化"
 
 #: src/frontend/xim/xim.c:146
 msgid "Can't Create imWindow"
 msgstr "无法创建输入法窗口"
 
-#: src/module/punc/punc.c:410
-msgid "Can't open punc file."
-msgstr "无法打开标点文件"
+#: src/frontend/xim/xim.c:157
+msgid "XMODIFIERS Error."
+msgstr "XMODIFIERS 错误。"
 
-#: src/module/remote/remote.c:70
+#: src/frontend/xim/xim.c:161
+msgid "Please set XMODIFIERS."
+msgstr "请设置环境变量XMODIFIERS"
+
+#: src/frontend/xim/xim.c:239
 #, c-format
-msgid "Can't open socket %s: %s"
-msgstr "无法打开Socket %s: %s"
+msgid "Start XIM error. Another XIM daemon named %s is running?"
+msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
 
-#: src/ui/classic/skin.desc:41
-msgid "Candidate Index Color"
-msgstr "候选词索引颜色"
+#: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
+#: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
+#: src/im/keyboard/keyboard.c:462 src/im/keyboard/keyboard.c:468
+#: src/im/keyboard/fcitx-keyboard.desc:1 src/im/keyboard/fcitx-keyboard.desc:6
+#: src/im/keyboard/fcitx-keyboard.desc:16
+#: src/im/keyboard/fcitx-keyboard.desc:21
+#: src/im/keyboard/fcitx-keyboard.desc:27
+#: src/im/keyboard/fcitx-keyboard.desc:36
+#: src/im/keyboard/fcitx-keyboard.desc:41
+msgid "Keyboard"
+msgstr "键盘"
 
-#: src/im/table/table.desc:117
-msgid "Candidate Table Layout"
-msgstr "候选词列表布局"
+#: src/im/keyboard/keyboard.c:426 src/im/keyboard/keyboard.c:443
+msgid "(Unavailable)"
+msgstr "(不可用)"
 
-#: data/config.desc:204 src/im/table/table.desc:176
-msgid "Candidate Word Number"
-msgstr "候选词个数"
+#: src/im/keyboard/keyboard.c:900
+msgid "Spell hint"
+msgstr "拼写提示"
 
-#: src/im/table/data/cangjie.conf.in:3
-msgid "Cangjie"
-msgstr "仓颉"
+#: src/im/keyboard/keyboard.c:901
+msgid "Spell hint is enabled."
+msgstr "已启用拼写提示。"
+
+#: src/im/keyboard/keyboard.c:902
+msgid "Spell hint is disabled."
+msgstr "已禁用拼写提示。"
+
+#: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
+#: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
+#: src/im/pinyin/fcitx-pinyin.desc:15 src/im/pinyin/fcitx-pinyin.desc:20
+#: src/im/pinyin/fcitx-pinyin.desc:25 src/im/pinyin/fcitx-pinyin.desc:30
+#: src/im/pinyin/fcitx-pinyin.desc:35 src/im/pinyin/fcitx-pinyin.desc:40
+#: src/im/pinyin/fcitx-pinyin.desc:45 src/im/pinyin/fcitx-pinyin.desc:50
+#: src/im/pinyin/fcitx-pinyin.desc:55 src/im/pinyin/fcitx-pinyin.desc:64
+#: src/im/pinyin/fcitx-pinyin.desc:73 src/im/pinyin/fcitx-pinyin.desc:82
+#: src/im/pinyin/fcitx-pinyin.desc:87 src/im/pinyin/fcitx-pinyin.desc:92
+#: src/im/pinyin/fcitx-pinyin.desc:97 src/im/pinyin/fcitx-pinyin.desc:102
+#: src/im/pinyin/fcitx-pinyin.desc:107 src/im/pinyin/fcitx-pinyin.desc:112
+#: src/im/pinyin/fcitx-pinyin.desc:117 src/im/pinyin/fcitx-pinyin.desc:122
+#: src/im/pinyin/fcitx-pinyin.desc:127 src/im/pinyin/fcitx-pinyin.desc:132
+#: src/im/pinyin/fcitx-pinyin.desc:137 src/im/pinyin/fcitx-pinyin.desc:142
+msgid "Pinyin"
+msgstr "拼音"
+
+#: src/im/pinyin/py.c:121 src/im/pinyin/shuangpin.conf.in:3
+msgid "Shuangpin"
+msgstr "双拼"
+
+#: src/im/pinyin/py.c:393
+msgid "Cannot find System Database of Pinyin!"
+msgstr "无法找到系统的拼音词库!"
+
+#: src/im/pinyin/py.c:457
+msgid "Pinyin Index Magic Number Doesn't match"
+msgstr "拼音索引的Magic Number不匹配"
+
+#: src/im/pinyin/py.c:729
+msgid "Press index to delete user phrase (ESC for cancel)"
+msgstr "按下索引来删除用户词组 (ESC 取消)"
+
+#: src/im/pinyin/py.c:743
+msgid "Press number to make word in frequent list"
+msgstr "按下数字加入常用字表"
+
+#: src/im/pinyin/py.c:769
+#, c-format
+msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
+msgstr "按下 1 删除常用字表中的 %s (ESC 取消)"
+
+#: src/im/pinyin/py.c:771
+#, c-format
+msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
+msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
+
+#: src/im/pinyin/py.c:1672
+#, c-format
+msgid "Cannot Save User Pinyin Database: %s"
+msgstr "无法保存用户拼音词库: %s"
 
 #: src/im/pinyin/py.c:1735
 #, c-format
@@ -469,101 +749,567 @@ msgstr "无法保存词频: %s"
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "无法保存拼音索引: %s"
 
-#: src/im/pinyin/py.c:1672
-#, c-format
-msgid "Cannot Save User Pinyin Database: %s"
-msgstr "无法保存用户拼音词库: %s"
+#: src/im/pinyin/py.c:2059
+msgid "Remind: "
+msgstr "联想："
 
-#: data/script/fcitx-diagnose.sh:925
-msgid "Cannot connect to fcitx correctly."
-msgstr "无法连接到 fcitx."
+#: src/im/pinyin/py.c:2141
+msgid "Migrate the old file path to the new one"
+msgstr "迁移老文件路径到新文件路径"
 
-#: tools/gui/quickphrase-editor/editor.cpp:296
-#, kde-format
-msgid "Cannot create file %1."
-msgstr "无法创建文件 %1。"
+#: src/im/qw/qw.c:64 src/im/qw/fcitx-qw.conf.in:3 src/im/qw/qw.conf.in:3
+msgid "Quwei"
+msgstr "区位"
 
-#: data/script/fcitx-diagnose.sh:774
-msgid "Cannot determine desktop environment."
-msgstr "无法确定桌面环境。"
-
-#: data/script/fcitx-diagnose.sh:1317
-msgid "Cannot find ${2} for gtk ${1}"
-msgstr "无法找到 gtk ${1} 的 ${2}."
-
-#: data/script/fcitx-diagnose.sh:944
-msgid "Cannot find DBus name ${1} owner."
-msgstr "找不到 DBus 名称 ${1} 的所有者。"
-
-#: src/im/pinyin/py.c:393
-msgid "Cannot find System Database of Pinyin!"
-msgstr "无法找到系统的拼音词库!"
-
-#: data/script/fcitx-diagnose.sh:1040
+#: src/im/table/table.c:596
 msgid ""
-"Cannot find a GUI config tool, please install one of ${1}, ${2}, or ${3}."
-msgstr "无法找到一个图形界面的配置工具，请安装 ${1}，${2}，${3} 之一。"
+"Left/Right to choose selected character, Press Enter to confirm, Press "
+"Escape to Cancel"
+msgstr "按左/右选择单字，按回车确认，按Escape 取消"
 
-#: data/script/fcitx-diagnose.sh:1520
-msgid "Cannot find enabled fcitx user interface!"
-msgstr "无法找到启用的 fcitx 用户界面!"
-
-#: data/script/fcitx-diagnose.sh:1440
-msgid "Cannot find fcitx addon config directory."
-msgstr "无法找到插件配置目录."
-
-#: data/script/fcitx-diagnose.sh:888
-msgid "Cannot find fcitx executable!"
-msgstr "无法找到 fcitx 可执行文件!"
-
-#: data/script/fcitx-diagnose.sh:1405
-msgid "Cannot find fcitx im module for gtk ${1} in cache."
-msgstr "无法在缓存中找到 gtk ${1} 的 fcitx 输入法模块."
-
-#: data/script/fcitx-diagnose.sh:1323
-msgid "Cannot find fcitx im module for gtk ${1}."
-msgstr "无法找到 gtk ${1} 的 fcitx 输入法模块."
-
-#: data/script/fcitx-diagnose.sh:1197 data/script/fcitx-diagnose.sh:1202
-msgid "Cannot find fcitx input method module for ${1}."
-msgstr "无法找到 ${1} 的 fcitx 输入法模块."
-
-#: data/script/fcitx-diagnose.sh:1030
-msgid "Cannot find fcitx-configtool executable!"
-msgstr "无法找到 fcitx-configtool 的可执行文件！"
-
-#: data/script/fcitx-diagnose.sh:1499
-msgid "Cannot find file ${1} of addon ${2}."
-msgstr "无法找到插件 ${2} 的文件 ${1}。"
-
-#: data/script/fcitx-diagnose.sh:1509
-msgid "Cannot find following required libraries for ${1} of addon ${2}."
-msgstr "无法找到插件 ${2} 所需的库 ${1}。"
-
-#: data/script/fcitx-diagnose.sh:1400
-msgid "Cannot find immodules cache for gtk ${1}"
-msgstr "无法找到 gtk ${1} 的输入法模块缓存"
-
-#: data/script/fcitx-diagnose.sh:1539
-msgid ""
-"Cannot find kimpanel dbus interface or enabled non-kimpanel user interface."
-msgstr "无法找到 kimpanel dbus 接口或非 kimpanel 用户界面."
-
-#: data/script/fcitx-diagnose.sh:952
-msgid "Cannot find pid of DBus name ${1} owner."
-msgstr "找不到 DBus 名称 ${1} 的 pid 所有者。"
-
-#: data/script/fcitx-diagnose.sh:1107
-msgid "Cannot find xim_server on root window."
-msgstr "无法在根窗口找到 xim_server."
+#: src/im/table/table.c:621
+msgid "Pinyin: "
+msgstr "拼音："
 
 #: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
 msgstr "无法找到拼音"
 
-#: data/script/fcitx-diagnose.sh:1081
-msgid "Cannot interpret XMODIFIERS: ${1}."
-msgstr "无法解析 XMODIFIERS: ${1}."
+#: src/im/table/table.c:705
+msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
+msgstr "选择放在前面的词组，按Escape 取消"
+
+#: src/im/table/table.c:713
+msgid "Choose the phrase to be deleted, Press Escape to Cancel"
+msgstr "选择要删除的词组，按Escape 取消"
+
+#: src/im/table/table.c:721
+msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
+msgstr "选择要清理输入频率的词组，按Escape 取消"
+
+#: src/im/table/table.c:1287
+msgid "Remind:"
+msgstr "联想："
+
+#: src/im/table/table.c:1395
+msgid "Phrase is already in Dict "
+msgstr "词组已在码表中"
+
+#: src/im/table/table.c:1399
+msgid "Code is "
+msgstr "编码为 "
+
+#: src/im/table/table.c:1403
+msgid " Ctrl+Delete To Delete"
+msgstr " Ctrl+Delete 删除"
+
+#: src/im/table/tabledict.c:41
+msgid "Loading Table Dict"
+msgstr "加载码表词典"
+
+#: src/im/table/tabledict.c:248
+msgid "Load Table Dict OK"
+msgstr "加载码表文件成功"
+
+#: src/im/table/tabledict.c:285
+msgid "Loading Autophrase."
+msgstr "加载自动组词信息中"
+
+#: src/im/table/tabledict.c:341
+msgid "Load Autophrase OK"
+msgstr "加载自动组词信息完成"
+
+#: src/im/table/tabledict.c:372
+msgid "Save dict error"
+msgstr "保存码表出错"
+
+#: src/im/table/tabledict.c:466
+msgid "Rename OK"
+msgstr "重命名成功"
+
+#: src/lib/fcitx/addon.c:138
+#, c-format
+msgid "Addon Config %s is %s"
+msgstr "Addon Config %s is %s"
+
+#: src/lib/fcitx/addon.c:151
+#, c-format
+msgid "Load Addon Config File:%s"
+msgstr "加载附加组件配置文件: %s"
+
+#: src/lib/fcitx/addon.c:298
+#, c-format
+msgid "Disable addon %s, dependency %s cannot be satisfied."
+msgstr "禁用插件 %s，依赖 %s 无法满足。"
+
+#: src/lib/fcitx-config/fcitx-config.c:376
+msgid "Enum option duplicated."
+msgstr "枚举选项重复"
+
+#: src/lib/fcitx-config/fcitx-config.c:386
+msgid "Enum option number must larger than 0"
+msgstr "枚举选项个数需要大于0"
+
+#: src/lib/fcitx-config/fcitx-config.c:400
+msgid "Enum Option is invalid, take it as string"
+msgstr "枚举选项不合法，将类型作为字符串处理"
+
+#: src/lib/fcitx-config/fcitx-config.c:406
+#, c-format
+msgid "Unknown type, take it as string: %s"
+msgstr "未知类型，作为字符串处理: %s"
+
+#: src/lib/fcitx-config/fcitx-config.c:410
+msgid "Missing type, take it as string"
+msgstr "类型缺失，作为字符串处理"
+
+#: src/lib/fcitx-config/fcitx-config.c:894
+#, c-format
+msgid "Configure group name error: line %d"
+msgstr "配置组名错误: 行%d"
+
+#: src/lib/fcitx-config/fcitx-config.c:901
+#, c-format
+msgid "Duplicate group name, merge with the previous: %s :line %d"
+msgstr "组名重复，和之前的组合并: %s :行 %d"
+
+#: src/lib/fcitx-config/fcitx-config.c:922
+#, c-format
+msgid "Invalid Entry: line %d missing '='"
+msgstr "配置项不合法:  行%d 缺少'='"
+
+#: src/lib/fcitx-config/fcitx-config.c:968
+#, c-format
+msgid "Duplicate option, overwrite: line %d"
+msgstr "重复的配置项，覆盖: 行%d"
+
+#: src/lib/fcitx-config/fcitx-config.c:1136
+#, c-format
+msgid "Option %s is Invalid, Use Default Value %s"
+msgstr "配置项%s不合法，使用默认值%s"
+
+#: src/lib/fcitx-config/fcitx-config.c:1144
+#, c-format
+msgid "Option %s is Invalid."
+msgstr "配置项%s不合法"
+
+#: src/lib/fcitx-config/fcitx-config.c:1180
+#: src/lib/fcitx-config/fcitx-config.c:1187
+msgid "Available Value:"
+msgstr "可选值："
+
+#: src/lib/fcitx-config/fcitx-config.c:1200
+#, c-format
+msgid "no default option for %s/%s"
+msgstr "选项%s/%s没有默认选项"
+
+#: src/lib/fcitx/frontend.c:530
+#, c-format
+msgid "Frontend: open %s fail %s"
+msgstr "前端: 打开 %s 失败 %s"
+
+#: src/lib/fcitx/frontend.c:542
+msgid "Frontend: bad frontend"
+msgstr "前端: 有问题的前端"
+
+#: src/lib/fcitx/frontend.c:565
+msgid "No available frontend"
+msgstr "无可用前端"
+
+#: src/lib/fcitx/ime.c:303
+#, c-format
+msgid "IM: open %s fail %s"
+msgstr "输入法: 打开%s 失败 %s"
+
+#: src/lib/fcitx/ime.c:322
+#, c-format
+msgid "IM: bad im %s"
+msgstr "输入法: 有问题的输入法 %s"
+
+#: src/lib/fcitx/ime.c:536
+msgid "No available Input Method"
+msgstr "无用输入法"
+
+#: src/lib/fcitx/ime.c:1695 src/module/notificationitem/notificationitem.c:411
+#: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
+msgid "Input Method"
+msgstr "输入法"
+
+#: src/lib/fcitx/ime.c:1797
+msgid "Input Speed: "
+msgstr "输入速度: "
+
+#: src/lib/fcitx/ime.c:1800
+msgid "/min  Time Used: "
+msgstr "/分  经过时间: "
+
+#: src/lib/fcitx/ime.c:1803
+msgid "min Num of Characters: "
+msgstr "分 字符数: "
+
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
+msgid "Use remind"
+msgstr "联想"
+
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
+msgid "No remind"
+msgstr "无联想"
+
+#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:553
+msgid "Toggle Remind"
+msgstr "切换联想"
+
+#: src/lib/fcitx/instance.c:528
+msgid "pthread mutex init failed"
+msgstr "pthread mutex init failed"
+
+#: src/lib/fcitx/module.c:61
+#, c-format
+msgid "Module: open %s fail %s"
+msgstr "模块: 打开%s 失败 %s"
+
+#: src/lib/fcitx/module.c:73
+msgid "Module: bad module"
+msgstr "模块: 有问题的模块"
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
+msgid "Clear"
+msgstr "清空"
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
+msgid "Left"
+msgstr "左"
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
+msgid "Right"
+msgstr "右"
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
+msgid "Empty"
+msgstr "空"
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
+msgid "The key you just pressed is not supported by Qt."
+msgstr "你刚刚按下的按键不被 Qt 支持。"
+
+#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
+msgid "Unsupported Key"
+msgstr "不支持的按键"
+
+#: src/lib/fcitx/ui.c:192
+#, c-format
+msgid "UI: open %s fail %s"
+msgstr "界面: 打开 %s 失败 %s"
+
+#: src/lib/fcitx/ui.c:205
+msgid "UI: bad ui"
+msgstr "界面: 有问题的界面"
+
+#: src/lib/fcitx-utils/desktop-parse.c:550
+#, c-format
+msgid "Invalid group name line @ line %d %s"
+msgstr "非法组名出现在第 %d 行: %s"
+
+#: src/lib/fcitx-utils/desktop-parse.c:562
+#, c-format
+msgid ""
+"Duplicate group %s in a desktop file,@ line %d, merge with previous one."
+msgstr "重复的组名 %s，@第 %d 行，与之前的组合并。"
+
+#: src/lib/fcitx-utils/desktop-parse.c:586
+#, c-format
+msgid "Non-comment doesn't belongs to any group @ %d %s"
+msgstr "非注释不属于任何组 @ %d %s"
+
+#: src/lib/fcitx-utils/desktop-parse.c:592
+#, c-format
+msgid "Invalid entry line @ line %d %s"
+msgstr "非法键值出现在第 %d 行: %s"
+
+#: src/lib/fcitx-utils/desktop-parse.c:602
+#, c-format
+msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
+msgstr "重复的键 %s 出现在组 %s 中, @第 %d 行, 覆盖之前的值."
+
+#: src/module/autoeng/AutoEng.c:557
+msgid "Too long item for AutoEng"
+msgstr "自动英文条目过长"
+
+#: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:456
+msgid "Press Enter to input text"
+msgstr "按下回车输入文本"
+
+#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:196
+msgid "Traditional Chinese"
+msgstr "繁体中文"
+
+#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+msgid "Simplified Chinese"
+msgstr "简体中文"
+
+#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+msgid "Toggle Simp/Trad Chinese Conversion"
+msgstr "切换简繁转换"
+
+#: src/module/chttrans/chttrans.c:176
+#: src/module/chttrans/fcitx-chttrans.conf.in:3
+msgid "Simplified Chinese To Traditional Chinese"
+msgstr "简繁转换"
+
+#: src/module/chttrans/chttrans.c:177
+msgid "Traditional Chinese is enabled."
+msgstr "已启用繁体中文。"
+
+#: src/module/chttrans/chttrans.c:178
+msgid "Simplified Chinese is enabled."
+msgstr "已启用简体中文。"
+
+#: src/module/clipboard/clipboard.c:372
+msgid "Select to paste"
+msgstr "选择以粘贴"
+
+#: src/module/freedesktop-notify/freedesktop-notify.c:620
+msgid "Do not show again"
+msgstr "不要再显示"
+
+#: src/module/fullwidthchar/fullwidthchar.c:114
+#: src/module/fullwidthchar/fullwidthchar.c:191
+msgid "Full width Character"
+msgstr "全角字符"
+
+#: src/module/fullwidthchar/fullwidthchar.c:114
+#: src/module/fullwidthchar/fullwidthchar.c:191
+msgid "Half width Character"
+msgstr "半角字符"
+
+#: src/module/fullwidthchar/fullwidthchar.c:115
+#: src/module/fullwidthchar/fullwidthchar.c:192
+msgid "Toggle Half/Full width Character"
+msgstr "切换半/全角字符"
+
+#: src/module/imselector/imselector.c:305
+msgid "Select global input method: "
+msgstr "选择全局输入法："
+
+#: src/module/imselector/imselector.c:306
+msgid "Select local input method: "
+msgstr "选择局部输入法："
+
+#: src/module/imselector/imselector.c:312
+msgid "Current local input method is "
+msgstr "当前局部输入法为 "
+
+#: src/module/imselector/imselector.c:316
+msgid "No local input method"
+msgstr "无局部输入法"
+
+#: src/module/imselector/imselector.c:326
+msgid "Clear local input method"
+msgstr "清除局部输入法"
+
+#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:431
+msgid "Online Help"
+msgstr "在线帮助"
+
+#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
+#: src/ui/kimpanel/kimpanel.c:781
+msgid "Configure Current Input Method"
+msgstr "配置当前输入法"
+
+#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:493
+msgid "Configure"
+msgstr "配置"
+
+#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
+#: src/ui/kimpanel/kimpanel.c:786
+msgid "Restart"
+msgstr "重新启动"
+
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:495
+msgid "Exit"
+msgstr "退出"
+
+#: src/module/notificationitem/notificationitem.c:456
+#: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:256
+msgid "No input window"
+msgstr "无输入窗口"
+
+#: src/module/notificationitem/notificationitem.c:462
+#: src/ui/kimpanel/kimpanel.c:281 src/ui/kimpanel/kimpanel.c:286
+#: data/config.desc:34
+msgid "Disabled"
+msgstr "禁用"
+
+#: src/module/notificationitem/notificationitem.c:463
+#: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
+msgid "Input Method Disabled"
+msgstr "输入法被禁用"
+
+#: src/module/punc/punc.c:148 src/module/punc/punc.c:567
+msgid "Full width punct"
+msgstr "全角标点"
+
+#: src/module/punc/punc.c:149 src/module/punc/punc.c:568
+msgid "Latin punct"
+msgstr "英文标点"
+
+#: src/module/punc/punc.c:150 src/module/punc/punc.c:569
+msgid "Toggle Full Width Punctuation"
+msgstr "切换全角标点"
+
+#: src/module/punc/punc.c:410
+msgid "Can't open punc file."
+msgstr "无法打开标点文件"
+
+#: src/module/punc/punc.c:585 src/module/punc/fcitx-punc.conf.in:3
+msgid "Punctuation Support"
+msgstr "标点支持"
+
+#: src/module/punc/punc.c:586
+msgid "Full width punctuations are used."
+msgstr "已启用全角标点。"
+
+#: src/module/punc/punc.c:587
+msgid "Latin punctuations are used."
+msgstr "已启用半角标点。"
+
+#: src/module/quickphrase/quickphrase.c:247
+#, c-format
+msgid "Space for %s Enter for %s"
+msgstr "空格输入 %s 回车输入 %s"
+
+#: src/module/quickphrase/quickphrase.c:378
+msgid "Quick Phrase: "
+msgstr "快速输入: "
+
+#: src/module/remote/remote.c:70
+#, c-format
+msgid "Can't open socket %s: %s"
+msgstr "无法打开Socket %s: %s"
+
+#: src/module/unicode/charselectdata.c:245
+msgid "<Non Private Use High Surrogate>"
+msgstr "<非专用高半代理区>"
+
+#: src/module/unicode/charselectdata.c:247
+msgid "<Private Use High Surrogate>"
+msgstr "<专用高半代理区>"
+
+#: src/module/unicode/charselectdata.c:249
+msgid "<Low Surrogate>"
+msgstr "<低半代理区>"
+
+#: src/module/unicode/charselectdata.c:251
+msgid "<Private Use>"
+msgstr "<专用区>"
+
+#: src/module/unicode/charselectdata.c:279
+msgid "<not assigned>"
+msgstr "<未指派>"
+
+#: src/module/unicode/unicode.c:230
+msgid "Search unicode"
+msgstr "搜索 unicode"
+
+#: src/module/vk/vk.c:51
+msgid "Latin"
+msgstr "拉丁字母"
+
+#: src/module/vk/vk.c:52
+msgid "Fullwidth"
+msgstr "全角字符"
+
+#: src/module/vk/vk.c:53
+msgid "Greek"
+msgstr "希腊字母"
+
+#: src/module/vk/vk.c:54
+msgid "Russian"
+msgstr "俄文字符"
+
+#: src/module/vk/vk.c:55
+msgid "Index"
+msgstr "索引"
+
+#: src/module/vk/vk.c:56
+msgid "Math"
+msgstr "数学符号"
+
+#: src/module/vk/vk.c:57
+msgid "Number"
+msgstr "数字"
+
+#: src/module/vk/vk.c:58
+msgid "Special"
+msgstr "特殊符号"
+
+#: src/module/vk/vk.c:59
+msgid "Hiragana"
+msgstr "平假名"
+
+#: src/module/vk/vk.c:60
+msgid "Katakana"
+msgstr "片假名"
+
+#: src/module/vk/vk.c:61
+msgid "Table Symbol"
+msgstr "制表符"
+
+#: src/module/vk/vk.c:154
+msgid "Toggle Virtual Keyboard"
+msgstr "切换虚拟键盘"
+
+#: src/module/vk/vk.c:154
+msgid "Virtual Keyboard State"
+msgstr "虚拟键盘状态"
+
+#: src/module/vk/vk.c:179
+msgid "Virtual Keyboard"
+msgstr "虚拟键盘"
+
+#: src/module/vk/vk.c:212
+msgid "Close virtual keyboard"
+msgstr "关闭虚拟键盘"
+
+#: src/module/xkbdbus/xkbdbus.c:218
+msgid "English (US)"
+msgstr "英语 (美国)"
+
+#: src/ui/cairostuff/font.c:46
+msgid "Error: Load fontconfig failed"
+msgstr "错误: fontconfig加载失败"
+
+#: src/ui/cairostuff/font.c:119
+#, c-format
+msgid "your current font is: %s"
+msgstr "当前字体为: %s"
+
+#: src/ui/cairostuff/font.c:121
+msgid "no valid font."
+msgstr "无可用字体"
+
+#: src/ui/classic/fcitx-skin-installer.sh:50
+msgid "Error: skin file should only contain one directory."
+msgstr "错误：皮肤文件应只包括一个目录"
+
+#: src/ui/classic/fcitx-skin-installer.sh:55
+msgid "Error: skin file doesn't contain skin config."
+msgstr "错误：皮肤文件不包含皮肤配置"
+
+#: src/ui/classic/fcitx-skin-installer.sh:64
+#, sh-format
+msgid ""
+"Error: $HOME or $XDG_CONFIG_HOME is not set, cannot determine the install "
+"path"
+msgstr "错误：$HOME 或 $XDG_CONFIG_HOME 未设置，无法确定安装路径"
+
+#: src/ui/classic/fcitx-skin-installer.sh:74
+msgid "Successfully Installed skin"
+msgstr "成功安装皮肤"
+
+#: src/ui/classic/fcitx-skin-installer.sh:76
+msgid "Error: skin failed to install"
+msgstr "错误：皮肤安装失败"
 
 #: src/ui/classic/skin.c:121
 msgid "Cannot load default skin, is installation correct?"
@@ -574,100 +1320,271 @@ msgstr "无法加载默认皮肤，安装是否正确？"
 msgid "Cannot load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
 
-#: data/script/fcitx-diagnose.sh:1549
-msgid "Cannot read im list from fcitx profile."
-msgstr "无法从 fcitx 配置文件中读取输入法列表."
+#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
+msgid "Skin"
+msgstr "皮肤"
+
+#: src/ui/classic/tray.c:160
+#, c-format
+msgid "X error %i on opcode send"
+msgstr "X error %i on opcode send"
+
+#: src/ui/kimpanel/kimpanel.c:397 data/fcitx-autostart.desktop.in:2
+#: data/fcitx.desktop.in:2
+msgid "Fcitx"
+msgstr "Fcitx"
+
+#: src/ui/kimpanel/kimpanel.c:778
+msgid "Toggle Input Method"
+msgstr "切换输入法"
+
+#: tools/gui/quickphrase-editor/batchdialog.cpp:31
+msgid "Use <Keyword> <Phrase> format on every line."
+msgstr "每行使用 <关键词> <词组> 的格式。"
+
+#: tools/gui/quickphrase-editor/editor.cpp:51
+msgid "&Add"
+msgstr "添加(&A)"
+
+#: tools/gui/quickphrase-editor/editor.cpp:52
+msgid "&Batch Edit"
+msgstr "批量编辑(&B)"
+
+#: tools/gui/quickphrase-editor/editor.cpp:53
+msgid "&Delete"
+msgstr "删除(&D)"
+
+#: tools/gui/quickphrase-editor/editor.cpp:54
+msgid "De&lete All"
+msgstr "全部删除(&L)"
+
+#: tools/gui/quickphrase-editor/editor.cpp:55
+msgid "&Import"
+msgstr "导入(&I)"
+
+#: tools/gui/quickphrase-editor/editor.cpp:56
+msgid "E&xport"
+msgstr "导出(&X)"
+
+#: tools/gui/quickphrase-editor/editor.cpp:57
+msgid "&Operation"
+msgstr "操作(&O)"
+
+#: tools/gui/quickphrase-editor/editor.cpp:68
+msgid "Add File"
+msgstr "添加文件"
+
+#: tools/gui/quickphrase-editor/editor.cpp:69
+msgid "Remove File"
+msgstr "移除文件"
+
+#: tools/gui/quickphrase-editor/editor.cpp:70
+msgid "Refresh List"
+msgstr "刷新列表"
+
+#: tools/gui/quickphrase-editor/editor.cpp:131
+msgid "Save Changes"
+msgstr "保存更改"
+
+#: tools/gui/quickphrase-editor/editor.cpp:132
+msgid ""
+"The content has changed.\n"
+"Do you want to save the changes or discard them?"
+msgstr "内容已更改。\n您想要保存还是撤销这些修改？"
+
+#: tools/gui/quickphrase-editor/editor.cpp:148
+msgid "Quick Phrase Editor"
+msgstr "快速输入编辑器"
+
+#: tools/gui/quickphrase-editor/editor.cpp:279
+msgid "Create new file"
+msgstr "创建新文件"
+
+#: tools/gui/quickphrase-editor/editor.cpp:280
+msgid "Please input a filename for newfile"
+msgstr "请输入新文件的文件名"
+
+#: tools/gui/quickphrase-editor/editor.cpp:285
+msgid "Invalid filename"
+msgstr "文件名无效"
+
+#: tools/gui/quickphrase-editor/editor.cpp:285
+msgid "File name should not contain '/'."
+msgstr "文件名不应该包括 “/”。"
+
+#: tools/gui/quickphrase-editor/editor.cpp:295
+#: tools/gui/quickphrase-editor/editor.cpp:342
+msgid "File Operation Failed"
+msgstr "文件操作失败"
+
+#: tools/gui/quickphrase-editor/editor.cpp:296
+#, kde-format
+msgid "Cannot create file %1."
+msgstr "无法创建文件 %1。"
 
 #: tools/gui/quickphrase-editor/editor.cpp:322
 msgid "Cannot remove system file"
 msgstr "无法移除系统文件"
 
-#: data/addon.desc:22
-msgid "Category"
-msgstr "种类"
+#: tools/gui/quickphrase-editor/editor.cpp:323
+#, kde-format
+msgid "%1 is a system file, do you want to delete all phrases instead?"
+msgstr "%1 是系统文件，您是否想要改为清空所有词组？"
 
-#: src/ui/classic/skin.desc:132 src/ui/classic/skin.desc:238
-#: src/ui/classic/skin.desc:368
-msgid "Center"
-msgstr "居中"
+#: tools/gui/quickphrase-editor/editor.cpp:334
+msgid "Confirm deletion"
+msgstr "确认删除"
 
-#: src/ui/classic/skin.desc:131 src/ui/classic/skin.desc:237
-#: src/ui/classic/skin.desc:367
-msgid "CenterLeft"
-msgstr "中部靠左"
+#: tools/gui/quickphrase-editor/editor.cpp:335
+#, kde-format
+msgid "Are you sure to delete %1?"
+msgstr "您确定要删除 %1？"
 
-#: src/ui/classic/skin.desc:133 src/ui/classic/skin.desc:239
-#: src/ui/classic/skin.desc:369
-msgid "CenterRight"
-msgstr "中部靠右"
+#: tools/gui/quickphrase-editor/editor.cpp:343
+#, kde-format
+msgid "Error while deleting %1."
+msgstr "删除 %1 时出错。"
+
+#: tools/gui/quickphrase-editor/editordialog.cpp:30
+msgid "Keyword:"
+msgstr "关键字："
+
+#: tools/gui/quickphrase-editor/editordialog.cpp:31
+msgid "Phrase:"
+msgstr "词组："
+
+#: tools/gui/quickphrase-editor/filelistmodel.cpp:47
+#: src/module/spell/fcitx-spell.desc:5
+msgid "Default"
+msgstr "默认"
+
+#: tools/gui/quickphrase-editor/model.cpp:56
+msgid "Keyword"
+msgstr "关键字"
+
+#: tools/gui/quickphrase-editor/model.cpp:58
+msgid "Phrase"
+msgstr "词组"
+
+#: tools/gui/wrapper/mainwindow.cpp:40
+msgid "&Save"
+msgstr "保存(&S)"
+
+#: tools/gui/wrapper/mainwindow.cpp:41
+msgid "&Reset"
+msgstr "重置(&R)"
+
+#: tools/gui/wrapper/mainwindow.cpp:42
+msgid "&Close"
+msgstr "关闭(&C)"
+
+#: data/fcitx-autostart.desktop.in:4 data/fcitx.desktop.in:4
+msgid "Start Input Method"
+msgstr "启动输入法"
+
+#: data/fcitx-configtool.desktop.in:2
+msgid "Fcitx Configuration"
+msgstr "Fcitx 配置"
+
+#: data/fcitx-configtool.desktop.in:3
+msgid "Input Method Configuration"
+msgstr "输入法配置"
 
 #: data/fcitx-configtool.desktop.in:4
 msgid "Change Fcitx Configuration"
 msgstr "修改 Fcitx 配置"
 
-#: src/im/table/table.desc:136
-msgid "Choose"
-msgstr "选择键"
+#: src/frontend/ipc/fcitx-ipc.conf.in:3
+msgid "Fcitx DBus Frontend"
+msgstr "Fcitx DBus 前端"
 
-#: data/config.desc:130
-msgid "Choose Second and Third Candidate Word"
-msgstr "选择第二第三候选词"
+#: src/frontend/ipc/fcitx-ipc.conf.in:4
+msgid "Frontend Used by IM Modules"
+msgstr "输入法模块使用的前端"
 
-#: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:141
-#: src/module/autoeng/fcitx-autoeng.desc:2
-#: src/module/clipboard/fcitx-clipboard.desc:35
-#: src/module/quickphrase/fcitx-quickphrase.desc:16
-msgid "Choose key modifier"
-msgstr "选词修饰键"
+#: src/frontend/xim/fcitx-xim.conf.in:3
+msgid "Fcitx XIM Frontend"
+msgstr "Fcitx XIM 前端"
 
-#: src/im/table/table.c:713
-msgid "Choose the phrase to be deleted, Press Escape to Cancel"
-msgstr "选择要删除的词组，按Escape 取消"
+#: src/frontend/xim/fcitx-xim.conf.in:4
+msgid "Provides XIM support"
+msgstr "提供 XIM 支持"
 
-#: src/im/table/table.c:705
-msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
-msgstr "选择放在前面的词组，按Escape 取消"
+#: src/im/keyboard/fcitx-keyboard.conf.in:3
+msgid "Keyboard Layout"
+msgstr "键盘布局"
 
-#: src/im/table/table.c:721
-msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
-msgstr "选择要清理输入频率的词组，按Escape 取消"
+#: src/im/keyboard/fcitx-keyboard.conf.in:4
+msgid "Use Keyboard Layout as Input Method"
+msgstr "将键盘布局作为输入法"
 
-#: src/ui/classic/fcitx-classic-ui.conf.in:3
-msgid "Classic"
-msgstr "经典界面"
+#: src/im/pinyin/fcitx-pinyin.conf.in:4
+msgid "Simple Pinyin support for Fcitx"
+msgstr "Fcitx 简单的拼音支持"
 
-#: src/ui/classic/fcitx-classic-ui.conf.in:4
-msgid "Classic User Interface with Skin support"
-msgstr "带皮肤支持的经典界面"
+#: src/im/pinyin/fcitx-pinyin.conf.in:9
+msgid "Shuang Pin Schema"
+msgstr "默认双拼方案"
 
-#: src/ui/classic/fcitx-classic-ui.desc:1
-#: src/ui/classic/fcitx-classic-ui.desc:7
-#: src/ui/classic/fcitx-classic-ui.desc:13
-#: src/ui/classic/fcitx-classic-ui.desc:20
-#: src/ui/classic/fcitx-classic-ui.desc:25
-#: src/ui/classic/fcitx-classic-ui.desc:30
-#: src/ui/classic/fcitx-classic-ui.desc:36
-#: src/ui/classic/fcitx-classic-ui.desc:41
-#: src/ui/classic/fcitx-classic-ui.desc:51
-#: src/ui/classic/fcitx-classic-ui.desc:56
-msgid "ClassicUI"
-msgstr "经典界面"
+#: src/im/qw/fcitx-qw.conf.in:4
+msgid "Quwei Input Method for Fcitx"
+msgstr "Fcitx 的区位输入法"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
-msgid "Clear"
-msgstr "清空"
+#: src/im/table/data/cangjie.conf.in:3
+msgid "Cangjie"
+msgstr "仓颉"
 
-#: src/im/table/fcitx-table.desc:19
-msgid "Clear Frequency"
-msgstr "清除输入频率"
+#: src/im/table/data/db.conf.in:3
+msgid "Dianbaoma"
+msgstr "电报码"
 
-#: src/module/imselector/fcitx-imselector.desc:14
-msgid "Clear local Input Method"
-msgstr "清除局部输入法"
+#: src/im/table/data/erbi.conf.in:3
+msgid "Erbi"
+msgstr "二笔"
 
-#: src/module/imselector/imselector.c:326
-msgid "Clear local input method"
-msgstr "清除局部输入法"
+#: src/im/table/data/qxm.conf.in:3
+msgid "Bingchan"
+msgstr "冰蟾全息"
+
+#: src/im/table/data/wanfeng.conf.in:3
+msgid "Wanfeng"
+msgstr "晚风"
+
+#: src/im/table/data/wbpy.conf.in:3
+msgid "WubiPinyin"
+msgstr "五笔拼音"
+
+#: src/im/table/data/wbx.conf.in:3
+msgid "Wubi"
+msgstr "五笔字型"
+
+#: src/im/table/data/zrm.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:4
+msgid "Ziranma"
+msgstr "自然码"
+
+#: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
+msgid "Table"
+msgstr "码表"
+
+#: src/im/table/fcitx-table.conf.in:4
+msgid "Table Input Method for Fcitx"
+msgstr "Fcitx 的码表输入法"
+
+#: src/module/autoeng/fcitx-autoeng.conf.in:3
+msgid "Auto English Mode"
+msgstr "自动英文模式"
+
+#: src/module/autoeng/fcitx-autoeng.conf.in:4
+msgid "Auto Change to English Mode while Input Specific String"
+msgstr "在输入特定字符串时切换到英文模式"
+
+#: src/module/autoeng/fcitx-autoeng.conf.in:9
+msgid "Auto English Trigger Word"
+msgstr "自动英文模式触发词"
+
+#: src/module/chttrans/fcitx-chttrans.conf.in:4
+msgid "Convert Simplified Chinese To Traditional Chinese"
+msgstr "简体中文转换为繁体中文"
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:3
 #: src/module/clipboard/fcitx-clipboard.desc:1
@@ -680,21 +1597,859 @@ msgstr "清除局部输入法"
 msgid "Clipboard"
 msgstr "剪贴板"
 
-#: src/module/vk/vk.c:212
-msgid "Close virtual keyboard"
-msgstr "关闭虚拟键盘"
+#: src/module/clipboard/fcitx-clipboard.conf.in:4
+msgid "Fcitx Clipboard access"
+msgstr "Fcitx 的剪贴板访问支持"
 
-#: src/im/table/table.desc:15
-msgid "Code Table File"
-msgstr "码表文件"
+#: src/module/dbus/fcitx-dbus.conf.in:3
+msgid "DBus Support"
+msgstr "DBus 支持"
 
-#: src/im/table/table.desc:7
-msgid "Code Table Name"
-msgstr "码表名称"
+#: src/module/dbus/fcitx-dbus.conf.in:4
+msgid "Provides DBus Support (Used by other Addon)"
+msgstr "提供 DBus 支持 (由其他插件使用)"
 
-#: src/im/table/table.c:1399
-msgid "Code is "
-msgstr "编码为 "
+#: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:3
+msgid "Freedesktop.org Notification Support"
+msgstr "Freedesktop.org 桌面提示支持"
+
+#: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
+msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
+msgstr "提供 Freedesktop.org 桌面提示支持 (供其它插件使用)"
+
+#: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:3
+msgid "Fullwidth Character"
+msgstr "全角字符"
+
+#: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
+msgid "Provides Fullwidth Character Input Support"
+msgstr "提供全角符号输入支持"
+
+#: src/module/imselector/fcitx-imselector.conf.in:3
+msgid "Input method selector"
+msgstr "输入法选择器"
+
+#: src/module/imselector/fcitx-imselector.conf.in:4
+msgid "Select specific input method via keyboard"
+msgstr "通过键盘选择特定的输入法"
+
+#: src/module/lua/fcitx-lua.conf.in:3
+msgid "Fcitx Lua Support"
+msgstr "Fcitx 的 Lua 支持"
+
+#: src/module/lua/fcitx-lua.conf.in:4
+msgid "Add Lua script support to Fcitx"
+msgstr "为 Fcitx 增加 Lua 支持"
+
+#: src/module/notificationitem/fcitx-notificationitem.conf.in:3
+#: src/module/notificationitem/fcitx-notificationitem.conf.in:4
+msgid "DBus based new Freedesktop.org tray icon"
+msgstr "基于 DBus 的新 Freedesktop.org 托盘图标"
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
+msgid "Enchance pinyin input in Fcitx"
+msgstr "增强 Fcitx 的拼音输入"
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:4
+msgid "Provide extra feature for pinyin in Fcitx"
+msgstr "增强 Fcitx 的拼音输入的功能"
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:9
+#: src/im/table/table.desc:126
+msgid "Symbol"
+msgstr "符号"
+
+#: src/module/punc/fcitx-punc.conf.in:4
+msgid "Punctuation Conversion Support"
+msgstr "标点转换支持"
+
+#: src/module/quickphrase/fcitx-quickphrase.conf.in:3
+msgid "Quickphrase"
+msgstr "快速输入"
+
+#: src/module/quickphrase/fcitx-quickphrase.conf.in:4
+msgid "Conveniently Input English or User-Defined Simple Table"
+msgstr "方便地输入英文或用户定义的码表"
+
+#: src/module/quickphrase/fcitx-quickphrase.conf.in:9
+msgid "Quick Phrase List"
+msgstr "快速输入列表"
+
+#: src/module/remote/fcitx-remote-module.conf.in:3
+msgid "Remote"
+msgstr "远程调用"
+
+#: src/module/remote/fcitx-remote-module.conf.in:4
+msgid "Used by fcitx-remote to change Fcitx state from console"
+msgstr "fcitx-remote 通过它来从命令行改变 Fcitx 的状态"
+
+#: src/module/spell/fcitx-spell.conf.in:3
+msgid "Spell"
+msgstr "拼写"
+
+#: src/module/spell/fcitx-spell.conf.in:4
+msgid "Fcitx Spelling Hint/Completion Support"
+msgstr "Fcitx 的拼写提示/补全支持"
+
+#: src/module/unicode/fcitx-unicode.conf.in:3
+msgid "Fcitx Unicode Typing Support"
+msgstr "Fcitx 的 Unicode 输入支持"
+
+#: src/module/unicode/fcitx-unicode.conf.in:4
+msgid "Add Unicode Typing Support"
+msgstr "添加 Unicode 输入支持"
+
+#: src/module/vk/fcitx-vk.conf.in:3 src/module/vk/fcitx-vk.conf.in:10
+msgid "Virtual Key Board"
+msgstr "虚拟键盘"
+
+#: src/module/vk/fcitx-vk.conf.in:4
+msgid "Virtual Key Board in order to input special character"
+msgstr "用于输入特殊字符的虚拟键盘"
+
+#: src/module/x11/fcitx-x11.conf.in:3
+msgid "X11 Support"
+msgstr "X11 支持"
+
+#: src/module/x11/fcitx-x11.conf.in:4
+msgid "X11 Utilitiy used by other Addon"
+msgstr "由其他插件使用的 X11 工具函数"
+
+#: src/module/xkbdbus/fcitx-xkbdbus.conf.in:3
+#: src/module/xkbdbus/fcitx-xkbdbus.conf.in:4
+msgid "X Keyboard Integration export with DBus"
+msgstr "通过 DBus 导出的 X 键盘集成接口"
+
+#: src/module/xkb/fcitx-xkb.conf.in:3 src/module/xkb/fcitx-xkb.conf.in:4
+msgid "X Keyboard Integration"
+msgstr "X 键盘集成"
+
+#: src/ui/classic/fcitx-classic-ui.conf.in:3
+msgid "Classic"
+msgstr "经典界面"
+
+#: src/ui/classic/fcitx-classic-ui.conf.in:4
+msgid "Classic User Interface with Skin support"
+msgstr "带皮肤支持的经典界面"
+
+#: src/ui/classic/fcitx-skin-installer.desktop.in:3
+msgid "Fcitx Skin Installer"
+msgstr "Fcitx 皮肤安装器"
+
+#: src/ui/classic/fcitx-skin-installer.desktop.in:4
+msgid "Installer Script for Fcitx Skin"
+msgstr "Fcitx 皮肤的安装器"
+
+#: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:3
+msgid "Kimpanel"
+msgstr "Kimpanel"
+
+#: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:4
+msgid "Kimpanel Support for Fcitx"
+msgstr "Fcitx 的 Kimpanel 支持"
+
+#: data/addon.desc:1 data/addon.desc:5 data/addon.desc:10 data/addon.desc:15
+#: data/addon.desc:24 data/addon.desc:29 data/addon.desc:33 data/addon.desc:40
+#: data/addon.desc:45 data/addon.desc:50 data/addon.desc:55 data/addon.desc:64
+#: data/addon.desc:69 data/addon.desc:74 data/addon.desc:79
+msgid "Addon"
+msgstr "附加组件"
+
+#: data/addon.desc:3 data/inputmethod.desc:7
+msgid "Name"
+msgstr "名称"
+
+#: data/addon.desc:7
+msgid "Name that can be display in UI"
+msgstr "显示于用户界面中的名称"
+
+#: data/addon.desc:12
+msgid "Comment"
+msgstr "描述"
+
+#: data/addon.desc:18 data/inputmethod.desc:1 data/inputmethod.desc:5
+#: data/inputmethod.desc:9 data/inputmethod.desc:13 data/inputmethod.desc:17
+#: data/inputmethod.desc:21
+msgid "InputMethod"
+msgstr "输入法"
+
+#: data/addon.desc:19
+msgid "Frontend"
+msgstr "前端"
+
+#: data/addon.desc:20
+msgid "Module"
+msgstr "模块"
+
+#: data/addon.desc:21
+msgid "UI"
+msgstr "界面"
+
+#: data/addon.desc:22
+msgid "Category"
+msgstr "种类"
+
+#: data/addon.desc:27
+msgid "Enabled"
+msgstr "启用"
+
+#: data/addon.desc:31
+msgid "Library"
+msgstr "库"
+
+#: data/addon.desc:36
+msgid "SharedLibrary"
+msgstr "共享库"
+
+#: data/addon.desc:37
+msgid "DBus"
+msgstr "DBus"
+
+#: data/addon.desc:38
+msgid "Type"
+msgstr "类型"
+
+#: data/addon.desc:43
+msgid "Dependency"
+msgstr "依赖"
+
+#: data/addon.desc:48
+msgid "Priority of addon"
+msgstr "附加组件优先级"
+
+#: data/addon.desc:53
+msgid "Sub Configuration for Module"
+msgstr "模块子配置"
+
+#: data/addon.desc:58
+msgid "Register IM"
+msgstr "注册输入法方法"
+
+#: data/addon.desc:60
+msgid "Self"
+msgstr "自提供"
+
+#: data/addon.desc:61
+msgid "Exec"
+msgstr "Exec"
+
+#: data/addon.desc:62
+msgid "ConfigFile"
+msgstr "配置文件"
+
+#: data/addon.desc:67
+msgid "Argument for InputMethod Register"
+msgstr "注册输入法的参数"
+
+#: data/addon.desc:72
+msgid "Fallback UI Addon"
+msgstr "备选界面附加组件"
+
+#: data/addon.desc:77
+msgid "Use RTLD_LOCAL to load library"
+msgstr "使用 RTLD_GLOBAL 加载库"
+
+#: data/addon.desc:82
+msgid "Do not show in GUI"
+msgstr "不在图形界面显示"
+
+#: data/config.desc:1 data/config.desc:7 data/config.desc:13
+#: data/config.desc:39 data/config.desc:46 data/config.desc:53
+#: data/config.desc:60 data/config.desc:65 data/config.desc:71
+#: data/config.desc:81 data/config.desc:87 data/config.desc:93
+#: data/config.desc:99 data/config.desc:105 data/config.desc:111
+#: data/config.desc:117 data/config.desc:122 data/config.desc:127
+#: data/config.desc:133 data/config.desc:139 data/config.desc:145
+#: data/config.desc:152
+msgid "Hotkey"
+msgstr "快捷键"
+
+#: data/config.desc:5
+msgid "Trigger Input Method"
+msgstr "切换激活/非激活输入法"
+
+#: data/config.desc:10
+msgid "Use extra trigger key only after using it to inactivate"
+msgstr "只在用额外切换键取消激活后才使用它进行切换"
+
+#: data/config.desc:16
+msgid "R_CTRL"
+msgstr "右Ctrl"
+
+#: data/config.desc:17
+msgid "R_SHIFT"
+msgstr "右Shift"
+
+#: data/config.desc:18
+msgid "L_SHIFT"
+msgstr "左Shift"
+
+#: data/config.desc:19
+msgid "L_CTRL"
+msgstr "左Ctrl"
+
+#: data/config.desc:20
+msgid "ALT_L_SHIFT"
+msgstr "Alt+左Shift"
+
+#: data/config.desc:21
+msgid "ALT_R_SHIFT"
+msgstr "Alt+右Shift"
+
+#: data/config.desc:22
+msgid "CTRL Both"
+msgstr "两侧 Ctrl"
+
+#: data/config.desc:23
+msgid "SHIFT Both"
+msgstr "两侧 Shift"
+
+#: data/config.desc:24
+msgid "L_ALT"
+msgstr "左 Alt"
+
+#: data/config.desc:25
+msgid "R_ALT"
+msgstr "右 Alt"
+
+#: data/config.desc:26
+msgid "ALT Both"
+msgstr "两侧 Alt"
+
+#: data/config.desc:27
+msgid "Left Super"
+msgstr "左 Super"
+
+#: data/config.desc:28
+msgid "Right Super"
+msgstr "右 Super"
+
+#: data/config.desc:29
+msgid "Super Both"
+msgstr "两侧 Super"
+
+#: data/config.desc:30
+msgid "Ctrl+Left Super"
+msgstr "Ctrl+左 Super"
+
+#: data/config.desc:31
+msgid "Ctrl+Right Super"
+msgstr "Ctrl+右 Super"
+
+#: data/config.desc:32
+msgid "Super+Left Ctrl"
+msgstr "Super+左 Ctrl"
+
+#: data/config.desc:33
+msgid "Super+Right Ctrl"
+msgstr "Super+右 Ctrl"
+
+#: data/config.desc:35
+msgid "Custom"
+msgstr "自定义"
+
+#: data/config.desc:37
+msgid "Extra key for trigger input method"
+msgstr "额外的激活输入法快捷键"
+
+#: data/config.desc:42
+msgid "Custom switch key"
+msgstr "自定义切换键"
+
+#: data/config.desc:49
+msgid "Activate input method"
+msgstr "激活输入法"
+
+#: data/config.desc:56
+msgid "Inactivate Input Method"
+msgstr "取消激活输入法"
+
+#: data/config.desc:63
+msgid "Enable Hotkey to scroll Between Input Method"
+msgstr "启用输入法间切换"
+
+#: data/config.desc:68
+msgid "Include Inactivate when scrolling between Input Method"
+msgstr "输入法间切换时包含未激活状态"
+
+#: data/config.desc:74
+msgid "CTRL_SHIFT"
+msgstr "Ctrl+Shift"
+
+#: data/config.desc:75
+msgid "ALT_SHIFT"
+msgstr "Alt+Shift"
+
+#: data/config.desc:76
+msgid "CTRL_SUPER"
+msgstr "Ctrl+Super"
+
+#: data/config.desc:77
+msgid "ALT_SUPER"
+msgstr "Alt+Super"
+
+#: data/config.desc:79
+msgid "Scroll between Input Method"
+msgstr "输入法切换键"
+
+#: data/config.desc:84
+msgid "Reload configuration"
+msgstr "重新载入配置"
+
+#: data/config.desc:90
+msgid "Interval of Two Key Input"
+msgstr "输入间隔"
+
+#: data/config.desc:96
+msgid "Switching Virtual Keyboard"
+msgstr "切换虚拟键盘"
+
+#: data/config.desc:102
+msgid "Switching Remind Mode"
+msgstr "切换联想模式"
+
+#: data/config.desc:108
+msgid "Switching Full Width Character Mode"
+msgstr "切换全角"
+
+#: data/config.desc:114
+msgid "Switch Full Width Punc Mode"
+msgstr "切换全角标点"
+
+#: data/config.desc:120
+msgid "Prev Page"
+msgstr "上一页"
+
+#: data/config.desc:125
+msgid "Next Page"
+msgstr "下一页"
+
+#: data/config.desc:130
+msgid "Choose Second and Third Candidate Word"
+msgstr "选择第二第三候选词"
+
+#: data/config.desc:136
+msgid "Saving All Config and Input History"
+msgstr "保存配置及输入历史"
+
+#: data/config.desc:142
+msgid "Switch Embeded Preedit"
+msgstr "切换嵌入预编辑字符串"
+
+#: data/config.desc:148
+msgid "Previous Candidate Word"
+msgstr "上一个候选词"
+
+#: data/config.desc:149
+msgid ""
+"This is used in some modules and input methods to navigate to the previous "
+"candidate word"
+msgstr "在部分插件 / 输入法中用来切换到上一个候选词的快捷键"
+
+#: data/config.desc:155
+msgid "Next Candidate Word"
+msgstr "下一个候选词"
+
+#: data/config.desc:156
+msgid ""
+"This is used in some modules and input methods to navigate to the next "
+"candidate word"
+msgstr "在部分插件 / 输入法中用来切换到下一个候选词的快捷键"
+
+#: data/config.desc:159 data/config.desc:165 data/config.desc:174
+msgid "Program"
+msgstr "程序"
+
+#: data/config.desc:162
+msgid "Seconds sleep before fcitx really start"
+msgstr "Fcitx 真正启动前延迟的秒数"
+
+#: data/config.desc:169
+msgid "No"
+msgstr "否"
+
+#: data/config.desc:170
+msgid "All"
+msgstr "所有"
+
+#: data/config.desc:171
+msgid "PerProgram"
+msgstr "按程序"
+
+#: data/config.desc:172
+msgid "Share State Among Window"
+msgstr "在窗口间共享状态"
+
+#: data/config.desc:178
+msgid "Inactive"
+msgstr "非激活"
+
+#: data/config.desc:179
+msgid "Active"
+msgstr "激活"
+
+#: data/config.desc:180
+msgid "Default Input Method State"
+msgstr "默认输入法状态"
+
+#: data/config.desc:183 data/config.desc:189 data/config.desc:195
+#: data/config.desc:201 data/config.desc:208 data/config.desc:214
+msgid "Output"
+msgstr "输出"
+
+#: data/config.desc:186
+msgid "Type half width Punc After a Number"
+msgstr "数字后跟半角符号"
+
+#: data/config.desc:192
+msgid "Disable Paging in Remind Mode"
+msgstr "联想模式禁用翻页"
+
+#: data/config.desc:198
+msgid "Commit when toggle state"
+msgstr "切换状态时提交"
+
+#: data/config.desc:199
+msgid "Send typed raw text if Switch to inactive Mode"
+msgstr "切换到非激活模式时当前输入的原始文本上屏"
+
+#: data/config.desc:204 src/im/table/table.desc:176
+msgid "Candidate Word Number"
+msgstr "候选词个数"
+
+#: data/config.desc:211
+msgid "Give the tips of Phrase"
+msgstr "提示词库中词组"
+
+#: data/config.desc:217
+msgid "Do not commit preedit text when unfocus a window"
+msgstr "窗口失去焦点时不提交预编辑文本"
+
+#: data/config.desc:220 data/config.desc:226 data/config.desc:232
+#: data/config.desc:238 data/config.desc:244 data/config.desc:250
+#: data/config.desc:256
+msgid "Appearance"
+msgstr "外观"
+
+#: data/config.desc:223
+msgid "Show Input Method Hint After Input method changed"
+msgstr "切换输入法时显示输入法提示"
+
+#: data/config.desc:229
+msgid "Show Input Method Hint After Input method changed and Focus in"
+msgstr "获得输入焦点并且输入法变化时显示输入法提示"
+
+#: data/config.desc:235
+msgid "Input Method Hint will be only shown when state is active"
+msgstr "输入法提示只在激活状态显示"
+
+#: data/config.desc:241
+msgid "Show Input Speed"
+msgstr "显示输入速度"
+
+#: data/config.desc:247
+msgid "Show Version"
+msgstr "显示版本"
+
+#: data/config.desc:253
+msgid "Do not show input window if there is only preedit string"
+msgstr "只有预编辑字符串时不显示输入窗口"
+
+#: data/config.desc:259
+msgid "Do not show input window if there is only one candidate and preedit"
+msgstr "只有一个候选词和预编辑字符串时不显示输入窗口"
+
+#: data/inputmethod.desc:3
+msgid "UniqueName"
+msgstr "唯一名称"
+
+#: data/inputmethod.desc:11
+msgid "IconName"
+msgstr "图标名称"
+
+#: data/inputmethod.desc:15
+msgid "Priority"
+msgstr "优先级"
+
+#: data/inputmethod.desc:19
+msgid "LangCode"
+msgstr "语言代码"
+
+#: data/inputmethod.desc:23
+msgid "Parent"
+msgstr "所属附加组件"
+
+#: data/profile.desc:1 data/profile.desc:6 data/profile.desc:11
+#: data/profile.desc:16 data/profile.desc:21 data/profile.desc:26
+msgid "Profile"
+msgstr "预置文件"
+
+#: data/profile.desc:2
+msgid "Use Full Width Character"
+msgstr "使用全角字符"
+
+#: data/profile.desc:7
+msgid "Use Wide Punctuation"
+msgstr "使用全角标点"
+
+#: data/profile.desc:12
+msgid "Prompt the phrases after input"
+msgstr "输入后联想词组"
+
+#: data/profile.desc:17
+msgid "Current Input Method Name"
+msgstr "当前输入法名称"
+
+#: data/profile.desc:22
+msgid "Current Enabled Input Method List"
+msgstr "当前启用的输入法列表"
+
+#: data/profile.desc:29
+msgid "Show Preedit String in Client Window"
+msgstr "在客户端窗口中显示预编辑字符串"
+
+#: src/frontend/xim/fcitx-xim.desc:1
+msgid "Xim"
+msgstr "Xim"
+
+#: src/frontend/xim/fcitx-xim.desc:4
+msgid "Use On The Spot Style for XIM (Cannot change during running)"
+msgstr "对XIM使用On The Spot风格（无法在运行时切换）"
+
+#: src/im/keyboard/fcitx-keyboard.desc:4
+msgid "Commit with extra space when choose candidate word"
+msgstr "选择候选词时输入额外空格"
+
+#: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:141
+#: src/module/autoeng/fcitx-autoeng.desc:2
+#: src/module/clipboard/fcitx-clipboard.desc:35
+#: src/module/quickphrase/fcitx-quickphrase.desc:16
+msgid "Choose key modifier"
+msgstr "选词修饰键"
+
+#: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:145
+#: src/module/autoeng/fcitx-autoeng.desc:6
+#: src/module/clipboard/fcitx-clipboard.desc:39
+#: src/module/quickphrase/fcitx-quickphrase.desc:5
+#: src/module/quickphrase/fcitx-quickphrase.desc:20
+msgid "None"
+msgstr "无"
+
+#: src/im/keyboard/fcitx-keyboard.desc:12 src/im/table/table.desc:146
+#: src/module/autoeng/fcitx-autoeng.desc:7
+#: src/module/clipboard/fcitx-clipboard.desc:40
+#: src/module/quickphrase/fcitx-quickphrase.desc:21
+msgid "Alt"
+msgstr "Alt"
+
+#: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:147
+#: src/module/autoeng/fcitx-autoeng.desc:8
+#: src/module/clipboard/fcitx-clipboard.desc:41
+#: src/module/quickphrase/fcitx-quickphrase.desc:22
+msgid "Ctrl"
+msgstr "Ctrl"
+
+#: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:148
+#: src/module/autoeng/fcitx-autoeng.desc:9
+#: src/module/clipboard/fcitx-clipboard.desc:42
+#: src/module/quickphrase/fcitx-quickphrase.desc:23
+msgid "Shift"
+msgstr "Shift"
+
+#: src/im/keyboard/fcitx-keyboard.desc:19
+msgid "Toggle the word hint"
+msgstr "切换单词提示"
+
+#: src/im/keyboard/fcitx-keyboard.desc:25
+msgid "Minimum length to trigger word hint"
+msgstr "最小触发单词提示长度"
+
+#: src/im/keyboard/fcitx-keyboard.desc:32
+msgid "Maximum length of spell hint list"
+msgstr "拼写提示候选词最大个数"
+
+#: src/im/keyboard/fcitx-keyboard.desc:33
+msgid ""
+"A different value from the global one may be useful when using horizontal "
+"candidate list"
+msgstr "如果您使用横排候选词, 一个与全局不同的设定可能会有所帮助"
+
+#: src/im/keyboard/fcitx-keyboard.desc:39
+msgid "Use enter to commit the existing string"
+msgstr "使用回车确认已输入字符串"
+
+#: src/im/keyboard/fcitx-keyboard.desc:44
+msgid "Add current input buffer to user dictionary"
+msgstr "当前输入内容加入用户词典"
+
+#: src/im/pinyin/fcitx-pinyin.desc:5
+msgid "MS"
+msgstr "微软"
+
+#: src/im/pinyin/fcitx-pinyin.desc:6
+msgid "Ziguang"
+msgstr "紫光"
+
+#: src/im/pinyin/fcitx-pinyin.desc:7
+msgid "ABC"
+msgstr "智能ABC"
+
+#: src/im/pinyin/fcitx-pinyin.desc:8
+msgid "Zhongwenzhixing"
+msgstr "中文之星"
+
+#: src/im/pinyin/fcitx-pinyin.desc:9
+msgid "PinyinJiaJia"
+msgstr "拼音加加"
+
+#: src/im/pinyin/fcitx-pinyin.desc:10
+msgid "XiaoHe"
+msgstr "小鹤"
+
+#: src/im/pinyin/fcitx-pinyin.desc:11
+msgid "User Defined"
+msgstr "用户定义"
+
+#: src/im/pinyin/fcitx-pinyin.desc:13
+msgid "Default Shuangpin Schema"
+msgstr "默认双拼方案"
+
+#: src/im/pinyin/fcitx-pinyin.desc:18
+msgid "Fix preedit cursor at head"
+msgstr "将光标固定在预输入文本开头"
+
+#: src/im/pinyin/fcitx-pinyin.desc:23
+msgid "Use V to trigger quickphrase"
+msgstr "使用 V 来触发快速输入"
+
+#: src/im/pinyin/fcitx-pinyin.desc:28
+msgid "Use Complete Pinyin"
+msgstr "使用完整拼音"
+
+#: src/im/pinyin/fcitx-pinyin.desc:33
+msgid "Auto Create Phrase"
+msgstr "自动组词"
+
+#: src/im/pinyin/fcitx-pinyin.desc:38
+msgid "Save Auto Created Phrase"
+msgstr "保存自动词组"
+
+#: src/im/pinyin/fcitx-pinyin.desc:43
+msgid "Hotkey of Adding Frequent Word"
+msgstr "快捷键: 添加常用字"
+
+#: src/im/pinyin/fcitx-pinyin.desc:48
+msgid "Hotkey of Deleting Frequent Word"
+msgstr "快捷键: 删除常用字"
+
+#: src/im/pinyin/fcitx-pinyin.desc:53
+msgid "Hotkey of Delete User Phrase"
+msgstr "快捷键: 删除用户词组"
+
+#: src/im/pinyin/fcitx-pinyin.desc:58 src/im/pinyin/fcitx-pinyin.desc:67
+#: src/im/pinyin/fcitx-pinyin.desc:76 src/im/table/table.desc:23
+msgid "AdjustNo"
+msgstr "不调整"
+
+#: src/im/pinyin/fcitx-pinyin.desc:59 src/im/pinyin/fcitx-pinyin.desc:68
+#: src/im/pinyin/fcitx-pinyin.desc:77 src/im/table/table.desc:24
+msgid "AdjustFast"
+msgstr "快速"
+
+#: src/im/pinyin/fcitx-pinyin.desc:60 src/im/pinyin/fcitx-pinyin.desc:69
+#: src/im/pinyin/fcitx-pinyin.desc:78 src/im/table/table.desc:25
+msgid "AdjustFreq"
+msgstr "按频率"
+
+#: src/im/pinyin/fcitx-pinyin.desc:62
+msgid "Rule of Candidate Word Order"
+msgstr "候选字顺序"
+
+#: src/im/pinyin/fcitx-pinyin.desc:71
+msgid "Rule of Candidate Phrase Order"
+msgstr "候选词顺序"
+
+#: src/im/pinyin/fcitx-pinyin.desc:80
+msgid "Rule of Frequent Word Order"
+msgstr "常用字顺序"
+
+#: src/im/pinyin/fcitx-pinyin.desc:85
+msgid "Fuzzy an and ang"
+msgstr "模糊an和ang"
+
+#: src/im/pinyin/fcitx-pinyin.desc:90
+msgid "Fuzzy en and eng"
+msgstr "模糊en和eng"
+
+#: src/im/pinyin/fcitx-pinyin.desc:95
+msgid "Fuzzy ian and iang"
+msgstr "模糊ian和iang"
+
+#: src/im/pinyin/fcitx-pinyin.desc:100
+msgid "Fuzzy in and ing"
+msgstr "模糊in和ing"
+
+#: src/im/pinyin/fcitx-pinyin.desc:105
+msgid "Fuzzy ou and u"
+msgstr "模糊ou和u"
+
+#: src/im/pinyin/fcitx-pinyin.desc:110
+msgid "Fuzzy uan and uang"
+msgstr "模糊uan和uang"
+
+#: src/im/pinyin/fcitx-pinyin.desc:115
+msgid "Fuzzy c and ch"
+msgstr "模糊c和ch"
+
+#: src/im/pinyin/fcitx-pinyin.desc:120
+msgid "Fuzzy f and h"
+msgstr "模糊f和h"
+
+#: src/im/pinyin/fcitx-pinyin.desc:125
+msgid "Fuzzy l and n"
+msgstr "模糊l和n"
+
+#: src/im/pinyin/fcitx-pinyin.desc:130
+msgid "Fuzzy s and sh"
+msgstr "模糊s和sh"
+
+#: src/im/pinyin/fcitx-pinyin.desc:135
+msgid "Fuzzy z and zh"
+msgstr "模糊z和zh"
+
+#: src/im/pinyin/fcitx-pinyin.desc:140
+msgid "Fix misstype gn/ng"
+msgstr "忽略拼音中ng->gn的输入错误"
+
+#: src/im/pinyin/fcitx-pinyin.desc:145
+msgid "Fix misstype v/u like jv, qv, xv, yv"
+msgstr "忽略拼音jv，qv，xv，yv中u->v的输入错误"
+
+#: src/im/table/fcitx-table.desc:1 src/im/table/fcitx-table.desc:6
+#: src/im/table/fcitx-table.desc:11 src/im/table/fcitx-table.desc:16
+#: src/im/table/fcitx-table.desc:21 src/module/unicode/fcitx-unicode.desc:3
+msgid "Key"
+msgstr "按键"
+
+#: src/im/table/fcitx-table.desc:4
+msgid "Add Phrase"
+msgstr "添加词组"
+
+#: src/im/table/fcitx-table.desc:9
+msgid "Delete Phrase"
+msgstr "删除词组"
+
+#: src/im/table/fcitx-table.desc:14 src/im/table/table.desc:19
+msgid "Adjust Order"
+msgstr "输入顺序"
+
+#: src/im/table/fcitx-table.desc:19
+msgid "Clear Frequency"
+msgstr "清除输入频率"
+
+#: src/im/table/fcitx-table.desc:24
+msgid "Lookup Pinyin"
+msgstr "反查拼音"
 
 #: src/im/table/table.desc:1 src/im/table/table.desc:6
 #: src/im/table/table.desc:10 src/im/table/table.desc:14
@@ -721,13 +2476,161 @@ msgstr "编码为 "
 msgid "CodeTable"
 msgstr "码表"
 
-#: src/ui/classic/skin.desc:257
-msgid "Color of Cursor"
-msgstr "光标颜色"
+#: src/im/table/table.desc:2
+msgid "Unique Name for Table"
+msgstr "码表的唯一名称"
 
-#: data/addon.desc:12
-msgid "Comment"
-msgstr "描述"
+#: src/im/table/table.desc:7
+msgid "Code Table Name"
+msgstr "码表名称"
+
+#: src/im/table/table.desc:11
+msgid "Icon Name"
+msgstr "图标名称"
+
+#: src/im/table/table.desc:15
+msgid "Code Table File"
+msgstr "码表文件"
+
+#: src/im/table/table.desc:28
+msgid "Level of simple code"
+msgstr "简码级别"
+
+#: src/im/table/table.desc:29
+msgid "Do not sort word with code less than this level"
+msgstr "比此级别短的码不进行排序"
+
+#: src/im/table/table.desc:34
+msgid "Order of Code Table"
+msgstr "码表顺序"
+
+#: src/im/table/table.desc:39
+msgid "Use Pinyin"
+msgstr "使用拼音"
+
+#: src/im/table/table.desc:44
+msgid "Pinyin Key"
+msgstr "拼音键"
+
+#: src/im/table/table.desc:49
+msgid "Auto Send Candidate Word"
+msgstr "自动上屏"
+
+#: src/im/table/table.desc:54
+msgid ""
+"Minimum length trigger auto send candidate word when only one candidate"
+msgstr "在只有一个候选词时触发自动上屏的最短输入长度"
+
+#: src/im/table/table.desc:59
+msgid ""
+"Minimum length trigger auto send candidate when there will be no candidate"
+msgstr "将要无候选词时触发自动上屏的最短输入长度"
+
+#: src/im/table/table.desc:64
+msgid "Send Raw Preedit"
+msgstr "发送原始输入按键"
+
+#: src/im/table/table.desc:69
+msgid "End Key"
+msgstr "中止键"
+
+#: src/im/table/table.desc:74
+msgid "Use Matching Key"
+msgstr "使用模糊键"
+
+#: src/im/table/table.desc:79
+msgid "Matching Key"
+msgstr "模糊键"
+
+#: src/im/table/table.desc:84
+msgid "Exact Match"
+msgstr "精确匹配"
+
+#: src/im/table/table.desc:88
+msgid "Auto Phrase"
+msgstr "自动词组"
+
+#: src/im/table/table.desc:93
+msgid ""
+"Keep current buffer when there is no match item and input length is equal "
+"code length"
+msgstr "当目前没有匹配项并且输入长度等于码长时保持当前的输入缓冲区"
+
+#: src/im/table/table.desc:98
+msgid "Auto Phrase Length"
+msgstr "自动词组长度"
+
+#: src/im/table/table.desc:103
+msgid "Auto Phrase Phrase"
+msgstr "词组参与自动造词"
+
+#: src/im/table/table.desc:108
+msgid "Save Auto Phrase"
+msgstr "保存自动词组"
+
+#: src/im/table/table.desc:113
+msgid "Prompt Table Code"
+msgstr "提示码表编码"
+
+#: src/im/table/table.desc:117
+msgid "Candidate Table Layout"
+msgstr "候选词列表布局"
+
+#: src/im/table/table.desc:121
+msgid "Not Set"
+msgstr "未设定"
+
+#: src/im/table/table.desc:122
+msgid "Vertical"
+msgstr "竖排"
+
+#: src/im/table/table.desc:123
+msgid "Horizontal"
+msgstr "横排"
+
+#: src/im/table/table.desc:131
+msgid "Symbol File"
+msgstr "符号文件"
+
+#: src/im/table/table.desc:136
+msgid "Choose"
+msgstr "选择键"
+
+#: src/im/table/table.desc:151
+msgid "Language Code for this table"
+msgstr "这个码表的语言代码"
+
+#: src/im/table/table.desc:156
+msgid "Enable"
+msgstr "启用"
+
+#: src/im/table/table.desc:161
+msgid "Use Custom Prompt String defined in table"
+msgstr "使用码表中自定义的提示文本"
+
+#: src/im/table/table.desc:166
+msgid "Keyboard Layout to be used"
+msgstr "键盘布局"
+
+#: src/im/table/table.desc:171
+msgid "Use Alternative Candidate Word Number"
+msgstr "使用自定义的候选词个数"
+
+#: src/im/table/table.desc:183
+msgid "Use Alternative Key for paging"
+msgstr "使用自定义的翻页键"
+
+#: src/im/table/table.desc:188
+msgid "Alternative Prev Page Key"
+msgstr "额外的上一页快捷键"
+
+#: src/im/table/table.desc:193
+msgid "Alternative Next Page Key"
+msgstr "额外的下一页快捷键"
+
+#: src/im/table/table.desc:198
+msgid "First Candidate Display as Preedit"
+msgstr "将第一个候选词显示为预编辑文本"
 
 #: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
@@ -741,233 +2644,21 @@ msgstr "第一个候选词的提交键"
 msgid "Commit string when there is no match"
 msgstr "当无匹配时提交输入"
 
-#: data/config.desc:198
-msgid "Commit when toggle state"
-msgstr "切换状态时提交"
+#: src/im/table/table.desc:218
+msgid "Ignore Punctuation"
+msgstr "忽略标点"
 
-#: src/im/keyboard/fcitx-keyboard.desc:4
-msgid "Commit with extra space when choose candidate word"
-msgstr "选择候选词时输入额外空格"
+#: src/im/table/table.desc:223
+msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
+msgstr "忽略部分标点，若为空则忽略所有标点"
 
-#: data/script/fcitx-diagnose.sh:996
-msgid "Config GUI for gtk${1} not found."
-msgstr "未找到 gtk${1} 的配置界面."
-
-#: data/script/fcitx-diagnose.sh:992
-msgid "Config GUI for gtk${1}:"
-msgstr "用于 GTK+-${1}.0 的配置界面："
-
-#: data/script/fcitx-diagnose.sh:1012
-msgid "Config GUI for kde:"
-msgstr "KDE 的配置界面："
-
-#: data/script/fcitx-diagnose.sh:1028
-msgid "Config Tool Wrapper:"
-msgstr "配置工具封装："
-
-#: data/addon.desc:62
-msgid "ConfigFile"
-msgstr "配置文件"
-
-#: data/script/fcitx-diagnose.sh:1683
-msgid "Configuration:"
-msgstr "配置:"
-
-#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:493
-msgid "Configure"
-msgstr "配置"
-
-#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
-#: src/ui/kimpanel/kimpanel.c:781
-msgid "Configure Current Input Method"
-msgstr "配置当前输入法"
-
-#: src/lib/fcitx-config/fcitx-config.c:894
-#, c-format
-msgid "Configure group name error: line %d"
-msgstr "配置组名错误: 行%d"
-
-#: tools/gui/quickphrase-editor/editor.cpp:334
-msgid "Confirm deletion"
-msgstr "确认删除"
-
-#: src/module/quickphrase/fcitx-quickphrase.conf.in:4
-msgid "Conveniently Input English or User-Defined Simple Table"
-msgstr "方便地输入英文或用户定义的码表"
-
-#: src/module/chttrans/fcitx-chttrans.conf.in:4
-msgid "Convert Simplified Chinese To Traditional Chinese"
-msgstr "简体中文转换为繁体中文"
-
-#: src/ui/classic/skin.desc:153 src/ui/classic/skin.desc:161
-#: src/ui/classic/skin.desc:295 src/ui/classic/skin.desc:303
-#: src/ui/classic/skin.desc:397 src/ui/classic/skin.desc:405
-msgid "Copy"
-msgstr "复制"
-
-#: tools/gui/quickphrase-editor/editor.cpp:279
-msgid "Create new file"
-msgstr "创建新文件"
-
-#: src/im/keyboard/fcitx-keyboard.desc:13 src/im/table/table.desc:147
-#: src/module/autoeng/fcitx-autoeng.desc:8
-#: src/module/clipboard/fcitx-clipboard.desc:41
-#: src/module/quickphrase/fcitx-quickphrase.desc:22
-msgid "Ctrl"
-msgstr "Ctrl"
-
-#: data/config.desc:30
-msgid "Ctrl+Left Super"
-msgstr "Ctrl+左 Super"
-
-#: data/config.desc:31
-msgid "Ctrl+Right Super"
-msgstr "Ctrl+右 Super"
-
-#: data/profile.desc:22
-msgid "Current Enabled Input Method List"
-msgstr "当前启用的输入法列表"
-
-#: data/profile.desc:17
-msgid "Current Input Method Name"
-msgstr "当前输入法名称"
-
-#: data/script/fcitx-diagnose.sh:839
-msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr "当前 fcitx 设置目录是 ${1} (${2})。"
-
-#: src/module/imselector/imselector.c:312
-msgid "Current local input method is "
-msgstr "当前局部输入法为 "
-
-#: data/script/fcitx-diagnose.sh:807
-msgid "Current locale:"
-msgstr "当前 locale:"
-
-#: data/script/fcitx-diagnose.sh:844
-msgid "Current user:"
-msgstr "当前用户："
-
-#: data/script/fcitx-diagnose.sh:833
-msgid "Current value of ${1} is ${2} (${3})."
-msgstr "${1} 的当前值是 ${2} (${3})。"
-
-#: data/config.desc:35
-msgid "Custom"
-msgstr "自定义"
-
-#: data/config.desc:42
-msgid "Custom switch key"
-msgstr "自定义切换键"
-
-#: data/addon.desc:37
-msgid "DBus"
-msgstr "DBus"
-
-#: src/module/dbus/fcitx-dbus.conf.in:3
-msgid "DBus Support"
-msgstr "DBus 支持"
-
-#: src/module/notificationitem/fcitx-notificationitem.conf.in:3
-#: src/module/notificationitem/fcitx-notificationitem.conf.in:4
-msgid "DBus based new Freedesktop.org tray icon"
-msgstr "基于 DBus 的新 Freedesktop.org 托盘图标"
-
-#: data/script/fcitx-diagnose.sh:933
-msgid "DBus interface:"
-msgstr "DBus 界面:"
-
-#: tools/gui/quickphrase-editor/editor.cpp:54
-msgid "De&lete All"
-msgstr "全部删除(&L)"
-
-#: tools/gui/quickphrase-editor/filelistmodel.cpp:47
-#: src/module/spell/fcitx-spell.desc:5
-msgid "Default"
-msgstr "默认"
-
-#: data/config.desc:180
-msgid "Default Input Method State"
-msgstr "默认输入法状态"
-
-#: src/im/pinyin/fcitx-pinyin.desc:13
-msgid "Default Shuangpin Schema"
-msgstr "默认双拼方案"
-
-#: src/module/spell/fcitx-spell.desc:11
-msgid "Default Spell Hint Backends Order"
-msgstr "拼写提示默认使用的后端顺序"
-
-#: data/script/fcitx-diagnose.sh:1575
-msgid "Default input methods:"
-msgstr "默认输入法:"
-
-#: src/im/table/fcitx-table.desc:9
-msgid "Delete Phrase"
-msgstr "删除词组"
-
-#: data/addon.desc:43
-msgid "Dependency"
-msgstr "依赖"
-
-#: src/ui/classic/skin.desc:15
-msgid "Description of Skin"
-msgstr "描述"
-
-#: data/script/fcitx-diagnose.sh:771
-msgid "Desktop Environment:"
-msgstr "桌面环境:"
-
-#: data/script/fcitx-diagnose.sh:776
-msgid "Desktop environment is ${1}."
-msgstr "桌面环境为 ${1}。"
-
-#: src/im/table/data/db.conf.in:3
-msgid "Dianbaoma"
-msgstr "电报码"
-
-#: data/script/fcitx-diagnose.sh:819
-msgid "Directories:"
-msgstr "目录："
-
-#: data/config.desc:192
-msgid "Disable Paging in Remind Mode"
-msgstr "联想模式禁用翻页"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
-msgid "Disable Pinyin Symbol"
-msgstr "禁用拼音符号"
-
-#: src/lib/fcitx/addon.c:298
-#, c-format
-msgid "Disable addon %s, dependency %s cannot be satisfied."
-msgstr "禁用插件 %s，依赖 %s 无法满足。"
-
-#: src/module/notificationitem/notificationitem.c:462
-#: src/ui/kimpanel/kimpanel.c:281 src/ui/kimpanel/kimpanel.c:286
-#: data/config.desc:34
-msgid "Disabled"
-msgstr "禁用"
-
-#: data/config.desc:217
-msgid "Do not commit preedit text when unfocus a window"
-msgstr "窗口失去焦点时不提交预编辑文本"
-
-#: src/module/freedesktop-notify/freedesktop-notify.c:620
-msgid "Do not show again"
-msgstr "不要再显示"
-
-#: data/addon.desc:82
-msgid "Do not show in GUI"
-msgstr "不在图形界面显示"
-
-#: data/config.desc:259
-msgid "Do not show input window if there is only one candidate and preedit"
-msgstr "只有一个候选词和预编辑字符串时不显示输入窗口"
-
-#: data/config.desc:253
-msgid "Do not show input window if there is only preedit string"
-msgstr "只有预编辑字符串时不显示输入窗口"
+#: src/module/autoeng/fcitx-autoeng.desc:1
+#: src/module/autoeng/fcitx-autoeng.desc:11
+#: src/module/autoeng/fcitx-autoeng.desc:17
+#: src/module/autoeng/fcitx-autoeng.desc:26
+#: src/module/autoeng/fcitx-autoeng.desc:34
+msgid "Auto English"
+msgstr "自动英文模式"
 
 #: src/module/autoeng/fcitx-autoeng.desc:12
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
@@ -975,469 +2666,105 @@ msgstr "只有预编辑字符串时不显示输入窗口"
 msgid "Do not show spell hint"
 msgstr "不显示拼写提示"
 
-#: src/im/table/table.desc:29
-msgid "Do not sort word with code less than this level"
-msgstr "比此级别短的码不进行排序"
+#: src/module/autoeng/fcitx-autoeng.desc:22
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:23
+#: src/module/quickphrase/fcitx-quickphrase.desc:36
+msgid "Maximum hint length"
+msgstr "拼写提示候选词最大个数"
 
-#: src/lib/fcitx-utils/desktop-parse.c:602
-#, c-format
-msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
-msgstr "重复的键 %s 出现在组 %s 中, @第 %d 行, 覆盖之前的值."
+#: src/module/autoeng/fcitx-autoeng.desc:23
+msgid "Maximum length of spell hint list for Auto English"
+msgstr "自动英文的拼写提示候选词最大个数"
 
-#: src/lib/fcitx-utils/desktop-parse.c:562
-#, c-format
-msgid ""
-"Duplicate group %s in a desktop file,@ line %d, merge with previous one."
-msgstr "重复的组名 %s，@第 %d 行，与之前的组合并。"
+#: src/module/autoeng/fcitx-autoeng.desc:30
+msgid "Maximum words number kept in preedit"
+msgstr "在预编辑中保留的最大单词数"
 
-#: src/lib/fcitx-config/fcitx-config.c:901
-#, c-format
-msgid "Duplicate group name, merge with the previous: %s :line %d"
-msgstr "组名重复，和之前的组合并: %s :行 %d"
+#: src/module/autoeng/fcitx-autoeng.desc:31
+msgid "0 for commit immediately, -1 for keep all words"
+msgstr "0 代表立即提交, -1 代表保留全部已选单词."
 
-#: src/lib/fcitx-config/fcitx-config.c:968
-#, c-format
-msgid "Duplicate option, overwrite: line %d"
-msgstr "重复的配置项，覆盖: 行%d"
+#: src/module/autoeng/fcitx-autoeng.desc:37
+msgid "Add Extra space when selecting a candidate word"
+msgstr "选择候选词时输入额外空格"
 
-#: tools/gui/quickphrase-editor/editor.cpp:56
-msgid "E&xport"
-msgstr "导出(&X)"
+#: src/module/chttrans/fcitx-chttrans.desc:1
+#: src/module/chttrans/fcitx-chttrans.desc:9
+#: src/module/chttrans/fcitx-chttrans.desc:14
+msgid "TraditionalChinese"
+msgstr "繁体中文"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
-msgid "Empty"
-msgstr "空"
+#: src/module/chttrans/fcitx-chttrans.desc:4
+msgid "Native"
+msgstr "原生"
 
-#: src/im/table/table.desc:156
-msgid "Enable"
-msgstr "启用"
+#: src/module/chttrans/fcitx-chttrans.desc:5
+msgid "OpenCC"
+msgstr "OpenCC"
 
-#: data/config.desc:63
-msgid "Enable Hotkey to scroll Between Input Method"
-msgstr "启用输入法间切换"
+#: src/module/chttrans/fcitx-chttrans.desc:6
+msgid "Traditional Chinese Translate Engine"
+msgstr "简繁转换引擎"
 
-#: data/addon.desc:27
-msgid "Enabled"
-msgstr "启用"
+#: src/module/chttrans/fcitx-chttrans.desc:12
+msgid "Toggle for enable or disable"
+msgstr "切换来禁用或启用"
 
 #: src/module/chttrans/fcitx-chttrans.desc:17
 msgid "Enabled state for im"
 msgstr "输入法启用状态"
 
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
-msgid "Enchance pinyin input in Fcitx"
-msgstr "增强 Fcitx 的拼音输入"
+#: src/module/clipboard/fcitx-clipboard.desc:4
+msgid "Save Clipboard History To File"
+msgstr "将剪贴板历史保存为文件"
 
-#: src/im/table/table.desc:69
-msgid "End Key"
-msgstr "中止键"
+#: src/module/clipboard/fcitx-clipboard.desc:11
+msgid "Length of Clipboard History to Save"
+msgstr "剪切板历史长度"
 
-#: src/module/xkbdbus/xkbdbus.c:218
-msgid "English (US)"
-msgstr "英语 (美国)"
+#: src/module/clipboard/fcitx-clipboard.desc:19
+msgid "Maximum length of each candidate word"
+msgstr "每个候选词最大长度"
 
-#: src/ui/classic/skin.desc:77
-msgid "English Mode Icon"
-msgstr "英文模式图标"
-
-#: src/lib/fcitx-config/fcitx-config.c:400
-msgid "Enum Option is invalid, take it as string"
-msgstr "枚举选项不合法，将类型作为字符串处理"
-
-#: src/lib/fcitx-config/fcitx-config.c:376
-msgid "Enum option duplicated."
-msgstr "枚举选项重复"
-
-#: src/lib/fcitx-config/fcitx-config.c:386
-msgid "Enum option number must larger than 0"
-msgstr "枚举选项个数需要大于0"
-
-#: data/script/fcitx-diagnose.sh:1059
+#: src/module/clipboard/fcitx-clipboard.desc:20
 msgid ""
-"Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
-"you have exported it incorrectly in any of your init files."
-msgstr ""
-"环境变量 ${1} 的值被设为了 \"${2}\" 而不是 \"${3}\". 请检查您是否在某个初始化"
-"文件中错误的设置了它的值."
-
-#: data/script/fcitx-diagnose.sh:825
-msgid "Environment variable ${1} is not set."
-msgstr "环境变量 ${1} 没有设定。"
-
-#: data/script/fcitx-diagnose.sh:1053
-msgid "Environment variable ${1} is set to \"${2}\" correctly."
-msgstr "环境变量 ${1} 已经正确地设为了 \"${2}\"."
-
-#: data/script/fcitx-diagnose.sh:829
-msgid "Environment variable ${1} is set to ${2}."
-msgstr "环境变量 ${1} 是设定为 ${2} 。"
-
-#: data/script/fcitx-diagnose.sh:784
-msgid "Environment:"
-msgstr "环境:"
-
-#: src/im/table/data/erbi.conf.in:3
-msgid "Erbi"
-msgstr "二笔"
-
-#: data/script/fcitx-diagnose.sh:811
-msgid "Error occurs when running ${1}. Please check your locale settings."
-msgstr "运行 ${1} 时发生错误. 请检查您的区域设置."
-
-#: tools/gui/quickphrase-editor/editor.cpp:343
-#, kde-format
-msgid "Error while deleting %1."
-msgstr "删除 %1 时出错。"
-
-#: src/ui/classic/fcitx-skin-installer.sh:64
-#, sh-format
-msgid ""
-"Error: $HOME or $XDG_CONFIG_HOME is not set, cannot determine the install "
-"path"
-msgstr "错误：$HOME 或 $XDG_CONFIG_HOME 未设置，无法确定安装路径"
-
-#: src/ui/cairostuff/font.c:46
-msgid "Error: Load fontconfig failed"
-msgstr "错误: fontconfig加载失败"
-
-#: src/ui/classic/fcitx-skin-installer.sh:76
-msgid "Error: skin failed to install"
-msgstr "错误：皮肤安装失败"
-
-#: src/ui/classic/fcitx-skin-installer.sh:55
-msgid "Error: skin file doesn't contain skin config."
-msgstr "错误：皮肤文件不包含皮肤配置"
-
-#: src/ui/classic/fcitx-skin-installer.sh:50
-msgid "Error: skin file should only contain one directory."
-msgstr "错误：皮肤文件应只包括一个目录"
-
-#: src/im/table/table.desc:84
-msgid "Exact Match"
-msgstr "精确匹配"
-
-#: data/addon.desc:61
-msgid "Exec"
-msgstr "Exec"
-
-#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:495
-msgid "Exit"
-msgstr "退出"
-
-#: data/config.desc:37
-msgid "Extra key for trigger input method"
-msgstr "额外的激活输入法快捷键"
-
-#: data/script/fcitx-diagnose.sh:1394
-msgid "Failed to find fcitx in immodule cache at ${1}"
-msgstr "无法输入法模块缓存 ${1} 中找到 fcitx"
-
-#: data/script/fcitx-diagnose.sh:1311
-msgid "Failed to find fcitx in the output of ${1}"
-msgstr "无法在 ${1} 的输出重找到 fcitx."
-
-#: data/addon.desc:72
-msgid "Fallback UI Addon"
-msgstr "备选界面附加组件"
-
-#: src/ui/kimpanel/kimpanel.c:397 data/fcitx-autostart.desktop.in:2
-#: data/fcitx.desktop.in:2
-msgid "Fcitx"
-msgstr "Fcitx"
-
-#: data/script/fcitx-diagnose.sh:1437
-msgid "Fcitx Addons:"
-msgstr "Fcitx 插件:"
-
-#: src/module/clipboard/fcitx-clipboard.conf.in:4
-msgid "Fcitx Clipboard access"
-msgstr "Fcitx 的剪贴板访问支持"
-
-#: data/fcitx-configtool.desktop.in:2
-msgid "Fcitx Configuration"
-msgstr "Fcitx 配置"
-
-#: data/script/fcitx-diagnose.sh:1027
-msgid "Fcitx Configure UI:"
-msgstr "Fcitx 配置界面:"
-
-#: src/frontend/ipc/fcitx-ipc.conf.in:3
-msgid "Fcitx DBus Frontend"
-msgstr "Fcitx DBus 前端"
-
-#: src/module/lua/fcitx-lua.conf.in:3
-msgid "Fcitx Lua Support"
-msgstr "Fcitx 的 Lua 支持"
-
-#: data/script/fcitx-diagnose.sh:837
-msgid "Fcitx Settings Directory:"
-msgstr "Fcitx 设置目录："
-
-#: src/ui/classic/fcitx-skin-installer.desktop.in:3
-msgid "Fcitx Skin Installer"
-msgstr "Fcitx 皮肤安装器"
-
-#: src/module/spell/fcitx-spell.conf.in:4
-msgid "Fcitx Spelling Hint/Completion Support"
-msgstr "Fcitx 的拼写提示/补全支持"
-
-#: data/script/fcitx-diagnose.sh:885
-msgid "Fcitx State:"
-msgstr "Fcitx 状态:"
-
-#: src/module/unicode/fcitx-unicode.conf.in:3
-msgid "Fcitx Unicode Typing Support"
-msgstr "Fcitx 的 Unicode 输入支持"
-
-#: src/frontend/xim/fcitx-xim.conf.in:3
-msgid "Fcitx XIM Frontend"
-msgstr "Fcitx XIM 前端"
-
-#: data/script/fcitx-diagnose.sh:910
-msgid "Fcitx is not running."
-msgstr "Fcitx 没有在运行."
-
-#: data/script/fcitx-diagnose.sh:899
-msgid "Fcitx version: ${1}"
-msgstr "Fcitx 版本: ${1}"
-
-#: tools/gui/quickphrase-editor/editor.cpp:295
-#: tools/gui/quickphrase-editor/editor.cpp:342
-msgid "File Operation Failed"
-msgstr "文件操作失败"
-
-#: tools/gui/quickphrase-editor/editor.cpp:285
-msgid "File name should not contain '/'."
-msgstr "文件名不应该包括 “/”。"
-
-#: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
-#: src/ui/classic/skin.desc:403
-msgid "Fill Background Horizontal rule"
-msgstr "横向填充规则"
-
-#: src/ui/classic/skin.desc:151 src/ui/classic/skin.desc:293
-#: src/ui/classic/skin.desc:395
-msgid "Fill Background Vertical rule"
-msgstr "纵向填充规则"
-
-#: src/ui/classic/skin.desc:45
-msgid "First Candidate Color"
-msgstr "第一候选词颜色"
-
-#: src/im/table/table.desc:198
-msgid "First Candidate Display as Preedit"
-msgstr "将第一个候选词显示为预编辑文本"
-
-#: src/im/pinyin/fcitx-pinyin.desc:140
-msgid "Fix misstype gn/ng"
-msgstr "忽略拼音中ng->gn的输入错误"
-
-#: src/im/pinyin/fcitx-pinyin.desc:145
-msgid "Fix misstype v/u like jv, qv, xv, yv"
-msgstr "忽略拼音jv，qv，xv，yv中u->v的输入错误"
-
-#: src/im/pinyin/fcitx-pinyin.desc:18
-msgid "Fix preedit cursor at head"
-msgstr "将光标固定在预输入文本开头"
-
-#: src/ui/classic/fcitx-classic-ui.desc:23
-msgid "Font"
-msgstr "字体"
-
-#: src/ui/classic/fcitx-classic-ui.desc:33
-msgid "Font Locale to display"
-msgstr "字体区域"
-
-#: src/ui/classic/fcitx-classic-ui.desc:16
-msgid "Font Size"
-msgstr "字体大小"
-
-#: src/ui/classic/skin.desc:28
-msgid "Font sizes respect dpi setting"
-msgstr "字体大小遵守dpi设置"
-
-#: src/module/xkb/fcitx-xkb.desc:10
-msgid ""
-"For example, if Keyboard - English (US) is the first input method in the "
-"list, then English (US) will be applied to all other non keyboard input "
-"method layout"
-msgstr ""
-"例如，如果键盘 - 英语(美国)是列表中的第一个输入法，则英语(美国)将应用于所有其"
-"他未设置键盘输入法的布局"
-
-#: data/script/fcitx-diagnose.sh:1005
-msgid "Found ${1} at ${2}."
-msgstr "在 ${2} 找到了 ${1}。"
-
-#: data/script/fcitx-diagnose.sh:1485
-msgid "Found ${1} disabled addons:"
-msgstr "找到了 ${1} 个被禁用的插件:"
-
-#: data/script/fcitx-diagnose.sh:1480
-msgid "Found ${1} enabled addons:"
-msgstr "找到了 ${1} 个已启用的插件:"
-
-#: data/script/fcitx-diagnose.sh:1570
-msgid "Found ${1} enabled input methods:"
-msgstr "找到了 ${1} 个启用的输入法:"
-
-#: data/script/fcitx-diagnose.sh:1522
-msgid "Found ${1} enabled user interface addons:"
-msgstr "找到了 ${1} 个已启用的用户界面插件:"
-
-#: data/script/fcitx-diagnose.sh:919
-msgid "Found ${1} fcitx process:"
-msgstr "找到了 ${1} 个 fcitx 进程:"
-
-#: data/script/fcitx-diagnose.sh:917
-msgid "Found ${1} fcitx processes:"
-msgstr "找到了 ${1} 个 fcitx 进程:"
-
-#: data/script/fcitx-diagnose.sh:1297
-msgid "Found ${2} for unknown gtk version at ${1}."
-msgstr "在 ${1} 找到了未知 gtk 版本的 ${2}."
-
-#: data/script/fcitx-diagnose.sh:1289
-msgid "Found ${3} for gtk ${1} at ${2}."
-msgstr "在 ${2} 找到了 gtk ${1} 的 ${3}."
-
-#: data/script/fcitx-diagnose.sh:1450
-msgid "Found fcitx addon config directory: ${1}."
-msgstr "找到了 fcitx 插件配置目录: ${1}."
-
-#: data/script/fcitx-diagnose.sh:894
-msgid "Found fcitx at ${1}."
-msgstr "在 ${1} 找到了 fcitx."
-
-#: data/script/fcitx-diagnose.sh:1178 data/script/fcitx-diagnose.sh:1183
-msgid "Found fcitx im module for ${2}: ${1}."
-msgstr "找到了 ${2} 的输入法模块: ${1}."
-
-#: data/script/fcitx-diagnose.sh:1305 data/script/fcitx-diagnose.sh:1388
-msgid "Found fcitx im modules for gtk ${1}."
-msgstr "已找到 gtk ${1} 的 fcitx 输入法模块."
-
-#: data/script/fcitx-diagnose.sh:1018
-msgid "Found fcitx kcm module."
-msgstr "找到了 fcitx 的 kcm 模块。"
-
-#: data/script/fcitx-diagnose.sh:1187
-msgid "Found fcitx qt module: ${1}."
-msgstr "找到了 fcitx 的 qt 模块: ${1}."
-
-#: data/script/fcitx-diagnose.sh:1032
-msgid "Found fcitx-configtool at ${1}."
-msgstr "在 ${1} 找到了 fcitx-configtool。"
-
-#: data/script/fcitx-diagnose.sh:1381
-msgid "Found immodule cache for unknown gtk version at ${1}."
-msgstr "在 ${1} 找到了未知 gtk 版本的输入法模块缓存."
-
-#: data/script/fcitx-diagnose.sh:1373
-msgid "Found immodules cache for gtk ${1} at ${2}."
-msgstr "在 ${2} 找到了 gtk ${1} 的输入法模块缓存."
-
-#: data/script/fcitx-diagnose.sh:1190
-msgid "Found unknown fcitx qt module: ${1}."
-msgstr "找到了未知的 fcitx qt 模块: ${1}."
-
-#: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:3
-msgid "Freedesktop.org Notification Support"
-msgstr "Freedesktop.org 桌面提示支持"
-
-#: data/addon.desc:19
-msgid "Frontend"
-msgstr "前端"
-
-#: src/frontend/ipc/fcitx-ipc.conf.in:4
-msgid "Frontend Used by IM Modules"
-msgstr "输入法模块使用的前端"
-
-#: src/lib/fcitx/frontend.c:542
-msgid "Frontend: bad frontend"
-msgstr "前端: 有问题的前端"
-
-#: src/lib/fcitx/frontend.c:530
-#, c-format
-msgid "Frontend: open %s fail %s"
-msgstr "前端: 打开 %s 失败 %s"
-
-#: data/script/fcitx-diagnose.sh:1676
-msgid "Frontends setup:"
-msgstr "前端设置:"
-
-#: src/module/fullwidthchar/fullwidthchar.c:114
-#: src/module/fullwidthchar/fullwidthchar.c:191
-msgid "Full width Character"
-msgstr "全角字符"
-
-#: src/module/punc/punc.c:148 src/module/punc/punc.c:567
-msgid "Full width punct"
-msgstr "全角标点"
-
-#: src/module/punc/punc.c:586
-msgid "Full width punctuations are used."
-msgstr "已启用全角标点。"
-
-#: src/module/vk/vk.c:52
-msgid "Fullwidth"
-msgstr "全角字符"
-
-#: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:3
-msgid "Fullwidth Character"
-msgstr "全角字符"
-
-#: src/im/pinyin/fcitx-pinyin.desc:85
-msgid "Fuzzy an and ang"
-msgstr "模糊an和ang"
-
-#: src/im/pinyin/fcitx-pinyin.desc:115
-msgid "Fuzzy c and ch"
-msgstr "模糊c和ch"
-
-#: src/im/pinyin/fcitx-pinyin.desc:90
-msgid "Fuzzy en and eng"
-msgstr "模糊en和eng"
-
-#: src/im/pinyin/fcitx-pinyin.desc:120
-msgid "Fuzzy f and h"
-msgstr "模糊f和h"
-
-#: src/im/pinyin/fcitx-pinyin.desc:95
-msgid "Fuzzy ian and iang"
-msgstr "模糊ian和iang"
-
-#: src/im/pinyin/fcitx-pinyin.desc:100
-msgid "Fuzzy in and ing"
-msgstr "模糊in和ing"
-
-#: src/im/pinyin/fcitx-pinyin.desc:125
-msgid "Fuzzy l and n"
-msgstr "模糊l和n"
-
-#: src/im/pinyin/fcitx-pinyin.desc:105
-msgid "Fuzzy ou and u"
-msgstr "模糊ou和u"
-
-#: src/im/pinyin/fcitx-pinyin.desc:130
-msgid "Fuzzy s and sh"
-msgstr "模糊s和sh"
-
-#: src/im/pinyin/fcitx-pinyin.desc:110
-msgid "Fuzzy uan and uang"
-msgstr "模糊uan和uang"
-
-#: src/im/pinyin/fcitx-pinyin.desc:135
-msgid "Fuzzy z and zh"
-msgstr "模糊z和zh"
-
-#: data/config.desc:211
-msgid "Give the tips of Phrase"
-msgstr "提示词库中词组"
+"Roughly the same length with this number of english letters, the actual "
+"length depends on the font and the content"
+msgstr "大致长度和英文字母相同，实际长度取决于字体和内容"
+
+#: src/module/clipboard/fcitx-clipboard.desc:25
+msgid "Trigger Key for Clipboard History List"
+msgstr "剪贴板历史快捷键"
+
+#: src/module/clipboard/fcitx-clipboard.desc:30
+msgid "Use Selection Text"
+msgstr "使用选区文字"
+
+#: src/module/clipboard/fcitx-clipboard.desc:31
+msgid "Include the text currently selected in clipboard history."
+msgstr "当前选中文字加入剪切板历史"
+
+#: src/module/clipboard/fcitx-clipboard.desc:45
+msgid "Ignore blank selections"
+msgstr "忽略空白的剪贴板内容"
+
+#: src/module/imselector/fcitx-imselector.desc:1
+#: src/module/imselector/fcitx-imselector.desc:6
+#: src/module/imselector/fcitx-imselector.desc:11
+msgid "IMSelector"
+msgstr "输入法选择器"
+
+#: src/module/imselector/fcitx-imselector.desc:4
+msgid "Local Input Method SelectKey"
+msgstr "局部输入法选择"
 
 #: src/module/imselector/fcitx-imselector.desc:9
 msgid "Global Input Method SelectKey"
 msgstr "全局输入法选择"
+
+#: src/module/imselector/fcitx-imselector.desc:14
+msgid "Clear local Input Method"
+msgstr "清除局部输入法"
 
 #: src/module/imselector/fcitx-imselector.desc:16
 #: src/module/imselector/fcitx-imselector.desc:21
@@ -1451,402 +2778,50 @@ msgstr "全局输入法选择"
 msgid "GlobalSelector"
 msgstr "全局选择"
 
-#: src/module/quickphrase/fcitx-quickphrase.desc:7
-msgid "Grave"
-msgstr "反引号"
-
-#: src/module/vk/vk.c:53
-msgid "Greek"
-msgstr "希腊字母"
-
-#: data/script/fcitx-diagnose.sh:1250
-msgid "Gtk ${1} immodule file ${2} does not exist."
-msgstr "Gtk ${1} 输入法模块文件 ${2} 不存在."
-
-#: data/script/fcitx-diagnose.sh:1418
-msgid "Gtk IM module cache:"
-msgstr "Gtk 输入法模块缓存:"
-
-#: data/script/fcitx-diagnose.sh:1423
-msgid "Gtk IM module files:"
-msgstr "Gtk 输入法模块文件:"
-
-#: src/module/fullwidthchar/fullwidthchar.c:114
-#: src/module/fullwidthchar/fullwidthchar.c:191
-msgid "Half width Character"
-msgstr "半角字符"
-
-#: data/script/fcitx-diagnose.sh:702
-msgid "Hall of Shame for Linux IME Support"
-msgstr "Linux 输入法支持耻辱堂"
-
-#: src/ui/classic/fcitx-classic-ui.desc:47
-msgid "Hide"
-msgstr "隐藏"
-
-#: src/ui/classic/fcitx-classic-ui.desc:46
-msgid "Hide when tray icon is available"
-msgstr "当托盘图标可用时隐藏"
-
-#: src/module/vk/vk.c:59
-msgid "Hiragana"
-msgstr "平假名"
-
-#: data/script/fcitx-diagnose.sh:821
-msgid "Home:"
-msgstr "主目录："
-
-#: src/im/table/table.desc:123
-msgid "Horizontal"
-msgstr "横排"
-
-#: data/config.desc:1 data/config.desc:7 data/config.desc:13
-#: data/config.desc:39 data/config.desc:46 data/config.desc:53
-#: data/config.desc:60 data/config.desc:65 data/config.desc:71
-#: data/config.desc:81 data/config.desc:87 data/config.desc:93
-#: data/config.desc:99 data/config.desc:105 data/config.desc:111
-#: data/config.desc:117 data/config.desc:122 data/config.desc:127
-#: data/config.desc:133 data/config.desc:139 data/config.desc:145
-#: data/config.desc:152
-msgid "Hotkey"
-msgstr "快捷键"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:30
-msgid "Hotkey for Inputing Character From Phrase"
-msgstr "以词定字"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:35
-msgid "Hotkey for switching to Inputing Character From Phrase mode"
-msgstr "切换至以词定字模式"
-
-#: src/im/pinyin/fcitx-pinyin.desc:43
-msgid "Hotkey of Adding Frequent Word"
-msgstr "快捷键: 添加常用字"
-
-#: src/im/pinyin/fcitx-pinyin.desc:53
-msgid "Hotkey of Delete User Phrase"
-msgstr "快捷键: 删除用户词组"
-
-#: src/im/pinyin/fcitx-pinyin.desc:48
-msgid "Hotkey of Deleting Frequent Word"
-msgstr "快捷键: 删除常用字"
-
-#: src/lib/fcitx/ime.c:322
-#, c-format
-msgid "IM: bad im %s"
-msgstr "输入法: 有问题的输入法 %s"
-
-#: src/lib/fcitx/ime.c:303
-#, c-format
-msgid "IM: open %s fail %s"
-msgstr "输入法: 打开%s 失败 %s"
-
-#: src/module/imselector/fcitx-imselector.desc:1
-#: src/module/imselector/fcitx-imselector.desc:6
-#: src/module/imselector/fcitx-imselector.desc:11
-msgid "IMSelector"
-msgstr "输入法选择器"
-
-#: src/im/table/table.desc:11
-msgid "Icon Name"
-msgstr "图标名称"
-
-#: data/inputmethod.desc:11
-msgid "IconName"
-msgstr "图标名称"
-
-#: data/script/fcitx-diagnose.sh:691
-msgid ""
-"If you are using ${1}, you may want to uninstall ${2} or remove ${3} in "
-"order to use any input method other than ${2}. See ${link} for more detail "
-"as well as alternative solutions."
-msgstr ""
-"如果您正在使用 ${1}, 您可能需要卸载 ${2} 或者删除 ${3} 已使用除 ${2} 之外的任"
-"何输入法. 更多细节和其它的解决方法参见 ${link}."
-
-#: data/script/fcitx-diagnose.sh:689
-msgid ""
-"If you are using ${1}, you may want to uninstall ${2}, remove ${3} or use "
-"the command ${g36_disable_ibus} to disable IBus integration in order to use "
-"any input method other than ${2}. See ${link} for more detail."
-msgstr ""
-"如果您正在使用 ${1}, 您可能需要卸载 ${2}, 删除 ${3} 或者使用命令 "
-"${g36_disable_ibus} 禁用 IBus 集成已使用除 ${2} 之外的任何输入法. 更多细节参"
-"见 ${link}."
-
-#: src/im/table/table.desc:218
-msgid "Ignore Punctuation"
-msgstr "忽略标点"
-
-#: src/module/clipboard/fcitx-clipboard.desc:45
-msgid "Ignore blank selections"
-msgstr "忽略空白的剪贴板内容"
-
-#: src/im/table/table.desc:223
-msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
-msgstr "忽略部分标点，若为空则忽略所有标点"
-
-#: data/config.desc:56
-msgid "Inactivate Input Method"
-msgstr "取消激活输入法"
-
-#: data/config.desc:178
-msgid "Inactive"
-msgstr "非激活"
-
-#: src/ui/classic/skin.desc:65
-msgid "Inactive Menu Item Character Color"
-msgstr "非活动菜单项颜色"
-
-#: src/ui/classic/skin.desc:177
-msgid "Inactive Text Icon Color"
-msgstr "非活动的文本图标颜色"
-
-#: data/config.desc:68
-msgid "Include Inactivate when scrolling between Input Method"
-msgstr "输入法间切换时包含未激活状态"
-
-#: src/module/clipboard/fcitx-clipboard.desc:31
-msgid "Include the text currently selected in clipboard history."
-msgstr "当前选中文字加入剪切板历史"
-
-#: src/ui/classic/skin.desc:313
-msgid "Inctive Tray Icon"
-msgstr "非活动输入法图标"
-
-#: src/module/vk/vk.c:55
-msgid "Index"
-msgstr "索引"
-
-#: src/ui/classic/skin.desc:19
-msgid "Input Font Size"
-msgstr "输入字体大小"
-
-#: src/ui/classic/skin.desc:37
-msgid "Input Message Color"
-msgstr "输入信息颜色"
-
-#: src/lib/fcitx/ime.c:1695 src/module/notificationitem/notificationitem.c:411
-#: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
-msgid "Input Method"
-msgstr "输入法"
-
-#: data/fcitx-configtool.desktop.in:3
-msgid "Input Method Configuration"
-msgstr "输入法配置"
-
-#: src/module/notificationitem/notificationitem.c:463
-#: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
-msgid "Input Method Disabled"
-msgstr "输入法被禁用"
-
-#: data/config.desc:235
-msgid "Input Method Hint will be only shown when state is active"
-msgstr "输入法提示只在激活状态显示"
-
-#: data/script/fcitx-diagnose.sh:666
-msgid "Input Method Related Environment Variables: "
-msgstr "输入法相关的环境变量: "
-
-#: data/script/fcitx-diagnose.sh:1545
-msgid "Input Methods:"
-msgstr "输入法:"
-
-#: src/lib/fcitx/ime.c:1797
-msgid "Input Speed: "
-msgstr "输入速度: "
-
-#: src/module/imselector/fcitx-imselector.conf.in:3
-msgid "Input method selector"
-msgstr "输入法选择器"
-
-#: data/addon.desc:18 data/inputmethod.desc:1 data/inputmethod.desc:5
-#: data/inputmethod.desc:9 data/inputmethod.desc:13 data/inputmethod.desc:17
-#: data/inputmethod.desc:21
-msgid "InputMethod"
-msgstr "输入法"
-
-#: src/ui/classic/fcitx-skin-installer.desktop.in:4
-msgid "Installer Script for Fcitx Skin"
-msgstr "Fcitx 皮肤的安装器"
-
-#: data/config.desc:90
-msgid "Interval of Two Key Input"
-msgstr "输入间隔"
-
-#: src/lib/fcitx-config/fcitx-config.c:922
-#, c-format
-msgid "Invalid Entry: line %d missing '='"
-msgstr "配置项不合法:  行%d 缺少'='"
-
-#: data/script/fcitx-diagnose.sh:1456
-msgid "Invalid addon config file ${1}."
-msgstr "无效的插件配置文件: ${1}."
-
-#: src/lib/fcitx-utils/desktop-parse.c:592
-#, c-format
-msgid "Invalid entry line @ line %d %s"
-msgstr "非法键值出现在第 %d 行: %s"
-
-#: tools/gui/quickphrase-editor/editor.cpp:285
-msgid "Invalid filename"
-msgstr "文件名无效"
-
-#: src/lib/fcitx-utils/desktop-parse.c:550
-#, c-format
-msgid "Invalid group name line @ line %d %s"
-msgstr "非法组名出现在第 %d 行: %s"
-
-#: data/script/fcitx-diagnose.sh:1559
-msgid "Invalid item ${1} in im list."
-msgstr "输入法列表中无效的项目: ${1}."
-
-#: src/module/vk/vk.c:60
-msgid "Katakana"
-msgstr "片假名"
-
-#: src/im/table/table.desc:93
-msgid ""
-"Keep current buffer when there is no match item and input length is equal "
-"code length"
-msgstr "当目前没有匹配项并且输入长度等于码长时保持当前的输入缓冲区"
-
-#: src/im/table/fcitx-table.desc:1 src/im/table/fcitx-table.desc:6
-#: src/im/table/fcitx-table.desc:11 src/im/table/fcitx-table.desc:16
-#: src/im/table/fcitx-table.desc:21 src/module/unicode/fcitx-unicode.desc:3
-msgid "Key"
-msgstr "按键"
-
-#: src/ui/classic/skin.desc:416
-msgid "Key Color On Virutal Keyboard"
-msgstr "软键盘按键文字颜色"
-
-#: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
-#: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
-#: src/im/keyboard/keyboard.c:462 src/im/keyboard/keyboard.c:468
-#: src/im/keyboard/fcitx-keyboard.desc:1 src/im/keyboard/fcitx-keyboard.desc:6
-#: src/im/keyboard/fcitx-keyboard.desc:16
-#: src/im/keyboard/fcitx-keyboard.desc:21
-#: src/im/keyboard/fcitx-keyboard.desc:27
-#: src/im/keyboard/fcitx-keyboard.desc:36
-#: src/im/keyboard/fcitx-keyboard.desc:41
-msgid "Keyboard"
-msgstr "键盘"
-
-#: src/im/keyboard/fcitx-keyboard.conf.in:3
-msgid "Keyboard Layout"
-msgstr "键盘布局"
-
-#: src/im/table/table.desc:166
-msgid "Keyboard Layout to be used"
-msgstr "键盘布局"
-
-#: data/script/fcitx-diagnose.sh:787
-msgid "Keyboard Layout:"
-msgstr "键盘布局:"
-
-#: tools/gui/quickphrase-editor/model.cpp:56
-msgid "Keyword"
-msgstr "关键字"
-
-#: tools/gui/quickphrase-editor/editordialog.cpp:30
-msgid "Keyword:"
-msgstr "关键字："
-
-#: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:3
-msgid "Kimpanel"
-msgstr "Kimpanel"
-
-#: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:4
-msgid "Kimpanel Support for Fcitx"
-msgstr "Fcitx 的 Kimpanel 支持"
-
-#: data/script/fcitx-diagnose.sh:1531
-msgid "Kimpanel process:"
-msgstr "Kimpanel 进程:"
-
-#: data/config.desc:24
-msgid "L_ALT"
-msgstr "左 Alt"
-
-#: data/config.desc:19
-msgid "L_CTRL"
-msgstr "左Ctrl"
-
-#: data/config.desc:18
-msgid "L_SHIFT"
-msgstr "左Shift"
-
-#: data/inputmethod.desc:19
-msgid "LangCode"
-msgstr "语言代码"
-
-#: src/im/table/table.desc:151
-msgid "Language Code for this table"
-msgstr "这个码表的语言代码"
-
-#: src/module/vk/vk.c:51
-msgid "Latin"
-msgstr "拉丁字母"
-
-#: src/module/punc/punc.c:149 src/module/punc/punc.c:568
-msgid "Latin punct"
-msgstr "英文标点"
-
-#: src/module/punc/punc.c:587
-msgid "Latin punctuations are used."
-msgstr "已启用半角标点。"
-
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
-msgid "Left"
-msgstr "左"
-
-#: data/config.desc:27
-msgid "Left Super"
-msgstr "左 Super"
-
-#: src/im/table/table.c:596
-msgid ""
-"Left/Right to choose selected character, Press Enter to confirm, Press "
-"Escape to Cancel"
-msgstr "按左/右选择单字，按回车确认，按Escape 取消"
-
-#: src/module/clipboard/fcitx-clipboard.desc:11
-msgid "Length of Clipboard History to Save"
-msgstr "剪切板历史长度"
-
-#: src/im/table/table.desc:28
-msgid "Level of simple code"
-msgstr "简码级别"
-
-#: data/addon.desc:31
-msgid "Library"
-msgstr "库"
-
-#: src/lib/fcitx/addon.c:151
-#, c-format
-msgid "Load Addon Config File:%s"
-msgstr "加载附加组件配置文件: %s"
-
-#: src/im/table/tabledict.c:341
-msgid "Load Autophrase OK"
-msgstr "加载自动组词信息完成"
-
-#: src/im/table/tabledict.c:248
-msgid "Load Table Dict OK"
-msgstr "加载码表文件成功"
-
-#: src/im/table/tabledict.c:285
-msgid "Loading Autophrase."
-msgstr "加载自动组词信息中"
-
-#: src/im/table/tabledict.c:41
-msgid "Loading Table Dict"
-msgstr "加载码表词典"
-
-#: src/module/imselector/fcitx-imselector.desc:4
-msgid "Local Input Method SelectKey"
-msgstr "局部输入法选择"
+#: src/module/imselector/fcitx-imselector.desc:19
+#: src/module/imselector/fcitx-imselector.desc:64
+msgid "Switch to the First Input Method"
+msgstr "切换至第1个输入法"
+
+#: src/module/imselector/fcitx-imselector.desc:24
+#: src/module/imselector/fcitx-imselector.desc:69
+msgid "Switch to the Second Input Method"
+msgstr "切换至第2个输入法"
+
+#: src/module/imselector/fcitx-imselector.desc:29
+#: src/module/imselector/fcitx-imselector.desc:74
+msgid "Switch to the Third Input Method"
+msgstr "切换至第3个输入法"
+
+#: src/module/imselector/fcitx-imselector.desc:34
+#: src/module/imselector/fcitx-imselector.desc:79
+msgid "Switch to the Fourth Input Method"
+msgstr "切换至第4个输入法"
+
+#: src/module/imselector/fcitx-imselector.desc:39
+#: src/module/imselector/fcitx-imselector.desc:84
+msgid "Switch to the Fifth Input Method"
+msgstr "切换至第5个输入法"
+
+#: src/module/imselector/fcitx-imselector.desc:44
+#: src/module/imselector/fcitx-imselector.desc:89
+msgid "Switch to the Sixth Input Method"
+msgstr "切换至第6个输入法"
+
+#: src/module/imselector/fcitx-imselector.desc:49
+#: src/module/imselector/fcitx-imselector.desc:94
+msgid "Switch to the Seventh Input Method"
+msgstr "切换至第7个输入法"
+
+#: src/module/imselector/fcitx-imselector.desc:54
+#: src/module/imselector/fcitx-imselector.desc:99
+msgid "Switch to the Eighth Input Method"
+msgstr "切换至第8个输入法"
+
+#: src/module/imselector/fcitx-imselector.desc:59
+#: src/module/imselector/fcitx-imselector.desc:104
+msgid "Switch to the Ninth Input Method"
+msgstr "切换至第9个输入法"
 
 #: src/module/imselector/fcitx-imselector.desc:61
 #: src/module/imselector/fcitx-imselector.desc:66
@@ -1860,313 +2835,6 @@ msgstr "局部输入法选择"
 msgid "LocalSelector"
 msgstr "局部选择"
 
-#: data/script/fcitx-diagnose.sh:802
-msgid "Locale:"
-msgstr "Locale:"
-
-#: data/script/fcitx-diagnose.sh:1689
-msgid "Log:"
-msgstr "日志:"
-
-#: src/ui/classic/skin.desc:73
-msgid "Logo Icon"
-msgstr "Logo图标"
-
-#: src/im/table/fcitx-table.desc:24
-msgid "Lookup Pinyin"
-msgstr "反查拼音"
-
-#: src/im/pinyin/fcitx-pinyin.desc:5
-msgid "MS"
-msgstr "微软"
-
-#: src/ui/classic/skin.desc:117 src/ui/classic/skin.desc:223
-#: src/ui/classic/skin.desc:353
-msgid "Margin Bottom for clickable region"
-msgstr "可点击区域的下边距"
-
-#: src/ui/classic/skin.desc:102 src/ui/classic/skin.desc:208
-#: src/ui/classic/skin.desc:338
-msgid "Margin Left for clickable region"
-msgstr "可点击区域的左边距"
-
-#: src/ui/classic/skin.desc:107 src/ui/classic/skin.desc:213
-#: src/ui/classic/skin.desc:343
-msgid "Margin Right for clickable region"
-msgstr "可点击区域的右边距"
-
-#: src/ui/classic/skin.desc:112 src/ui/classic/skin.desc:218
-#: src/ui/classic/skin.desc:348
-msgid "Margin Top for clickable region"
-msgstr "可点击区域的上边距"
-
-#: src/im/table/table.desc:79
-msgid "Matching Key"
-msgstr "模糊键"
-
-#: src/module/vk/vk.c:56
-msgid "Math"
-msgstr "数学符号"
-
-#: src/module/autoeng/fcitx-autoeng.desc:22
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:23
-#: src/module/quickphrase/fcitx-quickphrase.desc:36
-msgid "Maximum hint length"
-msgstr "拼写提示候选词最大个数"
-
-#: src/module/clipboard/fcitx-clipboard.desc:19
-msgid "Maximum length of each candidate word"
-msgstr "每个候选词最大长度"
-
-#: src/im/keyboard/fcitx-keyboard.desc:32
-msgid "Maximum length of spell hint list"
-msgstr "拼写提示候选词最大个数"
-
-#: src/module/autoeng/fcitx-autoeng.desc:23
-msgid "Maximum length of spell hint list for Auto English"
-msgstr "自动英文的拼写提示候选词最大个数"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
-msgid "Maximum length of spell hint list for Pinyin Enhance"
-msgstr "拼音增强的拼写提示候选词最大个数"
-
-#: src/module/quickphrase/fcitx-quickphrase.desc:37
-msgid "Maximum length of spell hint list for Quick Phrase"
-msgstr "快速输入的拼写提示候选词最大个数"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
-msgid "Maximum results from stroke input."
-msgstr "笔画输入结果的最大个数"
-
-#: src/module/autoeng/fcitx-autoeng.desc:30
-msgid "Maximum words number kept in preedit"
-msgstr "在预编辑中保留的最大单词数"
-
-#: src/ui/classic/fcitx-classic-ui.desc:28
-msgid "Menu Font"
-msgstr "菜单字体"
-
-#: src/ui/classic/skin.desc:23
-msgid "Menu Font Size"
-msgstr "菜单字体大小"
-
-#: src/im/pinyin/py.c:2141
-msgid "Migrate the old file path to the new one"
-msgstr "迁移老文件路径到新文件路径"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
-msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
-msgstr "最小触发笔画输入的输入长度(设为-1禁用笔画输入)"
-
-#: src/im/keyboard/fcitx-keyboard.desc:25
-msgid "Minimum length to trigger word hint"
-msgstr "最小触发单词提示长度"
-
-#: src/im/table/table.desc:59
-msgid ""
-"Minimum length trigger auto send candidate when there will be no candidate"
-msgstr "将要无候选词时触发自动上屏的最短输入长度"
-
-#: src/im/table/table.desc:54
-msgid "Minimum length trigger auto send candidate word when only one candidate"
-msgstr "在只有一个候选词时触发自动上屏的最短输入长度"
-
-#: src/lib/fcitx-config/fcitx-config.c:410
-msgid "Missing type, take it as string"
-msgstr "类型缺失，作为字符串处理"
-
-#: data/addon.desc:20
-msgid "Module"
-msgstr "模块"
-
-#: src/lib/fcitx/module.c:73
-msgid "Module: bad module"
-msgstr "模块: 有问题的模块"
-
-#: src/lib/fcitx/module.c:61
-#, c-format
-msgid "Module: open %s fail %s"
-msgstr "模块: 打开%s 失败 %s"
-
-#: src/module/spell/fcitx-spell.desc:7
-msgid "Myspell"
-msgstr "Myspell"
-
-#: data/addon.desc:3 data/inputmethod.desc:7
-msgid "Name"
-msgstr "名称"
-
-#: data/addon.desc:7
-msgid "Name that can be display in UI"
-msgstr "显示于用户界面中的名称"
-
-#: src/module/chttrans/fcitx-chttrans.desc:4
-msgid "Native"
-msgstr "原生"
-
-#: data/config.desc:155
-msgid "Next Candidate Word"
-msgstr "下一个候选词"
-
-#: data/config.desc:125
-msgid "Next Page"
-msgstr "下一页"
-
-#: src/ui/classic/skin.desc:273 src/ui/classic/skin.desc:281
-#: src/ui/classic/skin.desc:289
-msgid "Next Page Icon"
-msgstr "下一页图标"
-
-#: data/config.desc:169
-msgid "No"
-msgstr "否"
-
-#: src/lib/fcitx/ime.c:536
-msgid "No available Input Method"
-msgstr "无用输入法"
-
-#: src/lib/fcitx/frontend.c:565
-msgid "No available frontend"
-msgstr "无可用前端"
-
-#: src/module/notificationitem/notificationitem.c:456
-#: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:256
-msgid "No input window"
-msgstr "无输入窗口"
-
-#: src/module/imselector/imselector.c:316
-msgid "No local input method"
-msgstr "无局部输入法"
-
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
-msgid "No remind"
-msgstr "无联想"
-
-#: src/lib/fcitx-utils/desktop-parse.c:586
-#, c-format
-msgid "Non-comment doesn't belongs to any group @ %d %s"
-msgstr "非注释不属于任何组 @ %d %s"
-
-#: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:145
-#: src/module/autoeng/fcitx-autoeng.desc:6
-#: src/module/clipboard/fcitx-clipboard.desc:39
-#: src/module/quickphrase/fcitx-quickphrase.desc:5
-#: src/module/quickphrase/fcitx-quickphrase.desc:20
-msgid "None"
-msgstr "无"
-
-#: src/im/table/table.desc:121
-msgid "Not Set"
-msgstr "未设定"
-
-#: data/script/fcitx-diagnose.sh:682
-msgid "Note for GNOME Later than 3.6"
-msgstr "有关 3.6 之后版本 GNOME 的备注"
-
-#: src/module/vk/vk.c:57
-msgid "Number"
-msgstr "数字"
-
-#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:431
-msgid "Online Help"
-msgstr "在线帮助"
-
-#: src/module/chttrans/fcitx-chttrans.desc:5
-msgid "OpenCC"
-msgstr "OpenCC"
-
-#: src/lib/fcitx-config/fcitx-config.c:1136
-#, c-format
-msgid "Option %s is Invalid, Use Default Value %s"
-msgstr "配置项%s不合法，使用默认值%s"
-
-#: src/lib/fcitx-config/fcitx-config.c:1144
-#, c-format
-msgid "Option %s is Invalid."
-msgstr "配置项%s不合法"
-
-#: src/im/table/table.desc:34
-msgid "Order of Code Table"
-msgstr "码表顺序"
-
-#: src/ui/classic/skin.desc:57
-msgid "Other Color"
-msgstr "其他颜色"
-
-#: data/config.desc:183 data/config.desc:189 data/config.desc:195
-#: data/config.desc:201 data/config.desc:208 data/config.desc:214
-msgid "Output"
-msgstr "输出"
-
-#: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:248
-#: src/ui/classic/skin.desc:378
-msgid "Overlay X offset"
-msgstr "覆盖图片 X 偏移"
-
-#: src/ui/classic/skin.desc:147 src/ui/classic/skin.desc:253
-#: src/ui/classic/skin.desc:383
-msgid "Overlay Y offset"
-msgstr "覆盖图片 Y 偏移"
-
-#: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
-#: src/ui/classic/skin.desc:373
-msgid "Overlay dock position"
-msgstr "覆盖图片停靠位置"
-
-#: src/ui/classic/skin.desc:122 src/ui/classic/skin.desc:228
-#: src/ui/classic/skin.desc:358
-msgid "Overlay image"
-msgstr "覆盖图片"
-
-#: src/ui/classic/fcitx-classic-ui.desc:18
-msgid "Override the skin font size"
-msgstr "覆盖皮肤的字号设置"
-
-#: data/script/fcitx-diagnose.sh:940
-msgid "Owner of DBus name ${1} is ${2}."
-msgstr "DBus 名称 ${1} 的所有者是 ${2}。"
-
-#: data/script/fcitx-diagnose.sh:948
-msgid "PID of DBus name ${1} owner is ${2}."
-msgstr "DBus 名称 ${1} 的 PID 所有者是 ${2}。"
-
-#: data/inputmethod.desc:23
-msgid "Parent"
-msgstr "所属附加组件"
-
-#: data/config.desc:171
-msgid "PerProgram"
-msgstr "按程序"
-
-#: tools/gui/quickphrase-editor/model.cpp:58
-msgid "Phrase"
-msgstr "词组"
-
-#: src/im/table/table.c:1395
-msgid "Phrase is already in Dict "
-msgstr "词组已在码表中"
-
-#: tools/gui/quickphrase-editor/editordialog.cpp:31
-msgid "Phrase:"
-msgstr "词组："
-
-#: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
-#: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
-#: src/im/pinyin/fcitx-pinyin.desc:15 src/im/pinyin/fcitx-pinyin.desc:20
-#: src/im/pinyin/fcitx-pinyin.desc:25 src/im/pinyin/fcitx-pinyin.desc:30
-#: src/im/pinyin/fcitx-pinyin.desc:35 src/im/pinyin/fcitx-pinyin.desc:40
-#: src/im/pinyin/fcitx-pinyin.desc:45 src/im/pinyin/fcitx-pinyin.desc:50
-#: src/im/pinyin/fcitx-pinyin.desc:55 src/im/pinyin/fcitx-pinyin.desc:64
-#: src/im/pinyin/fcitx-pinyin.desc:73 src/im/pinyin/fcitx-pinyin.desc:82
-#: src/im/pinyin/fcitx-pinyin.desc:87 src/im/pinyin/fcitx-pinyin.desc:92
-#: src/im/pinyin/fcitx-pinyin.desc:97 src/im/pinyin/fcitx-pinyin.desc:102
-#: src/im/pinyin/fcitx-pinyin.desc:107 src/im/pinyin/fcitx-pinyin.desc:112
-#: src/im/pinyin/fcitx-pinyin.desc:117 src/im/pinyin/fcitx-pinyin.desc:122
-#: src/im/pinyin/fcitx-pinyin.desc:127 src/im/pinyin/fcitx-pinyin.desc:132
-#: src/im/pinyin/fcitx-pinyin.desc:137 src/im/pinyin/fcitx-pinyin.desc:142
-msgid "Pinyin"
-msgstr "拼音"
-
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:1
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:7
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:13
@@ -2179,167 +2847,57 @@ msgstr "拼音"
 msgid "Pinyin Enhance"
 msgstr "拼音增强"
 
-#: src/im/pinyin/py.c:457
-msgid "Pinyin Index Magic Number Doesn't match"
-msgstr "拼音索引的Magic Number不匹配"
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
+msgid "Treating abbreviated Pinyin as English"
+msgstr "将简拼视为英文"
 
-#: src/im/table/table.desc:44
-msgid "Pinyin Key"
-msgstr "拼音键"
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
+msgid "Useful when you hardly ever use abbreviated pinyin."
+msgstr "适用于很少使用简拼的情况"
 
-#: src/im/table/table.c:621
-msgid "Pinyin: "
-msgstr "拼音："
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
+msgid "Allow replacing the first candidate"
+msgstr "允许替换第一个候选词"
 
-#: src/im/pinyin/fcitx-pinyin.desc:9
-msgid "PinyinJiaJia"
-msgstr "拼音加加"
-
-#: data/script/fcitx-diagnose.sh:890
-msgid "Please check ${1} for how to install fcitx."
-msgstr "请访问 ${1} 查看如何安装 fcitx."
-
-#: data/script/fcitx-diagnose.sh:912
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:11
 msgid ""
-"Please check the Configure link of your distribution in ${1} for how to "
-"setup fcitx autostart."
-msgstr "请访问 ${1} 页面上对应您发行版的配置链接查看如何配置 fcitx 的自动启动."
+"Allow Pinyin Enhance to replace the first candidate word when the input "
+"string is very closed to English."
+msgstr "允许在输入字符串十分接近英文的时候替换第一个候选词"
 
-#: tools/gui/quickphrase-editor/editor.cpp:280
-msgid "Please input a filename for newfile"
-msgstr "请输入新文件的文件名"
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
+msgid "Maximum length of spell hint list for Pinyin Enhance"
+msgstr "拼音增强的拼写提示候选词最大个数"
 
-#: src/frontend/xim/xim.c:161
-msgid "Please set XMODIFIERS."
-msgstr "请设置环境变量XMODIFIERS"
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:30
+msgid "Hotkey for Inputing Character From Phrase"
+msgstr "以词定字"
 
-#: data/script/fcitx-diagnose.sh:663
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:35
+msgid "Hotkey for switching to Inputing Character From Phrase mode"
+msgstr "切换至以词定字模式"
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
+msgid "Disable Pinyin Symbol"
+msgstr "禁用拼音符号"
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
+msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
+msgstr "最小触发笔画输入的输入长度(设为-1禁用笔画输入)"
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
+msgid "Stroke input trigger length"
+msgstr "笔画输入触发长度"
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
+msgid "Maximum results from stroke input."
+msgstr "笔画输入结果的最大个数"
+
+#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
 msgid ""
-"Please set environment variable ${env_name} to \"${value}\" using the tool "
-"your distribution provides or add ${1} to your ${2}. See ${link}."
-msgstr ""
-"请使用您发行版提供的工具将环境变量 ${env_name} 设为 \"${value}\" 或者将 ${1} "
-"添加到您的 ${2} 中. 参见 ${link}."
-
-#: src/ui/classic/skin.desc:265
-msgid "Position or offset of LookupTable"
-msgstr "候选词表的位置或偏移"
-
-#: src/ui/classic/skin.desc:261
-msgid "Position or offset of Preedit"
-msgstr "预编辑文本的位置或偏移"
-
-#: src/module/spell/fcitx-spell.desc:14
-msgid "Possible Providers: presage, custom, enchant (separate with comma)"
-msgstr "可选的后端: presage, custom, enchant (用英文逗号分隔)"
-
-#: src/module/spell/fcitx-spell.desc:8
-msgid "Preferred Enchant provider"
-msgstr "首选的Enchant后端"
-
-#: src/im/pinyin/py.c:769
-#, c-format
-msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
-msgstr "按下 1 删除常用字表中的 %s (ESC 取消)"
-
-#: src/im/pinyin/py.c:771
-#, c-format
-msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
-msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
-
-#: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:456
-msgid "Press Enter to input text"
-msgstr "按下回车输入文本"
-
-#: src/im/pinyin/py.c:729
-msgid "Press index to delete user phrase (ESC for cancel)"
-msgstr "按下索引来删除用户词组 (ESC 取消)"
-
-#: src/im/pinyin/py.c:743
-msgid "Press number to make word in frequent list"
-msgstr "按下数字加入常用字表"
-
-#: data/config.desc:120
-msgid "Prev Page"
-msgstr "上一页"
-
-#: src/ui/classic/skin.desc:269 src/ui/classic/skin.desc:277
-#: src/ui/classic/skin.desc:285
-msgid "Prev Page Icon"
-msgstr "上一页图标"
-
-#: data/config.desc:148
-msgid "Previous Candidate Word"
-msgstr "上一个候选词"
-
-#: data/inputmethod.desc:15
-msgid "Priority"
-msgstr "优先级"
-
-#: data/addon.desc:48
-msgid "Priority of addon"
-msgstr "附加组件优先级"
-
-#: data/profile.desc:1 data/profile.desc:6 data/profile.desc:11
-#: data/profile.desc:16 data/profile.desc:21 data/profile.desc:26
-msgid "Profile"
-msgstr "预置文件"
-
-#: data/config.desc:159 data/config.desc:165 data/config.desc:174
-msgid "Program"
-msgstr "程序"
-
-#: src/im/table/table.desc:113
-msgid "Prompt Table Code"
-msgstr "提示码表编码"
-
-#: data/profile.desc:12
-msgid "Prompt the phrases after input"
-msgstr "输入后联想词组"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:4
-msgid "Provide extra feature for pinyin in Fcitx"
-msgstr "增强 Fcitx 的拼音输入的功能"
-
-#: src/module/dbus/fcitx-dbus.conf.in:4
-msgid "Provides DBus Support (Used by other Addon)"
-msgstr "提供 DBus 支持 (由其他插件使用)"
-
-#: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
-msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
-msgstr "提供 Freedesktop.org 桌面提示支持 (供其它插件使用)"
-
-#: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
-msgid "Provides Fullwidth Character Input Support"
-msgstr "提供全角符号输入支持"
-
-#: src/frontend/xim/fcitx-xim.conf.in:4
-msgid "Provides XIM support"
-msgstr "提供 XIM 支持"
-
-#: src/module/punc/fcitx-punc.conf.in:4
-msgid "Punctuation Conversion Support"
-msgstr "标点转换支持"
-
-#: src/module/punc/punc.c:585 src/module/punc/fcitx-punc.conf.in:3
-msgid "Punctuation Support"
-msgstr "标点支持"
-
-#: data/script/fcitx-diagnose.sh:1171
-msgid "Qt IM module files:"
-msgstr "Qt 输入法模块文件:"
-
-#: tools/gui/quickphrase-editor/editor.cpp:148
-msgid "Quick Phrase Editor"
-msgstr "快速输入编辑器"
-
-#: src/module/quickphrase/fcitx-quickphrase.conf.in:9
-msgid "Quick Phrase List"
-msgstr "快速输入列表"
-
-#: src/module/quickphrase/quickphrase.c:378
-msgid "Quick Phrase: "
-msgstr "快速输入: "
+"This is only a soft limit, the actually number of candidate words may be "
+"larger than this when multiple characters have the same order of strokes."
+msgstr "这仅仅是个软性限制. 当有多个字的笔顺相同时, 实际的笔画输入结果个数可能多于这个值."
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:1
 #: src/module/quickphrase/fcitx-quickphrase.desc:10
@@ -2349,72 +2907,260 @@ msgstr "快速输入: "
 msgid "QuickPhrase"
 msgstr "快速输入"
 
-#: src/module/quickphrase/fcitx-quickphrase.conf.in:3
-msgid "Quickphrase"
-msgstr "快速输入"
+#: src/module/quickphrase/fcitx-quickphrase.desc:6
+msgid "Semicolon"
+msgstr "分号"
 
-#: src/im/qw/qw.c:64 src/im/qw/fcitx-qw.conf.in:3 src/im/qw/qw.conf.in:3
-msgid "Quwei"
-msgstr "区位"
+#: src/module/quickphrase/fcitx-quickphrase.desc:7
+msgid "Grave"
+msgstr "反引号"
 
-#: src/im/qw/fcitx-qw.conf.in:4
-msgid "Quwei Input Method for Fcitx"
-msgstr "Fcitx 的区位输入法"
+#: src/module/quickphrase/fcitx-quickphrase.desc:8
+msgid "Trigger Key for QuickPhrase"
+msgstr "快速输入的触发键"
 
-#: data/config.desc:25
-msgid "R_ALT"
-msgstr "右 Alt"
+#: src/module/quickphrase/fcitx-quickphrase.desc:13
+msgid "Alternative Trigger Key for QuickPhrase"
+msgstr "额外的快速输入触发键"
 
-#: data/config.desc:16
-msgid "R_CTRL"
-msgstr "右Ctrl"
+#: src/module/quickphrase/fcitx-quickphrase.desc:37
+msgid "Maximum length of spell hint list for Quick Phrase"
+msgstr "快速输入的拼写提示候选词最大个数"
 
-#: data/config.desc:17
-msgid "R_SHIFT"
-msgstr "右Shift"
+#: src/module/spell/fcitx-spell.desc:1 src/module/spell/fcitx-spell.desc:10
+msgid "Spell Hint"
+msgstr "拼写提示"
 
-#: tools/gui/quickphrase-editor/editor.cpp:70
-msgid "Refresh List"
-msgstr "刷新列表"
+#: src/module/spell/fcitx-spell.desc:6
+msgid "Aspell"
+msgstr "Aspell"
 
-#: data/addon.desc:58
-msgid "Register IM"
-msgstr "注册输入法方法"
+#: src/module/spell/fcitx-spell.desc:7
+msgid "Myspell"
+msgstr "Myspell"
 
-#: data/config.desc:84
-msgid "Reload configuration"
-msgstr "重新载入配置"
+#: src/module/spell/fcitx-spell.desc:8
+msgid "Preferred Enchant provider"
+msgstr "首选的Enchant后端"
 
-#: src/im/table/table.c:1287
-msgid "Remind:"
-msgstr "联想："
+#: src/module/spell/fcitx-spell.desc:11
+msgid "Default Spell Hint Backends Order"
+msgstr "拼写提示默认使用的后端顺序"
 
-#: src/im/pinyin/py.c:2059
-msgid "Remind: "
-msgstr "联想："
+#: src/module/spell/fcitx-spell.desc:14
+msgid "Possible Providers: presage, custom, enchant (separate with comma)"
+msgstr "可选的后端: presage, custom, enchant (用英文逗号分隔)"
 
-#: src/module/remote/fcitx-remote-module.conf.in:3
-msgid "Remote"
-msgstr "远程调用"
+#: src/module/unicode/fcitx-unicode.desc:1
+msgid "Unicode"
+msgstr "Unicode"
 
-#: tools/gui/quickphrase-editor/editor.cpp:69
-msgid "Remove File"
-msgstr "移除文件"
+#: src/module/xkb/fcitx-xkb.desc:1 src/module/xkb/fcitx-xkb.desc:6
+#: src/module/xkb/fcitx-xkb.desc:12 src/module/xkb/fcitx-xkb.desc:17
+msgid "X Keyboard"
+msgstr "X 键盘"
 
-#: src/im/table/tabledict.c:466
-msgid "Rename OK"
-msgstr "重命名成功"
+#: src/module/xkb/fcitx-xkb.desc:4
+msgid "Allow to Override System XKB Settings"
+msgstr "允许覆盖系统的 XKB 设置"
 
-#: src/ui/classic/skin.desc:154 src/ui/classic/skin.desc:162
-#: src/ui/classic/skin.desc:296 src/ui/classic/skin.desc:304
-#: src/ui/classic/skin.desc:398 src/ui/classic/skin.desc:406
-msgid "Resize"
-msgstr "变形规则"
+#: src/module/xkb/fcitx-xkb.desc:9
+msgid ""
+"Use the layout of first keyboard input method in list as default layout"
+msgstr "使用列表中的第一个键盘输入法布局作为默认布局"
 
-#: src/ui/classic/skin.desc:97 src/ui/classic/skin.desc:203
-#: src/ui/classic/skin.desc:325
-msgid "Resize Margin Bottom"
-msgstr "下边距"
+#: src/module/xkb/fcitx-xkb.desc:10
+msgid ""
+"For example, if Keyboard - English (US) is the first input method in the "
+"list, then English (US) will be applied to all other non keyboard input "
+"method layout"
+msgstr "例如，如果键盘 - 英语(美国)是列表中的第一个输入法，则英语(美国)将应用于所有其他未设置键盘输入法的布局"
+
+#: src/module/xkb/fcitx-xkb.desc:15
+msgid "xmodmap command"
+msgstr "xmodmap 命令"
+
+#: src/module/xkb/fcitx-xkb.desc:20
+msgid "Apply this custom xmodmap script after layout change"
+msgstr "在键盘布局修改之后应用自定义的 xmodmap 脚本"
+
+#: src/ui/classic/fcitx-classic-ui.desc:1
+#: src/ui/classic/fcitx-classic-ui.desc:7
+#: src/ui/classic/fcitx-classic-ui.desc:13
+#: src/ui/classic/fcitx-classic-ui.desc:20
+#: src/ui/classic/fcitx-classic-ui.desc:25
+#: src/ui/classic/fcitx-classic-ui.desc:30
+#: src/ui/classic/fcitx-classic-ui.desc:36
+#: src/ui/classic/fcitx-classic-ui.desc:41
+#: src/ui/classic/fcitx-classic-ui.desc:51
+#: src/ui/classic/fcitx-classic-ui.desc:56
+msgid "ClassicUI"
+msgstr "经典界面"
+
+#: src/ui/classic/fcitx-classic-ui.desc:2
+msgid "Status Panel Position X"
+msgstr "状态栏 X 位置"
+
+#: src/ui/classic/fcitx-classic-ui.desc:8
+msgid "Status Panel Position Y"
+msgstr "状态栏 Y 位置"
+
+#: src/ui/classic/fcitx-classic-ui.desc:16
+msgid "Font Size"
+msgstr "字体大小"
+
+#: src/ui/classic/fcitx-classic-ui.desc:18
+msgid "Override the skin font size"
+msgstr "覆盖皮肤的字号设置"
+
+#: src/ui/classic/fcitx-classic-ui.desc:23
+msgid "Font"
+msgstr "字体"
+
+#: src/ui/classic/fcitx-classic-ui.desc:28
+msgid "Menu Font"
+msgstr "菜单字体"
+
+#: src/ui/classic/fcitx-classic-ui.desc:33
+msgid "Font Locale to display"
+msgstr "字体区域"
+
+#: src/ui/classic/fcitx-classic-ui.desc:39
+msgid "Use System Tray Icon"
+msgstr "使用系统托盘"
+
+#: src/ui/classic/fcitx-classic-ui.desc:44
+msgid "Show"
+msgstr "显示"
+
+#: src/ui/classic/fcitx-classic-ui.desc:45
+msgid "Auto"
+msgstr "自动"
+
+#: src/ui/classic/fcitx-classic-ui.desc:46
+msgid "Hide when tray icon is available"
+msgstr "当托盘图标可用时隐藏"
+
+#: src/ui/classic/fcitx-classic-ui.desc:47
+msgid "Hide"
+msgstr "隐藏"
+
+#: src/ui/classic/fcitx-classic-ui.desc:49
+msgid "Status Panel Hide Mode"
+msgstr "状态栏隐藏模式"
+
+#: src/ui/classic/fcitx-classic-ui.desc:54
+msgid "Vertical Candidate Word List"
+msgstr "竖排候选词列表"
+
+#: src/ui/classic/fcitx-classic-ui.desc:59 src/ui/classic/skin.desc:3
+msgid "Skin Name"
+msgstr "皮肤名称"
+
+#: src/ui/classic/skin.desc:1 src/ui/classic/skin.desc:5
+#: src/ui/classic/skin.desc:9 src/ui/classic/skin.desc:13
+msgid "SkinInfo"
+msgstr "皮肤信息"
+
+#: src/ui/classic/skin.desc:7
+msgid "Skin Version"
+msgstr "皮肤版本"
+
+#: src/ui/classic/skin.desc:11
+msgid "Skin Author"
+msgstr "皮肤作者"
+
+#: src/ui/classic/skin.desc:15
+msgid "Description of Skin"
+msgstr "描述"
+
+#: src/ui/classic/skin.desc:17 src/ui/classic/skin.desc:21
+#: src/ui/classic/skin.desc:26 src/ui/classic/skin.desc:31
+#: src/ui/classic/skin.desc:35 src/ui/classic/skin.desc:39
+#: src/ui/classic/skin.desc:43 src/ui/classic/skin.desc:47
+#: src/ui/classic/skin.desc:51 src/ui/classic/skin.desc:55
+#: src/ui/classic/skin.desc:59 src/ui/classic/skin.desc:63
+msgid "SkinFont"
+msgstr "皮肤字体"
+
+#: src/ui/classic/skin.desc:19
+msgid "Input Font Size"
+msgstr "输入字体大小"
+
+#: src/ui/classic/skin.desc:23
+msgid "Menu Font Size"
+msgstr "菜单字体大小"
+
+#: src/ui/classic/skin.desc:28
+msgid "Font sizes respect dpi setting"
+msgstr "字体大小遵守dpi设置"
+
+#: src/ui/classic/skin.desc:33
+msgid "Tip Message Color"
+msgstr "提示信息颜色"
+
+#: src/ui/classic/skin.desc:37
+msgid "Input Message Color"
+msgstr "输入信息颜色"
+
+#: src/ui/classic/skin.desc:41
+msgid "Candidate Index Color"
+msgstr "候选词索引颜色"
+
+#: src/ui/classic/skin.desc:45
+msgid "First Candidate Color"
+msgstr "第一候选词颜色"
+
+#: src/ui/classic/skin.desc:49
+msgid "User Phrase Color"
+msgstr "用户词组颜色"
+
+#: src/ui/classic/skin.desc:53
+msgid "Table Code Color"
+msgstr "码表提示颜色"
+
+#: src/ui/classic/skin.desc:57
+msgid "Other Color"
+msgstr "其他颜色"
+
+#: src/ui/classic/skin.desc:61
+msgid "Active Menu Item Character Color"
+msgstr "活动菜单项颜色"
+
+#: src/ui/classic/skin.desc:65
+msgid "Inactive Menu Item Character Color"
+msgstr "非活动菜单项颜色"
+
+#: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
+#: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
+#: src/ui/classic/skin.desc:83 src/ui/classic/skin.desc:87
+#: src/ui/classic/skin.desc:91 src/ui/classic/skin.desc:95
+#: src/ui/classic/skin.desc:99 src/ui/classic/skin.desc:104
+#: src/ui/classic/skin.desc:109 src/ui/classic/skin.desc:114
+#: src/ui/classic/skin.desc:119 src/ui/classic/skin.desc:124
+#: src/ui/classic/skin.desc:139 src/ui/classic/skin.desc:144
+#: src/ui/classic/skin.desc:149 src/ui/classic/skin.desc:157
+#: src/ui/classic/skin.desc:165 src/ui/classic/skin.desc:170
+#: src/ui/classic/skin.desc:175 src/ui/classic/skin.desc:180
+msgid "SkinMainBar"
+msgstr "皮肤主窗口设置"
+
+#: src/ui/classic/skin.desc:69 src/ui/classic/skin.desc:187
+#: src/ui/classic/skin.desc:317
+msgid "Background Image"
+msgstr "背景图片"
+
+#: src/ui/classic/skin.desc:73
+msgid "Logo Icon"
+msgstr "Logo图标"
+
+#: src/ui/classic/skin.desc:77
+msgid "English Mode Icon"
+msgstr "英文模式图标"
+
+#: src/ui/classic/skin.desc:81
+msgid "Active Mode Icon"
+msgstr "激活状态输入法图标"
 
 #: src/ui/classic/skin.desc:85 src/ui/classic/skin.desc:191
 #: src/ui/classic/skin.desc:329
@@ -2431,210 +3177,133 @@ msgstr "右边距"
 msgid "Resize Margin Top"
 msgstr "上边距"
 
-#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
-#: src/ui/kimpanel/kimpanel.c:786
-msgid "Restart"
-msgstr "重新启动"
+#: src/ui/classic/skin.desc:97 src/ui/classic/skin.desc:203
+#: src/ui/classic/skin.desc:325
+msgid "Resize Margin Bottom"
+msgstr "下边距"
 
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
-msgid "Right"
-msgstr "右"
+#: src/ui/classic/skin.desc:102 src/ui/classic/skin.desc:208
+#: src/ui/classic/skin.desc:338
+msgid "Margin Left for clickable region"
+msgstr "可点击区域的左边距"
 
-#: data/config.desc:28
-msgid "Right Super"
-msgstr "右 Super"
+#: src/ui/classic/skin.desc:107 src/ui/classic/skin.desc:213
+#: src/ui/classic/skin.desc:343
+msgid "Margin Right for clickable region"
+msgstr "可点击区域的右边距"
 
-#: src/module/clipboard/fcitx-clipboard.desc:20
-msgid ""
-"Roughly the same length with this number of english letters, the actual "
-"length depends on the font and the content"
-msgstr "大致长度和英文字母相同，实际长度取决于字体和内容"
+#: src/ui/classic/skin.desc:112 src/ui/classic/skin.desc:218
+#: src/ui/classic/skin.desc:348
+msgid "Margin Top for clickable region"
+msgstr "可点击区域的上边距"
 
-#: src/im/pinyin/fcitx-pinyin.desc:71
-msgid "Rule of Candidate Phrase Order"
-msgstr "候选词顺序"
+#: src/ui/classic/skin.desc:117 src/ui/classic/skin.desc:223
+#: src/ui/classic/skin.desc:353
+msgid "Margin Bottom for clickable region"
+msgstr "可点击区域的下边距"
 
-#: src/im/pinyin/fcitx-pinyin.desc:62
-msgid "Rule of Candidate Word Order"
-msgstr "候选字顺序"
+#: src/ui/classic/skin.desc:122 src/ui/classic/skin.desc:228
+#: src/ui/classic/skin.desc:358
+msgid "Overlay image"
+msgstr "覆盖图片"
 
-#: src/im/pinyin/fcitx-pinyin.desc:80
-msgid "Rule of Frequent Word Order"
-msgstr "常用字顺序"
+#: src/ui/classic/skin.desc:128 src/ui/classic/skin.desc:234
+#: src/ui/classic/skin.desc:364
+msgid "TopLeft"
+msgstr "左上角"
 
-#: data/script/fcitx-diagnose.sh:866
-msgid "Running as root:"
-msgstr "以管理员运行："
+#: src/ui/classic/skin.desc:129 src/ui/classic/skin.desc:235
+#: src/ui/classic/skin.desc:365
+msgid "TopCenter"
+msgstr "顶部居中"
 
-#: src/module/vk/vk.c:54
-msgid "Russian"
-msgstr "俄文字符"
+#: src/ui/classic/skin.desc:130 src/ui/classic/skin.desc:236
+#: src/ui/classic/skin.desc:366
+msgid "TopRight"
+msgstr "右上角"
 
-#: data/config.desc:23
-msgid "SHIFT Both"
-msgstr "两侧 Shift"
+#: src/ui/classic/skin.desc:131 src/ui/classic/skin.desc:237
+#: src/ui/classic/skin.desc:367
+msgid "CenterLeft"
+msgstr "中部靠左"
 
-#: src/im/pinyin/fcitx-pinyin.desc:38
-msgid "Save Auto Created Phrase"
-msgstr "保存自动词组"
+#: src/ui/classic/skin.desc:132 src/ui/classic/skin.desc:238
+#: src/ui/classic/skin.desc:368
+msgid "Center"
+msgstr "居中"
 
-#: src/im/table/table.desc:108
-msgid "Save Auto Phrase"
-msgstr "保存自动词组"
+#: src/ui/classic/skin.desc:133 src/ui/classic/skin.desc:239
+#: src/ui/classic/skin.desc:369
+msgid "CenterRight"
+msgstr "中部靠右"
 
-#: tools/gui/quickphrase-editor/editor.cpp:131
-msgid "Save Changes"
-msgstr "保存更改"
+#: src/ui/classic/skin.desc:134 src/ui/classic/skin.desc:240
+#: src/ui/classic/skin.desc:370
+msgid "BottomLeft"
+msgstr "左下角"
 
-#: src/module/clipboard/fcitx-clipboard.desc:4
-msgid "Save Clipboard History To File"
-msgstr "将剪贴板历史保存为文件"
+#: src/ui/classic/skin.desc:135 src/ui/classic/skin.desc:241
+#: src/ui/classic/skin.desc:371
+msgid "BottomCenter"
+msgstr "底部居中"
 
-#: src/im/table/tabledict.c:372
-msgid "Save dict error"
-msgstr "保存码表出错"
+#: src/ui/classic/skin.desc:136 src/ui/classic/skin.desc:242
+#: src/ui/classic/skin.desc:372
+msgid "BottomRight"
+msgstr "右下角"
 
-#: data/config.desc:136
-msgid "Saving All Config and Input History"
-msgstr "保存配置及输入历史"
+#: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
+#: src/ui/classic/skin.desc:373
+msgid "Overlay dock position"
+msgstr "覆盖图片停靠位置"
 
-#: data/config.desc:79
-msgid "Scroll between Input Method"
-msgstr "输入法切换键"
+#: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:248
+#: src/ui/classic/skin.desc:378
+msgid "Overlay X offset"
+msgstr "覆盖图片 X 偏移"
 
-#: src/module/unicode/unicode.c:230
-msgid "Search unicode"
-msgstr "搜索 unicode"
+#: src/ui/classic/skin.desc:147 src/ui/classic/skin.desc:253
+#: src/ui/classic/skin.desc:383
+msgid "Overlay Y offset"
+msgstr "覆盖图片 Y 偏移"
 
-#: data/config.desc:162
-msgid "Seconds sleep before fcitx really start"
-msgstr "Fcitx 真正启动前延迟的秒数"
+#: src/ui/classic/skin.desc:151 src/ui/classic/skin.desc:293
+#: src/ui/classic/skin.desc:395
+msgid "Fill Background Vertical rule"
+msgstr "纵向填充规则"
 
-#: src/module/imselector/imselector.c:305
-msgid "Select global input method: "
-msgstr "选择全局输入法："
+#: src/ui/classic/skin.desc:153 src/ui/classic/skin.desc:161
+#: src/ui/classic/skin.desc:295 src/ui/classic/skin.desc:303
+#: src/ui/classic/skin.desc:397 src/ui/classic/skin.desc:405
+msgid "Copy"
+msgstr "复制"
 
-#: src/module/imselector/imselector.c:306
-msgid "Select local input method: "
-msgstr "选择局部输入法："
+#: src/ui/classic/skin.desc:154 src/ui/classic/skin.desc:162
+#: src/ui/classic/skin.desc:296 src/ui/classic/skin.desc:304
+#: src/ui/classic/skin.desc:398 src/ui/classic/skin.desc:406
+msgid "Resize"
+msgstr "变形规则"
 
-#: src/module/imselector/fcitx-imselector.conf.in:4
-msgid "Select specific input method via keyboard"
-msgstr "通过键盘选择特定的输入法"
+#: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
+#: src/ui/classic/skin.desc:403
+msgid "Fill Background Horizontal rule"
+msgstr "横向填充规则"
 
-#: src/module/clipboard/clipboard.c:372
-msgid "Select to paste"
-msgstr "选择以粘贴"
+#: src/ui/classic/skin.desc:167
+msgid "Use Custom text icon color"
+msgstr "使用自定的文本图标颜色"
 
-#: data/addon.desc:60
-msgid "Self"
-msgstr "自提供"
+#: src/ui/classic/skin.desc:172
+msgid "Active Text Icon Color"
+msgstr "活动的文本图标颜色"
 
-#: src/module/quickphrase/fcitx-quickphrase.desc:6
-msgid "Semicolon"
-msgstr "分号"
+#: src/ui/classic/skin.desc:177
+msgid "Inactive Text Icon Color"
+msgstr "非活动的文本图标颜色"
 
-#: src/im/table/table.desc:64
-msgid "Send Raw Preedit"
-msgstr "发送原始输入按键"
-
-#: data/config.desc:199
-msgid "Send typed raw text if Switch to inactive Mode"
-msgstr "切换到非激活模式时当前输入的原始文本上屏"
-
-#: data/config.desc:172
-msgid "Share State Among Window"
-msgstr "在窗口间共享状态"
-
-#: data/addon.desc:36
-msgid "SharedLibrary"
-msgstr "共享库"
-
-#: src/im/keyboard/fcitx-keyboard.desc:14 src/im/table/table.desc:148
-#: src/module/autoeng/fcitx-autoeng.desc:9
-#: src/module/clipboard/fcitx-clipboard.desc:42
-#: src/module/quickphrase/fcitx-quickphrase.desc:23
-msgid "Shift"
-msgstr "Shift"
-
-#: src/ui/classic/fcitx-classic-ui.desc:44
-msgid "Show"
-msgstr "显示"
-
-#: data/config.desc:223
-msgid "Show Input Method Hint After Input method changed"
-msgstr "切换输入法时显示输入法提示"
-
-#: data/config.desc:229
-msgid "Show Input Method Hint After Input method changed and Focus in"
-msgstr "获得输入焦点并且输入法变化时显示输入法提示"
-
-#: data/config.desc:241
-msgid "Show Input Speed"
-msgstr "显示输入速度"
-
-#: data/profile.desc:29
-msgid "Show Preedit String in Client Window"
-msgstr "在客户端窗口中显示预编辑字符串"
-
-#: data/config.desc:247
-msgid "Show Version"
-msgstr "显示版本"
-
-#: src/im/pinyin/fcitx-pinyin.conf.in:9
-msgid "Shuang Pin Schema"
-msgstr "默认双拼方案"
-
-#: src/im/pinyin/py.c:121 src/im/pinyin/shuangpin.conf.in:3
-msgid "Shuangpin"
-msgstr "双拼"
-
-#: src/im/pinyin/fcitx-pinyin.conf.in:4
-msgid "Simple Pinyin support for Fcitx"
-msgstr "Fcitx 简单的拼音支持"
-
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
-msgid "Simplified Chinese"
-msgstr "简体中文"
-
-#: src/module/chttrans/chttrans.c:176
-#: src/module/chttrans/fcitx-chttrans.conf.in:3
-msgid "Simplified Chinese To Traditional Chinese"
-msgstr "简繁转换"
-
-#: src/module/chttrans/chttrans.c:178
-msgid "Simplified Chinese is enabled."
-msgstr "已启用简体中文。"
-
-#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
-msgid "Skin"
-msgstr "皮肤"
-
-#: src/ui/classic/skin.desc:11
-msgid "Skin Author"
-msgstr "皮肤作者"
-
-#: src/ui/classic/fcitx-classic-ui.desc:59 src/ui/classic/skin.desc:3
-msgid "Skin Name"
-msgstr "皮肤名称"
-
-#: src/ui/classic/skin.desc:7
-msgid "Skin Version"
-msgstr "皮肤版本"
-
-#: src/ui/classic/skin.desc:17 src/ui/classic/skin.desc:21
-#: src/ui/classic/skin.desc:26 src/ui/classic/skin.desc:31
-#: src/ui/classic/skin.desc:35 src/ui/classic/skin.desc:39
-#: src/ui/classic/skin.desc:43 src/ui/classic/skin.desc:47
-#: src/ui/classic/skin.desc:51 src/ui/classic/skin.desc:55
-#: src/ui/classic/skin.desc:59 src/ui/classic/skin.desc:63
-msgid "SkinFont"
-msgstr "皮肤字体"
-
-#: src/ui/classic/skin.desc:1 src/ui/classic/skin.desc:5
-#: src/ui/classic/skin.desc:9 src/ui/classic/skin.desc:13
-msgid "SkinInfo"
-msgstr "皮肤信息"
+#: src/ui/classic/skin.desc:182
+msgid "Special Icon position"
+msgstr "特殊图标位置"
 
 #: src/ui/classic/skin.desc:185 src/ui/classic/skin.desc:189
 #: src/ui/classic/skin.desc:193 src/ui/classic/skin.desc:197
@@ -2651,23 +3320,39 @@ msgstr "皮肤信息"
 msgid "SkinInputBar"
 msgstr "皮肤输入框设置"
 
-#: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
-msgid "SkinKeyboard"
-msgstr "键盘"
+#: src/ui/classic/skin.desc:257
+msgid "Color of Cursor"
+msgstr "光标颜色"
 
-#: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
-#: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
-#: src/ui/classic/skin.desc:83 src/ui/classic/skin.desc:87
-#: src/ui/classic/skin.desc:91 src/ui/classic/skin.desc:95
-#: src/ui/classic/skin.desc:99 src/ui/classic/skin.desc:104
-#: src/ui/classic/skin.desc:109 src/ui/classic/skin.desc:114
-#: src/ui/classic/skin.desc:119 src/ui/classic/skin.desc:124
-#: src/ui/classic/skin.desc:139 src/ui/classic/skin.desc:144
-#: src/ui/classic/skin.desc:149 src/ui/classic/skin.desc:157
-#: src/ui/classic/skin.desc:165 src/ui/classic/skin.desc:170
-#: src/ui/classic/skin.desc:175 src/ui/classic/skin.desc:180
-msgid "SkinMainBar"
-msgstr "皮肤主窗口设置"
+#: src/ui/classic/skin.desc:261
+msgid "Position or offset of Preedit"
+msgstr "预编辑文本的位置或偏移"
+
+#: src/ui/classic/skin.desc:265
+msgid "Position or offset of LookupTable"
+msgstr "候选词表的位置或偏移"
+
+#: src/ui/classic/skin.desc:269 src/ui/classic/skin.desc:277
+#: src/ui/classic/skin.desc:285
+msgid "Prev Page Icon"
+msgstr "上一页图标"
+
+#: src/ui/classic/skin.desc:273 src/ui/classic/skin.desc:281
+#: src/ui/classic/skin.desc:289
+msgid "Next Page Icon"
+msgstr "下一页图标"
+
+#: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
+msgid "SkinTrayIcon"
+msgstr "皮肤托盘图标设置"
+
+#: src/ui/classic/skin.desc:309
+msgid "Active Tray Icon"
+msgstr "活动输入法图标"
+
+#: src/ui/classic/skin.desc:313
+msgid "Inctive Tray Icon"
+msgstr "非活动输入法图标"
 
 #: src/ui/classic/skin.desc:315 src/ui/classic/skin.desc:319
 #: src/ui/classic/skin.desc:323 src/ui/classic/skin.desc:327
@@ -2681,740 +3366,22 @@ msgstr "皮肤主窗口设置"
 msgid "SkinMenu"
 msgstr "皮肤菜单设置"
 
-#: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
-msgid "SkinTrayIcon"
-msgstr "皮肤托盘图标设置"
+#: src/ui/classic/skin.desc:387
+msgid "Active Menu Color"
+msgstr "活动菜单颜色"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
 msgstr "分隔线颜色"
 
-#: src/module/quickphrase/quickphrase.c:247
-#, c-format
-msgid "Space for %s Enter for %s"
-msgstr "空格输入 %s 回车输入 %s"
-
-#: src/module/vk/vk.c:58
-msgid "Special"
-msgstr "特殊符号"
-
-#: src/ui/classic/skin.desc:182
-msgid "Special Icon position"
-msgstr "特殊图标位置"
-
-#: src/module/spell/fcitx-spell.conf.in:3
-msgid "Spell"
-msgstr "拼写"
-
-#: src/module/spell/fcitx-spell.desc:1 src/module/spell/fcitx-spell.desc:10
-msgid "Spell Hint"
-msgstr "拼写提示"
-
-#: src/im/keyboard/keyboard.c:900
-msgid "Spell hint"
-msgstr "拼写提示"
-
-#: src/im/keyboard/keyboard.c:902
-msgid "Spell hint is disabled."
-msgstr "已禁用拼写提示。"
-
-#: src/im/keyboard/keyboard.c:901
-msgid "Spell hint is enabled."
-msgstr "已启用拼写提示。"
-
-#: data/fcitx-autostart.desktop.in:4 data/fcitx.desktop.in:4
-msgid "Start Input Method"
-msgstr "启动输入法"
-
-#: src/frontend/xim/xim.c:239
-#, c-format
-msgid "Start XIM error. Another XIM daemon named %s is running?"
-msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
-
-#: src/ui/classic/fcitx-classic-ui.desc:49
-msgid "Status Panel Hide Mode"
-msgstr "状态栏隐藏模式"
-
-#: src/ui/classic/fcitx-classic-ui.desc:2
-msgid "Status Panel Position X"
-msgstr "状态栏 X 位置"
-
-#: src/ui/classic/fcitx-classic-ui.desc:8
-msgid "Status Panel Position Y"
-msgstr "状态栏 Y 位置"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
-msgid "Stroke input trigger length"
-msgstr "笔画输入触发长度"
-
-#: data/addon.desc:53
-msgid "Sub Configuration for Module"
-msgstr "模块子配置"
-
-#: src/ui/classic/fcitx-skin-installer.sh:74
-msgid "Successfully Installed skin"
-msgstr "成功安装皮肤"
-
-#: data/config.desc:29
-msgid "Super Both"
-msgstr "两侧 Super"
-
-#: data/config.desc:32
-msgid "Super+Left Ctrl"
-msgstr "Super+左 Ctrl"
-
-#: data/config.desc:33
-msgid "Super+Right Ctrl"
-msgstr "Super+右 Ctrl"
-
-#: data/config.desc:142
-msgid "Switch Embeded Preedit"
-msgstr "切换嵌入预编辑字符串"
-
-#: data/config.desc:114
-msgid "Switch Full Width Punc Mode"
-msgstr "切换全角标点"
-
-#: src/module/imselector/fcitx-imselector.desc:54
-#: src/module/imselector/fcitx-imselector.desc:99
-msgid "Switch to the Eighth Input Method"
-msgstr "切换至第8个输入法"
-
-#: src/module/imselector/fcitx-imselector.desc:39
-#: src/module/imselector/fcitx-imselector.desc:84
-msgid "Switch to the Fifth Input Method"
-msgstr "切换至第5个输入法"
-
-#: src/module/imselector/fcitx-imselector.desc:19
-#: src/module/imselector/fcitx-imselector.desc:64
-msgid "Switch to the First Input Method"
-msgstr "切换至第1个输入法"
-
-#: src/module/imselector/fcitx-imselector.desc:34
-#: src/module/imselector/fcitx-imselector.desc:79
-msgid "Switch to the Fourth Input Method"
-msgstr "切换至第4个输入法"
-
-#: src/module/imselector/fcitx-imselector.desc:59
-#: src/module/imselector/fcitx-imselector.desc:104
-msgid "Switch to the Ninth Input Method"
-msgstr "切换至第9个输入法"
-
-#: src/module/imselector/fcitx-imselector.desc:24
-#: src/module/imselector/fcitx-imselector.desc:69
-msgid "Switch to the Second Input Method"
-msgstr "切换至第2个输入法"
-
-#: src/module/imselector/fcitx-imselector.desc:49
-#: src/module/imselector/fcitx-imselector.desc:94
-msgid "Switch to the Seventh Input Method"
-msgstr "切换至第7个输入法"
-
-#: src/module/imselector/fcitx-imselector.desc:44
-#: src/module/imselector/fcitx-imselector.desc:89
-msgid "Switch to the Sixth Input Method"
-msgstr "切换至第6个输入法"
-
-#: src/module/imselector/fcitx-imselector.desc:29
-#: src/module/imselector/fcitx-imselector.desc:74
-msgid "Switch to the Third Input Method"
-msgstr "切换至第3个输入法"
-
-#: data/config.desc:108
-msgid "Switching Full Width Character Mode"
-msgstr "切换全角"
-
-#: data/config.desc:102
-msgid "Switching Remind Mode"
-msgstr "切换联想模式"
-
-#: data/config.desc:96
-msgid "Switching Virtual Keyboard"
-msgstr "切换虚拟键盘"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:9
-#: src/im/table/table.desc:126
-msgid "Symbol"
-msgstr "符号"
-
-#: src/im/table/table.desc:131
-msgid "Symbol File"
-msgstr "符号文件"
-
-#: data/script/fcitx-diagnose.sh:743
-msgid "System Info:"
-msgstr "系统信息:"
-
-#: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
-msgid "Table"
-msgstr "码表"
-
-#: src/ui/classic/skin.desc:53
-msgid "Table Code Color"
-msgstr "码表提示颜色"
-
-#: src/im/table/fcitx-table.conf.in:4
-msgid "Table Input Method for Fcitx"
-msgstr "Fcitx 的码表输入法"
-
-#: src/module/vk/vk.c:61
-msgid "Table Symbol"
-msgstr "制表符"
-
-#: tools/gui/quickphrase-editor/editor.cpp:132
-msgid ""
-"The content has changed.\n"
-"Do you want to save the changes or discard them?"
-msgstr ""
-"内容已更改。\n"
-"您想要保存还是撤销这些修改？"
-
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
-msgid "The key you just pressed is not supported by Qt."
-msgstr "你刚刚按下的按键不被 Qt 支持。"
-
-#: data/script/fcitx-diagnose.sh:845
-msgid "The script is run as ${1} (${2})."
-msgstr "脚本作为 ${1} (${2}) 运行。"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:56
-msgid ""
-"This is only a soft limit, the actually number of candidate words may be "
-"larger than this when multiple characters have the same order of strokes."
-msgstr ""
-"这仅仅是个软性限制. 当有多个字的笔顺相同时, 实际的笔画输入结果个数可能多于这"
-"个值."
-
-#: data/config.desc:156
-msgid ""
-"This is used in some modules and input methods to navigate to the next "
-"candidate word"
-msgstr "在部分插件 / 输入法中用来切换到下一个候选词的快捷键"
-
-#: data/config.desc:149
-msgid ""
-"This is used in some modules and input methods to navigate to the previous "
-"candidate word"
-msgstr "在部分插件 / 输入法中用来切换到上一个候选词的快捷键"
-
-#: src/ui/classic/skin.desc:33
-msgid "Tip Message Color"
-msgstr "提示信息颜色"
-
-#: data/script/fcitx-diagnose.sh:699
-#, sh-format
-msgid ""
-"To see some application specific problems you may have when using xim, check "
-"${link1}. For other more general problems of using XIM including application "
-"freezing, see ${link2}."
-msgstr ""
-"您可以在 ${link1} 找到一些会在使用 xim 时出现问题的应用程序. 包括应用程序卡死"
-"在内的更多使用 xim 可能出现的普遍问题请参见 ${link2}."
-
-#: src/module/punc/punc.c:150 src/module/punc/punc.c:569
-msgid "Toggle Full Width Punctuation"
-msgstr "切换全角标点"
-
-#: src/module/fullwidthchar/fullwidthchar.c:115
-#: src/module/fullwidthchar/fullwidthchar.c:192
-msgid "Toggle Half/Full width Character"
-msgstr "切换半/全角字符"
-
-#: src/ui/kimpanel/kimpanel.c:778
-msgid "Toggle Input Method"
-msgstr "切换输入法"
-
-#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:553
-msgid "Toggle Remind"
-msgstr "切换联想"
-
-#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
-msgid "Toggle Simp/Trad Chinese Conversion"
-msgstr "切换简繁转换"
-
-#: src/module/vk/vk.c:154
-msgid "Toggle Virtual Keyboard"
-msgstr "切换虚拟键盘"
-
-#: src/module/chttrans/fcitx-chttrans.desc:12
-msgid "Toggle for enable or disable"
-msgstr "切换来禁用或启用"
-
-#: src/im/keyboard/fcitx-keyboard.desc:19
-msgid "Toggle the word hint"
-msgstr "切换单词提示"
-
-#: src/module/autoeng/AutoEng.c:557
-msgid "Too long item for AutoEng"
-msgstr "自动英文条目过长"
-
-#: src/ui/classic/skin.desc:129 src/ui/classic/skin.desc:235
-#: src/ui/classic/skin.desc:365
-msgid "TopCenter"
-msgstr "顶部居中"
-
-#: src/ui/classic/skin.desc:128 src/ui/classic/skin.desc:234
-#: src/ui/classic/skin.desc:364
-msgid "TopLeft"
-msgstr "左上角"
-
-#: src/ui/classic/skin.desc:130 src/ui/classic/skin.desc:236
-#: src/ui/classic/skin.desc:366
-msgid "TopRight"
-msgstr "右上角"
-
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:196
-msgid "Traditional Chinese"
-msgstr "繁体中文"
-
-#: src/module/chttrans/fcitx-chttrans.desc:6
-msgid "Traditional Chinese Translate Engine"
-msgstr "简繁转换引擎"
-
-#: src/module/chttrans/chttrans.c:177
-msgid "Traditional Chinese is enabled."
-msgstr "已启用繁体中文。"
-
-#: src/module/chttrans/fcitx-chttrans.desc:1
-#: src/module/chttrans/fcitx-chttrans.desc:9
-#: src/module/chttrans/fcitx-chttrans.desc:14
-msgid "TraditionalChinese"
-msgstr "繁体中文"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
-msgid "Treating abbreviated Pinyin as English"
-msgstr "将简拼视为英文"
-
-#: data/config.desc:5
-msgid "Trigger Input Method"
-msgstr "切换激活/非激活输入法"
-
-#: src/module/clipboard/fcitx-clipboard.desc:25
-msgid "Trigger Key for Clipboard History List"
-msgstr "剪贴板历史快捷键"
-
-#: src/module/quickphrase/fcitx-quickphrase.desc:8
-msgid "Trigger Key for QuickPhrase"
-msgstr "快速输入的触发键"
-
-#: data/addon.desc:38
-msgid "Type"
-msgstr "类型"
-
-#: data/config.desc:186
-msgid "Type half width Punc After a Number"
-msgstr "数字后跟半角符号"
-
-#: data/addon.desc:21
-msgid "UI"
-msgstr "界面"
-
-#: src/lib/fcitx/ui.c:205
-msgid "UI: bad ui"
-msgstr "界面: 有问题的界面"
-
-#: src/lib/fcitx/ui.c:192
-#, c-format
-msgid "UI: open %s fail %s"
-msgstr "界面: 打开 %s 失败 %s"
-
-#: data/script/fcitx-diagnose.sh:956
-msgid "Unable to find a program to check dbus."
-msgstr "无法找到程序检查 dbus。"
-
-#: src/module/unicode/fcitx-unicode.desc:1
-msgid "Unicode"
-msgstr "Unicode"
-
-#: src/im/table/table.desc:2
-msgid "Unique Name for Table"
-msgstr "码表的唯一名称"
-
-#: data/inputmethod.desc:3
-msgid "UniqueName"
-msgstr "唯一名称"
-
-#: src/lib/fcitx-config/fcitx-config.c:406
-#, c-format
-msgid "Unknown type, take it as string: %s"
-msgstr "未知类型，作为字符串处理: %s"
-
-#: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
-msgid "Unsupported Key"
-msgstr "不支持的按键"
-
-#: tools/gui/quickphrase-editor/batchdialog.cpp:31
-msgid "Use <Keyword> <Phrase> format on every line."
-msgstr "每行使用 <关键词> <词组> 的格式。"
-
-#: src/im/table/table.desc:171
-msgid "Use Alternative Candidate Word Number"
-msgstr "使用自定义的候选词个数"
-
-#: src/im/table/table.desc:183
-msgid "Use Alternative Key for paging"
-msgstr "使用自定义的翻页键"
-
-#: src/im/pinyin/fcitx-pinyin.desc:28
-msgid "Use Complete Pinyin"
-msgstr "使用完整拼音"
-
-#: src/im/table/table.desc:161
-msgid "Use Custom Prompt String defined in table"
-msgstr "使用码表中自定义的提示文本"
-
-#: src/ui/classic/skin.desc:167
-msgid "Use Custom text icon color"
-msgstr "使用自定的文本图标颜色"
-
-#: data/profile.desc:2
-msgid "Use Full Width Character"
-msgstr "使用全角字符"
-
-#: src/im/keyboard/fcitx-keyboard.conf.in:4
-msgid "Use Keyboard Layout as Input Method"
-msgstr "将键盘布局作为输入法"
-
-#: src/im/table/table.desc:74
-msgid "Use Matching Key"
-msgstr "使用模糊键"
-
-#: src/frontend/xim/fcitx-xim.desc:4
-msgid "Use On The Spot Style for XIM (Cannot change during running)"
-msgstr "对XIM使用On The Spot风格（无法在运行时切换）"
-
-#: src/im/table/table.desc:39
-msgid "Use Pinyin"
-msgstr "使用拼音"
-
-#: data/addon.desc:77
-msgid "Use RTLD_LOCAL to load library"
-msgstr "使用 RTLD_GLOBAL 加载库"
-
-#: src/module/clipboard/fcitx-clipboard.desc:30
-msgid "Use Selection Text"
-msgstr "使用选区文字"
-
-#: src/ui/classic/fcitx-classic-ui.desc:39
-msgid "Use System Tray Icon"
-msgstr "使用系统托盘"
-
-#: src/im/pinyin/fcitx-pinyin.desc:23
-msgid "Use V to trigger quickphrase"
-msgstr "使用 V 来触发快速输入"
-
-#: data/profile.desc:7
-msgid "Use Wide Punctuation"
-msgstr "使用全角标点"
-
-#: src/im/keyboard/fcitx-keyboard.desc:39
-msgid "Use enter to commit the existing string"
-msgstr "使用回车确认已输入字符串"
-
-#: data/config.desc:10
-msgid "Use extra trigger key only after using it to inactivate"
-msgstr "只在用额外切换键取消激活后才使用它进行切换"
-
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
-msgid "Use remind"
-msgstr "联想"
-
-#: src/module/xkb/fcitx-xkb.desc:9
-msgid "Use the layout of first keyboard input method in list as default layout"
-msgstr "使用列表中的第一个键盘输入法布局作为默认布局"
-
-#: src/module/remote/fcitx-remote-module.conf.in:4
-msgid "Used by fcitx-remote to change Fcitx state from console"
-msgstr "fcitx-remote 通过它来从命令行改变 Fcitx 的状态"
-
-#: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
-msgid "Useful when you hardly ever use abbreviated pinyin."
-msgstr "适用于很少使用简拼的情况"
-
-#: src/im/pinyin/fcitx-pinyin.desc:11
-msgid "User Defined"
-msgstr "用户定义"
-
-#: data/script/fcitx-diagnose.sh:1518
-msgid "User Interface:"
-msgstr "用户界面:"
-
-#: src/ui/classic/skin.desc:49
-msgid "User Phrase Color"
-msgstr "用户词组颜色"
-
-#: data/script/fcitx-diagnose.sh:935
-msgid "Using ${1} to check dbus."
-msgstr "使用 ${1} 来检查 dbus。"
-
-#: data/script/fcitx-diagnose.sh:1294 data/script/fcitx-diagnose.sh:1377
-msgid "Version Line:"
-msgstr "版本行:"
-
-#: src/im/table/table.desc:122
-msgid "Vertical"
-msgstr "竖排"
-
-#: src/ui/classic/fcitx-classic-ui.desc:54
-msgid "Vertical Candidate Word List"
-msgstr "竖排候选词列表"
-
-#: src/module/vk/fcitx-vk.conf.in:3 src/module/vk/fcitx-vk.conf.in:10
-msgid "Virtual Key Board"
-msgstr "虚拟键盘"
-
-#: src/module/vk/fcitx-vk.conf.in:4
-msgid "Virtual Key Board in order to input special character"
-msgstr "用于输入特殊字符的虚拟键盘"
-
-#: src/module/vk/vk.c:179
-msgid "Virtual Keyboard"
-msgstr "虚拟键盘"
+#: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
+msgid "SkinKeyboard"
+msgstr "键盘"
 
 #: src/ui/classic/skin.desc:411
 msgid "Virtual Keyboard Image"
 msgstr "虚拟键盘图片"
 
-#: src/module/vk/vk.c:154
-msgid "Virtual Keyboard State"
-msgstr "虚拟键盘状态"
-
-#: src/im/table/data/wanfeng.conf.in:3
-msgid "Wanfeng"
-msgstr "晚风"
-
-#: data/script/fcitx-diagnose.sh:876
-msgid "Why is it bad to run as root"
-msgstr "以root身份运行不好的原因"
-
-#: src/im/table/data/wbx.conf.in:3
-msgid "Wubi"
-msgstr "五笔字型"
-
-#: src/im/table/data/wbpy.conf.in:3
-msgid "WubiPinyin"
-msgstr "五笔拼音"
-
-#: src/module/xkb/fcitx-xkb.desc:1 src/module/xkb/fcitx-xkb.desc:6
-#: src/module/xkb/fcitx-xkb.desc:12 src/module/xkb/fcitx-xkb.desc:17
-msgid "X Keyboard"
-msgstr "X 键盘"
-
-#: src/module/xkb/fcitx-xkb.conf.in:3 src/module/xkb/fcitx-xkb.conf.in:4
-msgid "X Keyboard Integration"
-msgstr "X 键盘集成"
-
-#: src/module/xkbdbus/fcitx-xkbdbus.conf.in:3
-#: src/module/xkbdbus/fcitx-xkbdbus.conf.in:4
-msgid "X Keyboard Integration export with DBus"
-msgstr "通过 DBus 导出的 X 键盘集成接口"
-
-#: src/ui/classic/tray.c:160
-#, c-format
-msgid "X error %i on opcode send"
-msgstr "X error %i on opcode send"
-
-#: src/module/x11/fcitx-x11.conf.in:3
-msgid "X11 Support"
-msgstr "X11 支持"
-
-#: src/module/x11/fcitx-x11.conf.in:4
-msgid "X11 Utilitiy used by other Addon"
-msgstr "由其他插件使用的 X11 工具函数"
-
-#: src/frontend/xim/xim.c:134
-msgid "X11 not initialized"
-msgstr "X11 未初始化"
-
-#: data/script/fcitx-diagnose.sh:1118
-msgid "XIM encoding:"
-msgstr "XIM 编码："
-
-#: data/script/fcitx-diagnose.sh:1113
-msgid "XIM for Emacs:"
-msgstr "用于 Emacs 的 XIM："
-
-#: data/script/fcitx-diagnose.sh:1091
-msgid "XIM_SERVERS on root window:"
-msgstr "根窗口上的 XIM_SERVERS:"
-
-#: src/frontend/xim/xim.c:157
-msgid "XMODIFIERS Error."
-msgstr "XMODIFIERS 错误。"
-
-#: data/script/fcitx-diagnose.sh:1068
-msgid "XMODIFIERS is not set"
-msgstr "XMODIFIERS 没有设置"
-
-#: src/im/pinyin/fcitx-pinyin.desc:10
-msgid "XiaoHe"
-msgstr "小鹤"
-
-#: src/frontend/xim/fcitx-xim.desc:1
-msgid "Xim"
-msgstr "Xim"
-
-#: data/script/fcitx-diagnose.sh:1089
-msgid "Xim Server Name from Environment variable is ${1}."
-msgstr "从环境变量中获取的 Xim 服务名称为 ${1}."
-
-#: data/script/fcitx-diagnose.sh:1101
-msgid "Xim server name is the same with that set in the environment variable."
-msgstr "Xim 服务的名称与环境变量中设置的相同."
-
-#: data/script/fcitx-diagnose.sh:1103
-msgid ""
-"Xim server name: \"${1}\" is different from that set in the environment "
-"variable: \"${2}\"."
-msgstr "Xim 服务名称: \"${1}\" 与环境变量中设置的值 \"${2}\" 不同."
-
-#: data/script/fcitx-diagnose.sh:874
-msgid ""
-"You are probably logging in as ${1} or using ${2} to run this script. This "
-"either means you have security problems or the result of this script may not "
-"be accurate. See ${3} or ${4} for more information."
-msgstr ""
-"你可能以 ${1} 或者 ${2} 登录运行此脚本。这意味着两种情况，要么你有安全问题或"
-"该脚本的结果可能不准确。有关更多信息，请参见 ${3} 或者 ${4} 。"
-
-#: data/script/fcitx-diagnose.sh:869
-msgid ""
-"You are probably using ${1} to run this script. This means the result of "
-"this script may not be accurate. See ${2} for more information."
-msgstr ""
-"你可能正在使用 ${1} 运行此脚本。这意味着这个脚本的结果可能不准确。见 ${2} 以"
-"获取更多信息。"
-
-#: data/script/fcitx-diagnose.sh:1140
-msgid "You are using xim in ${1} programs."
-msgstr "您正在 ${1} 程序中使用 xim."
-
-#: data/script/fcitx-diagnose.sh:1578
-msgid "You don't have any input methods enabled."
-msgstr "您没有任何启用的输入法."
-
-#: data/script/fcitx-diagnose.sh:1590
-msgid ""
-"You have a keyboard input method \"${1}\" correctly added as your default "
-"input method."
-msgstr "您已经正确的将一个键盘输入法 \"${1}\" 设为默认."
-
-#: data/script/fcitx-diagnose.sh:1145
-msgid "You may have trouble using fcitx in ${1} programs."
-msgstr "您可能会在 ${1} 程序中使用 fcitx 时遇到问题."
-
-#: data/script/fcitx-diagnose.sh:1584
-msgid ""
-"You only have one input method enabled, please add a keyboard input method "
-"as the first one and your main input method as the second one."
-msgstr ""
-"您仅仅启用了一个输入法, 请将一个键盘输入法设为第一个并将您的主要输入法设为第"
-"二个."
-
-#: data/script/fcitx-diagnose.sh:1582
-msgid ""
-"You only have one keyboard input method enabled. You may want to add another "
-"input method to input other languages."
-msgstr "你只有一个键盘输入法启用。你可能要添加其他输入法输入其他语言。"
-
-#: data/script/fcitx-configtool.sh:147
-msgid ""
-"You're currently running Fcitx with GUI, but fcitx-configtool couldn't be "
-"found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
-"fcitx-configtool. Now it will open config file with default text editor."
-msgstr ""
-"您正在图形界面下运行 fcitx，但是 fcitx-configtool 未被找到，软件包名通常为 "
-"fcitx-config-gtk，fcitx-config-gtk3，或者 fcitx-configtool。现在将用默认文本"
-"编辑器打开配置文件。"
-
-#: data/script/fcitx-configtool.sh:144
-msgid ""
-"You're currently running KDE, but KCModule for fcitx couldn't be found, the "
-"package name of this KCModule is usually kcm-fcitx or kde-config-fcitx. Now "
-"it will open config file with default text editor."
-msgstr ""
-"您正在运行 KDE，但是 fcitx 的 KCModule 未被找到，此 KCModule 的软件包名通常"
-"为 kcm-fcitx 或 kde-config-fcitx。现在将用默认文本编辑器打开配置文件。"
-
-#: data/script/fcitx-diagnose.sh:1115
-msgid ""
-"Your LC_CTYPE is set to ${1} instead of one of zh, ja, ko. You may not be "
-"able to use input method in emacs because of an really old emacs bug that "
-"upstream refuse to fix for years."
-msgstr ""
-"您的 LC_CTYPE 设置为 ${1} 而不是 zh, ja, ko 之一。您可能无法在 Emacs 中使用输"
-"入法，其根本是源自上游拒绝修复多年的一个超老的故障。"
-
-#: data/script/fcitx-diagnose.sh:1120
-msgid ""
-"Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have "
-"trouble committing strings using XIM."
-msgstr ""
-"您的 LC_CTYPE 设置为 ${1}，它的编码不是 UTF-8。您可能会在使用 XIM 提交字符串"
-"时遇到问题。"
-
-#: data/script/fcitx-diagnose.sh:1594
-msgid ""
-"Your first (default) input method is ${1} instead of a keyboard input "
-"method. You may have trouble deactivate fcitx."
-msgstr ""
-"您的第一个 (默认) 输入法是 ${1} 而不是一个键盘输入法. 您可能无法禁用 fcitx 输"
-"入法."
-
-#: src/im/pinyin/fcitx-pinyin.desc:8
-msgid "Zhongwenzhixing"
-msgstr "中文之星"
-
-#: src/im/pinyin/fcitx-pinyin.desc:6
-msgid "Ziguang"
-msgstr "紫光"
-
-#: src/im/table/data/zrm.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:4
-msgid "Ziranma"
-msgstr "自然码"
-
-#: data/script/fcitx-diagnose.sh:886
-msgid "executable:"
-msgstr "可执行文件:"
-
-#: data/script/fcitx-diagnose.sh:706
-msgid "here"
-msgstr "这里"
-
-#: src/lib/fcitx/ime.c:1803
-msgid "min Num of Characters: "
-msgstr "分 字符数: "
-
-#: src/lib/fcitx-config/fcitx-config.c:1200
-#, c-format
-msgid "no default option for %s/%s"
-msgstr "选项%s/%s没有默认选项"
-
-#: src/ui/cairostuff/font.c:121
-msgid "no valid font."
-msgstr "无可用字体"
-
-#: data/script/fcitx-diagnose.sh:900
-msgid "process:"
-msgstr "进程:"
-
-#: src/lib/fcitx/instance.c:528
-msgid "pthread mutex init failed"
-msgstr "pthread mutex init failed"
-
-#: data/script/fcitx-diagnose.sh:871 data/script/fcitx-diagnose.sh:877
-msgid "sudo environment variables"
-msgstr "sudo的环境变量"
-
-#: data/script/fcitx-diagnose.sh:896
-msgid "version:"
-msgstr "版本:"
-
-#: src/module/xkb/fcitx-xkb.desc:15
-msgid "xmodmap command"
-msgstr "xmodmap 命令"
-
-#: src/ui/cairostuff/font.c:119
-#, c-format
-msgid "your current font is: %s"
-msgstr "当前字体为: %s"
+#: src/ui/classic/skin.desc:416
+msgid "Key Color On Virutal Keyboard"
+msgstr "软键盘按键文字颜色"
