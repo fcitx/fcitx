@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2016-04-18 11:01-0700\n"
+"POT-Creation-Date: 2017-09-29 10:02-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -938,19 +938,19 @@ msgstr ""
 msgid "min Num of Characters: "
 msgstr ""
 
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:555
 msgid "Use remind"
 msgstr ""
 
-#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:552
+#: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:555
 msgid "No remind"
 msgstr ""
 
-#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:553
+#: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:556
 msgid "Toggle Remind"
 msgstr ""
 
-#: src/lib/fcitx/instance.c:528
+#: src/lib/fcitx/instance.c:531
 msgid "pthread mutex init failed"
 msgstr ""
 
@@ -1098,41 +1098,41 @@ msgstr ""
 msgid "Clear local input method"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:342 src/ui/classic/classicui.c:431
+#: src/module/notificationitem/dbusmenu.c:340 src/ui/classic/classicui.c:440
 msgid "Online Help"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:354 src/ui/classic/classicui.c:492
-#: src/ui/kimpanel/kimpanel.c:781
+#: src/module/notificationitem/dbusmenu.c:352 src/ui/classic/classicui.c:501
+#: src/ui/kimpanel/kimpanel.c:785
 msgid "Configure Current Input Method"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:358 src/ui/classic/classicui.c:493
+#: src/module/notificationitem/dbusmenu.c:356 src/ui/classic/classicui.c:502
 msgid "Configure"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:367 src/ui/classic/classicui.c:494
-#: src/ui/kimpanel/kimpanel.c:786
+#: src/module/notificationitem/dbusmenu.c:365 src/ui/classic/classicui.c:503
+#: src/ui/kimpanel/kimpanel.c:790
 msgid "Restart"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:495
+#: src/module/notificationitem/dbusmenu.c:371 src/ui/classic/classicui.c:504
 msgid "Exit"
 msgstr ""
 
 #: src/module/notificationitem/notificationitem.c:456
-#: src/ui/kimpanel/kimpanel.c:255 src/ui/kimpanel/kimpanel.c:256
+#: src/ui/kimpanel/kimpanel.c:256 src/ui/kimpanel/kimpanel.c:257
 msgid "No input window"
 msgstr ""
 
 #: src/module/notificationitem/notificationitem.c:462
-#: src/ui/kimpanel/kimpanel.c:281 src/ui/kimpanel/kimpanel.c:286
+#: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 #: data/config.desc:34
 msgid "Disabled"
 msgstr ""
 
 #: src/module/notificationitem/notificationitem.c:463
-#: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
+#: src/ui/kimpanel/kimpanel.c:283 src/ui/kimpanel/kimpanel.c:288
 msgid "Input Method Disabled"
 msgstr ""
 
@@ -1198,7 +1198,7 @@ msgstr ""
 msgid "<not assigned>"
 msgstr ""
 
-#: src/module/unicode/unicode.c:230
+#: src/module/unicode/unicode.c:272
 msgid "Search unicode"
 msgstr ""
 
@@ -1262,7 +1262,7 @@ msgstr ""
 msgid "Close virtual keyboard"
 msgstr ""
 
-#: src/module/xkbdbus/xkbdbus.c:218
+#: src/module/xkbdbus/xkbdbus.c:258
 msgid "English (US)"
 msgstr ""
 
@@ -1320,141 +1320,13 @@ msgstr ""
 msgid "X error %i on opcode send"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:397 data/fcitx-autostart.desktop.in:2
+#: src/ui/kimpanel/kimpanel.c:398 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
 msgid "Fcitx"
 msgstr ""
 
-#: src/ui/kimpanel/kimpanel.c:778
+#: src/ui/kimpanel/kimpanel.c:782
 msgid "Toggle Input Method"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/batchdialog.cpp:31
-msgid "Use <Keyword> <Phrase> format on every line."
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:51
-msgid "&Add"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:52
-msgid "&Batch Edit"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:53
-msgid "&Delete"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:54
-msgid "De&lete All"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:55
-msgid "&Import"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:56
-msgid "E&xport"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:57
-msgid "&Operation"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:68
-msgid "Add File"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:69
-msgid "Remove File"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:70
-msgid "Refresh List"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:131
-msgid "Save Changes"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:132
-msgid ""
-"The content has changed.\n"
-"Do you want to save the changes or discard them?"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:148
-msgid "Quick Phrase Editor"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:279
-msgid "Create new file"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:280
-msgid "Please input a filename for newfile"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:285
-msgid "Invalid filename"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:285
-msgid "File name should not contain '/'."
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:295
-#: tools/gui/quickphrase-editor/editor.cpp:342
-msgid "File Operation Failed"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:296
-#, kde-format
-msgid "Cannot create file %1."
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:322
-msgid "Cannot remove system file"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:323
-#, kde-format
-msgid "%1 is a system file, do you want to delete all phrases instead?"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:334
-msgid "Confirm deletion"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:335
-#, kde-format
-msgid "Are you sure to delete %1?"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editor.cpp:343
-#, kde-format
-msgid "Error while deleting %1."
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editordialog.cpp:30
-msgid "Keyword:"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/editordialog.cpp:31
-msgid "Phrase:"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/filelistmodel.cpp:47
-#: src/module/spell/fcitx-spell.desc:5
-msgid "Default"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/model.cpp:56
-msgid "Keyword"
-msgstr ""
-
-#: tools/gui/quickphrase-editor/model.cpp:58
-msgid "Phrase"
 msgstr ""
 
 #: tools/gui/wrapper/mainwindow.cpp:40
@@ -2919,6 +2791,10 @@ msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:1 src/module/spell/fcitx-spell.desc:10
 msgid "Spell Hint"
+msgstr ""
+
+#: src/module/spell/fcitx-spell.desc:5
+msgid "Default"
 msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:6
