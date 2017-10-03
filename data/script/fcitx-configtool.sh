@@ -204,7 +204,7 @@ detectDE
 # even if we are not on KDE, we should still try kde, some wrongly
 # configured kde desktop cannot be detected (usually missing xprop)
 # and if kde one can work, so why not use it if gtk, gtk3 not work?
-# xdg/editor is never a prefered solution
+# xdg/editor is never a preferred solution
 case "$DE" in
     kde)
         order="kde gtk3 gtk xdg editor"

@@ -42,7 +42,7 @@
  * If a key event goes through all phase and still the state is IRV_TO_PROCESS, it will be forwarded.
  *
  * When it comes to update candidates, if the flag contains IRV_FLAG_UPDATE_CANDIDATE_WORDS, it will trigger the GetCandWords
- * of input method engine and clean up all stiring in the input window, after that, it will trigger update candidates hook.
+ * of input method engine and clean up all strings in the input window, after that, it will trigger update candidates hook.
  *
  * Key blocker is useful if you want to do something in the post input phase, but you don't want forward key if they do nothing.
  * There is an default implemention inside fcitx, it will blocks key when raw input buffer is not empty. Those keys
@@ -953,7 +953,7 @@ extern "C" {
     void FcitxInstanceUnregisterIM(struct _FcitxInstance* instance, const char* name);
 
     /**
-     * show current input method infomation, notably it will use GetSubModeName to show the
+     * show current input method information, notably it will use GetSubModeName to show the
      * sub mode name
      *
      * There need to be no other aux preedit string, otherwise it will be rejected.

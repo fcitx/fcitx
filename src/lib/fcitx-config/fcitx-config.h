@@ -495,7 +495,7 @@ boolean name##LoadConfig(type* _cfg) { \
      *
      * @see FcitxConfigParseMultiConfigFileFp
      * @param fp array of file pointers
-     * @param len lenght of fp
+     * @param len length of fp
      * @param fileDesc config file description
      * @return FcitxConfigFile*
      **/
@@ -640,7 +640,7 @@ boolean name##LoadConfig(type* _cfg) { \
      * Get a option description from config file description, return NULL if not found.
      *
      * @param cfdesc config file description
-     * @param groupName gropu name
+     * @param groupName group name
      * @param optionName option name
      * @return const FcitxConfigOptionDesc*
      **/
@@ -651,7 +651,7 @@ boolean name##LoadConfig(type* _cfg) { \
      * Get a option description from config file description, return NULL if not found.
      *
      * @param cfile config file
-     * @param groupName gropu name
+     * @param groupName group name
      * @param optionName option name
      * @return const FcitxConfigOptionDesc*
      *

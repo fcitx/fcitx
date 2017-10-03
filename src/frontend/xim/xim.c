@@ -341,7 +341,7 @@ boolean XimDestroy(void* arg)
 
     /**
      * Destroy the window BEFORE(!!!!!) CloseIM!!!
-     * Work arround for a bug in libX11. See wengxt's commit log:
+     * Work around for a bug in libX11. See wengxt's commit log:
      * f773dd4f7152a4b4b7f406fe01bff466e0de3dc2
      * [xim, x11] correctly shutdown xim, destroy x11 with error handling
      **/

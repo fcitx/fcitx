@@ -101,7 +101,7 @@
 #     Integer types (including char):
 #         Fixed sized integer types:
 #             (intN_t and uintN_t defined in stdint.h) up to N=32 (we are not
-#             interested in running fcitx on a 16 bit processer).
+#             interested in running fcitx on a 16 bit processor).
 #         char:
 #             char, unsigned char, signed char
 #         other integer types:
@@ -154,7 +154,7 @@ Include0="example.h"
 #     it will stop at a missing entry OR an entry with blank value.
 #
 #     The value of these entries are names of macros that will be defined
-#     (or undefined controled by the corresponding group,
+#     (or undefined controlled by the corresponding group,
 #     see Macro Group below) by the api header before any files are included.
 #     This can be used as configure header to control definitions/declarations
 #     if necessary.
@@ -345,7 +345,7 @@ Arg2=boolean
 #             will be inserted as the first argument.
 #     5. Dereference of Result:
 #         This is the final stage you can insert code, in which you can preform
-#         the last simple operation on the result. This is controled by
+#         the last simple operation on the result. This is controlled by
 #         `Res.Deref=` and `Res.DerefType=` with the meaning of
 #         `Res.DerefType=` slightly modified as described above. In addition
 #         to all substitution available in `Inline.Code=` and `Res.Exp=`,

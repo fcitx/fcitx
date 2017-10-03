@@ -931,7 +931,7 @@ fcitx_client_class_init(FcitxClientClass *klass)
     /**
      * FcitxClient::commit-string:
      * @self: A #FcitxClient
-     * @string: string to be commited
+     * @string: string to be committed
      *
      * Emit when input method commit one string
      */
@@ -997,7 +997,7 @@ fcitx_client_class_init(FcitxClientClass *klass)
      * FcitxClient::update-formatted-preedit:
      * @self: A #FcitxClient
      * @preedit: (transfer none) (element-type FcitxPreeditItem): An #FcitxPreeditItem List
-     * @cursor: cursor postion by utf8 byte
+     * @cursor: cursor position by utf8 byte
      *
      * Emit when input method need to delete surrounding text
      */

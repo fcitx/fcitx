@@ -214,17 +214,17 @@ __fcitx_cmake_init()
 #     NO_INSTALL: Do not install any files or compile any sources
 #         useful when the module is disabled but the generated header is needed
 #     SCAN: Generate api header, the path of the input file is determined by the
-#         FXADDON_SRC arguement and the name of the generated header file is
-#         determined by the FXADDON_GEN arguement.
+#         FXADDON_SRC argument and the name of the generated header file is
+#         determined by the FXADDON_GEN argument.
 #     SCAN_PRIV: Generate add function header, the path of the input file is
-#         determined by the FXADDON_SRC arguement and the name of the
-#         generated header file is determined by the ADDFUNCTIONS_GEN arguement.
+#         determined by the FXADDON_SRC argument and the name of the
+#         generated header file is determined by the ADDFUNCTIONS_GEN argument.
 #     SCAN_IN: Generate api header from .in, the path of the fxaddon.in file
 #         (without the .in suffix) is determined by the
-#         FXADDON_SRC arguement and the name of the generated header file is
-#         determined by the FXADDON_GEN arguement.
+#         FXADDON_SRC argument and the name of the generated header file is
+#         determined by the FXADDON_GEN argument.
 #     DESC: Install main config-desc file, the path of the file (with the .desc
-#         suffix) is determined by the DESC_SRC arguement.
+#         suffix) is determined by the DESC_SRC argument.
 #     SCAN_NO_INSTALL: Do not install generated api header.
 # single value arguments:
 #     HEADER_DIR: The subdirectory under fcitx/module to which the header files
@@ -562,7 +562,7 @@ endfunction()
 # from a set of certain type of files, the script must be executable.
 #
 # When classifying source files, the script will be called with -c as the first
-# arguement and the file name as the second one. The script should return 0 in
+# argument and the file name as the second one. The script should return 0 in
 # this case to indicate a source file can be handled and should return non-zero
 # otherwise.
 #
@@ -646,8 +646,8 @@ endif()
 # certain type of files from the translated mo files.
 # The script must be executable.
 #
-# When classifying source files, the script will be called with first arguement
-# the directory name po's parse results are in, the second arguement a file
+# When classifying source files, the script will be called with first argument
+# the directory name po's parse results are in, the second argument a file
 # containing space separated language code and translated po file name
 # in each line, the third argument -c, followed by the file name of the input
 # and output files (argument 4 and 5). The script should decide from the
@@ -655,7 +655,7 @@ endif()
 # conversion and should return 0 if it can or non-zero otherwise.
 #
 # When doing the l18n conversion, the script will be called with arguments
-# the same with the previous case except the thrid argument is -w. The script
+# the same with the previous case except the third argument is -w. The script
 # should read language code list from the file given in the second argument
 # fetch translation from either files in the first argument or po files in
 # the second argument and then use these to l18n input file to output files.
