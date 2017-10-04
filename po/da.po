@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-03 22:03-0700\n"
-"PO-Revision-Date: 2017-09-29 17:03+0000\n"
+"POT-Creation-Date: 2017-10-03 23:02-0700\n"
+"PO-Revision-Date: 2017-10-04 05:04+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -1624,9 +1624,8 @@ msgid "Key"
 msgstr "Tast"
 
 #: src/ui/classic/skin.desc:416
-#, fuzzy
 msgid "Key Color On Virtual Keyboard"
-msgstr "Virtuelt tastatur til/fra"
+msgstr ""
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437

@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-03 22:03-0700\n"
-"PO-Revision-Date: 2017-09-29 17:03+0000\n"
+"POT-Creation-Date: 2017-10-03 23:02-0700\n"
+"PO-Revision-Date: 2017-10-04 05:04+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_CN/)\n"
@@ -1640,9 +1640,8 @@ msgid "Key"
 msgstr "按键"
 
 #: src/ui/classic/skin.desc:416
-#, fuzzy
 msgid "Key Color On Virtual Keyboard"
-msgstr "软键盘按键文字颜色"
+msgstr ""
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -2655,9 +2654,8 @@ msgid "Super+Right Ctrl"
 msgstr "Super+右 Ctrl"
 
 #: data/config.desc:142
-#, fuzzy
 msgid "Switch Embedded Preedit"
-msgstr "切换嵌入预编辑字符串"
+msgstr ""
 
 #: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
