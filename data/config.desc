@@ -139,7 +139,7 @@ Advance=True
 [Hotkey/SwitchPreedit]
 Type=Hotkey
 DefaultValue=CTRL_ALT_P
-Description=Switch Embeded Preedit
+Description=Switch Embedded Preedit
 Advance=True
 
 [Hotkey/PrevWord]

@@ -686,7 +686,7 @@ FcitxConfigSyncResult FcitxConfigOptionChar(FcitxConfigOption *option, FcitxConf
 
 FcitxConfigSyncResult FcitxConfigOptionHotkey(FcitxConfigOption *option, FcitxConfigSync sync)
 {
-    /* we assume all hotkey can have 2 candiate key */
+    /* we assume all hotkey can have 2 candidate key */
     if (!option->value.hotkey)
         return SyncNoBinding;
 

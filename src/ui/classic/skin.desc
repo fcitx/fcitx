@@ -413,7 +413,7 @@ DefaultValue=keyboard.png
 
 [SkinKeyboard/KeyColor]
 Type=Color
-Description=Key Color On Virutal Keyboard
+Description=Key Color On Virtual Keyboard
 DefaultValue=0 0 0
 
 [DescriptionFile]
