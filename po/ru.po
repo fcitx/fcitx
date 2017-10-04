@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-09-29 10:02-0700\n"
-"PO-Revision-Date: 2017-09-19 12:52+0000\n"
-"Last-Translator: TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>\n"
+"POT-Creation-Date: 2017-10-03 22:03-0700\n"
+"PO-Revision-Date: 2017-09-29 17:03+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -1660,7 +1660,8 @@ msgid "Key"
 msgstr "Клавиша"
 
 #: src/ui/classic/skin.desc:416
-msgid "Key Color On Virutal Keyboard"
+#, fuzzy
+msgid "Key Color On Virtual Keyboard"
 msgstr "Цвет клавиши на виртуальной клавиатуре"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
@@ -2696,7 +2697,8 @@ msgid "Super+Right Ctrl"
 msgstr "Super+Правая клавиша Ctrl"
 
 #: data/config.desc:142
-msgid "Switch Embeded Preedit"
+#, fuzzy
+msgid "Switch Embedded Preedit"
 msgstr "Переключение встроенного предварительного редактирования"
 
 #: data/config.desc:114
@@ -3355,94 +3357,3 @@ msgstr "команда xmodmap"
 #, c-format
 msgid "your current font is: %s"
 msgstr "ваш текущий шрифт: %s"
-
-#~ msgid "%1 is a system file, do you want to delete all phrases instead?"
-#~ msgstr "%1 — системный файл. Хотите вместо этого удалить все фразы?"
-
-#~ msgid "&Add"
-#~ msgstr "&Добавить"
-
-#~ msgid "&Batch Edit"
-#~ msgstr "&Групповое редактирование"
-
-#~ msgid "&Delete"
-#~ msgstr "&Удалить"
-
-#~ msgid "&Import"
-#~ msgstr "&Импорт"
-
-#~ msgid "&Operation"
-#~ msgstr "&Операция"
-
-#~ msgid "Add File"
-#~ msgstr "Добавить файл"
-
-#~ msgid "Are you sure to delete %1?"
-#~ msgstr "Действительно удалить %1?"
-
-#~ msgid "Cannot create file %1."
-#~ msgstr "Не удалось создать файл %1."
-
-#~ msgid "Cannot remove system file"
-#~ msgstr "Не удалось удалить системный файл"
-
-#~ msgid "Confirm deletion"
-#~ msgstr "Подтвердите удаление"
-
-#~ msgid "Create new file"
-#~ msgstr "Создать новый файл"
-
-#~ msgid "De&lete All"
-#~ msgstr "Уд&алить все"
-
-#~ msgid "E&xport"
-#~ msgstr "&Экспорт"
-
-#~ msgid "Error while deleting %1."
-#~ msgstr "Ошибка при удалении %1."
-
-#~ msgid "File Operation Failed"
-#~ msgstr "Сбой операции с файлом"
-
-#~ msgid "File name should not contain '/'."
-#~ msgstr "Имя файла не должно содержать '/'."
-
-#~ msgid "Invalid filename"
-#~ msgstr "Недопустимое имя файла"
-
-#~ msgid "Keyword"
-#~ msgstr "Ключевое слово"
-
-#~ msgid "Keyword:"
-#~ msgstr "Ключевое слово:"
-
-#~ msgid "Phrase"
-#~ msgstr "Фраза"
-
-#~ msgid "Phrase:"
-#~ msgstr "Фраза:"
-
-#~ msgid "Please input a filename for newfile"
-#~ msgstr "Введите имя для нового файла"
-
-#~ msgid "Quick Phrase Editor"
-#~ msgstr "Быстрый редактор фраз"
-
-#~ msgid "Refresh List"
-#~ msgstr "Обновить список"
-
-#~ msgid "Remove File"
-#~ msgstr "Удалить файл"
-
-#~ msgid "Save Changes"
-#~ msgstr "Сохранить изменения"
-
-#~ msgid ""
-#~ "The content has changed.\n"
-#~ "Do you want to save the changes or discard them?"
-#~ msgstr ""
-#~ "Содержимое изменилось.\n"
-#~ "Сохранить изменения или отменить их?"
-
-#~ msgid "Use <Keyword> <Phrase> format on every line."
-#~ msgstr "Использовать для каждой строки формат <Ключевое слово> <Фраза>."

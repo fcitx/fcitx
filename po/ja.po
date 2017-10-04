@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-09-29 10:02-0700\n"
-"PO-Revision-Date: 2017-09-19 11:55+0000\n"
+"POT-Creation-Date: 2017-10-03 22:03-0700\n"
+"PO-Revision-Date: 2017-09-29 17:03+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "Language: ja\n"
@@ -1651,7 +1651,8 @@ msgid "Key"
 msgstr "キー"
 
 #: src/ui/classic/skin.desc:416
-msgid "Key Color On Virutal Keyboard"
+#, fuzzy
+msgid "Key Color On Virtual Keyboard"
 msgstr "仮想キーボードのキーの色"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
@@ -2668,7 +2669,8 @@ msgid "Super+Right Ctrl"
 msgstr "Super+右Ctrl"
 
 #: data/config.desc:142
-msgid "Switch Embeded Preedit"
+#, fuzzy
+msgid "Switch Embedded Preedit"
 msgstr "組み込みプレエディットに切り替え"
 
 #: data/config.desc:114
@@ -3306,94 +3308,3 @@ msgstr "xmodmap コマンド"
 #, c-format
 msgid "your current font is: %s"
 msgstr "あなたの現在のフォントは %s です"
-
-#~ msgid "%1 is a system file, do you want to delete all phrases instead?"
-#~ msgstr "%1 はシステムファイルです。代わりにすべてのフレーズを削除しますか?"
-
-#~ msgid "&Add"
-#~ msgstr "追加 (&A)"
-
-#~ msgid "&Batch Edit"
-#~ msgstr "バッチ編集 (&B)"
-
-#~ msgid "&Delete"
-#~ msgstr "削除 (&D)"
-
-#~ msgid "&Import"
-#~ msgstr "インポート (&I)"
-
-#~ msgid "&Operation"
-#~ msgstr "操作(&O)"
-
-#~ msgid "Add File"
-#~ msgstr "ファイル追加"
-
-#~ msgid "Are you sure to delete %1?"
-#~ msgstr "本当に %1 を削除しますか?"
-
-#~ msgid "Cannot create file %1."
-#~ msgstr "%1 ファイルを作成できません。"
-
-#~ msgid "Cannot remove system file"
-#~ msgstr "システムファイルは削除出来ません。"
-
-#~ msgid "Confirm deletion"
-#~ msgstr "削除の確認"
-
-#~ msgid "Create new file"
-#~ msgstr "ファイルの新規作成"
-
-#~ msgid "De&lete All"
-#~ msgstr "全削除 (&l)"
-
-#~ msgid "E&xport"
-#~ msgstr "エクスポート (&x)"
-
-#~ msgid "Error while deleting %1."
-#~ msgstr "%1 の削除中にエラーが起きました。"
-
-#~ msgid "File Operation Failed"
-#~ msgstr "ファイル処理に失敗しました"
-
-#~ msgid "File name should not contain '/'."
-#~ msgstr "ファイル名に '/' は含められません。"
-
-#~ msgid "Invalid filename"
-#~ msgstr "無効なファイル名"
-
-#~ msgid "Keyword"
-#~ msgstr "キーワード"
-
-#~ msgid "Keyword:"
-#~ msgstr "キーワード:"
-
-#~ msgid "Phrase"
-#~ msgstr "フレーズ"
-
-#~ msgid "Phrase:"
-#~ msgstr "フレーズ:"
-
-#~ msgid "Please input a filename for newfile"
-#~ msgstr "新しいファイルのファイル名を入力してください"
-
-#~ msgid "Quick Phrase Editor"
-#~ msgstr "クイックフレーズ エディター"
-
-#~ msgid "Refresh List"
-#~ msgstr "リストの更新"
-
-#~ msgid "Remove File"
-#~ msgstr "ファイル削除"
-
-#~ msgid "Save Changes"
-#~ msgstr "変更の保存"
-
-#~ msgid ""
-#~ "The content has changed.\n"
-#~ "Do you want to save the changes or discard them?"
-#~ msgstr ""
-#~ "内容が変更されています。\n"
-#~ "変更を保存しますか?それとも変更を破棄しますか?"
-
-#~ msgid "Use <Keyword> <Phrase> format on every line."
-#~ msgstr "各行では <Keyword> <Phrase> の形式を使用してください。"

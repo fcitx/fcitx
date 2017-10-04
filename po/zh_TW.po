@@ -20,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-09-29 10:02-0700\n"
-"PO-Revision-Date: 2017-09-19 11:03+0000\n"
-"Last-Translator: PHLin <Cypressyew@gmail.com>\n"
+"POT-Creation-Date: 2017-10-03 22:03-0700\n"
+"PO-Revision-Date: 2017-09-29 17:03+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -1644,7 +1644,8 @@ msgid "Key"
 msgstr "按鍵"
 
 #: src/ui/classic/skin.desc:416
-msgid "Key Color On Virutal Keyboard"
+#, fuzzy
+msgid "Key Color On Virtual Keyboard"
 msgstr "虛擬鍵盤按鍵顏色"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
@@ -2658,7 +2659,8 @@ msgid "Super+Right Ctrl"
 msgstr "Super+右 Ctrl"
 
 #: data/config.desc:142
-msgid "Switch Embeded Preedit"
+#, fuzzy
+msgid "Switch Embedded Preedit"
 msgstr "切換嵌入預編輯字串"
 
 #: data/config.desc:114
@@ -3295,94 +3297,3 @@ msgstr "xmodmap 指令"
 #, c-format
 msgid "your current font is: %s"
 msgstr "目前使用的字型：%s"
-
-#~ msgid "%1 is a system file, do you want to delete all phrases instead?"
-#~ msgstr "%1 是系統檔，您是否想要改為清空所有字詞？"
-
-#~ msgid "&Add"
-#~ msgstr "新增 (&A)"
-
-#~ msgid "&Batch Edit"
-#~ msgstr "批次編輯 (&B)"
-
-#~ msgid "&Delete"
-#~ msgstr "刪除 (&D)"
-
-#~ msgid "&Import"
-#~ msgstr "匯入 (&I)"
-
-#~ msgid "&Operation"
-#~ msgstr "操作 (&O)"
-
-#~ msgid "Add File"
-#~ msgstr "加入檔案"
-
-#~ msgid "Are you sure to delete %1?"
-#~ msgstr "您確定要刪除 %1？"
-
-#~ msgid "Cannot create file %1."
-#~ msgstr "無法建立檔案 %1。"
-
-#~ msgid "Cannot remove system file"
-#~ msgstr "無法移除系統檔案"
-
-#~ msgid "Confirm deletion"
-#~ msgstr "確定刪除"
-
-#~ msgid "Create new file"
-#~ msgstr "建立新檔"
-
-#~ msgid "De&lete All"
-#~ msgstr "全部刪除 (&L)"
-
-#~ msgid "E&xport"
-#~ msgstr "匯出 (&X)"
-
-#~ msgid "Error while deleting %1."
-#~ msgstr "刪除 %1 時出錯。"
-
-#~ msgid "File Operation Failed"
-#~ msgstr "檔案操作失敗"
-
-#~ msgid "File name should not contain '/'."
-#~ msgstr "檔案名稱不能有「/」。"
-
-#~ msgid "Invalid filename"
-#~ msgstr "無效的檔案名稱"
-
-#~ msgid "Keyword"
-#~ msgstr "關鍵字"
-
-#~ msgid "Keyword:"
-#~ msgstr "關鍵字："
-
-#~ msgid "Phrase"
-#~ msgstr "字詞"
-
-#~ msgid "Phrase:"
-#~ msgstr "字詞："
-
-#~ msgid "Please input a filename for newfile"
-#~ msgstr "請輸入新檔案的名稱"
-
-#~ msgid "Quick Phrase Editor"
-#~ msgstr "快速輸入編輯器"
-
-#~ msgid "Refresh List"
-#~ msgstr "更新列表"
-
-#~ msgid "Remove File"
-#~ msgstr "移除檔案"
-
-#~ msgid "Save Changes"
-#~ msgstr "儲存修改"
-
-#~ msgid ""
-#~ "The content has changed.\n"
-#~ "Do you want to save the changes or discard them?"
-#~ msgstr ""
-#~ "內容已修改。\n"
-#~ "您想要儲存還是放棄這些修改？"
-
-#~ msgid "Use <Keyword> <Phrase> format on every line."
-#~ msgstr "每一行請使用 <Keyword> <Phrase> 格式。"

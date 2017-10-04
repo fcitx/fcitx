@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-09-29 10:02-0700\n"
-"PO-Revision-Date: 2017-09-23 18:54+0000\n"
-"Last-Translator: mar well <m.wellendorf@gmx.de>\n"
+"POT-Creation-Date: 2017-10-03 22:03-0700\n"
+"PO-Revision-Date: 2017-09-29 17:03+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1659,7 +1659,8 @@ msgid "Key"
 msgstr "Taste"
 
 #: src/ui/classic/skin.desc:416
-msgid "Key Color On Virutal Keyboard"
+#, fuzzy
+msgid "Key Color On Virtual Keyboard"
 msgstr "Icon für Virtuelle Tastatur"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
@@ -2692,7 +2693,8 @@ msgid "Super+Right Ctrl"
 msgstr "Super+Ctrl_R"
 
 #: data/config.desc:142
-msgid "Switch Embeded Preedit"
+#, fuzzy
+msgid "Switch Embedded Preedit"
 msgstr "Wechsel zum eingebetteten Preedit"
 
 #: data/config.desc:114
@@ -3355,95 +3357,3 @@ msgstr "xmodmap Befehl"
 #, c-format
 msgid "your current font is: %s"
 msgstr "der aktuelle Font ist: %s"
-
-#~ msgid "%1 is a system file, do you want to delete all phrases instead?"
-#~ msgstr ""
-#~ "%1 ist eine Systemdatei, wollen Sie stattdessen alle Phrasen löschen?"
-
-#~ msgid "&Add"
-#~ msgstr "&Hinzufügen"
-
-#~ msgid "&Batch Edit"
-#~ msgstr "&Stapelbearbeitung"
-
-#~ msgid "&Delete"
-#~ msgstr "&Löschen"
-
-#~ msgid "&Import"
-#~ msgstr "&Importieren"
-
-#~ msgid "&Operation"
-#~ msgstr "&Operation"
-
-#~ msgid "Add File"
-#~ msgstr "Datei hinzufügen"
-
-#~ msgid "Are you sure to delete %1?"
-#~ msgstr "Wollen Sie %1 wirklich löschen?"
-
-#~ msgid "Cannot create file %1."
-#~ msgstr "Datei %1 kann nicht erstellt werden."
-
-#~ msgid "Cannot remove system file"
-#~ msgstr "Systemdatei kann nicht entfernt werden."
-
-#~ msgid "Confirm deletion"
-#~ msgstr "Löschen bestätigen"
-
-#~ msgid "Create new file"
-#~ msgstr "Neue Datei erzeugen"
-
-#~ msgid "De&lete All"
-#~ msgstr "De&lete All"
-
-#~ msgid "E&xport"
-#~ msgstr "E&xport"
-
-#~ msgid "Error while deleting %1."
-#~ msgstr "Fehler beim Löschen von %1."
-
-#~ msgid "File Operation Failed"
-#~ msgstr "Dateioperation fehlgeschlagen"
-
-#~ msgid "File name should not contain '/'."
-#~ msgstr "Dateiname darf kein '/' enthalten."
-
-#~ msgid "Invalid filename"
-#~ msgstr "Ungültiger Dateiname"
-
-#~ msgid "Keyword"
-#~ msgstr "Schlüsselwort"
-
-#~ msgid "Keyword:"
-#~ msgstr "Schlüsselwort:"
-
-#~ msgid "Phrase"
-#~ msgstr "Phrase"
-
-#~ msgid "Phrase:"
-#~ msgstr "Phrase:"
-
-#~ msgid "Please input a filename for newfile"
-#~ msgstr "Bitte für die neue Datei einen Namen eingeben"
-
-#~ msgid "Quick Phrase Editor"
-#~ msgstr "Quick Phrase Editor"
-
-#~ msgid "Refresh List"
-#~ msgstr "Liste neu laden"
-
-#~ msgid "Remove File"
-#~ msgstr "Datei entfernen"
-
-#~ msgid "Save Changes"
-#~ msgstr "Änderungen speichern"
-
-#~ msgid ""
-#~ "The content has changed.\n"
-#~ "Do you want to save the changes or discard them?"
-#~ msgstr ""
-#~ "Der Inhalt hat sich geändert.\n"
-#~ "Möchten Sie die Änderungen speichern oder verwerfen?"
-
-#~ msgid "Use <Keyword> <Phrase> format on every line."
-#~ msgstr "Benutze  <Keyword> <Phrase> Format in jeder Linie."

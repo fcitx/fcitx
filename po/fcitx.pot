@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-09-29 10:02-0700\n"
+"POT-Creation-Date: 2017-10-03 22:03-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1896,7 +1896,7 @@ msgid "Saving All Config and Input History"
 msgstr ""
 
 #: data/config.desc:142
-msgid "Switch Embeded Preedit"
+msgid "Switch Embedded Preedit"
 msgstr ""
 
 #: data/config.desc:148
@@ -3248,5 +3248,5 @@ msgid "Virtual Keyboard Image"
 msgstr ""
 
 #: src/ui/classic/skin.desc:416
-msgid "Key Color On Virutal Keyboard"
+msgid "Key Color On Virtual Keyboard"
 msgstr ""

@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-09-29 10:02-0700\n"
-"PO-Revision-Date: 2017-09-23 10:19+0000\n"
-"Last-Translator: Riwan BEN EZZEDDINE <riwan.benezzeddine@gmail.com>\n"
+"POT-Creation-Date: 2017-10-03 22:03-0700\n"
+"PO-Revision-Date: 2017-09-29 17:03+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/fcitx/fcitx/language/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1622,7 +1622,7 @@ msgid "Key"
 msgstr ""
 
 #: src/ui/classic/skin.desc:416
-msgid "Key Color On Virutal Keyboard"
+msgid "Key Color On Virtual Keyboard"
 msgstr ""
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
@@ -2634,7 +2634,7 @@ msgid "Super+Right Ctrl"
 msgstr ""
 
 #: data/config.desc:142
-msgid "Switch Embeded Preedit"
+msgid "Switch Embedded Preedit"
 msgstr ""
 
 #: data/config.desc:114

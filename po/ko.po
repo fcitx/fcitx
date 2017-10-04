@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-09-29 10:02-0700\n"
-"PO-Revision-Date: 2017-09-23 18:10+0000\n"
-"Last-Translator: Bon Keun Seo <scobyseo@gmail.com>\n"
+"POT-Creation-Date: 2017-10-03 22:03-0700\n"
+"PO-Revision-Date: 2017-09-29 17:03+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -1641,7 +1641,8 @@ msgid "Key"
 msgstr "키"
 
 #: src/ui/classic/skin.desc:416
-msgid "Key Color On Virutal Keyboard"
+#, fuzzy
+msgid "Key Color On Virtual Keyboard"
 msgstr "가상 키보드의 키색"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
@@ -2658,7 +2659,8 @@ msgid "Super+Right Ctrl"
 msgstr "Super+오른쪽 Ctrl"
 
 #: data/config.desc:142
-msgid "Switch Embeded Preedit"
+#, fuzzy
+msgid "Switch Embedded Preedit"
 msgstr "내장 사전 전환"
 
 #: data/config.desc:114
@@ -3300,94 +3302,3 @@ msgstr "xmodmap 명령"
 #, c-format
 msgid "your current font is: %s"
 msgstr "현재 글꼴: %s"
-
-#~ msgid "%1 is a system file, do you want to delete all phrases instead?"
-#~ msgstr "%1 은 시스템 파일입니다. 모든 구절을 대신 지우겠습니까?"
-
-#~ msgid "&Add"
-#~ msgstr "추가(&A)"
-
-#~ msgid "&Batch Edit"
-#~ msgstr "일괄수정(&B)"
-
-#~ msgid "&Delete"
-#~ msgstr "지우기(&D)"
-
-#~ msgid "&Import"
-#~ msgstr "가져오기(&I)"
-
-#~ msgid "&Operation"
-#~ msgstr "작동(&O)"
-
-#~ msgid "Add File"
-#~ msgstr "파일 추가"
-
-#~ msgid "Are you sure to delete %1?"
-#~ msgstr "%1을(를) 지우시겠습니까?"
-
-#~ msgid "Cannot create file %1."
-#~ msgstr "파일 %1을 만들수 없습니다."
-
-#~ msgid "Cannot remove system file"
-#~ msgstr "시스템 파일을 지울 수 없음"
-
-#~ msgid "Confirm deletion"
-#~ msgstr "지우기 확인"
-
-#~ msgid "Create new file"
-#~ msgstr "새로운 파일 생성"
-
-#~ msgid "De&lete All"
-#~ msgstr "모두 지우기(&l)"
-
-#~ msgid "E&xport"
-#~ msgstr "가저오기(&x)"
-
-#~ msgid "Error while deleting %1."
-#~ msgstr "%1을 지우는 중 오류 발생"
-
-#~ msgid "File Operation Failed"
-#~ msgstr "파일 동작 실패"
-
-#~ msgid "File name should not contain '/'."
-#~ msgstr "파일명에 '/'가 포함되지 않아야 합니다."
-
-#~ msgid "Invalid filename"
-#~ msgstr "잘못된 파일명"
-
-#~ msgid "Keyword"
-#~ msgstr "키워드"
-
-#~ msgid "Keyword:"
-#~ msgstr "키워드:"
-
-#~ msgid "Phrase"
-#~ msgstr "문구"
-
-#~ msgid "Phrase:"
-#~ msgstr "문장:"
-
-#~ msgid "Please input a filename for newfile"
-#~ msgstr "새 파일의 이름을 입력"
-
-#~ msgid "Quick Phrase Editor"
-#~ msgstr "상용구 편집기"
-
-#~ msgid "Refresh List"
-#~ msgstr "리스트 갱신"
-
-#~ msgid "Remove File"
-#~ msgstr "파일 지우기"
-
-#~ msgid "Save Changes"
-#~ msgstr "변경 저장"
-
-#~ msgid ""
-#~ "The content has changed.\n"
-#~ "Do you want to save the changes or discard them?"
-#~ msgstr ""
-#~ "내용이 변했습니다.\n"
-#~ "변경사항을 저장할까요?"
-
-#~ msgid "Use <Keyword> <Phrase> format on every line."
-#~ msgstr "모든 행에 <Keyword> <Phrase> 형식을 사용합니다."

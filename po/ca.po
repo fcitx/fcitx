@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-09-29 10:02-0700\n"
-"PO-Revision-Date: 2017-09-23 01:20+0000\n"
-"Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
+"POT-Creation-Date: 2017-10-03 22:03-0700\n"
+"PO-Revision-Date: 2017-09-29 17:03+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -1669,7 +1669,8 @@ msgid "Key"
 msgstr "Tecla"
 
 #: src/ui/classic/skin.desc:416
-msgid "Key Color On Virutal Keyboard"
+#, fuzzy
+msgid "Key Color On Virtual Keyboard"
 msgstr "Color de la tecla al teclat virtual"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
@@ -2706,7 +2707,8 @@ msgid "Super+Right Ctrl"
 msgstr "Súper + CTRL dreta"
 
 #: data/config.desc:142
-msgid "Switch Embeded Preedit"
+#, fuzzy
+msgid "Switch Embedded Preedit"
 msgstr "Commuta la pre-edició incrustada"
 
 #: data/config.desc:114
@@ -3372,95 +3374,3 @@ msgstr "ordre xmodmap"
 #, c-format
 msgid "your current font is: %s"
 msgstr "el vostre tipus de lletra actual és: %s"
-
-#~ msgid "%1 is a system file, do you want to delete all phrases instead?"
-#~ msgstr ""
-#~ "%1 és un fitxer de sistema, voleu eliminar en canvi totes les frases?"
-
-#~ msgid "&Add"
-#~ msgstr "&Afegeix"
-
-#~ msgid "&Batch Edit"
-#~ msgstr "Edita en &batch"
-
-#~ msgid "&Delete"
-#~ msgstr "&Elimina"
-
-#~ msgid "&Import"
-#~ msgstr "&Importa"
-
-#~ msgid "&Operation"
-#~ msgstr "&Operació"
-
-#~ msgid "Add File"
-#~ msgstr "Afegeix un fitxer"
-
-#~ msgid "Are you sure to delete %1?"
-#~ msgstr "Segur que voleu eliminar %1?"
-
-#~ msgid "Cannot create file %1."
-#~ msgstr "No es pot crear el fitxer %1."
-
-#~ msgid "Cannot remove system file"
-#~ msgstr "No es pot eliminar el fitxer de sistema"
-
-#~ msgid "Confirm deletion"
-#~ msgstr "Confirma l'eliminació"
-
-#~ msgid "Create new file"
-#~ msgstr "Crea un fitxer nou"
-
-#~ msgid "De&lete All"
-#~ msgstr "E&limina tot"
-
-#~ msgid "E&xport"
-#~ msgstr "E&xporta"
-
-#~ msgid "Error while deleting %1."
-#~ msgstr "S'ha produït un error quan s'estava eliminant %1."
-
-#~ msgid "File Operation Failed"
-#~ msgstr "Ha fallat l'operació de fitxer"
-
-#~ msgid "File name should not contain '/'."
-#~ msgstr "El nom de fitxer no hauria de contenir «'»."
-
-#~ msgid "Invalid filename"
-#~ msgstr "Nom de fitxer no vàlid"
-
-#~ msgid "Keyword"
-#~ msgstr "Paraula clau"
-
-#~ msgid "Keyword:"
-#~ msgstr "Paraula clau:"
-
-#~ msgid "Phrase"
-#~ msgstr "Frase"
-
-#~ msgid "Phrase:"
-#~ msgstr "Frase:"
-
-#~ msgid "Please input a filename for newfile"
-#~ msgstr "Si us plau entre un nom de fitxer per al fitxer nou"
-
-#~ msgid "Quick Phrase Editor"
-#~ msgstr "Editor ràpid de frases"
-
-#~ msgid "Refresh List"
-#~ msgstr "Actualitza la llista"
-
-#~ msgid "Remove File"
-#~ msgstr "Elimina un fitxer"
-
-#~ msgid "Save Changes"
-#~ msgstr "Desa els canvis"
-
-#~ msgid ""
-#~ "The content has changed.\n"
-#~ "Do you want to save the changes or discard them?"
-#~ msgstr ""
-#~ "El contingut ha canviat.\n"
-#~ "Voleu desar els canvis o descartar-los?"
-
-#~ msgid "Use <Keyword> <Phrase> format on every line."
-#~ msgstr "Useu el format <Paraula clau><Frase> a cada línia."

@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-09-29 10:02-0700\n"
-"PO-Revision-Date: 2017-09-23 10:41+0000\n"
-"Last-Translator: scootergrisen\n"
+"POT-Creation-Date: 2017-10-03 22:03-0700\n"
+"PO-Revision-Date: 2017-09-29 17:03+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -1624,8 +1624,9 @@ msgid "Key"
 msgstr "Tast"
 
 #: src/ui/classic/skin.desc:416
-msgid "Key Color On Virutal Keyboard"
-msgstr ""
+#, fuzzy
+msgid "Key Color On Virtual Keyboard"
+msgstr "Virtuelt tastatur til/fra"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -2636,7 +2637,7 @@ msgid "Super+Right Ctrl"
 msgstr "Super+Højre Ctrl"
 
 #: data/config.desc:142
-msgid "Switch Embeded Preedit"
+msgid "Switch Embedded Preedit"
 msgstr ""
 
 #: data/config.desc:114
@@ -3253,69 +3254,3 @@ msgstr "xmodmap-kommando"
 #, c-format
 msgid "your current font is: %s"
 msgstr "din nuværende skrifttype er: %s"
-
-#~ msgid "&Add"
-#~ msgstr "&Tilføj"
-
-#~ msgid "&Batch Edit"
-#~ msgstr "&Batch-redigering"
-
-#~ msgid "&Delete"
-#~ msgstr "&Slet"
-
-#~ msgid "&Import"
-#~ msgstr "&Importér"
-
-#~ msgid "&Operation"
-#~ msgstr "&Handling"
-
-#~ msgid "Add File"
-#~ msgstr "Tilføj fil"
-
-#~ msgid "Are you sure to delete %1?"
-#~ msgstr "Er du sikker på, at du vil slette %1?"
-
-#~ msgid "Cannot create file %1."
-#~ msgstr "Kan ikke oprette filen %1."
-
-#~ msgid "Cannot remove system file"
-#~ msgstr "Kan ikke fjerne systemfil"
-
-#~ msgid "Confirm deletion"
-#~ msgstr "Bekræft sletning"
-
-#~ msgid "Create new file"
-#~ msgstr "Opret ny fil"
-
-#~ msgid "De&lete All"
-#~ msgstr "Slet &alle"
-
-#~ msgid "E&xport"
-#~ msgstr "&Eksportér"
-
-#~ msgid "Error while deleting %1."
-#~ msgstr "Fejl ved sletning af %1."
-
-#~ msgid "File Operation Failed"
-#~ msgstr "Filhandling mislykkedes"
-
-#~ msgid "File name should not contain '/'."
-#~ msgstr "Filnavn må ikke indeholde '/'."
-
-#~ msgid "Invalid filename"
-#~ msgstr "Ugyldigt filnavn"
-
-#~ msgid "Keyword"
-#~ msgstr "Nøgleord"
-
-#~ msgid "Keyword:"
-#~ msgstr "Nøgleord:"
-
-#~ msgid "Refresh List"
-#~ msgstr "Genopfrisk liste"
-
-#~ msgid "Remove File"
-#~ msgstr "Fjern fil"
-
-#~ msgid "Save Changes"
-#~ msgstr "Gem ændringer"
