@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-11 07:02-0700\n"
-"PO-Revision-Date: 2017-10-11 13:42+0000\n"
+"POT-Creation-Date: 2017-10-11 12:02-0700\n"
+"PO-Revision-Date: 2017-10-11 18:27+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -871,7 +871,7 @@ msgstr ""
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
 msgid "Disable Pinyin Symbol"
-msgstr ""
+msgstr "Deaktivér Pinyin-symbol"
 
 #: src/lib/fcitx/addon.c:298
 #, c-format
@@ -2707,7 +2707,7 @@ msgstr "Symbol"
 
 #: src/im/table/table.desc:131
 msgid "Symbol File"
-msgstr ""
+msgstr "Symbolfil"
 
 #: data/script/fcitx-diagnose.sh:743
 msgid "System Info:"
