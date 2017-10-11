@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-03 23:02-0700\n"
-"PO-Revision-Date: 2017-10-04 05:04+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2017-10-11 07:02-0700\n"
+"PO-Revision-Date: 2017-10-11 13:42+0000\n"
+"Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -146,7 +146,7 @@ msgstr "Aktiv"
 
 #: src/ui/classic/skin.desc:387
 msgid "Active Menu Color"
-msgstr ""
+msgstr "Farve for aktiv menu"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -154,7 +154,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:81
 msgid "Active Mode Icon"
-msgstr ""
+msgstr "Ikon for aktiv tilstand"
 
 #: src/ui/classic/skin.desc:172
 msgid "Active Text Icon Color"
@@ -174,7 +174,7 @@ msgstr ""
 
 #: src/im/table/fcitx-table.desc:4
 msgid "Add Phrase"
-msgstr ""
+msgstr "Tilføj frase"
 
 #: src/module/unicode/fcitx-unicode.conf.in:4
 msgid "Add Unicode Typing Support"
@@ -274,7 +274,7 @@ msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:13
 msgid "Alternative Trigger Key for QuickPhrase"
-msgstr ""
+msgstr "Alternativ udløsertast til hurtigfrase"
 
 #: data/config.desc:220 data/config.desc:226 data/config.desc:232
 #: data/config.desc:238 data/config.desc:244 data/config.desc:250
@@ -304,7 +304,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:33
 msgid "Auto Create Phrase"
-msgstr ""
+msgstr "Automatisk oprettelse af frase"
 
 #: src/module/autoeng/fcitx-autoeng.desc:1
 #: src/module/autoeng/fcitx-autoeng.desc:11
@@ -312,11 +312,11 @@ msgstr ""
 #: src/module/autoeng/fcitx-autoeng.desc:26
 #: src/module/autoeng/fcitx-autoeng.desc:34
 msgid "Auto English"
-msgstr ""
+msgstr "Automatisk engelsk"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:3
 msgid "Auto English Mode"
-msgstr ""
+msgstr "Automatisk engelsk tilstand"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:9
 msgid "Auto English Trigger Word"
@@ -324,15 +324,15 @@ msgstr ""
 
 #: src/im/table/table.desc:88
 msgid "Auto Phrase"
-msgstr ""
+msgstr "Automatisk frase"
 
 #: src/im/table/table.desc:98
 msgid "Auto Phrase Length"
-msgstr ""
+msgstr "Automatisk fraselængde"
 
 #: src/im/table/table.desc:103
 msgid "Auto Phrase Phrase"
-msgstr ""
+msgstr "Automatisk frase-frase"
 
 #: src/im/table/table.desc:49
 msgid "Auto Send Candidate Word"
@@ -402,7 +402,7 @@ msgstr "Kan ikke åbne socket %s: %s"
 
 #: src/ui/classic/skin.desc:41
 msgid "Candidate Index Color"
-msgstr ""
+msgstr "Farve for kandidatindeks"
 
 #: src/im/table/table.desc:117
 msgid "Candidate Table Layout"
@@ -671,7 +671,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:257
 msgid "Color of Cursor"
-msgstr ""
+msgstr "Farve for markør"
 
 #: data/addon.desc:12
 msgid "Comment"
@@ -839,7 +839,7 @@ msgstr "Standard inputmetoder:"
 
 #: src/im/table/fcitx-table.desc:9
 msgid "Delete Phrase"
-msgstr ""
+msgstr "Slet frase"
 
 #: data/addon.desc:43
 msgid "Dependency"
@@ -969,7 +969,7 @@ msgstr "Engelsk (USA)"
 
 #: src/ui/classic/skin.desc:77
 msgid "English Mode Icon"
-msgstr ""
+msgstr "Ikon for engelsk tilstand"
 
 #: src/lib/fcitx-config/fcitx-config.c:400
 msgid "Enum Option is invalid, take it as string"
@@ -1139,7 +1139,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:45
 msgid "First Candidate Color"
-msgstr ""
+msgstr "Farve for første kandidat"
 
 #: src/im/table/table.desc:198
 msgid "First Candidate Display as Preedit"
@@ -1464,7 +1464,7 @@ msgstr ""
 
 #: src/im/table/table.desc:11
 msgid "Icon Name"
-msgstr ""
+msgstr "Ikonnavn"
 
 #: data/inputmethod.desc:11
 msgid "IconName"
@@ -1534,7 +1534,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:37
 msgid "Input Message Color"
-msgstr ""
+msgstr "Farve for inputmeddelelse"
 
 #: src/lib/fcitx/ime.c:1695 src/module/notificationitem/notificationitem.c:411
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
@@ -1728,7 +1728,7 @@ msgstr ""
 
 #: src/im/table/tabledict.c:341
 msgid "Load Autophrase OK"
-msgstr ""
+msgstr "Indlæsning af automatisk frase OK"
 
 #: src/im/table/tabledict.c:248
 msgid "Load Table Dict OK"
@@ -1736,7 +1736,7 @@ msgstr ""
 
 #: src/im/table/tabledict.c:285
 msgid "Loading Autophrase."
-msgstr ""
+msgstr "Indlæser automatisk frase."
 
 #: src/im/table/tabledict.c:41
 msgid "Loading Table Dict"
@@ -2038,7 +2038,7 @@ msgstr "PrProgram"
 
 #: src/im/table/table.c:1395
 msgid "Phrase is already in Dict "
-msgstr ""
+msgstr "Frase findes allerede i ordbog"
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -2215,11 +2215,11 @@ msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
-msgstr ""
+msgstr "Hurtigfraseliste"
 
 #: src/module/quickphrase/quickphrase.c:378
 msgid "Quick Phrase: "
-msgstr ""
+msgstr "Hurtigfrase:"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:1
 #: src/module/quickphrase/fcitx-quickphrase.desc:10
@@ -2227,11 +2227,11 @@ msgstr ""
 #: src/module/quickphrase/fcitx-quickphrase.desc:25
 #: src/module/quickphrase/fcitx-quickphrase.desc:31
 msgid "QuickPhrase"
-msgstr ""
+msgstr "Hurtigfrase"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:3
 msgid "Quickphrase"
-msgstr ""
+msgstr "Hurtigfrase"
 
 #: src/im/qw/qw.c:64 src/im/qw/fcitx-qw.conf.in:3 src/im/qw/qw.conf.in:3
 msgid "Quwei"
@@ -2348,11 +2348,11 @@ msgstr "SKIFT begge"
 
 #: src/im/pinyin/fcitx-pinyin.desc:38
 msgid "Save Auto Created Phrase"
-msgstr ""
+msgstr "Gem automatisk oprettelse af frase"
 
 #: src/im/table/table.desc:108
 msgid "Save Auto Phrase"
-msgstr ""
+msgstr "Gem automatisk frase"
 
 #: src/module/clipboard/fcitx-clipboard.desc:4
 msgid "Save Clipboard History To File"
@@ -2646,47 +2646,47 @@ msgstr ""
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
 msgid "Switch to the Eighth Input Method"
-msgstr ""
+msgstr "Skift til den ottende inputmetode"
 
 #: src/module/imselector/fcitx-imselector.desc:39
 #: src/module/imselector/fcitx-imselector.desc:84
 msgid "Switch to the Fifth Input Method"
-msgstr ""
+msgstr "Skift til den femte inputmetode"
 
 #: src/module/imselector/fcitx-imselector.desc:19
 #: src/module/imselector/fcitx-imselector.desc:64
 msgid "Switch to the First Input Method"
-msgstr ""
+msgstr "Skift til den første inputmetode"
 
 #: src/module/imselector/fcitx-imselector.desc:34
 #: src/module/imselector/fcitx-imselector.desc:79
 msgid "Switch to the Fourth Input Method"
-msgstr ""
+msgstr "Skift til den fjerde inputmetode"
 
 #: src/module/imselector/fcitx-imselector.desc:59
 #: src/module/imselector/fcitx-imselector.desc:104
 msgid "Switch to the Ninth Input Method"
-msgstr ""
+msgstr "Skift til den niende inputmetode"
 
 #: src/module/imselector/fcitx-imselector.desc:24
 #: src/module/imselector/fcitx-imselector.desc:69
 msgid "Switch to the Second Input Method"
-msgstr ""
+msgstr "Skift til den anden inputmetode"
 
 #: src/module/imselector/fcitx-imselector.desc:49
 #: src/module/imselector/fcitx-imselector.desc:94
 msgid "Switch to the Seventh Input Method"
-msgstr ""
+msgstr "Skift til den syvende inputmetode"
 
 #: src/module/imselector/fcitx-imselector.desc:44
 #: src/module/imselector/fcitx-imselector.desc:89
 msgid "Switch to the Sixth Input Method"
-msgstr ""
+msgstr "Skift til den sjette inputmetode"
 
 #: src/module/imselector/fcitx-imselector.desc:29
 #: src/module/imselector/fcitx-imselector.desc:74
 msgid "Switch to the Third Input Method"
-msgstr ""
+msgstr "Skift til den tredje inputmetode"
 
 #: data/config.desc:108
 msgid "Switching Full Width Character Mode"
@@ -2719,7 +2719,7 @@ msgstr "Tabel"
 
 #: src/ui/classic/skin.desc:53
 msgid "Table Code Color"
-msgstr ""
+msgstr "Farve for tabelkode"
 
 #: src/im/table/fcitx-table.conf.in:4
 msgid "Table Input Method for Fcitx"
@@ -2757,7 +2757,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:33
 msgid "Tip Message Color"
-msgstr ""
+msgstr "Farve for tipmeddelelse"
 
 #: data/script/fcitx-diagnose.sh:699
 #, sh-format
@@ -2851,7 +2851,7 @@ msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:8
 msgid "Trigger Key for QuickPhrase"
-msgstr ""
+msgstr "Udløsertast til hurtigfrase"
 
 #: data/addon.desc:38
 msgid "Type"
@@ -2993,7 +2993,7 @@ msgstr "Brugerflade:"
 
 #: src/ui/classic/skin.desc:49
 msgid "User Phrase Color"
-msgstr ""
+msgstr "Farve for brugerfrase"
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
@@ -3025,7 +3025,7 @@ msgstr "Virtuelt tastatur"
 
 #: src/ui/classic/skin.desc:411
 msgid "Virtual Keyboard Image"
-msgstr ""
+msgstr "Billede for virtuelt tastatur"
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
