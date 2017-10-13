@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-11 12:02-0700\n"
-"PO-Revision-Date: 2017-10-11 18:27+0000\n"
+"POT-Creation-Date: 2017-10-13 09:02-0700\n"
+"PO-Revision-Date: 2017-10-13 15:57+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -162,7 +162,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:309
 msgid "Active Tray Icon"
-msgstr ""
+msgstr "Aktiv bakkeikon"
 
 #: src/module/autoeng/fcitx-autoeng.desc:37
 msgid "Add Extra space when selecting a candidate word"
@@ -363,17 +363,17 @@ msgstr "Bingchan"
 #: src/ui/classic/skin.desc:135 src/ui/classic/skin.desc:241
 #: src/ui/classic/skin.desc:371
 msgid "BottomCenter"
-msgstr ""
+msgstr "Nederst i midten"
 
 #: src/ui/classic/skin.desc:134 src/ui/classic/skin.desc:240
 #: src/ui/classic/skin.desc:370
 msgid "BottomLeft"
-msgstr ""
+msgstr "Nederst til venstre"
 
 #: src/ui/classic/skin.desc:136 src/ui/classic/skin.desc:242
 #: src/ui/classic/skin.desc:372
 msgid "BottomRight"
-msgstr ""
+msgstr "Nederst til højre"
 
 #: data/config.desc:22
 msgid "CTRL Both"
@@ -519,12 +519,12 @@ msgstr "Kan ikke fortolke XMODIFIERS: ${1}."
 
 #: src/ui/classic/skin.c:121
 msgid "Cannot load default skin, is installation correct?"
-msgstr ""
+msgstr "Kan ikke indlæse standardskin, er installationen korrekt?"
 
 #: src/ui/classic/skin.c:126
 #, c-format
 msgid "Cannot load skin %s, return to default"
-msgstr ""
+msgstr "Kan ikke indlæse skinnet %s, falder tilbage til standard"
 
 #: data/script/fcitx-diagnose.sh:1549
 msgid "Cannot read im list from fcitx profile."
@@ -537,17 +537,17 @@ msgstr "Kategori"
 #: src/ui/classic/skin.desc:132 src/ui/classic/skin.desc:238
 #: src/ui/classic/skin.desc:368
 msgid "Center"
-msgstr ""
+msgstr "I midten"
 
 #: src/ui/classic/skin.desc:131 src/ui/classic/skin.desc:237
 #: src/ui/classic/skin.desc:367
 msgid "CenterLeft"
-msgstr ""
+msgstr "I midten til venstre"
 
 #: src/ui/classic/skin.desc:133 src/ui/classic/skin.desc:239
 #: src/ui/classic/skin.desc:369
 msgid "CenterRight"
-msgstr ""
+msgstr "I midten til højre"
 
 #: data/fcitx-configtool.desktop.in:4
 msgid "Change Fcitx Configuration"
@@ -586,7 +586,7 @@ msgstr "Klassisk"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
-msgstr ""
+msgstr "Klassisk brugergrænseflade med understøttelse af skin"
 
 #: src/ui/classic/fcitx-classic-ui.desc:1
 #: src/ui/classic/fcitx-classic-ui.desc:7
@@ -1028,15 +1028,15 @@ msgstr ""
 
 #: src/ui/classic/fcitx-skin-installer.sh:76
 msgid "Error: skin failed to install"
-msgstr ""
+msgstr "Fejl: skinnet kunne ikke installeres"
 
 #: src/ui/classic/fcitx-skin-installer.sh:55
 msgid "Error: skin file doesn't contain skin config."
-msgstr ""
+msgstr "Fejl: skin-fil indeholde ikke skin-konfiguration."
 
 #: src/ui/classic/fcitx-skin-installer.sh:50
 msgid "Error: skin file should only contain one directory."
-msgstr ""
+msgstr "Fejl: skin-fil skal kun indeholde én mappe."
 
 #: src/im/table/table.desc:84
 msgid "Exact Match"
@@ -1101,7 +1101,7 @@ msgstr "Fcitx-indstillingsmappe:"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:3
 msgid "Fcitx Skin Installer"
-msgstr ""
+msgstr "Fcitx-skin-installationsprogram"
 
 #: src/module/spell/fcitx-spell.conf.in:4
 msgid "Fcitx Spelling Hint/Completion Support"
@@ -1401,7 +1401,7 @@ msgstr "Skjul"
 
 #: src/ui/classic/fcitx-classic-ui.desc:46
 msgid "Hide when tray icon is available"
-msgstr ""
+msgstr "Skjul når bakkeikon er tilgængelig"
 
 #: src/module/vk/vk.c:59
 msgid "Hiragana"
@@ -1522,7 +1522,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:313
 msgid "Inctive Tray Icon"
-msgstr ""
+msgstr "Inaktiv bakkeikon"
 
 #: src/module/vk/vk.c:55
 msgid "Index"
@@ -1578,7 +1578,7 @@ msgstr "InputMetode"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:4
 msgid "Installer Script for Fcitx Skin"
-msgstr ""
+msgstr "Installer script til Fcitx-skin"
 
 #: data/config.desc:90
 msgid "Interval of Two Key Input"
@@ -1999,17 +1999,17 @@ msgstr "Output"
 #: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:248
 #: src/ui/classic/skin.desc:378
 msgid "Overlay X offset"
-msgstr ""
+msgstr "Overlægningens x-forskydning"
 
 #: src/ui/classic/skin.desc:147 src/ui/classic/skin.desc:253
 #: src/ui/classic/skin.desc:383
 msgid "Overlay Y offset"
-msgstr ""
+msgstr "Overlægningens y-forskydning"
 
 #: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
 #: src/ui/classic/skin.desc:373
 msgid "Overlay dock position"
-msgstr ""
+msgstr "Placering af overlægningens dok"
 
 #: src/ui/classic/skin.desc:122 src/ui/classic/skin.desc:228
 #: src/ui/classic/skin.desc:358
@@ -2018,7 +2018,7 @@ msgstr "Overlægningsbillede"
 
 #: src/ui/classic/fcitx-classic-ui.desc:18
 msgid "Override the skin font size"
-msgstr ""
+msgstr "Tilsidesæt skinnets skriftstørrelse"
 
 #: data/script/fcitx-diagnose.sh:940
 msgid "Owner of DBus name ${1} is ${2}."
@@ -2497,7 +2497,7 @@ msgstr "Skin-version"
 #: src/ui/classic/skin.desc:51 src/ui/classic/skin.desc:55
 #: src/ui/classic/skin.desc:59 src/ui/classic/skin.desc:63
 msgid "SkinFont"
-msgstr ""
+msgstr "Skin-skrifttype"
 
 #: src/ui/classic/skin.desc:1 src/ui/classic/skin.desc:5
 #: src/ui/classic/skin.desc:9 src/ui/classic/skin.desc:13
@@ -2517,11 +2517,11 @@ msgstr "Skininfo"
 #: src/ui/classic/skin.desc:283 src/ui/classic/skin.desc:287
 #: src/ui/classic/skin.desc:291 src/ui/classic/skin.desc:299
 msgid "SkinInputBar"
-msgstr ""
+msgstr "Skin-inputlinje"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
 msgid "SkinKeyboard"
-msgstr ""
+msgstr "Skin-tastatur"
 
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
@@ -2535,7 +2535,7 @@ msgstr ""
 #: src/ui/classic/skin.desc:165 src/ui/classic/skin.desc:170
 #: src/ui/classic/skin.desc:175 src/ui/classic/skin.desc:180
 msgid "SkinMainBar"
-msgstr ""
+msgstr "Skin-hovedlinje"
 
 #: src/ui/classic/skin.desc:315 src/ui/classic/skin.desc:319
 #: src/ui/classic/skin.desc:323 src/ui/classic/skin.desc:327
@@ -2547,11 +2547,11 @@ msgstr ""
 #: src/ui/classic/skin.desc:389 src/ui/classic/skin.desc:393
 #: src/ui/classic/skin.desc:401
 msgid "SkinMenu"
-msgstr ""
+msgstr "Skin-menu"
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
-msgstr ""
+msgstr "Skin-bakkeikon"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
@@ -2621,7 +2621,7 @@ msgstr ""
 
 #: src/ui/classic/fcitx-skin-installer.sh:74
 msgid "Successfully Installed skin"
-msgstr ""
+msgstr "Installation af skin lykkedes"
 
 #: data/config.desc:29
 msgid "Super Both"
@@ -2807,17 +2807,17 @@ msgstr ""
 #: src/ui/classic/skin.desc:129 src/ui/classic/skin.desc:235
 #: src/ui/classic/skin.desc:365
 msgid "TopCenter"
-msgstr ""
+msgstr "Øverst i midten"
 
 #: src/ui/classic/skin.desc:128 src/ui/classic/skin.desc:234
 #: src/ui/classic/skin.desc:364
 msgid "TopLeft"
-msgstr ""
+msgstr "Øverst til venstre"
 
 #: src/ui/classic/skin.desc:130 src/ui/classic/skin.desc:236
 #: src/ui/classic/skin.desc:366
 msgid "TopRight"
-msgstr ""
+msgstr "Øverst til højre"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:196
 msgid "Traditional Chinese"
