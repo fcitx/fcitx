@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-13 15:02-0700\n"
-"PO-Revision-Date: 2017-10-13 21:57+0000\n"
+"POT-Creation-Date: 2017-10-14 03:02-0700\n"
+"PO-Revision-Date: 2017-10-14 09:49+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -150,7 +150,7 @@ msgstr "Farve for aktiv menu"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
-msgstr ""
+msgstr "Farve for tegn i aktivt menupunkt"
 
 #: src/ui/classic/skin.desc:81
 msgid "Active Mode Icon"
@@ -158,7 +158,7 @@ msgstr "Ikon for aktiv tilstand"
 
 #: src/ui/classic/skin.desc:172
 msgid "Active Text Icon Color"
-msgstr ""
+msgstr "Farve for aktiv tekst på ikon"
 
 #: src/ui/classic/skin.desc:309
 msgid "Active Tray Icon"
@@ -424,7 +424,7 @@ msgstr ""
 #: src/im/pinyin/py.c:1798
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
-msgstr ""
+msgstr "Kan ikke gemme Pinyin-indeks: %s"
 
 #: src/im/pinyin/py.c:1672
 #, c-format
@@ -482,7 +482,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1030
 msgid "Cannot find fcitx-configtool executable!"
-msgstr ""
+msgstr "Kan ikke finde eksekverbaren fcitx-configtool!"
 
 #: data/script/fcitx-diagnose.sh:1499
 msgid "Cannot find file ${1} of addon ${2}."
@@ -570,15 +570,16 @@ msgstr ""
 
 #: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
-msgstr ""
+msgstr "Vælg frasen som skal slettes. Tryk på Escape for at annullere"
 
 #: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
-msgstr ""
+msgstr "Vælg frasen som skal sættes forrest. Tryk på Escape for at annullere"
 
 #: src/im/table/table.c:721
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
+"Vælg frasen for at rydde skrivehistorik. Tryk på Escape for at annullere"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
@@ -699,15 +700,15 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:996
 msgid "Config GUI for gtk${1} not found."
-msgstr ""
+msgstr "Konfigurations-GUI til gtk${1} ikke fundet."
 
 #: data/script/fcitx-diagnose.sh:992
 msgid "Config GUI for gtk${1}:"
-msgstr ""
+msgstr "Konfigurations-GUI til gtk${1}:"
 
 #: data/script/fcitx-diagnose.sh:1012
 msgid "Config GUI for kde:"
-msgstr ""
+msgstr "Konfigurations-GUI til kde:"
 
 #: data/script/fcitx-diagnose.sh:1028
 msgid "Config Tool Wrapper:"
@@ -770,7 +771,7 @@ msgstr ""
 
 #: data/profile.desc:17
 msgid "Current Input Method Name"
-msgstr ""
+msgstr "Nuværende inputmetodenavn"
 
 #: data/script/fcitx-diagnose.sh:839
 msgid "Current fcitx settings directory is ${1} (${2})."
@@ -995,7 +996,7 @@ msgstr "Miljøvariablen ${1} er ikke sat."
 
 #: data/script/fcitx-diagnose.sh:1053
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
-msgstr ""
+msgstr "Miljøvariablen ${1} er sat korrekt til \"${2}\"."
 
 #: data/script/fcitx-diagnose.sh:829
 msgid "Environment variable ${1} is set to ${2}."
@@ -1085,7 +1086,7 @@ msgstr "Fcitx-konfiguration"
 
 #: data/script/fcitx-diagnose.sh:1027
 msgid "Fcitx Configure UI:"
-msgstr ""
+msgstr "Fcitx-konfigurations-UI:"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -1093,7 +1094,7 @@ msgstr "Fcitx DBus-frontend"
 
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
-msgstr ""
+msgstr "Understøtelse af Fcitx Lua"
 
 #: data/script/fcitx-diagnose.sh:837
 msgid "Fcitx Settings Directory:"
@@ -1130,12 +1131,12 @@ msgstr "Fcitx-version: ${1}"
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
 #: src/ui/classic/skin.desc:403
 msgid "Fill Background Horizontal rule"
-msgstr ""
+msgstr "Regel for vandret udfyldning af baggrund"
 
 #: src/ui/classic/skin.desc:151 src/ui/classic/skin.desc:293
 #: src/ui/classic/skin.desc:395
 msgid "Fill Background Vertical rule"
-msgstr ""
+msgstr "Regel for lodret udfyldning af baggrund"
 
 #: src/ui/classic/skin.desc:45
 msgid "First Candidate Color"
@@ -1171,7 +1172,7 @@ msgstr "Skriftstørrelse"
 
 #: src/ui/classic/skin.desc:28
 msgid "Font sizes respect dpi setting"
-msgstr ""
+msgstr "Skriftstørrelser respekterer dpi-indstilling"
 
 #: src/module/xkb/fcitx-xkb.desc:10
 msgid ""
@@ -1186,11 +1187,11 @@ msgstr "Fandt ${1} ved ${2}."
 
 #: data/script/fcitx-diagnose.sh:1485
 msgid "Found ${1} disabled addons:"
-msgstr ""
+msgstr "Fandt ${1} deaktiverede tilføjelser:"
 
 #: data/script/fcitx-diagnose.sh:1480
 msgid "Found ${1} enabled addons:"
-msgstr ""
+msgstr "Fandt ${1} aktiverede tilføjelser:"
 
 #: data/script/fcitx-diagnose.sh:1570
 msgid "Found ${1} enabled input methods:"
@@ -1242,7 +1243,7 @@ msgstr "Fandt fcitx qt-modul: ${1}."
 
 #: data/script/fcitx-diagnose.sh:1032
 msgid "Found fcitx-configtool at ${1}."
-msgstr ""
+msgstr "Fandt fcitx-configtool ved ${1}."
 
 #: data/script/fcitx-diagnose.sh:1381
 msgid "Found immodule cache for unknown gtk version at ${1}."
@@ -1348,7 +1349,7 @@ msgstr ""
 
 #: data/config.desc:211
 msgid "Give the tips of Phrase"
-msgstr ""
+msgstr "Giv tips for frase"
 
 #: src/module/imselector/fcitx-imselector.desc:9
 msgid "Global Input Method SelectKey"
@@ -1428,11 +1429,11 @@ msgstr "Hottast"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:30
 msgid "Hotkey for Inputing Character From Phrase"
-msgstr ""
+msgstr "Hottast til at inputte tegn fra frase"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:35
 msgid "Hotkey for switching to Inputing Character From Phrase mode"
-msgstr ""
+msgstr "Hottast til at skifte til at inputte tegn fra frasetilstand"
 
 #: src/im/pinyin/fcitx-pinyin.desc:43
 msgid "Hotkey of Adding Frequent Word"
@@ -1440,7 +1441,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:53
 msgid "Hotkey of Delete User Phrase"
-msgstr ""
+msgstr "Hottast til slet brugerfrase"
 
 #: src/im/pinyin/fcitx-pinyin.desc:48
 msgid "Hotkey of Deleting Frequent Word"
@@ -1449,7 +1450,7 @@ msgstr ""
 #: src/lib/fcitx/ime.c:322
 #, c-format
 msgid "IM: bad im %s"
-msgstr ""
+msgstr "IM: dårlig im %s"
 
 #: src/lib/fcitx/ime.c:303
 #, c-format
@@ -1506,11 +1507,11 @@ msgstr "Inaktiv"
 
 #: src/ui/classic/skin.desc:65
 msgid "Inactive Menu Item Character Color"
-msgstr ""
+msgstr "Farve for tegn i inaktivt menupunkt"
 
 #: src/ui/classic/skin.desc:177
 msgid "Inactive Text Icon Color"
-msgstr ""
+msgstr "Farve for inaktiv tekst på ikon"
 
 #: data/config.desc:68
 msgid "Include Inactivate when scrolling between Input Method"
@@ -1530,7 +1531,7 @@ msgstr "Indeks"
 
 #: src/ui/classic/skin.desc:19
 msgid "Input Font Size"
-msgstr ""
+msgstr "Skriftstørrelse for input"
 
 #: src/ui/classic/skin.desc:37
 msgid "Input Message Color"
@@ -1625,7 +1626,7 @@ msgstr "Tast"
 
 #: src/ui/classic/skin.desc:416
 msgid "Key Color On Virtual Keyboard"
-msgstr ""
+msgstr "Farve for tast på virtuelt tastatur"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -1781,22 +1782,22 @@ msgstr "MS"
 #: src/ui/classic/skin.desc:117 src/ui/classic/skin.desc:223
 #: src/ui/classic/skin.desc:353
 msgid "Margin Bottom for clickable region"
-msgstr ""
+msgstr "Margen under klikbart område"
 
 #: src/ui/classic/skin.desc:102 src/ui/classic/skin.desc:208
 #: src/ui/classic/skin.desc:338
 msgid "Margin Left for clickable region"
-msgstr ""
+msgstr "Margen til venstre for klikbart område"
 
 #: src/ui/classic/skin.desc:107 src/ui/classic/skin.desc:213
 #: src/ui/classic/skin.desc:343
 msgid "Margin Right for clickable region"
-msgstr ""
+msgstr "Margen til højre for klikbart område"
 
 #: src/ui/classic/skin.desc:112 src/ui/classic/skin.desc:218
 #: src/ui/classic/skin.desc:348
 msgid "Margin Top for clickable region"
-msgstr ""
+msgstr "Margen over klikbart område"
 
 #: src/im/table/table.desc:79
 msgid "Matching Key"
@@ -1830,7 +1831,7 @@ msgstr ""
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:37
 msgid "Maximum length of spell hint list for Quick Phrase"
-msgstr ""
+msgstr "Maksimum længde af stavetipliste for hurtigfrase"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
 msgid "Maximum results from stroke input."
@@ -1846,7 +1847,7 @@ msgstr "Menuens skrifttype"
 
 #: src/ui/classic/skin.desc:23
 msgid "Menu Font Size"
-msgstr ""
+msgstr "Skriftstørrelse for menu"
 
 #: src/im/pinyin/py.c:2141
 msgid "Migrate the old file path to the new one"
@@ -1879,7 +1880,7 @@ msgstr "Modul"
 
 #: src/lib/fcitx/module.c:73
 msgid "Module: bad module"
-msgstr ""
+msgstr "Modul: dårligt modul"
 
 #: src/lib/fcitx/module.c:61
 #, c-format
@@ -1921,7 +1922,7 @@ msgstr "Nej"
 
 #: src/lib/fcitx/ime.c:536
 msgid "No available Input Method"
-msgstr ""
+msgstr "Ingen tilgængelig inputmetode"
 
 #: src/lib/fcitx/frontend.c:565
 msgid "No available frontend"
@@ -2104,14 +2105,17 @@ msgid ""
 "Please set environment variable ${env_name} to \"${value}\" using the tool "
 "your distribution provides or add ${1} to your ${2}. See ${link}."
 msgstr ""
+"Sæt venligst miljøvariablen ${env_name} til \"${value}\" ved brug af "
+"værktøjet som din distribution leverer eller tilføj ${1} til din ${2}. Se "
+"${link}."
 
 #: src/ui/classic/skin.desc:265
 msgid "Position or offset of LookupTable"
-msgstr ""
+msgstr "Placering eller forskydning af LookupTable"
 
 #: src/ui/classic/skin.desc:261
 msgid "Position or offset of Preedit"
-msgstr ""
+msgstr "Placering eller forskydning af Preedit"
 
 #: src/module/spell/fcitx-spell.desc:14
 msgid "Possible Providers: presage, custom, enchant (separate with comma)"
@@ -2137,7 +2141,7 @@ msgstr "Tryk på Enter for at indtaste tekst"
 
 #: src/im/pinyin/py.c:729
 msgid "Press index to delete user phrase (ESC for cancel)"
-msgstr ""
+msgstr "Tryk på indeks for at slette brugerfrase (ESC for at annullere)"
 
 #: src/im/pinyin/py.c:743
 msgid "Press number to make word in frequent list"
@@ -2179,7 +2183,7 @@ msgstr ""
 
 #: data/profile.desc:12
 msgid "Prompt the phrases after input"
-msgstr ""
+msgstr "Spørg om fraserne efter input"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:4
 msgid "Provide extra feature for pinyin in Fcitx"
@@ -2207,7 +2211,7 @@ msgstr ""
 
 #: src/module/punc/punc.c:585 src/module/punc/fcitx-punc.conf.in:3
 msgid "Punctuation Support"
-msgstr ""
+msgstr "Understøttelse af tegnsætning"
 
 #: data/script/fcitx-diagnose.sh:1171
 msgid "Qt IM module files:"
@@ -2286,22 +2290,22 @@ msgstr "Tilpas størrelse"
 #: src/ui/classic/skin.desc:97 src/ui/classic/skin.desc:203
 #: src/ui/classic/skin.desc:325
 msgid "Resize Margin Bottom"
-msgstr ""
+msgstr "Tilpas størrelse på nederste margen"
 
 #: src/ui/classic/skin.desc:85 src/ui/classic/skin.desc:191
 #: src/ui/classic/skin.desc:329
 msgid "Resize Margin Left"
-msgstr ""
+msgstr "Tilpas størrelse på venstre margen"
 
 #: src/ui/classic/skin.desc:89 src/ui/classic/skin.desc:195
 #: src/ui/classic/skin.desc:333
 msgid "Resize Margin Right"
-msgstr ""
+msgstr "Tilpas størrelse på højre margen"
 
 #: src/ui/classic/skin.desc:93 src/ui/classic/skin.desc:199
 #: src/ui/classic/skin.desc:321
 msgid "Resize Margin Top"
-msgstr ""
+msgstr "Tilpas størrelse på øverste margen"
 
 #: src/module/notificationitem/dbusmenu.c:365 src/ui/classic/classicui.c:503
 #: src/ui/kimpanel/kimpanel.c:790
@@ -2443,7 +2447,7 @@ msgstr ""
 
 #: data/profile.desc:29
 msgid "Show Preedit String in Client Window"
-msgstr ""
+msgstr "Vis Preedit-streng i klientvindue"
 
 #: data/config.desc:247
 msgid "Show Version"
@@ -2555,7 +2559,7 @@ msgstr "Skin-bakkeikon"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
-msgstr ""
+msgstr "Farve for mellemrumslinje"
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
@@ -2568,7 +2572,7 @@ msgstr "Special"
 
 #: src/ui/classic/skin.desc:182
 msgid "Special Icon position"
-msgstr ""
+msgstr "Placering af specielt ikon"
 
 #: src/module/spell/fcitx-spell.conf.in:3
 msgid "Spell"
@@ -2601,15 +2605,15 @@ msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
-msgstr ""
+msgstr "Statuspanelets skjuletilstand"
 
 #: src/ui/classic/fcitx-classic-ui.desc:2
 msgid "Status Panel Position X"
-msgstr ""
+msgstr "Statuspanelets x-position"
 
 #: src/ui/classic/fcitx-classic-ui.desc:8
 msgid "Status Panel Position Y"
-msgstr ""
+msgstr "Statuspanelets y-position"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
@@ -2867,7 +2871,7 @@ msgstr "Brugerflade"
 
 #: src/lib/fcitx/ui.c:205
 msgid "UI: bad ui"
-msgstr ""
+msgstr "UI: dårlig ui"
 
 #: src/lib/fcitx/ui.c:192
 #, c-format
@@ -2876,7 +2880,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:956
 msgid "Unable to find a program to check dbus."
-msgstr ""
+msgstr "Kan ikke finde et program til at tjekke dbus."
 
 #: src/module/unicode/fcitx-unicode.desc:1
 msgid "Unicode"
@@ -2917,7 +2921,7 @@ msgstr ""
 
 #: src/ui/classic/skin.desc:167
 msgid "Use Custom text icon color"
-msgstr ""
+msgstr "Brug tilpasset farve for tekst på ikon"
 
 #: data/profile.desc:2
 msgid "Use Full Width Character"
@@ -2953,11 +2957,11 @@ msgstr "Brug systembakkeikon"
 
 #: src/im/pinyin/fcitx-pinyin.desc:23
 msgid "Use V to trigger quickphrase"
-msgstr ""
+msgstr "Brug V til at udløse hurtigfrase"
 
 #: data/profile.desc:7
 msgid "Use Wide Punctuation"
-msgstr ""
+msgstr "Brug bred tegnsætning"
 
 #: src/im/keyboard/fcitx-keyboard.desc:39
 msgid "Use enter to commit the existing string"
@@ -3068,7 +3072,7 @@ msgstr ""
 
 #: src/module/x11/fcitx-x11.conf.in:3
 msgid "X11 Support"
-msgstr ""
+msgstr "Understøttelse af X11"
 
 #: src/module/x11/fcitx-x11.conf.in:4
 msgid "X11 Utilitiy used by other Addon"
@@ -3088,7 +3092,7 @@ msgstr "XIM til Emacs:"
 
 #: data/script/fcitx-diagnose.sh:1091
 msgid "XIM_SERVERS on root window:"
-msgstr ""
+msgstr "XIM_SERVERS på rod-vindue:"
 
 #: src/frontend/xim/xim.c:157
 msgid "XMODIFIERS Error."
@@ -3169,6 +3173,10 @@ msgid ""
 "found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
 "fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
+"Du kører i øjeblikket Fcitx med GUI, men fcitx-configtool blev ikke fundet, "
+"pakkenavnet for KCModule er typisk fcitx-config-gtk, fcitx-config-gtk3 eller "
+"fcitx-configtool. Den vil nu åbne konfigurationsfilen med "
+"standardtekstredigeringsprogrammet."
 
 #: data/script/fcitx-configtool.sh:144
 msgid ""
@@ -3176,6 +3184,9 @@ msgid ""
 "package name of this KCModule is usually kcm-fcitx or kde-config-fcitx. Now "
 "it will open config file with default text editor."
 msgstr ""
+"Du kører i øjeblikket KDE, men KCModule til fcitx blev ikke fundet, "
+"pakkenavnet for KCModule er typisk kcm-fcitx eller kde-config-fcitx. Den vil "
+"nu åbne konfigurationsfilen med standardtekstredigeringsprogrammet."
 
 #: data/script/fcitx-diagnose.sh:1115
 msgid ""
