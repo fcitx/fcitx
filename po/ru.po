@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-15 20:02-0700\n"
-"PO-Revision-Date: 2017-10-05 13:59+0000\n"
-"Last-Translator: TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>\n"
+"POT-Creation-Date: 2017-10-15 21:02-0700\n"
+"PO-Revision-Date: 2017-10-16 03:03+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -1115,9 +1115,8 @@ msgid "Fcitx DBus Frontend"
 msgstr "Интерфейс Fcitx DBus"
 
 #: src/frontend/ipcportal/fcitx-ipcportal.conf.in:3
-#, fuzzy
 msgid "Fcitx DBus Frontend (Portal version)"
-msgstr "Интерфейс Fcitx DBus"
+msgstr ""
 
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
