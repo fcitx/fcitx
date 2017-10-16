@@ -325,13 +325,11 @@ void PortalDestroyIC(void* arg, FcitxInputContext* context)
     context->privateic = NULL;
 }
 
-void PortalSendSignal(FcitxPortalFrontend* ipc, FcitxPortalIC* ipcic, DBusMessage* msg)
+void PortalSendSignal(FcitxPortalFrontend* ipc, DBusMessage* msg)
 {
-    if (!ipcic) {
-        if (ipc->_conn) {
-            dbus_connection_send(ipc->_conn, msg, NULL);
-            dbus_connection_flush(ipc->_conn);
-        }
+    if (ipc->_conn) {
+        dbus_connection_send(ipc->_conn, msg, NULL);
+        dbus_connection_flush(ipc->_conn);
     }
     dbus_message_unref(msg);
 }
@@ -355,7 +353,7 @@ void PortalCommitString(void* arg, FcitxInputContext* ic, const char* str)
                        "CommitString"); // name of the signal
 
     dbus_message_append_args(msg, DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
-    PortalSendSignal(ipc, GetPortalIC(ic), msg);
+    PortalSendSignal(ipc, msg);
 }
 
 void PortalForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)
@@ -369,7 +367,7 @@ void PortalForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event,
     uint32_t keystate = (uint32_t) state;
     dbus_bool_t type = event == FCITX_RELEASE_KEY;
     dbus_message_append_args(msg, DBUS_TYPE_UINT32, &keyval, DBUS_TYPE_UINT32, &keystate, DBUS_TYPE_BOOLEAN, &type, DBUS_TYPE_INVALID);
-    PortalSendSignal(ipc, GetPortalIC(ic), msg);
+    PortalSendSignal(ipc, msg);
 }
 
 void PortalSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
@@ -699,7 +697,7 @@ void PortalUpdatePreedit(void* arg, FcitxInputContext* ic)
     int iCursorPos = FcitxInputStateGetClientCursorPos(input);
     dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &iCursorPos);
 
-    PortalSendSignal(ipc, GetPortalIC(ic), msg);
+    PortalSendSignal(ipc, msg);
 }
 
 void PortalDeleteSurroundingText(void* arg, FcitxInputContext* ic, int offset, unsigned int size)
@@ -743,7 +741,7 @@ void PortalDeleteSurroundingText(void* arg, FcitxInputContext* ic, int offset, u
 
     dbus_message_append_args(msg, DBUS_TYPE_INT32, &offset, DBUS_TYPE_UINT32, &size, DBUS_TYPE_INVALID);
 
-    PortalSendSignal(ipc, GetPortalIC(ic), msg);
+    PortalSendSignal(ipc, msg);
 }
 
 
@@ -777,57 +775,6 @@ boolean PortalCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck
     return strcmp(ic2ToCheck->prgname, ic2->prgname) == 0;
 }
 
-void PortalEmitPropertiesChanged(void* arg, const char* const* properties)
-{
-    if (!properties || !*properties)
-        return;
-
-    FcitxPortalFrontend* ipc = (FcitxPortalFrontend*) arg;
-    DBusMessage* msg = dbus_message_new_signal(FCITX_IM_DBUS_PATH, // object name of the signal
-                       DBUS_INTERFACE_PROPERTIES, // interface name of the signal
-                       "PropertiesChanged"); // name of the signal
-
-    DBusMessageIter args;
-    DBusMessageIter changed_properties, invalidated_properties;
-    char sinterface[] = FCITX_IM_DBUS_INTERFACE;
-    char* interface = sinterface;
-    dbus_message_iter_init_append(msg, &args);
-    dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &interface);
-
-    dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "{sv}", &changed_properties);
-    dbus_message_iter_close_container(&args, &changed_properties);
-
-    dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "s", &invalidated_properties);
-    for (; *properties; properties++)
-        dbus_message_iter_append_basic(&invalidated_properties, DBUS_TYPE_STRING, properties);
-    dbus_message_iter_close_container(&args, &invalidated_properties);
-
-    PortalSendSignal(ipc, NULL, msg);
-}
-
-void PortalGetPropertyCurrentIM(void* arg, DBusMessageIter* args)
-{
-    FcitxPortalFrontend* ipc = (FcitxPortalFrontend*) arg;
-    FcitxInstance* instance = ipc->owner;
-    FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
-    const char* currentIM = im && im->uniqueName ? im->uniqueName : "";
-
-    dbus_message_iter_append_basic(args, DBUS_TYPE_STRING, &currentIM);
-}
-
-void PortalSetPropertyCurrentIM(void* arg, DBusMessageIter* args)
-{
-    FcitxPortalFrontend* ipc = (FcitxPortalFrontend*) arg;
-    FcitxInstance* instance = ipc->owner;
-    const char* currentIM;
-
-    if (dbus_message_iter_get_arg_type(args) != DBUS_TYPE_STRING)
-        return;
-
-    dbus_message_iter_get_basic(args, &currentIM);
-    FcitxInstanceSwitchIMByName(instance, currentIM);
-}
-
 void PortalUpdateIMInfoForIC(void* arg)
 {
     FcitxPortalFrontend* ipc = (FcitxPortalFrontend*) arg;
@@ -853,7 +800,7 @@ void PortalUpdateIMInfoForIC(void* arg)
         fcitx_utils_string_swap(&GetPortalIC(ic)->lastSentIMInfo.langCode, langCode);
 
         dbus_message_append_args(msg, DBUS_TYPE_STRING, &name, DBUS_TYPE_STRING, &uniqueName, DBUS_TYPE_STRING, &langCode, DBUS_TYPE_INVALID);
-        PortalSendSignal(ipc, GetPortalIC(ic), msg);
+        PortalSendSignal(ipc, msg);
     }
 }
 
