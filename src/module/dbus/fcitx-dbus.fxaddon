@@ -6,7 +6,7 @@ Function0=GetConnection
 Function1=GetPrivConnection
 Function2=WatchName
 Function3=UnwatchName
-Function4=
+Function4=AttachConnection
 Function5=
 Function6=
 Self.Type=FcitxDBus*
@@ -39,3 +39,15 @@ Arg0=int
 Arg0.Deref=$0 - 1
 Arg0.DerefType=int
 Res.WrapFunc=DBusUnwatchName
+
+[AttachConnection]
+Name=attach-connection
+Return=boolean
+Arg0=DBusConnection *
+Res.WrapFunc=DBusAttachConnection
+
+[DeattachConnection]
+Name=deattach-connection
+Return=void
+Arg0=DBusConnection *
+Res.WrapFunc=DBusDeattachConnection

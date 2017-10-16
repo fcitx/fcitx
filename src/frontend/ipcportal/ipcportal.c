@@ -218,6 +218,13 @@ void* PortalCreate(FcitxInstance* instance, int frontendid)
         return NULL;
     }
 
+    if (!FcitxDBusAttachConnection(instance, ipc->_conn)) {
+        dbus_connection_unref(ipc->_conn);
+        ipc->_conn = NULL;
+        free(ipc);
+        return NULL;
+    }
+
     int ret = dbus_bus_request_name(ipc->_conn, FCITX_PORTAL_SERVICE,
                                     DBUS_NAME_FLAG_DO_NOT_QUEUE,
                                     NULL);
@@ -231,6 +238,7 @@ void* PortalCreate(FcitxInstance* instance, int frontendid)
 
     DBusObjectPathVTable fcitxPortalVTable = {NULL, &PortalDBusEventHandler, NULL, NULL, NULL, NULL };
     dbus_connection_register_object_path(ipc->_conn,  FCITX_IM_DBUS_PATH, &fcitxPortalVTable, ipc);
+    dbus_connection_flush(ipc->_conn);
 
     FcitxIMEventHook hook;
     hook.arg = ipc;
@@ -278,11 +286,11 @@ void PortalCreateIC(void* arg, FcitxInputContext* context, void* priv)
                              DBUS_TYPE_OBJECT_PATH, &path,
                              // FIXME uuid
                              DBUS_TYPE_INVALID);
-    DBusMessageIter args, array, sub;
+    DBusMessageIter args, array;
     dbus_message_iter_init_append(reply, &args);
     dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "y", &array);
     for (int i = 0; i < sizeof(uuid_t); i++) {
-        dbus_message_iter_append_basic(&sub, DBUS_TYPE_BYTE, &ipcic->uuid[i]);
+        dbus_message_iter_append_basic(&array, DBUS_TYPE_BYTE, &ipcic->uuid[i]);
     }
     dbus_message_iter_close_container(&args, &array);
     dbus_connection_send(ipcpriv->conn, reply, NULL);

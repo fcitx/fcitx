@@ -42,6 +42,7 @@ typedef struct _FcitxDBus {
     DBusDaemonProperty daemon;
     char* serviceName;
     FcitxHandlerTable* handler;
+    UT_array extraconns;
 } FcitxDBus;
 
 #define RETRY_INTERVAL 2
@@ -163,6 +164,7 @@ void* DBusCreate(FcitxInstance* instance)
 {
     FcitxDBus *dbusmodule = (FcitxDBus*) fcitx_utils_malloc0(sizeof(FcitxDBus));
     dbusmodule->owner = instance;
+    utarray_init(&dbusmodule->extraconns, fcitx_ptr_icd);
 
     DBusError err;
 
@@ -424,7 +426,11 @@ void DBusSetFD(void* arg)
     fd_set *wfds =  FcitxInstanceGetWriteFDSet(instance);
     fd_set *efds =  FcitxInstanceGetExceptFDSet(instance);
 
-    DBusUpdateFDSet(dbusmodule->watches, rfds, wfds, efds);
+    int maxfd = DBusUpdateFDSet(dbusmodule->watches, rfds, wfds, efds);
+
+    if (FcitxInstanceGetMaxFD(instance) < maxfd) {
+        FcitxInstanceSetMaxFD(instance, maxfd);
+    }
 }
 
 
@@ -439,6 +445,9 @@ void DBusProcessEvent(void* arg)
     DBusProcessEventForWatches(dbusmodule->watches, rfds, wfds, efds);
     DBusProcessEventForConnection(dbusmodule->conn);
     DBusProcessEventForConnection(dbusmodule->privconn);
+    utarray_foreach(connection, &dbusmodule->extraconns, DBusConnection *) {
+        DBusProcessEventForConnection(*connection);
+    }
 }
 
 boolean DBusWatchName(void* arg,
@@ -467,6 +476,32 @@ void DBusUnwatchName(void* arg, int id)
     FcitxDBus* dbusmodule = (FcitxDBus*) arg;
 
     fcitx_handler_table_remove_by_id_full(dbusmodule->handler, id);
+}
+
+boolean DBusAttachConnection(void *arg, DBusConnection *conn) {
+    FcitxDBus* dbusmodule = (FcitxDBus*) arg;
+    dbus_connection_ref(conn);
+    if (!dbus_connection_set_watch_functions(conn, DBusAddWatch,
+                                                DBusRemoveWatch, NULL,
+                                                &dbusmodule->watches, NULL)) {
+        FcitxLog(WARNING, "Add Watch Function Error");
+        dbus_connection_unref(conn);
+        return false;
+    }
+    utarray_push_back(&dbusmodule->extraconns, &conn);
+    return true;
+}
+
+void DBusDeattachConnection(void *arg, DBusConnection *conn) {
+
+    FcitxDBus* dbusmodule = (FcitxDBus*) arg;
+    utarray_foreach(connection, &dbusmodule->extraconns, DBusConnection *) {
+        if (*connection == conn) {
+            utarray_remove_quick(&dbusmodule->extraconns, utarray_eltidx(&dbusmodule->extraconns, connection));
+            dbus_connection_unref(conn);
+            break;
+        }
+    }
 }
 
 #include "fcitx-dbus-addfunctions.h"
