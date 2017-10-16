@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-03 23:02-0700\n"
+"POT-Creation-Date: 2017-10-15 20:02-0700\n"
 "PO-Revision-Date: 2017-10-04 05:04+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/fcitx/fcitx/"
@@ -1104,6 +1104,11 @@ msgstr "Fcitx 設定介面："
 msgid "Fcitx DBus Frontend"
 msgstr "Fcitx DBus 前端"
 
+#: src/frontend/ipcportal/fcitx-ipcportal.conf.in:3
+#, fuzzy
+msgid "Fcitx DBus Frontend (Portal version)"
+msgstr "Fcitx DBus 前端"
+
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
 msgstr "Fcitx Lua 支援"
@@ -1280,6 +1285,7 @@ msgid "Frontend"
 msgstr "前端"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:4
+#: src/frontend/ipcportal/fcitx-ipcportal.conf.in:4
 msgid "Frontend Used by IM Modules"
 msgstr "輸入法模組使用的前端"
 

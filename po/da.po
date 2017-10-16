@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-14 03:02-0700\n"
+"POT-Creation-Date: 2017-10-15 20:02-0700\n"
 "PO-Revision-Date: 2017-10-14 09:49+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
@@ -1092,6 +1092,11 @@ msgstr "Fcitx-konfigurations-UI:"
 msgid "Fcitx DBus Frontend"
 msgstr "Fcitx DBus-frontend"
 
+#: src/frontend/ipcportal/fcitx-ipcportal.conf.in:3
+#, fuzzy
+msgid "Fcitx DBus Frontend (Portal version)"
+msgstr "Fcitx DBus-frontend"
+
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
 msgstr "Understøtelse af Fcitx Lua"
@@ -1266,6 +1271,7 @@ msgid "Frontend"
 msgstr "Frontend"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:4
+#: src/frontend/ipcportal/fcitx-ipcportal.conf.in:4
 msgid "Frontend Used by IM Modules"
 msgstr "Frontend brugt af IM-moduler"
 

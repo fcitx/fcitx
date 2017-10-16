@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-03 23:02-0700\n"
+"POT-Creation-Date: 2017-10-15 20:02-0700\n"
 "PO-Revision-Date: 2017-10-04 05:04+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
@@ -1100,6 +1100,11 @@ msgstr "Fcitx 설정UI:"
 msgid "Fcitx DBus Frontend"
 msgstr "Fcitx DBus 프론트엔드"
 
+#: src/frontend/ipcportal/fcitx-ipcportal.conf.in:3
+#, fuzzy
+msgid "Fcitx DBus Frontend (Portal version)"
+msgstr "Fcitx DBus 프론트엔드"
+
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
 msgstr "Fcitx Lua 지원"
@@ -1276,6 +1281,7 @@ msgid "Frontend"
 msgstr "프론트엔드"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:4
+#: src/frontend/ipcportal/fcitx-ipcportal.conf.in:4
 msgid "Frontend Used by IM Modules"
 msgstr "IM 모듈이 사용하는 프론트엔드"
 

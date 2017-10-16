@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-05 07:02-0700\n"
+"POT-Creation-Date: 2017-10-15 20:02-0700\n"
 "PO-Revision-Date: 2017-10-05 13:59+0000\n"
 "Last-Translator: TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
@@ -1114,6 +1114,11 @@ msgstr "Конфигурационный интерфейс Fcitx:"
 msgid "Fcitx DBus Frontend"
 msgstr "Интерфейс Fcitx DBus"
 
+#: src/frontend/ipcportal/fcitx-ipcportal.conf.in:3
+#, fuzzy
+msgid "Fcitx DBus Frontend (Portal version)"
+msgstr "Интерфейс Fcitx DBus"
+
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
 msgstr "Поддержка Lua в Fcitx"
@@ -1291,6 +1296,7 @@ msgid "Frontend"
 msgstr "Интерфейс"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:4
+#: src/frontend/ipcportal/fcitx-ipcportal.conf.in:4
 msgid "Frontend Used by IM Modules"
 msgstr "Интерфейс, используемый модулями методов ввода"
 
