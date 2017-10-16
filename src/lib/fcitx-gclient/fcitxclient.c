@@ -623,6 +623,7 @@ static void fcitx_client_init(FcitxClient *self) {
     self->priv->improxy = NULL;
     self->priv->icproxy = NULL;
     self->priv->icname = NULL;
+    self->priv->display = NULL;
 }
 
 static void fcitx_client_constructed(GObject *object) {
@@ -1193,8 +1194,6 @@ static void fcitx_client_set_property(GObject *gobject, guint prop_id,
 static void _fcitx_client_clean_up(FcitxClient *self,
                                    gboolean dont_emit_disconn) {
     self->priv->is_portal = FALSE;
-    g_free(self->priv->icname);
-    self->priv->icname = NULL;
     if (self->priv->cancellable) {
         g_cancellable_cancel(self->priv->cancellable);
         g_object_unref(self->priv->cancellable);
@@ -1205,6 +1204,9 @@ static void _fcitx_client_clean_up(FcitxClient *self,
         g_object_unref(self->priv->improxy);
         self->priv->improxy = NULL;
     }
+
+    g_free(self->priv->icname);
+    self->priv->icname = NULL;
 
     if (self->priv->icproxy) {
         g_signal_handlers_disconnect_by_func(
