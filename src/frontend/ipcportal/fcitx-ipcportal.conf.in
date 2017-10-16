@@ -1,0 +1,10 @@
+[Addon]
+Name=fcitx-ipcportal
+_GeneralName=Fcitx DBus Frontend (Portal version)
+_Comment=Frontend Used by IM Modules
+Category=Frontend
+Enabled=True
+Library=fcitx-ipcportal.so
+Type=SharedLibrary
+Dependency=fcitx-dbus
+Advance=True

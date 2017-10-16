@@ -1,16 +1,33 @@
 set(qtim_fcitx_SRCS
   qfcitxinputcontextplugin.cpp
   qfcitxinputcontext.cpp
+  qtkey.cpp
+  fcitxwatcher.cpp
+  fcitxinputcontextproxy.cpp
+  fcitxqtdbustypes.cpp
   )
 
 fcitx_translate_add_sources(${qtim_fcitx_SRCS}
-  keyserver_x11.h
   qfcitxinputcontext.h
   )
 
 if(NOT (ENABLE_QT_IM_MODULE AND ENABLE_QT))
   return()
 endif()
+
+set_source_files_properties(org.fcitx.Fcitx.InputContext.xml PROPERTIES
+INCLUDE fcitxqtdbustypes.h)
+set_source_files_properties(org.fcitx.Fcitx.InputContext1.xml PROPERTIES
+INCLUDE fcitxqtdbustypes.h)
+set_source_files_properties(org.fcitx.Fcitx.InputMethod.xml PROPERTIES
+INCLUDE fcitxqtdbustypes.h)
+set_source_files_properties(org.fcitx.Fcitx.InputMethod1.xml PROPERTIES
+INCLUDE fcitxqtdbustypes.h)
+
+qt4_add_dbus_interface(qtim_fcitx_SRCS org.fcitx.Fcitx.InputContext.xml inputcontextproxy)
+qt4_add_dbus_interface(qtim_fcitx_SRCS org.fcitx.Fcitx.InputContext1.xml inputcontext1proxy)
+qt4_add_dbus_interface(qtim_fcitx_SRCS org.fcitx.Fcitx.InputMethod.xml inputmethodproxy)
+qt4_add_dbus_interface(qtim_fcitx_SRCS org.fcitx.Fcitx.InputMethod1.xml inputmethod1proxy)
 
 include_directories(
   ${QT_INCLUDE_DIR}
@@ -26,25 +43,17 @@ if(ENABLE_X11)
   link_directories(${X11_LIBRARY_DIRS})
 endif()
 
-set(qtim_fcitx_MOC_HDRS
-  qfcitxinputcontext.h
-  )
-
-QT4_AUTOMOC(${qtim_fcitx_SRCS})
-QT4_WRAP_CPP(qtim_fcitx_MOC_SRCS
-  ${qtim_fcitx_MOC_HDRS}
-  )
-
 add_library(
   qtim-fcitx MODULE
   ${qtim_fcitx_SRCS}
-  ${qtim_fcitx_MOC_SRCS}
   )
 
 set_target_properties(qtim-fcitx PROPERTIES
   PREFIX ""
   COMPILE_FLAGS "-fvisibility=hidden"
-  LINK_FLAGS "-Wl,--no-undefined")
+  LINK_FLAGS "-Wl,--no-undefined"
+  CXX_STANDARD 11
+  AUTOMOC TRUE)
 
 target_link_libraries(
   qtim-fcitx
@@ -55,7 +64,6 @@ target_link_libraries(
   optimized ${QT_QTDBUS_LIBRARY_RELEASE}
   optimized ${QT_QTGUI_LIBRARY_RELEASE}
   fcitx-config
-  fcitx-qt
   XKBCommon::XKBCommon
   )
 

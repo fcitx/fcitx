@@ -70,8 +70,7 @@ FcitxClient* fcitx_client_new();
 FcitxClient* fcitx_client_new_with_connection(FcitxConnection* connection);
 gboolean fcitx_client_is_valid(FcitxClient* self);
 int fcitx_client_process_key_sync(FcitxClient* self, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);
-void fcitx_client_process_key(FcitxClient* self, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);
-void fcitx_client_process_key_async(FcitxClient* self,
+void fcitx_client_process_key(FcitxClient* self,
                                     guint32 keyval, guint32 keycode,
                                     guint32 state, gint type, guint32 t,
                                     gint timeout_msec,
@@ -79,11 +78,9 @@ void fcitx_client_process_key_async(FcitxClient* self,
                                     GAsyncReadyCallback callback,
                                     gpointer user_data);
 gint fcitx_client_process_key_finish(FcitxClient* self, GAsyncResult* res);
-void fcitx_client_enable_ic(FcitxClient* self);
-void fcitx_client_close_ic(FcitxClient* self);
 void fcitx_client_focus_in(FcitxClient* self);
 void fcitx_client_focus_out(FcitxClient* self);
-void fcitx_client_set_cusor_rect(FcitxClient* self, int x, int y, int w, int h);
+void fcitx_client_set_display(FcitxClient* self, const gchar* display);
 void fcitx_client_set_cursor_rect(FcitxClient* self, int x, int y, int w, int h);
 void fcitx_client_set_relative_cursor_rect(FcitxClient* self, int x, int y, int w, int h);
 void fcitx_client_set_surrounding_text(FcitxClient* self, gchar* text, guint cursor, guint anchor);

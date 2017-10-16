@@ -54,10 +54,10 @@ _connect_cb(FcitxClient* client, void* user_data)
 {
     FCITX_UNUSED(user_data);
     GCancellable* cancellable = g_cancellable_new();
-    fcitx_client_process_key_async(client, FcitxKey_a, 0, 0, 0, 0, -1, cancellable, _process_cb, NULL);
+    fcitx_client_process_key(client, FcitxKey_a, 0, 0, 0, 0, -1, cancellable, _process_cb, NULL);
     g_cancellable_cancel(cancellable);
     g_object_unref(cancellable);
-    fcitx_client_process_key_async(client, FcitxKey_a, 0, 0, 0, 0, -1, NULL, _process_cb, NULL);
+    fcitx_client_process_key(client, FcitxKey_a, 0, 0, 0, 0, -1, NULL, _process_cb, NULL);
 }
 
 static void

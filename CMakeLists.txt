@@ -107,7 +107,7 @@ if(ENABLE_PRESAGE)
 endif()
 
 if(ENABLE_QT)
-  find_package(Qt4 4.5 COMPONENTS QtCore QtGui QtDBus REQUIRED)
+  find_package(Qt4 4.8 COMPONENTS QtCore QtGui QtDBus REQUIRED)
 endif()
 
 if(ENABLE_X11)

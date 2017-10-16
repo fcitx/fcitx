@@ -30,27 +30,21 @@
 #include <QWeakPointer>
 
 #include <xkbcommon/xkbcommon-compose.h>
-#include "fcitx-qt/fcitxqtinputcontextproxy.h"
-#include "fcitx-qt/fcitxqtinputmethodproxy.h"
 #include "fcitx-config/hotkey.h"
 #include "fcitx/ime.h"
+#include "fcitxinputcontextproxy.h"
+#include "fcitxwatcher.h"
 
-#if defined(Q_WS_X11)
 #include <X11/Xlib.h>
 #include "fcitx/frontend.h"
 
 struct FcitxQtICData {
-    FcitxQtICData() : capacity(0), proxy(0), surroundingAnchor(-1), surroundingCursor(-1) {}
+    FcitxQtICData(FcitxWatcher *watcher) : capacity(0), proxy(new FcitxInputContextProxy(watcher, watcher)), surroundingAnchor(-1), surroundingCursor(-1) {}
     ~FcitxQtICData() {
-        if (proxy) {
-            if (proxy->isValid()) {
-                proxy->DestroyIC();
-            }
-            delete proxy;
-        }
+        delete proxy;
     }
     QFlags<FcitxCapacityFlags> capacity;
-    FcitxQtInputContextProxy *proxy;
+    FcitxInputContextProxy *proxy;
     QRect rect;
     QString surroundingText;
     int surroundingAnchor;
@@ -82,12 +76,9 @@ public:
     XEvent* event;
     KeySym sym;
 };
-#endif
 
 
 #define FCITX_IDENTIFIER_NAME "fcitx"
-
-
 
 struct XkbContextDeleter
 {
@@ -129,38 +120,26 @@ public:
 
     virtual void widgetDestroyed(QWidget *w);
 
-#if defined(Q_WS_X11) && defined(ENABLE_X11)
     virtual bool x11FilterEvent(QWidget *keywidget, XEvent *event);
-#endif // Q_WS_X11
-    virtual bool filterEvent(const QEvent* event);
     virtual void mouseHandler(int x, QMouseEvent* event);
 
 private Q_SLOTS:
-    void connected();
-    void createInputContext(WId w);
+    void createInputContextFinished();
     void cleanUp();
     void commitString(const QString& str);
-    void updateFormattedPreedit(const FcitxQtFormattedPreeditList& preeditList, int cursorPos);
-    void forwardKey(uint keyval, uint state, int type);
+    void updateFormattedPreedit(const FcitxFormattedPreeditList& preeditList, int cursorPos);
+    void forwardKey(uint keyval, uint state, bool isRelease);
     void deleteSurroundingText(int offset, uint nchar);
-    void createInputContextFinished(QDBusPendingCallWatcher* watcher);
     void updateCursor();
-#if defined(Q_WS_X11) && defined(ENABLE_X11)
     void x11ProcessKeyEventCallback(QDBusPendingCallWatcher* watcher);
-#endif
 private:
     QWidget* validFocusWidget();
     bool processCompose(uint keyval, uint state, FcitxKeyEventType event);
-    bool checkAlgorithmically();
-    bool checkCompactTable(const struct _FcitxComposeTableCompact *table);
-#if defined(Q_WS_X11) && defined(ENABLE_X11)
     bool x11FilterEventFallback(XEvent *event, KeySym sym);
-    XEvent* createXEvent(Display* dpy, WId wid, uint keyval, uint state, int type);
-#endif // Q_WS_X11
-    QKeyEvent* createKeyEvent(uint keyval, uint state, int type);
+    XEvent* createXEvent(Display* dpy, WId wid, uint keyval, uint state, bool isRelease);
     bool isValid();
-    FcitxQtInputContextProxy* validIC();
-    FcitxQtInputContextProxy* validICByWidget(QWidget* w);
+    FcitxInputContextProxy* validIC();
+    FcitxInputContextProxy* validICByWidget(QWidget* w);
 
     void addCapacity(FcitxQtICData* data, QFlags<FcitxCapacityFlags> capacity, bool forceUpdate = false)
     {
@@ -184,14 +163,13 @@ private:
     void commitPreedit();
     void createICData(QWidget* w);
 
-    FcitxQtInputMethodProxy* m_improxy;
     QString m_preedit;
     QString m_commitPreedit;
-    FcitxQtFormattedPreeditList m_preeditList;
+    FcitxFormattedPreeditList m_preeditList;
     int m_cursorPos;
     bool m_useSurroundingText;
     bool m_syncMode;
-    FcitxQtConnection* m_connection;
+    FcitxWatcher* m_watcher;
     QHash<WId, FcitxQtICData*> m_icMap;
     QScopedPointer<struct xkb_context, XkbContextDeleter> m_xkbContext;
     QScopedPointer<struct xkb_compose_table, XkbComposeTableDeleter>  m_xkbComposeTable;

@@ -164,27 +164,7 @@ void FcitxQtConnectionPrivate::socketFileChanged() {
 
 QByteArray FcitxQtConnectionPrivate::localMachineId()
 {
-#if QT_VERSION >= QT_VERSION_CHECK(4, 8, 0)
     return QDBusConnection::localMachineId();
-#else
-    QFile file1("/var/lib/dbus/machine-id");
-    QFile file2("/etc/machine-id");
-    QFile* fileToRead = NULL;
-    if (file1.open(QIODevice::ReadOnly)) {
-        fileToRead = &file1;
-    }
-    else if (file2.open(QIODevice::ReadOnly)) {
-        fileToRead = &file2;
-    }
-    if (fileToRead) {
-        QByteArray result = fileToRead->readLine(1024);
-        fileToRead->close();
-        result = result.trimmed();
-        if (!result.isEmpty())
-            return result;
-    }
-    return "machine-id";
-#endif
 }
 
 int FcitxQtConnectionPrivate::displayNumber() {

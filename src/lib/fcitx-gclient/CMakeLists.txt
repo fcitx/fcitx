@@ -3,7 +3,6 @@ set(FCITX_GCLIENT_SOURCES
   fcitxinputmethod.c
   fcitxkbd.c
   fcitxconnection.c
-  #fcitxdbusproxy.c
   )
 
 set(FCITX_GCLIENT_BUILT_SOURCES
@@ -14,7 +13,6 @@ set(FCITX_GCLIENT_HEADERS
   fcitxclient.h
   fcitxinputmethod.h
   fcitxkbd.h
-  #fcitxdbusproxy.h
   fcitxconnection.h
   )
 
@@ -51,8 +49,8 @@ add_custom_command(OUTPUT marshall.h
 add_library(fcitx-gclient SHARED ${FCITX_GCLIENT_SOURCES}
   ${FCITX_GCLIENT_BUILT_SOURCES} ${FCITX_GCLIENT_BUILT_HEADERS})
 set_target_properties(fcitx-gclient
-  PROPERTIES VERSION 0.1
-  SOVERSION 0
+  PROPERTIES VERSION 0.2
+  SOVERSION 1
   COMPILE_FLAGS "-fvisibility=hidden"
   LINK_FLAGS "-Wl,--no-undefined")
 target_link_libraries(fcitx-gclient ${GIO2_LIBRARIES}

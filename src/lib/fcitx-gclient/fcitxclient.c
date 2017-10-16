@@ -58,8 +58,9 @@ struct _FcitxClientPrivate {
     GDBusProxy* improxy;
     GDBusProxy* icproxy;
     char servicename[64];
-    char icname[64];
-    int id;
+    gchar* icname;
+    gchar* display;
+    gboolean is_portal;
     GCancellable* cancellable;
     FcitxConnection* connection;
 };
@@ -78,6 +79,17 @@ static const gchar introspection_xml[] =
     "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
     "    </method>\n"
     "  </interface>"
+    "</node>";
+
+static const gchar introspection_portal_xml[] =
+    "<node>"
+    "<interface name=\"org.fcitx.Fcitx.InputMethod1\">"
+    "<method name=\"CreateInputContext\">"
+    "<arg type=\"a(ss)\" direction=\"in\"/>"
+    "<arg type=\"o\" direction=\"out\"/>"
+    "<arg type=\"ay\" direction=\"out\"/>"
+    "</method>"
+    "</interface>"
     "</node>";
 
 
@@ -152,6 +164,64 @@ static const gchar ic_introspection_xml[] =
     "    </signal>\n"
     "  </interface>\n"
     "</node>\n";
+
+
+const char * ic_introspection_portal_xml =
+    "<node>"
+    "<interface name=\"org.fcitx.Fcitx.InputContext1\">"
+    "<method name=\"DestroyIC\">"
+    "</method>"
+    "<method name=\"FocusIn\">"
+    "</method>"
+    "<method name=\"FocusOut\">"
+    "</method>"
+    "<method name=\"ProcessKeyEvent\">"
+    "<arg type=\"u\" direction=\"in\"/>"
+    "<arg type=\"u\" direction=\"in\"/>"
+    "<arg type=\"u\" direction=\"in\"/>"
+    "<arg type=\"b\" direction=\"in\"/>"
+    "<arg type=\"u\" direction=\"in\"/>"
+    "<arg type=\"b\" direction=\"out\"/>"
+    "</method>"
+    "<method name=\"Reset\">"
+    "</method>"
+    "<method name=\"SetCapability\">"
+    "<arg type=\"t\" direction=\"in\"/>"
+    "</method>"
+    "<method name=\"SetCursorRect\">"
+    "<arg type=\"i\" direction=\"in\"/>"
+    "<arg type=\"i\" direction=\"in\"/>"
+    "<arg type=\"i\" direction=\"in\"/>"
+    "<arg type=\"i\" direction=\"in\"/>"
+    "</method>"
+    "<method name=\"SetSurroundingText\">"
+    "<arg type=\"s\" direction=\"in\"/>"
+    "<arg type=\"u\" direction=\"in\"/>"
+    "<arg type=\"u\" direction=\"in\"/>"
+    "</method>"
+    "<method name=\"SetSurroundingTextPosition\">"
+    "<arg type=\"u\" direction=\"in\"/>"
+    "<arg type=\"u\" direction=\"in\"/>"
+    "</method>"
+    "<signal name=\"CommitString\">"
+    "<arg type=\"s\"/>"
+    "</signal>"
+    "<signal name=\"DeleteSurroundingText\">"
+    "<arg type=\"i\"/>"
+    "<arg type=\"u\"/>"
+    "</signal>"
+    "<signal name=\"ForwardKey\">"
+    "<arg type=\"u\"/>"
+    "<arg type=\"u\"/>"
+    "<arg type=\"b\"/>"
+    "</signal>"
+    "<signal name=\"UpdateFormattedPreedit\">"
+    "<arg type=\"a(si)\"/>"
+    "<arg type=\"i\"/>"
+    "</signal>"
+    "</interface>"
+    "</node>";
+
 FCITX_EXPORT_API
 GType        fcitx_client_get_type(void) G_GNUC_CONST;
 
@@ -176,12 +246,19 @@ enum {
 static guint signals[LAST_SIGNAL] = {0};
 
 static GDBusInterfaceInfo *_fcitx_client_get_interface_info(void);
+static GDBusInterfaceInfo *_fcitx_client_get_portal_interface_info(void);
 static GDBusInterfaceInfo *_fcitx_client_get_clientic_info(void);
+static GDBusInterfaceInfo *_fcitx_client_get_portal_clientic_info(void);
 static void _fcitx_client_create_ic(FcitxConnection* connection, gpointer user_data);
 static void _fcitx_client_disconnect(FcitxConnection* connection, gpointer user_data);
 static void _fcitx_client_create_ic_phase1_finished(GObject* source_object, GAsyncResult* res, gpointer user_data);
+static void _fcitx_client_create_ic_portal_phase1_finished(GObject *source_object,
+                                                           GAsyncResult *res,
+                                                           gpointer user_data);
 static void _fcitx_client_create_ic_cb(GObject *source_object, GAsyncResult *res, gpointer user_data);
+static void _fcitx_client_create_ic_portal_cb(GObject *source_object, GAsyncResult *res, gpointer user_data);
 static void _fcitx_client_create_ic_phase2_finished(GObject *source_object, GAsyncResult *res, gpointer user_data);
+static void _fcitx_client_create_ic_phase2_portal_finished(GObject *source_object, GAsyncResult *res, gpointer user_data);
 static void _fcitx_client_g_signal(GDBusProxy *proxy, gchar *sender_name, gchar *signal_name, GVariant *parameters, gpointer user_data);
 static void fcitx_client_init(FcitxClient *self);
 static void fcitx_client_finalize(GObject *object);
@@ -199,33 +276,25 @@ static void fcitx_client_class_init(FcitxClientClass *klass);
 
 static void _item_free(gpointer arg);
 
-static GDBusInterfaceInfo *
-_fcitx_client_get_interface_info(void)
-{
-    static gsize has_info = 0;
-    static GDBusInterfaceInfo *info = NULL;
-    if (g_once_init_enter(&has_info)) {
-        GDBusNodeInfo *introspection_data;
-        introspection_data = g_dbus_node_info_new_for_xml(introspection_xml, NULL);
-        info = introspection_data->interfaces[0];
-        g_once_init_leave(&has_info, 1);
-    }
-    return info;
+#define STATIC_INTERFACE_INFO(FUNCTION, XML) \
+static GDBusInterfaceInfo * \
+FUNCTION(void) \
+{ \
+    static gsize has_info = 0; \
+    static GDBusInterfaceInfo *info = NULL; \
+    if (g_once_init_enter(&has_info)) { \
+        GDBusNodeInfo *introspection_data; \
+        introspection_data = g_dbus_node_info_new_for_xml(XML, NULL); \
+        info = introspection_data->interfaces[0]; \
+        g_once_init_leave(&has_info, 1); \
+    } \
+    return info; \
 }
 
-static GDBusInterfaceInfo *
-_fcitx_client_get_clientic_info(void)
-{
-    static gsize has_info = 0;
-    static GDBusInterfaceInfo *info = NULL;
-    if (g_once_init_enter(&has_info)) {
-        GDBusNodeInfo *introspection_data;
-        introspection_data = g_dbus_node_info_new_for_xml(ic_introspection_xml, NULL);
-        info = introspection_data->interfaces[0];
-        g_once_init_leave(&has_info, 1);
-    }
-    return info;
-}
+STATIC_INTERFACE_INFO(_fcitx_client_get_interface_info, introspection_xml)
+STATIC_INTERFACE_INFO(_fcitx_client_get_portal_interface_info, introspection_portal_xml)
+STATIC_INTERFACE_INFO(_fcitx_client_get_clientic_info, ic_introspection_xml)
+STATIC_INTERFACE_INFO(_fcitx_client_get_portal_clientic_info, ic_introspection_portal_xml)
 
 static void
 fcitx_client_finalize(GObject *object)
@@ -254,6 +323,9 @@ fcitx_client_dispose(GObject *object)
 
     if (G_OBJECT_CLASS(fcitx_client_parent_class)->dispose != NULL)
         G_OBJECT_CLASS(fcitx_client_parent_class)->dispose(object);
+
+    g_free(self->priv->display);
+    self->priv->display = NULL;
 }
 
 /**
@@ -265,7 +337,7 @@ fcitx_client_dispose(GObject *object)
 FCITX_EXPORT_API
 void fcitx_client_enable_ic(FcitxClient* self)
 {
-    if (self->priv->icproxy) {
+    if (self->priv->icproxy && !self->priv->is_portal) {
         g_dbus_proxy_call(self->priv->icproxy, "EnableIC", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
 }
@@ -279,7 +351,7 @@ void fcitx_client_enable_ic(FcitxClient* self)
 FCITX_EXPORT_API
 void fcitx_client_close_ic(FcitxClient* self)
 {
-    if (self->priv->icproxy) {
+    if (self->priv->icproxy && !self->priv->is_portal) {
         g_dbus_proxy_call(self->priv->icproxy, "CloseIC", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
 }
@@ -336,28 +408,15 @@ void fcitx_client_reset(FcitxClient* self)
 FCITX_EXPORT_API
 void fcitx_client_set_capacity(FcitxClient* self, guint flags)
 {
-    uint32_t iflags = flags;
     if (self->priv->icproxy) {
-        g_dbus_proxy_call(self->priv->icproxy, "SetCapacity", g_variant_new("(u)", iflags), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+        if (self->priv->is_portal) {
+            guint64 iflags = flags;
+            g_dbus_proxy_call(self->priv->icproxy, "SetCapability", g_variant_new("(t)", iflags), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+        } else {
+            guint32 iflags = flags;
+            g_dbus_proxy_call(self->priv->icproxy, "SetCapacity", g_variant_new("(u)", iflags), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+        }
     }
-}
-
-/**
- * fcitx_client_set_cusor_rect:
- * @self A #FcitxClient
- * @x x of cursor
- * @y y of cursor
- * @w width of cursor
- * @h height of cursor
- *
- * Deprecated:
- *
- * tell fcitx current client's cursor geometry info
- **/
-FCITX_EXPORT_API
-void fcitx_client_set_cusor_rect(FcitxClient* self, int x, int y, int w, int h)
-{
-    fcitx_client_set_cursor_rect(self, x, y, w, h);
 }
 
 /**
@@ -399,36 +458,6 @@ void fcitx_client_set_surrounding_text(FcitxClient* self, gchar* text, guint cur
 }
 
 /**
- * fcitx_client_process_key:
- * @self: A #FcitxClient
- * @cb: callback
- * @user_data: user data
- * @keyval: key value
- * @keycode: hardware key code
- * @state: key state
- * @type: event type
- * @t: timestamp
- *
- * Deprecated:
- *
- * send a key event to fcitx asynchronizely, you need to use #g_dbus_proxy_call_finish with this function
- **/
-FCITX_EXPORT_API
-void fcitx_client_process_key(FcitxClient* self, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t)
-{
-    int itype = type;
-    if (self->priv->icproxy) {
-        g_dbus_proxy_call(self->priv->icproxy,
-                          "ProcessKeyEvent",
-                          g_variant_new("(uuuiu)", keyval, keycode, state, itype, t),
-                          G_DBUS_CALL_FLAGS_NONE,
-                          -1, NULL,
-                          cb,
-                          user_data);
-    }
-}
-
-/**
  * fcitx_client_process_key_finish:
  * @self: A #FcitxClient
  * @res: result
@@ -446,8 +475,15 @@ gint fcitx_client_process_key_finish(FcitxClient* self, GAsyncResult* res)
 
     GVariant* result = g_dbus_proxy_call_finish(self->priv->icproxy, res, NULL);
     if (result) {
-        g_variant_get(result, "(i)", &ret);
-        g_variant_unref(result);
+        if (self->priv->is_portal) {
+            gboolean bret;
+            g_variant_get(result, "(b)", &bret);
+            g_variant_unref(result);
+            ret = bret ? 1 : 0;
+        } else {
+            g_variant_get(result, "(i)", &ret);
+            g_variant_unref(result);
+        }
     }
     return ret;
 }
@@ -477,7 +513,7 @@ void _fcitx_client_process_key_cancelled(GCancellable* cancellable, gpointer use
 }
 
 /**
- * fcitx_client_process_key_async:
+ * fcitx_client_process_key:
  * @self: A #FcitxClient
  * @keyval: key value
  * @keycode: hardware key code
@@ -492,7 +528,7 @@ void _fcitx_client_process_key_cancelled(GCancellable* cancellable, gpointer use
  * use this function with #fcitx_client_process_key_finish
  **/
 FCITX_EXPORT_API
-void fcitx_client_process_key_async(FcitxClient* self,
+void fcitx_client_process_key(FcitxClient* self,
                                     guint32 keyval, guint32 keycode,
                                     guint32 state, gint type, guint32 t,
                                     gint timeout_msec,
@@ -500,20 +536,32 @@ void fcitx_client_process_key_async(FcitxClient* self,
                                     GAsyncReadyCallback callback,
                                     gpointer user_data)
 {
-    int itype = type;
     if (self->priv->icproxy) {
         ProcessKeyStruct* pk = g_new(ProcessKeyStruct, 1);
         pk->self = g_object_ref(self);
         pk->callback = callback;
         pk->user_data = user_data;
-        g_dbus_proxy_call(self->priv->icproxy,
-                          "ProcessKeyEvent",
-                          g_variant_new("(uuuiu)", keyval, keycode, state, itype, t),
-                          G_DBUS_CALL_FLAGS_NONE,
-                          timeout_msec,
-                          cancellable,
-                          _fcitx_client_process_key_cb,
-                          pk);
+        if (self->priv->is_portal) {
+            gboolean btype = type == 1;
+            g_dbus_proxy_call(self->priv->icproxy,
+                            "ProcessKeyEvent",
+                            g_variant_new("(uuubu)", keyval, keycode, state, btype, t),
+                            G_DBUS_CALL_FLAGS_NONE,
+                            timeout_msec,
+                            cancellable,
+                            _fcitx_client_process_key_cb,
+                            pk);
+        } else {
+            gint32 itype = type;
+            g_dbus_proxy_call(self->priv->icproxy,
+                            "ProcessKeyEvent",
+                            g_variant_new("(uuuiu)", keyval, keycode, state, itype, t),
+                            G_DBUS_CALL_FLAGS_NONE,
+                            timeout_msec,
+                            cancellable,
+                            _fcitx_client_process_key_cb,
+                            pk);
+        }
     }
 }
 
@@ -533,23 +581,40 @@ void fcitx_client_process_key_async(FcitxClient* self,
 FCITX_EXPORT_API
 int fcitx_client_process_key_sync(FcitxClient* self, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t)
 {
-    int itype = type;
-    int ret = -1;
     if (self->priv->icproxy) {
-        GVariant* result =  g_dbus_proxy_call_sync(self->priv->icproxy,
-                            "ProcessKeyEvent",
-                            g_variant_new("(uuuiu)", keyval, keycode, state, itype, t),
-                            G_DBUS_CALL_FLAGS_NONE,
-                            -1, NULL,
-                            NULL);
+        if (self->priv->is_portal) {
+            gboolean ret = 0;
+            gboolean is_release = type == 1;
+            GVariant* result =  g_dbus_proxy_call_sync(self->priv->icproxy,
+                                "ProcessKeyEvent",
+                                g_variant_new("(uuubu)", keyval, keycode, state, is_release, t),
+                                G_DBUS_CALL_FLAGS_NONE,
+                                -1, NULL,
+                                NULL);
 
-        if (result) {
-            g_variant_get(result, "(i)", &ret);
-            g_variant_unref(result);
+            if (result) {
+                g_variant_get(result, "(b)", &ret);
+                g_variant_unref(result);
+            }
+            return ret ? 1 : 0;
+        } else {
+            int ret = -1;
+            GVariant* result =  g_dbus_proxy_call_sync(self->priv->icproxy,
+                                "ProcessKeyEvent",
+                                g_variant_new("(uuuiu)", keyval, keycode, state, type, t),
+                                G_DBUS_CALL_FLAGS_NONE,
+                                -1, NULL,
+                                NULL);
+
+            if (result) {
+                g_variant_get(result, "(i)", &ret);
+                g_variant_unref(result);
+            }
+            return ret;
         }
     }
 
-    return ret;
+    return -1;
 }
 
 static void
@@ -563,6 +628,7 @@ fcitx_client_init(FcitxClient *self)
     self->priv->cancellable = NULL;
     self->priv->improxy = NULL;
     self->priv->icproxy = NULL;
+    self->priv->icname = NULL;
 }
 
 static void
@@ -602,6 +668,25 @@ _fcitx_client_create_ic(FcitxConnection* connection, gpointer user_data)
         FCITX_IM_DBUS_INTERFACE,
         self->priv->cancellable,
         _fcitx_client_create_ic_phase1_finished,
+        self
+    );
+}
+
+static void
+_fcitx_client_create_ic_portal(FcitxClient *self)
+{
+    fcitx_gclient_debug("_fcitx_client_create_ic_portal");
+
+    self->priv->cancellable = g_cancellable_new ();
+    g_dbus_proxy_new(
+        fcitx_connection_get_g_dbus_connection(self->priv->connection),
+        G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
+        _fcitx_client_get_portal_interface_info(),
+        "org.freedesktop.portal.Fcitx",
+        "/inputmethod",
+        "org.fcitx.Fcitx.InputMethod1",
+        self->priv->cancellable,
+        _fcitx_client_create_ic_portal_phase1_finished,
         self
     );
 }
@@ -648,8 +733,7 @@ _fcitx_client_create_ic_phase1_finished(GObject *source_object,
     } while(0);
 
     if (!self->priv->improxy) {
-        /* unref for create_ic */
-        g_object_unref(self);
+        _fcitx_client_create_ic_portal(self);
         return;
     }
 
@@ -668,6 +752,66 @@ _fcitx_client_create_ic_phase1_finished(GObject *source_object,
     );
     free(appname);
 
+}
+
+
+static void
+_fcitx_client_create_ic_portal_phase1_finished(GObject *source_object,
+                                               GAsyncResult *res,
+                                               gpointer user_data)
+{
+    FCITX_UNUSED(source_object);
+    fcitx_gclient_debug("_fcitx_client_create_ic_portal_phase1_finished");
+    g_return_if_fail (user_data != NULL);
+    g_return_if_fail (FCITX_IS_CLIENT(user_data));
+    FcitxClient* self = (FcitxClient*) user_data;
+    if (self->priv->cancellable) {
+        g_object_unref (self->priv->cancellable);
+        self->priv->cancellable = NULL;
+    }
+    if (self->priv->improxy)
+        g_object_unref(self->priv->improxy);
+    self->priv->improxy = g_dbus_proxy_new_finish(res, NULL);
+
+    do {
+        if (!self->priv->improxy) {
+            break;
+        }
+
+        gchar* owner_name = g_dbus_proxy_get_name_owner(self->priv->improxy);
+
+        if (!owner_name) {
+            g_object_unref(self->priv->improxy);
+            self->priv->improxy = NULL;
+            break;
+        }
+        g_free(owner_name);
+    } while(0);
+
+    if (!self->priv->improxy) {
+        /* unref for create_ic */
+        g_object_unref(self);
+        return;
+    }
+
+    self->priv->cancellable = g_cancellable_new ();
+
+    GVariantBuilder builder;
+    g_variant_builder_init(&builder, G_VARIANT_TYPE("a(ss)"));
+    if (self->priv->display) {
+        g_variant_builder_add(&builder, "(ss)", "display,", self->priv->display);
+    }
+
+    g_dbus_proxy_call(
+        self->priv->improxy,
+        "CreateInputContext",
+        g_variant_new("(a(ss))", &builder),
+        G_DBUS_CALL_FLAGS_NONE,
+        -1,           /* timeout */
+        self->priv->cancellable,
+        _fcitx_client_create_ic_portal_cb,
+        self
+    );
 }
 
 static void
@@ -690,10 +834,11 @@ _fcitx_client_create_ic_cb(GObject *source_object,
 
     gboolean enable;
     guint32 key1, state1, key2, state2;
-    g_variant_get(result, "(ibuuuu)", &self->priv->id, &enable, &key1, &state1, &key2, &state2);
+    int id;
+    g_variant_get(result, "(ibuuuu)", &id, &enable, &key1, &state1, &key2, &state2);
     g_variant_unref(result);
 
-    sprintf(self->priv->icname, FCITX_IC_DBUS_PATH, self->priv->id);
+    self->priv->icname = g_strdup_printf(FCITX_IC_DBUS_PATH, id);
 
     self->priv->cancellable = g_cancellable_new ();
     g_dbus_proxy_new(
@@ -709,6 +854,45 @@ _fcitx_client_create_ic_cb(GObject *source_object,
     );
 }
 
+static void
+_fcitx_client_create_ic_portal_cb(GObject *source_object,
+                           GAsyncResult *res,
+                           gpointer user_data)
+{
+    FcitxClient* self = (FcitxClient*) user_data;
+    if (self->priv->cancellable) {
+        g_object_unref (self->priv->cancellable);
+        self->priv->cancellable = NULL;
+    }
+    GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(source_object), res, NULL);
+
+    if (!result) {
+        /* unref for _fcitx_client_phase1_finish */
+        g_object_unref(self);
+        return;
+    }
+
+    gchar *path = NULL;
+    GVariantIter *iter;
+    g_variant_get(result, "(oay)", &path, &iter);
+    g_variant_iter_free(iter);
+    g_variant_unref(result);
+
+    self->priv->icname = g_strdup(path);
+
+    self->priv->cancellable = g_cancellable_new ();
+    g_dbus_proxy_new(
+        fcitx_connection_get_g_dbus_connection(self->priv->connection),
+        G_DBUS_PROXY_FLAGS_NONE,
+        _fcitx_client_get_portal_clientic_info(),
+        "org.freedesktop.portal.Fcitx",
+        self->priv->icname,
+        "org.fcitx.Fcitx.InputContext1",
+        self->priv->cancellable,
+        _fcitx_client_create_ic_phase2_portal_finished,
+        self
+    );
+}
 
 static void
 _fcitx_client_create_ic_phase2_finished(GObject *source_object,
@@ -751,6 +935,47 @@ _fcitx_client_create_ic_phase2_finished(GObject *source_object,
 }
 
 static void
+_fcitx_client_create_ic_phase2_portal_finished(GObject *source_object,
+                                        GAsyncResult *res,
+                                        gpointer user_data)
+{
+    FCITX_UNUSED(source_object);
+    g_return_if_fail (user_data != NULL);
+    g_return_if_fail (FCITX_IS_CLIENT(user_data));
+    FcitxClient* self = (FcitxClient*) user_data;
+    if (self->priv->cancellable) {
+        g_object_unref (self->priv->cancellable);
+        self->priv->cancellable = NULL;
+    }
+    if (self->priv->icproxy)
+        g_object_unref(self->priv->icproxy);
+    self->priv->icproxy = g_dbus_proxy_new_finish(res, NULL);
+
+    do {
+        if (!self->priv->icproxy)
+            break;
+
+        gchar* owner_name = g_dbus_proxy_get_name_owner(self->priv->icproxy);
+
+        if (!owner_name) {
+            g_object_unref(self->priv->icproxy);
+            self->priv->icproxy = NULL;
+            break;
+        }
+        g_free(owner_name);
+    } while(0);
+
+    if (self->priv->icproxy) {
+        self->priv->is_portal = TRUE;
+        g_signal_connect(self->priv->icproxy, "g-signal", G_CALLBACK(_fcitx_client_g_signal), self);
+        g_signal_emit(user_data, signals[CONNECTED_SIGNAL], 0);
+    }
+
+    /* unref for _fcitx_client_create_ic_cb */
+    g_object_unref(self);
+}
+
+static void
 _item_free(gpointer arg)
 {
     FcitxPreeditItem* item = arg;
@@ -767,6 +992,7 @@ _fcitx_client_g_signal(GDBusProxy *proxy,
 {
     FCITX_UNUSED(proxy);
     FCITX_UNUSED(sender_name);
+    FcitxClient *self = user_data;
     if (strcmp(signal_name, "EnableIM") == 0) {
         g_signal_emit(user_data, signals[ENABLE_IM_SIGNAL], 0);
     }
@@ -781,10 +1007,17 @@ _fcitx_client_g_signal(GDBusProxy *proxy,
         }
     }
     else if (strcmp(signal_name, "ForwardKey") == 0) {
-        guint32 key, state;
-        gint32 type;
-        g_variant_get(parameters, "(uui)", &key, &state, &type);
-        g_signal_emit(user_data, signals[FORWARD_KEY_SIGNAL], 0, key, state, type);
+        if (self->priv->is_portal) {
+            guint32 key, state;
+            gboolean is_release;
+            g_variant_get(parameters, "(uub)", &key, &state, &is_release);
+            g_signal_emit(user_data, signals[FORWARD_KEY_SIGNAL], 0, key, state, (is_release ? 0: 1));
+        } else {
+            guint32 key, state;
+            gint32 type;
+            g_variant_get(parameters, "(uui)", &key, &state, &type);
+            g_signal_emit(user_data, signals[FORWARD_KEY_SIGNAL], 0, key, state, type);
+        }
     }
     else if (strcmp(signal_name, "DeleteSurroundingText") == 0) {
         guint32 nchar;
@@ -809,7 +1042,12 @@ _fcitx_client_g_signal(GDBusProxy *proxy,
         while (g_variant_iter_next(iter, "(si)", &string, &type, NULL)) {
             FcitxPreeditItem* item = g_malloc0(sizeof(FcitxPreeditItem));
             item->string = strdup(string);
-            item->type = type;
+            if (self->priv->is_portal) {
+                // revert under line to fcitx 4 style.
+                item->type = type ^ (1 << 3);
+            } else {
+                item->type = type;
+            }
             g_ptr_array_add(array, item);
             g_free(string);
         }
@@ -1045,6 +1283,12 @@ FcitxClient* fcitx_client_new_with_connection(FcitxConnection* connection)
     return FCITX_CLIENT(self);
 }
 
+FCITX_EXPORT_API
+void fcitx_client_set_display(FcitxClient* self, const gchar* display) {
+    g_free(self->priv->display);
+    self->priv->display = g_strdup(display);
+}
+
 /**
  * fcitx_client_is_valid:
  * @self: A #FcitxClient
@@ -1082,6 +1326,9 @@ void fcitx_client_set_property(GObject* gobject, guint prop_id, const GValue* va
 static void
 _fcitx_client_clean_up(FcitxClient* self, gboolean dont_emit_disconn)
 {
+    self->priv->is_portal = FALSE;
+    g_free(self->priv->icname);
+    self->priv->icname = NULL;
     if (self->priv->cancellable) {
         g_cancellable_cancel (self->priv->cancellable);
         g_object_unref (self->priv->cancellable);

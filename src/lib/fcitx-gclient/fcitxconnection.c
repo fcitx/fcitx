@@ -26,6 +26,12 @@
 #include "fcitxconnection.h"
 #include "marshall.h"
 
+typedef enum _NameStatus {
+    NS_NAME_UNKNOWN,
+    NS_NAME_NOT_PRESENT,
+    NS_NAME_PRESENT
+} NameStatus ;
+
 /**
  * FcitxConnection:
  *
@@ -38,6 +44,10 @@
 struct _FcitxConnectionPrivate {
     char servicename[64];
     guint watch_id;
+    guint portal_watch_id;
+
+    NameStatus main_status, portal_status;
+
     GFileMonitor* monitor;
     GCancellable* cancellable;
     GDBusConnection* connection;
@@ -126,6 +136,11 @@ _fcitx_connection_appear(GDBusConnection *connection, const gchar *name,
                            _fcitx_connection_new_service_appear,
                            g_object_ref(self),
                            g_object_unref);
+        if (g_strcmp0(name, "org.freedesktop.portal.Fcitx") == 0) {
+            self->priv->portal_status = NS_NAME_PRESENT;
+        } else {
+            self->priv->main_status = NS_NAME_PRESENT;
+        }
     }
 }
 
@@ -136,7 +151,15 @@ _fcitx_connection_vanish(GDBusConnection *connection, const gchar *name,
     FCITX_UNUSED(connection);
     FCITX_UNUSED(name);
     FcitxConnection* self = (FcitxConnection*) user_data;
-    _fcitx_connection_clean_up(self, FALSE);
+    if (g_strcmp0(name, "org.freedesktop.portal.Fcitx") == 0) {
+        self->priv->portal_status = NS_NAME_NOT_PRESENT;
+    } else {
+        self->priv->main_status = NS_NAME_NOT_PRESENT;
+    }
+
+    if (self->priv->portal_status == NS_NAME_NOT_PRESENT && self->priv->main_status == NS_NAME_NOT_PRESENT) {
+        _fcitx_connection_clean_up(self, FALSE);
+    }
 }
 
 static gchar*
@@ -167,6 +190,8 @@ fcitx_connection_init(FcitxConnection *self)
     self->priv->connection = NULL;
     self->priv->cancellable = NULL;
     self->priv->watch_id = 0;
+    self->priv->portal_watch_id = 0;
+    self->priv->main_status = self->priv->portal_status = NS_NAME_UNKNOWN;
     self->priv->connection_is_bus = FALSE;
 
     gchar* path = _fcitx_get_socket_path();
@@ -262,13 +287,24 @@ _fcitx_connection_bus_finished(GObject *source_object, GAsyncResult *res,
 static void
 _fcitx_connection_watch(FcitxConnection* self)
 {
-    if (self->priv->watch_id)
+    if (self->priv->watch_id || self->priv->portal_watch_id)
         return;
     fcitx_gclient_debug("_fcitx_connection_watch");
 
+    self->priv->main_status = self->priv->portal_status = NS_NAME_UNKNOWN;
     self->priv->watch_id = g_bus_watch_name(
                        G_BUS_TYPE_SESSION,
                        self->priv->servicename,
+                       G_BUS_NAME_WATCHER_FLAGS_NONE,
+                       _fcitx_connection_appear,
+                       _fcitx_connection_vanish,
+                       self,
+                       NULL
+                   );
+
+    self->priv->portal_watch_id = g_bus_watch_name(
+                       G_BUS_TYPE_SESSION,
+                       "org.freedesktop.portal.Fcitx",
                        G_BUS_NAME_WATCHER_FLAGS_NONE,
                        _fcitx_connection_appear,
                        _fcitx_connection_vanish,
@@ -282,7 +318,10 @@ _fcitx_connection_unwatch(FcitxConnection* self)
 {
     if (self->priv->watch_id)
         g_bus_unwatch_name(self->priv->watch_id);
+    if (self->priv->portal_watch_id)
+        g_bus_unwatch_name(self->priv->portal_watch_id);
     self->priv->watch_id = 0;
+    self->priv->portal_watch_id = 0;
 }
 
 static void
