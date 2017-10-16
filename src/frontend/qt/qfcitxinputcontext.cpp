@@ -293,6 +293,7 @@ void QFcitxInputContext::createICData(QWidget* w)
     FcitxQtICData* data = m_icMap.value(w->effectiveWinId());
     if (!data) {
         m_icMap[w->effectiveWinId()] = data = new FcitxQtICData(m_watcher);
+        data->proxy->setDisplay("x11:");
         data->proxy->setProperty("wid", (qulonglong) w);
         data->proxy->setProperty("icData", qVariantFromValue(static_cast<void*>(data)));
         connect(data->proxy, SIGNAL(inputContextCreated()), this, SLOT(createInputContextFinished()));

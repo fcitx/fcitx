@@ -48,6 +48,7 @@ typedef struct _FcitxLastSentIMInfo
 
 typedef struct _FcitxPortalIC {
     int id;
+    char* sender;
     char path[32];
     uuid_t uuid;
     int width;
@@ -257,6 +258,7 @@ void PortalCreateIC(void* arg, FcitxInputContext* context, void* priv)
     context->privateic = ipcic;
 
     ipcic->id = ipc->maxid;
+    ipcic->sender = strdup(dbus_message_get_sender(message));
     ipc->maxid ++;
     ipcic->lastPreeditIsEmpty = false;
     sprintf(ipcic->path, "/inputcontext/%d", ipcic->id);
@@ -310,6 +312,7 @@ void PortalDestroyIC(void* arg, FcitxInputContext* context)
     fcitx_utils_free(ipcic->lastSentIMInfo.uniqueName);
     fcitx_utils_free(ipcic->lastSentIMInfo.langCode);
     fcitx_utils_free(ipcic->surroundingText);
+    fcitx_utils_free(ipcic->sender);
     free(context->privateic);
     context->privateic = NULL;
 }
@@ -429,7 +432,9 @@ static DBusHandlerResult PortalICDBusEventHandler(DBusConnection *connection, DB
     if (!reply && ic) {
         DBusError error;
         dbus_error_init(&error);
-        if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusIn")) {
+        if (strcmp(dbus_message_get_sender(msg), GetPortalIC(ic)->sender) != 0) {
+            reply = dbus_message_new_error(msg, "org.fcitx.Fcitx.Error", "Invalid sender");
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusIn")) {
             PortalICFocusIn(ipc, ic);
             reply = dbus_message_new_method_return(msg);
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusOut")) {
@@ -823,7 +828,7 @@ void PortalUpdateIMInfoForIC(void* arg)
         FcitxIM* im = FcitxInstanceGetCurrentIM(ipc->owner);
         const char* name = (im && im->strName && fcitx_utf8_check_string(im->strName)) ? im->strName : "";
         const char* uniqueName = (im && im->uniqueName && fcitx_utf8_check_string(im->uniqueName)) ? im->uniqueName : "";
-        const char* langCode = (im && im->langCode && fcitx_utf8_check_string(im->langCode)) ? im->langCode : "";
+        const char* langCode = (im && fcitx_utf8_check_string(im->langCode)) ? im->langCode : "";
 
         if (fcitx_utils_strcmp0(GetPortalIC(ic)->lastSentIMInfo.name, name) == 0 &&
             fcitx_utils_strcmp0(GetPortalIC(ic)->lastSentIMInfo.uniqueName, uniqueName) == 0 &&
