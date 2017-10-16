@@ -79,7 +79,6 @@ private:
     QDBusPendingCallWatcher *m_createInputContextWatcher = nullptr;
     QString m_display;
     bool m_portal;
-    qulonglong m_capability;
 };
 
 #endif  // FCITXINPUTCONTEXTPROXY_H_
