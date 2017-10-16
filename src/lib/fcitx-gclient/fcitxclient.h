@@ -20,36 +20,35 @@
 #ifndef CLIENT_IM_H
 #define CLIENT_IM_H
 
-
-#include <gio/gio.h>
 #include "fcitxconnection.h"
+#include <gio/gio.h>
 
 /*
  * Type macros
  */
 
 /* define GOBJECT macros */
-#define FCITX_TYPE_CLIENT         (fcitx_client_get_type ())
-#define FCITX_CLIENT(o) \
-        (G_TYPE_CHECK_INSTANCE_CAST ((o), FCITX_TYPE_CLIENT, FcitxClient))
-#define FCITX_IS_CLIENT(object) \
-        (G_TYPE_CHECK_INSTANCE_TYPE ((object), FCITX_TYPE_CLIENT))
-#define FCITX_CLIENT_CLASS(k) \
-        (G_TYPE_CHECK_CLASS_CAST((k), FCITX_TYPE_CLIENT, FcitxClientClass))
-#define FCITX_CLIENT_GET_CLASS(o) \
-        (G_TYPE_INSTANCE_GET_CLASS ((o), FCITX_TYPE_CLIENT, FcitxClientClass))
+#define FCITX_TYPE_CLIENT (fcitx_client_get_type())
+#define FCITX_CLIENT(o)                                                        \
+    (G_TYPE_CHECK_INSTANCE_CAST((o), FCITX_TYPE_CLIENT, FcitxClient))
+#define FCITX_IS_CLIENT(object)                                                \
+    (G_TYPE_CHECK_INSTANCE_TYPE((object), FCITX_TYPE_CLIENT))
+#define FCITX_CLIENT_CLASS(k)                                                  \
+    (G_TYPE_CHECK_CLASS_CAST((k), FCITX_TYPE_CLIENT, FcitxClientClass))
+#define FCITX_CLIENT_GET_CLASS(o)                                              \
+    (G_TYPE_INSTANCE_GET_CLASS((o), FCITX_TYPE_CLIENT, FcitxClientClass))
 
 G_BEGIN_DECLS
 
-typedef struct _FcitxClient        FcitxClient;
-typedef struct _FcitxClientClass   FcitxClientClass;
+typedef struct _FcitxClient FcitxClient;
+typedef struct _FcitxClientClass FcitxClientClass;
 typedef struct _FcitxClientPrivate FcitxClientPrivate;
-typedef struct _FcitxPreeditItem   FcitxPreeditItem;
+typedef struct _FcitxPreeditItem FcitxPreeditItem;
 
 struct _FcitxClient {
     GObject parent_instance;
     /* instance member */
-    FcitxClientPrivate* priv;
+    FcitxClientPrivate *priv;
 };
 
 struct _FcitxClientClass {
@@ -61,33 +60,36 @@ struct _FcitxClientClass {
 };
 
 struct _FcitxPreeditItem {
-    gchar* string;
+    gchar *string;
     gint32 type;
 };
 
-GType        fcitx_client_get_type(void) G_GNUC_CONST;
-FcitxClient* fcitx_client_new();
-FcitxClient* fcitx_client_new_with_connection(FcitxConnection* connection);
-gboolean fcitx_client_is_valid(FcitxClient* self);
-int fcitx_client_process_key_sync(FcitxClient* self, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);
-void fcitx_client_process_key(FcitxClient* self,
-                                    guint32 keyval, guint32 keycode,
-                                    guint32 state, gint type, guint32 t,
-                                    gint timeout_msec,
-                                    GCancellable *cancellable,
-                                    GAsyncReadyCallback callback,
-                                    gpointer user_data);
-gint fcitx_client_process_key_finish(FcitxClient* self, GAsyncResult* res);
-void fcitx_client_focus_in(FcitxClient* self);
-void fcitx_client_focus_out(FcitxClient* self);
-void fcitx_client_set_display(FcitxClient* self, const gchar* display);
-void fcitx_client_set_cursor_rect(FcitxClient* self, int x, int y, int w, int h);
-void fcitx_client_set_relative_cursor_rect(FcitxClient* self, int x, int y, int w, int h);
-void fcitx_client_set_surrounding_text(FcitxClient* self, gchar* text, guint cursor, guint anchor);
-void fcitx_client_set_capacity(FcitxClient* self, guint flags);
+GType fcitx_client_get_type(void) G_GNUC_CONST;
+FcitxClient *fcitx_client_new();
+FcitxClient *fcitx_client_new_with_connection(FcitxConnection *connection);
+gboolean fcitx_client_is_valid(FcitxClient *self);
+int fcitx_client_process_key_sync(FcitxClient *self, guint32 keyval,
+                                  guint32 keycode, guint32 state, gint type,
+                                  guint32 t);
+void fcitx_client_process_key(FcitxClient *self, guint32 keyval,
+                              guint32 keycode, guint32 state, gint type,
+                              guint32 t, gint timeout_msec,
+                              GCancellable *cancellable,
+                              GAsyncReadyCallback callback, gpointer user_data);
+gint fcitx_client_process_key_finish(FcitxClient *self, GAsyncResult *res);
+void fcitx_client_focus_in(FcitxClient *self);
+void fcitx_client_focus_out(FcitxClient *self);
+void fcitx_client_set_display(FcitxClient *self, const gchar *display);
+void fcitx_client_set_cursor_rect(FcitxClient *self, int x, int y, int w,
+                                  int h);
+void fcitx_client_set_relative_cursor_rect(FcitxClient *self, int x, int y,
+                                           int w, int h);
+void fcitx_client_set_surrounding_text(FcitxClient *self, gchar *text,
+                                       guint cursor, guint anchor);
+void fcitx_client_set_capacity(FcitxClient *self, guint flags);
 
-void fcitx_client_reset(FcitxClient* self);
+void fcitx_client_reset(FcitxClient *self);
 
 G_END_DECLS
 
-#endif //CLIENT_IM_H
+#endif // CLIENT_IM_H
