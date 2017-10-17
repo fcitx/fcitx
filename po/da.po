@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-17 11:02-0700\n"
-"PO-Revision-Date: 2017-10-17 17:56+0000\n"
+"POT-Creation-Date: 2017-10-17 12:02-0700\n"
+"PO-Revision-Date: 2017-10-17 18:15+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -85,7 +85,7 @@ msgstr "/min  tid brugt: "
 
 #: src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
-msgstr ""
+msgstr "0 for at begå med det samme, -1 for at beholde alle ord"
 
 #: src/module/unicode/charselectdata.c:249
 msgid "<Low Surrogate>"
@@ -686,23 +686,23 @@ msgstr "Kommentar"
 
 #: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
-msgstr ""
+msgstr "Begå og videregiv når der trykkes på en ugyldig nøgle i denne tabel"
 
 #: src/im/table/table.desc:208
 msgid "Commit key for select first candidate"
-msgstr ""
+msgstr "Begå-tast til at vælge første kandidat"
 
 #: src/im/table/table.desc:213
 msgid "Commit string when there is no match"
-msgstr ""
+msgstr "Begå-streng når der ikke er noget match"
 
 #: data/config.desc:198
 msgid "Commit when toggle state"
-msgstr ""
+msgstr "Begå når der skiftes tilstand"
 
 #: src/im/keyboard/fcitx-keyboard.desc:4
 msgid "Commit with extra space when choose candidate word"
-msgstr ""
+msgstr "Begå med ekstra mellemrum når der vælges kandidatord"
 
 #: data/script/fcitx-diagnose.sh:996
 msgid "Config GUI for gtk${1} not found."
@@ -893,7 +893,7 @@ msgstr "Deaktiveret"
 
 #: data/config.desc:217
 msgid "Do not commit preedit text when unfocus a window"
-msgstr ""
+msgstr "Begå ikke preedit-tekst når et vindue mister fokus"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:620
 msgid "Do not show again"
@@ -1566,7 +1566,7 @@ msgstr "Inputmetode deaktiveret"
 
 #: data/config.desc:235
 msgid "Input Method Hint will be only shown when state is active"
-msgstr ""
+msgstr "Inputmetodetip vil kun blive vist når tilstand er aktiv"
 
 #: data/script/fcitx-diagnose.sh:666
 msgid "Input Method Related Environment Variables: "
@@ -1869,6 +1869,7 @@ msgstr "Migrer den gamle filsti til den nye"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
 msgstr ""
+"Minimum inputlængde for at udløse stroke-input (sæt til -1 for at deaktivere)"
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
@@ -1878,10 +1879,14 @@ msgstr "Minimumlængde for tip til udløserord"
 msgid ""
 "Minimum length trigger auto send candidate when there will be no candidate"
 msgstr ""
+"Minimumlængde udløser automatisk afsendelse af kandidat når der ikke er "
+"nogen kandidat"
 
 #: src/im/table/table.desc:54
 msgid "Minimum length trigger auto send candidate word when only one candidate"
 msgstr ""
+"Minimumlængde udløser automatisk afsendelse af kandidatord når der kun er én "
+"kandidat"
 
 #: src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
@@ -2980,7 +2985,7 @@ msgstr "Brug bred tegnsætning"
 
 #: src/im/keyboard/fcitx-keyboard.desc:39
 msgid "Use enter to commit the existing string"
-msgstr ""
+msgstr "Brug enter til at begå den eksisterende streng"
 
 #: data/config.desc:10
 msgid "Use extra trigger key only after using it to inactivate"
@@ -3215,6 +3220,8 @@ msgid ""
 "Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have "
 "trouble committing strings using XIM."
 msgstr ""
+"Din LC_CTYPE er sat til ${1} hvor kodningen ikke er UTF-8. Du kan have "
+"problemer med at begå strenge ved brug af XIM."
 
 #: data/script/fcitx-diagnose.sh:1594
 msgid ""
