@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-15 21:02-0700\n"
-"PO-Revision-Date: 2017-10-16 03:03+0000\n"
+"POT-Creation-Date: 2017-10-16 21:02-0700\n"
+"PO-Revision-Date: 2017-10-17 03:02+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_CN/)\n"
@@ -154,8 +154,9 @@ msgid "Active"
 msgstr "激活"
 
 #: src/ui/classic/skin.desc:387
+#, fuzzy
 msgid "Active Menu Color"
-msgstr "活动菜单颜色"
+msgstr "活动的文本图标颜色"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -1645,8 +1646,9 @@ msgid "Key"
 msgstr "按键"
 
 #: src/ui/classic/skin.desc:416
+#, fuzzy
 msgid "Key Color On Virtual Keyboard"
-msgstr ""
+msgstr "切换虚拟键盘"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -2543,6 +2545,7 @@ msgid "SkinInputBar"
 msgstr "皮肤输入框设置"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
+#, fuzzy
 msgid "SkinKeyboard"
 msgstr "键盘"
 
@@ -2569,16 +2572,18 @@ msgstr "皮肤主窗口设置"
 #: src/ui/classic/skin.desc:380 src/ui/classic/skin.desc:385
 #: src/ui/classic/skin.desc:389 src/ui/classic/skin.desc:393
 #: src/ui/classic/skin.desc:401
+#, fuzzy
 msgid "SkinMenu"
-msgstr "皮肤菜单设置"
+msgstr "皮肤"
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
 msgstr "皮肤托盘图标设置"
 
 #: src/ui/classic/skin.desc:391
+#, fuzzy
 msgid "Space Line Color"
-msgstr "分隔线颜色"
+msgstr "码表提示颜色"
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
@@ -3051,8 +3056,9 @@ msgid "Virtual Keyboard"
 msgstr "虚拟键盘"
 
 #: src/ui/classic/skin.desc:411
+#, fuzzy
 msgid "Virtual Keyboard Image"
-msgstr "虚拟键盘图片"
+msgstr "虚拟键盘状态"
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"

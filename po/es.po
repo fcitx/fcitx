@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-15 20:02-0700\n"
-"PO-Revision-Date: 2017-10-04 05:04+0000\n"
+"POT-Creation-Date: 2017-10-16 21:02-0700\n"
+"PO-Revision-Date: 2017-10-17 03:02+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/fcitx/fcitx/language/es/)\n"
 "Language: es\n"
@@ -1627,8 +1627,9 @@ msgid "Key"
 msgstr ""
 
 #: src/ui/classic/skin.desc:416
+#, fuzzy
 msgid "Key Color On Virtual Keyboard"
-msgstr ""
+msgstr "Teclado virtual"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -2525,8 +2526,9 @@ msgid "SkinInputBar"
 msgstr ""
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
+#, fuzzy
 msgid "SkinKeyboard"
-msgstr ""
+msgstr "Teclado virtual"
 
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
@@ -3029,8 +3031,9 @@ msgid "Virtual Keyboard"
 msgstr "Teclado virtual"
 
 #: src/ui/classic/skin.desc:411
+#, fuzzy
 msgid "Virtual Keyboard Image"
-msgstr ""
+msgstr "Estado del teclado virtual"
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"

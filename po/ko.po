@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-15 21:02-0700\n"
-"PO-Revision-Date: 2017-10-16 03:03+0000\n"
+"POT-Creation-Date: 2017-10-16 21:02-0700\n"
+"PO-Revision-Date: 2017-10-17 03:02+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -147,8 +147,9 @@ msgid "Active"
 msgstr "활성"
 
 #: src/ui/classic/skin.desc:387
+#, fuzzy
 msgid "Active Menu Color"
-msgstr "활성 메뉴 색"
+msgstr "활성 문자열 아이콘 색"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -1646,8 +1647,9 @@ msgid "Key"
 msgstr "키"
 
 #: src/ui/classic/skin.desc:416
+#, fuzzy
 msgid "Key Color On Virtual Keyboard"
-msgstr ""
+msgstr "가상 키보드 전환"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -2547,8 +2549,9 @@ msgid "SkinInputBar"
 msgstr "스킨입력바"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
+#, fuzzy
 msgid "SkinKeyboard"
-msgstr "스킨키보드"
+msgstr "키보드"
 
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
@@ -2573,16 +2576,18 @@ msgstr "스킨메인바"
 #: src/ui/classic/skin.desc:380 src/ui/classic/skin.desc:385
 #: src/ui/classic/skin.desc:389 src/ui/classic/skin.desc:393
 #: src/ui/classic/skin.desc:401
+#, fuzzy
 msgid "SkinMenu"
-msgstr "스킨메뉴"
+msgstr "스킨"
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
 msgstr "스킨 트레이아이콘"
 
 #: src/ui/classic/skin.desc:391
+#, fuzzy
 msgid "Space Line Color"
-msgstr "스페이스 라인 색"
+msgstr "표 코드 색"
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
@@ -3054,8 +3059,9 @@ msgid "Virtual Keyboard"
 msgstr "가상 키보드"
 
 #: src/ui/classic/skin.desc:411
+#, fuzzy
 msgid "Virtual Keyboard Image"
-msgstr "가상 키보드 이미지"
+msgstr "가상 키보드 상태"
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
