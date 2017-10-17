@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-17 12:02-0700\n"
-"PO-Revision-Date: 2017-10-17 18:15+0000\n"
+"POT-Creation-Date: 2017-10-17 15:02-0700\n"
+"PO-Revision-Date: 2017-10-17 21:59+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -221,7 +221,7 @@ msgstr "JusterHurtig"
 #: src/im/pinyin/fcitx-pinyin.desc:60 src/im/pinyin/fcitx-pinyin.desc:69
 #: src/im/pinyin/fcitx-pinyin.desc:78 src/im/table/table.desc:25
 msgid "AdjustFreq"
-msgstr ""
+msgstr "Justerpopulær"
 
 #: src/im/pinyin/fcitx-pinyin.desc:58 src/im/pinyin/fcitx-pinyin.desc:67
 #: src/im/pinyin/fcitx-pinyin.desc:76 src/im/table/table.desc:23
@@ -291,7 +291,7 @@ msgstr "Anvend dette tilpasset xmodmap-script efter layout er blevet ændret"
 
 #: data/addon.desc:67
 msgid "Argument for InputMethod Register"
-msgstr ""
+msgstr "Argument til inputmetode-register"
 
 #: src/module/spell/fcitx-spell.desc:6
 msgid "Aspell"
@@ -422,7 +422,7 @@ msgstr "Cangjie"
 #: src/im/pinyin/py.c:1735
 #, c-format
 msgid "Cannot Save Frequent word: %s"
-msgstr ""
+msgstr "Kan ikke gemme populærord: %s"
 
 #: src/im/pinyin/py.c:1798
 #, c-format
@@ -432,7 +432,7 @@ msgstr "Kan ikke gemme Pinyin-indeks: %s"
 #: src/im/pinyin/py.c:1672
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
-msgstr ""
+msgstr "Kan ikke gemme bruger-Pinyin-database: %s"
 
 #: data/script/fcitx-diagnose.sh:925
 msgid "Cannot connect to fcitx correctly."
@@ -506,6 +506,8 @@ msgstr "Kan ikke finde im-modul mellemlager til gtk ${1}"
 msgid ""
 "Cannot find kimpanel dbus interface or enabled non-kimpanel user interface."
 msgstr ""
+"Kan ikke finde kimpanel dbus-grænseflade eller aktivere ikke-kimpanel-"
+"brugerflade."
 
 #: data/script/fcitx-diagnose.sh:952
 msgid "Cannot find pid of DBus name ${1} owner."
@@ -593,7 +595,7 @@ msgstr "Klassisk"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
-msgstr "Klassisk brugergrænseflade med understøttelse af skin"
+msgstr "Klassisk brugerflade med understøttelse af skin"
 
 #: src/ui/classic/fcitx-classic-ui.desc:1
 #: src/ui/classic/fcitx-classic-ui.desc:7
@@ -905,11 +907,11 @@ msgstr "Vis ikke i grafisk brugerflade"
 
 #: data/config.desc:259
 msgid "Do not show input window if there is only one candidate and preedit"
-msgstr ""
+msgstr "Vis ikke inputvindue hvis der kun er en kandidat og preedit"
 
 #: data/config.desc:253
 msgid "Do not show input window if there is only preedit string"
-msgstr ""
+msgstr "Vis ikke inputvindue hvis der kun er preedit-streng"
 
 #: src/module/autoeng/fcitx-autoeng.desc:12
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
@@ -966,7 +968,7 @@ msgstr "Aktiveret tilstand for inputmetode"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
 msgid "Enchance pinyin input in Fcitx"
-msgstr ""
+msgstr "Enchance pinyin-input i Fcitx"
 
 #: src/im/table/table.desc:69
 msgid "End Key"
@@ -1030,6 +1032,8 @@ msgid ""
 "Error: $HOME or $XDG_CONFIG_HOME is not set, cannot determine the install "
 "path"
 msgstr ""
+"Fejl: $HOME eller $XDG_CONFIG_HOME er ikke sat, kan ikke beslutte "
+"installationsstien"
 
 #: src/ui/cairostuff/font.c:46
 msgid "Error: Load fontconfig failed"
@@ -1118,7 +1122,7 @@ msgstr "Fcitx-skin-installationsprogram"
 
 #: src/module/spell/fcitx-spell.conf.in:4
 msgid "Fcitx Spelling Hint/Completion Support"
-msgstr ""
+msgstr "Understøttelse af Fcitx-stavetips-/fuldførsel"
 
 #: data/script/fcitx-diagnose.sh:885
 msgid "Fcitx State:"
@@ -1450,7 +1454,7 @@ msgstr "Hottast til at skifte til at inputte tegn fra frasetilstand"
 
 #: src/im/pinyin/fcitx-pinyin.desc:43
 msgid "Hotkey of Adding Frequent Word"
-msgstr ""
+msgstr "Hottast til at tilføje populærord"
 
 #: src/im/pinyin/fcitx-pinyin.desc:53
 msgid "Hotkey of Delete User Phrase"
@@ -1458,7 +1462,7 @@ msgstr "Hottast til slet brugerfrase"
 
 #: src/im/pinyin/fcitx-pinyin.desc:48
 msgid "Hotkey of Deleting Frequent Word"
-msgstr ""
+msgstr "Hottast til at slette populærord"
 
 #: src/lib/fcitx/ime.c:322
 #, c-format
@@ -1508,7 +1512,7 @@ msgstr "Ignorer tomme markeringer"
 
 #: src/im/table/table.desc:223
 msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
-msgstr ""
+msgstr "Ignorer noget tegnsætning. Ignorer al tegnsætning, hvis den er tom"
 
 #: data/config.desc:56
 msgid "Inactivate Input Method"
@@ -1532,7 +1536,7 @@ msgstr "Inkluder deaktivér når der rulles mellem inputmetode"
 
 #: src/module/clipboard/fcitx-clipboard.desc:31
 msgid "Include the text currently selected in clipboard history."
-msgstr ""
+msgstr "Inkluder teksten som er markeret i udklipsholderens historik."
 
 #: src/ui/classic/skin.desc:313
 msgid "Inctive Tray Icon"
@@ -1832,7 +1836,7 @@ msgstr "Maksimum længde af hvert kandidatord"
 
 #: src/im/keyboard/fcitx-keyboard.desc:32
 msgid "Maximum length of spell hint list"
-msgstr ""
+msgstr "Maksimum længde af stavetipliste"
 
 #: src/module/autoeng/fcitx-autoeng.desc:23
 msgid "Maximum length of spell hint list for Auto English"
@@ -1852,7 +1856,7 @@ msgstr ""
 
 #: src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
-msgstr ""
+msgstr "Maksimum antal ord i preedit"
 
 #: src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
@@ -2090,7 +2094,7 @@ msgstr "Pinyin-forbedring"
 
 #: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
-msgstr ""
+msgstr "Pinyin-indeks magisk tal matcher ikke"
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
@@ -2146,12 +2150,12 @@ msgstr "Fortrukne Enchant-udbyder"
 #: src/im/pinyin/py.c:769
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
-msgstr ""
+msgstr "Tryk på 1 for at slette %s i populærliste (ESC for at annullere)"
 
 #: src/im/pinyin/py.c:771
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
-msgstr ""
+msgstr "Tryk på 1-%d for at slette %s i populærliste (ESC for at annullere)"
 
 #: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:456
 msgid "Press Enter to input text"
@@ -2163,7 +2167,7 @@ msgstr "Tryk på indeks for at slette brugerfrase (ESC for at annullere)"
 
 #: src/im/pinyin/py.c:743
 msgid "Press number to make word in frequent list"
-msgstr ""
+msgstr "Tryk på tal for at få ord i populærliste"
 
 #: data/config.desc:120
 msgid "Prev Page"
@@ -2356,7 +2360,7 @@ msgstr "Regel for rækkefølge på kandidatord"
 
 #: src/im/pinyin/fcitx-pinyin.desc:80
 msgid "Rule of Frequent Word Order"
-msgstr ""
+msgstr "Regel for rækkefølge på populærord"
 
 #: data/script/fcitx-diagnose.sh:866
 msgid "Running as root:"
@@ -2665,7 +2669,7 @@ msgstr "Skift indlejret Preedit"
 
 #: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
-msgstr ""
+msgstr "Skift tilstand for tegnsætning med fuld bredde"
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
@@ -2714,7 +2718,7 @@ msgstr "Skift til den tredje inputmetode"
 
 #: data/config.desc:108
 msgid "Switching Full Width Character Mode"
-msgstr ""
+msgstr "Skifter tilstand for tegn med fuld bredde"
 
 #: data/config.desc:102
 msgid "Switching Remind Mode"
@@ -2883,7 +2887,7 @@ msgstr "Type"
 
 #: data/config.desc:186
 msgid "Type half width Punc After a Number"
-msgstr ""
+msgstr "Skriv tegnsætning med halv bredde efter et tal"
 
 #: data/addon.desc:21
 msgid "UI"
@@ -3037,11 +3041,11 @@ msgstr "Lodret kandidatsordliste"
 
 #: src/module/vk/fcitx-vk.conf.in:3 src/module/vk/fcitx-vk.conf.in:10
 msgid "Virtual Key Board"
-msgstr ""
+msgstr "Virtuelt tastatur"
 
 #: src/module/vk/fcitx-vk.conf.in:4
 msgid "Virtual Key Board in order to input special character"
-msgstr ""
+msgstr "Virtuelt tastatur til at inputte specialtegn"
 
 #: src/module/vk/vk.c:179
 msgid "Virtual Keyboard"
@@ -3132,17 +3136,19 @@ msgstr "Xim"
 
 #: data/script/fcitx-diagnose.sh:1089
 msgid "Xim Server Name from Environment variable is ${1}."
-msgstr ""
+msgstr "Xim-servernavn fra miljøvariabel er ${1}."
 
 #: data/script/fcitx-diagnose.sh:1101
 msgid "Xim server name is the same with that set in the environment variable."
-msgstr ""
+msgstr "Xim-servernavn er det samme som det der er sat i miljøvariablen."
 
 #: data/script/fcitx-diagnose.sh:1103
 msgid ""
 "Xim server name: \"${1}\" is different from that set in the environment "
 "variable: \"${2}\"."
 msgstr ""
+"Xim-servernavn: \"${1}\" er ikke det samme som det der er sat i "
+"miljøvariablen: \"${2}\"."
 
 #: data/script/fcitx-diagnose.sh:874
 msgid ""
