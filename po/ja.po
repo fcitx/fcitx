@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-16 21:02-0700\n"
-"PO-Revision-Date: 2017-10-17 03:02+0000\n"
+"POT-Creation-Date: 2017-10-16 22:02-0700\n"
+"PO-Revision-Date: 2017-10-17 04:04+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "Language: ja\n"
@@ -160,9 +160,8 @@ msgid "Active"
 msgstr "有効"
 
 #: src/ui/classic/skin.desc:387
-#, fuzzy
 msgid "Active Menu Color"
-msgstr "有効なテキストアイコンの色"
+msgstr ""
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -1657,9 +1656,8 @@ msgid "Key"
 msgstr "キー"
 
 #: src/ui/classic/skin.desc:416
-#, fuzzy
 msgid "Key Color On Virtual Keyboard"
-msgstr "仮想キーボードの切り替え"
+msgstr ""
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -2559,9 +2557,8 @@ msgid "SkinInputBar"
 msgstr "入力バーのスキン"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
-#, fuzzy
 msgid "SkinKeyboard"
-msgstr "キーボード"
+msgstr ""
 
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
@@ -2586,18 +2583,16 @@ msgstr "メインバーのスキン"
 #: src/ui/classic/skin.desc:380 src/ui/classic/skin.desc:385
 #: src/ui/classic/skin.desc:389 src/ui/classic/skin.desc:393
 #: src/ui/classic/skin.desc:401
-#, fuzzy
 msgid "SkinMenu"
-msgstr "スキン"
+msgstr ""
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
 msgstr "スキントレイアイコン"
 
 #: src/ui/classic/skin.desc:391
-#, fuzzy
 msgid "Space Line Color"
-msgstr "テーブルコードの色"
+msgstr ""
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
@@ -3071,9 +3066,8 @@ msgid "Virtual Keyboard"
 msgstr "仮想キーボード"
 
 #: src/ui/classic/skin.desc:411
-#, fuzzy
 msgid "Virtual Keyboard Image"
-msgstr "仮想キーボードの状態"
+msgstr ""
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"

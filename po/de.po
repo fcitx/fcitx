@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-16 21:02-0700\n"
-"PO-Revision-Date: 2017-10-17 03:02+0000\n"
+"POT-Creation-Date: 2017-10-16 22:02-0700\n"
+"PO-Revision-Date: 2017-10-17 04:04+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
@@ -149,9 +149,8 @@ msgid "Active"
 msgstr "Aktiv"
 
 #: src/ui/classic/skin.desc:387
-#, fuzzy
 msgid "Active Menu Color"
-msgstr "Aktive Texticon-Farbe"
+msgstr ""
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -1665,9 +1664,8 @@ msgid "Key"
 msgstr "Taste"
 
 #: src/ui/classic/skin.desc:416
-#, fuzzy
 msgid "Key Color On Virtual Keyboard"
-msgstr "Wechsel Virtuelle Tastatur"
+msgstr ""
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -2583,9 +2581,8 @@ msgid "SkinInputBar"
 msgstr "Oberfläche Eingabefeld"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
-#, fuzzy
 msgid "SkinKeyboard"
-msgstr "Tastatur"
+msgstr ""
 
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
@@ -2610,18 +2607,16 @@ msgstr "Oberfläche Hauptfenster"
 #: src/ui/classic/skin.desc:380 src/ui/classic/skin.desc:385
 #: src/ui/classic/skin.desc:389 src/ui/classic/skin.desc:393
 #: src/ui/classic/skin.desc:401
-#, fuzzy
 msgid "SkinMenu"
-msgstr "Oberfläche"
+msgstr ""
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
 msgstr "Oberfläche Trayicons"
 
 #: src/ui/classic/skin.desc:391
-#, fuzzy
 msgid "Space Line Color"
-msgstr "Farbe Eingabe Tabelle"
+msgstr ""
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
@@ -3104,9 +3099,8 @@ msgid "Virtual Keyboard"
 msgstr "Virtuelle Tastatur"
 
 #: src/ui/classic/skin.desc:411
-#, fuzzy
 msgid "Virtual Keyboard Image"
-msgstr "Status der virtuellen Tastatur"
+msgstr ""
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
