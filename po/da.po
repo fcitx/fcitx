@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-17 05:02-0700\n"
-"PO-Revision-Date: 2017-10-17 11:03+0000\n"
+"POT-Creation-Date: 2017-10-17 09:02-0700\n"
+"PO-Revision-Date: 2017-10-17 16:01+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -234,7 +234,7 @@ msgstr "Alle"
 
 #: data/script/fcitx-diagnose.sh:1256
 msgid "All found Gtk ${1} immodule files exist."
-msgstr "Alle fundne Gtk ${1} immodule-filer findes."
+msgstr "Alle fundne Gtk ${1} im-modul-filer findes."
 
 #: data/script/fcitx-diagnose.sh:1517
 msgid "All libraries for all addons are found."
@@ -249,6 +249,8 @@ msgid ""
 "Allow Pinyin Enhance to replace the first candidate word when the input "
 "string is very closed to English."
 msgstr ""
+"Tillad Pinyin-forbedring at erstatte det første kandidatord når "
+"inputstrengen er meget tæt på engelsk."
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
 msgid "Allow replacing the first candidate"
@@ -301,7 +303,7 @@ msgstr "Automatisk"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:4
 msgid "Auto Change to English Mode while Input Specific String"
-msgstr ""
+msgstr "Skift automatisk til engelsk-tilstand mens der inputtes bestemt streng"
 
 #: src/im/pinyin/fcitx-pinyin.desc:33
 msgid "Auto Create Phrase"
@@ -317,11 +319,11 @@ msgstr "Automatisk engelsk"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:3
 msgid "Auto English Mode"
-msgstr "Automatisk engelsk tilstand"
+msgstr "Automatisk engelsk-tilstand"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:9
 msgid "Auto English Trigger Word"
-msgstr ""
+msgstr "Udløser ord for automatisk engelsk"
 
 #: src/im/table/table.desc:88
 msgid "Auto Phrase"
@@ -337,7 +339,7 @@ msgstr "Automatisk frase-frase"
 
 #: src/im/table/table.desc:49
 msgid "Auto Send Candidate Word"
-msgstr ""
+msgstr "Send automatisk kandidatord"
 
 #: src/lib/fcitx-config/fcitx-config.c:1180
 #: src/lib/fcitx-config/fcitx-config.c:1187
@@ -411,7 +413,7 @@ msgstr ""
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
-msgstr ""
+msgstr "Kandidatord-nummer"
 
 #: src/im/table/data/cangjie.conf.in:3
 msgid "Cangjie"
@@ -473,15 +475,15 @@ msgstr "Kan ikke finde fcitx-eksekverbar!"
 
 #: data/script/fcitx-diagnose.sh:1405
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
-msgstr ""
+msgstr "Kan ikke finde im-modul til gtk ${1} i mellemlager."
 
 #: data/script/fcitx-diagnose.sh:1323
 msgid "Cannot find fcitx im module for gtk ${1}."
-msgstr ""
+msgstr "Kan ikke finde fcitx im-modul til gtk ${1}."
 
 #: data/script/fcitx-diagnose.sh:1197 data/script/fcitx-diagnose.sh:1202
 msgid "Cannot find fcitx input method module for ${1}."
-msgstr ""
+msgstr "Kan ikke finde fcitx inputmetode-modul for ${1}."
 
 #: data/script/fcitx-diagnose.sh:1030
 msgid "Cannot find fcitx-configtool executable!"
@@ -498,7 +500,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1400
 msgid "Cannot find immodules cache for gtk ${1}"
-msgstr ""
+msgstr "Kan ikke finde im-modul mellemlager til gtk ${1}"
 
 #: data/script/fcitx-diagnose.sh:1539
 msgid ""
@@ -563,7 +565,7 @@ msgstr "Vælg"
 
 #: data/config.desc:130
 msgid "Choose Second and Third Candidate Word"
-msgstr ""
+msgstr "Vælg andet eller tredje kandidatord"
 
 #: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:141
 #: src/module/autoeng/fcitx-autoeng.desc:2
@@ -746,7 +748,7 @@ msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.conf.in:4
 msgid "Convert Simplified Chinese To Traditional Chinese"
-msgstr ""
+msgstr "Konverter forenklet kinesisk til traditionelt kinesisk"
 
 #: src/ui/classic/skin.desc:153 src/ui/classic/skin.desc:161
 #: src/ui/classic/skin.desc:295 src/ui/classic/skin.desc:303
@@ -816,7 +818,7 @@ msgstr "DBus-understøttelse"
 #: src/module/notificationitem/fcitx-notificationitem.conf.in:3
 #: src/module/notificationitem/fcitx-notificationitem.conf.in:4
 msgid "DBus based new Freedesktop.org tray icon"
-msgstr ""
+msgstr "DBus-baseret nyt Freedesktop.org-bakkeikon"
 
 #: data/script/fcitx-diagnose.sh:933
 msgid "DBus interface:"
@@ -929,6 +931,8 @@ msgstr ""
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
 msgstr ""
+"Duplikatgruppen %s er en skrivebordsfil,@ linje %d, sammenføj med den "
+"forrige."
 
 #: src/lib/fcitx-config/fcitx-config.c:901
 #, c-format
@@ -1061,7 +1065,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1394
 msgid "Failed to find fcitx in immodule cache at ${1}"
-msgstr ""
+msgstr "Kunne ikke finde fcitx i im-modul mellemlager ved ${1}"
 
 #: data/script/fcitx-diagnose.sh:1311
 msgid "Failed to find fcitx in the output of ${1}"
@@ -1082,7 +1086,7 @@ msgstr "Fcitx-tilføjelser:"
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:4
 msgid "Fcitx Clipboard access"
-msgstr ""
+msgstr "Fcitx udklipsholderadgang"
 
 #: data/fcitx-configtool.desktop.in:2
 msgid "Fcitx Configuration"
@@ -1255,11 +1259,11 @@ msgstr "Fandt fcitx-configtool ved ${1}."
 
 #: data/script/fcitx-diagnose.sh:1381
 msgid "Found immodule cache for unknown gtk version at ${1}."
-msgstr ""
+msgstr "Fandt im-modul mellemlager for ukendt gtk-version ved ${1}."
 
 #: data/script/fcitx-diagnose.sh:1373
 msgid "Found immodules cache for gtk ${1} at ${2}."
-msgstr ""
+msgstr "Fandt im-modulers mellemlager til gtk ${1} ved ${2}."
 
 #: data/script/fcitx-diagnose.sh:1190
 msgid "Found unknown fcitx qt module: ${1}."
@@ -1386,7 +1390,7 @@ msgstr "Græsk"
 
 #: data/script/fcitx-diagnose.sh:1250
 msgid "Gtk ${1} immodule file ${2} does not exist."
-msgstr ""
+msgstr "Gtk ${1} im-modul-filen ${2} findes ikke."
 
 #: data/script/fcitx-diagnose.sh:1418
 msgid "Gtk IM module cache:"
@@ -1606,7 +1610,7 @@ msgstr "Ugyldig tilføjelseskonfigurationsfil ${1}."
 #: src/lib/fcitx-utils/desktop-parse.c:592
 #, c-format
 msgid "Invalid entry line @ line %d %s"
-msgstr ""
+msgstr "Ugyldig postlinje @ linje %d %s"
 
 #: src/lib/fcitx-utils/desktop-parse.c:550
 #, c-format
@@ -1832,15 +1836,15 @@ msgstr ""
 
 #: src/module/autoeng/fcitx-autoeng.desc:23
 msgid "Maximum length of spell hint list for Auto English"
-msgstr ""
+msgstr "Maksimum længde af stavetipliste til automatisk engelsk"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 msgid "Maximum length of spell hint list for Pinyin Enhance"
-msgstr ""
+msgstr "Maksimum længde af stavetipliste til Pinyin-forbedring"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:37
 msgid "Maximum length of spell hint list for Quick Phrase"
-msgstr "Maksimum længde af stavetipliste for hurtigfrase"
+msgstr "Maksimum længde af stavetipliste til hurtigfrase"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
 msgid "Maximum results from stroke input."
@@ -1860,7 +1864,7 @@ msgstr "Skriftstørrelse for menu"
 
 #: src/im/pinyin/py.c:2141
 msgid "Migrate the old file path to the new one"
-msgstr ""
+msgstr "Migrer den gamle filsti til den nye"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
@@ -1914,7 +1918,7 @@ msgstr "Indbygget"
 
 #: data/config.desc:155
 msgid "Next Candidate Word"
-msgstr ""
+msgstr "Næste kandidatord"
 
 #: data/config.desc:125
 msgid "Next Page"
@@ -1953,7 +1957,7 @@ msgstr "Ingen påmindelse"
 #: src/lib/fcitx-utils/desktop-parse.c:586
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
-msgstr ""
+msgstr "Ikke-kommentar tilhører ikke nogen gruppe @ %d %s"
 
 #: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:145
 #: src/module/autoeng/fcitx-autoeng.desc:6
@@ -2077,7 +2081,7 @@ msgstr "Pinyin"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:42
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:50
 msgid "Pinyin Enhance"
-msgstr ""
+msgstr "Pinyin-forbedring"
 
 #: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
@@ -2167,7 +2171,7 @@ msgstr "Forrige side-ikon"
 
 #: data/config.desc:148
 msgid "Previous Candidate Word"
-msgstr ""
+msgstr "Forrige kandidatord"
 
 #: data/inputmethod.desc:15
 msgid "Priority"
@@ -2196,7 +2200,7 @@ msgstr "Spørg om fraserne efter input"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:4
 msgid "Provide extra feature for pinyin in Fcitx"
-msgstr ""
+msgstr "Giv ekstra funktionalitet til pinyin i Fcitx"
 
 #: src/module/dbus/fcitx-dbus.conf.in:4
 msgid "Provides DBus Support (Used by other Addon)"
@@ -2218,7 +2222,7 @@ msgstr "Leverer XIM-understøttelse"
 
 #: src/module/punc/fcitx-punc.conf.in:4
 msgid "Punctuation Conversion Support"
-msgstr ""
+msgstr "Understøttelse af tegnsætningskonvertering"
 
 #: src/module/punc/punc.c:585 src/module/punc/fcitx-punc.conf.in:3
 msgid "Punctuation Support"
@@ -2226,7 +2230,7 @@ msgstr "Understøttelse af tegnsætning"
 
 #: data/script/fcitx-diagnose.sh:1171
 msgid "Qt IM module files:"
-msgstr ""
+msgstr "Filer for Qt IM-modul:"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
@@ -2343,7 +2347,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:62
 msgid "Rule of Candidate Word Order"
-msgstr ""
+msgstr "Regel for rækkefølge på kandidatord"
 
 #: src/im/pinyin/fcitx-pinyin.desc:80
 msgid "Rule of Frequent Word Order"
@@ -2587,7 +2591,7 @@ msgstr "Placering af specielt ikon"
 
 #: src/module/spell/fcitx-spell.conf.in:3
 msgid "Spell"
-msgstr ""
+msgstr "Stav"
 
 #: src/module/spell/fcitx-spell.desc:1 src/module/spell/fcitx-spell.desc:10
 msgid "Spell Hint"
