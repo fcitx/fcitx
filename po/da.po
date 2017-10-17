@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-16 22:02-0700\n"
-"PO-Revision-Date: 2017-10-17 04:04+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2017-10-17 03:02-0700\n"
+"PO-Revision-Date: 2017-10-17 10:00+0000\n"
+"Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -64,7 +64,7 @@ msgstr "/Begynder%27s_guide"
 
 #: data/script/fcitx-diagnose.sh:703
 msgid "/Hall_of_Shame_for_Linux_IME_Support"
-msgstr ""
+msgstr "/Hall_of_Shame_for_understøttelse_af_Linux_IME"
 
 #: data/script/fcitx-diagnose.sh:667
 msgid "/Input_method_related_environment_variables"
@@ -455,6 +455,8 @@ msgstr ""
 msgid ""
 "Cannot find a GUI config tool, please install one of ${1}, ${2}, or ${3}."
 msgstr ""
+"Kan ikke finde et GUI-konfigurationsværktøj, installer venligst ${1}, ${2}, "
+"eller ${3}."
 
 #: data/script/fcitx-diagnose.sh:1520
 msgid "Cannot find enabled fcitx user interface!"
@@ -712,7 +714,7 @@ msgstr "Konfigurations-GUI til kde:"
 
 #: data/script/fcitx-diagnose.sh:1028
 msgid "Config Tool Wrapper:"
-msgstr ""
+msgstr "Konfigurationsværktøjs-wrapper:"
 
 #: data/addon.desc:62
 msgid "ConfigFile"
@@ -1399,7 +1401,7 @@ msgstr "Halv tegnbrede"
 
 #: data/script/fcitx-diagnose.sh:702
 msgid "Hall of Shame for Linux IME Support"
-msgstr ""
+msgstr "Hall of Shame for understøttelse af Linux IME"
 
 #: src/ui/classic/fcitx-classic-ui.desc:47
 msgid "Hide"
@@ -1663,7 +1665,7 @@ msgstr ""
 
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:4
 msgid "Kimpanel Support for Fcitx"
-msgstr ""
+msgstr "Understøttelse af Kimpanel for Fcitx"
 
 #: data/script/fcitx-diagnose.sh:1531
 msgid "Kimpanel process:"
