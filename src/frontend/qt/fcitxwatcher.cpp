@@ -106,7 +106,7 @@ QString FcitxWatcher::service() const {
 void FcitxWatcher::setAvailability(bool availability) {
     if (m_availability != availability) {
         m_availability = availability;
-        emit availibilityChanged(m_availability);
+        emit availabilityChanged(m_availability);
     }
 }
 
@@ -148,7 +148,7 @@ void FcitxWatcher::unwatch() {
     m_mainPresent = false;
     m_portalPresent =false;
     m_watched = false;
-    updateAvailbility();
+    updateAvailability();
 }
 
 QString FcitxWatcher::address() {
@@ -221,7 +221,7 @@ void FcitxWatcher::createConnection() {
                               this, SLOT(dbusDisconnected()));
         unwatchSocketFile();
     }
-    updateAvailbility();
+    updateAvailability();
 }
 
 void FcitxWatcher::dbusDisconnected() {
@@ -275,9 +275,9 @@ void FcitxWatcher::imChanged(const QString &service, const QString &oldOwner,
         }
     }
 
-    updateAvailbility();
+    updateAvailability();
 }
 
-void FcitxWatcher::updateAvailbility() {
+void FcitxWatcher::updateAvailability() {
     setAvailability(m_mainPresent || m_portalPresent || m_connection);
 }

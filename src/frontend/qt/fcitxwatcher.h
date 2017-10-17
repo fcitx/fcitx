@@ -43,7 +43,7 @@ public:
     QString service() const;
 
 signals:
-    void availibilityChanged(bool);
+    void availabilityChanged(bool);
 
 private slots:
     void dbusDisconnected();
@@ -58,7 +58,7 @@ private:
     void createConnection();
     void cleanUpConnection();
     void setAvailability(bool availability);
-    void updateAvailbility();
+    void updateAvailability();
 
     QFileSystemWatcher *m_fsWatcher;
     QDBusServiceWatcher *m_serviceWatcher;

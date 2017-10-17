@@ -32,7 +32,7 @@ FcitxInputContextProxy::FcitxInputContextProxy(FcitxWatcher *watcher,
     : QObject(parent), m_fcitxWatcher(watcher), m_portal(false) {
     FcitxFormattedPreedit::registerMetaType();
     FcitxInputContextArgument::registerMetaType();
-    connect(m_fcitxWatcher, SIGNAL(availibilityChanged(bool)), this,
+    connect(m_fcitxWatcher, SIGNAL(availabilityChanged(bool)), this,
             SLOT(availabilityChanged()));
     m_watcher.setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
     connect(&m_watcher, SIGNAL(serviceUnregistered(QString)), this,
