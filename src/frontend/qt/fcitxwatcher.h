@@ -48,7 +48,8 @@ signals:
 private slots:
     void dbusDisconnected();
     void socketFileChanged();
-    void imChanged(const QString &service, const QString &oldOwner, const QString &newOwner);
+    void imChanged(const QString &service, const QString &oldOwner,
+                   const QString &newOwner);
 
 private:
     QString address();
@@ -70,4 +71,4 @@ private:
     bool m_watched = false;
 };
 
-#endif  // FCITXWATCHER_H_
+#endif // FCITXWATCHER_H_

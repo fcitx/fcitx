@@ -20,11 +20,11 @@
 #include "qtkey.h"
 
 #include <QHash>
-#include <qnamespace.h>
-#include <X11/keysym.h>
-#include <X11/XF86keysym.h>
-#include <ctype.h>
 #include <QString>
+#include <X11/XF86keysym.h>
+#include <X11/keysym.h>
+#include <ctype.h>
+#include <qnamespace.h>
 #include <unordered_map>
 
 const std::unordered_map<uint32_t, int> &KeyTbl() {
@@ -239,7 +239,8 @@ const std::unordered_map<uint32_t, int> &KeyTbl() {
         std::make_pair(XF86XK_MonBrightnessDown, Qt::Key_MonBrightnessDown),
         std::make_pair(XF86XK_KbdLightOnOff, Qt::Key_KeyboardLightOnOff),
         std::make_pair(XF86XK_KbdBrightnessUp, Qt::Key_KeyboardBrightnessUp),
-        std::make_pair(XF86XK_KbdBrightnessDown, Qt::Key_KeyboardBrightnessDown),
+        std::make_pair(XF86XK_KbdBrightnessDown,
+                       Qt::Key_KeyboardBrightnessDown),
         std::make_pair(XF86XK_PowerOff, Qt::Key_PowerOff),
         std::make_pair(XF86XK_WakeUp, Qt::Key_WakeUp),
         std::make_pair(XF86XK_Eject, Qt::Key_Eject),
@@ -347,15 +348,14 @@ int keysymToQtKey(uint32_t key) {
     return 0;
 }
 
-int keysymToQtKey(uint32_t keysym, const QString &text)
-{
+int keysymToQtKey(uint32_t keysym, const QString &text) {
     int code = 0;
     if (keysym < 128) {
         // upper-case key, if known
         code = isprint((int)keysym) ? toupper((int)keysym) : 0;
-    } else if (text.length() == 1 && text.unicode()->unicode() > 0x1f
-                                  && text.unicode()->unicode() != 0x7f
-                                  && !(keysym >= XK_dead_grave && keysym <= XK_dead_currency)) {
+    } else if (text.length() == 1 && text.unicode()->unicode() > 0x1f &&
+               text.unicode()->unicode() != 0x7f &&
+               !(keysym >= XK_dead_grave && keysym <= XK_dead_currency)) {
         code = text.unicode()->toUpper().unicode();
     } else {
         // any other keys

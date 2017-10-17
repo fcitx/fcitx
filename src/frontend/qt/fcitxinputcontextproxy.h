@@ -20,13 +20,13 @@
 #ifndef FCITXINPUTCONTEXTPROXY_H_
 #define FCITXINPUTCONTEXTPROXY_H_
 
-#include <QObject>
-#include <QDBusServiceWatcher>
-#include <QDBusConnection>
-#include "inputcontextproxy.h"
 #include "inputcontext1proxy.h"
-#include "inputmethodproxy.h"
+#include "inputcontextproxy.h"
 #include "inputmethod1proxy.h"
+#include "inputmethodproxy.h"
+#include <QDBusConnection>
+#include <QDBusServiceWatcher>
+#include <QObject>
 
 class QDBusPendingCallWatcher;
 class FcitxWatcher;
@@ -41,31 +41,36 @@ public:
 
     QDBusPendingReply<> focusIn();
     QDBusPendingReply<> focusOut();
-    QDBusPendingCall processKeyEvent(uint keyval, uint keycode, uint state, bool type, uint time);
+    QDBusPendingCall processKeyEvent(uint keyval, uint keycode, uint state,
+                                     bool type, uint time);
     bool processKeyEventResult(const QDBusPendingCall &call);
     QDBusPendingReply<> reset();
     QDBusPendingReply<> setCapability(qulonglong caps);
     QDBusPendingReply<> setCursorRect(int x, int y, int w, int h);
-    QDBusPendingReply<> setSurroundingText(const QString &text, uint cursor, uint anchor);
+    QDBusPendingReply<> setSurroundingText(const QString &text, uint cursor,
+                                           uint anchor);
     QDBusPendingReply<> setSurroundingTextPosition(uint cursor, uint anchor);
     void setDisplay(const QString &display);
 
 signals:
     void commitString(const QString &str);
-    void currentIM(const QString &name, const QString &uniqueName, const QString &langCode);
+    void currentIM(const QString &name, const QString &uniqueName,
+                   const QString &langCode);
     void deleteSurroundingText(int offset, uint nchar);
     void forwardKey(uint keyval, uint state, bool isRelease);
-    void updateFormattedPreedit(const FcitxFormattedPreeditList &str, int cursorpos);
+    void updateFormattedPreedit(const FcitxFormattedPreeditList &str,
+                                int cursorpos);
     void inputContextCreated();
 
 private slots:
-    void availabilityChanged(bool avail);
+    void availabilityChanged();
     void createInputContext();
     void createInputContextFinished();
     void serviceUnregistered();
     void recheck();
     void forwardKeyWrapper(uint keyval, uint state, int type);
-    void updateFormattedPreeditWrapper(const FcitxFormattedPreeditList &str, int cursorpos);
+    void updateFormattedPreeditWrapper(const FcitxFormattedPreeditList &str,
+                                       int cursorpos);
 
 private:
     void cleanUp();
@@ -81,5 +86,4 @@ private:
     bool m_portal;
 };
 
-#endif  // FCITXINPUTCONTEXTPROXY_H_
-
+#endif // FCITXINPUTCONTEXTPROXY_H_

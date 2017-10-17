@@ -21,8 +21,8 @@
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 #include <QDBusServiceWatcher>
-#include <QFileSystemWatcher>
 #include <QDir>
+#include <QFileSystemWatcher>
 #include <signal.h>
 
 // utils function in fcitx-utils and fcitx-config
@@ -55,9 +55,11 @@ int displayNumber() {
     return 0;
 }
 
-QString socketFile()
-{
-    QString filename = QString("%1-%2").arg(QString::fromLatin1(QDBusConnection::localMachineId())).arg(displayNumber());
+QString socketFile() {
+    QString filename =
+        QString("%1-%2")
+            .arg(QString::fromLatin1(QDBusConnection::localMachineId()))
+            .arg(displayNumber());
 
     QString home = QString::fromLocal8Bit(qgetenv("XDG_CONFIG_HOME"));
     if (home.isEmpty()) {
@@ -66,38 +68,29 @@ QString socketFile()
     return QString("%1/fcitx/dbus/%2").arg(home).arg(filename);
 }
 
-FcitxWatcher::FcitxWatcher(QObject *parent) : QObject(parent),
-    m_fsWatcher(new QFileSystemWatcher(this)),
-    m_serviceWatcher(new QDBusServiceWatcher(this)),
-    m_connection(nullptr),
-    m_socketFile(socketFile()),
-    m_serviceName(QString("org.fcitx.Fcitx-%2").arg(displayNumber())),
-    m_availability(false)
-     {
-}
+FcitxWatcher::FcitxWatcher(QObject *parent)
+    : QObject(parent), m_fsWatcher(new QFileSystemWatcher(this)),
+      m_serviceWatcher(new QDBusServiceWatcher(this)), m_connection(nullptr),
+      m_socketFile(socketFile()),
+      m_serviceName(QString("org.fcitx.Fcitx-%2").arg(displayNumber())),
+      m_availability(false) {}
 
-FcitxWatcher::~FcitxWatcher()
-{
+FcitxWatcher::~FcitxWatcher() {
     cleanUpConnection();
     delete m_fsWatcher;
     m_fsWatcher = nullptr;
 }
 
-bool FcitxWatcher::availability() const
-{
-    return m_availability;
-}
+bool FcitxWatcher::availability() const { return m_availability; }
 
-QDBusConnection FcitxWatcher::connection() const
-{
+QDBusConnection FcitxWatcher::connection() const {
     if (m_connection) {
         return *m_connection;
     }
     return QDBusConnection::sessionBus();
 }
 
-QString FcitxWatcher::service() const
-{
+QString FcitxWatcher::service() const {
     if (m_connection) {
         return m_serviceName;
     }
@@ -110,31 +103,31 @@ QString FcitxWatcher::service() const
     return QString();
 }
 
-
-void FcitxWatcher::setAvailability(bool availability)
-{
+void FcitxWatcher::setAvailability(bool availability) {
     if (m_availability != availability) {
         m_availability = availability;
         emit availibilityChanged(m_availability);
     }
 }
 
-
-void FcitxWatcher::watch()
-{
+void FcitxWatcher::watch() {
     if (m_watched) {
         return;
     }
 
-    connect(m_serviceWatcher, SIGNAL(serviceOwnerChanged(QString,QString,QString)), this, SLOT(imChanged(QString,QString,QString)));
+    connect(m_serviceWatcher,
+            SIGNAL(serviceOwnerChanged(QString, QString, QString)), this,
+            SLOT(imChanged(QString, QString, QString)));
     m_serviceWatcher->setConnection(QDBusConnection::sessionBus());
     m_serviceWatcher->addWatchedService(m_serviceName);
     m_serviceWatcher->addWatchedService("org.freedesktop.portal.Fcitx");
 
-    if (QDBusConnection::sessionBus().interface()->isServiceRegistered(m_serviceName)) {
+    if (QDBusConnection::sessionBus().interface()->isServiceRegistered(
+            m_serviceName)) {
         m_mainPresent = true;
     }
-    if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.freedesktop.portal.Fcitx")) {
+    if (QDBusConnection::sessionBus().interface()->isServiceRegistered(
+            "org.freedesktop.portal.Fcitx")) {
         m_portalPresent = true;
     }
 
@@ -147,11 +140,15 @@ void FcitxWatcher::unwatch() {
     if (!m_watched) {
         return;
     }
-    disconnect(m_serviceWatcher, SIGNAL(serviceOwnerChanged(QString,QString,QString)), this, SLOT(imChanged(QString,QString,QString)));
+    disconnect(m_serviceWatcher,
+               SIGNAL(serviceOwnerChanged(QString, QString, QString)), this,
+               SLOT(imChanged(QString, QString, QString)));
+    m_watched = false;
+    unwatchSocketFile();
+    cleanUpConnection();
 }
 
-QString FcitxWatcher::address()
-{
+QString FcitxWatcher::address() {
     QString addr;
     QByteArray addrVar = qgetenv("FCITX_DBUS_ADDRESS");
     if (!addrVar.isNull())
@@ -168,8 +165,8 @@ QString FcitxWatcher::address()
     file.close();
     if (sz == 0)
         return QString();
-    char* p = buffer;
-    while(*p)
+    char *p = buffer;
+    while (*p)
         p++;
     size_t addrlen = p - buffer;
     if (sz != addrlen + 2 * sizeof(pid_t) + 1)
@@ -177,12 +174,11 @@ QString FcitxWatcher::address()
 
     /* skip '\0' */
     p++;
-    pid_t *ppid = (pid_t*) p;
+    pid_t *ppid = (pid_t *)p;
     pid_t daemonpid = ppid[0];
     pid_t fcitxpid = ppid[1];
 
-    if (!_pid_exists(daemonpid)
-        || !_pid_exists(fcitxpid))
+    if (!_pid_exists(daemonpid) || !_pid_exists(fcitxpid))
         return QString();
 
     addr = QLatin1String(buffer);
@@ -205,23 +201,21 @@ void FcitxWatcher::createConnection() {
     QString addr = address();
     // qDebug() << addr;
     if (!addr.isNull()) {
-        QDBusConnection connection(QDBusConnection::connectToBus(addr, "fcitx"));
+        QDBusConnection connection(
+            QDBusConnection::connectToBus(addr, "fcitx"));
         if (connection.isConnected()) {
             // qDebug() << "create private";
             m_connection = new QDBusConnection(connection);
-        }
-        else {
+        } else {
             QDBusConnection::disconnectFromBus("fcitx");
         }
     }
 
     if (m_connection) {
-        m_connection->connect ("org.freedesktop.DBus.Local",
-                            "/org/freedesktop/DBus/Local",
-                            "org.freedesktop.DBus.Local",
-                            "Disconnected",
-                            this,
-                            SLOT (dbusDisconnected ()));
+        m_connection->connect("org.freedesktop.DBus.Local",
+                              "/org/freedesktop/DBus/Local",
+                              "org.freedesktop.DBus.Local", "Disconnected",
+                              this, SLOT(dbusDisconnected()));
         unwatchSocketFile();
     }
     updateAvailbility();
@@ -249,8 +243,10 @@ void FcitxWatcher::watchSocketFile() {
         m_fsWatcher->addPath(info.filePath());
     }
 
-    connect(m_fsWatcher, SIGNAL(fileChanged(QString)), this, SLOT(socketFileChanged()));
-    connect(m_fsWatcher, SIGNAL(directoryChanged(QString)), this, SLOT(socketFileChanged()));
+    connect(m_fsWatcher, SIGNAL(fileChanged(QString)), this,
+            SLOT(socketFileChanged()));
+    connect(m_fsWatcher, SIGNAL(directoryChanged(QString)), this,
+            SLOT(socketFileChanged()));
 }
 
 void FcitxWatcher::unwatchSocketFile() {
@@ -260,8 +256,8 @@ void FcitxWatcher::unwatchSocketFile() {
     m_fsWatcher->disconnect(SIGNAL(directoryChanged(QString)));
 }
 
-void FcitxWatcher::imChanged(const QString& service, const QString& oldOwner, const QString& newOwner)
-{
+void FcitxWatcher::imChanged(const QString &service, const QString &oldOwner,
+                             const QString &newOwner) {
     if (service == m_serviceName) {
         if (!newOwner.isEmpty()) {
             m_mainPresent = true;

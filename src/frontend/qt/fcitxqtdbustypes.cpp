@@ -24,8 +24,7 @@
 void FcitxFormattedPreedit::registerMetaType() {
     qRegisterMetaType<FcitxFormattedPreedit>("FcitxFormattedPreedit");
     qDBusRegisterMetaType<FcitxFormattedPreedit>();
-    qRegisterMetaType<FcitxFormattedPreeditList>(
-        "FcitxFormattedPreeditList");
+    qRegisterMetaType<FcitxFormattedPreeditList>("FcitxFormattedPreeditList");
     qDBusRegisterMetaType<FcitxFormattedPreeditList>();
 }
 
@@ -64,8 +63,7 @@ const QDBusArgument &operator>>(const QDBusArgument &argument,
 }
 
 void FcitxInputContextArgument::registerMetaType() {
-    qRegisterMetaType<FcitxInputContextArgument>(
-        "FcitxInputContextArgument");
+    qRegisterMetaType<FcitxInputContextArgument>("FcitxInputContextArgument");
     qDBusRegisterMetaType<FcitxInputContextArgument>();
     qRegisterMetaType<FcitxInputContextArgumentList>(
         "FcitxInputContextArgumentList");
@@ -74,9 +72,7 @@ void FcitxInputContextArgument::registerMetaType() {
 
 const QString &FcitxInputContextArgument::name() const { return m_name; }
 
-void FcitxInputContextArgument::setName(const QString &name) {
-    m_name = name;
-}
+void FcitxInputContextArgument::setName(const QString &name) { m_name = name; }
 
 const QString &FcitxInputContextArgument::value() const { return m_value; }
 
