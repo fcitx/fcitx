@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-17 15:02-0700\n"
-"PO-Revision-Date: 2017-10-17 21:59+0000\n"
+"POT-Creation-Date: 2017-10-17 16:02-0700\n"
+"PO-Revision-Date: 2017-10-17 22:34+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -183,7 +183,7 @@ msgstr "Tilføj understøttelse af unicode-indtastning"
 
 #: src/im/keyboard/fcitx-keyboard.desc:44
 msgid "Add current input buffer to user dictionary"
-msgstr ""
+msgstr "Tilføj nuværende inputbuffer til brugermappe"
 
 #: data/addon.desc:1 data/addon.desc:5 data/addon.desc:10 data/addon.desc:15
 #: data/addon.desc:24 data/addon.desc:29 data/addon.desc:33 data/addon.desc:40
@@ -409,7 +409,7 @@ msgstr "Farve for kandidatindeks"
 
 #: src/im/table/table.desc:117
 msgid "Candidate Table Layout"
-msgstr ""
+msgstr "Layout for kandidattabel"
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
@@ -746,7 +746,7 @@ msgstr "Fejl ved konfigurationsgruppenavn: linje %d"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
-msgstr ""
+msgstr "Nem input af engelsk eller brugerdefineret simpel tabel"
 
 #: src/module/chttrans/fcitx-chttrans.conf.in:4
 msgid "Convert Simplified Chinese To Traditional Chinese"
@@ -840,7 +840,7 @@ msgstr "Standard Shuangpin-skema"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
-msgstr ""
+msgstr "Standardrækkefølge for stavetip-backends"
 
 #: data/script/fcitx-diagnose.sh:1575
 msgid "Default input methods:"
@@ -921,12 +921,12 @@ msgstr "Vis ikke stavetips"
 
 #: src/im/table/table.desc:29
 msgid "Do not sort word with code less than this level"
-msgstr ""
+msgstr "Sortér ikke ord med kode mindre end dette niveau"
 
 #: src/lib/fcitx-utils/desktop-parse.c:602
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
-msgstr ""
+msgstr "Duplikeret indslag %s i gruppe %s,@ linje %d, tilsidesæt den forrige."
 
 #: src/lib/fcitx-utils/desktop-parse.c:562
 #, c-format
@@ -1196,6 +1196,8 @@ msgid ""
 "list, then English (US) will be applied to all other non keyboard input "
 "method layout"
 msgstr ""
+"F.eks. hvis Tastatur - Dansk er den første inputmetode i listen, så vil "
+"Dansk blive anvendt på alle andre inputmetode-layout som ikke er tastatur"
 
 #: data/script/fcitx-diagnose.sh:1005
 msgid "Found ${1} at ${2}."
@@ -1386,7 +1388,7 @@ msgstr "Valg af global"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:7
 msgid "Grave"
-msgstr ""
+msgstr "Alvorlig"
 
 #: src/module/vk/vk.c:53
 msgid "Greek"
@@ -1726,6 +1728,8 @@ msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr ""
+"Venstre/højre for at vælge tegn, Enter for at bekræfte, Escape for at "
+"annullere"
 
 #: src/module/clipboard/fcitx-clipboard.desc:11
 msgid "Length of Clipboard History to Save"
@@ -1790,7 +1794,7 @@ msgstr "Logoikon"
 
 #: src/im/table/fcitx-table.desc:24
 msgid "Lookup Pinyin"
-msgstr ""
+msgstr "Pinyin-opslag"
 
 #: src/im/pinyin/fcitx-pinyin.desc:5
 msgid "MS"
@@ -1852,7 +1856,7 @@ msgstr "Maksimum længde af stavetipliste til hurtigfrase"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
 msgid "Maximum results from stroke input."
-msgstr ""
+msgstr "Maksimum resultater fra stroke-input."
 
 #: src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
@@ -2641,7 +2645,7 @@ msgstr "Statuspanelets y-position"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
-msgstr ""
+msgstr "Stroke-input udløserlængde"
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
@@ -2830,7 +2834,7 @@ msgstr "Ordtip til/fra"
 
 #: src/module/autoeng/AutoEng.c:557
 msgid "Too long item for AutoEng"
-msgstr ""
+msgstr "For lang en post til automatisk engelsk"
 
 #: src/ui/classic/skin.desc:129 src/ui/classic/skin.desc:235
 #: src/ui/classic/skin.desc:365
@@ -2867,7 +2871,7 @@ msgstr "Traditionel kinesisk"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
 msgid "Treating abbreviated Pinyin as English"
-msgstr ""
+msgstr "Behandler forkortet Pinyin som engelsk"
 
 #: data/config.desc:5
 msgid "Trigger Input Method"
@@ -3002,6 +3006,7 @@ msgstr "Brug påmindelse"
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Use the layout of first keyboard input method in list as default layout"
 msgstr ""
+"Brug layoutet af den første tastaturinputmetode i listen som standardlayout"
 
 #: src/module/remote/fcitx-remote-module.conf.in:4
 msgid "Used by fcitx-remote to change Fcitx state from console"
@@ -3009,7 +3014,7 @@ msgstr "Brug af fcitx-remote til at skifte Fcitx-tilstand fra konsol"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
 msgid "Useful when you hardly ever use abbreviated pinyin."
-msgstr ""
+msgstr "Nyttig til når du næsten aldrig bruger forkortet pinyin."
 
 #: src/im/pinyin/fcitx-pinyin.desc:11
 msgid "User Defined"
@@ -3176,6 +3181,8 @@ msgid ""
 "You have a keyboard input method \"${1}\" correctly added as your default "
 "input method."
 msgstr ""
+"Du har en tastaturinputmetode \"${1}\" korrekt tilføjet som din "
+"standardinputmetode."
 
 #: data/script/fcitx-diagnose.sh:1145
 msgid "You may have trouble using fcitx in ${1} programs."
@@ -3192,6 +3199,8 @@ msgid ""
 "You only have one keyboard input method enabled. You may want to add another "
 "input method to input other languages."
 msgstr ""
+"Du har kun én tastaturinputmetode aktiveret. Du vil måske tilføje en anden "
+"inputmetode for at inputte andre sprog."
 
 #: data/script/fcitx-configtool.sh:147
 msgid ""
