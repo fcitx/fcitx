@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-17 09:02-0700\n"
-"PO-Revision-Date: 2017-10-17 16:01+0000\n"
+"POT-Creation-Date: 2017-10-17 10:02-0700\n"
+"PO-Revision-Date: 2017-10-17 16:28+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -167,7 +167,7 @@ msgstr "Aktiv bakkeikon"
 
 #: src/module/autoeng/fcitx-autoeng.desc:37
 msgid "Add Extra space when selecting a candidate word"
-msgstr ""
+msgstr "Tilføj ekstra mellem når det vælges et kandidatord"
 
 #: src/module/lua/fcitx-lua.conf.in:4
 msgid "Add Lua script support to Fcitx"
@@ -254,7 +254,7 @@ msgstr ""
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
 msgid "Allow replacing the first candidate"
-msgstr ""
+msgstr "Tillad erstatning af den første kanditat"
 
 #: src/module/xkb/fcitx-xkb.desc:4
 msgid "Allow to Override System XKB Settings"
@@ -269,11 +269,11 @@ msgstr "Alt"
 
 #: src/im/table/table.desc:193
 msgid "Alternative Next Page Key"
-msgstr ""
+msgstr "Alternativ næste side-tast"
 
 #: src/im/table/table.desc:188
 msgid "Alternative Prev Page Key"
-msgstr ""
+msgstr "Alternativ forrige side-tast"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:13
 msgid "Alternative Trigger Key for QuickPhrase"
@@ -287,7 +287,7 @@ msgstr "Udseende"
 
 #: src/module/xkb/fcitx-xkb.desc:20
 msgid "Apply this custom xmodmap script after layout change"
-msgstr ""
+msgstr "Anvend dette tilpasset xmodmap-script efter layout er blevet ændret"
 
 #: data/addon.desc:67
 msgid "Argument for InputMethod Register"
@@ -572,7 +572,7 @@ msgstr "Vælg andet eller tredje kandidatord"
 #: src/module/clipboard/fcitx-clipboard.desc:35
 #: src/module/quickphrase/fcitx-quickphrase.desc:16
 msgid "Choose key modifier"
-msgstr ""
+msgstr "Vælg tast-modifier"
 
 #: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
@@ -773,7 +773,7 @@ msgstr "Ctrl+Højre Super"
 
 #: data/profile.desc:22
 msgid "Current Enabled Input Method List"
-msgstr ""
+msgstr "Nuværende aktiverede inputmetodeliste"
 
 #: data/profile.desc:17
 msgid "Current Input Method Name"
@@ -805,7 +805,7 @@ msgstr "Tilpasset"
 
 #: data/config.desc:42
 msgid "Custom switch key"
-msgstr ""
+msgstr "Tilpasset skiftetast"
 
 #: data/addon.desc:37
 msgid "DBus"
@@ -834,7 +834,7 @@ msgstr "Standardtilstand for inputmetode:"
 
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
-msgstr ""
+msgstr "Standard Shuangpin-skema"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
@@ -842,7 +842,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1575
 msgid "Default input methods:"
-msgstr "Standard inputmetoder:"
+msgstr "Standardinputmetoder:"
 
 #: src/im/table/fcitx-table.desc:9
 msgid "Delete Phrase"
@@ -874,7 +874,7 @@ msgstr "Mapper:"
 
 #: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
-msgstr ""
+msgstr "Deaktivér paging i påmindelsestilstand"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
 msgid "Disable Pinyin Symbol"
@@ -954,7 +954,7 @@ msgstr "Aktivér"
 
 #: data/config.desc:63
 msgid "Enable Hotkey to scroll Between Input Method"
-msgstr ""
+msgstr "Aktivér hottast til at rulle mellem inputmetoder"
 
 #: data/addon.desc:27
 msgid "Enabled"
@@ -1156,7 +1156,7 @@ msgstr "Farve for første kandidat"
 
 #: src/im/table/table.desc:198
 msgid "First Candidate Display as Preedit"
-msgstr ""
+msgstr "Første kandidatvisning som Preedit"
 
 #: src/im/pinyin/fcitx-pinyin.desc:140
 msgid "Fix misstype gn/ng"
@@ -1318,47 +1318,47 @@ msgstr "Tegn i fuld bredde"
 
 #: src/im/pinyin/fcitx-pinyin.desc:85
 msgid "Fuzzy an and ang"
-msgstr ""
+msgstr "Uafklarede an og ang"
 
 #: src/im/pinyin/fcitx-pinyin.desc:115
 msgid "Fuzzy c and ch"
-msgstr ""
+msgstr "Uafklarede c og ch"
 
 #: src/im/pinyin/fcitx-pinyin.desc:90
 msgid "Fuzzy en and eng"
-msgstr ""
+msgstr "Uafklarede en og eng"
 
 #: src/im/pinyin/fcitx-pinyin.desc:120
 msgid "Fuzzy f and h"
-msgstr ""
+msgstr "Uafklarede f og h"
 
 #: src/im/pinyin/fcitx-pinyin.desc:95
 msgid "Fuzzy ian and iang"
-msgstr ""
+msgstr "Uafklarede ian og iang"
 
 #: src/im/pinyin/fcitx-pinyin.desc:100
 msgid "Fuzzy in and ing"
-msgstr ""
+msgstr "Uafklarede in og ing"
 
 #: src/im/pinyin/fcitx-pinyin.desc:125
 msgid "Fuzzy l and n"
-msgstr ""
+msgstr "Uafklarede l og n"
 
 #: src/im/pinyin/fcitx-pinyin.desc:105
 msgid "Fuzzy ou and u"
-msgstr ""
+msgstr "Uafklarede ou og u"
 
 #: src/im/pinyin/fcitx-pinyin.desc:130
 msgid "Fuzzy s and sh"
-msgstr ""
+msgstr "Uafklarede s og sh"
 
 #: src/im/pinyin/fcitx-pinyin.desc:110
 msgid "Fuzzy uan and uang"
-msgstr ""
+msgstr "Uafklarede uan og uang"
 
 #: src/im/pinyin/fcitx-pinyin.desc:135
 msgid "Fuzzy z and zh"
-msgstr ""
+msgstr "Uafklarede z og zh"
 
 #: data/config.desc:211
 msgid "Give the tips of Phrase"
@@ -1504,7 +1504,7 @@ msgstr "Ignorer tegnsætning"
 
 #: src/module/clipboard/fcitx-clipboard.desc:45
 msgid "Ignore blank selections"
-msgstr ""
+msgstr "Ignorer tomme markeringer"
 
 #: src/im/table/table.desc:223
 msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
@@ -1512,7 +1512,7 @@ msgstr ""
 
 #: data/config.desc:56
 msgid "Inactivate Input Method"
-msgstr ""
+msgstr "Deaktivér inputmetode"
 
 #: data/config.desc:178
 msgid "Inactive"
@@ -1528,7 +1528,7 @@ msgstr "Farve for inaktiv tekst på ikon"
 
 #: data/config.desc:68
 msgid "Include Inactivate when scrolling between Input Method"
-msgstr ""
+msgstr "Inkluder deaktivér når der rulles mellem inputmetode"
 
 #: src/module/clipboard/fcitx-clipboard.desc:31
 msgid "Include the text currently selected in clipboard history."
@@ -1596,7 +1596,7 @@ msgstr "Installer script til Fcitx-skin"
 
 #: data/config.desc:90
 msgid "Interval of Two Key Input"
-msgstr ""
+msgstr "Interval af to tasteinput"
 
 #: src/lib/fcitx-config/fcitx-config.c:922
 #, c-format
@@ -1667,7 +1667,7 @@ msgstr "Tastaturlayout:"
 
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:3
 msgid "Kimpanel"
-msgstr ""
+msgstr "Kimpanel"
 
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:4
 msgid "Kimpanel Support for Fcitx"
@@ -1910,7 +1910,7 @@ msgstr "Navn"
 
 #: data/addon.desc:7
 msgid "Name that can be display in UI"
-msgstr ""
+msgstr "Navn som kan vises i brugerflade"
 
 #: src/module/chttrans/fcitx-chttrans.desc:4
 msgid "Native"
@@ -2132,11 +2132,11 @@ msgstr "Placering eller forskydning af Preedit"
 
 #: src/module/spell/fcitx-spell.desc:14
 msgid "Possible Providers: presage, custom, enchant (separate with comma)"
-msgstr ""
+msgstr "Mulige udbydere: presage, custom, enchant (separer med komma)"
 
 #: src/module/spell/fcitx-spell.desc:8
 msgid "Preferred Enchant provider"
-msgstr ""
+msgstr "Fortrukne Enchant-udbyder"
 
 #: src/im/pinyin/py.c:769
 #, c-format
@@ -2192,7 +2192,7 @@ msgstr "Program"
 
 #: src/im/table/table.desc:113
 msgid "Prompt Table Code"
-msgstr ""
+msgstr "Spørg om tabelkode"
 
 #: data/profile.desc:12
 msgid "Prompt the phrases after input"
@@ -2274,7 +2274,7 @@ msgstr "H_SKIFT"
 
 #: data/addon.desc:58
 msgid "Register IM"
-msgstr ""
+msgstr "Registrer IM"
 
 #: data/config.desc:84
 msgid "Reload configuration"
@@ -2343,7 +2343,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:71
 msgid "Rule of Candidate Phrase Order"
-msgstr ""
+msgstr "Regel for rækkefølge på kandidatfrase"
 
 #: src/im/pinyin/fcitx-pinyin.desc:62
 msgid "Rule of Candidate Word Order"
@@ -2383,7 +2383,7 @@ msgstr "Fejl ved forsøg på at gemme ordbog"
 
 #: data/config.desc:136
 msgid "Saving All Config and Input History"
-msgstr ""
+msgstr "Gem al konfiguration og inputhistorik"
 
 #: data/config.desc:79
 msgid "Scroll between Input Method"
@@ -2395,7 +2395,7 @@ msgstr "Søg efter unicode"
 
 #: data/config.desc:162
 msgid "Seconds sleep before fcitx really start"
-msgstr ""
+msgstr "Sekunders søvn inden fcitx rigtig starter"
 
 #: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
@@ -2415,7 +2415,7 @@ msgstr "Vælg for at indsætte"
 
 #: data/addon.desc:60
 msgid "Self"
-msgstr ""
+msgstr "Selv"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:6
 msgid "Semicolon"
@@ -2423,11 +2423,11 @@ msgstr "Semikolon"
 
 #: src/im/table/table.desc:64
 msgid "Send Raw Preedit"
-msgstr ""
+msgstr "Send rå Preedit"
 
 #: data/config.desc:199
 msgid "Send typed raw text if Switch to inactive Mode"
-msgstr ""
+msgstr "Send skrivet rå tekst hvis der skiftes til inaktiv-tilstand"
 
 #: data/config.desc:172
 msgid "Share State Among Window"
@@ -2458,7 +2458,7 @@ msgstr ""
 
 #: data/config.desc:241
 msgid "Show Input Speed"
-msgstr ""
+msgstr "Vis inputhastighed"
 
 #: data/profile.desc:29
 msgid "Show Preedit String in Client Window"
@@ -2636,7 +2636,7 @@ msgstr ""
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
-msgstr ""
+msgstr "Underkonfiguration til modul"
 
 #: src/ui/classic/fcitx-skin-installer.sh:74
 msgid "Successfully Installed skin"
@@ -2656,7 +2656,7 @@ msgstr "Super+Højre Ctrl"
 
 #: data/config.desc:142
 msgid "Switch Embedded Preedit"
-msgstr ""
+msgstr "Skift indlejret Preedit"
 
 #: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
@@ -2817,7 +2817,7 @@ msgstr "Skift mellem aktivér/deaktivér"
 
 #: src/im/keyboard/fcitx-keyboard.desc:19
 msgid "Toggle the word hint"
-msgstr ""
+msgstr "Ordtip til/fra"
 
 #: src/module/autoeng/AutoEng.c:557
 msgid "Too long item for AutoEng"
@@ -2844,7 +2844,7 @@ msgstr "Traditionel kinesisk"
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
-msgstr ""
+msgstr "Oversættelsesmotor til traditionelt kinesisk"
 
 #: src/module/chttrans/chttrans.c:177
 msgid "Traditional Chinese is enabled."
@@ -2920,11 +2920,11 @@ msgstr "Ikke-understøttet tast"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
-msgstr ""
+msgstr "Bru alternativt kandidatord-nummer"
 
 #: src/im/table/table.desc:183
 msgid "Use Alternative Key for paging"
-msgstr ""
+msgstr "Brug alternativ tast til paging"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
@@ -2932,7 +2932,7 @@ msgstr "Brug komplet Pinyin"
 
 #: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
-msgstr ""
+msgstr "Brug tilpasset spørgsmålsstreng angivet i tabel"
 
 #: src/ui/classic/skin.desc:167
 msgid "Use Custom text icon color"
@@ -2960,11 +2960,11 @@ msgstr "Brug Pinyin"
 
 #: data/addon.desc:77
 msgid "Use RTLD_LOCAL to load library"
-msgstr ""
+msgstr "Brug RTLD_LOCAL til at indlæse bibliotek"
 
 #: src/module/clipboard/fcitx-clipboard.desc:30
 msgid "Use Selection Text"
-msgstr ""
+msgstr "Brug markeringstekst"
 
 #: src/ui/classic/fcitx-classic-ui.desc:39
 msgid "Use System Tray Icon"
@@ -2984,7 +2984,7 @@ msgstr ""
 
 #: data/config.desc:10
 msgid "Use extra trigger key only after using it to inactivate"
-msgstr ""
+msgstr "Brug kun ekstra udløsertast efter den er brugt til at deaktivere"
 
 #: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:555
 msgid "Use remind"
