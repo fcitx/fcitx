@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-17 04:02-0700\n"
-"PO-Revision-Date: 2017-10-17 11:01+0000\n"
+"POT-Creation-Date: 2017-10-17 05:02-0700\n"
+"PO-Revision-Date: 2017-10-17 11:03+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -1298,7 +1298,7 @@ msgstr "Fuld tegnbrede"
 
 #: src/module/punc/punc.c:148 src/module/punc/punc.c:567
 msgid "Full width punct"
-msgstr ""
+msgstr "Tegnsætning i fuld bredde"
 
 #: src/module/punc/punc.c:586
 msgid "Full width punctuations are used."
@@ -2483,11 +2483,11 @@ msgstr "Forenklet kinesisk"
 #: src/module/chttrans/chttrans.c:176
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
-msgstr ""
+msgstr "Forenklet kinesisk til traditionelt kinesisk"
 
 #: src/module/chttrans/chttrans.c:178
 msgid "Simplified Chinese is enabled."
-msgstr ""
+msgstr "Forenklet kinesisk er aktiveret."
 
 #: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
@@ -2789,7 +2789,7 @@ msgstr "Tegnsætning i fuld bredde til/fra"
 #: src/module/fullwidthchar/fullwidthchar.c:115
 #: src/module/fullwidthchar/fullwidthchar.c:192
 msgid "Toggle Half/Full width Character"
-msgstr ""
+msgstr "Skift mellem tegn i halv/fuld bredde"
 
 #: src/ui/kimpanel/kimpanel.c:782
 msgid "Toggle Input Method"
@@ -2801,7 +2801,7 @@ msgstr "Påmindelse til/fra"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 msgid "Toggle Simp/Trad Chinese Conversion"
-msgstr ""
+msgstr "Konvertering af forenklet/traditionelt kinesisk til/fra"
 
 #: src/module/vk/vk.c:154
 msgid "Toggle Virtual Keyboard"
@@ -2844,7 +2844,7 @@ msgstr ""
 
 #: src/module/chttrans/chttrans.c:177
 msgid "Traditional Chinese is enabled."
-msgstr ""
+msgstr "Traditionelt kinesisk er aktiveret."
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
