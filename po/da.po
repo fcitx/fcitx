@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-17 10:02-0700\n"
-"PO-Revision-Date: 2017-10-17 16:28+0000\n"
+"POT-Creation-Date: 2017-10-17 11:02-0700\n"
+"PO-Revision-Date: 2017-10-17 17:56+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -139,7 +139,7 @@ msgstr "ALT_SUPER"
 
 #: data/config.desc:49
 msgid "Activate input method"
-msgstr ""
+msgstr "Aktivér inputmetode"
 
 #: data/config.desc:179
 msgid "Active"
@@ -216,7 +216,7 @@ msgstr "Juster rækkefølge"
 #: src/im/pinyin/fcitx-pinyin.desc:59 src/im/pinyin/fcitx-pinyin.desc:68
 #: src/im/pinyin/fcitx-pinyin.desc:77 src/im/table/table.desc:24
 msgid "AdjustFast"
-msgstr ""
+msgstr "JusterHurtig"
 
 #: src/im/pinyin/fcitx-pinyin.desc:60 src/im/pinyin/fcitx-pinyin.desc:69
 #: src/im/pinyin/fcitx-pinyin.desc:78 src/im/table/table.desc:25
@@ -226,7 +226,7 @@ msgstr ""
 #: src/im/pinyin/fcitx-pinyin.desc:58 src/im/pinyin/fcitx-pinyin.desc:67
 #: src/im/pinyin/fcitx-pinyin.desc:76 src/im/table/table.desc:23
 msgid "AdjustNo"
-msgstr ""
+msgstr "JusterNummer"
 
 #: data/config.desc:170
 msgid "All"
@@ -323,7 +323,7 @@ msgstr "Automatisk engelsk-tilstand"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:9
 msgid "Auto English Trigger Word"
-msgstr "Udløser ord for automatisk engelsk"
+msgstr "Udløserord for automatisk engelsk"
 
 #: src/im/table/table.desc:88
 msgid "Auto Phrase"
@@ -463,7 +463,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1520
 msgid "Cannot find enabled fcitx user interface!"
-msgstr ""
+msgstr "Kan ikke finde aktiveret fcitx-brugerflade!"
 
 #: data/script/fcitx-diagnose.sh:1440
 msgid "Cannot find fcitx addon config directory."
@@ -513,7 +513,7 @@ msgstr "Kan ikke finde pid på ejer af DBus-navnet ${1}."
 
 #: data/script/fcitx-diagnose.sh:1107
 msgid "Cannot find xim_server on root window."
-msgstr ""
+msgstr "Kan ikke finde xim_server på rodvindue."
 
 #: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
@@ -1053,7 +1053,7 @@ msgstr "Præcist match"
 
 #: data/addon.desc:61
 msgid "Exec"
-msgstr ""
+msgstr "Eksekverbar"
 
 #: src/module/notificationitem/dbusmenu.c:371 src/ui/classic/classicui.c:504
 msgid "Exit"
@@ -1061,7 +1061,7 @@ msgstr "Afslut"
 
 #: data/config.desc:37
 msgid "Extra key for trigger input method"
-msgstr ""
+msgstr "Ekstra tast til at udløse inputmetode"
 
 #: data/script/fcitx-diagnose.sh:1394
 msgid "Failed to find fcitx in immodule cache at ${1}"
@@ -1160,15 +1160,15 @@ msgstr "Første kandidatvisning som Preedit"
 
 #: src/im/pinyin/fcitx-pinyin.desc:140
 msgid "Fix misstype gn/ng"
-msgstr ""
+msgstr "Ret forkert skrevet gn/ng"
 
 #: src/im/pinyin/fcitx-pinyin.desc:145
 msgid "Fix misstype v/u like jv, qv, xv, yv"
-msgstr ""
+msgstr "Ret forkert skrevet v/u såsom jv, qv, xv, yv"
 
 #: src/im/pinyin/fcitx-pinyin.desc:18
 msgid "Fix preedit cursor at head"
-msgstr ""
+msgstr "Ret preedit-markør ved hovede"
 
 #: src/ui/classic/fcitx-classic-ui.desc:23
 msgid "Font"
@@ -1293,12 +1293,12 @@ msgstr "Frontend: åbning af %s mislykkedes %s"
 
 #: data/script/fcitx-diagnose.sh:1676
 msgid "Frontends setup:"
-msgstr ""
+msgstr "Frontendens opsætning:"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
 msgid "Full width Character"
-msgstr "Fuld tegnbrede"
+msgstr "Fuld tegnbredde"
 
 #: src/module/punc/punc.c:148 src/module/punc/punc.c:567
 msgid "Full width punct"
@@ -1310,7 +1310,7 @@ msgstr "Tegnsætning i fuld bredde bruges."
 
 #: src/module/vk/vk.c:52
 msgid "Fullwidth"
-msgstr "Fuld brede"
+msgstr "Fuld bredde"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:3
 msgid "Fullwidth Character"
@@ -1403,7 +1403,7 @@ msgstr "Filer for Gtk IM-modul:"
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
 msgid "Half width Character"
-msgstr "Halv tegnbrede"
+msgstr "Halv tegnbredde"
 
 #: data/script/fcitx-diagnose.sh:702
 msgid "Hall of Shame for Linux IME Support"
@@ -1824,7 +1824,7 @@ msgstr "Matematik"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:23
 #: src/module/quickphrase/fcitx-quickphrase.desc:36
 msgid "Maximum hint length"
-msgstr "Maksimum tipslængde"
+msgstr "Maksimum længde for tip"
 
 #: src/module/clipboard/fcitx-clipboard.desc:19
 msgid "Maximum length of each candidate word"
@@ -1872,7 +1872,7 @@ msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
-msgstr ""
+msgstr "Minimumlængde for tip til udløserord"
 
 #: src/im/table/table.desc:59
 msgid ""
@@ -2450,11 +2450,11 @@ msgstr "Vis"
 
 #: data/config.desc:223
 msgid "Show Input Method Hint After Input method changed"
-msgstr ""
+msgstr "Vis inputmetodetip efter inputmetode er blevet ændret"
 
 #: data/config.desc:229
 msgid "Show Input Method Hint After Input method changed and Focus in"
-msgstr ""
+msgstr "Vis inputmetodetip efter inputmetode er blevet ændret og har fokuser"
 
 #: data/config.desc:241
 msgid "Show Input Speed"
@@ -2866,7 +2866,7 @@ msgstr "Udløs inputmetode"
 
 #: src/module/clipboard/fcitx-clipboard.desc:25
 msgid "Trigger Key for Clipboard History List"
-msgstr ""
+msgstr "Udløsertast til udklipsholderens historikliste"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:8
 msgid "Trigger Key for QuickPhrase"
@@ -2940,7 +2940,7 @@ msgstr "Brug tilpasset farve for tekst på ikon"
 
 #: data/profile.desc:2
 msgid "Use Full Width Character"
-msgstr ""
+msgstr "Brug tegn i fuldbredde"
 
 #: src/im/keyboard/fcitx-keyboard.conf.in:4
 msgid "Use Keyboard Layout as Input Method"
@@ -2996,7 +2996,7 @@ msgstr ""
 
 #: src/module/remote/fcitx-remote-module.conf.in:4
 msgid "Used by fcitx-remote to change Fcitx state from console"
-msgstr ""
+msgstr "Brug af fcitx-remote til at skifte Fcitx-tilstand fra konsol"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
 msgid "Useful when you hardly ever use abbreviated pinyin."
@@ -3073,7 +3073,7 @@ msgstr "X-tastatur"
 
 #: src/module/xkb/fcitx-xkb.conf.in:3 src/module/xkb/fcitx-xkb.conf.in:4
 msgid "X Keyboard Integration"
-msgstr ""
+msgstr "Integration af X-tastatur"
 
 #: src/module/xkbdbus/fcitx-xkbdbus.conf.in:3
 #: src/module/xkbdbus/fcitx-xkbdbus.conf.in:4
