@@ -226,14 +226,10 @@ void* PortalCreate(FcitxInstance* instance, int frontendid)
     }
 
     int ret = dbus_bus_request_name(ipc->_conn, FCITX_PORTAL_SERVICE,
-                                    DBUS_NAME_FLAG_DO_NOT_QUEUE,
+                                    0,
                                     NULL);
     if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
-        FcitxLog(ERROR, "Service exists");
-        dbus_connection_unref(ipc->_conn);
-        ipc->_conn = NULL;
-        free(ipc);
-        return NULL;
+        FcitxLog(INFO, "Portal Service exists.");
     }
 
     DBusObjectPathVTable fcitxPortalVTable = {NULL, &PortalDBusEventHandler, NULL, NULL, NULL, NULL };
