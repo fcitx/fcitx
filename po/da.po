@@ -4,12 +4,13 @@
 #
 # Translators:
 # scootergrisen, 2017
+# scootergrisen, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-17 03:02-0700\n"
-"PO-Revision-Date: 2017-10-17 10:00+0000\n"
+"POT-Creation-Date: 2017-10-17 04:02-0700\n"
+"PO-Revision-Date: 2017-10-17 11:01+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -60,7 +61,7 @@ msgstr "(utilgængelig)"
 
 #: data/script/fcitx-diagnose.sh:656
 msgid "/Beginner%27s_Guide"
-msgstr "/Begynder%27s_guide"
+msgstr "/Begynderguide"
 
 #: data/script/fcitx-diagnose.sh:703
 msgid "/Hall_of_Shame_for_Linux_IME_Support"
@@ -80,7 +81,7 @@ msgstr "/XIM"
 
 #: src/lib/fcitx/ime.c:1800
 msgid "/min  Time Used: "
-msgstr ""
+msgstr "/min  tid brugt: "
 
 #: src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
@@ -146,7 +147,7 @@ msgstr "Aktiv"
 
 #: src/ui/classic/skin.desc:387
 msgid "Active Menu Color"
-msgstr ""
+msgstr "Aktiv menufarve"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -170,7 +171,7 @@ msgstr ""
 
 #: src/module/lua/fcitx-lua.conf.in:4
 msgid "Add Lua script support to Fcitx"
-msgstr ""
+msgstr "Tilføj understøttelse af Lua-script til Fcitx"
 
 #: src/im/table/fcitx-table.desc:4
 msgid "Add Phrase"
@@ -178,7 +179,7 @@ msgstr "Tilføj frase"
 
 #: src/module/unicode/fcitx-unicode.conf.in:4
 msgid "Add Unicode Typing Support"
-msgstr ""
+msgstr "Tilføj understøttelse af unicode-indtastning"
 
 #: src/im/keyboard/fcitx-keyboard.desc:44
 msgid "Add current input buffer to user dictionary"
@@ -194,11 +195,11 @@ msgstr "Tilføjelse"
 #: src/lib/fcitx/addon.c:138
 #, c-format
 msgid "Addon Config %s is %s"
-msgstr ""
+msgstr "Tilføjelseskonfiguration %s er %s"
 
 #: data/script/fcitx-diagnose.sh:1438
 msgid "Addon Config Dir:"
-msgstr ""
+msgstr "Tilføjelseskonfigurationsmappe:"
 
 #: data/script/fcitx-diagnose.sh:1491
 msgid "Addon Libraries:"
@@ -210,7 +211,7 @@ msgstr "Tilføjelsesliste:"
 
 #: src/im/table/fcitx-table.desc:14 src/im/table/table.desc:19
 msgid "Adjust Order"
-msgstr ""
+msgstr "Juster rækkefølge"
 
 #: src/im/pinyin/fcitx-pinyin.desc:59 src/im/pinyin/fcitx-pinyin.desc:68
 #: src/im/pinyin/fcitx-pinyin.desc:77 src/im/table/table.desc:24
@@ -237,7 +238,7 @@ msgstr "Alle fundne Gtk ${1} immodule-filer findes."
 
 #: data/script/fcitx-diagnose.sh:1517
 msgid "All libraries for all addons are found."
-msgstr ""
+msgstr "Alle biblioteker til alle tilføjelse er fundet."
 
 #: data/script/fcitx-diagnose.sh:805
 msgid "All locale:"
@@ -393,7 +394,7 @@ msgstr "Kan ikke oprette imWindow"
 
 #: src/module/punc/punc.c:410
 msgid "Can't open punc file."
-msgstr ""
+msgstr "Kan ikke åbne tegnsætningsfil"
 
 #: src/module/remote/remote.c:70
 #, c-format
@@ -449,14 +450,14 @@ msgstr "Kan ikke finde ejer af DBus-navnet ${1}."
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
-msgstr ""
+msgstr "Kan ikke finde Pinyins systemdatabase!"
 
 #: data/script/fcitx-diagnose.sh:1040
 msgid ""
 "Cannot find a GUI config tool, please install one of ${1}, ${2}, or ${3}."
 msgstr ""
-"Kan ikke finde et GUI-konfigurationsværktøj, installer venligst ${1}, ${2}, "
-"eller ${3}."
+"Kan ikke finde et konfigurationsværktøj med grafisk brugerflade, installer "
+"venligst ${1}, ${2}, eller ${3}."
 
 #: data/script/fcitx-diagnose.sh:1520
 msgid "Cannot find enabled fcitx user interface!"
@@ -464,7 +465,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1440
 msgid "Cannot find fcitx addon config directory."
-msgstr ""
+msgstr "Kan ikke finde fcitx-tilføjelseskonfigurationsmappe."
 
 #: data/script/fcitx-diagnose.sh:888
 msgid "Cannot find fcitx executable!"
@@ -488,11 +489,12 @@ msgstr "Kan ikke finde eksekverbaren fcitx-configtool!"
 
 #: data/script/fcitx-diagnose.sh:1499
 msgid "Cannot find file ${1} of addon ${2}."
-msgstr ""
+msgstr "Kan ikke filen ${1} af tilføjelsen ${2}."
 
 #: data/script/fcitx-diagnose.sh:1509
 msgid "Cannot find following required libraries for ${1} of addon ${2}."
 msgstr ""
+"Kan ikke finde følgende krævede biblioteker for ${1} af tilføjelsen ${2}."
 
 #: data/script/fcitx-diagnose.sh:1400
 msgid "Cannot find immodules cache for gtk ${1}"
@@ -505,7 +507,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:952
 msgid "Cannot find pid of DBus name ${1} owner."
-msgstr ""
+msgstr "Kan ikke finde pid på ejer af DBus-navnet ${1}."
 
 #: data/script/fcitx-diagnose.sh:1107
 msgid "Cannot find xim_server on root window."
@@ -530,7 +532,7 @@ msgstr "Kan ikke indlæse skinnet %s, falder tilbage til standard"
 
 #: data/script/fcitx-diagnose.sh:1549
 msgid "Cannot read im list from fcitx profile."
-msgstr ""
+msgstr "Kan ikke læse im-liste fra fcitx-profil."
 
 #: data/addon.desc:22
 msgid "Category"
@@ -610,15 +612,15 @@ msgstr "Ryd"
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
-msgstr ""
+msgstr "Ryd frekvens"
 
 #: src/module/imselector/fcitx-imselector.desc:14
 msgid "Clear local Input Method"
-msgstr ""
+msgstr "Ryd lokal inputmetode"
 
 #: src/module/imselector/imselector.c:326
 msgid "Clear local input method"
-msgstr ""
+msgstr "Ryd lokal inputmetode"
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:3
 #: src/module/clipboard/fcitx-clipboard.desc:1
@@ -637,15 +639,15 @@ msgstr "Luk virtuelt tastatur"
 
 #: src/im/table/table.desc:15
 msgid "Code Table File"
-msgstr ""
+msgstr "Kodetabelfil"
 
 #: src/im/table/table.desc:7
 msgid "Code Table Name"
-msgstr ""
+msgstr "Kodetabelnavn"
 
 #: src/im/table/table.c:1399
 msgid "Code is "
-msgstr "Kode is"
+msgstr "Kode is "
 
 #: src/im/table/table.desc:1 src/im/table/table.desc:6
 #: src/im/table/table.desc:10 src/im/table/table.desc:14
@@ -670,7 +672,7 @@ msgstr "Kode is"
 #: src/im/table/table.desc:212 src/im/table/table.desc:217
 #: src/im/table/table.desc:222
 msgid "CodeTable"
-msgstr ""
+msgstr "Kodetabel"
 
 #: src/ui/classic/skin.desc:257
 msgid "Color of Cursor"
@@ -702,15 +704,15 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:996
 msgid "Config GUI for gtk${1} not found."
-msgstr "Konfigurations-GUI til gtk${1} ikke fundet."
+msgstr "Konfiguration med grafisk brugerflade til gtk${1} ikke fundet."
 
 #: data/script/fcitx-diagnose.sh:992
 msgid "Config GUI for gtk${1}:"
-msgstr "Konfigurations-GUI til gtk${1}:"
+msgstr "Konfiguration med grafisk brugerflade til gtk${1}:"
 
 #: data/script/fcitx-diagnose.sh:1012
 msgid "Config GUI for kde:"
-msgstr "Konfigurations-GUI til kde:"
+msgstr "Konfiguration med grafisk brugerflade til kde:"
 
 #: data/script/fcitx-diagnose.sh:1028
 msgid "Config Tool Wrapper:"
@@ -736,7 +738,7 @@ msgstr "Konfigurer nuværende inputmetode"
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
 msgid "Configure group name error: line %d"
-msgstr ""
+msgstr "Fejl ved konfigurationsgruppenavn: linje %d"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
@@ -781,7 +783,7 @@ msgstr "Nuværende fcitx-indstillingsmappe er ${1} (${2})."
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
-msgstr ""
+msgstr "Nuværende lokale inputmetode er"
 
 #: data/script/fcitx-diagnose.sh:807
 msgid "Current locale:"
@@ -826,7 +828,7 @@ msgstr "Standard"
 
 #: data/config.desc:180
 msgid "Default Input Method State"
-msgstr ""
+msgstr "Standardtilstand for inputmetode:"
 
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
@@ -879,7 +881,7 @@ msgstr "Deaktivér Pinyin-symbol"
 #: src/lib/fcitx/addon.c:298
 #, c-format
 msgid "Disable addon %s, dependency %s cannot be satisfied."
-msgstr ""
+msgstr "Deaktivér tilføjelsen %s, afhængighed %s kan ikke tilfredsstilles."
 
 #: src/module/notificationitem/notificationitem.c:462
 #: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
@@ -911,7 +913,7 @@ msgstr ""
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
 #: src/module/quickphrase/fcitx-quickphrase.desc:26
 msgid "Do not show spell hint"
-msgstr ""
+msgstr "Vis ikke stavetips"
 
 #: src/im/table/table.desc:29
 msgid "Do not sort word with code less than this level"
@@ -931,12 +933,12 @@ msgstr ""
 #: src/lib/fcitx-config/fcitx-config.c:901
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
-msgstr ""
+msgstr "Duplikeret gruppenavn, sammenlæg med forrige: %s :linje %d"
 
 #: src/lib/fcitx-config/fcitx-config.c:968
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
-msgstr ""
+msgstr "Duplikeret valgmulighed, overskriv: linje %d"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
@@ -956,7 +958,7 @@ msgstr "Aktiveret"
 
 #: src/module/chttrans/fcitx-chttrans.desc:17
 msgid "Enabled state for im"
-msgstr ""
+msgstr "Aktiveret tilstand for inputmetode"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
 msgid "Enchance pinyin input in Fcitx"
@@ -964,7 +966,7 @@ msgstr ""
 
 #: src/im/table/table.desc:69
 msgid "End Key"
-msgstr ""
+msgstr "Slut-tast"
 
 #: src/module/xkbdbus/xkbdbus.c:258
 msgid "English (US)"
@@ -976,15 +978,15 @@ msgstr "Ikon for engelsk tilstand"
 
 #: src/lib/fcitx-config/fcitx-config.c:400
 msgid "Enum Option is invalid, take it as string"
-msgstr ""
+msgstr "Enum-valgmuligheden er ugyldig, tag den som en streng"
 
 #: src/lib/fcitx-config/fcitx-config.c:376
 msgid "Enum option duplicated."
-msgstr ""
+msgstr "Enum-valgmuligheden er duplikeret."
 
 #: src/lib/fcitx-config/fcitx-config.c:386
 msgid "Enum option number must larger than 0"
-msgstr ""
+msgstr "Enum-valgmulighedstallet skal være større end 0"
 
 #: data/script/fcitx-diagnose.sh:1059
 msgid ""
@@ -1027,7 +1029,7 @@ msgstr ""
 
 #: src/ui/cairostuff/font.c:46
 msgid "Error: Load fontconfig failed"
-msgstr ""
+msgstr "Fejl: Indlæsning af skrifttypekonfiguration mislykkedes"
 
 #: src/ui/classic/fcitx-skin-installer.sh:76
 msgid "Error: skin failed to install"
@@ -1043,7 +1045,7 @@ msgstr "Fejl: skin-fil skal kun indeholde én mappe."
 
 #: src/im/table/table.desc:84
 msgid "Exact Match"
-msgstr ""
+msgstr "Præcist match"
 
 #: data/addon.desc:61
 msgid "Exec"
@@ -1067,7 +1069,7 @@ msgstr "Kunne ikke finde fcitx i outputtet af ${1}"
 
 #: data/addon.desc:72
 msgid "Fallback UI Addon"
-msgstr ""
+msgstr "Reserve brugerflade-tilføjelse"
 
 #: src/ui/kimpanel/kimpanel.c:398 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
@@ -1088,7 +1090,7 @@ msgstr "Fcitx-konfiguration"
 
 #: data/script/fcitx-diagnose.sh:1027
 msgid "Fcitx Configure UI:"
-msgstr "Fcitx-konfigurations-UI:"
+msgstr "Fcitx-konfiguration med brugerflade:"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -1096,7 +1098,7 @@ msgstr "Fcitx DBus-frontend"
 
 #: src/frontend/ipcportal/fcitx-ipcportal.conf.in:3
 msgid "Fcitx DBus Frontend (Portal version)"
-msgstr ""
+msgstr "Fcitx DBus-frontend (Portal version)"
 
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
@@ -1120,7 +1122,7 @@ msgstr "Fcitx-tilstand:"
 
 #: src/module/unicode/fcitx-unicode.conf.in:3
 msgid "Fcitx Unicode Typing Support"
-msgstr ""
+msgstr "Understøttelse af Fcitx unicode-indtastning"
 
 #: src/frontend/xim/fcitx-xim.conf.in:3
 msgid "Fcitx XIM Frontend"
@@ -1170,7 +1172,7 @@ msgstr "Skrifttype"
 
 #: src/ui/classic/fcitx-classic-ui.desc:33
 msgid "Font Locale to display"
-msgstr ""
+msgstr "Skrifttypesprog som skal vises"
 
 #: src/ui/classic/fcitx-classic-ui.desc:16
 msgid "Font Size"
@@ -1201,11 +1203,11 @@ msgstr "Fandt ${1} aktiverede tilføjelser:"
 
 #: data/script/fcitx-diagnose.sh:1570
 msgid "Found ${1} enabled input methods:"
-msgstr ""
+msgstr "Fandt ${1} aktiverede inputmethoder:"
 
 #: data/script/fcitx-diagnose.sh:1522
 msgid "Found ${1} enabled user interface addons:"
-msgstr ""
+msgstr "Fandt ${1} aktiverede brugergrænsefladetilføjelser:"
 
 #: data/script/fcitx-diagnose.sh:919
 msgid "Found ${1} fcitx process:"
@@ -1225,7 +1227,7 @@ msgstr "Fandt ${3} til gtk ${1} ved ${2}."
 
 #: data/script/fcitx-diagnose.sh:1450
 msgid "Found fcitx addon config directory: ${1}."
-msgstr ""
+msgstr "Fandt fcitx-tilføjelseskonfigurationsmappe: ${1}."
 
 #: data/script/fcitx-diagnose.sh:894
 msgid "Found fcitx at ${1}."
@@ -1265,7 +1267,7 @@ msgstr "Fandt ukendt fcitx qt-modul: ${1}."
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:3
 msgid "Freedesktop.org Notification Support"
-msgstr ""
+msgstr "Understøttelse af Freedesktop.org-notifikation"
 
 #: data/addon.desc:19
 msgid "Frontend"
@@ -1278,12 +1280,12 @@ msgstr "Frontend brugt af IM-moduler"
 
 #: src/lib/fcitx/frontend.c:542
 msgid "Frontend: bad frontend"
-msgstr ""
+msgstr "Frontend: dårlig frontend"
 
 #: src/lib/fcitx/frontend.c:530
 #, c-format
 msgid "Frontend: open %s fail %s"
-msgstr ""
+msgstr "Frontend: åbning af %s mislykkedes %s"
 
 #: data/script/fcitx-diagnose.sh:1676
 msgid "Frontends setup:"
@@ -1300,7 +1302,7 @@ msgstr ""
 
 #: src/module/punc/punc.c:586
 msgid "Full width punctuations are used."
-msgstr ""
+msgstr "Tegnsætning i fuld bredde bruges."
 
 #: src/module/vk/vk.c:52
 msgid "Fullwidth"
@@ -1308,7 +1310,7 @@ msgstr "Fuld brede"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:3
 msgid "Fullwidth Character"
-msgstr ""
+msgstr "Tegn i fuld bredde"
 
 #: src/im/pinyin/fcitx-pinyin.desc:85
 msgid "Fuzzy an and ang"
@@ -1360,7 +1362,7 @@ msgstr "Giv tips for frase"
 
 #: src/module/imselector/fcitx-imselector.desc:9
 msgid "Global Input Method SelectKey"
-msgstr ""
+msgstr "Vælg-tast for global inputmetode"
 
 #: src/module/imselector/fcitx-imselector.desc:16
 #: src/module/imselector/fcitx-imselector.desc:21
@@ -1372,7 +1374,7 @@ msgstr ""
 #: src/module/imselector/fcitx-imselector.desc:51
 #: src/module/imselector/fcitx-imselector.desc:56
 msgid "GlobalSelector"
-msgstr ""
+msgstr "Valg af global"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:7
 msgid "Grave"
@@ -1388,11 +1390,11 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1418
 msgid "Gtk IM module cache:"
-msgstr ""
+msgstr "Mellemlager for Gtk IM-modul:"
 
 #: data/script/fcitx-diagnose.sh:1423
 msgid "Gtk IM module files:"
-msgstr ""
+msgstr "Filer for Gtk IM-modul:"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1462,13 +1464,13 @@ msgstr "IM: dårlig im %s"
 #: src/lib/fcitx/ime.c:303
 #, c-format
 msgid "IM: open %s fail %s"
-msgstr ""
+msgstr "IM: åbning af %s mislykkedes %s"
 
 #: src/module/imselector/fcitx-imselector.desc:1
 #: src/module/imselector/fcitx-imselector.desc:6
 #: src/module/imselector/fcitx-imselector.desc:11
 msgid "IMSelector"
-msgstr ""
+msgstr "Valg af inputmetode"
 
 #: src/im/table/table.desc:11
 msgid "Icon Name"
@@ -1494,7 +1496,7 @@ msgstr ""
 
 #: src/im/table/table.desc:218
 msgid "Ignore Punctuation"
-msgstr ""
+msgstr "Ignorer tegnsætning"
 
 #: src/module/clipboard/fcitx-clipboard.desc:45
 msgid "Ignore blank selections"
@@ -1564,7 +1566,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:666
 msgid "Input Method Related Environment Variables: "
-msgstr "Inputmetode som er har relation til miljøvariabler:"
+msgstr "Inputmetode som er har relation til miljøvariabler: "
 
 #: data/script/fcitx-diagnose.sh:1545
 msgid "Input Methods:"
@@ -1572,11 +1574,11 @@ msgstr "Inputmetoder:"
 
 #: src/lib/fcitx/ime.c:1797
 msgid "Input Speed: "
-msgstr "Inputhastighed:"
+msgstr "Inputhastighed: "
 
 #: src/module/imselector/fcitx-imselector.conf.in:3
 msgid "Input method selector"
-msgstr ""
+msgstr "Valg af inputmetode"
 
 #: data/addon.desc:18 data/inputmethod.desc:1 data/inputmethod.desc:5
 #: data/inputmethod.desc:9 data/inputmethod.desc:13 data/inputmethod.desc:17
@@ -1595,11 +1597,11 @@ msgstr ""
 #: src/lib/fcitx-config/fcitx-config.c:922
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
-msgstr ""
+msgstr "Ugyldig post: linje %d mangler '='"
 
 #: data/script/fcitx-diagnose.sh:1456
 msgid "Invalid addon config file ${1}."
-msgstr ""
+msgstr "Ugyldig tilføjelseskonfigurationsfil ${1}."
 
 #: src/lib/fcitx-utils/desktop-parse.c:592
 #, c-format
@@ -1609,11 +1611,11 @@ msgstr ""
 #: src/lib/fcitx-utils/desktop-parse.c:550
 #, c-format
 msgid "Invalid group name line @ line %d %s"
-msgstr ""
+msgstr "Ugyldig gruppenavnslinje @ linje %d %s"
 
 #: data/script/fcitx-diagnose.sh:1559
 msgid "Invalid item ${1} in im list."
-msgstr ""
+msgstr "Ugyldig post ${1} i im-liste."
 
 #: src/module/vk/vk.c:60
 msgid "Katakana"
@@ -1633,7 +1635,7 @@ msgstr "Tast"
 
 #: src/ui/classic/skin.desc:416
 msgid "Key Color On Virtual Keyboard"
-msgstr ""
+msgstr "Tastfarve på virtuelt tastatur"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -1697,11 +1699,11 @@ msgstr "Latinsk"
 
 #: src/module/punc/punc.c:149 src/module/punc/punc.c:568
 msgid "Latin punct"
-msgstr ""
+msgstr "Latinsk tegnsætning"
 
 #: src/module/punc/punc.c:587
 msgid "Latin punctuations are used."
-msgstr ""
+msgstr "Latinsk tegnsætning bruges."
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
@@ -1719,11 +1721,11 @@ msgstr ""
 
 #: src/module/clipboard/fcitx-clipboard.desc:11
 msgid "Length of Clipboard History to Save"
-msgstr ""
+msgstr "Længde af udklipsholderens historik som skal gemmes"
 
 #: src/im/table/table.desc:28
 msgid "Level of simple code"
-msgstr ""
+msgstr "Niveau af simpel kode"
 
 #: data/addon.desc:31
 msgid "Library"
@@ -1732,7 +1734,7 @@ msgstr "Bibliotek"
 #: src/lib/fcitx/addon.c:151
 #, c-format
 msgid "Load Addon Config File:%s"
-msgstr ""
+msgstr "Indlæs tilføjelseskonfigurationsfil:%s"
 
 #: src/im/table/tabledict.c:341
 msgid "Load Autophrase OK"
@@ -1740,7 +1742,7 @@ msgstr "Indlæsning af automatisk frase OK"
 
 #: src/im/table/tabledict.c:248
 msgid "Load Table Dict OK"
-msgstr ""
+msgstr "Indlæsning af tabelordbord OK"
 
 #: src/im/table/tabledict.c:285
 msgid "Loading Autophrase."
@@ -1748,11 +1750,11 @@ msgstr "Indlæser automatisk frase."
 
 #: src/im/table/tabledict.c:41
 msgid "Loading Table Dict"
-msgstr ""
+msgstr "Indlæser tabelordbog"
 
 #: src/module/imselector/fcitx-imselector.desc:4
 msgid "Local Input Method SelectKey"
-msgstr ""
+msgstr "Vælg-tast for lokal inputmetode"
 
 #: src/module/imselector/fcitx-imselector.desc:61
 #: src/module/imselector/fcitx-imselector.desc:66
@@ -1764,7 +1766,7 @@ msgstr ""
 #: src/module/imselector/fcitx-imselector.desc:96
 #: src/module/imselector/fcitx-imselector.desc:101
 msgid "LocalSelector"
-msgstr ""
+msgstr "Valg af lokal"
 
 #: data/script/fcitx-diagnose.sh:802
 msgid "Locale:"
@@ -1808,7 +1810,7 @@ msgstr "Margen over klikbart område"
 
 #: src/im/table/table.desc:79
 msgid "Matching Key"
-msgstr ""
+msgstr "Matchende tast"
 
 #: src/module/vk/vk.c:56
 msgid "Math"
@@ -1818,11 +1820,11 @@ msgstr "Matematik"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:23
 #: src/module/quickphrase/fcitx-quickphrase.desc:36
 msgid "Maximum hint length"
-msgstr ""
+msgstr "Maksimum tipslængde"
 
 #: src/module/clipboard/fcitx-clipboard.desc:19
 msgid "Maximum length of each candidate word"
-msgstr ""
+msgstr "Maksimum længde af hvert kandidatord"
 
 #: src/im/keyboard/fcitx-keyboard.desc:32
 msgid "Maximum length of spell hint list"
@@ -1879,7 +1881,7 @@ msgstr ""
 
 #: src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
-msgstr ""
+msgstr "Manglende type, tag den som en streng"
 
 #: data/addon.desc:20
 msgid "Module"
@@ -1892,7 +1894,7 @@ msgstr "Modul: dårligt modul"
 #: src/lib/fcitx/module.c:61
 #, c-format
 msgid "Module: open %s fail %s"
-msgstr ""
+msgstr "Modul: åbning af %s mislykkedes %s"
 
 #: src/module/spell/fcitx-spell.desc:7
 msgid "Myspell"
@@ -1908,7 +1910,7 @@ msgstr ""
 
 #: src/module/chttrans/fcitx-chttrans.desc:4
 msgid "Native"
-msgstr ""
+msgstr "Indbygget"
 
 #: data/config.desc:155
 msgid "Next Candidate Word"
@@ -1942,7 +1944,7 @@ msgstr "Intet inputvindue"
 
 #: src/module/imselector/imselector.c:316
 msgid "No local input method"
-msgstr ""
+msgstr "Ingen lokal inputmetode"
 
 #: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:555
 msgid "No remind"
@@ -1979,21 +1981,21 @@ msgstr "Onlinehjælp"
 
 #: src/module/chttrans/fcitx-chttrans.desc:5
 msgid "OpenCC"
-msgstr ""
+msgstr "OpenCC"
 
 #: src/lib/fcitx-config/fcitx-config.c:1136
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
-msgstr ""
+msgstr "Valgmuligheden %s er brug standardværdien %s"
 
 #: src/lib/fcitx-config/fcitx-config.c:1144
 #, c-format
 msgid "Option %s is Invalid."
-msgstr ""
+msgstr "Valgmuligheden %s er ugyldig."
 
 #: src/im/table/table.desc:34
 msgid "Order of Code Table"
-msgstr ""
+msgstr "Rækkefølge på kodetabel"
 
 #: src/ui/classic/skin.desc:57
 msgid "Other Color"
@@ -2046,7 +2048,7 @@ msgstr "PrProgram"
 
 #: src/im/table/table.c:1395
 msgid "Phrase is already in Dict "
-msgstr "Frase findes allerede i ordbog"
+msgstr "Frase findes allerede i ordbog "
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -2083,7 +2085,7 @@ msgstr ""
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
-msgstr ""
+msgstr "Pinyin-tast"
 
 #: src/im/table/table.c:621
 msgid "Pinyin: "
@@ -2095,7 +2097,7 @@ msgstr "PinyinJiaJia"
 
 #: data/script/fcitx-diagnose.sh:890
 msgid "Please check ${1} for how to install fcitx."
-msgstr ""
+msgstr "Tjek venligst ${1} for hvordan fcitx installeres."
 
 #: data/script/fcitx-diagnose.sh:912
 msgid ""
@@ -2198,15 +2200,17 @@ msgstr ""
 
 #: src/module/dbus/fcitx-dbus.conf.in:4
 msgid "Provides DBus Support (Used by other Addon)"
-msgstr ""
+msgstr "Giver understøttelse af DBus (bruges af anden tilføjelse)"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
 msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
 msgstr ""
+"Giver understøttelse af Freedesktop.org-notifikation (bruges af anden "
+"tilføjelse)"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
 msgid "Provides Fullwidth Character Input Support"
-msgstr ""
+msgstr "Giver understøttelse af tegninput i fuld bredde"
 
 #: src/frontend/xim/fcitx-xim.conf.in:4
 msgid "Provides XIM support"
@@ -2230,7 +2234,7 @@ msgstr "Hurtigfraseliste"
 
 #: src/module/quickphrase/quickphrase.c:378
 msgid "Quick Phrase: "
-msgstr "Hurtigfrase:"
+msgstr "Hurtigfrase: "
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:1
 #: src/module/quickphrase/fcitx-quickphrase.desc:10
@@ -2250,7 +2254,7 @@ msgstr "Quwei"
 
 #: src/im/qw/fcitx-qw.conf.in:4
 msgid "Quwei Input Method for Fcitx"
-msgstr ""
+msgstr "Quwei-inputmethode til Fcitx"
 
 #: data/config.desc:25
 msgid "R_ALT"
@@ -2278,7 +2282,7 @@ msgstr "Påmindelse:"
 
 #: src/im/pinyin/py.c:2059
 msgid "Remind: "
-msgstr "Påmindelse:"
+msgstr "Påmindelse: "
 
 #: src/module/remote/fcitx-remote-module.conf.in:3
 msgid "Remote"
@@ -2367,11 +2371,11 @@ msgstr "Gem automatisk frase"
 
 #: src/module/clipboard/fcitx-clipboard.desc:4
 msgid "Save Clipboard History To File"
-msgstr ""
+msgstr "Gem udklipsholderens historik til fil"
 
 #: src/im/table/tabledict.c:372
 msgid "Save dict error"
-msgstr ""
+msgstr "Fejl ved forsøg på at gemme ordbog"
 
 #: data/config.desc:136
 msgid "Saving All Config and Input History"
@@ -2391,15 +2395,15 @@ msgstr ""
 
 #: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
-msgstr ""
+msgstr "Vælg global inputmetode:"
 
 #: src/module/imselector/imselector.c:306
 msgid "Select local input method: "
-msgstr ""
+msgstr "Vælg lokal inputmetode:"
 
 #: src/module/imselector/fcitx-imselector.conf.in:4
 msgid "Select specific input method via keyboard"
-msgstr ""
+msgstr "Vælg bestemt inputmetode via tastatur"
 
 #: src/module/clipboard/clipboard.c:372
 msgid "Select to paste"
@@ -2423,7 +2427,7 @@ msgstr ""
 
 #: data/config.desc:172
 msgid "Share State Among Window"
-msgstr ""
+msgstr "Del tilstand mellem vinduer"
 
 #: data/addon.desc:36
 msgid "SharedLibrary"
@@ -2462,7 +2466,7 @@ msgstr "Vis version"
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:9
 msgid "Shuang Pin Schema"
-msgstr ""
+msgstr "Shuang Pin-skema"
 
 #: src/im/pinyin/py.c:121 src/im/pinyin/shuangpin.conf.in:3
 msgid "Shuangpin"
@@ -2470,7 +2474,7 @@ msgstr "Shuangpin"
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:4
 msgid "Simple Pinyin support for Fcitx"
-msgstr ""
+msgstr "Understøttelse af enkel Pinyin for Fcitx"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
 msgid "Simplified Chinese"
@@ -2532,7 +2536,7 @@ msgstr "Skin-inputlinje"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
 msgid "SkinKeyboard"
-msgstr ""
+msgstr "Skintastatur"
 
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
@@ -2558,7 +2562,7 @@ msgstr "Skin-hovedlinje"
 #: src/ui/classic/skin.desc:389 src/ui/classic/skin.desc:393
 #: src/ui/classic/skin.desc:401
 msgid "SkinMenu"
-msgstr ""
+msgstr "Skinmenu"
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
@@ -2566,12 +2570,12 @@ msgstr "Skin-bakkeikon"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
-msgstr ""
+msgstr "Mellemrumslinjefarve"
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
 msgid "Space for %s Enter for %s"
-msgstr ""
+msgstr "Mellemrum for %s Enter for %s"
 
 #: src/module/vk/vk.c:58
 msgid "Special"
@@ -2587,7 +2591,7 @@ msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:1 src/module/spell/fcitx-spell.desc:10
 msgid "Spell Hint"
-msgstr ""
+msgstr "Stavetips"
 
 #: src/im/keyboard/keyboard.c:900
 msgid "Spell hint"
@@ -2608,7 +2612,7 @@ msgstr "Start inputmetode"
 #: src/frontend/xim/xim.c:239
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
-msgstr ""
+msgstr "Fejl ved start at XIM. Kører en anden XIM-dæmon ved navn %s?"
 
 #: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
@@ -2734,7 +2738,7 @@ msgstr "Farve for tabelkode"
 
 #: src/im/table/fcitx-table.conf.in:4
 msgid "Table Input Method for Fcitx"
-msgstr ""
+msgstr "Tabelinputmetode til Fcitx"
 
 #: src/module/vk/vk.c:61
 msgid "Table Symbol"
@@ -2742,7 +2746,7 @@ msgstr "Tabelsymbol"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
-msgstr ""
+msgstr "Tasten du lige har trykket på understøttes ikke af Qt."
 
 #: data/script/fcitx-diagnose.sh:845
 msgid "The script is run as ${1} (${2})."
@@ -2780,7 +2784,7 @@ msgstr ""
 
 #: src/module/punc/punc.c:150 src/module/punc/punc.c:569
 msgid "Toggle Full Width Punctuation"
-msgstr ""
+msgstr "Tegnsætning i fuld bredde til/fra"
 
 #: src/module/fullwidthchar/fullwidthchar.c:115
 #: src/module/fullwidthchar/fullwidthchar.c:192
@@ -2805,7 +2809,7 @@ msgstr "Virtuelt tastatur til/fra"
 
 #: src/module/chttrans/fcitx-chttrans.desc:12
 msgid "Toggle for enable or disable"
-msgstr ""
+msgstr "Skift mellem aktivér/deaktivér"
 
 #: src/im/keyboard/fcitx-keyboard.desc:19
 msgid "Toggle the word hint"
@@ -2878,12 +2882,12 @@ msgstr "Brugerflade"
 
 #: src/lib/fcitx/ui.c:205
 msgid "UI: bad ui"
-msgstr "UI: dårlig ui"
+msgstr "Brugerflade: dårlig brugerflade"
 
 #: src/lib/fcitx/ui.c:192
 #, c-format
 msgid "UI: open %s fail %s"
-msgstr ""
+msgstr "Brugerflade: åbning af %s mislykkedes %s"
 
 #: data/script/fcitx-diagnose.sh:956
 msgid "Unable to find a program to check dbus."
@@ -2895,7 +2899,7 @@ msgstr "Unicode"
 
 #: src/im/table/table.desc:2
 msgid "Unique Name for Table"
-msgstr ""
+msgstr "Unikt navn for tabel"
 
 #: data/inputmethod.desc:3
 msgid "UniqueName"
@@ -2904,7 +2908,7 @@ msgstr "UniktNavn"
 #: src/lib/fcitx-config/fcitx-config.c:406
 #, c-format
 msgid "Unknown type, take it as string: %s"
-msgstr ""
+msgstr "Ukendt type, tag den som en streng: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
@@ -2920,7 +2924,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
-msgstr ""
+msgstr "Brug komplet Pinyin"
 
 #: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
@@ -2940,7 +2944,7 @@ msgstr "Brug tastaturlayout som inputmetode"
 
 #: src/im/table/table.desc:74
 msgid "Use Matching Key"
-msgstr ""
+msgstr "Brug matchende tast"
 
 #: src/frontend/xim/fcitx-xim.desc:4
 msgid "Use On The Spot Style for XIM (Cannot change during running)"
@@ -2948,7 +2952,7 @@ msgstr ""
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
-msgstr ""
+msgstr "Brug Pinyin"
 
 #: data/addon.desc:77
 msgid "Use RTLD_LOCAL to load library"
@@ -3020,7 +3024,7 @@ msgstr "Lodret"
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
-msgstr ""
+msgstr "Lodret kandidatsordliste"
 
 #: src/module/vk/fcitx-vk.conf.in:3 src/module/vk/fcitx-vk.conf.in:10
 msgid "Virtual Key Board"
@@ -3036,7 +3040,7 @@ msgstr "Virtuelt tastatur"
 
 #: src/ui/classic/skin.desc:411
 msgid "Virtual Keyboard Image"
-msgstr ""
+msgstr "Virtuelt tastaturbillede"
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
@@ -3075,7 +3079,7 @@ msgstr ""
 #: src/ui/classic/tray.c:160
 #, c-format
 msgid "X error %i on opcode send"
-msgstr ""
+msgstr "X-fejl %i ved afsendelse af opcode"
 
 #: src/module/x11/fcitx-x11.conf.in:3
 msgid "X11 Support"
@@ -3083,7 +3087,7 @@ msgstr "Understøttelse af X11"
 
 #: src/module/x11/fcitx-x11.conf.in:4
 msgid "X11 Utilitiy used by other Addon"
-msgstr ""
+msgstr "X11-redskab bruges af anden tilføjelse"
 
 #: src/frontend/xim/xim.c:134
 msgid "X11 not initialized"
@@ -3150,7 +3154,7 @@ msgstr "Du bruger xim i ${1} programmer."
 
 #: data/script/fcitx-diagnose.sh:1578
 msgid "You don't have any input methods enabled."
-msgstr ""
+msgstr "Du har ingen aktiverede inputmetoder."
 
 #: data/script/fcitx-diagnose.sh:1590
 msgid ""
@@ -3180,9 +3184,9 @@ msgid ""
 "found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
 "fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
-"Du kører i øjeblikket Fcitx med GUI, men fcitx-configtool blev ikke fundet, "
-"pakkenavnet for KCModule er typisk fcitx-config-gtk, fcitx-config-gtk3 eller "
-"fcitx-configtool. Den vil nu åbne konfigurationsfilen med "
+"Du kører i øjeblikket Fcitx med grafisk brugerflade, men fcitx-configtool "
+"blev ikke fundet, pakkenavnet for KCModule er typisk fcitx-config-gtk, fcitx-"
+"config-gtk3 eller fcitx-configtool. Den vil nu åbne konfigurationsfilen med "
 "standardtekstredigeringsprogrammet."
 
 #: data/script/fcitx-configtool.sh:144
@@ -3236,12 +3240,12 @@ msgstr "her"
 
 #: src/lib/fcitx/ime.c:1803
 msgid "min Num of Characters: "
-msgstr ""
+msgstr "minimum antal tegn: "
 
 #: src/lib/fcitx-config/fcitx-config.c:1200
 #, c-format
 msgid "no default option for %s/%s"
-msgstr ""
+msgstr "ingen standardvalgmulighed for %s/%s"
 
 #: src/ui/cairostuff/font.c:121
 msgid "no valid font."
@@ -3253,7 +3257,7 @@ msgstr "proces:"
 
 #: src/lib/fcitx/instance.c:531
 msgid "pthread mutex init failed"
-msgstr ""
+msgstr "initiering af pthread mutex mislykkedes"
 
 #: data/script/fcitx-diagnose.sh:871 data/script/fcitx-diagnose.sh:877
 msgid "sudo environment variables"
