@@ -143,9 +143,12 @@ void FcitxWatcher::unwatch() {
     disconnect(m_serviceWatcher,
                SIGNAL(serviceOwnerChanged(QString, QString, QString)), this,
                SLOT(imChanged(QString, QString, QString)));
-    m_watched = false;
     unwatchSocketFile();
     cleanUpConnection();
+    m_mainPresent = false;
+    m_portalPresent =false;
+    m_watched = false;
+    updateAvailbility();
 }
 
 QString FcitxWatcher::address() {
