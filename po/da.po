@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-17 16:02-0700\n"
-"PO-Revision-Date: 2017-10-17 22:34+0000\n"
+"POT-Creation-Date: 2017-10-17 18:02-0700\n"
+"PO-Revision-Date: 2017-10-18 00:05+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -112,6 +112,8 @@ msgid ""
 "A different value from the global one may be useful when using horizontal "
 "candidate list"
 msgstr ""
+"En anden værdi end den globale kan være nyttug når der bruges vandret "
+"kandidatliste"
 
 #: src/im/pinyin/fcitx-pinyin.desc:7
 msgid "ABC"
@@ -396,7 +398,7 @@ msgstr "Kan ikke oprette imWindow"
 
 #: src/module/punc/punc.c:410
 msgid "Can't open punc file."
-msgstr "Kan ikke åbne tegnsætningsfil"
+msgstr "Kan ikke åbne tegnsætningsfil."
 
 #: src/module/remote/remote.c:70
 #, c-format
@@ -787,7 +789,7 @@ msgstr "Nuværende fcitx-indstillingsmappe er ${1} (${2})."
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
-msgstr "Nuværende lokale inputmetode er"
+msgstr "Nuværende lokale inputmetode er "
 
 #: data/script/fcitx-diagnose.sh:807
 msgid "Current locale:"
@@ -832,7 +834,7 @@ msgstr "Standard"
 
 #: data/config.desc:180
 msgid "Default Input Method State"
-msgstr "Standardtilstand for inputmetode:"
+msgstr "Standardtilstand for inputmetode"
 
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
@@ -999,6 +1001,8 @@ msgid ""
 "Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
 "you have exported it incorrectly in any of your init files."
 msgstr ""
+"Miljøvariablen ${1} er \"${2}\" i stedet for \"${3}\". Tjek venligst om du "
+"har eksporteret den forkert i nogen af dine init-filer."
 
 #: data/script/fcitx-diagnose.sh:825
 msgid "Environment variable ${1} is not set."
@@ -1496,6 +1500,9 @@ msgid ""
 "order to use any input method other than ${2}. See ${link} for more detail "
 "as well as alternative solutions."
 msgstr ""
+"Hvis du bruger ${1}, så vil du måske afinstallere ${2} eller fjerne ${3} for "
+"at kunne bruge andre inputmetoder end ${2}. Se ${link} for flere detaljer og "
+"alternative løsninger."
 
 #: data/script/fcitx-diagnose.sh:689
 msgid ""
@@ -1503,6 +1510,9 @@ msgid ""
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
+"Hvis du bruger ${1}, så vil du måske afinstallere ${2}, fjerne ${3} eller "
+"bruger kommandoen ${g36_disable_ibus} til at deaktivere IBus-integration for "
+"at kunne bruge andre inputmetoder end ${2}. Se ${link} for flere detaljer."
 
 #: src/im/table/table.desc:218
 msgid "Ignore Punctuation"
@@ -1636,6 +1646,8 @@ msgid ""
 "Keep current buffer when there is no match item and input length is equal "
 "code length"
 msgstr ""
+"Behold nuværende buffer når der ikke er nogle matchede post og inputlængden "
+"er det samme som kodelængden"
 
 #: src/im/table/fcitx-table.desc:1 src/im/table/fcitx-table.desc:6
 #: src/im/table/fcitx-table.desc:11 src/im/table/fcitx-table.desc:16
@@ -2121,6 +2133,8 @@ msgid ""
 "Please check the Configure link of your distribution in ${1} for how to "
 "setup fcitx autostart."
 msgstr ""
+"Tjek venligst konfigurationslinket for din distribution i ${1} for hvordan "
+"fcitx-autostart opsættes."
 
 #: src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
@@ -2353,6 +2367,8 @@ msgid ""
 "Roughly the same length with this number of english letters, the actual "
 "length depends on the font and the content"
 msgstr ""
+"Cirka den samme længde med dette antal engelske tegn. Den rigtige længde "
+"afhænger af indholdets skrifttype"
 
 #: src/im/pinyin/fcitx-pinyin.desc:71
 msgid "Rule of Candidate Phrase Order"
@@ -2412,11 +2428,11 @@ msgstr "Sekunders søvn inden fcitx rigtig starter"
 
 #: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
-msgstr "Vælg global inputmetode:"
+msgstr "Vælg global inputmetode: "
 
 #: src/module/imselector/imselector.c:306
 msgid "Select local input method: "
-msgstr "Vælg lokal inputmetode:"
+msgstr "Vælg lokal inputmetode: "
 
 #: src/module/imselector/fcitx-imselector.conf.in:4
 msgid "Select specific input method via keyboard"
@@ -2774,18 +2790,24 @@ msgid ""
 "This is only a soft limit, the actually number of candidate words may be "
 "larger than this when multiple characters have the same order of strokes."
 msgstr ""
+"Dette er kun en blød grænse. Det rigtige antal kandidatord kan være større "
+"end dette når flere tegn har den samme rækkefølge af strokes."
 
 #: data/config.desc:156
 msgid ""
 "This is used in some modules and input methods to navigate to the next "
 "candidate word"
 msgstr ""
+"Dette bruges i nogle moduler og inputmetoder til at navigere til det næste "
+"kandidatord"
 
 #: data/config.desc:149
 msgid ""
 "This is used in some modules and input methods to navigate to the previous "
 "candidate word"
 msgstr ""
+"Dette bruges i nogle moduler og inputmetoder til at navigere til det forrige "
+"kandidatord"
 
 #: src/ui/classic/skin.desc:33
 msgid "Tip Message Color"
@@ -2798,6 +2820,9 @@ msgid ""
 "${link1}. For other more general problems of using XIM including application "
 "freezing, see ${link2}."
 msgstr ""
+"Tjek ${link1}, for at se flere programspecifikke problemer som du kan have "
+"når du bruger xim. Se ${link2}, for andre generelle problemer med at bruge "
+"XIM, inklusiv programfrysninger."
 
 #: src/module/punc/punc.c:150 src/module/punc/punc.c:569
 msgid "Toggle Full Width Punctuation"
@@ -2965,7 +2990,7 @@ msgstr "Brug matchende tast"
 
 #: src/frontend/xim/fcitx-xim.desc:4
 msgid "Use On The Spot Style for XIM (Cannot change during running)"
-msgstr ""
+msgstr "Brug her-og-nu-stil til XIM (kan ikke ændres under kørsel)"
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
@@ -3092,7 +3117,7 @@ msgstr "Integration af X-tastatur"
 #: src/module/xkbdbus/fcitx-xkbdbus.conf.in:3
 #: src/module/xkbdbus/fcitx-xkbdbus.conf.in:4
 msgid "X Keyboard Integration export with DBus"
-msgstr ""
+msgstr "Eksport af integration af X-tastatur med DBus"
 
 #: src/ui/classic/tray.c:160
 #, c-format
@@ -3161,12 +3186,17 @@ msgid ""
 "either means you have security problems or the result of this script may not "
 "be accurate. See ${3} or ${4} for more information."
 msgstr ""
+"Du er formodentligt logget ind som ${1} eller bruger ${2} til at køre dette "
+"script. Det betyder enten at du har sikkerhedsproblemer eller at resultatet "
+"af denne script kan være upræcist. Se ${3} eller ${4} for mere information."
 
 #: data/script/fcitx-diagnose.sh:869
 msgid ""
 "You are probably using ${1} to run this script. This means the result of "
 "this script may not be accurate. See ${2} for more information."
 msgstr ""
+"Du bruger formodentligt ${1} til at køre dette script. Det betyder at "
+"resultatet af denne script kan være upræcist. Se ${2} for mere information."
 
 #: data/script/fcitx-diagnose.sh:1140
 msgid "You are using xim in ${1} programs."
@@ -3193,6 +3223,8 @@ msgid ""
 "You only have one input method enabled, please add a keyboard input method "
 "as the first one and your main input method as the second one."
 msgstr ""
+"Du har kun én inputmetode aktiveret. Tilføj venligst en tastaturinputmetode "
+"som den første og din primære inputmetode som den anden."
 
 #: data/script/fcitx-diagnose.sh:1582
 msgid ""
@@ -3229,6 +3261,9 @@ msgid ""
 "able to use input method in emacs because of an really old emacs bug that "
 "upstream refuse to fix for years."
 msgstr ""
+"Din LC_CTYPE er sat til ${1} i stedet for zh, ja eller ko. Du vil måske ikke "
+"kunne bruge inputmetode i emacs pga. en meget gammel emacs-fejl som upstream "
+"har nægtet at rette i årevis."
 
 #: data/script/fcitx-diagnose.sh:1120
 msgid ""
@@ -3243,6 +3278,8 @@ msgid ""
 "Your first (default) input method is ${1} instead of a keyboard input "
 "method. You may have trouble deactivate fcitx."
 msgstr ""
+"Din første (standard) inputmetode er ${1} i stedet for en "
+"tastaturinputmetode. Du kan have problemer med at deaktivere fcitx."
 
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"
