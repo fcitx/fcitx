@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-17 18:02-0700\n"
-"PO-Revision-Date: 2017-10-18 00:05+0000\n"
+"POT-Creation-Date: 2017-10-19 00:03-0700\n"
+"PO-Revision-Date: 2017-10-18 23:30+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -1868,7 +1868,7 @@ msgstr "Maksimum længde af stavetipliste til hurtigfrase"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
 msgid "Maximum results from stroke input."
-msgstr "Maksimum resultater fra stroke-input."
+msgstr "Maksimum resultater fra trykinput."
 
 #: src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
@@ -1889,7 +1889,7 @@ msgstr "Migrer den gamle filsti til den nye"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
 msgstr ""
-"Minimum inputlængde for at udløse stroke-input (sæt til -1 for at deaktivere)"
+"Minimum inputlængde for at udløse trykinput (sæt til -1 for at deaktivere)"
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
@@ -2661,7 +2661,7 @@ msgstr "Statuspanelets y-position"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
-msgstr "Stroke-input udløserlængde"
+msgstr "Trykinput udløserlængde"
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
@@ -2791,7 +2791,7 @@ msgid ""
 "larger than this when multiple characters have the same order of strokes."
 msgstr ""
 "Dette er kun en blød grænse. Det rigtige antal kandidatord kan være større "
-"end dette når flere tegn har den samme rækkefølge af strokes."
+"end dette når flere tegn har den samme rækkefølge af tryk."
 
 #: data/config.desc:156
 msgid ""
