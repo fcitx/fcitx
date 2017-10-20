@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-19 00:03-0700\n"
-"PO-Revision-Date: 2017-10-18 23:30+0000\n"
+"POT-Creation-Date: 2017-10-20 00:02-0700\n"
+"PO-Revision-Date: 2017-10-19 23:39+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -61,7 +61,7 @@ msgstr "(utilgængelig)"
 
 #: data/script/fcitx-diagnose.sh:656
 msgid "/Beginner%27s_Guide"
-msgstr "/Begynderguide"
+msgstr "/Begyndervejledning"
 
 #: data/script/fcitx-diagnose.sh:703
 msgid "/Hall_of_Shame_for_Linux_IME_Support"
@@ -69,7 +69,7 @@ msgstr "/Hall_of_Shame_for_understøttelse_af_Linux_IME"
 
 #: data/script/fcitx-diagnose.sh:667
 msgid "/Input_method_related_environment_variables"
-msgstr "/Inputmetode_som_er_har_relation_til_miljøvariabler"
+msgstr "/Inputmetode_med_relation_til_miljøvariabler"
 
 #: data/script/fcitx-diagnose.sh:683
 msgid "/Note_for_GNOME_Later_than_3.6"
@@ -149,7 +149,7 @@ msgstr "Aktiv"
 
 #: src/ui/classic/skin.desc:387
 msgid "Active Menu Color"
-msgstr "Aktiv menufarve"
+msgstr "Farve for aktiv menu"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -359,7 +359,7 @@ msgstr "Bash-version:"
 
 #: data/script/fcitx-diagnose.sh:655
 msgid "Beginner's Guide"
-msgstr "Begynderguide"
+msgstr "Begyndervejledning"
 
 #: src/im/table/data/qxm.conf.in:3
 msgid "Bingchan"
@@ -529,7 +529,7 @@ msgstr "Kan ikke fortolke XMODIFIERS: ${1}."
 
 #: src/ui/classic/skin.c:121
 msgid "Cannot load default skin, is installation correct?"
-msgstr "Kan ikke indlæse standardskin, er installationen korrekt?"
+msgstr "Kan ikke indlæse standardskin - er installationen korrekt?"
 
 #: src/ui/classic/skin.c:126
 #, c-format
@@ -1586,7 +1586,7 @@ msgstr "Inputmetodetip vil kun blive vist når tilstand er aktiv"
 
 #: data/script/fcitx-diagnose.sh:666
 msgid "Input Method Related Environment Variables: "
-msgstr "Inputmetode som er har relation til miljøvariabler: "
+msgstr "Inputmetode med relation til miljøvariabler: "
 
 #: data/script/fcitx-diagnose.sh:1545
 msgid "Input Methods:"
@@ -2603,7 +2603,7 @@ msgstr "Skin-bakkeikon"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
-msgstr "Mellemrumslinjefarve"
+msgstr "Farve for mellemrumslinje"
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
@@ -3067,7 +3067,7 @@ msgstr "Lodret"
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
-msgstr "Lodret kandidatsordliste"
+msgstr "Lodret kandidatordliste"
 
 #: src/module/vk/fcitx-vk.conf.in:3 src/module/vk/fcitx-vk.conf.in:10
 msgid "Virtual Key Board"
