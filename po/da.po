@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-20 00:02-0700\n"
-"PO-Revision-Date: 2017-10-19 23:39+0000\n"
+"POT-Creation-Date: 2017-10-20 08:03-0700\n"
+"PO-Revision-Date: 2017-10-20 08:53+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -289,7 +289,7 @@ msgstr "Udseende"
 
 #: src/module/xkb/fcitx-xkb.desc:20
 msgid "Apply this custom xmodmap script after layout change"
-msgstr "Anvend dette tilpasset xmodmap-script efter layout er blevet ændret"
+msgstr "Anvend det tilpasset xmodmap-script efter layout er blevet ændret"
 
 #: data/addon.desc:67
 msgid "Argument for InputMethod Register"
@@ -690,7 +690,7 @@ msgstr "Kommentar"
 
 #: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
-msgstr "Begå og videregiv når der trykkes på en ugyldig nøgle i denne tabel"
+msgstr "Begå og videregiv når der trykkes på en ugyldig nøgle i tabellen"
 
 #: src/im/table/table.desc:208
 msgid "Commit key for select first candidate"
@@ -1713,7 +1713,7 @@ msgstr "SprogKode"
 
 #: src/im/table/table.desc:151
 msgid "Language Code for this table"
-msgstr "Sprogkode for denne tabel"
+msgstr "Sprogkode for tabellen"
 
 #: src/module/vk/vk.c:51
 msgid "Latin"
@@ -2790,15 +2790,15 @@ msgid ""
 "This is only a soft limit, the actually number of candidate words may be "
 "larger than this when multiple characters have the same order of strokes."
 msgstr ""
-"Dette er kun en blød grænse. Det rigtige antal kandidatord kan være større "
-"end dette når flere tegn har den samme rækkefølge af tryk."
+"Det er kun en blød grænse. Det rigtige antal kandidatord kan være større end "
+"dette når flere tegn har den samme rækkefølge af tryk."
 
 #: data/config.desc:156
 msgid ""
 "This is used in some modules and input methods to navigate to the next "
 "candidate word"
 msgstr ""
-"Dette bruges i nogle moduler og inputmetoder til at navigere til det næste "
+"Det bruges i nogle moduler og inputmetoder til at navigere til det næste "
 "kandidatord"
 
 #: data/config.desc:149
@@ -2806,7 +2806,7 @@ msgid ""
 "This is used in some modules and input methods to navigate to the previous "
 "candidate word"
 msgstr ""
-"Dette bruges i nogle moduler og inputmetoder til at navigere til det forrige "
+"Det bruges i nogle moduler og inputmetoder til at navigere til det forrige "
 "kandidatord"
 
 #: src/ui/classic/skin.desc:33
@@ -3186,17 +3186,18 @@ msgid ""
 "either means you have security problems or the result of this script may not "
 "be accurate. See ${3} or ${4} for more information."
 msgstr ""
-"Du er formodentligt logget ind som ${1} eller bruger ${2} til at køre dette "
-"script. Det betyder enten at du har sikkerhedsproblemer eller at resultatet "
-"af denne script kan være upræcist. Se ${3} eller ${4} for mere information."
+"Du er formodentligt logget ind som ${1} eller bruger ${2} til at køre "
+"scriptet. Det betyder enten at du har sikkerhedsproblemer eller at "
+"resultatet af scriptet kan være upræcist. Se ${3} eller ${4} for mere "
+"information."
 
 #: data/script/fcitx-diagnose.sh:869
 msgid ""
 "You are probably using ${1} to run this script. This means the result of "
 "this script may not be accurate. See ${2} for more information."
 msgstr ""
-"Du bruger formodentligt ${1} til at køre dette script. Det betyder at "
-"resultatet af denne script kan være upræcist. Se ${2} for mere information."
+"Du bruger formodentligt ${1} til at køre scriptet. Det betyder at resultatet "
+"af scriptet kan være upræcist. Se ${2} for mere information."
 
 #: data/script/fcitx-diagnose.sh:1140
 msgid "You are using xim in ${1} programs."
