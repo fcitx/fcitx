@@ -44,6 +44,7 @@ option(FORCE_PRESAGE
 option(ENABLE_BACKTRACE "Enable backtrace support" On)
 option(ENABLE_XDGAUTOSTART "Enable xdg autostart desktop file installation" On)
 option(ENABLE_GETTEXT "Enable gettext support." On)
+option(ENABLE_SPELL "Enable Spell Addon" On)
 
 if(NOT NO_SNOOPER_APPS)
   set(NO_SNOOPER_APPS ".*chrome.*,.*chromium.*,firefox.*,Do.*"
