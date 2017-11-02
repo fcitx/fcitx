@@ -136,8 +136,13 @@ FcitxLogFunc(FcitxLogLevel e, const char* filename, const int line,
              const char* fmt, ...)
 {
     va_list ap;
+    char *file = strdup(filename);
+    if (!file) {
+        return;
+    }
     va_start(ap, fmt);
-    FcitxLogFuncV(e, basename(filename), line, fmt, ap);
+    FcitxLogFuncV(e, basename(file), line, fmt, ap);
+    free(file);
     va_end(ap);
 }
 

@@ -7,7 +7,7 @@ Function1=GetPrivConnection
 Function2=WatchName
 Function3=UnwatchName
 Function4=AttachConnection
-Function5=
+Function5=DeattachConnection
 Function6=
 Self.Type=FcitxDBus*
 
