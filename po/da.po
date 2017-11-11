@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-20 08:03-0700\n"
-"PO-Revision-Date: 2017-10-20 08:53+0000\n"
+"POT-Creation-Date: 2017-11-10 16:02-0800\n"
+"PO-Revision-Date: 2017-11-10 22:09+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -85,7 +85,7 @@ msgstr "/min  tid brugt: "
 
 #: src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
-msgstr "0 for at begå med det samme, -1 for at beholde alle ord"
+msgstr "0 for at udføre med det samme, -1 for at beholde alle ord"
 
 #: src/module/unicode/charselectdata.c:249
 msgid "<Low Surrogate>"
@@ -218,17 +218,17 @@ msgstr "Juster rækkefølge"
 #: src/im/pinyin/fcitx-pinyin.desc:59 src/im/pinyin/fcitx-pinyin.desc:68
 #: src/im/pinyin/fcitx-pinyin.desc:77 src/im/table/table.desc:24
 msgid "AdjustFast"
-msgstr "JusterHurtig"
+msgstr "Juster hurtig"
 
 #: src/im/pinyin/fcitx-pinyin.desc:60 src/im/pinyin/fcitx-pinyin.desc:69
 #: src/im/pinyin/fcitx-pinyin.desc:78 src/im/table/table.desc:25
 msgid "AdjustFreq"
-msgstr "Justerpopulær"
+msgstr "Juster populær"
 
 #: src/im/pinyin/fcitx-pinyin.desc:58 src/im/pinyin/fcitx-pinyin.desc:67
 #: src/im/pinyin/fcitx-pinyin.desc:76 src/im/table/table.desc:23
 msgid "AdjustNo"
-msgstr "JusterNummer"
+msgstr "Juster nummer"
 
 #: data/config.desc:170
 msgid "All"
@@ -576,7 +576,7 @@ msgstr "Vælg andet eller tredje kandidatord"
 #: src/module/clipboard/fcitx-clipboard.desc:35
 #: src/module/quickphrase/fcitx-quickphrase.desc:16
 msgid "Choose key modifier"
-msgstr "Vælg tast-modifier"
+msgstr "Vælg ændringstast"
 
 #: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
@@ -690,23 +690,23 @@ msgstr "Kommentar"
 
 #: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
-msgstr "Begå og videregiv når der trykkes på en ugyldig nøgle i tabellen"
+msgstr "Udfør og videregiv når der trykkes på en ugyldig nøgle i tabellen"
 
 #: src/im/table/table.desc:208
 msgid "Commit key for select first candidate"
-msgstr "Begå-tast til at vælge første kandidat"
+msgstr "Udfør-tast til at vælge første kandidat"
 
 #: src/im/table/table.desc:213
 msgid "Commit string when there is no match"
-msgstr "Begå-streng når der ikke er noget match"
+msgstr "Udfør streng når der ikke er nogen match"
 
 #: data/config.desc:198
 msgid "Commit when toggle state"
-msgstr "Begå når der skiftes tilstand"
+msgstr "Udfør når der skiftes tilstand"
 
 #: src/im/keyboard/fcitx-keyboard.desc:4
 msgid "Commit with extra space when choose candidate word"
-msgstr "Begå med ekstra mellemrum når der vælges kandidatord"
+msgstr "Udfør med ekstra mellemrum når der vælges kandidatord"
 
 #: data/script/fcitx-diagnose.sh:996
 msgid "Config GUI for gtk${1} not found."
@@ -897,7 +897,7 @@ msgstr "Deaktiveret"
 
 #: data/config.desc:217
 msgid "Do not commit preedit text when unfocus a window"
-msgstr "Begå ikke preedit-tekst når et vindue mister fokus"
+msgstr "Udfør ikke preedit-tekst når et vindue mister fokus"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:620
 msgid "Do not show again"
@@ -950,7 +950,7 @@ msgstr "Duplikeret valgmulighed, overskriv: linje %d"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr "Tøm"
+msgstr "Tom"
 
 #: src/im/table/table.desc:156
 msgid "Enable"
@@ -1376,7 +1376,7 @@ msgstr "Giv tips for frase"
 
 #: src/module/imselector/fcitx-imselector.desc:9
 msgid "Global Input Method SelectKey"
-msgstr "Vælg-tast for global inputmetode"
+msgstr "Valgtast for global inputmetode"
 
 #: src/module/imselector/fcitx-imselector.desc:16
 #: src/module/imselector/fcitx-imselector.desc:21
@@ -1778,7 +1778,7 @@ msgstr "Indlæser tabelordbog"
 
 #: src/module/imselector/fcitx-imselector.desc:4
 msgid "Local Input Method SelectKey"
-msgstr "Vælg-tast for lokal inputmetode"
+msgstr "Valgtast for lokal inputmetode"
 
 #: src/module/imselector/fcitx-imselector.desc:61
 #: src/module/imselector/fcitx-imselector.desc:66
@@ -2073,7 +2073,7 @@ msgstr "Forælder"
 
 #: data/config.desc:171
 msgid "PerProgram"
-msgstr "PrProgram"
+msgstr "Per program"
 
 #: src/im/table/table.c:1395
 msgid "Phrase is already in Dict "
@@ -3018,7 +3018,7 @@ msgstr "Brug bred tegnsætning"
 
 #: src/im/keyboard/fcitx-keyboard.desc:39
 msgid "Use enter to commit the existing string"
-msgstr "Brug enter til at begå den eksisterende streng"
+msgstr "Brug enter til at udføre den eksisterende streng"
 
 #: data/config.desc:10
 msgid "Use extra trigger key only after using it to inactivate"
@@ -3272,7 +3272,7 @@ msgid ""
 "trouble committing strings using XIM."
 msgstr ""
 "Din LC_CTYPE er sat til ${1} hvor kodningen ikke er UTF-8. Du kan have "
-"problemer med at begå strenge ved brug af XIM."
+"problemer med at udføre strenge ved brug af XIM."
 
 #: data/script/fcitx-diagnose.sh:1594
 msgid ""
