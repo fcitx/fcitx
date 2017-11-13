@@ -205,6 +205,7 @@ Inscriptional Parthian
 Phoenician
 Samaritan
 Syriac
+Syriac Supplement
 
 SECTION Central Asian Scripts
 Manichaean
@@ -213,7 +214,9 @@ Mongolian
 Mongolian Supplement
 Old Turkic
 Phags-pa
+Soyombo
 Tibetan
+Zanabazar Square
 
 SECTION South Asian Scripts
 Ahom
@@ -235,6 +238,7 @@ Lepcha
 Limbu
 Mahajani
 Malayalam
+Masaram Gondi
 Meetei Mayek
 Meetei Mayek Extensions
 Modi
@@ -297,6 +301,7 @@ CJK Unified Ideographs Extension B
 CJK Unified Ideographs Extension C
 CJK Unified Ideographs Extension D
 CJK Unified Ideographs Extension E
+CJK Unified Ideographs Extension F
 CJK Compatibility Ideographs
 CJK Compatibility Ideographs Supplement
 Kangxi Radicals
@@ -311,10 +316,12 @@ Hangul Syllables
 Hiragana
 Katakana
 Katakana Phonetic Extensions
+Kana Extended-A
 Kana Supplement
 Kanbun
 Lisu
 Miao
+Nushu
 Tangut
 Tangut Components
 Yi Syllables
