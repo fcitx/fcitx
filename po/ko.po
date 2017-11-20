@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-18 01:02-0700\n"
-"PO-Revision-Date: 2017-10-18 07:46+0000\n"
+"POT-Creation-Date: 2017-11-20 00:02-0800\n"
+"PO-Revision-Date: 2017-11-20 07:10+0000\n"
 "Last-Translator: Bon Keun Seo <scobyseo@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -980,7 +980,7 @@ msgstr "영어 모드 아이콘"
 
 #: src/lib/fcitx-config/fcitx-config.c:400
 msgid "Enum Option is invalid, take it as string"
-msgstr "Enum 옵션이 유효하지 않고, 문자열을 가짐 "
+msgstr "Enum 옵션은 숫자값이어야 합니다"
 
 #: src/lib/fcitx-config/fcitx-config.c:376
 msgid "Enum option duplicated."
@@ -2664,7 +2664,7 @@ msgstr "Super+오른쪽 Ctrl"
 
 #: data/config.desc:142
 msgid "Switch Embedded Preedit"
-msgstr ""
+msgstr "내장 사전 전환"
 
 #: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
