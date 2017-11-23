@@ -219,6 +219,7 @@ void* PortalCreate(FcitxInstance* instance, int frontendid)
     }
 
     if (!FcitxDBusAttachConnection(instance, ipc->_conn)) {
+        dbus_connection_close(ipc->_conn);
         dbus_connection_unref(ipc->_conn);
         ipc->_conn = NULL;
         free(ipc);
