@@ -5,6 +5,7 @@
 # Translators:
 # しろう, 2013
 # しろう <>, 2013
+# ABE Tsunehiko, 2017
 # あわしろいくや <ikunya@gmail.com>, 2013-2016
 # csslayer <wengxt@gmail.com>, 2013
 # あわしろいくや <ikunya@gmail.com>, 2013
@@ -21,9 +22,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-16 22:02-0700\n"
-"PO-Revision-Date: 2017-10-17 04:04+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2017-11-23 00:02-0800\n"
+"PO-Revision-Date: 2017-11-23 06:45+0000\n"
+"Last-Translator: ABE Tsunehiko\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -37,15 +38,15 @@ msgstr "Ctrl+Delete で削除"
 
 #: data/script/fcitx-diagnose.sh:850
 msgid "${1} Environment Variables:"
-msgstr ""
+msgstr "環境変数 ${1}:"
 
 #: data/script/fcitx-diagnose.sh:859
 msgid "${1} is not set."
-msgstr ""
+msgstr "${1} は設定されていません。"
 
 #: data/script/fcitx-diagnose.sh:856
 msgid "${1} is set to ${2}."
-msgstr ""
+msgstr "${1} に ${2} を設定しました。"
 
 #: data/script/fcitx-diagnose.sh:514
 msgid "${1} not found."
@@ -367,7 +368,7 @@ msgstr "背景"
 
 #: data/script/fcitx-diagnose.sh:779
 msgid "Bash Version:"
-msgstr ""
+msgstr "Bash のバージョン:"
 
 #: data/script/fcitx-diagnose.sh:655
 msgid "Beginner's Guide"
@@ -450,7 +451,7 @@ msgstr "ユーザーのPinyinデータベースを保存できません: %s"
 
 #: data/script/fcitx-diagnose.sh:925
 msgid "Cannot connect to fcitx correctly."
-msgstr "正しくfcitxに接続できません。"
+msgstr "正しく fcitx に接続できません。"
 
 #: data/script/fcitx-diagnose.sh:774
 msgid "Cannot determine desktop environment."
@@ -462,7 +463,7 @@ msgstr "gtk ${1} 用の ${2} が見つかりません"
 
 #: data/script/fcitx-diagnose.sh:944
 msgid "Cannot find DBus name ${1} owner."
-msgstr ""
+msgstr "DBus 名 ${1} の所有者が見つかりません。"
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
@@ -485,7 +486,7 @@ msgstr "Fcitx アドオンの設定ディレクトリが見つかりません。
 
 #: data/script/fcitx-diagnose.sh:888
 msgid "Cannot find fcitx executable!"
-msgstr "fcitxを実行できません！"
+msgstr "fcitx を実行できません！"
 
 #: data/script/fcitx-diagnose.sh:1405
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
@@ -519,10 +520,12 @@ msgstr "gtk ${1} 用の immodule キャッシュが見つかりません"
 msgid ""
 "Cannot find kimpanel dbus interface or enabled non-kimpanel user interface."
 msgstr ""
+"kimpanel DBus インターフェイスが見つからないか、kimpanel ユーザーインター"
+"フェース以外が有効になっています。"
 
 #: data/script/fcitx-diagnose.sh:952
 msgid "Cannot find pid of DBus name ${1} owner."
-msgstr ""
+msgstr "DBus名 ${1} の所有者の PID が見つかりません。"
 
 #: data/script/fcitx-diagnose.sh:1107
 msgid "Cannot find xim_server on root window."
@@ -793,7 +796,7 @@ msgstr "現在の入力メソッド名"
 
 #: data/script/fcitx-diagnose.sh:839
 msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr ""
+msgstr "現在の Fcitx の設定ディレクトリーは ${1} (${2}) です。"
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
@@ -809,7 +812,7 @@ msgstr "現在のユーザー:"
 
 #: data/script/fcitx-diagnose.sh:833
 msgid "Current value of ${1} is ${2} (${3})."
-msgstr ""
+msgstr "現在の ${1} の値は ${2} (${3}) です。"
 
 #: data/config.desc:35
 msgid "Custom"
@@ -834,7 +837,7 @@ msgstr "新しい Freedesktop.org の DBus のトレイアイコン"
 
 #: data/script/fcitx-diagnose.sh:933
 msgid "DBus interface:"
-msgstr ""
+msgstr "DBus インターフェース:"
 
 #: src/module/spell/fcitx-spell.desc:5
 msgid "Default"
@@ -1024,7 +1027,7 @@ msgstr "環境変数 ${1} は \"${2}\" に正しく設定されています。"
 
 #: data/script/fcitx-diagnose.sh:829
 msgid "Environment variable ${1} is set to ${2}."
-msgstr ""
+msgstr "環境変数 ${1} に ${2} を設定しました。"
 
 #: data/script/fcitx-diagnose.sh:784
 msgid "Environment:"
@@ -1081,11 +1084,11 @@ msgstr "入力メソッド起動のその他のキー"
 
 #: data/script/fcitx-diagnose.sh:1394
 msgid "Failed to find fcitx in immodule cache at ${1}"
-msgstr ""
+msgstr "${1} の immodule キャッシュに fcitx が見つかりません。"
 
 #: data/script/fcitx-diagnose.sh:1311
 msgid "Failed to find fcitx in the output of ${1}"
-msgstr ""
+msgstr "${1} の出力に fcitx が見つかりません。"
 
 #: data/addon.desc:72
 msgid "Fallback UI Addon"
@@ -1138,7 +1141,7 @@ msgstr "Fcitx スペルのヒント/補完サポート"
 
 #: data/script/fcitx-diagnose.sh:885
 msgid "Fcitx State:"
-msgstr "Fcitxの状態:"
+msgstr "Fcitx の状態:"
 
 #: src/module/unicode/fcitx-unicode.conf.in:3
 msgid "Fcitx Unicode Typing Support"
@@ -1150,11 +1153,11 @@ msgstr "Fcitx XIMフロントエンド"
 
 #: data/script/fcitx-diagnose.sh:910
 msgid "Fcitx is not running."
-msgstr "Fcitxは実行されていません。"
+msgstr "Fcitx は実行されていません。"
 
 #: data/script/fcitx-diagnose.sh:899
 msgid "Fcitx version: ${1}"
-msgstr "Fcitxのバージョン: ${1}"
+msgstr "Fcitx のバージョン: ${1}"
 
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
 #: src/ui/classic/skin.desc:403
@@ -1227,15 +1230,15 @@ msgstr "${1} の有効な入力メソッドを見つけました:"
 
 #: data/script/fcitx-diagnose.sh:1522
 msgid "Found ${1} enabled user interface addons:"
-msgstr ""
+msgstr "${1} の有効なユーザーインターフェースアドオンを見つけました:"
 
 #: data/script/fcitx-diagnose.sh:919
 msgid "Found ${1} fcitx process:"
-msgstr "Fcitxのプロセス ${1} を見つけました:"
+msgstr "Fcitx のプロセス ${1} を見つけました:"
 
 #: data/script/fcitx-diagnose.sh:917
 msgid "Found ${1} fcitx processes:"
-msgstr "Fcitxのプロセス ${1} を見つけました:"
+msgstr "Fcitx のプロセス ${1} を見つけました:"
 
 #: data/script/fcitx-diagnose.sh:1297
 msgid "Found ${2} for unknown gtk version at ${1}."
@@ -1251,7 +1254,7 @@ msgstr "Fcitx アドオンの設定ディレクトリを見つけました: ${1}
 
 #: data/script/fcitx-diagnose.sh:894
 msgid "Found fcitx at ${1}."
-msgstr "${1} にfcitxを見つけました。"
+msgstr "${1} に fcitx を見つけました。"
 
 #: data/script/fcitx-diagnose.sh:1178 data/script/fcitx-diagnose.sh:1183
 msgid "Found fcitx im module for ${2}: ${1}."
@@ -1506,6 +1509,9 @@ msgid ""
 "order to use any input method other than ${2}. See ${link} for more detail "
 "as well as alternative solutions."
 msgstr ""
+"${1} を使っている場合、 ${2} 以外の入力メソッドを使うためには ${2} をアンイン"
+"ストールするか ${3} を削除します。 他の解決方法の詳細は ${link} を参照してく"
+"ださい。"
 
 #: data/script/fcitx-diagnose.sh:689
 msgid ""
@@ -1513,6 +1519,10 @@ msgid ""
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
+"もしあなたが ${1} を使用中で、${2} をアンインストールしたい場合、${2} 以外の"
+"入力メソッドを使用するための IBus 統合を無効化するために、${3} を削除するか "
+"${g36_disable_ibus} コマンドを実行してください。詳細は ${link} で確認してくだ"
+"さい。"
 
 #: src/im/table/table.desc:218
 msgid "Ignore Punctuation"
@@ -2054,11 +2064,11 @@ msgstr "スキンのフォントサイズを上書きする"
 
 #: data/script/fcitx-diagnose.sh:940
 msgid "Owner of DBus name ${1} is ${2}."
-msgstr ""
+msgstr "DBus 名 ${1} の所有者は ${2} です。"
 
 #: data/script/fcitx-diagnose.sh:948
 msgid "PID of DBus name ${1} owner is ${2}."
-msgstr ""
+msgstr "DBus 名 ${1} の所有者の PID は${2} です。"
 
 #: data/inputmethod.desc:23
 msgid "Parent"
@@ -2119,7 +2129,7 @@ msgstr "PinyinJiaJia"
 
 #: data/script/fcitx-diagnose.sh:890
 msgid "Please check ${1} for how to install fcitx."
-msgstr "fcitxのインストール方法 ${1} を確認してください。"
+msgstr "fcitx のインストール方法 ${1} を確認してください。"
 
 #: data/script/fcitx-diagnose.sh:912
 msgid ""
@@ -2373,7 +2383,7 @@ msgstr "よく使う単語の表示順序ルール"
 
 #: data/script/fcitx-diagnose.sh:866
 msgid "Running as root:"
-msgstr ""
+msgstr "root として実行中:"
 
 #: src/module/vk/vk.c:54
 msgid "Russian"
@@ -2916,7 +2926,7 @@ msgstr "UI: %s を開くのに失敗しました %s"
 
 #: data/script/fcitx-diagnose.sh:956
 msgid "Unable to find a program to check dbus."
-msgstr ""
+msgstr "DBus をチェックするためのプログラムが見つかりません。"
 
 #: src/module/unicode/fcitx-unicode.desc:1
 msgid "Unicode"
@@ -3039,7 +3049,7 @@ msgstr "ユーザーフレーズの色"
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
-msgstr ""
+msgstr "DBus をチェックするために ${1} を使用します。"
 
 #: data/script/fcitx-diagnose.sh:1294 data/script/fcitx-diagnose.sh:1377
 msgid "Version Line:"
@@ -3079,7 +3089,7 @@ msgstr "Wanfeng"
 
 #: data/script/fcitx-diagnose.sh:876
 msgid "Why is it bad to run as root"
-msgstr "なぜrootで実行することが危険なのか"
+msgstr "なぜ root で実行することが危険なのか"
 
 #: src/im/table/data/wbx.conf.in:3
 msgid "Wubi"
@@ -3168,12 +3178,17 @@ msgid ""
 "either means you have security problems or the result of this script may not "
 "be accurate. See ${3} or ${4} for more information."
 msgstr ""
+"現在 ${1} としてログインしているか、このスクリプトを実行するために ${2} が使"
+"われたようです。セキュリティの問題がある可能性や、スクリプトの結果が正確では"
+"ない可能性があります。詳細は ${3} と ${4} で確認してください。"
 
 #: data/script/fcitx-diagnose.sh:869
 msgid ""
 "You are probably using ${1} to run this script. This means the result of "
 "this script may not be accurate. See ${2} for more information."
 msgstr ""
+"このスクリプトを実行するために ${1} が使われたようです。スクリプトの結果は正"
+"確ではない可能性があります。詳細は ${2} で確認してください。"
 
 #: data/script/fcitx-diagnose.sh:1140
 msgid "You are using xim in ${1} programs."
@@ -3207,6 +3222,8 @@ msgid ""
 "You only have one keyboard input method enabled. You may want to add another "
 "input method to input other languages."
 msgstr ""
+"有効な入力メソッドが1つしかありません。他言語の向けの入力メソッドを追加してく"
+"ださい。"
 
 #: data/script/fcitx-configtool.sh:147
 msgid ""
