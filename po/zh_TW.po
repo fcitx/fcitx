@@ -7,7 +7,7 @@
 # Alisha <alisha.4m@gmail.com>, 2012
 # BrLi <rainman59118@gmail.com>, 2014
 # PHLin <Cypressyew@gmail.com>, 2017
-# fhoshino <fh@pinchia.com>, 2014
+# fhoshino <fh@pinchia.com>, 2014,2017
 # Gerald Du <frozenmouse@gmail.com>, 2015
 # Hiunn-hué <hiunnhue108@ymail.com>, 2012-2013
 # Pellaeon Lin <nfsmwlin@gmail.com>, 2013
@@ -20,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-16 22:02-0700\n"
-"PO-Revision-Date: 2017-10-17 04:04+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2017-11-25 00:02-0800\n"
+"PO-Revision-Date: 2017-11-24 17:19+0000\n"
+"Last-Translator: fhoshino <fh@pinchia.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -363,7 +363,7 @@ msgstr "背景圖片"
 
 #: data/script/fcitx-diagnose.sh:779
 msgid "Bash Version:"
-msgstr ""
+msgstr "Bash 版本："
 
 #: data/script/fcitx-diagnose.sh:655
 msgid "Beginner's Guide"
@@ -1077,7 +1077,7 @@ msgstr "無法在 ${1} 的輸出中找到 fcitx。"
 
 #: data/addon.desc:72
 msgid "Fallback UI Addon"
-msgstr ""
+msgstr "備用使用者介面附加元件"
 
 #: src/ui/kimpanel/kimpanel.c:398 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
@@ -3286,7 +3286,7 @@ msgstr "pthread mutex 初始化失敗"
 
 #: data/script/fcitx-diagnose.sh:871 data/script/fcitx-diagnose.sh:877
 msgid "sudo environment variables"
-msgstr ""
+msgstr "sudo 環境變數"
 
 #: data/script/fcitx-diagnose.sh:896
 msgid "version:"
