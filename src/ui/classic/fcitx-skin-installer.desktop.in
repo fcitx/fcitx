@@ -1,7 +1,9 @@
 [Desktop Entry]
 MimeType=application/x-fskin;
 _Name=Fcitx Skin Installer
+Name[ru]=Установка скинов Fcitx
 _Comment=Installer Script for Fcitx Skin
+Comment[ru]=Скрипт установки скинов Fcitx
 Exec=fcitx-skin-installer %U
 Icon=fcitx
 Terminal=false

@@ -1,7 +1,10 @@
 [Desktop Entry]
 _Name=Fcitx Configuration
+Name[ru]=Настройка Fcitx
 _GenericName=Input Method Configuration
+GenericName[ru]=Настройка метода ввода
 _Comment=Change Fcitx Configuration
+Comment[ru]=Изменить настройки Fcitx
 Exec=fcitx-configtool
 Icon=fcitx
 Type=Application
