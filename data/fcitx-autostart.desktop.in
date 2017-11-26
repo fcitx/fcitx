@@ -1,7 +1,9 @@
 [Desktop Entry]
 _Name=Fcitx
 _GenericName=Input Method
+GenericName[ru]=Метод ввода
 _Comment=Start Input Method
+Comment[ru]=Запустить метод ввода
 Exec=fcitx-autostart
 Icon=fcitx
 Terminal=false
