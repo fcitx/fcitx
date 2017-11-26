@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-11-10 16:02-0800\n"
-"PO-Revision-Date: 2017-11-10 22:09+0000\n"
+"POT-Creation-Date: 2017-11-26 00:03-0800\n"
+"PO-Revision-Date: 2017-11-25 11:24+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -752,7 +752,7 @@ msgstr "Nem input af engelsk eller brugerdefineret simpel tabel"
 
 #: src/module/chttrans/fcitx-chttrans.conf.in:4
 msgid "Convert Simplified Chinese To Traditional Chinese"
-msgstr "Konverter forenklet kinesisk til traditionelt kinesisk"
+msgstr "Konverter forenklet kinesisk til traditionel kinesisk"
 
 #: src/ui/classic/skin.desc:153 src/ui/classic/skin.desc:161
 #: src/ui/classic/skin.desc:295 src/ui/classic/skin.desc:303
@@ -2516,7 +2516,7 @@ msgstr "Forenklet kinesisk"
 #: src/module/chttrans/chttrans.c:176
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
-msgstr "Forenklet kinesisk til traditionelt kinesisk"
+msgstr "Forenklet kinesisk til traditionel kinesisk"
 
 #: src/module/chttrans/chttrans.c:178
 msgid "Simplified Chinese is enabled."
@@ -2843,7 +2843,7 @@ msgstr "Påmindelse til/fra"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 msgid "Toggle Simp/Trad Chinese Conversion"
-msgstr "Konvertering af forenklet/traditionelt kinesisk til/fra"
+msgstr "Konvertering af forenklet/traditionel kinesisk til/fra"
 
 #: src/module/vk/vk.c:154
 msgid "Toggle Virtual Keyboard"
@@ -2882,11 +2882,11 @@ msgstr "Traditionel kinesisk"
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
-msgstr "Oversættelsesmotor til traditionelt kinesisk"
+msgstr "Oversættelsesmotor til traditionel kinesisk"
 
 #: src/module/chttrans/chttrans.c:177
 msgid "Traditional Chinese is enabled."
-msgstr "Traditionelt kinesisk er aktiveret."
+msgstr "Traditionel kinesisk er aktiveret."
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
