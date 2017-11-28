@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-16 22:02-0700\n"
-"PO-Revision-Date: 2017-10-17 04:04+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2017-11-28 00:02-0800\n"
+"PO-Revision-Date: 2017-11-27 15:26+0000\n"
+"Last-Translator: TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -150,7 +150,7 @@ msgstr "Активно"
 
 #: src/ui/classic/skin.desc:387
 msgid "Active Menu Color"
-msgstr ""
+msgstr "Цвет активного меню"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -841,7 +841,7 @@ msgstr "Состояние метода ввода по умолчанию"
 
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
-msgstr "Схема шуаньпинь по умолчанию"
+msgstr "Схема шуанпинь по умолчанию"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
@@ -1116,7 +1116,7 @@ msgstr "Интерфейс Fcitx DBus"
 
 #: src/frontend/ipcportal/fcitx-ipcportal.conf.in:3
 msgid "Fcitx DBus Frontend (Portal version)"
-msgstr ""
+msgstr "Интерфейс Fcitx DBus (портальная версия)"
 
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
@@ -1666,7 +1666,7 @@ msgstr "Клавиша"
 
 #: src/ui/classic/skin.desc:416
 msgid "Key Color On Virtual Keyboard"
-msgstr ""
+msgstr "Цвет клавиш виртуальной клавиатуры"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -2586,7 +2586,7 @@ msgstr "Панель ввода скинов"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
 msgid "SkinKeyboard"
-msgstr ""
+msgstr "Скин клавиатуры"
 
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
@@ -2612,7 +2612,7 @@ msgstr "Главная панель скинов"
 #: src/ui/classic/skin.desc:389 src/ui/classic/skin.desc:393
 #: src/ui/classic/skin.desc:401
 msgid "SkinMenu"
-msgstr ""
+msgstr "Скин меню"
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
@@ -2620,7 +2620,7 @@ msgstr "Значок скина в области уведомлений"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
-msgstr ""
+msgstr "Цвет разделительной линии"
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
@@ -3102,7 +3102,7 @@ msgstr "Виртуальная клавиатура"
 
 #: src/ui/classic/skin.desc:411
 msgid "Virtual Keyboard Image"
-msgstr ""
+msgstr "Изображение виртуальной клавиатуры"
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
