@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-11-26 00:03-0800\n"
-"PO-Revision-Date: 2017-11-25 11:24+0000\n"
+"POT-Creation-Date: 2017-12-09 00:02-0800\n"
+"PO-Revision-Date: 2017-12-08 20:21+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -2958,7 +2958,7 @@ msgstr "Ikke-understøttet tast"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
-msgstr "Bru alternativt kandidatord-nummer"
+msgstr "Brug alternativt kandidatord-nummer"
 
 #: src/im/table/table.desc:183
 msgid "Use Alternative Key for paging"

@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
+# Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>, 2017
 # Walter Garcia-Fontes <walter.garcia@upf.edu>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-16 22:02-0700\n"
-"PO-Revision-Date: 2017-10-17 04:04+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2017-12-09 00:02-0800\n"
+"PO-Revision-Date: 2017-12-08 22:23+0000\n"
+"Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -56,7 +57,7 @@ msgstr "De&sa"
 
 #: src/im/keyboard/keyboard.c:426 src/im/keyboard/keyboard.c:443
 msgid "(Unavailable)"
-msgstr "(No disponible)"
+msgstr "(no disponible)"
 
 #: data/script/fcitx-diagnose.sh:656
 msgid "/Beginner%27s_Guide"
@@ -80,7 +81,7 @@ msgstr "/XIM"
 
 #: src/lib/fcitx/ime.c:1800
 msgid "/min  Time Used: "
-msgstr "Temps /min usat:"
+msgstr "Temps /min utilitzat:"
 
 #: src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
@@ -111,8 +112,8 @@ msgid ""
 "A different value from the global one may be useful when using horizontal "
 "candidate list"
 msgstr ""
-"Pot ser útil un valor diferent del global quan s'usa la llista de candidats "
-"horitzontals"
+"Un valor diferent del global pot ser útil quan s'utilitza la llista de "
+"candidates horitzontals"
 
 #: src/im/pinyin/fcitx-pinyin.desc:7
 msgid "ABC"
@@ -148,7 +149,7 @@ msgstr "Actiu"
 
 #: src/ui/classic/skin.desc:387
 msgid "Active Menu Color"
-msgstr ""
+msgstr "Color del menú actiu"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -173,7 +174,7 @@ msgstr ""
 
 #: src/module/lua/fcitx-lua.conf.in:4
 msgid "Add Lua script support to Fcitx"
-msgstr "Afegeix suport a scripts del Lua al fcitx"
+msgstr "Afegeix l'script de compatibilitat amb Lua a fcitx"
 
 #: src/im/table/fcitx-table.desc:4
 msgid "Add Phrase"
@@ -181,7 +182,7 @@ msgstr "Afegeix una frase"
 
 #: src/module/unicode/fcitx-unicode.conf.in:4
 msgid "Add Unicode Typing Support"
-msgstr "Afegeix suport per a l'escriptura unicode"
+msgstr "Afegeix la compatibilitat amb l'escriptura unicode"
 
 #: src/im/keyboard/fcitx-keyboard.desc:44
 msgid "Add current input buffer to user dictionary"
@@ -271,11 +272,11 @@ msgstr "Alt"
 
 #: src/im/table/table.desc:193
 msgid "Alternative Next Page Key"
-msgstr "Clau alternativa de pàgina següent"
+msgstr "Tecla alternativa d'Av Pàg"
 
 #: src/im/table/table.desc:188
 msgid "Alternative Prev Page Key"
-msgstr "Clau alternativa de pàgina prèvia"
+msgstr "Tecla alternativa de Re Pàg"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:13
 msgid "Alternative Trigger Key for QuickPhrase"
@@ -349,7 +350,7 @@ msgstr "Envia la paraula candidata automàticament"
 #: src/lib/fcitx-config/fcitx-config.c:1180
 #: src/lib/fcitx-config/fcitx-config.c:1187
 msgid "Available Value:"
-msgstr "Valor disponible:"
+msgstr "Valors disponibles:"
 
 #: src/ui/classic/skin.desc:69 src/ui/classic/skin.desc:187
 #: src/ui/classic/skin.desc:317
@@ -362,7 +363,7 @@ msgstr "Versió del bash:"
 
 #: data/script/fcitx-diagnose.sh:655
 msgid "Beginner's Guide"
-msgstr "Manual d'instroducció."
+msgstr "Manual d'introducció"
 
 #: src/im/table/data/qxm.conf.in:3
 msgid "Bingchan"
@@ -418,7 +419,7 @@ msgstr "Disposició de la taula de candidates"
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
-msgstr "Número de paraula candidata"
+msgstr "Nombre de paraula candidata"
 
 #: src/im/table/data/cangjie.conf.in:3
 msgid "Cangjie"
@@ -441,7 +442,7 @@ msgstr "No es pot desar la base de dades d'usuari del pinyin: %s"
 
 #: data/script/fcitx-diagnose.sh:925
 msgid "Cannot connect to fcitx correctly."
-msgstr "No es pot connectar correctament al fcitx."
+msgstr "No es pot connectar correctament a fcitx."
 
 #: data/script/fcitx-diagnose.sh:774
 msgid "Cannot determine desktop environment."
@@ -468,7 +469,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1520
 msgid "Cannot find enabled fcitx user interface!"
-msgstr "No es pot trobar la interfície d'usuari habilitada del fcitx."
+msgstr "No es pot trobar la interfície d'usuari habilitada de fcitx."
 
 #: data/script/fcitx-diagnose.sh:1440
 msgid "Cannot find fcitx addon config directory."
@@ -476,23 +477,23 @@ msgstr "No es pot trobar el directori de configuració dels complements."
 
 #: data/script/fcitx-diagnose.sh:888
 msgid "Cannot find fcitx executable!"
-msgstr "No es pot trobar l'executable del fcitx!"
+msgstr "No es pot trobar l'executable de fcitx!"
 
 #: data/script/fcitx-diagnose.sh:1405
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
-msgstr "No es pot trobar el mòdul im del fcitx per al gtk ${1} al cau."
+msgstr "No es pot trobar el mòdul im de fcitx per a gtk ${1} a la memòria cau."
 
 #: data/script/fcitx-diagnose.sh:1323
 msgid "Cannot find fcitx im module for gtk ${1}."
-msgstr "No es pot trobar el mòdul im del fcitx per al gtk ${1}."
+msgstr "No es pot trobar el mòdul im de fcitx per a gtk ${1}."
 
 #: data/script/fcitx-diagnose.sh:1197 data/script/fcitx-diagnose.sh:1202
 msgid "Cannot find fcitx input method module for ${1}."
-msgstr "No es pot trobar el mòdul de mètode d'entrada del fcitx per a ${1}."
+msgstr "No es pot trobar el mòdul de mètode d'entrada de fcitx per a ${1}."
 
 #: data/script/fcitx-diagnose.sh:1030
 msgid "Cannot find fcitx-configtool executable!"
-msgstr "No es pot trobar l'executable del fcitx-configtool!"
+msgstr "No es pot trobar l'executable fcitx-configtool!"
 
 #: data/script/fcitx-diagnose.sh:1499
 msgid "Cannot find file ${1} of addon ${2}."
@@ -543,7 +544,7 @@ msgstr "No es pot carregar l'aparença %s, torna a la predeterminada"
 
 #: data/script/fcitx-diagnose.sh:1549
 msgid "Cannot read im list from fcitx profile."
-msgstr "No es pot llegir la llista im a partir del perfil del fcitx."
+msgstr "No es pot llegir la llista im a partir del perfil de fcitx."
 
 #: data/addon.desc:22
 msgid "Category"
@@ -566,7 +567,7 @@ msgstr "Centre dret"
 
 #: data/fcitx-configtool.desktop.in:4
 msgid "Change Fcitx Configuration"
-msgstr "Canvia la configuració del fcitx"
+msgstr "Canvieu la configuració de fcitx"
 
 #: src/im/table/table.desc:136
 msgid "Choose"
@@ -574,7 +575,7 @@ msgstr "Escull"
 
 #: data/config.desc:130
 msgid "Choose Second and Third Candidate Word"
-msgstr "Escolliu la segona i tercera paraula candidata"
+msgstr "Tria la segona i tercera paraula candidata"
 
 #: src/im/keyboard/fcitx-keyboard.desc:7 src/im/table/table.desc:141
 #: src/module/autoeng/fcitx-autoeng.desc:2
@@ -603,7 +604,7 @@ msgstr "Clàssic"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
-msgstr "Interfície clàssica d'usuari amb suport per a l'aparença"
+msgstr "Interfície clàssica d'usuari que admet aparences"
 
 #: src/ui/classic/fcitx-classic-ui.desc:1
 #: src/ui/classic/fcitx-classic-ui.desc:7
@@ -791,7 +792,7 @@ msgstr "Nom del mètode actual d'entrada"
 
 #: data/script/fcitx-diagnose.sh:839
 msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr "El directori actual de configuracions del fcitx és ${1}(${2})."
+msgstr "El directori actual dels paràmetres de fcitx és ${1}(${2})."
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
@@ -823,7 +824,7 @@ msgstr "DBus"
 
 #: src/module/dbus/fcitx-dbus.conf.in:3
 msgid "DBus Support"
-msgstr "Suport del DBus"
+msgstr "Compatibilitat amb DBus"
 
 #: src/module/notificationitem/fcitx-notificationitem.conf.in:3
 #: src/module/notificationitem/fcitx-notificationitem.conf.in:4
@@ -840,7 +841,7 @@ msgstr "Per defecte"
 
 #: data/config.desc:180
 msgid "Default Input Method State"
-msgstr "Estat predeterminat de mètode d'entrada"
+msgstr "Estat predeterminat del mètode d'entrada"
 
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
@@ -848,7 +849,7 @@ msgstr "Esquema Shuangpin predeterminat"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
-msgstr "Ordre predeterminat de dorsals de pistes d'ortografia"
+msgstr "Ordre predeterminat dels dorsals dels suggeriments d'escriptura"
 
 #: data/script/fcitx-diagnose.sh:1575
 msgid "Default input methods:"
@@ -930,7 +931,7 @@ msgstr ""
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
 #: src/module/quickphrase/fcitx-quickphrase.desc:26
 msgid "Do not show spell hint"
-msgstr "No mostris la pista d'ortografia"
+msgstr "No mostris suggeriments d'escriptura"
 
 #: src/im/table/table.desc:29
 msgid "Do not sort word with code less than this level"
@@ -981,7 +982,7 @@ msgstr "Activa l'estat per al mètode d'entrada"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
 msgid "Enchance pinyin input in Fcitx"
-msgstr "Millora l'entrada de pinyin al fcitx"
+msgstr "Millora l'entrada de pinyin a fcitx"
 
 #: src/im/table/table.desc:69
 msgid "End Key"
@@ -1102,55 +1103,56 @@ msgstr "Fcitx"
 
 #: data/script/fcitx-diagnose.sh:1437
 msgid "Fcitx Addons:"
-msgstr "Complements del fcitx:"
+msgstr "Complements de fcitx:"
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:4
 msgid "Fcitx Clipboard access"
-msgstr "Accés al porta-retalls del fcitx"
+msgstr "Accés al porta-retalls de fcitx"
 
 #: data/fcitx-configtool.desktop.in:2
 msgid "Fcitx Configuration"
-msgstr "Configuració del fcitx"
+msgstr "Configuració de fcitx"
 
 #: data/script/fcitx-diagnose.sh:1027
 msgid "Fcitx Configure UI:"
-msgstr "Interfície d'usuari de configuració del fcitx:"
+msgstr "Interfície d'usuari de configuració de fcitx:"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
-msgstr "Frontal DBus del fcitx"
+msgstr "Frontal DBus de fcitx"
 
 #: src/frontend/ipcportal/fcitx-ipcportal.conf.in:3
 msgid "Fcitx DBus Frontend (Portal version)"
-msgstr ""
+msgstr "Frontal DBus de fcitx (versió de portal)"
 
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
-msgstr "Suport del Lua del fcitx"
+msgstr "Compatibilitat amb Lua de fcitx"
 
 #: data/script/fcitx-diagnose.sh:837
 msgid "Fcitx Settings Directory:"
-msgstr "Directori de configuració del Fcitx"
+msgstr "Directori de configuració de Fcitx"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:3
 msgid "Fcitx Skin Installer"
-msgstr "Instal·lador d'aparença del fcitx"
+msgstr "Instal·lador d'aparences de fcitx"
 
 #: src/module/spell/fcitx-spell.conf.in:4
 msgid "Fcitx Spelling Hint/Completion Support"
-msgstr "Suport per a pista/completar l'ortografia del fcitx"
+msgstr ""
+"Compatibilitat amb els suggeriments ortogràfics i la compleció de fcitx"
 
 #: data/script/fcitx-diagnose.sh:885
 msgid "Fcitx State:"
-msgstr "Estat del fcitx:"
+msgstr "Estat de fcitx:"
 
 #: src/module/unicode/fcitx-unicode.conf.in:3
 msgid "Fcitx Unicode Typing Support"
-msgstr "Suport per a l'escriptura unicode del fcitx"
+msgstr "Compatibilitat amb l'escriptura unicode de fcitx"
 
 #: src/frontend/xim/fcitx-xim.conf.in:3
 msgid "Fcitx XIM Frontend"
-msgstr "Frontal de l'XIM del fcitx"
+msgstr "Frontal XIM de fcitx"
 
 #: data/script/fcitx-diagnose.sh:910
 msgid "Fcitx is not running."
@@ -1158,7 +1160,7 @@ msgstr "El fcitx no s'està executant."
 
 #: data/script/fcitx-diagnose.sh:899
 msgid "Fcitx version: ${1}"
-msgstr "Versió del fcitx: ${1}"
+msgstr "Versió de fcitx: ${1}"
 
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
 #: src/ui/classic/skin.desc:403
@@ -1180,11 +1182,11 @@ msgstr "Primera visualització candidata com a pre-edició"
 
 #: src/im/pinyin/fcitx-pinyin.desc:140
 msgid "Fix misstype gn/ng"
-msgstr "Arregla gn/ng mal entrades"
+msgstr "Corregeix l'error tipogràfic gn/ng"
 
 #: src/im/pinyin/fcitx-pinyin.desc:145
 msgid "Fix misstype v/u like jv, qv, xv, yv"
-msgstr "Arregla v/u mal entrades, com ara jv, qv, xv, yv"
+msgstr "Corregeix l'error tipogràfic v/u, com ara jv, qv, xv o yv"
 
 #: src/im/pinyin/fcitx-pinyin.desc:18
 msgid "Fix preedit cursor at head"
@@ -1238,11 +1240,11 @@ msgstr "S'han trobat ${1} complements habilitats d'interfície d'usuari:"
 
 #: data/script/fcitx-diagnose.sh:919
 msgid "Found ${1} fcitx process:"
-msgstr "S'ha trobat ${1} procés del fcitx:"
+msgstr "S'ha trobat ${1} procés de fcitx:"
 
 #: data/script/fcitx-diagnose.sh:917
 msgid "Found ${1} fcitx processes:"
-msgstr "S'han trobat ${1} processos del fcitx:"
+msgstr "S'han trobat ${1} processos de fcitx:"
 
 #: data/script/fcitx-diagnose.sh:1297
 msgid "Found ${2} for unknown gtk version at ${1}."
@@ -1262,15 +1264,15 @@ msgstr "S'ha trobat el fcitx a ${1}."
 
 #: data/script/fcitx-diagnose.sh:1178 data/script/fcitx-diagnose.sh:1183
 msgid "Found fcitx im module for ${2}: ${1}."
-msgstr "S'ha trobat el mòdul im del fcitx per a ${2}: ${1}."
+msgstr "S'ha trobat el mòdul im de fcitx per a ${2}: ${1}."
 
 #: data/script/fcitx-diagnose.sh:1305 data/script/fcitx-diagnose.sh:1388
 msgid "Found fcitx im modules for gtk ${1}."
-msgstr "S'han trobat els mòduls im del fcitx per al gtk ${1}."
+msgstr "S'han trobat els mòduls im de fcitx per a gtk ${1}."
 
 #: data/script/fcitx-diagnose.sh:1018
 msgid "Found fcitx kcm module."
-msgstr "S'ha trobat el mòdul kcm del fcitx."
+msgstr "S'ha trobat el mòdul kcm de fcitx."
 
 #: data/script/fcitx-diagnose.sh:1187
 msgid "Found fcitx qt module: ${1}."
@@ -1292,11 +1294,11 @@ msgstr "S'ha trobat el cau dels mòdules immodule per al gtk ${1} a ${2}."
 
 #: data/script/fcitx-diagnose.sh:1190
 msgid "Found unknown fcitx qt module: ${1}."
-msgstr "S'ha trobat un mòdul qt desconegut del fcitx: ${1}."
+msgstr "S'ha trobat un mòdul qt desconegut de fcitx: ${1}."
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:3
 msgid "Freedesktop.org Notification Support"
-msgstr "Suport de notificacions del freedesktop.org"
+msgstr "Compatibilitat amb les notificacions de freedesktop.org"
 
 #: data/addon.desc:19
 msgid "Frontend"
@@ -1305,7 +1307,7 @@ msgstr "Frontal"
 #: src/frontend/ipc/fcitx-ipc.conf.in:4
 #: src/frontend/ipcportal/fcitx-ipcportal.conf.in:4
 msgid "Frontend Used by IM Modules"
-msgstr "Frontal usat pels mòduls IM"
+msgstr "Frontal utilitzat pels mòduls dels mètodes d'entrada"
 
 #: src/lib/fcitx/frontend.c:542
 msgid "Frontend: bad frontend"
@@ -1436,11 +1438,11 @@ msgstr "Suport per al Hall of Shame for Linux IME"
 
 #: src/ui/classic/fcitx-classic-ui.desc:47
 msgid "Hide"
-msgstr "Amaga"
+msgstr "Oculta"
 
 #: src/ui/classic/fcitx-classic-ui.desc:46
 msgid "Hide when tray icon is available"
-msgstr "Amaga quan està disponible la icona de la safata"
+msgstr "Oculta quan està disponible la icona de la safata"
 
 #: src/module/vk/vk.c:59
 msgid "Hiragana"
@@ -1516,9 +1518,9 @@ msgid ""
 "order to use any input method other than ${2}. See ${link} for more detail "
 "as well as alternative solutions."
 msgstr ""
-"Si esteu usant ${1} potser voleu desinstal·lar ${2} o suprimir ${3} per usar "
-"qualsevol mètode d'entrada diferent a ${2}. Vegeu ${link} per a més "
-"informació així com solucions alternatives."
+"Si esteu utilitzant ${1} potser voleu desinstal·lar ${2} o suprimir ${3} per "
+"utilitzar qualsevol mètode d'entrada diferent a ${2}. Vegeu ${link} per a "
+"més informació així com solucions alternatives."
 
 #: data/script/fcitx-diagnose.sh:689
 msgid ""
@@ -1526,10 +1528,10 @@ msgid ""
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
-"Si esteu usant ${1} potser voleu desinstal·lar ${2}, suprimir ${3} o usar "
-"l'ordre ${g36_disable_ibus} per deshabilitar la integració IBus per usar "
-"qualsevol mètode d'entrada diferent a ${2}. Vegeu ${link} per a més "
-"informació."
+"Si esteu utilitzant ${1} potser voleu desinstal·lar ${2}, suprimir ${3} o "
+"utilitzar l'ordre ${g36_disable_ibus} per a inhabilitar la integració IBus "
+"per utilitzar qualsevol mètode d'entrada diferent a ${2}. Vegeu ${link} per "
+"a més informació."
 
 #: src/im/table/table.desc:218
 msgid "Ignore Punctuation"
@@ -1600,7 +1602,9 @@ msgstr "Mètode d'entrada desactivat"
 
 #: data/config.desc:235
 msgid "Input Method Hint will be only shown when state is active"
-msgstr "La pista de mètode d'entrada sols es mostrarà quan l'estat està actiu"
+msgstr ""
+"Els suggerents del mètode d'entrada únicament es mostraran quan l'estat "
+"sigui actiu"
 
 #: data/script/fcitx-diagnose.sh:666
 msgid "Input Method Related Environment Variables: "
@@ -1626,7 +1630,7 @@ msgstr "Mètode d'entrada"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:4
 msgid "Installer Script for Fcitx Skin"
-msgstr "Script de l'instal·lador per a l'aparença del fcitx"
+msgstr "Script de l'instal·lador per a les aparences de fcitx"
 
 #: data/config.desc:90
 msgid "Interval of Two Key Input"
@@ -1675,7 +1679,7 @@ msgstr "Tecla"
 
 #: src/ui/classic/skin.desc:416
 msgid "Key Color On Virtual Keyboard"
-msgstr ""
+msgstr "Color de la tecla al teclat virtual"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -1695,7 +1699,7 @@ msgstr "Disposició del teclat"
 
 #: src/im/table/table.desc:166
 msgid "Keyboard Layout to be used"
-msgstr "Disposició de teclat a usar"
+msgstr "Disposició de teclat que s'utilitzarà"
 
 #: data/script/fcitx-diagnose.sh:787
 msgid "Keyboard Layout:"
@@ -1707,7 +1711,7 @@ msgstr "Kimpanel"
 
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:4
 msgid "Kimpanel Support for Fcitx"
-msgstr "Suport del kimpanel per al fcitx"
+msgstr "Compatibilitat de kimpanel per a fcitx"
 
 #: data/script/fcitx-diagnose.sh:1531
 msgid "Kimpanel process:"
@@ -1862,7 +1866,7 @@ msgstr "Matemàtiques"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:23
 #: src/module/quickphrase/fcitx-quickphrase.desc:36
 msgid "Maximum hint length"
-msgstr "Longitud màxima de la pista"
+msgstr "Nombre màxim de suggeriments"
 
 #: src/module/clipboard/fcitx-clipboard.desc:19
 msgid "Maximum length of each candidate word"
@@ -1870,19 +1874,19 @@ msgstr "Longitud màxima de cada paraula candidata"
 
 #: src/im/keyboard/fcitx-keyboard.desc:32
 msgid "Maximum length of spell hint list"
-msgstr "Longitud màxima per a la llista de pistes d'ortografia"
+msgstr "Nombre màxim de suggeriments d'escriptura"
 
 #: src/module/autoeng/fcitx-autoeng.desc:23
 msgid "Maximum length of spell hint list for Auto English"
-msgstr "Longitud màxima de la pista d'ortografia per a l'anglès automàtic"
+msgstr "Nombre màxim de suggeriments d'escriptura per a l'anglès automàtic"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 msgid "Maximum length of spell hint list for Pinyin Enhance"
-msgstr "Longitud màxima de la pista d'ortografia per a la millora de pinyin"
+msgstr "Nombre màxim de suggeriments d'escriptura per a millora de pinyin"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:37
 msgid "Maximum length of spell hint list for Quick Phrase"
-msgstr "Longitud màxima de la pista d'ortografia per a la frase ràpida"
+msgstr "Nombre màxim de suggeriments d'escriptura per a frases ràpides"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
 msgid "Maximum results from stroke input."
@@ -1912,7 +1916,7 @@ msgstr ""
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
-msgstr "Longitud mínima per activar la pista de paraula"
+msgstr "Llargada mínima per activar el suggeriment de paraules"
 
 #: src/im/table/table.desc:59
 msgid ""
@@ -1962,16 +1966,16 @@ msgstr "Natiu"
 
 #: data/config.desc:155
 msgid "Next Candidate Word"
-msgstr "Pròxima paraula candidata"
+msgstr "Paraula candidata següent"
 
 #: data/config.desc:125
 msgid "Next Page"
-msgstr "Pàgina següent"
+msgstr "Av Pàg"
 
 #: src/ui/classic/skin.desc:273 src/ui/classic/skin.desc:281
 #: src/ui/classic/skin.desc:289
 msgid "Next Page Icon"
-msgstr "Icona de pàgina següent"
+msgstr "Icona d'Av Pàg"
 
 #: data/config.desc:169
 msgid "No"
@@ -1979,11 +1983,11 @@ msgstr "No"
 
 #: src/lib/fcitx/ime.c:536
 msgid "No available Input Method"
-msgstr "No hi ha un mètode d'entrada disponible"
+msgstr "No hi ha disponible cap mètode d'entrada"
 
 #: src/lib/fcitx/frontend.c:565
 msgid "No available frontend"
-msgstr "No hi ha frontal disponible"
+msgstr "No hi ha disponible cap frontal"
 
 #: src/module/notificationitem/notificationitem.c:456
 #: src/ui/kimpanel/kimpanel.c:256 src/ui/kimpanel/kimpanel.c:257
@@ -2034,7 +2038,7 @@ msgstr "OpenCC"
 #: src/lib/fcitx-config/fcitx-config.c:1136
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
-msgstr "L'opció %s no és vàlida. Usa el valor predeterminat %s"
+msgstr "L'opció %s no és vàlida. Utilitzeu el valor predeterminat %s"
 
 #: src/lib/fcitx-config/fcitx-config.c:1144
 #, c-format
@@ -2145,15 +2149,15 @@ msgstr "PinyinJiaJia"
 
 #: data/script/fcitx-diagnose.sh:890
 msgid "Please check ${1} for how to install fcitx."
-msgstr "Si us plau mireu ${1} per veure com instal·lar el fcitx."
+msgstr "Mireu ${1} per veure com instal·lar fcitx."
 
 #: data/script/fcitx-diagnose.sh:912
 msgid ""
 "Please check the Configure link of your distribution in ${1} for how to "
 "setup fcitx autostart."
 msgstr ""
-"Si us plau mireu l'enllaç Configura de la vostra distribució a ${1} per "
-"veure com establir l'inici automàtic del fcitx."
+"Mireu l'enllaç Configura de la vostra distribució a ${1} per veure com "
+"establir l'inici automàtic de fcitx."
 
 #: src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
@@ -2164,9 +2168,9 @@ msgid ""
 "Please set environment variable ${env_name} to \"${value}\" using the tool "
 "your distribution provides or add ${1} to your ${2}. See ${link}."
 msgstr ""
-"Si us plau establiu la variable d'entorn ${env_name} a «${value}» usant "
-"l'eina que proveeix la vostra distribució o afegiu ${1} al vostre ${2}. "
-"Vegeu ${link}."
+"Establiu la variable d'entorn ${env_name} a «${value}» mitjançant l'eina que "
+"us proporciona la vostra distribució o afegiu ${1} al vostre ${2}. Vegeu "
+"${link}."
 
 #: src/ui/classic/skin.desc:265
 msgid "Position or offset of LookupTable"
@@ -2210,16 +2214,16 @@ msgstr "Premeu un número per fer una paraula a la llista de freqüents"
 
 #: data/config.desc:120
 msgid "Prev Page"
-msgstr "Pàgina prèvia"
+msgstr "Re Pàg"
 
 #: src/ui/classic/skin.desc:269 src/ui/classic/skin.desc:277
 #: src/ui/classic/skin.desc:285
 msgid "Prev Page Icon"
-msgstr "Icona de pàgina prèvia"
+msgstr "Icona de Re Pàg"
 
 #: data/config.desc:148
 msgid "Previous Candidate Word"
-msgstr "Paraula candidata prèvia"
+msgstr "Paraula candidata anterior"
 
 #: data/inputmethod.desc:15
 msgid "Priority"
@@ -2248,25 +2252,27 @@ msgstr "Demana les frases després de l'entrada"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:4
 msgid "Provide extra feature for pinyin in Fcitx"
-msgstr "Proveeix una funcionalitat addicional per a pinyin al fcitx"
+msgstr "Proporciona una funcionalitat extra per al pinyin a fcitx"
 
 #: src/module/dbus/fcitx-dbus.conf.in:4
 msgid "Provides DBus Support (Used by other Addon)"
-msgstr "Proveeix suport del DBus (usat per altres complements)"
+msgstr ""
+"Proporciona la compatibilitat amb DBus (s'utilitza amb un altre complement)"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
 msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
 msgstr ""
-"Proveeix suport de notificacions del freedesktop.org (usat per altres "
-"complements)"
+"Proporciona la compatibilitat amb les notificacions de freedesktop.org "
+"(s'utilitza amb un altre complement)"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
 msgid "Provides Fullwidth Character Input Support"
-msgstr "Proveeix suport d'entrada de caràcter d'amplada completa"
+msgstr ""
+"Proporciona la compatibilitat amb l'entrada de caràcters d'amplada completa"
 
 #: src/frontend/xim/fcitx-xim.conf.in:4
 msgid "Provides XIM support"
-msgstr "Proveeix suport a l'XIM"
+msgstr "Proporciona la compatibilitat amb XIM"
 
 #: src/module/punc/fcitx-punc.conf.in:4
 msgid "Punctuation Conversion Support"
@@ -2274,7 +2280,7 @@ msgstr "Suport per a la conversió de puntuació"
 
 #: src/module/punc/punc.c:585 src/module/punc/fcitx-punc.conf.in:3
 msgid "Punctuation Support"
-msgstr "Suport de puntuació"
+msgstr "Compatibilitat amb la puntuació"
 
 #: data/script/fcitx-diagnose.sh:1171
 msgid "Qt IM module files:"
@@ -2306,7 +2312,7 @@ msgstr "Quwei"
 
 #: src/im/qw/fcitx-qw.conf.in:4
 msgid "Quwei Input Method for Fcitx"
-msgstr "Mètode d'entrada quwei per al fcitx"
+msgstr "Mètode d'entrada quwei per a fcitx"
 
 #: data/config.desc:25
 msgid "R_ALT"
@@ -2433,7 +2439,7 @@ msgstr "Desa l'error del diccionari"
 
 #: data/config.desc:136
 msgid "Saving All Config and Input History"
-msgstr "S'està desant tota la història de configuració i entrada"
+msgstr "Desament de tota la configuració i l'historial d'entrades"
 
 #: data/config.desc:79
 msgid "Scroll between Input Method"
@@ -2445,7 +2451,7 @@ msgstr "Cerca l'unicode"
 
 #: data/config.desc:162
 msgid "Seconds sleep before fcitx really start"
-msgstr "Segons d'espera abans que el fcitx realment s'iniciï"
+msgstr "Segons d'espera abans que s'iniciï realment fcitx"
 
 #: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
@@ -2501,14 +2507,14 @@ msgstr "Mostra"
 #: data/config.desc:223
 msgid "Show Input Method Hint After Input method changed"
 msgstr ""
-"Mostra la pista de mètode d'entrada després que hagi canviat el mètode "
-"d'entrada"
+"Mostra els suggerents del mètode d'entrada després que hagi canviat el "
+"mètode d'entrada"
 
 #: data/config.desc:229
 msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr ""
-"Mostra la pista de mètode d'entrada després que hagi canviat el mètode "
-"d'entrada i l'enfoc a dins"
+"Mostra els suggerents del mètode d'entrada després que hagi canviat el "
+"mètode d'entrada i hagi rebut el focus"
 
 #: data/config.desc:241
 msgid "Show Input Speed"
@@ -2532,7 +2538,7 @@ msgstr "Shuangpin"
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:4
 msgid "Simple Pinyin support for Fcitx"
-msgstr "Suport pinyin simple per al fcitx"
+msgstr "Compatibilitat amb pinyin simple per a fcitx"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
 msgid "Simplified Chinese"
@@ -2545,7 +2551,7 @@ msgstr "Xinès simplificat a xinès tradicional"
 
 #: src/module/chttrans/chttrans.c:178
 msgid "Simplified Chinese is enabled."
-msgstr "S'ha activat el xinès simplificat"
+msgstr "El xinès simplificat està habilitat."
 
 #: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
@@ -2594,7 +2600,7 @@ msgstr "Barra d'entrada de l'aparença"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
 msgid "SkinKeyboard"
-msgstr ""
+msgstr "Teclat de l'aparença"
 
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
@@ -2620,7 +2626,7 @@ msgstr "Barra principal de l'aparença"
 #: src/ui/classic/skin.desc:389 src/ui/classic/skin.desc:393
 #: src/ui/classic/skin.desc:401
 msgid "SkinMenu"
-msgstr ""
+msgstr "Menú de l'aparença"
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
@@ -2628,7 +2634,7 @@ msgstr "Icona de la safata de l'aparença"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
-msgstr ""
+msgstr "Color de la línia d'espai"
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
@@ -2649,19 +2655,19 @@ msgstr "Ortografia"
 
 #: src/module/spell/fcitx-spell.desc:1 src/module/spell/fcitx-spell.desc:10
 msgid "Spell Hint"
-msgstr "Pista d'ortografia"
+msgstr "Suggeriment d'escriptura"
 
 #: src/im/keyboard/keyboard.c:900
 msgid "Spell hint"
-msgstr "Pista d'ortografia"
+msgstr "Suggeriment d'escriptura"
 
 #: src/im/keyboard/keyboard.c:902
 msgid "Spell hint is disabled."
-msgstr "S'han desactivat les pistes d'ortografia"
+msgstr "El suggeriment d'escriptura està inhabilitat."
 
 #: src/im/keyboard/keyboard.c:901
 msgid "Spell hint is enabled."
-msgstr "S'han activat les pistes d'ortografia"
+msgstr "El suggeriment d'escriptura està habilitat."
 
 #: data/fcitx-autostart.desktop.in:4 data/fcitx.desktop.in:4
 msgid "Start Input Method"
@@ -2671,20 +2677,19 @@ msgstr "Inicia el mètode d'entrada"
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr ""
-"Error d'inici de l'XIM. HI ha un altre dimoni de l'XIM anomenat %s executant-"
-"se?"
+"Error d'inici de XIM. Hi ha un altre dimoni de XIM anomenat %sen execució ?"
 
 #: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
-msgstr "Mode d'amagament del panell d'estat"
+msgstr "Mode d'ocultació del tauler d'estat"
 
 #: src/ui/classic/fcitx-classic-ui.desc:2
 msgid "Status Panel Position X"
-msgstr "Posició X de panell d'estat"
+msgstr "Posició X del tauler d'estat"
 
 #: src/ui/classic/fcitx-classic-ui.desc:8
 msgid "Status Panel Position Y"
-msgstr "Posició Y de panell d'estat"
+msgstr "Posició Y del tauler d'estat"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
@@ -2712,7 +2717,7 @@ msgstr "Súper + CTRL dreta"
 
 #: data/config.desc:142
 msgid "Switch Embedded Preedit"
-msgstr ""
+msgstr "Commuta la pre-edició incrustada"
 
 #: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
@@ -2765,15 +2770,15 @@ msgstr "Canvia al tercer mètode de entrada"
 
 #: data/config.desc:108
 msgid "Switching Full Width Character Mode"
-msgstr "S'està canviant a mode de caràcter d'amplada completa"
+msgstr "Canvi de mode de caràcter d'amplada completa"
 
 #: data/config.desc:102
 msgid "Switching Remind Mode"
-msgstr "S'està canviant el mode de recordatori"
+msgstr "Canvi de mode de recordatori"
 
 #: data/config.desc:96
 msgid "Switching Virtual Keyboard"
-msgstr "S'està canviant el teclat virtual"
+msgstr "Canvi de teclat virtual"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:9
 #: src/im/table/table.desc:126
@@ -2798,7 +2803,7 @@ msgstr "Color del codi de taula"
 
 #: src/im/table/fcitx-table.conf.in:4
 msgid "Table Input Method for Fcitx"
-msgstr "Mètode d'entrada de taula per al fcitx"
+msgstr "Mètode d'entrada de taula per a fcitx"
 
 #: src/module/vk/vk.c:61
 msgid "Table Symbol"
@@ -2826,16 +2831,16 @@ msgid ""
 "This is used in some modules and input methods to navigate to the next "
 "candidate word"
 msgstr ""
-"Això s'usa en alguns mòduls i mètodes d'entada per navegar a la pròxima "
-"paraula candidata"
+"Això s'utilitza en alguns mòduls i mètodes d'entada per navegar a la paraula "
+"candidata següent"
 
 #: data/config.desc:149
 msgid ""
 "This is used in some modules and input methods to navigate to the previous "
 "candidate word"
 msgstr ""
-"Això s'usa en alguns mòduls i mètodes d'entrada per navegar a la paraula "
-"candidata prèvia"
+"Això s'utilitza en alguns mòduls i mètodes d'entrada per navegar a la "
+"paraula candidata anterior"
 
 #: src/ui/classic/skin.desc:33
 msgid "Tip Message Color"
@@ -2849,8 +2854,8 @@ msgid ""
 "freezing, see ${link2}."
 msgstr ""
 "Per veure alguns problemes específics a les aplicacions que podeu tenir quan "
-"useu el xim, vegeu ${link1}. Per a altres problemes més generals d'usar el "
-"XIM incloent-hi bloquejos d'aplicacions, vegeu ${link2}."
+"utilitzeu xim, vegeu ${link1}. Per a altres problemes més generals quant a "
+"l'ús de XIM, incloent-hi els bloquejos de les aplicacions, vegeu ${link2}."
 
 #: src/module/punc/punc.c:150 src/module/punc/punc.c:569
 msgid "Toggle Full Width Punctuation"
@@ -2883,7 +2888,7 @@ msgstr "Commutació per activar o desactivar"
 
 #: src/im/keyboard/fcitx-keyboard.desc:19
 msgid "Toggle the word hint"
-msgstr "Commuta la pista de paraula"
+msgstr "Commuta el suggeriment de paraules"
 
 #: src/module/autoeng/AutoEng.c:557
 msgid "Too long item for AutoEng"
@@ -2910,11 +2915,11 @@ msgstr "Xinès tradicional"
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
-msgstr "Motor de traducció del xinès tradicional"
+msgstr "Motor de traducció de xinès tradicional"
 
 #: src/module/chttrans/chttrans.c:177
 msgid "Traditional Chinese is enabled."
-msgstr "S'ha activat el xinès tradicional"
+msgstr "El xinès tradicional està habilitat."
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
@@ -2986,65 +2991,66 @@ msgstr "Tecla sense suport"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
-msgstr "Usa el número alternatiu de paraula candidata"
+msgstr "Utilitza el nombre alternatiu de paraula candidata"
 
 #: src/im/table/table.desc:183
 msgid "Use Alternative Key for paging"
-msgstr "Usa la clau alternativa per a la paginació"
+msgstr "Utilitza la tecla alternativa per a la paginació"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
-msgstr "Usa el pinyin complet"
+msgstr "Utilitza el pinyin complet"
 
 #: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
 msgstr ""
-"Usa la cadena personalitzada de caràcters de demanda definida a la taula"
+"Utilitza la cadena personalitzada de caràcters de demanda definida a la taula"
 
 #: src/ui/classic/skin.desc:167
 msgid "Use Custom text icon color"
-msgstr "Usa un color personalitzat de la icona de text"
+msgstr "Utilitza un color personalitzat de la icona de text"
 
 #: data/profile.desc:2
 msgid "Use Full Width Character"
-msgstr "Usa el caràcter d'amplada completa"
+msgstr "Utilitza el caràcter d'amplada completa"
 
 #: src/im/keyboard/fcitx-keyboard.conf.in:4
 msgid "Use Keyboard Layout as Input Method"
-msgstr "Usa la disposició del teclat com a mètode d'entrada"
+msgstr "Utilitza la disposició del teclat com a mètode d'entrada"
 
 #: src/im/table/table.desc:74
 msgid "Use Matching Key"
-msgstr "Usa la clau concordant"
+msgstr "Utilitza la tecla concordant"
 
 #: src/frontend/xim/fcitx-xim.desc:4
 msgid "Use On The Spot Style for XIM (Cannot change during running)"
 msgstr ""
-"Usa l'estil en el lloc per a l'XIM (no es pot canviar durant l'execució)"
+"Utilitza l'estil «en el lloc mateix» per a XIM (no es pot canviar durant "
+"l'execució)"
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
-msgstr "Usa pinyin"
+msgstr "Utilitza el pinyin"
 
 #: data/addon.desc:77
 msgid "Use RTLD_LOCAL to load library"
-msgstr "Usa RTLD_LOCAL per carregar la llibrary"
+msgstr "Utilitza RTLD_LOCAL per carregar la biblioteca"
 
 #: src/module/clipboard/fcitx-clipboard.desc:30
 msgid "Use Selection Text"
-msgstr "Usa el text de selecció"
+msgstr "Utilitza el text de selecció"
 
 #: src/ui/classic/fcitx-classic-ui.desc:39
 msgid "Use System Tray Icon"
-msgstr "Usa la icona de la safata del sistema"
+msgstr "Utilitza la icona de la safata del sistema"
 
 #: src/im/pinyin/fcitx-pinyin.desc:23
 msgid "Use V to trigger quickphrase"
-msgstr "Usa V per activar la frase ràpida"
+msgstr "Utilitza V per activar la frase ràpida"
 
 #: data/profile.desc:7
 msgid "Use Wide Punctuation"
-msgstr "Usa puntuació àmplia"
+msgstr "Utilitza puntuació àmplia"
 
 #: src/im/keyboard/fcitx-keyboard.desc:39
 msgid "Use enter to commit the existing string"
@@ -3053,7 +3059,8 @@ msgstr "Useu Intro per enviar la cadena de caràcters existent"
 #: data/config.desc:10
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr ""
-"Usa la tecla addicional d'activació sols després d'usar-la per desactivar"
+"Utilitza la tecla addicional d'activació únicament després d'utilitzar-la "
+"per desactivar"
 
 #: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:555
 msgid "Use remind"
@@ -3062,13 +3069,13 @@ msgstr "Recordatori d'ús"
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Use the layout of first keyboard input method in list as default layout"
 msgstr ""
-"Usa la disposició del primer mètode d'entrada de teclat a la llista com a "
-"disposició predeterminada"
+"Utilitza la disposició del primer mètode d'entrada de teclat a la llista com "
+"a disposició predeterminada"
 
 #: src/module/remote/fcitx-remote-module.conf.in:4
 msgid "Used by fcitx-remote to change Fcitx state from console"
 msgstr ""
-"Usat pel remot del fcitx per canviar l'estat del fcitx des de la consola"
+"S'utilitza amb fcitx-remote per canviar l'estat de fcitx des de la consola"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
 msgid "Useful when you hardly ever use abbreviated pinyin."
@@ -3088,7 +3095,7 @@ msgstr "Color de la frase d'usuari"
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
-msgstr "S'està usant ${1} per verificar el dbus."
+msgstr "S'està usant ${1} per comprovar dbus."
 
 #: data/script/fcitx-diagnose.sh:1294 data/script/fcitx-diagnose.sh:1377
 msgid "Version Line:"
@@ -3116,7 +3123,7 @@ msgstr "Teclat virtual"
 
 #: src/ui/classic/skin.desc:411
 msgid "Virtual Keyboard Image"
-msgstr ""
+msgstr "Imatge del teclat virtual"
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
@@ -3159,11 +3166,11 @@ msgstr "Error X %i a l'opcode enviat"
 
 #: src/module/x11/fcitx-x11.conf.in:3
 msgid "X11 Support"
-msgstr "Suport per a l'X11"
+msgstr "Compatibilitat amb X11"
 
 #: src/module/x11/fcitx-x11.conf.in:4
 msgid "X11 Utilitiy used by other Addon"
-msgstr "Utilitat de l'X11 usada per altres complements"
+msgstr "Utilitat de X11 que s'utilitza amb un altre complement"
 
 #: src/frontend/xim/xim.c:134
 msgid "X11 not initialized"
@@ -3183,7 +3190,7 @@ msgstr "XIM_SERVERS a la finestra arrel:"
 
 #: src/frontend/xim/xim.c:157
 msgid "XMODIFIERS Error."
-msgstr "Error d'XMODIFIERS."
+msgstr "Error de XMODIFIERS."
 
 #: data/script/fcitx-diagnose.sh:1068
 msgid "XMODIFIERS is not set"
@@ -3237,7 +3244,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1140
 msgid "You are using xim in ${1} programs."
-msgstr "Esteu usant xim a ${1} programes."
+msgstr "Esteu utilitzat xim en ${1} programes."
 
 #: data/script/fcitx-diagnose.sh:1578
 msgid "You don't have any input methods enabled."
@@ -3253,7 +3260,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:1145
 msgid "You may have trouble using fcitx in ${1} programs."
-msgstr "Podreu tenir problemes usant el fcitx a ${1} programes."
+msgstr "Podreu tenir problemes amb l'ús de fcitx en ${1} programes."
 
 #: data/script/fcitx-diagnose.sh:1584
 msgid ""
@@ -3278,9 +3285,9 @@ msgid ""
 "found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
 "fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
-"Actualment esteu executant el Fcitx amb entorn gràfic, però no s'ha pogut "
+"Actualment esteu executant fcitx amb l'entorn gràfic, però no s'ha pogut "
 "trobar fcitx-configtool, el nom del paquet és habitualment fcitx-config-gtk, "
-"fcitx-config-gtk3 o fcitx-configtool. Ara obrirà el fitxer de configuració "
+"fcitx-config-gtk3 o fcitx-configtool. Ara s'obrirà el fitxer de configuració "
 "amb l'editor de text predeterminat."
 
 #: data/script/fcitx-configtool.sh:144
@@ -3300,9 +3307,10 @@ msgid ""
 "able to use input method in emacs because of an really old emacs bug that "
 "upstream refuse to fix for years."
 msgstr ""
-"El vostre LC_CTYPE està establert a ${1} en comptes de zh, ja, ko. Potser no "
-"podreu usar el mètode d'entrada a l'emacs per causa d'un error realment vell "
-"de l'emacs que els desenvolupadors s'han negat a arreglar durant anys."
+"El vostre LC_CTYPE està establert a ${1} en comptes de zh, ja o ko. Potser "
+"no podreu utilitzar el mètode d'entrada a emacs per causa d'un error "
+"realment vell d'emacs que els desenvolupadors s'han negat a corregir durant "
+"anys."
 
 #: data/script/fcitx-diagnose.sh:1120
 msgid ""
@@ -3318,7 +3326,7 @@ msgid ""
 "method. You may have trouble deactivate fcitx."
 msgstr ""
 "El vostre primer mètode d'entrada (predeterminat) és ${1} en comptes d'un "
-"mètode d'entrada de teclat. Podreu tenir problemes per deshabilitar el fcitx."
+"mètode d'entrada de teclat. Podreu tenir problemes per desactivar fcitx."
 
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"
