@@ -22,6 +22,7 @@
 #include <libintl.h>
 #include <stdarg.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 
 #include "ui.h"
 #include "addon.h"
