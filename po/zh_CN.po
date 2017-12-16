@@ -6,7 +6,7 @@
 # Christopher Meng <i@cicku.me>, 2012
 # Cynthia Young <cynthia.young0512@gmail.com>, 2013
 # marguerite su <i@marguerite.su>, 2012-2014
-# csslayer <wengxt@gmail.com>, 2013-2015
+# csslayer <wengxt@gmail.com>, 2013-2015,2017
 # csslayer <wengxt@gmail.com>, 2010-2012
 # csslayer <wengxt@gmail.com>, 2013
 # wwj402 <wwj402@gmail.com>, 2013-2016
@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-16 22:02-0700\n"
-"PO-Revision-Date: 2017-10-17 04:04+0000\n"
+"POT-Creation-Date: 2017-12-16 00:02-0800\n"
+"PO-Revision-Date: 2017-12-16 04:51+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_CN/)\n"
@@ -155,7 +155,7 @@ msgstr "激活"
 
 #: src/ui/classic/skin.desc:387
 msgid "Active Menu Color"
-msgstr ""
+msgstr "活动菜单项颜色"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -1102,7 +1102,7 @@ msgstr "Fcitx DBus 前端"
 
 #: src/frontend/ipcportal/fcitx-ipcportal.conf.in:3
 msgid "Fcitx DBus Frontend (Portal version)"
-msgstr ""
+msgstr "Fcitx DBus 前端 (Portal 版)"
 
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
@@ -1646,7 +1646,7 @@ msgstr "按键"
 
 #: src/ui/classic/skin.desc:416
 msgid "Key Color On Virtual Keyboard"
-msgstr ""
+msgstr "软键盘按键文字颜色"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -2544,7 +2544,7 @@ msgstr "皮肤输入框设置"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
 msgid "SkinKeyboard"
-msgstr ""
+msgstr "键盘"
 
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
@@ -2570,7 +2570,7 @@ msgstr "皮肤主窗口设置"
 #: src/ui/classic/skin.desc:389 src/ui/classic/skin.desc:393
 #: src/ui/classic/skin.desc:401
 msgid "SkinMenu"
-msgstr ""
+msgstr "皮肤菜单设置"
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
@@ -2578,7 +2578,7 @@ msgstr "皮肤托盘图标设置"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
-msgstr ""
+msgstr "分隔线颜色"
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
@@ -2660,7 +2660,7 @@ msgstr "Super+右 Ctrl"
 
 #: data/config.desc:142
 msgid "Switch Embedded Preedit"
-msgstr ""
+msgstr "切换嵌入预编辑字符串"
 
 #: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
@@ -3052,7 +3052,7 @@ msgstr "虚拟键盘"
 
 #: src/ui/classic/skin.desc:411
 msgid "Virtual Keyboard Image"
-msgstr ""
+msgstr "虚拟键盘图片"
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
