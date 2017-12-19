@@ -292,7 +292,7 @@ X11GetWindowProperty(FcitxX11 *x11priv, Window win, Atom prop, Atom *ret_type,
     unsigned long bytes_left = 0;
     if (prop == None)
         goto fail;
-    res = XGetWindowProperty(x11priv->dpy, win, prop, 0, 256, // 100k / 4
+    res = XGetWindowProperty(x11priv->dpy, win, prop, 0, 256,
                              False, AnyPropertyType, ret_type,
                              ret_format, nitems, &bytes_left, &buff);
     if (res != Success || *ret_type == None || !buff)
