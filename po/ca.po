@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-12-09 00:02-0800\n"
-"PO-Revision-Date: 2017-12-08 22:23+0000\n"
+"POT-Creation-Date: 2017-12-20 00:02-0800\n"
+"PO-Revision-Date: 2017-12-20 06:07+0000\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "Language: ca\n"
@@ -245,7 +245,7 @@ msgstr "Es troben totes les llibreries de tots els complements."
 
 #: data/script/fcitx-diagnose.sh:805
 msgid "All locale:"
-msgstr "Totes les localitzacions:"
+msgstr "Totes les configuracions regionals:"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:11
 msgid ""
@@ -359,7 +359,7 @@ msgstr "Imatge de fons"
 
 #: data/script/fcitx-diagnose.sh:779
 msgid "Bash Version:"
-msgstr "Versió del bash:"
+msgstr "Versió de bash:"
 
 #: data/script/fcitx-diagnose.sh:655
 msgid "Beginner's Guide"
@@ -419,7 +419,7 @@ msgstr "Disposició de la taula de candidates"
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
-msgstr "Nombre de paraula candidata"
+msgstr "Nombre de paraules candidates"
 
 #: src/im/table/data/cangjie.conf.in:3
 msgid "Cangjie"
@@ -450,7 +450,7 @@ msgstr "No s'ha pogut determinar l'entorn d'escriptori."
 
 #: data/script/fcitx-diagnose.sh:1317
 msgid "Cannot find ${2} for gtk ${1}"
-msgstr "No es pot trobar ${2} per al gtk ${1}"
+msgstr "No es pot trobar ${2} per a gtk ${1}"
 
 #: data/script/fcitx-diagnose.sh:944
 msgid "Cannot find DBus name ${1} owner."
@@ -586,7 +586,7 @@ msgstr "Escolliu el modificador de tecla"
 
 #: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
-msgstr "Escolliu la frase a esborrar, premeu Escape per cancel·lar"
+msgstr "Escolliu la frase a esborrar, premeu Esc per cancel·lar"
 
 #: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
@@ -595,7 +595,7 @@ msgstr "Escolliu la frase per posar al frontal, premeu Escape per cancel·lar"
 #: src/im/table/table.c:721
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
-"Escolliu la frase per netejar la història d'escriptura, premeu Escape per "
+"Escolliu la frase per netejar l'historial d'escriptura, premeu Esc per "
 "cancel·lar"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:3
@@ -629,11 +629,11 @@ msgstr "Neteja la freqüència"
 
 #: src/module/imselector/fcitx-imselector.desc:14
 msgid "Clear local Input Method"
-msgstr "Esborra el mètode local d'entrada"
+msgstr "Neteja el mètode local d'entrada"
 
 #: src/module/imselector/imselector.c:326
 msgid "Clear local input method"
-msgstr "Cancel·la el mètode local d'entrada"
+msgstr "Neteja el mètode local d'entrada"
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:3
 #: src/module/clipboard/fcitx-clipboard.desc:1
@@ -800,7 +800,7 @@ msgstr "El mètode actual local d'entrada és"
 
 #: data/script/fcitx-diagnose.sh:807
 msgid "Current locale:"
-msgstr "Localització actual"
+msgstr "Configuració regional actual:"
 
 #: data/script/fcitx-diagnose.sh:844
 msgid "Current user:"
@@ -962,7 +962,7 @@ msgstr "Opció duplicada, overwrite: línia %d"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr "Vuit"
+msgstr "Buit"
 
 #: src/im/table/table.desc:156
 msgid "Enable"
@@ -1040,8 +1040,8 @@ msgstr "Erbi"
 #: data/script/fcitx-diagnose.sh:811
 msgid "Error occurs when running ${1}. Please check your locale settings."
 msgstr ""
-"S'han produït error quan s'executava ${1}. Si us plau verifiqueu la vostra "
-"configuració de localització."
+"S'han produït error mentre s'executava ${1}. Si us plau, verifiqueu la "
+"vostra configuració regional."
 
 #: src/ui/classic/fcitx-skin-installer.sh:64
 #, sh-format
@@ -1054,7 +1054,7 @@ msgstr ""
 
 #: src/ui/cairostuff/font.c:46
 msgid "Error: Load fontconfig failed"
-msgstr "Error: Ha fallat la càrrega del fontconfig"
+msgstr "Error: Ha fallat la càrrega de fontconfig"
 
 #: src/ui/classic/fcitx-skin-installer.sh:76
 msgid "Error: skin failed to install"
@@ -1086,11 +1086,11 @@ msgstr "Tecla addicional per activar el mètode d'entrada"
 
 #: data/script/fcitx-diagnose.sh:1394
 msgid "Failed to find fcitx in immodule cache at ${1}"
-msgstr "No s'ha trobat el fcitx al cau del mòdul immodule a ${1}"
+msgstr "No s'ha trobat fcitx al cau del mòdul immodule a ${1}"
 
 #: data/script/fcitx-diagnose.sh:1311
 msgid "Failed to find fcitx in the output of ${1}"
-msgstr "No s'ha trobat el fcitx a la sortida de ${1}"
+msgstr "No s'ha trobat fcitx a la sortida de ${1}"
 
 #: data/addon.desc:72
 msgid "Fallback UI Addon"
@@ -1156,7 +1156,7 @@ msgstr "Frontal XIM de fcitx"
 
 #: data/script/fcitx-diagnose.sh:910
 msgid "Fcitx is not running."
-msgstr "El fcitx no s'està executant."
+msgstr "Fcitx no s'està executant."
 
 #: data/script/fcitx-diagnose.sh:899
 msgid "Fcitx version: ${1}"
@@ -1194,19 +1194,19 @@ msgstr "Fixa el cursor de pre-edició al cap"
 
 #: src/ui/classic/fcitx-classic-ui.desc:23
 msgid "Font"
-msgstr "Tipus de lletra"
+msgstr "Lletra"
 
 #: src/ui/classic/fcitx-classic-ui.desc:33
 msgid "Font Locale to display"
-msgstr "Localització del tipus de lletra a mostrar"
+msgstr "Configuració regional de la lletra a mostrar"
 
 #: src/ui/classic/fcitx-classic-ui.desc:16
 msgid "Font Size"
-msgstr "Mida del tipus de lletra"
+msgstr "Mida de la lletra"
 
 #: src/ui/classic/skin.desc:28
 msgid "Font sizes respect dpi setting"
-msgstr "Mides dels tipus de lletra respecta a la configuració dpi"
+msgstr "Mides de les lletres en funció de l'establiment dels ppp"
 
 #: src/module/xkb/fcitx-xkb.desc:10
 msgid ""
@@ -1252,7 +1252,7 @@ msgstr "S'ha trobat ${2} per a la versió desconeguda del gtk a ${1}."
 
 #: data/script/fcitx-diagnose.sh:1289
 msgid "Found ${3} for gtk ${1} at ${2}."
-msgstr "S'ha trobat ${3} per al gtk ${1} a ${2}."
+msgstr "S'ha trobat ${3} per a gtk ${1} a ${2}."
 
 #: data/script/fcitx-diagnose.sh:1450
 msgid "Found fcitx addon config directory: ${1}."
@@ -1260,7 +1260,7 @@ msgstr "S'ha trobat el directori de configuració dels complements: ${1}."
 
 #: data/script/fcitx-diagnose.sh:894
 msgid "Found fcitx at ${1}."
-msgstr "S'ha trobat el fcitx a ${1}."
+msgstr "S'ha trobat fcitx a ${1}."
 
 #: data/script/fcitx-diagnose.sh:1178 data/script/fcitx-diagnose.sh:1183
 msgid "Found fcitx im module for ${2}: ${1}."
@@ -1276,21 +1276,21 @@ msgstr "S'ha trobat el mòdul kcm de fcitx."
 
 #: data/script/fcitx-diagnose.sh:1187
 msgid "Found fcitx qt module: ${1}."
-msgstr "S'ha trobat el mòdul qt del fctix: ${1}."
+msgstr "S'ha trobat el mòdul qt de fctix: ${1}."
 
 #: data/script/fcitx-diagnose.sh:1032
 msgid "Found fcitx-configtool at ${1}."
-msgstr "S'ha trobat el fcitx-configtool a ${1}."
+msgstr "S'ha trobat fcitx-configtool a ${1}."
 
 #: data/script/fcitx-diagnose.sh:1381
 msgid "Found immodule cache for unknown gtk version at ${1}."
 msgstr ""
-"S'ha trobat el cau del mòdul immodule per a la versió desconeguda del gtk a "
+"S'ha trobat el cau del mòdul immodule per a la versió desconeguda de gtk a "
 "${1}."
 
 #: data/script/fcitx-diagnose.sh:1373
 msgid "Found immodules cache for gtk ${1} at ${2}."
-msgstr "S'ha trobat el cau dels mòdules immodule per al gtk ${1} a ${2}."
+msgstr "S'ha trobat el cau dels mòdules immodule per a gtk ${1} a ${2}."
 
 #: data/script/fcitx-diagnose.sh:1190
 msgid "Found unknown fcitx qt module: ${1}."
@@ -1421,11 +1421,11 @@ msgstr "No existeix el fitxer ${2} del mòdul immodule ${1} del Gtk"
 
 #: data/script/fcitx-diagnose.sh:1418
 msgid "Gtk IM module cache:"
-msgstr "Cau del mòdul IM del gtk:"
+msgstr "Cau del mòdul IM de gtk:"
 
 #: data/script/fcitx-diagnose.sh:1423
 msgid "Gtk IM module files:"
-msgstr "Fitxers del mòdul IM del gtk:"
+msgstr "Fitxers del mòdul IM de gtk:"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1568,7 +1568,7 @@ msgstr "Inclou la desactivació al desplaçament entre mètodes d'entrada"
 
 #: src/module/clipboard/fcitx-clipboard.desc:31
 msgid "Include the text currently selected in clipboard history."
-msgstr "Inclou el text seleccionat actualment a la història del porta-retalls."
+msgstr "Inclou el text seleccionat actualment a l'historial del porta-retalls."
 
 #: src/ui/classic/skin.desc:313
 msgid "Inctive Tray Icon"
@@ -1580,7 +1580,7 @@ msgstr "Índex"
 
 #: src/ui/classic/skin.desc:19
 msgid "Input Font Size"
-msgstr "Mida del tipus de lletra d'entrada"
+msgstr "Mida de la lletra d'entrada"
 
 #: src/ui/classic/skin.desc:37
 msgid "Input Message Color"
@@ -1608,7 +1608,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:666
 msgid "Input Method Related Environment Variables: "
-msgstr "Variable d'entorn relacionades amb el mètode d'entrada:"
+msgstr "Variables d'entorn relacionades amb el mètode d'entrada:"
 
 #: data/script/fcitx-diagnose.sh:1545
 msgid "Input Methods:"
@@ -1762,12 +1762,12 @@ msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr ""
-"Esquerra/Dreta per escollir el caràcter seleccionat, premeu Intro per "
-"confirmar, premeu Escape per cancel·lar"
+"Esquerra/Dreta per escollir el caràcter seleccionat, premeu Retorn per "
+"confirmar, premeu Esc per cancel·lar"
 
 #: src/module/clipboard/fcitx-clipboard.desc:11
 msgid "Length of Clipboard History to Save"
-msgstr "Longitud de la història del porta-retalls a desar"
+msgstr "Longitud de l'historial del porta-retalls a desar"
 
 #: src/im/table/table.desc:28
 msgid "Level of simple code"
@@ -1816,7 +1816,7 @@ msgstr "Selector local"
 
 #: data/script/fcitx-diagnose.sh:802
 msgid "Locale:"
-msgstr "Localització:"
+msgstr "Configuració regional:"
 
 #: data/script/fcitx-diagnose.sh:1689
 msgid "Log:"
@@ -1898,11 +1898,11 @@ msgstr "Número del màxim de paraules mantingut a la pre-edició"
 
 #: src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
-msgstr "Tipus de lletra del menú"
+msgstr "Lletra del menú"
 
 #: src/ui/classic/skin.desc:23
 msgid "Menu Font Size"
-msgstr "Mida del tipus de lletra de menús"
+msgstr "Mida de la lletra del menú"
 
 #: src/im/pinyin/py.c:2141
 msgid "Migrate the old file path to the new one"
@@ -2051,7 +2051,7 @@ msgstr "Ordre de la taula de codis"
 
 #: src/ui/classic/skin.desc:57
 msgid "Other Color"
-msgstr "Un altre color"
+msgstr "Altres colors"
 
 #: data/config.desc:183 data/config.desc:189 data/config.desc:195
 #: data/config.desc:201 data/config.desc:208 data/config.desc:214
@@ -2080,7 +2080,7 @@ msgstr "Imatge de superposició"
 
 #: src/ui/classic/fcitx-classic-ui.desc:18
 msgid "Override the skin font size"
-msgstr "Ignora la mida del tipus de lletra de l'aparença"
+msgstr "Redefineix la mida de la lletra de l'aparença"
 
 #: data/script/fcitx-diagnose.sh:940
 msgid "Owner of DBus name ${1} is ${2}."
@@ -2161,7 +2161,7 @@ msgstr ""
 
 #: src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
-msgstr "Si us plau establiu XMODIFIERS."
+msgstr "Si us plau, establiu XMODIFIERS."
 
 #: data/script/fcitx-diagnose.sh:663
 msgid ""
@@ -2187,7 +2187,7 @@ msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:8
 msgid "Preferred Enchant provider"
-msgstr "Proveïdor preferit de l'enchant"
+msgstr "Proveïdor preferit d'enchant"
 
 #: src/im/pinyin/py.c:769
 #, c-format
@@ -2257,7 +2257,7 @@ msgstr "Proporciona una funcionalitat extra per al pinyin a fcitx"
 #: src/module/dbus/fcitx-dbus.conf.in:4
 msgid "Provides DBus Support (Used by other Addon)"
 msgstr ""
-"Proporciona la compatibilitat amb DBus (s'utilitza amb un altre complement)"
+"Proporciona la compatibilitat amb DBus (s'utilitza amb altres complements)"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
 msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
@@ -2395,7 +2395,7 @@ msgid ""
 "length depends on the font and the content"
 msgstr ""
 "Aproximadament la mateixa longitud amb aquest nombre de lletres angleses, la "
-"longitud real depèn del tipus de lletra i del contingut"
+"longitud real depèn de la lletra i del contingut"
 
 #: src/im/pinyin/fcitx-pinyin.desc:71
 msgid "Rule of Candidate Phrase Order"
@@ -2431,7 +2431,7 @@ msgstr "Desa la frase automàtica"
 
 #: src/module/clipboard/fcitx-clipboard.desc:4
 msgid "Save Clipboard History To File"
-msgstr "Desa la història del porta-retalls a un fitxer"
+msgstr "Desa l'historial del porta-retalls a un fitxer"
 
 #: src/im/table/tabledict.c:372
 msgid "Save dict error"
@@ -2576,7 +2576,7 @@ msgstr "Versió de l'aparença"
 #: src/ui/classic/skin.desc:51 src/ui/classic/skin.desc:55
 #: src/ui/classic/skin.desc:59 src/ui/classic/skin.desc:63
 msgid "SkinFont"
-msgstr "Tipus de lletra de l'aparença"
+msgstr "Lletra de l'aparença"
 
 #: src/ui/classic/skin.desc:1 src/ui/classic/skin.desc:5
 #: src/ui/classic/skin.desc:9 src/ui/classic/skin.desc:13
@@ -2677,7 +2677,7 @@ msgstr "Inicia el mètode d'entrada"
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr ""
-"Error d'inici de XIM. Hi ha un altre dimoni de XIM anomenat %sen execució ?"
+"Error d'inici de XIM. Hi ha un altre dimoni de XIM anomenat %s en execució?"
 
 #: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
@@ -2937,7 +2937,7 @@ msgstr "Activa el mètode d'entrada"
 
 #: src/module/clipboard/fcitx-clipboard.desc:25
 msgid "Trigger Key for Clipboard History List"
-msgstr "Tecla d'activació per a la llista d'història del porta-retalls"
+msgstr "Tecla d'activació per a la llista de l'historial del porta-retalls"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:8
 msgid "Trigger Key for QuickPhrase"
@@ -2949,7 +2949,7 @@ msgstr "Tipus"
 
 #: data/config.desc:186
 msgid "Type half width Punc After a Number"
-msgstr "Escriu puntuació d'amplada mitja després d'un número"
+msgstr "Escriu la puntuació d'amplada mitja després d'un número"
 
 #: data/addon.desc:21
 msgid "UI"
@@ -3095,7 +3095,7 @@ msgstr "Color de la frase d'usuari"
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
-msgstr "S'està usant ${1} per comprovar dbus."
+msgstr "S'està utilitzant ${1} per comprovar dbus."
 
 #: data/script/fcitx-diagnose.sh:1294 data/script/fcitx-diagnose.sh:1377
 msgid "Version Line:"
@@ -3170,7 +3170,7 @@ msgstr "Compatibilitat amb X11"
 
 #: src/module/x11/fcitx-x11.conf.in:4
 msgid "X11 Utilitiy used by other Addon"
-msgstr "Utilitat de X11 que s'utilitza amb un altre complement"
+msgstr "Utilitat de X11 que s'utilitza amb altres complements"
 
 #: src/frontend/xim/xim.c:134
 msgid "X11 not initialized"
@@ -3178,7 +3178,7 @@ msgstr "X11 no està inicialitzat"
 
 #: data/script/fcitx-diagnose.sh:1118
 msgid "XIM encoding:"
-msgstr "Codificació del xim:"
+msgstr "Codificació de XIM:"
 
 #: data/script/fcitx-diagnose.sh:1113
 msgid "XIM for Emacs:"
@@ -3317,8 +3317,8 @@ msgid ""
 "Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have "
 "trouble committing strings using XIM."
 msgstr ""
-"La vostra LC_TYPE s'ha establert a ${1} la codificació de la qual no és "
-"UTF-8. Podreu tenir problemes per enviar cadenes usant el XIM."
+"El vostre LC_TYPE està establert a ${1} la codificació del qual no és UTF-8. "
+"És possible que tingueu problemes amb l'enviament de cadenes mitjançant XIM."
 
 #: data/script/fcitx-diagnose.sh:1594
 msgid ""
@@ -3359,7 +3359,7 @@ msgstr "cap opció predeterminada per a %s/%s"
 
 #: src/ui/cairostuff/font.c:121
 msgid "no valid font."
-msgstr "tipus de lletra no vàlid"
+msgstr "cap lletra vàlida."
 
 #: data/script/fcitx-diagnose.sh:900
 msgid "process:"
@@ -3384,4 +3384,4 @@ msgstr "ordre xmodmap"
 #: src/ui/cairostuff/font.c:119
 #, c-format
 msgid "your current font is: %s"
-msgstr "el vostre tipus de lletra actual és: %s"
+msgstr "la vostra lletra actual és: %s"
