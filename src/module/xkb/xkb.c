@@ -168,6 +168,19 @@ boolean FcitxXkbSupported(FcitxXkb* xkb, int* xkbOpcode)
     return true;
 }
 
+static void FcitxXkbFixInconsistentLayoutVariant(FcitxXkb *xkb) {
+    while (utarray_len(xkb->defaultVariants) <
+           utarray_len(xkb->defaultLayouts)) {
+        const char* dummy = "";
+        utarray_push_back(xkb->defaultVariants, &dummy);
+    }
+
+    while (utarray_len(xkb->defaultVariants) >
+           utarray_len(xkb->defaultLayouts)) {
+        utarray_pop_back(xkb->defaultVariants);
+    }
+}
+
 static inline void
 FcitxXkbClearVarDefsRec(XkbRF_VarDefsRec *vdp)
 {
@@ -210,6 +223,26 @@ static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
     return rulesFile;
 }
 
+UT_array*
+splitAndKeepEmpty(UT_array *list,
+                  const char* str, const char *delm)
+{
+    const char *lastPos, *pos;
+    lastPos = str;
+    // even lastPos points to '\0" it will return something meaningful.
+    pos = lastPos + strcspn(lastPos, delm);
+
+    while (*pos || *lastPos) {
+        fcitx_utils_string_list_append_len(list, lastPos, pos - lastPos);
+        if (*pos == '\0') {
+            break;
+        }
+        lastPos = pos + 1;
+        pos = lastPos + strcspn(lastPos, delm);
+    }
+    return list;
+}
+
 static void
 FcitxXkbInitDefaultLayout(FcitxXkb* xkb)
 {
@@ -231,17 +264,19 @@ FcitxXkbInitDefaultLayout(FcitxXkb* xkb)
     if (!vd.model || !vd.layout)
         FcitxLog(WARNING, "Could not get group layout from X property");
     if (vd.layout) {
-        fcitx_utils_append_split_string(xkb->defaultLayouts, vd.layout, ",");
+        splitAndKeepEmpty(xkb->defaultLayouts, vd.layout, ",");
     }
     if (vd.model) {
-        fcitx_utils_append_split_string(xkb->defaultModels, vd.model, ",");
+        splitAndKeepEmpty(xkb->defaultModels, vd.model, ",");
     }
     if (vd.options) {
-        fcitx_utils_append_split_string(xkb->defaultOptions, vd.options, ",");
+        splitAndKeepEmpty(xkb->defaultOptions, vd.options, ",");
     }
     if (vd.variant) {
-        fcitx_utils_append_split_string(xkb->defaultVariants, vd.variant, ",");
+        splitAndKeepEmpty(xkb->defaultVariants, vd.variant, ",");
     }
+
+    FcitxXkbFixInconsistentLayoutVariant(xkb);
 
     FcitxXkbClearVarDefsRec(&vd);
 }
@@ -501,16 +536,7 @@ static void FcitxXkbAddNewLayout(FcitxXkb* xkb, const char* layoutString,
     if (!layoutString)
         return;
 
-    while (utarray_len(xkb->defaultVariants) <
-           utarray_len(xkb->defaultLayouts)) {
-        const char* dummy = "";
-        utarray_push_back(xkb->defaultVariants, &dummy);
-    }
-
-    while (utarray_len(xkb->defaultVariants) >
-           utarray_len(xkb->defaultLayouts)) {
-        utarray_pop_back(xkb->defaultVariants);
-    }
+    FcitxXkbFixInconsistentLayoutVariant(xkb);
 
     if (toDefault) {
         if (index == 0) {
