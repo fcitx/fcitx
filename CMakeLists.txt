@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.6)
 
 project(fcitx)
 
-set(version 4.2.9.5)
+set(version 4.2.9.6)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED TRUE)
