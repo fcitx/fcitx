@@ -156,7 +156,7 @@ void* FcitxXkbDBusCreate(FcitxInstance* instance)
         dbus_message_unref(message);
 
         xkbdbus->rules = rules;
-        xkbdbus->isocodes = FcitxXkbReadIsoCodes(ISOCODES_ISO639_XML, ISOCODES_ISO3166_XML);
+        xkbdbus->isocodes = FcitxXkbReadIsoCodes(ISOCODES_ISO639_JSON, ISOCODES_ISO3166_JSON);
         FcitxXkbDBusAddFunctions(instance);
         return xkbdbus;
     } while(0);

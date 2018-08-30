@@ -41,7 +41,7 @@
 #include "module/freedesktop-notify/fcitx-freedesktop-notify.h"
 
 #include "keyboard.h"
-#if defined(ENABLE_LIBXML2)
+#if defined(ENABLE_XKB)
 #include "isocodes.h"
 #endif
 
@@ -224,7 +224,7 @@ void* SimpleCopy(void* arg, void* dest, void* src)
     return src;
 }
 
-#if defined(ENABLE_LIBXML2)
+#if defined(ENABLE_XKB)
 static const char* FindBestLanguage(FcitxIsoCodes* isocodes, const char* hint, UT_array* languages)
 {
     const char* bestLang = NULL;
@@ -337,7 +337,7 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     if (!keyboard->initialLayout)
         keyboard->initialLayout = strdup("us");
 
-#if defined(ENABLE_LIBXML2)
+#if defined(ENABLE_XKB)
     if (rules && utarray_len(rules->layoutInfos)) {
         char* tempfile = NULL;
         FcitxXDGGetFileUserWithPrefix("", "", "w", NULL);
@@ -351,7 +351,7 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
             free(tempfile);
         }
 
-        FcitxIsoCodes* isocodes = FcitxXkbReadIsoCodes(ISOCODES_ISO639_XML, ISOCODES_ISO3166_XML);
+        FcitxIsoCodes* isocodes = FcitxXkbReadIsoCodes(ISOCODES_ISO639_JSON, ISOCODES_ISO3166_JSON);
         utarray_foreach(layoutInfo, rules->layoutInfos, FcitxXkbLayoutInfo) {
             {
                 const char* lang = FindBestLanguage(isocodes, layoutInfo->description, layoutInfo->languages);
@@ -407,7 +407,7 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
 #endif
     {
         /* though this is unrelated to libxml2, but can only generated with libxml2 enabled */
-#if defined(ENABLE_LIBXML2)
+#if defined(ENABLE_XKB)
         FILE* fp = FcitxXDGGetFileUserWithPrefix("", "cached_layout", "r", NULL);
         if (fp) {
             char *buf = NULL, *buf1 = NULL;

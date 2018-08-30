@@ -16,4 +16,4 @@ set(FCITX_XKBDBUS_SOURCES
   ../../im/keyboard/isocodes.c)
 fcitx_add_addon_full(xkbdbus SCAN SCAN_PRIV ${xkbdbus_noinstall}
   SOURCES ${FCITX_XKBDBUS_SOURCES}
-  LINK_LIBS ${FCITX_XKBDBUS_LINK_LIBS})
+  LINK_LIBS ${FCITX_XKBDBUS_LINK_LIBS} PkgConfig::JsonC)

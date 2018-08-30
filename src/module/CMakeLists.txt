@@ -1,6 +1,6 @@
 add_subdirectory(x11)
 
-if(ENABLE_X11 AND ENABLE_LIBXML2)
+if(ENABLE_X11 AND ENABLE_XKB)
   set(_ENABLE_XKB On)
 else()
   set(_ENABLE_XKB Off)
