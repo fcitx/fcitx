@@ -127,9 +127,7 @@ FcitxKbd *fcitx_kbd_new(GBusType bus_type, GDBusProxyFlags flags,
  *
  * Get Fcitx all im list
  *
- * Returns: (transfer full) (element-type FcitxLayoutItem): A #FcitxLayoutItem
- *List
- * Rename to: fcitx_kbd_get_layouts
+ * Returns: (transfer full) (element-type FcitxLayoutItem): A #FcitxLayoutItem List
  **/
 FCITX_EXPORT_API
 GPtrArray *fcitx_kbd_get_layouts_nofree(FcitxKbd *kbd) {

@@ -244,6 +244,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
         case_vowel:
         case_consonant:
             letters++;
+            /* fallthrough */
         default:
             *(p - spaces) = *p;
             break;

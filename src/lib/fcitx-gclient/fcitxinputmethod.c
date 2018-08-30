@@ -139,15 +139,12 @@ GPtrArray *fcitx_input_method_get_imlist(FcitxInputMethod *im) {
 }
 
 /**
- * fcitx_input_method_get_imlist_nofree: (rename-to
- *fcitx_input_method_get_imlist)
+ * fcitx_input_method_get_imlist_nofree: (rename-to fcitx_input_method_get_imlist)
  * @im: A #FcitxInputMethod
  *
  * Get Fcitx all im list
  *
  * Returns: (transfer full) (element-type FcitxIMItem): A #FcitxIMItem List
- *
- * Rename to: fcitx_input_method_get_imlist
  **/
 FCITX_EXPORT_API
 GPtrArray *fcitx_input_method_get_imlist_nofree(FcitxInputMethod *im) {

@@ -541,6 +541,7 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
         case '#':
             line++;
             utarray_push_back(comments, &line);
+            /* fallthrough */
         case '\0':
             continue;
         case '[': {
