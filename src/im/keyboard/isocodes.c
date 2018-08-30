@@ -43,7 +43,7 @@ FcitxIsoCodes* FcitxXkbReadIsoCodes(const char* iso639, const char* iso3166)
         if (!obj) {
             break;
         }
-        json_object *obj639 = json_object_object_get(obj, "639-2");
+        json_object *obj639 = json_object_object_get(obj, "639-3");
         if (!obj639 || json_object_get_type(obj639) != json_type_array) {
             break;
         }
