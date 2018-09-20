@@ -794,7 +794,7 @@ static void _fcitx_im_context_update_formatted_preedit_cb(FcitxClient *im,
 #else
                     GtkStyle *style = gtk_widget_get_style(widget);
                     fg = style->text[GTK_STATE_SELECTED];
-                    bg = style->bg[GTK_STATE_SELECTED];
+                    bg = style->base[GTK_STATE_SELECTED];
 #endif
                 }
             }
