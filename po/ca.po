@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>, 2017
+# Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>, 2017-2018
 # Walter Garcia-Fontes <walter.garcia@upf.edu>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-12-20 00:02-0800\n"
-"PO-Revision-Date: 2017-12-20 06:07+0000\n"
+"POT-Creation-Date: 2019-11-03 12:27-0800\n"
+"PO-Revision-Date: 2018-06-13 07:09+0000\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "Language: ca\n"
@@ -79,7 +79,7 @@ msgstr "/Nota_per_a_GNOME_posterior_a_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1800
+#: src/lib/fcitx/ime.c:1801
 msgid "/min  Time Used: "
 msgstr "Temps /min utilitzat:"
 
@@ -784,7 +784,7 @@ msgstr "CTRL dreta Súper"
 
 #: data/profile.desc:22
 msgid "Current Enabled Input Method List"
-msgstr "Llista actual de mètodes d'entrada activats"
+msgstr "Llista actual de mètodes d'entrada habilitats"
 
 #: data/profile.desc:17
 msgid "Current Input Method Name"
@@ -885,22 +885,22 @@ msgstr "Directoris:"
 
 #: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
-msgstr "Desactiva la paginació al mode de recordatori"
+msgstr "Inhabilita la paginació al mode de recordatori"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
 msgid "Disable Pinyin Symbol"
-msgstr "Desactiva el símbol de pinyin"
+msgstr "Inhabilita el símbol de pinyin"
 
 #: src/lib/fcitx/addon.c:298
 #, c-format
 msgid "Disable addon %s, dependency %s cannot be satisfied."
-msgstr "Desactiva el complement %s, no es pot satisfer la dependència %s."
+msgstr "Inhabilita el complement %s, no es pot satisfer la dependència %s."
 
 #: src/module/notificationitem/notificationitem.c:462
 #: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 #: data/config.desc:34
 msgid "Disabled"
-msgstr "Desactivat"
+msgstr "Inhabilitat"
 
 #: data/config.desc:217
 msgid "Do not commit preedit text when unfocus a window"
@@ -937,12 +937,12 @@ msgstr "No mostris suggeriments d'escriptura"
 msgid "Do not sort word with code less than this level"
 msgstr "No ordenis la paraula amb un codi inferior a aquest nivell"
 
-#: src/lib/fcitx-utils/desktop-parse.c:602
+#: src/lib/fcitx-utils/desktop-parse.c:603
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
 msgstr "Entrada %s duplicada al grup %s, @ line %d, anul·la l'anterior."
 
-#: src/lib/fcitx-utils/desktop-parse.c:562
+#: src/lib/fcitx-utils/desktop-parse.c:563
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
@@ -966,11 +966,11 @@ msgstr "Buit"
 
 #: src/im/table/table.desc:156
 msgid "Enable"
-msgstr "Activa"
+msgstr "Habilita"
 
 #: data/config.desc:63
 msgid "Enable Hotkey to scroll Between Input Method"
-msgstr "Activa la drecera de teclat pel desplaçament entre mètodes d'entrada"
+msgstr "Habilita la drecera de teclat pel desplaçament entre mètodes d'entrada"
 
 #: data/addon.desc:27
 msgid "Enabled"
@@ -978,7 +978,7 @@ msgstr "Habilitat"
 
 #: src/module/chttrans/fcitx-chttrans.desc:17
 msgid "Enabled state for im"
-msgstr "Activa l'estat per al mètode d'entrada"
+msgstr "Estat habilitat per al mètode d'entrada"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
 msgid "Enchance pinyin input in Fcitx"
@@ -1586,7 +1586,7 @@ msgstr "Mida de la lletra d'entrada"
 msgid "Input Message Color"
 msgstr "Color del missatge d'entrada"
 
-#: src/lib/fcitx/ime.c:1695 src/module/notificationitem/notificationitem.c:411
+#: src/lib/fcitx/ime.c:1696 src/module/notificationitem/notificationitem.c:411
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Mètode d'entrada"
@@ -1598,7 +1598,7 @@ msgstr "Configuració del mètode d'entrada"
 #: src/module/notificationitem/notificationitem.c:463
 #: src/ui/kimpanel/kimpanel.c:283 src/ui/kimpanel/kimpanel.c:288
 msgid "Input Method Disabled"
-msgstr "Mètode d'entrada desactivat"
+msgstr "Mètode d'entrada inhabilitat"
 
 #: data/config.desc:235
 msgid "Input Method Hint will be only shown when state is active"
@@ -1614,7 +1614,7 @@ msgstr "Variables d'entorn relacionades amb el mètode d'entrada:"
 msgid "Input Methods:"
 msgstr "Mètodes d'entrada:"
 
-#: src/lib/fcitx/ime.c:1797
+#: src/lib/fcitx/ime.c:1798
 msgid "Input Speed: "
 msgstr "Velocitat d'entrada:"
 
@@ -1645,12 +1645,12 @@ msgstr "Entrada no vàlida: falten %d «=»"
 msgid "Invalid addon config file ${1}."
 msgstr "Fitxer ${1} no vàlid de configuració de complements"
 
-#: src/lib/fcitx-utils/desktop-parse.c:592
+#: src/lib/fcitx-utils/desktop-parse.c:593
 #, c-format
 msgid "Invalid entry line @ line %d %s"
 msgstr "Línia no vàlida d'entrada @ línia %d %s"
 
-#: src/lib/fcitx-utils/desktop-parse.c:550
+#: src/lib/fcitx-utils/desktop-parse.c:551
 #, c-format
 msgid "Invalid group name line @ line %d %s"
 msgstr "Línia no vàlida de nom de grup @ línia %d %s"
@@ -2002,7 +2002,7 @@ msgstr "No hi ha cap mètode local d'entrada"
 msgid "No remind"
 msgstr "Sense recordatori"
 
-#: src/lib/fcitx-utils/desktop-parse.c:586
+#: src/lib/fcitx-utils/desktop-parse.c:587
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr "El comentari nul no pertany a cap grup @ %d %s"
@@ -2884,7 +2884,7 @@ msgstr "Commuta el teclat virtual"
 
 #: src/module/chttrans/fcitx-chttrans.desc:12
 msgid "Toggle for enable or disable"
-msgstr "Commutació per activar o desactivar"
+msgstr "Commutació per habilitar o inhabilitar"
 
 #: src/im/keyboard/fcitx-keyboard.desc:19
 msgid "Toggle the word hint"
@@ -3348,7 +3348,7 @@ msgstr "executable:"
 msgid "here"
 msgstr "aquí"
 
-#: src/lib/fcitx/ime.c:1803
+#: src/lib/fcitx/ime.c:1804
 msgid "min Num of Characters: "
 msgstr "Num min de caràcters"
 

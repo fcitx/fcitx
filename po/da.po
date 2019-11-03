@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# scootergrisen, 2017
-# scootergrisen, 2017
+# scootergrisen, 2017,2019
+# scootergrisen, 2017,2019
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-12-09 00:02-0800\n"
-"PO-Revision-Date: 2017-12-08 20:21+0000\n"
+"POT-Creation-Date: 2019-11-03 12:27-0800\n"
+"PO-Revision-Date: 2019-05-18 22:22+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -79,7 +79,7 @@ msgstr "/Bemærkning_til_GNOME_senere_end_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1800
+#: src/lib/fcitx/ime.c:1801
 msgid "/min  Time Used: "
 msgstr "/min  tid brugt: "
 
@@ -925,12 +925,12 @@ msgstr "Vis ikke stavetips"
 msgid "Do not sort word with code less than this level"
 msgstr "Sortér ikke ord med kode mindre end dette niveau"
 
-#: src/lib/fcitx-utils/desktop-parse.c:602
+#: src/lib/fcitx-utils/desktop-parse.c:603
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
 msgstr "Duplikeret indslag %s i gruppe %s,@ linje %d, tilsidesæt den forrige."
 
-#: src/lib/fcitx-utils/desktop-parse.c:562
+#: src/lib/fcitx-utils/desktop-parse.c:563
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
@@ -1281,7 +1281,7 @@ msgstr "Fandt ukendt fcitx qt-modul: ${1}."
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:3
 msgid "Freedesktop.org Notification Support"
-msgstr "Understøttelse af Freedesktop.org-notifikation"
+msgstr "Understøttelse af Freedesktop.org-underretning"
 
 #: data/addon.desc:19
 msgid "Frontend"
@@ -1566,7 +1566,7 @@ msgstr "Skriftstørrelse for input"
 msgid "Input Message Color"
 msgstr "Farve for inputmeddelelse"
 
-#: src/lib/fcitx/ime.c:1695 src/module/notificationitem/notificationitem.c:411
+#: src/lib/fcitx/ime.c:1696 src/module/notificationitem/notificationitem.c:411
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Inputmetode"
@@ -1592,7 +1592,7 @@ msgstr "Inputmetode med relation til miljøvariabler: "
 msgid "Input Methods:"
 msgstr "Inputmetoder:"
 
-#: src/lib/fcitx/ime.c:1797
+#: src/lib/fcitx/ime.c:1798
 msgid "Input Speed: "
 msgstr "Inputhastighed: "
 
@@ -1623,12 +1623,12 @@ msgstr "Ugyldig post: linje %d mangler '='"
 msgid "Invalid addon config file ${1}."
 msgstr "Ugyldig tilføjelseskonfigurationsfil ${1}."
 
-#: src/lib/fcitx-utils/desktop-parse.c:592
+#: src/lib/fcitx-utils/desktop-parse.c:593
 #, c-format
 msgid "Invalid entry line @ line %d %s"
 msgstr "Ugyldig postlinje @ linje %d %s"
 
-#: src/lib/fcitx-utils/desktop-parse.c:550
+#: src/lib/fcitx-utils/desktop-parse.c:551
 #, c-format
 msgid "Invalid group name line @ line %d %s"
 msgstr "Ugyldig gruppenavnslinje @ linje %d %s"
@@ -1979,7 +1979,7 @@ msgstr "Ingen lokal inputmetode"
 msgid "No remind"
 msgstr "Ingen påmindelse"
 
-#: src/lib/fcitx-utils/desktop-parse.c:586
+#: src/lib/fcitx-utils/desktop-parse.c:587
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr "Ikke-kommentar tilhører ikke nogen gruppe @ %d %s"
@@ -2236,7 +2236,7 @@ msgstr "Giver understøttelse af DBus (bruges af anden tilføjelse)"
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
 msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
 msgstr ""
-"Giver understøttelse af Freedesktop.org-notifikation (bruges af anden "
+"Giver understøttelse af Freedesktop.org-underretning (bruges af anden "
 "tilføjelse)"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
@@ -3302,7 +3302,7 @@ msgstr "eksekverbar:"
 msgid "here"
 msgstr "her"
 
-#: src/lib/fcitx/ime.c:1803
+#: src/lib/fcitx/ime.c:1804
 msgid "min Num of Characters: "
 msgstr "minimum antal tegn: "
 

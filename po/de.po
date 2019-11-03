@@ -3,17 +3,19 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
+# csslayer <wengxt@gmail.com>, 2013,2015
 # mar well <m.wellendorf@gmx.de>, 2012-2013
-# mar well <m.wellendorf@gmx.de>, 2014,2017
+# mar well <m.wellendorf@gmx.de>, 2014,2017-2018
+# Tim Hofstede <timhofstede.va@gmail.com>, 2018
 # csslayer <wengxt@gmail.com>, 2013,2015
 # csslayer <wengxt@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-16 22:02-0700\n"
-"PO-Revision-Date: 2017-10-17 04:04+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2019-11-03 12:27-0800\n"
+"PO-Revision-Date: 2018-10-20 13:39+0000\n"
+"Last-Translator: Tim Hofstede <timhofstede.va@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -81,7 +83,7 @@ msgstr "/Hinweis_für_GNOME_höher_als_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1800
+#: src/lib/fcitx/ime.c:1801
 msgid "/min  Time Used: "
 msgstr "/min Verwendete Zeit:"
 
@@ -150,7 +152,7 @@ msgstr "Aktiv"
 
 #: src/ui/classic/skin.desc:387
 msgid "Active Menu Color"
-msgstr ""
+msgstr "Farbe aktueller Menüeintrag"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -158,7 +160,7 @@ msgstr "Farbe aktivierter Menüeintrag"
 
 #: src/ui/classic/skin.desc:81
 msgid "Active Mode Icon"
-msgstr "Icon des Aktiven Modus"
+msgstr "Icon des aktiven Modus"
 
 #: src/ui/classic/skin.desc:172
 msgid "Active Text Icon Color"
@@ -307,7 +309,8 @@ msgstr "Automatisch"
 #: src/module/autoeng/fcitx-autoeng.conf.in:4
 msgid "Auto Change to English Mode while Input Specific String"
 msgstr ""
-"Automatischer Wechsel zur zweiten Eingabemethode durch bestimmte Zeichenfolge"
+"Automatischer Wechsel zur zweiten Eingabemethode durch bestimmte "
+"Zeichenfolgen"
 
 #: src/im/pinyin/fcitx-pinyin.desc:33
 msgid "Auto Create Phrase"
@@ -323,7 +326,7 @@ msgstr "Englisch automatisch"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:3
 msgid "Auto English Mode"
-msgstr "Auto Englisch"
+msgstr "Modus für automatisches Englisch"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:9
 msgid "Auto English Trigger Word"
@@ -353,7 +356,7 @@ msgstr "Mögliche Werte:"
 #: src/ui/classic/skin.desc:69 src/ui/classic/skin.desc:187
 #: src/ui/classic/skin.desc:317
 msgid "Background Image"
-msgstr "Hintergrundgraphik"
+msgstr "Hintergrundgrafik"
 
 #: data/script/fcitx-diagnose.sh:779
 msgid "Bash Version:"
@@ -413,7 +416,7 @@ msgstr "Farbe vorgeschlagene Kandidaten"
 
 #: src/im/table/table.desc:117
 msgid "Candidate Table Layout"
-msgstr ""
+msgstr "Layout der Kandidatentabelle"
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
@@ -579,7 +582,7 @@ msgstr "Zweiten und dritten Kandidaten auswählen"
 #: src/module/clipboard/fcitx-clipboard.desc:35
 #: src/module/quickphrase/fcitx-quickphrase.desc:16
 msgid "Choose key modifier"
-msgstr ""
+msgstr "Funktionstaste wählen"
 
 #: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
@@ -680,7 +683,7 @@ msgstr "Code ist"
 #: src/im/table/table.desc:212 src/im/table/table.desc:217
 #: src/im/table/table.desc:222
 msgid "CodeTable"
-msgstr ""
+msgstr "CodeTabelle"
 
 #: src/ui/classic/skin.desc:257
 msgid "Color of Cursor"
@@ -811,7 +814,7 @@ msgstr "Anwenderspezifisch"
 
 #: data/config.desc:42
 msgid "Custom switch key"
-msgstr ""
+msgstr "Eingestellte Taste zum Wechseln"
 
 #: data/addon.desc:37
 msgid "DBus"
@@ -844,7 +847,7 @@ msgstr "Standard Shuangpin Schema"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
-msgstr ""
+msgstr "Standard-Reihenfolge Buchstabierhilfen"
 
 #: data/script/fcitx-diagnose.sh:1575
 msgid "Default input methods:"
@@ -880,7 +883,7 @@ msgstr "Verzeichnisse:"
 
 #: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
-msgstr ""
+msgstr "Paging im Erinnerungsmodus ausschalten"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
 msgid "Disable Pinyin Symbol"
@@ -929,12 +932,12 @@ msgstr "Keinen Rechtsschreibungshinweis zeigen"
 msgid "Do not sort word with code less than this level"
 msgstr "Wörter mit weniger Eingabe als diese Länge nicht sortieren"
 
-#: src/lib/fcitx-utils/desktop-parse.c:602
+#: src/lib/fcitx-utils/desktop-parse.c:603
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
 msgstr "Doppelter Eintrag %s in Gruppe %s,@ Zeile %d, vorherige übergehen."
 
-#: src/lib/fcitx-utils/desktop-parse.c:562
+#: src/lib/fcitx-utils/desktop-parse.c:563
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
@@ -988,7 +991,7 @@ msgstr "English (US)"
 
 #: src/ui/classic/skin.desc:77
 msgid "English Mode Icon"
-msgstr "Icon Englischer Modus"
+msgstr "Icon des englischen Modus"
 
 #: src/lib/fcitx-config/fcitx-config.c:400
 msgid "Enum Option is invalid, take it as string"
@@ -1115,7 +1118,7 @@ msgstr "Fcitx DBus Schnittstelle"
 
 #: src/frontend/ipcportal/fcitx-ipcportal.conf.in:3
 msgid "Fcitx DBus Frontend (Portal version)"
-msgstr ""
+msgstr "Fcitx DBus-Schnittstelle (Portalversion)"
 
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
@@ -1156,12 +1159,12 @@ msgstr "Fcitx-Version: ${1}"
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
 #: src/ui/classic/skin.desc:403
 msgid "Fill Background Horizontal rule"
-msgstr "Regel Verwendung der Hintergrundgraphik horizontal"
+msgstr "Regel Verwendung der Hintergrundgrafik horizontal"
 
 #: src/ui/classic/skin.desc:151 src/ui/classic/skin.desc:293
 #: src/ui/classic/skin.desc:395
 msgid "Fill Background Vertical rule"
-msgstr "Regel Verwendung der Hintergrundgraphik vertikal"
+msgstr "Regel Verwendung der Hintergrundgrafik vertikal"
 
 #: src/ui/classic/skin.desc:45
 msgid "First Candidate Color"
@@ -1575,7 +1578,7 @@ msgstr "Schriftgröße Eingabe"
 msgid "Input Message Color"
 msgstr "Farbe der Pinyineingabe"
 
-#: src/lib/fcitx/ime.c:1695 src/module/notificationitem/notificationitem.c:411
+#: src/lib/fcitx/ime.c:1696 src/module/notificationitem/notificationitem.c:411
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Eingabemethode"
@@ -1602,7 +1605,7 @@ msgstr "Eingabemethodenbezogenene Umgebungsvariablen:"
 msgid "Input Methods:"
 msgstr "Eingabemethoden:"
 
-#: src/lib/fcitx/ime.c:1797
+#: src/lib/fcitx/ime.c:1798
 msgid "Input Speed: "
 msgstr "Eingabegeschwindigkeit"
 
@@ -1633,12 +1636,12 @@ msgstr "Ungültiger Eintrag: In Linie %d fehlt \"=\""
 msgid "Invalid addon config file ${1}."
 msgstr "Ungültige Addon Konfigurationsdatei ${1}"
 
-#: src/lib/fcitx-utils/desktop-parse.c:592
+#: src/lib/fcitx-utils/desktop-parse.c:593
 #, c-format
 msgid "Invalid entry line @ line %d %s"
 msgstr "Ungültiger Eintrag Zeile @ Zeile %d %s"
 
-#: src/lib/fcitx-utils/desktop-parse.c:550
+#: src/lib/fcitx-utils/desktop-parse.c:551
 #, c-format
 msgid "Invalid group name line @ line %d %s"
 msgstr "Ungültiger Gruppenname Zeile @ Zeile %d %s"
@@ -1665,7 +1668,7 @@ msgstr "Taste"
 
 #: src/ui/classic/skin.desc:416
 msgid "Key Color On Virtual Keyboard"
-msgstr ""
+msgstr "Tastenfarbe der Virtuellen Tastatur"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -1989,7 +1992,7 @@ msgstr "Keine lokale Eingabemethode"
 msgid "No remind"
 msgstr "Nicht erinnern"
 
-#: src/lib/fcitx-utils/desktop-parse.c:586
+#: src/lib/fcitx-utils/desktop-parse.c:587
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr ""
@@ -2048,7 +2051,7 @@ msgstr "Ausgabe"
 #: src/ui/classic/skin.desc:142 src/ui/classic/skin.desc:248
 #: src/ui/classic/skin.desc:378
 msgid "Overlay X offset"
-msgstr "Ebene X Offset"
+msgstr "Overlay X Offset"
 
 #: src/ui/classic/skin.desc:147 src/ui/classic/skin.desc:253
 #: src/ui/classic/skin.desc:383
@@ -2058,12 +2061,12 @@ msgstr "Overlay Y offset"
 #: src/ui/classic/skin.desc:137 src/ui/classic/skin.desc:243
 #: src/ui/classic/skin.desc:373
 msgid "Overlay dock position"
-msgstr "Position des Ebenen-Docks"
+msgstr "Position des Overlays"
 
 #: src/ui/classic/skin.desc:122 src/ui/classic/skin.desc:228
 #: src/ui/classic/skin.desc:358
 msgid "Overlay image"
-msgstr "Darüberliegendes Bild"
+msgstr "Bild für das Overlay"
 
 #: src/ui/classic/fcitx-classic-ui.desc:18
 msgid "Override the skin font size"
@@ -2169,11 +2172,11 @@ msgstr "Position / Offset des Preeditstrings"
 
 #: src/module/spell/fcitx-spell.desc:14
 msgid "Possible Providers: presage, custom, enchant (separate with comma)"
-msgstr ""
+msgstr "Mögliche Anbieter: presage, custom, enchant (durch Komma trennen)"
 
 #: src/module/spell/fcitx-spell.desc:8
 msgid "Preferred Enchant provider"
-msgstr ""
+msgstr "Bevorzugter Enchant-Anbieter"
 
 #: src/im/pinyin/py.c:769
 #, c-format
@@ -2255,7 +2258,7 @@ msgstr ""
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
 msgid "Provides Fullwidth Character Input Support"
-msgstr "Unterstüztzt die Eingabe Vollbreiter Zeichen"
+msgstr "Unterstützt die Eingabe Vollbreiter Zeichen"
 
 #: src/frontend/xim/fcitx-xim.conf.in:4
 msgid "Provides XIM support"
@@ -2381,6 +2384,8 @@ msgid ""
 "Roughly the same length with this number of english letters, the actual "
 "length depends on the font and the content"
 msgstr ""
+"Ungefähr dieselbe Länge mit dieser Anzahl Buchstaben, die tatsächliche Länge "
+"hängt von Schriftart und Inhalt ab"
 
 #: src/im/pinyin/fcitx-pinyin.desc:71
 msgid "Rule of Candidate Phrase Order"
@@ -2582,7 +2587,7 @@ msgstr "Oberfläche Eingabefeld"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
 msgid "SkinKeyboard"
-msgstr ""
+msgstr "Oberfläche Tastatur"
 
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
@@ -2608,7 +2613,7 @@ msgstr "Oberfläche Hauptfenster"
 #: src/ui/classic/skin.desc:389 src/ui/classic/skin.desc:393
 #: src/ui/classic/skin.desc:401
 msgid "SkinMenu"
-msgstr ""
+msgstr "SkinMenu"
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
@@ -2616,7 +2621,7 @@ msgstr "Oberfläche Trayicons"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
-msgstr ""
+msgstr "Farbe Trennlinie"
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
@@ -2698,7 +2703,7 @@ msgstr "Super+Ctrl_R"
 
 #: data/config.desc:142
 msgid "Switch Embedded Preedit"
-msgstr ""
+msgstr "Wechsel zum eingebetteten Preedit"
 
 #: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
@@ -2972,11 +2977,11 @@ msgstr "Nicht unterstützte Taste"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
-msgstr ""
+msgstr "Alternative Anzahl Zeichenvorschläge benutzen"
 
 #: src/im/table/table.desc:183
 msgid "Use Alternative Key for paging"
-msgstr ""
+msgstr "Alternative Taste für Seitenwechsel"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
@@ -3004,7 +3009,7 @@ msgstr "Passende Taste benutzen"
 
 #: src/frontend/xim/fcitx-xim.desc:4
 msgid "Use On The Spot Style for XIM (Cannot change during running)"
-msgstr ""
+msgstr "Eingabe im Programm für XIM (Neustart Fcitx erforderlich)"
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
@@ -3100,7 +3105,7 @@ msgstr "Virtuelle Tastatur"
 
 #: src/ui/classic/skin.desc:411
 msgid "Virtual Keyboard Image"
-msgstr ""
+msgstr "Bild für Virtuelle Tastatur"
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
@@ -3323,7 +3328,7 @@ msgstr "Programm:"
 msgid "here"
 msgstr "hier"
 
-#: src/lib/fcitx/ime.c:1803
+#: src/lib/fcitx/ime.c:1804
 msgid "min Num of Characters: "
 msgstr "min Anzahl Zeichen:"
 
