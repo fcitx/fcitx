@@ -669,7 +669,7 @@ static void _fcitx_client_create_ic_portal(FcitxClient *self) {
         fcitx_connection_get_g_dbus_connection(self->priv->connection),
         G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
         _fcitx_client_get_portal_interface_info(),
-        "org.freedesktop.portal.Fcitx", "/inputmethod",
+        "org.freedesktop.portal.Fcitx", "/org/freedesktop/portal/inputmethod",
         "org.fcitx.Fcitx.InputMethod1", self->priv->cancellable,
         _fcitx_client_create_ic_portal_phase1_finished, self);
 }

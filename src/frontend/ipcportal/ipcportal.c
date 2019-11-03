@@ -49,7 +49,7 @@ typedef struct _FcitxLastSentIMInfo
 typedef struct _FcitxPortalIC {
     int id;
     char* sender;
-    char path[32];
+    char path[64];
     uuid_t uuid;
     int width;
     int height;
@@ -234,7 +234,7 @@ void* PortalCreate(FcitxInstance* instance, int frontendid)
     }
 
     DBusObjectPathVTable fcitxPortalVTable = {NULL, &PortalDBusEventHandler, NULL, NULL, NULL, NULL };
-    dbus_connection_register_object_path(ipc->_conn,  FCITX_IM_DBUS_PATH, &fcitxPortalVTable, ipc);
+    dbus_connection_register_object_path(ipc->_conn,  FCITX_IM_DBUS_PORTAL_PATH, &fcitxPortalVTable, ipc);
     dbus_connection_flush(ipc->_conn);
 
     FcitxIMEventHook hook;
@@ -266,7 +266,7 @@ void PortalCreateIC(void* arg, FcitxInputContext* context, void* priv)
     ipcic->sender = strdup(dbus_message_get_sender(message));
     ipc->maxid ++;
     ipcic->lastPreeditIsEmpty = false;
-    sprintf(ipcic->path, "/inputcontext/%d", ipcic->id);
+    sprintf(ipcic->path, FCITX_IC_DBUS_PORTAL_PATH, ipcic->id);
     uuid_generate(ipcic->uuid);
 
     int icpid = 0;
@@ -420,7 +420,7 @@ static DBusHandlerResult PortalICDBusEventHandler(DBusConnection *connection, DB
 {
     FcitxPortalFrontend* ipc = (FcitxPortalFrontend*) user_data;
     int id = -1;
-    sscanf(dbus_message_get_path(msg), "/inputcontext/%d", &id);
+    sscanf(dbus_message_get_path(msg), FCITX_IC_DBUS_PORTAL_PATH, &id);
     FcitxInputContext* ic = FcitxInstanceFindIC(ipc->owner, ipc->frontendid, &id);
     DBusHandlerResult result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
     DBusMessage *reply = NULL;

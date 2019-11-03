@@ -116,7 +116,7 @@ void FcitxInputContextProxy::createInputContext() {
     QFileInfo info(QCoreApplication::applicationFilePath());
     if (service == "org.freedesktop.portal.Fcitx") {
         m_portal = true;
-        m_im1proxy = new org::fcitx::Fcitx::InputMethod1(owner, "/inputmethod",
+        m_im1proxy = new org::fcitx::Fcitx::InputMethod1(owner, "/org/freedesktop/portal/inputmethod",
                                                          connection, this);
         FcitxInputContextArgumentList list;
         FcitxInputContextArgument arg;

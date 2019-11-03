@@ -17,14 +17,15 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITX_IPC_H
-#define FCITX_IPC_H
+#ifndef FCITX_IPC_PORTAL_H
+#define FCITX_IPC_PORTAL_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define FCITX_IM_DBUS_PATH "/inputmethod"
+#define FCITX_IM_DBUS_PORTAL_PATH "/org/freedesktop/portal/inputmethod"
+#define FCITX_IC_DBUS_PORTAL_PATH "/org/freedesktop/portal/inputcontext/%d"
 
 #define FCITX_PORTAL_SERVICE "org.freedesktop.portal.Fcitx"
 #define FCITX_IM_DBUS_INTERFACE "org.fcitx.Fcitx.InputMethod1"
@@ -34,5 +35,5 @@ extern "C" {
 }
 #endif
 
-#endif // FCITX_IPC_H
+#endif // FCITX_IPC_PORTAL_H
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
