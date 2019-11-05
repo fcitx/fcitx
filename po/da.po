@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2019-11-03 12:27-0800\n"
-"PO-Revision-Date: 2019-05-18 22:22+0000\n"
+"POT-Creation-Date: 2019-11-05 00:02-0800\n"
+"PO-Revision-Date: 2019-11-04 08:16+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -256,7 +256,7 @@ msgstr ""
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
 msgid "Allow replacing the first candidate"
-msgstr "Tillad erstatning af den første kanditat"
+msgstr "Tillad erstatning af den første kandidat"
 
 #: src/module/xkb/fcitx-xkb.desc:4
 msgid "Allow to Override System XKB Settings"
