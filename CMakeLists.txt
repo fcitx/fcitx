@@ -96,9 +96,11 @@ if(ENABLE_ENCHANT)
   endif()
 endif()
 if (ENABLE_XKB)
+    # Parse xkb xml file
     find_package(LibXml2 REQUIRED)
     find_package(IsoCodes REQUIRED)
     find_package(XkbFile REQUIRED)
+    # Parse isocodes json
     pkg_check_modules(JsonC "json-c" IMPORTED_TARGET REQUIRED)
 endif (ENABLE_XKB)
 if(ENABLE_PRESAGE)

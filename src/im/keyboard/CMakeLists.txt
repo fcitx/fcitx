@@ -15,9 +15,10 @@ set(FCITX_KEYBOARD_SOURCES
 
 if(ENABLE_XKB)
   set(FCITX_KEYBOARD_SOURCES ${FCITX_KEYBOARD_SOURCES} isocodes.c)
+  set(FCITX_KEYBOARD_LINK_LIBS ${FCITX_KEYBOARD_LINK_LIBS} PkgConfig::JsonC)
 endif()
 
 fcitx_add_addon_full(keyboard DESC
   SOURCES ${FCITX_KEYBOARD_SOURCES}
-  LINK_LIBS ${FCITX_KEYBOARD_LINK_LIBS} XKBCommon::XKBCommon PkgConfig::JsonC
+  LINK_LIBS ${FCITX_KEYBOARD_LINK_LIBS} XKBCommon::XKBCommon
   EXTRA_PO isocodes.c isocodes.h keyboard.h)
