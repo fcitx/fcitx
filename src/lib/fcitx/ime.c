@@ -105,35 +105,6 @@ static const FcitxHotkey* switchKey2[] = {
     FCITX_NONE_KEY
 };
 
-static const FcitxHotkey* imSWNextKey1[] = {
-    FCITX_LCTRL_LSHIFT,
-    FCITX_LALT_LSHIFT,
-    FCITX_LCTRL_LSUPER,
-    FCITX_LALT_LSUPER,
-};
-
-static const FcitxHotkey* imSWNextKey2[] = {
-    FCITX_LCTRL_LSHIFT2,
-    FCITX_LALT_LSHIFT2,
-    FCITX_LCTRL_LSUPER2,
-    FCITX_LALT_LSUPER2,
-};
-
-static const FcitxHotkey* imSWPrevKey1[] = {
-    FCITX_RCTRL_RSHIFT,
-    FCITX_RALT_RSHIFT,
-    FCITX_RCTRL_RSUPER,
-    FCITX_RALT_RSUPER,
-};
-
-static const FcitxHotkey* imSWPrevKey2[] = {
-    FCITX_RCTRL_RSHIFT2,
-    FCITX_RALT_RSHIFT2,
-    FCITX_RCTRL_RSUPER2,
-    FCITX_RALT_RSUPER2,
-};
-
-
 static const UT_icd ime_icd = { sizeof(FcitxIM), NULL , NULL, NULL };
 static boolean IMMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateIMMenuItem(FcitxUIMenu *menu);
@@ -721,11 +692,11 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
 
     FcitxGlobalConfig *fc = instance->config;
 
-    const FcitxHotkey* hkSwitchNext1 = imSWNextKey1[fc->iIMSwitchKey];
-    const FcitxHotkey* hkSwitchNext2 = imSWNextKey2[fc->iIMSwitchKey];
+    const FcitxHotkey* hkSwitchNext1 = &fc->hkIMSwitchKeyNext[0];
+    const FcitxHotkey* hkSwitchNext2 = &fc->hkIMSwitchKeyNext[1];
 
-    const FcitxHotkey* hkSwitchPrev1 = imSWPrevKey1[fc->iIMSwitchKey];
-    const FcitxHotkey* hkSwitchPrev2 = imSWPrevKey2[fc->iIMSwitchKey];
+    const FcitxHotkey* hkSwitchPrev1 = &fc->hkIMSwitchKeyPrev[0];
+    const FcitxHotkey* hkSwitchPrev2 = &fc->hkIMSwitchKeyPrev[1];
 
     const FcitxHotkey* hkSwitchKey1;
     const FcitxHotkey* hkSwitchKey2;
@@ -882,7 +853,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
         }
 
         if (retVal == IRV_TO_PROCESS) {
-            if (!FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) && currentIM) {
+            if (!FcitxHotkeyIsHotKey(sym, state, fc->hkIMSwitchKeyNext) && currentIM) {
                 retVal = currentIM->DoInput(currentIM->klass, sym, state);
             }
         }
