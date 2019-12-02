@@ -72,6 +72,8 @@ extern "C" {
     #define CONTEXT_DISABLE_FULLWIDTH "CONTEXT_DISABLE_FULLWIDTH"
     /** disable punc module */
     #define CONTEXT_DISABLE_PUNC "CONTEXT_DISABLE_PUNC"
+        /** disable chttrans module */
+    #define CONTEXT_DISABLE_CHTTRANS "CONTEXT_DISABLE_CHTTRANS"
 
     /**
      * @brief register a new global context variable
