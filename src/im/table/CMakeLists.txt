@@ -21,6 +21,7 @@ set(FCITX_TABLE_HEADERS
   )
 if(ENABLE_TABLE)
   set(table_noinstall)
+  add_subdirectory(data)
 else()
   set(table_noinstall NO_INSTALL)
 endif()
@@ -30,4 +31,3 @@ fcitx_add_addon_full(table DESC ${table_noinstall}
   EXTRA_DESC table.desc
   EXTRA_PO ${FCITX_TABLE_HEADERS})
 
-add_subdirectory(data)

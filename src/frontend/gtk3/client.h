@@ -1,1 +1,0 @@
-../gtk2/client.h

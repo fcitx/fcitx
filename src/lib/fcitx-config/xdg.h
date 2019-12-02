@@ -77,7 +77,7 @@ extern "C"
     FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile);
 
     /**
-     * get xdg path with given arguement, do not use this directly
+     * get xdg path with given argument, do not use this directly
      *
      * @param len return array size
      * @param homeEnv homeEnv

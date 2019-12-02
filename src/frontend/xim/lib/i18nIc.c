@@ -464,7 +464,7 @@ static XICAttribute *CreateNestedList(CARD16 attr_id,
     if (nest_list->value == NULL)
         return NULL;
     /*endif*/
-    memset(nest_list->value, 0, sizeof(value_length));
+    memset(nest_list->value, 0, value_length);
 
     nest_list->attribute_id = attr_id;
     nest_list->value_length = value_length;

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 a="$(find scabable/status/ -type f -name \*.svg)"
 echo $a

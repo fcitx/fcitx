@@ -4,7 +4,6 @@ _GenericName=Input Method Configuration
 _Comment=Change Fcitx Configuration
 Exec=fcitx-configtool
 Icon=fcitx
-MimeType=
 Type=Application
 Categories=Settings;
 X-KDE-StartupNotify=false

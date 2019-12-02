@@ -17,11 +17,6 @@ set(FCITX_DATA_FILES
   vk.conf
   )
 
-set(FCITX_PY_FILES
-  pySym.mb
-  sp.dat
-  )
-
 set(FCITX_DSEKTOP_FILES
   fcitx.desktop
   fcitx-configtool.desktop

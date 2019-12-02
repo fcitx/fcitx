@@ -17,13 +17,12 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include <QInputContextPlugin>
-#include <QDBusConnection>
 #include "qfcitxinputcontext.h"
+#include <QDBusConnection>
+#include <QInputContextPlugin>
 
 /* The class Definition */
-class QFcitxInputContextPlugin: public QInputContextPlugin
-{
+class QFcitxInputContextPlugin : public QInputContextPlugin {
 
 private:
     /**
@@ -32,7 +31,6 @@ private:
     static QStringList fcitx_languages;
 
 public:
-
     QFcitxInputContextPlugin(QObject *parent = 0);
 
     ~QFcitxInputContextPlugin();
@@ -50,33 +48,21 @@ public:
 private:
 };
 
-
 /* Implementations */
 QStringList QFcitxInputContextPlugin::fcitx_languages;
 
-
 QFcitxInputContextPlugin::QFcitxInputContextPlugin(QObject *parent)
-    : QInputContextPlugin(parent)
-{
-}
+    : QInputContextPlugin(parent) {}
 
+QFcitxInputContextPlugin::~QFcitxInputContextPlugin() {}
 
-QFcitxInputContextPlugin::~QFcitxInputContextPlugin()
-{
-}
-
-QStringList
-QFcitxInputContextPlugin::keys() const
-{
+QStringList QFcitxInputContextPlugin::keys() const {
     QStringList identifiers;
     identifiers.push_back(FCITX_IDENTIFIER_NAME);
     return identifiers;
 }
 
-
-QStringList
-QFcitxInputContextPlugin::languages(const QString & key)
-{
+QStringList QFcitxInputContextPlugin::languages(const QString &key) {
     if (key.toLower() != FCITX_IDENTIFIER_NAME) {
         return QStringList();
     }
@@ -89,10 +75,7 @@ QFcitxInputContextPlugin::languages(const QString & key)
     return fcitx_languages;
 }
 
-
-QString
-QFcitxInputContextPlugin::description(const QString &key)
-{
+QString QFcitxInputContextPlugin::description(const QString &key) {
     if (key.toLower() != FCITX_IDENTIFIER_NAME) {
         return QString("");
     }
@@ -100,10 +83,7 @@ QFcitxInputContextPlugin::description(const QString &key)
     return QString::fromUtf8("Qt immodule plugin for Fcitx");
 }
 
-
-QInputContext *
-QFcitxInputContextPlugin::create(const QString &key)
-{
+QInputContext *QFcitxInputContextPlugin::create(const QString &key) {
     if (key.toLower() != FCITX_IDENTIFIER_NAME) {
         return NULL;
     }
@@ -111,9 +91,7 @@ QFcitxInputContextPlugin::create(const QString &key)
     return static_cast<QInputContext *>(new QFcitxInputContext());
 }
 
-
-QString QFcitxInputContextPlugin::displayName(const QString &key)
-{
+QString QFcitxInputContextPlugin::displayName(const QString &key) {
     return key;
 }
 

@@ -500,7 +500,7 @@ extern "C" {
     void fcitx_utils_backtrace();
 
     /**
-     * @brief get bool environment var for convinience.
+     * @brief get bool environment var for convenience.
      *
      * @param name var name
      * @param defval default value
@@ -534,7 +534,7 @@ extern "C" {
     int fcitx_utils_strcmp0(const char* a, const char* b);
 
     /**
-     * similiar with fcitx_utils_strcmp0, but empty string will be considered
+     * similar with fcitx_utils_strcmp0, but empty string will be considered
      * equals to NULL in this case.
      * NULL == empty, and empty < not empty
      *

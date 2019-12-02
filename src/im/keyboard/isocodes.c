@@ -20,69 +20,94 @@
 
 #include "config.h"
 
-#include <libxml/parser.h>
+#include <json-c/json.h>
 
 #include <string.h>
 
 #include <fcitx-utils/utils.h>
 #include "isocodes.h"
 
-#define XMLCHAR_CAST (const char*)
 
-static void IsoCodes639HandlerStartElement(void *ctx,
-                                           const xmlChar *name,
-                                           const xmlChar **atts);
-static void IsoCodes3166HandlerStartElement(void *ctx,
-                                            const xmlChar *name,
-                                            const xmlChar **atts);
+static void IsoCodes639Handler(FcitxIsoCodes *isocodes, json_object *entry);
+static void IsoCodes3166Handler(FcitxIsoCodes *isocodes, json_object *entry);
 static void FcitxIsoCodes639EntryFree(FcitxIsoCodes639Entry* entry);
 static void FcitxIsoCodes3166EntryFree(FcitxIsoCodes3166Entry* entry);
 
 FcitxIsoCodes* FcitxXkbReadIsoCodes(const char* iso639, const char* iso3166)
 {
-    xmlSAXHandler handle;
-    memset(&handle, 0, sizeof(xmlSAXHandler));
+    FcitxIsoCodes* isocodes = fcitx_utils_new(FcitxIsoCodes);
 
-    xmlInitParser();
+    json_object *obj;
+    do {
+        obj = json_object_from_file(iso639);
+        if (!obj) {
+            break;
+        }
+        json_object *obj639 = json_object_object_get(obj, "639-3");
+        if (!obj639 || json_object_get_type(obj639) != json_type_array) {
+            break;
+        }
 
-    FcitxIsoCodes* isocodes = (FcitxIsoCodes*) fcitx_utils_malloc0(sizeof(FcitxIsoCodes));
+        for (size_t i = 0, e = json_object_array_length(obj639); i < e; i++) {
+            json_object *entry = json_object_array_get_idx(obj639, i);
+            IsoCodes639Handler(isocodes, entry);
+        }
+    } while(0);
+    json_object_put(obj);
 
-    handle.startElement = IsoCodes639HandlerStartElement;
-    xmlSAXUserParseFile(&handle, isocodes, iso639);
-    handle.startElement = IsoCodes3166HandlerStartElement;
-    xmlSAXUserParseFile(&handle, isocodes, iso3166);
+    do {
+        obj = json_object_from_file(iso3166);
+        if (!obj) {
+            break;
+        }
+        json_object *obj3166 = json_object_object_get(obj, "3166-1");
+        if (!obj3166 || json_object_get_type(obj3166) != json_type_array) {
+            break;
+        }
 
-    /* DO NOT Call xmlCleanupParser() */
-
+        for (size_t i = 0, e = json_object_array_length(obj3166); i < e; i++) {
+            json_object *entry = json_object_array_get_idx(obj3166, i);
+            IsoCodes3166Handler(isocodes, entry);
+        }
+    } while(0);
     return isocodes;
 }
 
-static void IsoCodes639HandlerStartElement(void *ctx,
-                                           const xmlChar *name,
-                                           const xmlChar **atts)
+static void IsoCodes639Handler(FcitxIsoCodes *isocodes, json_object *entry)
 {
-    FcitxIsoCodes* isocodes = ctx;
-    if (strcmp(XMLCHAR_CAST name, "iso_639_entry") == 0) {
-        FcitxIsoCodes639Entry* entry = fcitx_utils_malloc0(sizeof(FcitxIsoCodes639Entry));
-        int i = 0;
-        while(atts && atts[i*2] != 0) {
-            if (strcmp(XMLCHAR_CAST atts[i * 2], "iso_639_2B_code") == 0)
-                entry->iso_639_2B_code = strdup(XMLCHAR_CAST atts[i * 2 + 1]);
-            else if (strcmp(XMLCHAR_CAST atts[i * 2], "iso_639_2T_code") == 0)
-                entry->iso_639_2T_code = strdup(XMLCHAR_CAST atts[i * 2 + 1]);
-            else if (strcmp(XMLCHAR_CAST atts[i * 2], "iso_639_1_code") == 0)
-                entry->iso_639_1_code = strdup(XMLCHAR_CAST atts[i * 2 + 1]);
-            else if (strcmp(XMLCHAR_CAST atts[i * 2], "name") == 0)
-                entry->name = strdup(XMLCHAR_CAST atts[i * 2 + 1]);
-            i++;
-        }
-        if (!entry->iso_639_2B_code || !entry->iso_639_2T_code || !entry->name)
-            FcitxIsoCodes639EntryFree(entry);
-        else {
-            HASH_ADD_KEYPTR(hh1, isocodes->iso6392B, entry->iso_639_2B_code, strlen(entry->iso_639_2B_code), entry);
-            HASH_ADD_KEYPTR(hh2, isocodes->iso6392T, entry->iso_639_2T_code, strlen(entry->iso_639_2T_code), entry);
-        }
+    json_object *alpha2 = json_object_object_get(entry, "alpha_2");
+    json_object *alpha3 = json_object_object_get(entry, "alpha_3");
+    json_object *bibliographic = json_object_object_get(entry, "bibliographic");
+    json_object *name= json_object_object_get(entry, "name");
+    if (!name || json_object_get_type(name) != json_type_string) {
+        return;
     }
+    // there must be alpha3
+    if (!alpha3 || json_object_get_type(alpha3) != json_type_string) {
+        return;
+    }
+
+    // alpha2 is optional
+    if (alpha2 && json_object_get_type(alpha2) != json_type_string) {
+        return;
+    }
+
+    // bibliographic is optional
+    if (bibliographic && json_object_get_type(bibliographic) != json_type_string) {
+        return;
+    }
+    if (!bibliographic) {
+        bibliographic = alpha3;
+    }
+    FcitxIsoCodes639Entry* e = fcitx_utils_new(FcitxIsoCodes639Entry);
+    e->name = strndup(json_object_get_string(name), json_object_get_string_len(name));
+    if (alpha2) {
+        e->iso_639_1_code = strndup(json_object_get_string(alpha2), json_object_get_string_len(alpha2));
+    }
+    e->iso_639_2B_code = strndup(json_object_get_string(bibliographic), json_object_get_string_len(bibliographic));
+    e->iso_639_2T_code = strndup(json_object_get_string(alpha3), json_object_get_string_len(alpha3));
+    HASH_ADD_KEYPTR(hh1, isocodes->iso6392B, e->iso_639_2B_code, strlen(e->iso_639_2B_code), e);
+    HASH_ADD_KEYPTR(hh2, isocodes->iso6392T, e->iso_639_2T_code, strlen(e->iso_639_2T_code), e);
 }
 
 void FcitxIsoCodes639EntryFree(FcitxIsoCodes639Entry* entry)
@@ -101,27 +126,21 @@ void FcitxIsoCodes3166EntryFree(FcitxIsoCodes3166Entry* entry)
     free(entry);
 }
 
-
-static void IsoCodes3166HandlerStartElement(void *ctx,
-                                           const xmlChar *name,
-                                           const xmlChar **atts)
+static void IsoCodes3166Handler(FcitxIsoCodes *isocodes, json_object *entry)
 {
-    FcitxIsoCodes* isocodes = ctx;
-    if (strcmp(XMLCHAR_CAST name, "iso_3166_entry") == 0) {
-        FcitxIsoCodes3166Entry* entry = fcitx_utils_malloc0(sizeof(FcitxIsoCodes3166Entry));
-        int i = 0;
-        while(atts && atts[i*2] != 0) {
-            if (strcmp(XMLCHAR_CAST atts[i * 2], "alpha_2_code") == 0)
-                entry->alpha_2_code = strdup(XMLCHAR_CAST atts[i * 2 + 1]);
-            else if (strcmp(XMLCHAR_CAST atts[i * 2], "name") == 0)
-                entry->name = strdup(XMLCHAR_CAST atts[i * 2 + 1]);
-            i++;
-        }
-        if (!entry->name || !entry->alpha_2_code)
-            FcitxIsoCodes3166EntryFree(entry);
-        else
-            HASH_ADD_KEYPTR(hh, isocodes->iso3166, entry->alpha_2_code, strlen(entry->alpha_2_code), entry);
+    json_object *alpha2 = json_object_object_get(entry, "alpha_2");
+    json_object *name= json_object_object_get(entry, "name");
+    if (!name || json_object_get_type(name) != json_type_string) {
+        return;
     }
+    // there must be alpha3
+    if (!alpha2 || json_object_get_type(alpha2) != json_type_string) {
+        return;
+    }
+    FcitxIsoCodes3166Entry* e = fcitx_utils_new(FcitxIsoCodes3166Entry);
+    e->name = strndup(json_object_get_string(name), json_object_get_string_len(name));
+    e->alpha_2_code = strndup(json_object_get_string(alpha2), json_object_get_string_len(alpha2));
+    HASH_ADD_KEYPTR(hh, isocodes->iso3166, e->alpha_2_code, strlen(e->alpha_2_code), e);
 }
 
 FcitxIsoCodes639Entry* FcitxIsoCodesGetEntry(FcitxIsoCodes* isocodes, const char* lang)

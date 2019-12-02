@@ -1,3 +1,7 @@
+set(FCITX_PY_FILES
+  pySym.mb
+  sp.dat
+  )
 
 set(PY_ORGDATA pyPhrase.org)
 set(PY_DATA "${CMAKE_CURRENT_BINARY_DIR}/pybase.mb"

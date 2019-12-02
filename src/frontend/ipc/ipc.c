@@ -48,6 +48,7 @@ typedef struct _FcitxLastSentIMInfo
 
 typedef struct _FcitxIPCIC {
     int id;
+    char* sender;
     char path[32];
     int width;
     int height;
@@ -394,6 +395,7 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     context->privateic = ipcic;
 
     ipcic->id = ipc->maxid;
+    ipcic->sender = strdup(dbus_message_get_sender(message));
     ipc->maxid ++;
     ipcic->lastPreeditIsEmpty = false;
     ipcic->isPriv = (ipcpriv->conn != ipc->_conn);
@@ -524,6 +526,7 @@ void IPCDestroyIC(void* arg, FcitxInputContext* context)
     fcitx_utils_free(ipcic->lastSentIMInfo.uniqueName);
     fcitx_utils_free(ipcic->lastSentIMInfo.langCode);
     fcitx_utils_free(ipcic->surroundingText);
+    fcitx_utils_free(ipcic->sender);
     free(context->privateic);
     context->privateic = NULL;
 }
@@ -792,7 +795,9 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
     if (!reply && ic) {
         DBusError error;
         dbus_error_init(&error);
-        if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "EnableIC")) {
+        if (strcmp(dbus_message_get_sender(msg), GetIPCIC(ic)->sender) != 0) {
+            reply = dbus_message_new_error(msg, "org.fcitx.Fcitx.Error", "Invalid sender");
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "EnableIC")) {
             FcitxInstanceEnableIM(ipc->owner, ic, false);
             reply = dbus_message_new_method_return(msg);
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "CloseIC")) {
@@ -1408,11 +1413,11 @@ void IPCUpdateIMInfoForIC(void* arg)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(ipc->owner);
-    if (ic && (ic->contextCaps & CAPACITY_GET_IM_INFO_ON_FOCUS)) {
+    if (ic && (ic->contextCaps & CAPACITY_GET_IM_INFO_ON_FOCUS) && ic->frontendid == ipc->frontendid) {
         FcitxIM* im = FcitxInstanceGetCurrentIM(ipc->owner);
         const char* name = (im && im->strName && fcitx_utf8_check_string(im->strName)) ? im->strName : "";
         const char* uniqueName = (im && im->uniqueName && fcitx_utf8_check_string(im->uniqueName)) ? im->uniqueName : "";
-        const char* langCode = (im && im->langCode && fcitx_utf8_check_string(im->langCode)) ? im->langCode : "";
+        const char* langCode = (im && fcitx_utf8_check_string(im->langCode)) ? im->langCode : "";
 
         if (fcitx_utils_strcmp0(GetIPCIC(ic)->lastSentIMInfo.name, name) == 0 &&
             fcitx_utils_strcmp0(GetIPCIC(ic)->lastSentIMInfo.uniqueName, uniqueName) == 0 &&

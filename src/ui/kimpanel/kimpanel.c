@@ -134,6 +134,7 @@ typedef struct _FcitxKimpanelUI {
     int lastUpdateH;
     int lastCursor;
     boolean hasSetLookupTable;
+    boolean hasSetRelativeSpotRect;
 } FcitxKimpanelUI;
 
 static void* KimpanelCreate(FcitxInstance* instance);
@@ -157,7 +158,7 @@ static void KimUpdateLookupTableCursor(FcitxKimpanelUI* kimpanel, int cursor);
 static void KimShowAux(FcitxKimpanelUI* kimpanel, boolean toShow);
 static void KimShowPreedit(FcitxKimpanelUI* kimpanel, boolean toShow);
 static void KimUpdateSpotLocation(FcitxKimpanelUI* kimpanel, int x, int y);
-static void KimSetSpotRect(FcitxKimpanelUI* kimpanel, int x, int y, int w, int h);
+static void KimSetSpotRect(FcitxKimpanelUI* kimpanel, int x, int y, int w, int h, boolean relative);
 static void KimShowLookupTable(FcitxKimpanelUI* kimpanel, boolean toShow);
 static void KimUpdateLookupTable(FcitxKimpanelUI* kimpanel, char *labels[], int nLabel, char *texts[], int nText, boolean has_prev, boolean has_next);
 static void KimSetLookupTable(FcitxKimpanelUI* kimpanel,
@@ -494,12 +495,15 @@ void KimpanelMoveInputWindow(void* arg)
     int x = 0, y = 0, w = 0, h = 0;
 
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(kimpanel->owner);
+    if (!ic) {
+        return;
+    }
     FcitxInstanceGetWindowRect(kimpanel->owner, ic, &x, &y, &w, &h);
 
     if (kimpanel->version == 1)
         KimUpdateSpotLocation(kimpanel, x, y + h);
     else
-        KimSetSpotRect(kimpanel, x, y, w, h);
+        KimSetSpotRect(kimpanel, x, y, w, h, !!(ic->contextCaps & CAPACITY_RELATIVE_CURSOR_RECT));
 }
 
 void KimpanelRegisterMenu(void* arg, FcitxUIMenu* menu)
@@ -1548,7 +1552,7 @@ void KimUpdateSpotLocation(FcitxKimpanelUI* kimpanel, int x, int y)
 
 }
 
-void KimSetSpotRect(FcitxKimpanelUI* kimpanel, int x, int y, int w, int h)
+void KimSetSpotRect(FcitxKimpanelUI* kimpanel, int x, int y, int w, int h, boolean relative)
 {
     if (kimpanel->lastUpdateX == x && kimpanel->lastUpdateY == y && kimpanel->lastUpdateW == w && kimpanel->lastUpdateH == h)
         return;
@@ -1559,11 +1563,13 @@ void KimSetSpotRect(FcitxKimpanelUI* kimpanel, int x, int y, int w, int h)
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg;
 
+    boolean useRelative = kimpanel->hasSetRelativeSpotRect && relative;
+
     // create a signal and check for errors
     msg = dbus_message_new_method_call("org.kde.impanel",
                                        "/org/kde/impanel",
                                        "org.kde.impanel2",
-                                       "SetSpotRect"); // name of the signal
+                                       useRelative ? "SetRelativeSpotRect" : "SetSpotRect"); // name of the signal
     if (NULL == msg) {
         FcitxLog(DEBUG, "Message Null");
         return;
@@ -1708,6 +1714,9 @@ void KimpanelIntrospectCallback(DBusPendingCall *call, void *data)
                 if (strstr(s, "SetLookupTable")) {
                     kimpanel->hasSetLookupTable = true;
                 }
+                if (strstr(s, "SetRelativeSpotRect")) {
+                    kimpanel->hasSetRelativeSpotRect = true;
+                }
             }
         }
         dbus_message_unref(msg);
@@ -1721,6 +1730,7 @@ void KimpanelSuspend(void* arg)
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
     kimpanel->version = 1;
     kimpanel->hasSetLookupTable = false;
+    kimpanel->hasSetRelativeSpotRect = false;
 }
 
 

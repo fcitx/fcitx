@@ -98,12 +98,14 @@ boolean UnicodePreFilter(void* arg, FcitxKeySym sym, unsigned int state,
     INPUT_RETURN_VALUE retVal = IRV_TO_PROCESS;
     do {
         UnicodeModule *uni = arg;
-        if (!uni->enable)
-            break;
+        if (!uni->enable) {
+            return false;
+        }
         FcitxInstance *instance = uni->owner;
         FcitxInputState *input = FcitxInstanceGetInputState(instance);
         FcitxGlobalConfig *fc = FcitxInstanceGetGlobalConfig(instance);
         FcitxCandidateWordList *candList;
+        FcitxCandidateWord *candWord;
         candList = FcitxInputStateGetCandidateList(input);
 
         FcitxCandidateWordSetPageSize(candList, fc->iMaxCandWord);
@@ -132,6 +134,41 @@ boolean UnicodePreFilter(void* arg, FcitxKeySym sym, unsigned int state,
             }
         } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
             retVal = IRV_CLEAN;
+        } else if (FcitxHotkeyIsHotKey(sym, state, fc->nextWord)) {
+            candWord = FcitxCandidateWordGetFocus(candList, true);
+            candWord = FcitxCandidateWordGetNext(candList, candWord);
+            if (!candWord) {
+                FcitxCandidateWordSetPage(candList, 0);
+                candWord = FcitxCandidateWordGetFirst(candList);
+            } else {
+                FcitxCandidateWordSetFocus(
+                    candList, FcitxCandidateWordGetIndex(candList, candWord));
+            }
+            if (candWord) {
+                FcitxCandidateWordSetType(candWord, MSG_CANDIATE_CURSOR);
+                retVal = IRV_FLAG_UPDATE_INPUT_WINDOW;
+            }
+        } else if (FcitxHotkeyIsHotKey(sym, state, fc->prevWord)) {
+            candWord = FcitxCandidateWordGetFocus(candList, true);
+            candWord = FcitxCandidateWordGetPrev(candList, candWord);
+            if (!candWord) {
+                FcitxCandidateWordSetPage(
+                    candList, FcitxCandidateWordPageCount(candList) - 1);
+                candWord = FcitxCandidateWordGetLast(candList);
+            } else {
+                FcitxCandidateWordSetFocus(
+                    candList, FcitxCandidateWordGetIndex(candList, candWord));
+            }
+            if (candWord) {
+                FcitxCandidateWordSetType(candWord, MSG_CANDIATE_CURSOR);
+                retVal = IRV_FLAG_UPDATE_INPUT_WINDOW;
+            }
+        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
+            candWord = FcitxCandidateWordGetFocus(candList, true);
+            if (candWord) {
+                retVal = FcitxCandidateWordChooseByTotalIndex(
+                    candList, FcitxCandidateWordGetIndex(candList, candWord));
+            }
         }
 
         if (retVal == IRV_TO_PROCESS) {
@@ -151,9 +188,10 @@ boolean UnicodePreFilter(void* arg, FcitxKeySym sym, unsigned int state,
         }
     } while(0);
 
+    if (retVal == IRV_TO_PROCESS) {
+        retVal = IRV_DO_NOTHING;
+    }
     *r = retVal;
-    if (retVal == IRV_TO_PROCESS)
-        return false;
     return true;
 }
 
@@ -194,6 +232,10 @@ INPUT_RETURN_VALUE UnicodeGetCandWords(UnicodeModule* uni)
         FcitxCandidateWordAppend(candList, &candWord);
     }
     utarray_free(result);
+    if (FcitxCandidateWordGetListSize(candList)) {
+        FcitxCandidateWordSetType(FcitxCandidateWordGetFirst(candList),
+                                  MSG_CANDIATE_CURSOR);
+    }
     return IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
 

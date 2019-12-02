@@ -98,7 +98,7 @@ extern "C" {
     void *FcitxModuleInvokeOnAddon(FcitxAddon *addon, FcitxModuleFunction func,
                                    FcitxModuleFunctionArg *args);
     /**
-     * invode inter module function wiht addon pointer, returns NULL when fails (the function itself can also return NULL)
+     * invode inter module function with addon pointer, returns NULL when fails (the function itself can also return NULL)
      *
      * @param addon addon
      * @param functionId function index

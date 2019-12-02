@@ -430,7 +430,7 @@ call_data        points to a IMProtocol structure.
 of preediting start-keys for Dynamic Event Flow model. The IMOnKeysList
 IMValue is mandatary for IMserver to support Dynamic Event Flow Model,
 so that the IMlibrary can send the IMserver a request to start
-preediting with the apperance of one of these registered on-keys.
+preediting with the appearance of one of these registered on-keys.
    If the IMOnKeysList is left unspecified, no default will be provided,
 and Static Event Flow model will be used.
    XIMTriggerKeys structure is defined by IMdkit as follows:
@@ -452,7 +452,7 @@ typedef struct {
 of preediing end-keys for Dynamic Event Flow model. The IMOffKeysList
 IMValue is optional for IMserver to support Dynamic Event Flow Model.
    When it is specified, the IMlibrary can send the IMserver a request
-to stop preediting with the apperance of one of these registered
+to stop preediting with the appearance of one of these registered
 off-keys, while it's unspecified, the IMserver calls IMPreeditEnd to
 notify the IMlibrary to stop preeditting when the IMserver would like to
 stop preeditring.
@@ -532,9 +532,9 @@ the X Window System, Version 11", which contains in X11R5 contribuion.
         front-end type, which key events are always passed to both
         IMserver and IMlibrary. Both of them recognize registered keys.
   XIMP_SYNC_BE_TYPE1
-        XIMP_BE_TYPE1 & KeyPress is transfered synchronously.
+        XIMP_BE_TYPE1 & KeyPress is transferred synchronously.
   XIMP_SYNC_BE_TYPE2
-        XIMP_BE_TYPE2 & KeyPress is transfered synchronously.
+        XIMP_BE_TYPE2 & KeyPress is transferred synchronously.
 
 XIMPExtension
 

@@ -44,6 +44,10 @@
 #include "xkb.h"
 #include "xkb-internal.h"
 #include "rules.h"
+#ifdef _ENABLE_DBUS
+#include "module/xkbdbus/fcitx-xkbdbus.h"
+#endif
+
 
 #ifndef XKB_RULES_XML_FILE
 #define XKB_RULES_XML_FILE "/usr/share/X11/xkb/rules/evdev.xml"
@@ -164,6 +168,19 @@ boolean FcitxXkbSupported(FcitxXkb* xkb, int* xkbOpcode)
     return true;
 }
 
+static void FcitxXkbFixInconsistentLayoutVariant(FcitxXkb *xkb) {
+    while (utarray_len(xkb->defaultVariants) <
+           utarray_len(xkb->defaultLayouts)) {
+        const char* dummy = "";
+        utarray_push_back(xkb->defaultVariants, &dummy);
+    }
+
+    while (utarray_len(xkb->defaultVariants) >
+           utarray_len(xkb->defaultLayouts)) {
+        utarray_pop_back(xkb->defaultVariants);
+    }
+}
+
 static inline void
 FcitxXkbClearVarDefsRec(XkbRF_VarDefsRec *vdp)
 {
@@ -196,58 +213,34 @@ static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
         if (rulesName[0] == '/') {
             fcitx_utils_alloc_cat_str(rulesFile, rulesName, ".xml");
         } else {
-            int count = 0, i = 0;
-            const char* base = XLIBDIR;
-            char *parent_to_free = NULL;
-            while (base[i]) {
-                if (base[i] == '/')
-                    count++;
-                i++;
-            }
-
-            /**
-             * guess X11 data base directory.
-             **/
-            if (count >= 3) {
-                // .../usr/lib/X11 -> /usr/share/X11/xkb vs
-                // .../usr/X11/lib -> /usr/X11/share/X11/xkb
-                const char* delta = StringEndsWith(base, "X11") ?
-                    "/../../share/X11" : "/../share/X11";
-                fcitx_utils_alloc_cat_str(parent_to_free, base, delta);
-                if(!fcitx_utils_isdir(parent_to_free)) {
-                    // fallback to ${base}/X11
-                    fcitx_utils_set_cat_str(parent_to_free, base, "/X11");
-                    if(!fcitx_utils_isdir(parent_to_free)) {
-                        free(parent_to_free);
-                        parent_to_free = NULL;
-                    }
-                }
-            }
-            const char *parent_path;
-            if (parent_to_free) {
-                /**
-                 * Found a existing dir, simplify it.
-                 * Using realpath() on rules files' name can change the base
-                 * name of the file (due to symlink), so it is only safe
-                 * to do it for directory's name. T-T..
-                 **/
-                char *tmp = realpath(parent_to_free, NULL);
-                parent_path = tmp;
-                free(parent_to_free);
-                parent_to_free = tmp;
-            } else {
-                // last fallback for known rules name.
-                parent_path = "/usr/share/X11";
-            }
-            fcitx_utils_alloc_cat_str(rulesFile, parent_path,
-                                      "/xkb/rules/", rulesName, ".xml");
-            fcitx_utils_free(parent_to_free);
+            fcitx_utils_alloc_cat_str(rulesFile, XKEYBOARDCONFIG_XKBBASE,
+                                      "/rules/", rulesName, ".xml");
         }
         free(rulesName);
     } else {
         return strdup(XKB_RULES_XML_FILE);
     }
     return rulesFile;
+}
+
+UT_array*
+splitAndKeepEmpty(UT_array *list,
+                  const char* str, const char *delm)
+{
+    const char *lastPos, *pos;
+    lastPos = str;
+    // even lastPos points to '\0" it will return something meaningful.
+    pos = lastPos + strcspn(lastPos, delm);
+
+    while (*pos || *lastPos) {
+        fcitx_utils_string_list_append_len(list, lastPos, pos - lastPos);
+        if (*pos == '\0') {
+            break;
+        }
+        lastPos = pos + 1;
+        pos = lastPos + strcspn(lastPos, delm);
+    }
+    return list;
 }
 
 static void
@@ -271,17 +264,19 @@ FcitxXkbInitDefaultLayout(FcitxXkb* xkb)
     if (!vd.model || !vd.layout)
         FcitxLog(WARNING, "Could not get group layout from X property");
     if (vd.layout) {
-        fcitx_utils_append_split_string(xkb->defaultLayouts, vd.layout, ",");
+        splitAndKeepEmpty(xkb->defaultLayouts, vd.layout, ",");
     }
     if (vd.model) {
-        fcitx_utils_append_split_string(xkb->defaultModels, vd.model, ",");
+        splitAndKeepEmpty(xkb->defaultModels, vd.model, ",");
     }
     if (vd.options) {
-        fcitx_utils_append_split_string(xkb->defaultOptions, vd.options, ",");
+        splitAndKeepEmpty(xkb->defaultOptions, vd.options, ",");
     }
     if (vd.variant) {
-        fcitx_utils_append_split_string(xkb->defaultVariants, vd.variant, ",");
+        splitAndKeepEmpty(xkb->defaultVariants, vd.variant, ",");
     }
+
+    FcitxXkbFixInconsistentLayoutVariant(xkb);
 
     FcitxXkbClearVarDefsRec(&vd);
 }
@@ -313,7 +308,7 @@ FcitxXkbSetRules(FcitxXkb* xkb, const char *rules_file, const char *model,
     if (rules == NULL) {
         char *rulesPath = FcitxXkbFindXkbRulesFile(xkb);
         size_t rulesBaseLen = strlen(rulesPath) - strlen(".xml");
-        if (strcmp(rulesPath + rulesBaseLen, ".xml") == 0) {
+        if (strlen(rulesPath) > strlen(".xml") && strcmp(rulesPath + rulesBaseLen, ".xml") == 0) {
             rulesPath[rulesBaseLen] = '\0';
         }
         rules = XkbRF_Load(rulesPath, "C", True, True);
@@ -541,16 +536,7 @@ static void FcitxXkbAddNewLayout(FcitxXkb* xkb, const char* layoutString,
     if (!layoutString)
         return;
 
-    while (utarray_len(xkb->defaultVariants) <
-           utarray_len(xkb->defaultLayouts)) {
-        const char* dummy = "";
-        utarray_push_back(xkb->defaultVariants, &dummy);
-    }
-
-    while (utarray_len(xkb->defaultVariants) >
-           utarray_len(xkb->defaultLayouts)) {
-        utarray_pop_back(xkb->defaultVariants);
-    }
+    FcitxXkbFixInconsistentLayoutVariant(xkb);
 
     if (toDefault) {
         if (index == 0) {
@@ -594,7 +580,9 @@ FcitxXkbFindOrAddLayout(FcitxXkb *xkb, const char *layout, const char *variant, 
         return index;
     if (!(index < 0 || (index > 0 && toDefault)))
         return index;
-    FcitxXkbAddNewLayout(xkb, layout, variant, toDefault, index);
+    if (!xkb->blockOverride) {
+        FcitxXkbAddNewLayout(xkb, layout, variant, toDefault, index);
+    }
     FcitxXkbInitDefaultLayout(xkb);
     return FcitxXkbFindLayoutIndex(xkb, layout, variant);
 }
@@ -607,7 +595,18 @@ FcitxXkbSetLayoutByName(FcitxXkb *xkb, const char *layout, const char *variant, 
     if (index < 0) {
         return false;
     }
-    XkbLockGroup(xkb->dpy, XkbUseCoreKbd, index);
+#ifdef _ENABLE_DBUS
+    // xkbdbus should be gnone at this point, don't touch the code.
+    if (FcitxInstanceGetIsDestroying(xkb->owner)) {
+        XkbLockGroup(xkb->dpy, XkbUseCoreKbd, index);
+        return false;
+    }
+    FcitxAddon *addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(xkb->owner), "fcitx-xkbdbus");
+    if (!addon || !addon->addonInstance || !FcitxXkbDBusLockGroupByHelper(xkb->owner, index))
+#endif
+    {
+        XkbLockGroup(xkb->dpy, XkbUseCoreKbd, index);
+    }
     return true;
 }
 
@@ -705,8 +704,10 @@ static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
                 }
             }
         }
-        if (!FcitxXkbSetLayoutByName(xkb, layoutString, variantString, false)) {
-            FcitxXkbRetrieveCloseGroup(xkb);
+        if (layoutString) {
+            if (!FcitxXkbSetLayoutByName(xkb, layoutString, variantString, false)) {
+                FcitxXkbRetrieveCloseGroup(xkb);
+            }
         }
         if (s) {
             fcitx_utils_free_string_list(s);
@@ -833,10 +834,13 @@ static void FcitxXkbScheduleRefresh(void* arg) {
     FcitxUIUpdateInputWindow(xkb->owner);
     FcitxXkbInitDefaultLayout(xkb);
     // we shall now ignore all outside world change, apply only if we do it on our own
+    xkb->blockOverride = true;
+    FcitxXkbCurrentStateChanged(xkb);
     if (xkb->waitingForRefresh) {
         xkb->waitingForRefresh = false;
         FcitxXkbApplyCustomScript(xkb);
     }
+    xkb->blockOverride = false;
 }
 
 static boolean FcitxXkbEventHandler(void* arg, XEvent* event)

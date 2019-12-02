@@ -50,6 +50,7 @@ typedef struct _FcitxXkb
     struct _LayoutOverride* layoutOverride;
     unsigned long lastSerial;
     boolean waitingForRefresh;
+    boolean blockOverride;
 } FcitxXkb;
 
 

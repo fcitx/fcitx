@@ -58,7 +58,7 @@ extern "C" {
     #define CONTEXT_ALTERNATIVE_NEXTPAGE_KEY "CONTEXT_ALTERNATIVE_NEXTPAGE_KEY"
     /** current input method language */
     #define CONTEXT_IM_LANGUAGE "CONTEXT_IM_LANGUAGE"
-    /** current input method prefered layout, requires fcitx-xkb to really works */
+    /** current input method preferred layout, requires fcitx-xkb to really works */
     #define CONTEXT_IM_KEYBOARD_LAYOUT "CONTEXT_IM_KEYBOARD_LAYOUT"
     /** disable built-in autoeng module */
     #define CONTEXT_DISABLE_AUTOENG "CONTEXT_DISABLE_AUTOENG"

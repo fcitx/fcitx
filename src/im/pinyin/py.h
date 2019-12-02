@@ -173,7 +173,7 @@ typedef struct _FcitxPinyinState {
     char strPYRemindMap[MAX_WORDS_USER_INPUT * 2 + 1];
 
     PY_SELECTED pySelected[MAX_WORDS_USER_INPUT + 1];
-    uint iPYSelected;
+    unsigned int iPYSelected;
 
     char strPYAuto[MAX_WORDS_USER_INPUT * UTF8_MAX_LENGTH + 1];
     char strPYAutoMap[MAX_WORDS_USER_INPUT * 2 + 1];

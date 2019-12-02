@@ -96,7 +96,6 @@ const char* dbus_menu_interface =
     "<arg name=\"eventId\" type=\"s\" direction=\"in\"/>"
     "<arg name=\"data\" type=\"v\" direction=\"in\"/>"
     "<arg name=\"timestamp\" type=\"u\" direction=\"in\"/>"
-    "<annotation name=\"org.freedesktop.DBus.Method.NoReply\" value=\"true\"/>"
     "</method>"
     "<method name=\"GetProperty\">"
     "<arg type=\"v\" direction=\"out\"/>"
@@ -161,9 +160,8 @@ DBusHandlerResult FcitxDBusMenuEventHandler(DBusConnection* connection, DBusMess
         reply = dbus_message_new_method_return(message);
         dbus_message_append_args(reply, DBUS_TYPE_STRING, &dbus_menu_interface, DBUS_TYPE_INVALID);
     } else if (dbus_message_is_method_call(message, DBUS_MENU_IFACE, "Event")) {
-        /* this is no reply */
         FcitxDBusMenuEvent(notificationitem, message);
-        return DBUS_HANDLER_RESULT_HANDLED;
+        reply = dbus_message_new_method_return(message);
     } else if (dbus_message_is_method_call(message, DBUS_MENU_IFACE, "GetProperty")) {
         reply = FcitxDBusMenuGetProperty(notificationitem, message);
     } else if (dbus_message_is_method_call(message, DBUS_MENU_IFACE, "GetLayout")) {
