@@ -47,7 +47,7 @@ static const UT_icd ut_int32_icd = {
 };
 
 const char* dbus_menu_interface =
-    "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\""
+    "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\" "
     "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">"
     "<node>"
     "<interface name=\"" DBUS_INTERFACE_INTROSPECTABLE "\">"
