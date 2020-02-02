@@ -675,7 +675,8 @@ void FcitxUIOnInputFocus(FcitxInstance* instance)
 
     boolean changed;
 
-    if (instance->lastIC == instance->CurrentIC && instance->delayedIM) {
+    if ((instance->lastIC == instance->CurrentIC || instance->config->shareState == ShareState_All)
+            && instance->delayedIM) {
         FcitxInstanceSwitchIMByName(instance, instance->delayedIM);
         changed = true;
     } else {
