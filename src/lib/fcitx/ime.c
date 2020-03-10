@@ -592,6 +592,7 @@ INPUT_RETURN_VALUE _DoActivate(FcitxInstance* instance)
 {
     if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
         FcitxInstanceEnableIM(instance, instance->CurrentIC, false);
+        FcitxInstanceShowInputSpeed(instance, false);
         return IRV_DO_NOTHING;
     }
     return IRV_TO_PROCESS;
@@ -601,6 +602,7 @@ INPUT_RETURN_VALUE _DoDeactivate(FcitxInstance* instance)
 {
     if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) {
         FcitxInstanceCloseIM(instance, instance->CurrentIC);
+        FcitxInstanceShowInputSpeed(instance, false);
         return IRV_DO_NOTHING;
     }
     return IRV_TO_PROCESS;
