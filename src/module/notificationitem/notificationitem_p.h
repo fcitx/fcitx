@@ -24,6 +24,11 @@
 #include "fcitx/instance.h"
 #include "notificationitem.h"
 
+typedef struct _MenuIdSet {
+    int id;
+    UT_hash_handle hh;
+} MenuIdSet;
+
 typedef struct _FcitxNotificationItem {
     FcitxInstance* owner;
     DBusConnection* conn;
@@ -36,9 +41,14 @@ typedef struct _FcitxNotificationItem {
     int pendingActionId;
     boolean isUnity;
     char layoutNameBuffer[3];
+    MenuIdSet *ids;
 } FcitxNotificationItem;
 
 boolean FcitxDBusMenuCreate(FcitxNotificationItem* notificationitem);
+
+MenuIdSet* MenuIdSetAdd(MenuIdSet *ids, int id);
+boolean MenuIdSetContains(MenuIdSet *ids, int id);
+MenuIdSet* MenuIdSetClear(MenuIdSet* ids);
 
 static inline boolean CheckAddPrefix( const char** name) {
     boolean result = !((*name)[0] == '\0' || (*name)[0] == '/' || (*name)[0] == '@');

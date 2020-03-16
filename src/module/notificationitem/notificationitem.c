@@ -179,6 +179,7 @@ void* FcitxNotificationItemCreate(FcitxInstance* instance)
 {
     FcitxNotificationItem* notificationitem = fcitx_utils_new(FcitxNotificationItem);
     notificationitem->owner = instance;
+    notificationitem->revision = 2;
     DBusError err;
     dbus_error_init(&err);
     do {
@@ -263,6 +264,7 @@ void FcitxNotificationItemDestroy(void* arg)
         dbus_connection_unregister_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ);
         dbus_connection_unregister_object_path(notificationitem->conn, "/MenuBar");
     }
+    notificationitem->ids = MenuIdSetClear(notificationitem->ids);
 
     free(notificationitem);
 }

@@ -141,6 +141,34 @@ const FcitxDBusPropertyTable dbusMenuPropertyTable[] = {
     { NULL, NULL, NULL, NULL, NULL }
 };
 
+MenuIdSet* MenuIdSetAdd(MenuIdSet *ids, int id) {
+    MenuIdSet* item = NULL;
+    HASH_FIND_INT(ids, &id, item);
+    if (item) {
+        return ids;
+    }
+    item = fcitx_utils_new(MenuIdSet);
+    item->id = id;
+    HASH_ADD_INT(ids, id, item);
+    return ids;
+}
+
+boolean MenuIdSetContains(MenuIdSet *ids, int id) {
+    MenuIdSet* item = NULL;
+    HASH_FIND_INT(ids, &id, item);
+    return item != NULL;
+}
+
+MenuIdSet* MenuIdSetClear(MenuIdSet* ids) {
+    MenuIdSet* cur = NULL;
+    while (ids) {
+        cur = ids;
+        HASH_DEL(ids, cur);
+        free(cur);
+    }
+    return NULL;
+}
+
 boolean FcitxDBusMenuCreate(FcitxNotificationItem* notificationitem)
 {
     DBusObjectPathVTable fcitxIPCVTable = {NULL, &FcitxDBusMenuEventHandler, NULL, NULL, NULL, NULL };
@@ -285,6 +313,10 @@ void FcitxDBusMenuEvent(FcitxNotificationItem* notificationitem, DBusMessage* me
             break;
         dbus_message_iter_get_basic(&args, &type);
         dbus_message_iter_next(&args);
+        if (id == 0 && strcmp(type, "closed") == 0) {
+            notificationitem->ids = MenuIdSetClear(notificationitem->ids);
+            break;
+        }
         if (strcmp(type, "clicked") != 0)
             break;
         /* TODO parse variant, but no one actually use this */
@@ -472,6 +504,7 @@ void FcitxDBusMenuFillLayooutItem(FcitxNotificationItem* notificationitem, int32
 
     /* using != 0 can make -1 recursive to infinite */
     if (depth != 0) {
+        notificationitem->ids = MenuIdSetAdd(notificationitem->ids, id);
         int32_t menu = ACTION_MENU(id);
         int32_t index = ACTION_INDEX(id);
 
@@ -709,14 +742,14 @@ DBusMessage* FcitxDBusMenuAboutToShow(FcitxNotificationItem* notificationitem, D
     dbus_error_init(&err);
     if (dbus_message_get_args(message, &err, DBUS_TYPE_INT32, &id, DBUS_TYPE_INVALID)) {
         reply = dbus_message_new_method_return(message);
-        /* for fcitx, we always return true */
         dbus_bool_t needUpdate = TRUE;
+        if (id == 0) {
+            needUpdate = TRUE;
+            notificationitem->ids = MenuIdSetClear(notificationitem->ids);
+        } else {
+            needUpdate = !MenuIdSetContains(notificationitem->ids, id);
+        }
         dbus_message_append_args(reply, DBUS_TYPE_BOOLEAN, &needUpdate, DBUS_TYPE_INVALID);
-        notificationitem->revision++;
-        DBusMessage* sig = dbus_message_new_signal("/MenuBar", DBUS_MENU_IFACE, "LayoutUpdated");
-        dbus_message_append_args(sig, DBUS_TYPE_UINT32, &notificationitem->revision, DBUS_TYPE_INT32, &id, DBUS_TYPE_INVALID);
-        dbus_connection_send(notificationitem->conn, sig, NULL);
-        dbus_message_unref(sig);
     } else {
         reply = FcitxDBusPropertyUnknownMethod(message);
     }
