@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-04-03 00:02-0700\n"
-"PO-Revision-Date: 2020-04-02 15:46+0000\n"
+"POT-Creation-Date: 2020-04-04 00:02-0700\n"
+"PO-Revision-Date: 2020-04-03 14:46+0000\n"
 "Last-Translator: MarongHappy <daemul72@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: src/im/table/table.c:1403
 msgid " Ctrl+Delete To Delete"
-msgstr "Ctrl+Delete로 지우기"
+msgstr "Ctrl+Delete로 삭제"
 
 #: data/script/fcitx-diagnose.sh:850
 msgid "${1} Environment Variables:"
@@ -325,7 +325,7 @@ msgstr "자동 영어 모드"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:9
 msgid "Auto English Trigger Word"
-msgstr "자동 영어 발동 단어"
+msgstr "자동 영어 전환 단어"
 
 #: src/im/table/table.desc:88
 msgid "Auto Phrase"
@@ -333,7 +333,7 @@ msgstr "자동 문구"
 
 #: src/im/table/table.desc:98
 msgid "Auto Phrase Length"
-msgstr "자동 문구 길이"
+msgstr "자동 문구 문자 수"
 
 #: src/im/table/table.desc:103
 msgid "Auto Phrase Phrase"
@@ -407,7 +407,7 @@ msgstr "소켓을 열수 없음 %s: %s"
 
 #: src/ui/classic/skin.desc:41
 msgid "Candidate Index Color"
-msgstr "일련번호 색 후보"
+msgstr "후보 일련번호 색상"
 
 #: src/im/table/table.desc:117
 msgid "Candidate Table Layout"
@@ -578,7 +578,7 @@ msgstr "변환 키 선택"
 
 #: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
-msgstr "지우기위해 문장을 선택하고, 취소를 위해서 ESC를 누르세요"
+msgstr "삭제할 문구를 선택하고, Esc 키를 눌러 취소하십시오"
 
 #: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
@@ -847,7 +847,7 @@ msgstr "기본 입력기"
 
 #: src/im/table/fcitx-table.desc:9
 msgid "Delete Phrase"
-msgstr "문구 지우기"
+msgstr "문구 삭제"
 
 #: data/addon.desc:43
 msgid "Dependency"
@@ -1161,15 +1161,15 @@ msgstr "사전 편집을 첫 후보로 표시"
 
 #: src/im/pinyin/fcitx-pinyin.desc:140
 msgid "Fix misstype gn/ng"
-msgstr "잘못 입력된 gn/ng 고침"
+msgstr "잘못 입력된 gn/ng 수정"
 
 #: src/im/pinyin/fcitx-pinyin.desc:145
 msgid "Fix misstype v/u like jv, qv, xv, yv"
-msgstr "jv, qv, xv, yv 등의 잘못 입력된 v/u 고침"
+msgstr "jv, qv, xv, yv 등의 잘못 입력된 v/u 수정"
 
 #: src/im/pinyin/fcitx-pinyin.desc:18
 msgid "Fix preedit cursor at head"
-msgstr "사전편집 커서를 앞에 고정"
+msgstr "사전편집 커서를 앞에 수정"
 
 #: src/ui/classic/fcitx-classic-ui.desc:23
 msgid "Font"
@@ -1457,7 +1457,7 @@ msgstr "자주사용하는 단어 입력하는 단축키"
 
 #: src/im/pinyin/fcitx-pinyin.desc:53
 msgid "Hotkey of Delete User Phrase"
-msgstr "사용자 문장을 지우는 단축키"
+msgstr "사용자 문구 삭제 단축키"
 
 #: src/im/pinyin/fcitx-pinyin.desc:48
 msgid "Hotkey of Deleting Frequent Word"
@@ -1835,27 +1835,27 @@ msgstr "수학"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:23
 #: src/module/quickphrase/fcitx-quickphrase.desc:36
 msgid "Maximum hint length"
-msgstr "최대 힌트 길이"
+msgstr "최대 힌트 문자 수"
 
 #: src/module/clipboard/fcitx-clipboard.desc:19
 msgid "Maximum length of each candidate word"
-msgstr "각 후보 단어의 최대 길이"
+msgstr "각 후보 단어의 최대 문자 수"
 
 #: src/im/keyboard/fcitx-keyboard.desc:32
 msgid "Maximum length of spell hint list"
-msgstr "철자 힌트 목록의 최대 길이"
+msgstr "철자 힌트 목록의 최대 문자 수"
 
 #: src/module/autoeng/fcitx-autoeng.desc:23
 msgid "Maximum length of spell hint list for Auto English"
-msgstr "자동 영어 입력을 위한 철자 힌트 목록의 최대 길이"
+msgstr "자동 영어 입력을 위한 철자 힌트 목록의 최대 문자 수"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 msgid "Maximum length of spell hint list for Pinyin Enhance"
-msgstr "병음 개선을 위한 철자 힌트 목록의 최대 길이"
+msgstr "병음 개선을 위한 철자 힌트 목록의 최대 문자 수"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:37
 msgid "Maximum length of spell hint list for Quick Phrase"
-msgstr "Quick Phrase를 위한 철자 힌트 목록의 최대 길이"
+msgstr "상용구용 철자 힌트 목록의 최대 문자 수"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
 msgid "Maximum results from stroke input."
@@ -1879,24 +1879,24 @@ msgstr "오래된 파일 경로를 새로운 곳으로 이전하기"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
-msgstr "필획 입력 기능이 시작되는 최소 입력 문자 수 (끄기: -1)"
+msgstr "필획 입력을 전환할 최소 입력 문자 수 (끄기: -1)"
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
-msgstr "단어 힌트 발생 문자열 최소 길이"
+msgstr "단어 힌트 전환할 최소 문자 수"
 
 #: src/im/table/table.desc:59
 msgid ""
 "Minimum length trigger auto send candidate when there will be no candidate"
-msgstr "후보가 없을 것 같을 때 후보 단어를 자동 입력하기 위한 최저 문자수"
+msgstr "후보가 없을 때, 전환 자동 전송 후보 최소 문자 수"
 
 #: src/im/table/table.desc:54
 msgid "Minimum length trigger auto send candidate word when only one candidate"
-msgstr "하나의 후보만 있을 때 후보 단어를 자동 입력하기 위한 최저 문자수"
+msgstr "하나의 후보만 있을 때, 전환 자동 전송 후보 단어 최소 문자 수"
 
 #: src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
-msgstr "누락된 입력, 문자열로 간주"
+msgstr "누락된 유형, 문자열로 간주"
 
 #: data/addon.desc:20
 msgid "Module"
@@ -2096,7 +2096,7 @@ msgstr "병음 개선"
 
 #: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
-msgstr "병음 색인 매직 번호가 일치하지 않음"
+msgstr "병음 일련번호 매직 번호가 일치하지 않음"
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
@@ -2152,12 +2152,14 @@ msgstr "선호하는 Enchant 제공자"
 #: src/im/pinyin/py.c:769
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
-msgstr "%s을 자주 사용하는 목록에서 지우려면 1을 누르세요 (취소는 ESC)"
+msgstr ""
+"자주 사용하는 목록에서 %s을(를) 삭제하려면 1 키를 누르십시오 (취소는 ESC)"
 
 #: src/im/pinyin/py.c:771
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
-msgstr "%s을 자주 사용하는 목록에서 지우려면 1-%d을 누르세요 (취소는 ESC)"
+msgstr ""
+"자주 사용하는 목록에서 %s을(를) 삭제하려면 1-%d키를 누르십시오 (취소는 ESC)"
 
 #: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:456
 msgid "Press Enter to input text"
@@ -2165,7 +2167,7 @@ msgstr "텍스트를 입력하기위해 엔터를 누르세요"
 
 #: src/im/pinyin/py.c:729
 msgid "Press index to delete user phrase (ESC for cancel)"
-msgstr "사용자 문구를 삭제하려면 일련번호를 누르세요 (취소는 ESC)"
+msgstr "사용자 문구를 삭제하려면 일련번호를 누르십시오 (취소는 ESC)"
 
 #: src/im/pinyin/py.c:743
 msgid "Press number to make word in frequent list"
@@ -2348,7 +2350,9 @@ msgstr "오른쪽 Super"
 msgid ""
 "Roughly the same length with this number of english letters, the actual "
 "length depends on the font and the content"
-msgstr "글꼴이나 내용에 따라 달라지지만, 다음 영어 문자 수와 유사한 길이가 됨"
+msgstr ""
+"이 영어 글자 수와 대략 같은 문자 수이며 실제 문자 수는 글꼴과 내용에 따라 다"
+"릅니다"
 
 #: src/im/pinyin/fcitx-pinyin.desc:71
 msgid "Rule of Candidate Phrase Order"
@@ -2440,7 +2444,7 @@ msgstr "비활성 모드로 전환 시 가공되지 않은 문자열 전송"
 
 #: data/config.desc:172
 msgid "Share State Among Window"
-msgstr "창 사이에 상태 공유"
+msgstr "창 사이의 공유 상태"
 
 #: data/addon.desc:36
 msgid "SharedLibrary"
@@ -2641,7 +2645,7 @@ msgstr "상태 패널 위치 Y"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
-msgstr "필획 입력 문자 수"
+msgstr "필획 입력 전환 문자 수"
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
@@ -2874,7 +2878,7 @@ msgstr "병음 약어를 영어로 취급"
 
 #: data/config.desc:5
 msgid "Trigger Input Method"
-msgstr "입력기 전환"
+msgstr "입력기 변환"
 
 #: src/module/clipboard/fcitx-clipboard.desc:25
 msgid "Trigger Key for Clipboard History List"
@@ -2886,7 +2890,7 @@ msgstr "QuickPhrase에 대한 트리거 키"
 
 #: data/addon.desc:38
 msgid "Type"
-msgstr "입력"
+msgstr "유형"
 
 #: data/config.desc:186
 msgid "Type half width Punc After a Number"
@@ -2924,7 +2928,7 @@ msgstr "고유명칭"
 #: src/lib/fcitx-config/fcitx-config.c:406
 #, c-format
 msgid "Unknown type, take it as string: %s"
-msgstr "알 수 없는 입력, 문자열로 간주: %s"
+msgstr "알 수 없는 유형, 문자열로 간주: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
@@ -2984,7 +2988,7 @@ msgstr "시스템 트레이 아이콘 사용"
 
 #: src/im/pinyin/fcitx-pinyin.desc:23
 msgid "Use V to trigger quickphrase"
-msgstr "상용구 변환을 위해 V 사용"
+msgstr "상용구 전환을 위해 V 사용"
 
 #: data/profile.desc:7
 msgid "Use Wide Punctuation"
