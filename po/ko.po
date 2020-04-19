@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-04-04 00:02-0700\n"
-"PO-Revision-Date: 2020-04-03 14:46+0000\n"
+"POT-Creation-Date: 2020-04-19 00:02-0700\n"
+"PO-Revision-Date: 2020-04-19 06:45+0000\n"
 "Last-Translator: MarongHappy <daemul72@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -83,7 +83,7 @@ msgstr "/XIM"
 
 #: src/lib/fcitx/ime.c:1803
 msgid "/min  Time Used: "
-msgstr "/분, 사용 시간:"
+msgstr "/분,  사용된 시간: "
 
 #: src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
@@ -113,7 +113,7 @@ msgstr "<할당 안됨>"
 msgid ""
 "A different value from the global one may be useful when using horizontal "
 "candidate list"
-msgstr "수평 후보 목록 사용 시 전역값과는 다른 값이 필요할 수 있습니다."
+msgstr "수평 후보 목록을 사용할 때 전역 값과 다른 값이 유용할 수 있음"
 
 #: src/im/pinyin/fcitx-pinyin.desc:7
 msgid "ABC"
@@ -835,7 +835,7 @@ msgstr "기본 입력기 상태"
 
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
-msgstr "기본 Shuangpin 스키마"
+msgstr "기본 이중병음 스키마"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
@@ -843,7 +843,7 @@ msgstr "기본 철자 힌트 백엔드 순서"
 
 #: data/script/fcitx-diagnose.sh:1575
 msgid "Default input methods:"
-msgstr "기본 입력기"
+msgstr "기본 입력기:"
 
 #: src/im/table/fcitx-table.desc:9
 msgid "Delete Phrase"
@@ -1218,7 +1218,7 @@ msgstr "${1}개의 활성화된 사용자 인터페이스 부가기능 발견:"
 
 #: data/script/fcitx-diagnose.sh:919
 msgid "Found ${1} fcitx process:"
-msgstr "${1}개의 fcitx 프로세스를 발견하였습니다."
+msgstr "${1}개의 fcitx 프로세스를 발견하였습니다:"
 
 #: data/script/fcitx-diagnose.sh:917
 msgid "Found ${1} fcitx processes:"
@@ -1579,7 +1579,7 @@ msgstr "활성 상태일 때만 입력기 힌트 표시"
 
 #: data/script/fcitx-diagnose.sh:666
 msgid "Input Method Related Environment Variables: "
-msgstr "입력기와 관련된 환경변수 :"
+msgstr "입력기와 관련된 환경변수: "
 
 #: data/script/fcitx-diagnose.sh:1545
 msgid "Input Methods:"
@@ -1624,7 +1624,7 @@ msgstr "유효하지 않은 항목행 @ 행 %d %s"
 #: src/lib/fcitx-utils/desktop-parse.c:551
 #, c-format
 msgid "Invalid group name line @ line %d %s"
-msgstr "유효하지 않은 그룹명 라인 %s @ 라인 %d"
+msgstr "유효하지 않은 그룹명 라인 @ 라인 %d %s"
 
 #: data/script/fcitx-diagnose.sh:1559
 msgid "Invalid item ${1} in im list."
@@ -1963,7 +1963,7 @@ msgstr "로컬 입력기 없음"
 
 #: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:555
 msgid "No remind"
-msgstr "리마인드 없음"
+msgstr "알림 없음"
 
 #: src/lib/fcitx-utils/desktop-parse.c:587
 #, c-format
@@ -2108,7 +2108,7 @@ msgstr "병음:"
 
 #: src/im/pinyin/fcitx-pinyin.desc:9
 msgid "PinyinJiaJia"
-msgstr "병음가가"
+msgstr "PinyinJiaJia"
 
 #: data/script/fcitx-diagnose.sh:890
 msgid "Please check ${1} for how to install fcitx."
@@ -2152,14 +2152,13 @@ msgstr "선호하는 Enchant 제공자"
 #: src/im/pinyin/py.c:769
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
-msgstr ""
-"자주 사용하는 목록에서 %s을(를) 삭제하려면 1 키를 누르십시오 (취소는 ESC)"
+msgstr "1 키를 눌러 자주 사용하는 목록에서 %s을(를) 삭제하십시오 (취소는 ESC)"
 
 #: src/im/pinyin/py.c:771
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
-"자주 사용하는 목록에서 %s을(를) 삭제하려면 1-%d키를 누르십시오 (취소는 ESC)"
+"1-%d 키를 눌러 자주 사용하는 목록에서 %s을(를) 삭제하십시오 (취소는 ESC)"
 
 #: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:456
 msgid "Press Enter to input text"
@@ -2293,11 +2292,11 @@ msgstr "환경설정 다시읽기"
 
 #: src/im/table/table.c:1287
 msgid "Remind:"
-msgstr "리마인드:"
+msgstr "알림:"
 
 #: src/im/pinyin/py.c:2059
 msgid "Remind: "
-msgstr "리마인드:"
+msgstr "알림: "
 
 #: src/module/remote/fcitx-remote-module.conf.in:3
 msgid "Remote"
@@ -2487,7 +2486,7 @@ msgstr "Shuang Pin 스키마"
 
 #: src/im/pinyin/py.c:121 src/im/pinyin/shuangpin.conf.in:3
 msgid "Shuangpin"
-msgstr "Shuangpin"
+msgstr "이중병음"
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:4
 msgid "Simple Pinyin support for Fcitx"
@@ -2629,7 +2628,7 @@ msgstr "입력기 시작"
 #: src/frontend/xim/xim.c:239
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
-msgstr "XIM 시작 오류. %s이라는 이름의 다른 XIM 데몬이 동작 중입니다."
+msgstr "XIM 시작 오류. %s라는 다른 XIM 데몬이 실행 중입니까?"
 
 #: src/ui/classic/fcitx-classic-ui.desc:49
 msgid "Status Panel Hide Mode"
@@ -2817,7 +2816,7 @@ msgstr "입력기 전환"
 
 #: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:556
 msgid "Toggle Remind"
-msgstr "리마인드 젼환"
+msgstr "알림 젼환"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 msgid "Toggle Simp/Trad Chinese Conversion"
@@ -2944,7 +2943,7 @@ msgstr "페이지 이동을 위한 대체 키 사용"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
-msgstr "온전한 병음 사용"
+msgstr "완전한 병음 사용"
 
 #: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
@@ -3004,7 +3003,7 @@ msgstr "트리거 키를 사용하여 비활성화 한 후에 만 ​​추가 �
 
 #: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:555
 msgid "Use remind"
-msgstr "리마인드 사용"
+msgstr "알림 사용"
 
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Use the layout of first keyboard input method in list as default layout"
@@ -3135,7 +3134,7 @@ msgstr "XMODIFIERS가 설정되지 않음"
 
 #: src/im/pinyin/fcitx-pinyin.desc:10
 msgid "XiaoHe"
-msgstr "작은학(XiaoHe)"
+msgstr "XiaoHe"
 
 #: src/frontend/xim/fcitx-xim.desc:1
 msgid "Xim"
