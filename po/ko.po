@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-04-19 00:02-0700\n"
-"PO-Revision-Date: 2020-04-19 06:45+0000\n"
+"POT-Creation-Date: 2020-04-24 00:02-0700\n"
+"PO-Revision-Date: 2020-04-24 05:01+0000\n"
 "Last-Translator: MarongHappy <daemul72@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -289,7 +289,7 @@ msgstr "모양새"
 
 #: src/module/xkb/fcitx-xkb.desc:20
 msgid "Apply this custom xmodmap script after layout change"
-msgstr "자판 변경 후 다음 사용자 xmodmap 스크립트 적용"
+msgstr "자판 변경후 이 사용자 지정 xmodmap 스크립트 적용"
 
 #: data/addon.desc:67
 msgid "Argument for InputMethod Register"
@@ -802,11 +802,11 @@ msgstr "${1}의 현재 값은 ${2}(${3})."
 
 #: data/config.desc:35
 msgid "Custom"
-msgstr "사용자 설정"
+msgstr "사용자 지정"
 
 #: data/config.desc:42
 msgid "Custom switch key"
-msgstr "커스텀 변경키"
+msgstr "사용자 지정 전환 키"
 
 #: data/addon.desc:37
 msgid "DBus"
@@ -2143,11 +2143,11 @@ msgstr "Preedit의 위치"
 
 #: src/module/spell/fcitx-spell.desc:14
 msgid "Possible Providers: presage, custom, enchant (separate with comma)"
-msgstr "가능한 제공자: presage, custom, enchant (쉼표로 구분)"
+msgstr "가능한 제공자: 사전 설정, 사용자 지정, 인챈트 (쉼표로 구분)"
 
 #: src/module/spell/fcitx-spell.desc:8
 msgid "Preferred Enchant provider"
-msgstr "선호하는 Enchant 제공자"
+msgstr "선호하는 인챈트 제공자"
 
 #: src/im/pinyin/py.c:769
 #, c-format
@@ -2947,11 +2947,11 @@ msgstr "완전한 병음 사용"
 
 #: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
-msgstr "표에 정의된 사용자 질의 문자열 사용"
+msgstr "표에 정의된 사용자 지정 프롬프트 문자열 사용"
 
 #: src/ui/classic/skin.desc:167
 msgid "Use Custom text icon color"
-msgstr "사용자 문자열 아이콘 색 사용"
+msgstr "사용자 지정 문자열 아이콘 색상 사용"
 
 #: data/profile.desc:2
 msgid "Use Full Width Character"
