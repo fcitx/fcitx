@@ -350,6 +350,15 @@ extern "C" {
     struct _FcitxIM* FcitxInstanceGetCurrentIM(struct _FcitxInstance *instance);
 
     /**
+     * get input method for ic, return result can be NULL.
+     *
+     * @param instance fcitx instance
+     * @param ic input context
+     * @return _FcitxIM*
+     */
+    struct _FcitxIM* FcitxInstanceGetIM(struct _FcitxInstance *instance, struct _FcitxInputContext* ic);
+
+    /**
      * get input method by name
      *
      * @param instance fcitx instance

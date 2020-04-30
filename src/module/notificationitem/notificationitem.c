@@ -365,15 +365,16 @@ DBusHandlerResult FcitxNotificationItemEventHandler (DBusConnection  *connection
 char* FcitxNotificationItemGetIconNameString(FcitxNotificationItem* notificationitem)
 {
     char* iconName = NULL;
-    FcitxIM* im = FcitxInstanceGetCurrentIM(notificationitem->owner);
-    const char* icon = "";
+    FcitxIM* im = FcitxInstanceGetIM(notificationitem->owner, FcitxInstanceGetLastIC(notificationitem->owner));
+    const char* icon = NULL;
     if (im) {
         if (strncmp(im->uniqueName, "fcitx-keyboard-",
                     strlen("fcitx-keyboard-")) != 0) {
             icon = im->strIconName;
-        } else {
-            return strdup("input-keyboard");
         }
+    }
+    if (!icon) {
+        return strdup("input-keyboard");
     }
     boolean result = CheckAddPrefix(&icon);
     fcitx_utils_alloc_cat_str(iconName, result ? "fcitx-" : "", icon);
@@ -417,14 +418,13 @@ void FcitxNotificationItemGetTitle(void* arg, DBusMessageIter* iter)
 void FcitxNotificationItemGetIconName(void* arg, DBusMessageIter* iter)
 {
     FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) arg;
-    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(notificationitem->owner);
-    if (ic == NULL) {
+    char* icon = FcitxNotificationItemGetIconNameString(notificationitem);
+    if (!icon) {
         const char* iconName = "input-keyboard";
         dbus_message_iter_append_basic(iter, DBUS_TYPE_STRING, &iconName);
     } else {
-        char* iconName = FcitxNotificationItemGetIconNameString(notificationitem);
-        dbus_message_iter_append_basic(iter, DBUS_TYPE_STRING, &iconName);
-        free(iconName);
+        dbus_message_iter_append_basic(iter, DBUS_TYPE_STRING, &icon);
+        free(icon);
     }
 }
 
@@ -460,7 +460,7 @@ void FcitxNotificationItemGetToolTip(void* arg, DBusMessageIter* iter)
     } else {
         iconName = FcitxNotificationItemGetIconNameString(notificationitem);
         iconNameToFree = iconName;
-        FcitxIM* im = FcitxInstanceGetCurrentIM(notificationitem->owner);
+        FcitxIM* im = FcitxInstanceGetIM(notificationitem->owner, FcitxInstanceGetLastIC(notificationitem->owner));
         title = im ? im->strName : _("Disabled");
         content = im ? "" : _("Input Method Disabled");
     }
@@ -480,7 +480,7 @@ const char* FcitxNotificationItemGetLabel(FcitxNotificationItem* notificationite
 
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(notificationitem->owner);
     if (ic) {
-        FcitxIM* im = FcitxInstanceGetCurrentIM(notificationitem->owner);
+        FcitxIM* im = FcitxInstanceGetIM(notificationitem->owner, FcitxInstanceGetLastIC(notificationitem->owner));
         if (im) {
             if (strncmp(im->uniqueName, "fcitx-keyboard-",
                         strlen("fcitx-keyboard-")) == 0) {

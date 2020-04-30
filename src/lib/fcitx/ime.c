@@ -1879,6 +1879,37 @@ FcitxIM* FcitxInstanceGetCurrentIM(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
+FcitxIM* FcitxInstanceGetIM(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    if (!ic)
+        return NULL;
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    int globalIndex = FcitxInstanceGetIMIndexByName(instance, instance->globalIMName);
+    /* global index is not valid, that's why we need to fix it. */
+    if (globalIndex <= 0) {
+        UT_array *ime = &instance->imes;
+        FcitxIM *im = (FcitxIM*)utarray_eltptr(ime, 1);
+        if (im) {
+            globalIndex = 1;
+        }
+    }
+    int targetIMIndex = 0;
+    if (ic && ic->state != IS_ACTIVE) {
+        targetIMIndex = 0;
+    }
+    else {
+        if (ic2 && ic2->imname)
+            targetIMIndex = FcitxInstanceGetIMIndexByName(instance, ic2->imname);
+
+        if (targetIMIndex <= 0) {
+            targetIMIndex = globalIndex;
+        }
+    }
+
+    return fcitx_array_eltptr(&instance->imes, targetIMIndex);
+}
+
+FCITX_EXPORT_API
 FcitxIM* FcitxInstanceGetIMByIndex(FcitxInstance* instance, int index)
 {
     /* utarray helps us to check the overflow */

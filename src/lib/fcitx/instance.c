@@ -667,13 +667,20 @@ FcitxInputContext* FcitxInstanceGetCurrentIC(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
+FcitxInputContext* FcitxInstanceGetLastIC(FcitxInstance*instance)
+{
+    return instance->lastIC;
+}
+
+FCITX_EXPORT_API
 boolean FcitxInstanceSetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic)
 {
     FcitxContextState prevstate = FcitxInstanceGetCurrentState(instance);
     boolean changed = (instance->CurrentIC != ic);
 
-    if (instance->CurrentIC) {
-        FcitxInstanceSetLastIC(instance, instance->CurrentIC);
+    // We want to use last ic to track the last focused.
+    if (ic) {
+        FcitxInstanceSetLastIC(instance, ic);
     }
     instance->CurrentIC = ic;
 

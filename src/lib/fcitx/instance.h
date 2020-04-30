@@ -175,6 +175,14 @@ extern "C" {
     boolean FcitxInstanceSetCurrentIC(struct _FcitxInstance* instance, FcitxInputContext* ic);
 
     /**
+     * Get last focused input context.
+     *
+     * @param instance
+     * @return last focused input context
+     */
+    FcitxInputContext* FcitxInstanceGetLastIC(FcitxInstance* instance);
+
+    /**
      * Get Addons From Instance
      *
      * @param instance fcitx instance
