@@ -186,7 +186,7 @@ void ToggleChttransState(void* arg)
 {
     FcitxChttrans *transState = (FcitxChttrans*)arg;
     FcitxInstance *instance = transState->owner;
-    FcitxIM* im = FcitxInstanceGetCurrentIM(transState->owner);
+    FcitxIM* im = FcitxInstanceGetIM(transState->owner, FcitxInstanceGetLastIC(transState->owner));
     if (!im)
         return;
     boolean enabled = !ChttransEnabled(transState);
