@@ -255,7 +255,9 @@ void FcitxNotificationItemDestroy(void* arg)
 {
     FcitxNotificationItem* notificationitem = (FcitxNotificationItem*) arg;
     if (notificationitem->conn) {
-        dbus_connection_unregister_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ);
+        if (notificationitem->callback) {
+            dbus_connection_unregister_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ);
+        }
         dbus_connection_unregister_object_path(notificationitem->conn, "/MenuBar");
     }
     notificationitem->ids = MenuIdSetClear(notificationitem->ids);
