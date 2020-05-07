@@ -191,12 +191,6 @@ void* FcitxNotificationItemCreate(FcitxInstance* instance)
 
         notificationitem->conn = conn;
 
-        DBusObjectPathVTable fcitxIPCVTable = {NULL, &FcitxNotificationItemEventHandler, NULL, NULL, NULL, NULL };
-        if (!dbus_connection_register_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ, &fcitxIPCVTable, notificationitem)) {
-            FcitxLog(ERROR, "No memory");
-            break;
-        }
-
         if (!FcitxDBusMenuCreate(notificationitem)) {
             FcitxLog(ERROR, "No memory");
             break;
@@ -587,6 +581,10 @@ boolean FcitxNotificationItemEnable(FcitxNotificationItem* notificationitem, Fci
         FcitxLog(ERROR, "This should not happen, please report bug.");
         return false;
     }
+
+    DBusObjectPathVTable fcitxIPCVTable = {NULL, &FcitxNotificationItemEventHandler, NULL, NULL, NULL, NULL };
+    dbus_connection_unregister_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ);
+    dbus_connection_register_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ, &fcitxIPCVTable, notificationitem);
     notificationitem->callback = callback;
     notificationitem->data = data;
     asprintf(&notificationitem->serviceName, "org.kde.StatusNotifierItem-%u-%d", getpid(), ++notificationitem->index);
@@ -614,6 +612,8 @@ void FcitxNotificationItemDisable(FcitxNotificationItem* notificationitem)
 {
     notificationitem->callback = NULL;
     notificationitem->data = NULL;
+
+    dbus_connection_unregister_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ);
 
     if (notificationitem->serviceName) {
         dbus_bus_release_name(notificationitem->conn, notificationitem->serviceName, NULL);
