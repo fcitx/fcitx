@@ -583,7 +583,6 @@ boolean FcitxNotificationItemEnable(FcitxNotificationItem* notificationitem, Fci
     }
 
     DBusObjectPathVTable fcitxIPCVTable = {NULL, &FcitxNotificationItemEventHandler, NULL, NULL, NULL, NULL };
-    dbus_connection_unregister_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ);
     dbus_connection_register_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ, &fcitxIPCVTable, notificationitem);
     notificationitem->callback = callback;
     notificationitem->data = data;
@@ -610,10 +609,11 @@ boolean FcitxNotificationItemEnable(FcitxNotificationItem* notificationitem, Fci
 
 void FcitxNotificationItemDisable(FcitxNotificationItem* notificationitem)
 {
+    if (notificationitem->callback) {
+        dbus_connection_unregister_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ);
+    }
     notificationitem->callback = NULL;
     notificationitem->data = NULL;
-
-    dbus_connection_unregister_object_path(notificationitem->conn, NOTIFICATION_ITEM_DEFAULT_OBJ);
 
     if (notificationitem->serviceName) {
         dbus_bus_release_name(notificationitem->conn, notificationitem->serviceName, NULL);
