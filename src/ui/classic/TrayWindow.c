@@ -47,7 +47,7 @@ void TrayWindowInit(TrayWindow *trayWindow)
     FcitxClassicUI *classicui = trayWindow->owner;
     Display *dpy = classicui->dpy;
     int iScreen = classicui->iScreen;
-    char   strWindowName[] = "Fcitx Tray Window";
+    char   strWindowName[] = "Fcitx";
     if (!classicui->bUseTrayIcon || classicui->isSuspend || classicui->notificationItemAvailable)
         return;
 
