@@ -148,7 +148,8 @@ void *ChttransCreate(FcitxInstance* instance)
     FcitxInstanceRegisterCommitFilter(instance, shk);
     FcitxInstanceRegisterIMChangedHook(instance, imhk);
     FcitxUIRegisterStatus(instance, transState, "chttrans",
-                          ChttransEnabled(transState) ? _("Traditional Chinese") :  _("Simplified Chinese"),
+                          ChttransEnabled(transState) ? _("Switch to Simplified Chinese") :
+                          _("Switch to Traditional Chinese"),
                           _("Toggle Simp/Trad Chinese Conversion"),
                           ToggleChttransState,
                           GetChttransEnabled);
@@ -193,8 +194,8 @@ void ToggleChttransState(void* arg)
 
     fcitx_string_map_set(transState->enableIM, im->uniqueName, enabled);
     FcitxUISetStatusString(instance, "chttrans",
-                           enabled ? _("Traditional Chinese") :
-                           _("Simplified Chinese"),
+                           enabled ? _("Switch to Simplified Chinese") :
+                           _("Switch to Traditional Chinese"),
                           _("Toggle Simp/Trad Chinese Conversion"));
     FcitxUIUpdateInputWindow(instance);
     SaveChttransConfig(transState);
