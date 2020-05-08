@@ -6,23 +6,27 @@
 # しろう, 2013
 # しろう <>, 2013
 # ABE Tsunehiko, 2017
+# ABE Tsunehiko, 2017
 # あわしろいくや <ikunya@gmail.com>, 2013-2016
-# csslayer <wengxt@gmail.com>, 2013
+# csslayer <wengxt@gmail.com>, 2013,2015
 # あわしろいくや <ikunya@gmail.com>, 2013
 # あわしろいくや <ikunya@gmail.com>, 2012-2013
+# あわしろいくや <ikunya@gmail.com>, 2013
 # ISHIKAWA Mutsumi <ishikawa@hanzubon.jp>, 2014
 # mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>, 2012
+# shirou - しろう <shirou.faw@gmail.com>, 2013
 # usingsystem8 <yuta.ooka@gmail.com>, 2013
 # shirou - しろう <shirou.faw@gmail.com>, 2013
 # csslayer <wengxt@gmail.com>, 2013,2015
 # csslayer <wengxt@gmail.com>, 2013
 # usingsystem8 <yuta.ooka@gmail.com>, 2013
 # yyc1992 <yyc1992@gmail.com>, 2015
+# yyc1992 <yyc1992@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-11-23 00:02-0800\n"
+"POT-Creation-Date: 2020-05-08 10:05-0700\n"
 "PO-Revision-Date: 2017-11-23 06:45+0000\n"
 "Last-Translator: ABE Tsunehiko\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
@@ -92,7 +96,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1800
+#: src/lib/fcitx/ime.c:1803
 msgid "/min  Time Used: "
 msgstr "/分 使用時間: "
 
@@ -743,14 +747,9 @@ msgstr "設定ファイル"
 msgid "Configuration:"
 msgstr "設定:"
 
-#: src/module/notificationitem/dbusmenu.c:356 src/ui/classic/classicui.c:502
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:501
 msgid "Configure"
 msgstr "設定"
-
-#: src/module/notificationitem/dbusmenu.c:352 src/ui/classic/classicui.c:501
-#: src/ui/kimpanel/kimpanel.c:785
-msgid "Configure Current Input Method"
-msgstr "現在の入力メソッドの設定"
 
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
@@ -900,7 +899,7 @@ msgstr "Pinyin 記号を無効にする"
 msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr "アドオン %s を無効にしました。 %s の依存関係が解決されていません。"
 
-#: src/module/notificationitem/notificationitem.c:462
+#: src/module/notificationitem/notificationitem.c:460
 #: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 #: data/config.desc:34
 msgid "Disabled"
@@ -938,12 +937,12 @@ msgstr "スペルヒントを表示しない"
 msgid "Do not sort word with code less than this level"
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:602
+#: src/lib/fcitx-utils/desktop-parse.c:603
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
 msgstr " %s が %s グループ、 %d 行目で重複しており、前のを上書きします。"
 
-#: src/lib/fcitx-utils/desktop-parse.c:562
+#: src/lib/fcitx-utils/desktop-parse.c:563
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
@@ -1074,7 +1073,7 @@ msgstr "完全一致"
 msgid "Exec"
 msgstr "Exec"
 
-#: src/module/notificationitem/dbusmenu.c:371 src/ui/classic/classicui.c:504
+#: src/module/notificationitem/dbusmenu.c:388 src/ui/classic/classicui.c:503
 msgid "Exit"
 msgstr "閉じる"
 
@@ -1576,7 +1575,7 @@ msgstr "入力時のフォントの大きさ"
 msgid "Input Message Color"
 msgstr "入力メッセージの色"
 
-#: src/lib/fcitx/ime.c:1695 src/module/notificationitem/notificationitem.c:411
+#: src/lib/fcitx/ime.c:1698 src/module/notificationitem/notificationitem.c:410
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "入力メソッド"
@@ -1585,7 +1584,7 @@ msgstr "入力メソッド"
 msgid "Input Method Configuration"
 msgstr "入力メソッドの設定"
 
-#: src/module/notificationitem/notificationitem.c:463
+#: src/module/notificationitem/notificationitem.c:461
 #: src/ui/kimpanel/kimpanel.c:283 src/ui/kimpanel/kimpanel.c:288
 msgid "Input Method Disabled"
 msgstr "入力メソッドが無効"
@@ -1602,7 +1601,7 @@ msgstr "入力メソッド関連の環境変数:"
 msgid "Input Methods:"
 msgstr "入力メソッド:"
 
-#: src/lib/fcitx/ime.c:1797
+#: src/lib/fcitx/ime.c:1800
 msgid "Input Speed: "
 msgstr "入力速度: "
 
@@ -1633,12 +1632,12 @@ msgstr "不正な入力: %d 行目で '=' がありません"
 msgid "Invalid addon config file ${1}."
 msgstr "不正なアドオン設定ファイル ${1} です。"
 
-#: src/lib/fcitx-utils/desktop-parse.c:592
+#: src/lib/fcitx-utils/desktop-parse.c:593
 #, c-format
 msgid "Invalid entry line @ line %d %s"
 msgstr "不正な入力です %d 行目 %s "
 
-#: src/lib/fcitx-utils/desktop-parse.c:550
+#: src/lib/fcitx-utils/desktop-parse.c:551
 #, c-format
 msgid "Invalid group name line @ line %d %s"
 msgstr "不正なグループ名です。 %d 行目 %s"
@@ -1969,7 +1968,7 @@ msgstr "有効な入力メソッドがありません"
 msgid "No available frontend"
 msgstr "フロントエンドが見つかりません"
 
-#: src/module/notificationitem/notificationitem.c:456
+#: src/module/notificationitem/notificationitem.c:454
 #: src/ui/kimpanel/kimpanel.c:256 src/ui/kimpanel/kimpanel.c:257
 msgid "No input window"
 msgstr "入力ウィンドウなし"
@@ -1982,7 +1981,7 @@ msgstr "ローカル入力メソッドがありません"
 msgid "No remind"
 msgstr "リマインドなし"
 
-#: src/lib/fcitx-utils/desktop-parse.c:586
+#: src/lib/fcitx-utils/desktop-parse.c:587
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr "コメントでない入力がグループに属していません %d 行目 %s"
@@ -2007,7 +2006,7 @@ msgstr "GNOME 3.6 以降の注意"
 msgid "Number"
 msgstr "漢数字"
 
-#: src/module/notificationitem/dbusmenu.c:340 src/ui/classic/classicui.c:440
+#: src/module/notificationitem/dbusmenu.c:361 src/ui/classic/classicui.c:440
 msgid "Online Help"
 msgstr "オンラインヘルプ"
 
@@ -2350,8 +2349,8 @@ msgstr "右マージンを調整"
 msgid "Resize Margin Top"
 msgstr "上マージンを調整"
 
-#: src/module/notificationitem/dbusmenu.c:365 src/ui/classic/classicui.c:503
-#: src/ui/kimpanel/kimpanel.c:790
+#: src/module/notificationitem/dbusmenu.c:382 src/ui/classic/classicui.c:502
+#: src/ui/kimpanel/kimpanel.c:785
 msgid "Restart"
 msgstr "再起動"
 
@@ -2508,16 +2507,12 @@ msgstr "Shuangpin"
 msgid "Simple Pinyin support for Fcitx"
 msgstr "Fcitx の簡単な Pinyin サポート"
 
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
-msgid "Simplified Chinese"
-msgstr "中国語簡体字"
-
-#: src/module/chttrans/chttrans.c:176
+#: src/module/chttrans/chttrans.c:177
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr "簡体字中国語から繁体字中国語へ"
 
-#: src/module/chttrans/chttrans.c:178
+#: src/module/chttrans/chttrans.c:179
 msgid "Simplified Chinese is enabled."
 msgstr "簡体字は有効です。"
 
@@ -2690,6 +2685,16 @@ msgstr ""
 msgid "Switch Full Width Punc Mode"
 msgstr "全角句読点モードに切り替え"
 
+#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#, fuzzy
+msgid "Switch to Simplified Chinese"
+msgstr "中国語簡体字"
+
+#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#, fuzzy
+msgid "Switch to Traditional Chinese"
+msgstr "中国語繁体字"
+
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
 msgid "Switch to the Eighth Input Method"
@@ -2834,7 +2839,7 @@ msgstr "入力メソッドの切り替え"
 msgid "Toggle Remind"
 msgstr "リマインドの切り替え"
 
-#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "中国語の簡体字/繁体字の変換の切り替え"
 
@@ -2869,15 +2874,11 @@ msgstr "左上"
 msgid "TopRight"
 msgstr "右上"
 
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:196
-msgid "Traditional Chinese"
-msgstr "中国語繁体字"
-
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
 msgstr "中国語繁体字翻訳エンジン"
 
-#: src/module/chttrans/chttrans.c:177
+#: src/module/chttrans/chttrans.c:178
 msgid "Traditional Chinese is enabled."
 msgstr "繁体字は有効です。"
 
@@ -3291,7 +3292,7 @@ msgstr "実行可能:"
 msgid "here"
 msgstr "ここ"
 
-#: src/lib/fcitx/ime.c:1803
+#: src/lib/fcitx/ime.c:1806
 msgid "min Num of Characters: "
 msgstr "分 文字数: "
 
@@ -3328,3 +3329,6 @@ msgstr "xmodmap コマンド"
 #, c-format
 msgid "your current font is: %s"
 msgstr "あなたの現在のフォントは %s です"
+
+#~ msgid "Configure Current Input Method"
+#~ msgstr "現在の入力メソッドの設定"

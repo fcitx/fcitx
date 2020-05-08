@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2019-11-03 12:27-0800\n"
+"POT-Creation-Date: 2020-05-08 10:05-0700\n"
 "PO-Revision-Date: 2018-06-13 07:09+0000\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
@@ -79,7 +79,7 @@ msgstr "/Nota_per_a_GNOME_posterior_a_3.6"
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1801
+#: src/lib/fcitx/ime.c:1803
 msgid "/min  Time Used: "
 msgstr "Temps /min utilitzat:"
 
@@ -739,14 +739,9 @@ msgstr "Fitxer de configuració"
 msgid "Configuration:"
 msgstr "Configuració:"
 
-#: src/module/notificationitem/dbusmenu.c:356 src/ui/classic/classicui.c:502
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:501
 msgid "Configure"
 msgstr "Configura"
-
-#: src/module/notificationitem/dbusmenu.c:352 src/ui/classic/classicui.c:501
-#: src/ui/kimpanel/kimpanel.c:785
-msgid "Configure Current Input Method"
-msgstr "Configura el mètode actual d'entrada"
 
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
@@ -896,7 +891,7 @@ msgstr "Inhabilita el símbol de pinyin"
 msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr "Inhabilita el complement %s, no es pot satisfer la dependència %s."
 
-#: src/module/notificationitem/notificationitem.c:462
+#: src/module/notificationitem/notificationitem.c:460
 #: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 #: data/config.desc:34
 msgid "Disabled"
@@ -1076,7 +1071,7 @@ msgstr "Concordança exacta"
 msgid "Exec"
 msgstr "Exec"
 
-#: src/module/notificationitem/dbusmenu.c:371 src/ui/classic/classicui.c:504
+#: src/module/notificationitem/dbusmenu.c:388 src/ui/classic/classicui.c:503
 msgid "Exit"
 msgstr "Surt"
 
@@ -1586,7 +1581,7 @@ msgstr "Mida de la lletra d'entrada"
 msgid "Input Message Color"
 msgstr "Color del missatge d'entrada"
 
-#: src/lib/fcitx/ime.c:1696 src/module/notificationitem/notificationitem.c:411
+#: src/lib/fcitx/ime.c:1698 src/module/notificationitem/notificationitem.c:410
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Mètode d'entrada"
@@ -1595,7 +1590,7 @@ msgstr "Mètode d'entrada"
 msgid "Input Method Configuration"
 msgstr "Configuració del mètode d'entrada"
 
-#: src/module/notificationitem/notificationitem.c:463
+#: src/module/notificationitem/notificationitem.c:461
 #: src/ui/kimpanel/kimpanel.c:283 src/ui/kimpanel/kimpanel.c:288
 msgid "Input Method Disabled"
 msgstr "Mètode d'entrada inhabilitat"
@@ -1614,7 +1609,7 @@ msgstr "Variables d'entorn relacionades amb el mètode d'entrada:"
 msgid "Input Methods:"
 msgstr "Mètodes d'entrada:"
 
-#: src/lib/fcitx/ime.c:1798
+#: src/lib/fcitx/ime.c:1800
 msgid "Input Speed: "
 msgstr "Velocitat d'entrada:"
 
@@ -1989,7 +1984,7 @@ msgstr "No hi ha disponible cap mètode d'entrada"
 msgid "No available frontend"
 msgstr "No hi ha disponible cap frontal"
 
-#: src/module/notificationitem/notificationitem.c:456
+#: src/module/notificationitem/notificationitem.c:454
 #: src/ui/kimpanel/kimpanel.c:256 src/ui/kimpanel/kimpanel.c:257
 msgid "No input window"
 msgstr "No hi ha cap finestra d'entrada"
@@ -2027,7 +2022,7 @@ msgstr "Nota per al GNOME amb versió superior a 3.6"
 msgid "Number"
 msgstr "Nombre"
 
-#: src/module/notificationitem/dbusmenu.c:340 src/ui/classic/classicui.c:440
+#: src/module/notificationitem/dbusmenu.c:361 src/ui/classic/classicui.c:440
 msgid "Online Help"
 msgstr "Ajuda en línia"
 
@@ -2376,8 +2371,8 @@ msgstr "Canvia la mida del marge dret"
 msgid "Resize Margin Top"
 msgstr "Canvia la mida del marge superior"
 
-#: src/module/notificationitem/dbusmenu.c:365 src/ui/classic/classicui.c:503
-#: src/ui/kimpanel/kimpanel.c:790
+#: src/module/notificationitem/dbusmenu.c:382 src/ui/classic/classicui.c:502
+#: src/ui/kimpanel/kimpanel.c:785
 msgid "Restart"
 msgstr "Reinicia"
 
@@ -2540,16 +2535,12 @@ msgstr "Shuangpin"
 msgid "Simple Pinyin support for Fcitx"
 msgstr "Compatibilitat amb pinyin simple per a fcitx"
 
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
-msgid "Simplified Chinese"
-msgstr "Xinès simplificat"
-
-#: src/module/chttrans/chttrans.c:176
+#: src/module/chttrans/chttrans.c:177
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr "Xinès simplificat a xinès tradicional"
 
-#: src/module/chttrans/chttrans.c:178
+#: src/module/chttrans/chttrans.c:179
 msgid "Simplified Chinese is enabled."
 msgstr "El xinès simplificat està habilitat."
 
@@ -2723,6 +2714,16 @@ msgstr "Commuta la pre-edició incrustada"
 msgid "Switch Full Width Punc Mode"
 msgstr "Canvia a mode de puntuació d'amplada completa"
 
+#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#, fuzzy
+msgid "Switch to Simplified Chinese"
+msgstr "Xinès simplificat"
+
+#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#, fuzzy
+msgid "Switch to Traditional Chinese"
+msgstr "Xinès tradicional"
+
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
 msgid "Switch to the Eighth Input Method"
@@ -2874,7 +2875,7 @@ msgstr "Commuta el mètode d'entrada"
 msgid "Toggle Remind"
 msgstr "Commuta el recordatori"
 
-#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "Commuta la conversió xinès simple/tradicional"
 
@@ -2909,15 +2910,11 @@ msgstr "Superior esquerre"
 msgid "TopRight"
 msgstr "Superior dret"
 
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:196
-msgid "Traditional Chinese"
-msgstr "Xinès tradicional"
-
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
 msgstr "Motor de traducció de xinès tradicional"
 
-#: src/module/chttrans/chttrans.c:177
+#: src/module/chttrans/chttrans.c:178
 msgid "Traditional Chinese is enabled."
 msgstr "El xinès tradicional està habilitat."
 
@@ -3348,7 +3345,7 @@ msgstr "executable:"
 msgid "here"
 msgstr "aquí"
 
-#: src/lib/fcitx/ime.c:1804
+#: src/lib/fcitx/ime.c:1806
 msgid "min Num of Characters: "
 msgstr "Num min de caràcters"
 
@@ -3385,3 +3382,6 @@ msgstr "ordre xmodmap"
 #, c-format
 msgid "your current font is: %s"
 msgstr "la vostra lletra actual és: %s"
+
+#~ msgid "Configure Current Input Method"
+#~ msgstr "Configura el mètode actual d'entrada"

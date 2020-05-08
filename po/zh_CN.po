@@ -3,7 +3,9 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Christopher Meng <i@cicku.me>, 2012
+# Christopher M <i@cicku.me>, 2012
+# Christopher M <i@cicku.me>, 2012
+# csslayer <wengxt@gmail.com>, 2013
 # Cynthia Young <cynthia.young0512@gmail.com>, 2013
 # marguerite su <i@marguerite.su>, 2012-2014
 # csslayer <wengxt@gmail.com>, 2013-2015,2017
@@ -12,11 +14,12 @@
 # wwj402 <wwj402@gmail.com>, 2013-2016
 # yyc1992 <yyc1992@gmail.com>, 2012
 # yyc1992 <yyc1992@gmail.com>, 2013-2015
+# yyc1992 <yyc1992@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-12-16 00:02-0800\n"
+"POT-Creation-Date: 2020-05-08 10:05-0700\n"
 "PO-Revision-Date: 2017-12-16 04:51+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
@@ -87,7 +90,7 @@ msgstr "/Note_for_GNOME_Later_than_3.6"
 msgid "/XIM"
 msgstr "/XIM/zh-cn"
 
-#: src/lib/fcitx/ime.c:1800
+#: src/lib/fcitx/ime.c:1803
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -730,14 +733,9 @@ msgstr "配置文件"
 msgid "Configuration:"
 msgstr "配置:"
 
-#: src/module/notificationitem/dbusmenu.c:356 src/ui/classic/classicui.c:502
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:501
 msgid "Configure"
 msgstr "配置"
-
-#: src/module/notificationitem/dbusmenu.c:352 src/ui/classic/classicui.c:501
-#: src/ui/kimpanel/kimpanel.c:785
-msgid "Configure Current Input Method"
-msgstr "配置当前输入法"
 
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
@@ -887,7 +885,7 @@ msgstr "禁用拼音符号"
 msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr "禁用插件 %s，依赖 %s 无法满足。"
 
-#: src/module/notificationitem/notificationitem.c:462
+#: src/module/notificationitem/notificationitem.c:460
 #: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 #: data/config.desc:34
 msgid "Disabled"
@@ -923,12 +921,12 @@ msgstr "不显示拼写提示"
 msgid "Do not sort word with code less than this level"
 msgstr "比此级别短的码不进行排序"
 
-#: src/lib/fcitx-utils/desktop-parse.c:602
+#: src/lib/fcitx-utils/desktop-parse.c:603
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
 msgstr "重复的键 %s 出现在组 %s 中, @第 %d 行, 覆盖之前的值."
 
-#: src/lib/fcitx-utils/desktop-parse.c:562
+#: src/lib/fcitx-utils/desktop-parse.c:563
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
@@ -1055,7 +1053,7 @@ msgstr "精确匹配"
 msgid "Exec"
 msgstr "Exec"
 
-#: src/module/notificationitem/dbusmenu.c:371 src/ui/classic/classicui.c:504
+#: src/module/notificationitem/dbusmenu.c:388 src/ui/classic/classicui.c:503
 msgid "Exit"
 msgstr "退出"
 
@@ -1557,7 +1555,7 @@ msgstr "输入字体大小"
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-#: src/lib/fcitx/ime.c:1695 src/module/notificationitem/notificationitem.c:411
+#: src/lib/fcitx/ime.c:1698 src/module/notificationitem/notificationitem.c:410
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "输入法"
@@ -1566,7 +1564,7 @@ msgstr "输入法"
 msgid "Input Method Configuration"
 msgstr "输入法配置"
 
-#: src/module/notificationitem/notificationitem.c:463
+#: src/module/notificationitem/notificationitem.c:461
 #: src/ui/kimpanel/kimpanel.c:283 src/ui/kimpanel/kimpanel.c:288
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
@@ -1583,7 +1581,7 @@ msgstr "输入法相关的环境变量: "
 msgid "Input Methods:"
 msgstr "输入法:"
 
-#: src/lib/fcitx/ime.c:1797
+#: src/lib/fcitx/ime.c:1800
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -1614,12 +1612,12 @@ msgstr "配置项不合法:  行%d 缺少'='"
 msgid "Invalid addon config file ${1}."
 msgstr "无效的插件配置文件: ${1}."
 
-#: src/lib/fcitx-utils/desktop-parse.c:592
+#: src/lib/fcitx-utils/desktop-parse.c:593
 #, c-format
 msgid "Invalid entry line @ line %d %s"
 msgstr "非法键值出现在第 %d 行: %s"
 
-#: src/lib/fcitx-utils/desktop-parse.c:550
+#: src/lib/fcitx-utils/desktop-parse.c:551
 #, c-format
 msgid "Invalid group name line @ line %d %s"
 msgstr "非法组名出现在第 %d 行: %s"
@@ -1948,7 +1946,7 @@ msgstr "无用输入法"
 msgid "No available frontend"
 msgstr "无可用前端"
 
-#: src/module/notificationitem/notificationitem.c:456
+#: src/module/notificationitem/notificationitem.c:454
 #: src/ui/kimpanel/kimpanel.c:256 src/ui/kimpanel/kimpanel.c:257
 msgid "No input window"
 msgstr "无输入窗口"
@@ -1961,7 +1959,7 @@ msgstr "无局部输入法"
 msgid "No remind"
 msgstr "无联想"
 
-#: src/lib/fcitx-utils/desktop-parse.c:586
+#: src/lib/fcitx-utils/desktop-parse.c:587
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr "非注释不属于任何组 @ %d %s"
@@ -1986,7 +1984,7 @@ msgstr "有关 3.6 之后版本 GNOME 的备注"
 msgid "Number"
 msgstr "数字"
 
-#: src/module/notificationitem/dbusmenu.c:340 src/ui/classic/classicui.c:440
+#: src/module/notificationitem/dbusmenu.c:361 src/ui/classic/classicui.c:440
 msgid "Online Help"
 msgstr "在线帮助"
 
@@ -2326,8 +2324,8 @@ msgstr "右边距"
 msgid "Resize Margin Top"
 msgstr "上边距"
 
-#: src/module/notificationitem/dbusmenu.c:365 src/ui/classic/classicui.c:503
-#: src/ui/kimpanel/kimpanel.c:790
+#: src/module/notificationitem/dbusmenu.c:382 src/ui/classic/classicui.c:502
+#: src/ui/kimpanel/kimpanel.c:785
 msgid "Restart"
 msgstr "重新启动"
 
@@ -2484,16 +2482,12 @@ msgstr "双拼"
 msgid "Simple Pinyin support for Fcitx"
 msgstr "Fcitx 简单的拼音支持"
 
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
-msgid "Simplified Chinese"
-msgstr "简体中文"
-
-#: src/module/chttrans/chttrans.c:176
+#: src/module/chttrans/chttrans.c:177
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr "简繁转换"
 
-#: src/module/chttrans/chttrans.c:178
+#: src/module/chttrans/chttrans.c:179
 msgid "Simplified Chinese is enabled."
 msgstr "已启用简体中文。"
 
@@ -2666,6 +2660,16 @@ msgstr "切换嵌入预编辑字符串"
 msgid "Switch Full Width Punc Mode"
 msgstr "切换全角标点"
 
+#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#, fuzzy
+msgid "Switch to Simplified Chinese"
+msgstr "简体中文"
+
+#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#, fuzzy
+msgid "Switch to Traditional Chinese"
+msgstr "繁体中文"
+
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
 msgid "Switch to the Eighth Input Method"
@@ -2811,7 +2815,7 @@ msgstr "切换输入法"
 msgid "Toggle Remind"
 msgstr "切换联想"
 
-#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "切换简繁转换"
 
@@ -2846,15 +2850,11 @@ msgstr "左上角"
 msgid "TopRight"
 msgstr "右上角"
 
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:196
-msgid "Traditional Chinese"
-msgstr "繁体中文"
-
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
 msgstr "简繁转换引擎"
 
-#: src/module/chttrans/chttrans.c:177
+#: src/module/chttrans/chttrans.c:178
 msgid "Traditional Chinese is enabled."
 msgstr "已启用繁体中文。"
 
@@ -3260,7 +3260,7 @@ msgstr "可执行文件:"
 msgid "here"
 msgstr "这里"
 
-#: src/lib/fcitx/ime.c:1803
+#: src/lib/fcitx/ime.c:1806
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 
@@ -3297,3 +3297,6 @@ msgstr "xmodmap 命令"
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
+
+#~ msgid "Configure Current Input Method"
+#~ msgstr "配置当前输入法"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-11-28 00:02-0800\n"
+"POT-Creation-Date: 2020-05-08 10:05-0700\n"
 "PO-Revision-Date: 2017-11-27 15:26+0000\n"
 "Last-Translator: TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
@@ -80,7 +80,7 @@ msgstr "/Заметка_для_пользователей_GNOME_старше_в�
 msgid "/XIM"
 msgstr "/XIM"
 
-#: src/lib/fcitx/ime.c:1800
+#: src/lib/fcitx/ime.c:1803
 msgid "/min  Time Used: "
 msgstr "минимальное время:"
 
@@ -735,14 +735,9 @@ msgstr "Файл конфигурации"
 msgid "Configuration:"
 msgstr "Настройка:"
 
-#: src/module/notificationitem/dbusmenu.c:356 src/ui/classic/classicui.c:502
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:501
 msgid "Configure"
 msgstr "Настроить"
-
-#: src/module/notificationitem/dbusmenu.c:352 src/ui/classic/classicui.c:501
-#: src/ui/kimpanel/kimpanel.c:785
-msgid "Configure Current Input Method"
-msgstr "Настроить текущий метод ввода"
 
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
@@ -892,7 +887,7 @@ msgstr "Отключить символ пиньинь"
 msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr "Отключить аддоны %s, зависимости %s не могут быть удовлетворены."
 
-#: src/module/notificationitem/notificationitem.c:462
+#: src/module/notificationitem/notificationitem.c:460
 #: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 #: data/config.desc:34
 msgid "Disabled"
@@ -932,12 +927,12 @@ msgstr "Не показывать подсказки по написанию"
 msgid "Do not sort word with code less than this level"
 msgstr "Не сортировать слово с кодом ниже этого уровня"
 
-#: src/lib/fcitx-utils/desktop-parse.c:602
+#: src/lib/fcitx-utils/desktop-parse.c:603
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
 msgstr "Дубликат записи %s в группе %s, строка %d, перезапись предыдущей."
 
-#: src/lib/fcitx-utils/desktop-parse.c:562
+#: src/lib/fcitx-utils/desktop-parse.c:563
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
@@ -1069,7 +1064,7 @@ msgstr "Точное совпадение"
 msgid "Exec"
 msgstr "Выполнить"
 
-#: src/module/notificationitem/dbusmenu.c:371 src/ui/classic/classicui.c:504
+#: src/module/notificationitem/dbusmenu.c:388 src/ui/classic/classicui.c:503
 msgid "Exit"
 msgstr "Выход"
 
@@ -1575,7 +1570,7 @@ msgstr "Размер шрифта ввода"
 msgid "Input Message Color"
 msgstr "Цвет сообщения ввода"
 
-#: src/lib/fcitx/ime.c:1695 src/module/notificationitem/notificationitem.c:411
+#: src/lib/fcitx/ime.c:1698 src/module/notificationitem/notificationitem.c:410
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "Метод ввода"
@@ -1584,7 +1579,7 @@ msgstr "Метод ввода"
 msgid "Input Method Configuration"
 msgstr "Настройка метода ввода"
 
-#: src/module/notificationitem/notificationitem.c:463
+#: src/module/notificationitem/notificationitem.c:461
 #: src/ui/kimpanel/kimpanel.c:283 src/ui/kimpanel/kimpanel.c:288
 msgid "Input Method Disabled"
 msgstr "Метод ввода отключен"
@@ -1601,7 +1596,7 @@ msgstr "Относящиеся к методу ввода переменные �
 msgid "Input Methods:"
 msgstr "Методы ввода:"
 
-#: src/lib/fcitx/ime.c:1797
+#: src/lib/fcitx/ime.c:1800
 msgid "Input Speed: "
 msgstr "Скорость ввода:"
 
@@ -1632,12 +1627,12 @@ msgstr "Недопустимая запись: в строке %d отсутст
 msgid "Invalid addon config file ${1}."
 msgstr "Неверный файл конфигурации дополнения ${1}."
 
-#: src/lib/fcitx-utils/desktop-parse.c:592
+#: src/lib/fcitx-utils/desktop-parse.c:593
 #, c-format
 msgid "Invalid entry line @ line %d %s"
 msgstr "Неверная строка записи %d %s"
 
-#: src/lib/fcitx-utils/desktop-parse.c:550
+#: src/lib/fcitx-utils/desktop-parse.c:551
 #, c-format
 msgid "Invalid group name line @ line %d %s"
 msgstr "Некорректное название группы line @ line %d %s"
@@ -1978,7 +1973,7 @@ msgstr "Нет доступных методов ввода"
 msgid "No available frontend"
 msgstr "Нет доступного интерфейса"
 
-#: src/module/notificationitem/notificationitem.c:456
+#: src/module/notificationitem/notificationitem.c:454
 #: src/ui/kimpanel/kimpanel.c:256 src/ui/kimpanel/kimpanel.c:257
 msgid "No input window"
 msgstr "Нет окна ввода"
@@ -1991,7 +1986,7 @@ msgstr "Локальный метод ввода отсутствует"
 msgid "No remind"
 msgstr "Не напоминать"
 
-#: src/lib/fcitx-utils/desktop-parse.c:586
+#: src/lib/fcitx-utils/desktop-parse.c:587
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr "Не комментарий не принадлежит ни к какой группе %d %s"
@@ -2016,7 +2011,7 @@ msgstr "Заметка для пользователей GNOME старше ве
 msgid "Number"
 msgstr "Числовая"
 
-#: src/module/notificationitem/dbusmenu.c:340 src/ui/classic/classicui.c:440
+#: src/module/notificationitem/dbusmenu.c:361 src/ui/classic/classicui.c:440
 msgid "Online Help"
 msgstr "Онлайн-справка"
 
@@ -2364,8 +2359,8 @@ msgstr "Изменить размер предела справа"
 msgid "Resize Margin Top"
 msgstr "Изменить размер предела сверху"
 
-#: src/module/notificationitem/dbusmenu.c:365 src/ui/classic/classicui.c:503
-#: src/ui/kimpanel/kimpanel.c:790
+#: src/module/notificationitem/dbusmenu.c:382 src/ui/classic/classicui.c:502
+#: src/ui/kimpanel/kimpanel.c:785
 msgid "Restart"
 msgstr "Перезапустить"
 
@@ -2526,16 +2521,12 @@ msgstr "Шуанпинь"
 msgid "Simple Pinyin support for Fcitx"
 msgstr "Поддержка простого пиньинь в Fcitx"
 
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
-msgid "Simplified Chinese"
-msgstr "Упрощенный китайский"
-
-#: src/module/chttrans/chttrans.c:176
+#: src/module/chttrans/chttrans.c:177
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr "Преобразовать упрощенный китайский в традиционный"
 
-#: src/module/chttrans/chttrans.c:178
+#: src/module/chttrans/chttrans.c:179
 msgid "Simplified Chinese is enabled."
 msgstr "Упрощенный китайский включен."
 
@@ -2708,6 +2699,16 @@ msgstr "Переключить встроенное предварительно
 msgid "Switch Full Width Punc Mode"
 msgstr "Переключение режима ввода полноширинных знаков пунктуации"
 
+#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#, fuzzy
+msgid "Switch to Simplified Chinese"
+msgstr "Упрощенный китайский"
+
+#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#, fuzzy
+msgid "Switch to Traditional Chinese"
+msgstr "Традиционный китайский"
+
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
 msgid "Switch to the Eighth Input Method"
@@ -2858,7 +2859,7 @@ msgstr "Переключить метод ввода"
 msgid "Toggle Remind"
 msgstr "Вкл./выкл. напоминания"
 
-#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "Переключить преобразование упрощенного китайского в традиционный"
 
@@ -2893,15 +2894,11 @@ msgstr "СверхуСлева"
 msgid "TopRight"
 msgstr "СверхуСправа"
 
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:196
-msgid "Traditional Chinese"
-msgstr "Традиционный китайский"
-
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
 msgstr "Движок перевода на традиционный китайский"
 
-#: src/module/chttrans/chttrans.c:177
+#: src/module/chttrans/chttrans.c:178
 msgid "Traditional Chinese is enabled."
 msgstr "Традиционный китайский включен."
 
@@ -3323,7 +3320,7 @@ msgstr "Исполняемый файл:"
 msgid "here"
 msgstr "здесь"
 
-#: src/lib/fcitx/ime.c:1803
+#: src/lib/fcitx/ime.c:1806
 msgid "min Num of Characters: "
 msgstr "минимальное число символов:"
 
@@ -3360,3 +3357,6 @@ msgstr "команда xmodmap"
 #, c-format
 msgid "your current font is: %s"
 msgstr "ваш текущий шрифт: %s"
+
+#~ msgid "Configure Current Input Method"
+#~ msgstr "Настроить текущий метод ввода"

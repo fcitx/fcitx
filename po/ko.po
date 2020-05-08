@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-04-24 00:02-0700\n"
+"POT-Creation-Date: 2020-05-08 10:05-0700\n"
 "PO-Revision-Date: 2020-04-24 05:01+0000\n"
 "Last-Translator: MarongHappy <daemul72@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
@@ -729,14 +729,9 @@ msgstr "설정 파일"
 msgid "Configuration:"
 msgstr "환경설정:"
 
-#: src/module/notificationitem/dbusmenu.c:388 src/ui/classic/classicui.c:502
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:501
 msgid "Configure"
 msgstr "설정"
-
-#: src/module/notificationitem/dbusmenu.c:384 src/ui/classic/classicui.c:501
-#: src/ui/kimpanel/kimpanel.c:785
-msgid "Configure Current Input Method"
-msgstr "현재 입력기 설정"
 
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
@@ -886,7 +881,7 @@ msgstr "병음 기호 비활성화"
 msgid "Disable addon %s, dependency %s cannot be satisfied."
 msgstr "부가기능 %s의 의존성이 만족되지 않아 %s이 비활성화 됩니다"
 
-#: src/module/notificationitem/notificationitem.c:464
+#: src/module/notificationitem/notificationitem.c:460
 #: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 #: data/config.desc:34
 msgid "Disabled"
@@ -1056,7 +1051,7 @@ msgstr "정확한 일치"
 msgid "Exec"
 msgstr "실행"
 
-#: src/module/notificationitem/dbusmenu.c:403 src/ui/classic/classicui.c:504
+#: src/module/notificationitem/dbusmenu.c:388 src/ui/classic/classicui.c:503
 msgid "Exit"
 msgstr "나가기"
 
@@ -1559,7 +1554,7 @@ msgstr "입력 글꼴 크기"
 msgid "Input Message Color"
 msgstr "입력 메세지 색"
 
-#: src/lib/fcitx/ime.c:1698 src/module/notificationitem/notificationitem.c:413
+#: src/lib/fcitx/ime.c:1698 src/module/notificationitem/notificationitem.c:410
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr "입력기"
@@ -1568,7 +1563,7 @@ msgstr "입력기"
 msgid "Input Method Configuration"
 msgstr "입력기 환경설정"
 
-#: src/module/notificationitem/notificationitem.c:465
+#: src/module/notificationitem/notificationitem.c:461
 #: src/ui/kimpanel/kimpanel.c:283 src/ui/kimpanel/kimpanel.c:288
 msgid "Input Method Disabled"
 msgstr "입력기 비활성"
@@ -1952,7 +1947,7 @@ msgstr "사용 가능한 입력기가 없음"
 msgid "No available frontend"
 msgstr "사용 사능한 frontend가 없음"
 
-#: src/module/notificationitem/notificationitem.c:458
+#: src/module/notificationitem/notificationitem.c:454
 #: src/ui/kimpanel/kimpanel.c:256 src/ui/kimpanel/kimpanel.c:257
 msgid "No input window"
 msgstr "입력창 없음"
@@ -1990,7 +1985,7 @@ msgstr "3.6 이후의 GNOME 에 대한 주의사항"
 msgid "Number"
 msgstr "숫자"
 
-#: src/module/notificationitem/dbusmenu.c:372 src/ui/classic/classicui.c:440
+#: src/module/notificationitem/dbusmenu.c:361 src/ui/classic/classicui.c:440
 msgid "Online Help"
 msgstr "온라인 도움말"
 
@@ -2332,8 +2327,8 @@ msgstr "오른쪽 여백 크기 변경"
 msgid "Resize Margin Top"
 msgstr "위쪽 여백 크기 변경"
 
-#: src/module/notificationitem/dbusmenu.c:397 src/ui/classic/classicui.c:503
-#: src/ui/kimpanel/kimpanel.c:790
+#: src/module/notificationitem/dbusmenu.c:382 src/ui/classic/classicui.c:502
+#: src/ui/kimpanel/kimpanel.c:785
 msgid "Restart"
 msgstr "재시작"
 
@@ -2492,16 +2487,12 @@ msgstr "이중병음"
 msgid "Simple Pinyin support for Fcitx"
 msgstr "Fcitx를 위한 단순 병음 지원"
 
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
-msgid "Simplified Chinese"
-msgstr "간체"
-
-#: src/module/chttrans/chttrans.c:176
+#: src/module/chttrans/chttrans.c:177
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr "간체를 번체로"
 
-#: src/module/chttrans/chttrans.c:178
+#: src/module/chttrans/chttrans.c:179
 msgid "Simplified Chinese is enabled."
 msgstr "중국어 간체가 활성화되었습니다."
 
@@ -2674,6 +2665,16 @@ msgstr "내장 사전 전환"
 msgid "Switch Full Width Punc Mode"
 msgstr "전각 부호 모드 전환"
 
+#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#, fuzzy
+msgid "Switch to Simplified Chinese"
+msgstr "간체"
+
+#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#, fuzzy
+msgid "Switch to Traditional Chinese"
+msgstr "번체"
+
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
 msgid "Switch to the Eighth Input Method"
@@ -2818,7 +2819,7 @@ msgstr "입력기 전환"
 msgid "Toggle Remind"
 msgstr "알림 젼환"
 
-#: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "간체/번체 변환 전환"
 
@@ -2853,15 +2854,11 @@ msgstr "왼쪽위"
 msgid "TopRight"
 msgstr "오른쪽위"
 
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:196
-msgid "Traditional Chinese"
-msgstr "번체"
-
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
 msgstr "중국어 번체 번역 엔진"
 
-#: src/module/chttrans/chttrans.c:177
+#: src/module/chttrans/chttrans.c:178
 msgid "Traditional Chinese is enabled."
 msgstr "중국어 번체가 활성화되었습니다."
 
@@ -3309,3 +3306,6 @@ msgstr "xmodmap 명령"
 #, c-format
 msgid "your current font is: %s"
 msgstr "현재 글꼴: %s"
+
+#~ msgid "Configure Current Input Method"
+#~ msgstr "현재 입력기 설정"

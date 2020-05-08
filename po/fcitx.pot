@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-10-15 20:02-0700\n"
+"POT-Creation-Date: 2020-05-08 10:05-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -921,20 +921,20 @@ msgstr ""
 msgid "No available Input Method"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1695 src/module/notificationitem/notificationitem.c:411
+#: src/lib/fcitx/ime.c:1698 src/module/notificationitem/notificationitem.c:410
 #: data/fcitx-autostart.desktop.in:3 data/fcitx.desktop.in:3
 msgid "Input Method"
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1797
+#: src/lib/fcitx/ime.c:1800
 msgid "Input Speed: "
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1800
+#: src/lib/fcitx/ime.c:1803
 msgid "/min  Time Used: "
 msgstr ""
 
-#: src/lib/fcitx/ime.c:1803
+#: src/lib/fcitx/ime.c:1806
 msgid "min Num of Characters: "
 msgstr ""
 
@@ -996,28 +996,28 @@ msgstr ""
 msgid "UI: bad ui"
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:550
+#: src/lib/fcitx-utils/desktop-parse.c:551
 #, c-format
 msgid "Invalid group name line @ line %d %s"
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:562
+#: src/lib/fcitx-utils/desktop-parse.c:563
 #, c-format
 msgid ""
 "Duplicate group %s in a desktop file,@ line %d, merge with previous one."
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:586
+#: src/lib/fcitx-utils/desktop-parse.c:587
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:592
+#: src/lib/fcitx-utils/desktop-parse.c:593
 #, c-format
 msgid "Invalid entry line @ line %d %s"
 msgstr ""
 
-#: src/lib/fcitx-utils/desktop-parse.c:602
+#: src/lib/fcitx-utils/desktop-parse.c:603
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
 msgstr ""
@@ -1030,28 +1030,28 @@ msgstr ""
 msgid "Press Enter to input text"
 msgstr ""
 
-#: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:196
-msgid "Traditional Chinese"
-msgstr ""
-
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
-msgid "Simplified Chinese"
+msgid "Switch to Simplified Chinese"
 msgstr ""
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+msgid "Switch to Traditional Chinese"
+msgstr ""
+
+#: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr ""
 
-#: src/module/chttrans/chttrans.c:176
+#: src/module/chttrans/chttrans.c:177
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr ""
 
-#: src/module/chttrans/chttrans.c:177
+#: src/module/chttrans/chttrans.c:178
 msgid "Traditional Chinese is enabled."
 msgstr ""
 
-#: src/module/chttrans/chttrans.c:178
+#: src/module/chttrans/chttrans.c:179
 msgid "Simplified Chinese is enabled."
 msgstr ""
 
@@ -1098,40 +1098,35 @@ msgstr ""
 msgid "Clear local input method"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:340 src/ui/classic/classicui.c:440
+#: src/module/notificationitem/dbusmenu.c:361 src/ui/classic/classicui.c:440
 msgid "Online Help"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:352 src/ui/classic/classicui.c:501
-#: src/ui/kimpanel/kimpanel.c:785
-msgid "Configure Current Input Method"
-msgstr ""
-
-#: src/module/notificationitem/dbusmenu.c:356 src/ui/classic/classicui.c:502
+#: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:501
 msgid "Configure"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:365 src/ui/classic/classicui.c:503
-#: src/ui/kimpanel/kimpanel.c:790
+#: src/module/notificationitem/dbusmenu.c:382 src/ui/classic/classicui.c:502
+#: src/ui/kimpanel/kimpanel.c:785
 msgid "Restart"
 msgstr ""
 
-#: src/module/notificationitem/dbusmenu.c:371 src/ui/classic/classicui.c:504
+#: src/module/notificationitem/dbusmenu.c:388 src/ui/classic/classicui.c:503
 msgid "Exit"
 msgstr ""
 
-#: src/module/notificationitem/notificationitem.c:456
+#: src/module/notificationitem/notificationitem.c:454
 #: src/ui/kimpanel/kimpanel.c:256 src/ui/kimpanel/kimpanel.c:257
 msgid "No input window"
 msgstr ""
 
-#: src/module/notificationitem/notificationitem.c:462
+#: src/module/notificationitem/notificationitem.c:460
 #: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
 #: data/config.desc:34
 msgid "Disabled"
 msgstr ""
 
-#: src/module/notificationitem/notificationitem.c:463
+#: src/module/notificationitem/notificationitem.c:461
 #: src/ui/kimpanel/kimpanel.c:283 src/ui/kimpanel/kimpanel.c:288
 msgid "Input Method Disabled"
 msgstr ""
