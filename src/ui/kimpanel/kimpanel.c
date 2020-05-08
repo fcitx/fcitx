@@ -778,36 +778,23 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
             if (strlen(s0) > strlen("/Fcitx/")) {
                 s0 += strlen("/Fcitx/");
                 if (strcmp("logo", s0) == 0) {
-                    char *prop[3];
+                    char *prop[2];
                     char *trans_str = _("Toggle Input Method");
                     fcitx_utils_alloc_cat_str(prop[0], "/Fcitx/logo/toggle:",
                                               trans_str, "::", trans_str);
-                    trans_str = _("Configure Current Input Method");
-                    fcitx_utils_alloc_cat_str(prop[1],
-                                              "/Fcitx/logo/configureim:",
-                                              trans_str, ":configure:",
-                                              trans_str);
                     trans_str = _("Restart");
-                    fcitx_utils_alloc_cat_str(prop[2], "/Fcitx/logo/restart:",
+                    fcitx_utils_alloc_cat_str(prop[1], "/Fcitx/logo/restart:",
                                               trans_str, ":view-refresh:",
                                               trans_str);
-                    KimExecMenu(kimpanel, prop, 3);
+                    KimExecMenu(kimpanel, prop, 2);
                     int i;
-                    for (i = 0;i < 3;i++) {
+                    for (i = 0;i < 2;i++) {
                         free(prop[i]);
                     }
                 } else if (strncmp("logo/", s0, strlen("logo/")) == 0) {
                     s0 += strlen("logo/");
                     if (strcmp(s0, "toggle") == 0)
                         FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
-                    else if (strcmp(s0, "configureim") == 0) {
-                        FcitxIM* im = FcitxInstanceGetCurrentIM(kimpanel->owner);
-                        if (im && im->owner) {
-                            fcitx_utils_launch_configure_tool_for_addon(im->uniqueName);
-                        }
-                        else
-                            fcitx_utils_launch_configure_tool();
-                    }
                     else if (strcmp(s0, "restart") == 0) {
                         FcitxInstanceRestart(instance);
                     }

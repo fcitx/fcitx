@@ -237,21 +237,10 @@ void FcitxDBusMenuDoEvent(void* arg)
                     {
                         char* args[] = {
                             "xdg-open",
-                            "http://fcitx-im.org/",
+                            "https://fcitx-im.org/",
                             0
                         };
                         fcitx_utils_start_process(args);
-                    }
-                    break;
-                case 4:
-                    {
-                        FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
-                        if (im && im->owner) {
-                            fcitx_utils_launch_configure_tool_for_addon(im->uniqueName);
-                        }
-                        else {
-                            fcitx_utils_launch_configure_tool();
-                        }
                     }
                     break;
                 case 5:
@@ -380,10 +369,6 @@ void FcitxDBusMenuFillProperty(FcitxNotificationItem* notificationitem, int32_t 
                     value = "separator";
                     FcitxDBusMenuAppendProperty(&sub, properties, "type", DBUS_TYPE_STRING, &value);
                     break;
-                case 4:
-                    value = _("Configure Current Input Method");
-                    FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &value);
-                    break;
                 case 5:
                     value = _("Configure");
                     FcitxDBusMenuAppendProperty(&sub, properties, "label", DBUS_TYPE_STRING, &value);
@@ -496,7 +481,7 @@ void FcitxDBusMenuFillLayooutItem(FcitxNotificationItem* notificationitem, int32
      *            -> separator (0,8)
      *            -> registered menu (x,0) -> (x,1) , (x,2), (x,3)
      *            -> separator (0,3)
-     *            -> configure current (0,4)
+     *            -> configure current (0,4) # removed.
      *            -> configure (0,5)
      *            -> restart (0,6)
      *            -> exit (0,7)
@@ -573,7 +558,6 @@ void FcitxDBusMenuFillLayooutItem(FcitxNotificationItem* notificationitem, int32
                     }
                     FcitxDBusMenuFillLayooutItemWrap(notificationitem, ACTION_ID(0,3), depth - 1, properties, &array);
                 }
-                FcitxDBusMenuFillLayooutItemWrap(notificationitem, ACTION_ID(0,4), depth - 1, properties, &array);
                 FcitxDBusMenuFillLayooutItemWrap(notificationitem, ACTION_ID(0,5), depth - 1, properties, &array);
                 FcitxDBusMenuFillLayooutItemWrap(notificationitem, ACTION_ID(0,6), depth - 1, properties, &array);
                 FcitxDBusMenuFillLayooutItemWrap(notificationitem, ACTION_ID(0,7), depth - 1, properties, &array);

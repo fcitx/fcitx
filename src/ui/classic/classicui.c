@@ -498,7 +498,6 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
         FcitxMenuAddMenuItem(menu, menup->name, MENUTYPE_SUBMENU, menup);
     }
     FcitxMenuAddMenuItem(menu, NULL, MENUTYPE_DIVLINE, NULL);
-    FcitxMenuAddMenuItem(menu, _("Configure Current Input Method"), MENUTYPE_SIMPLE, NULL);
     FcitxMenuAddMenuItem(menu, _("Configure"), MENUTYPE_SIMPLE, NULL);
     FcitxMenuAddMenuItem(menu, _("Restart"), MENUTYPE_SIMPLE, NULL);
     FcitxMenuAddMenuItem(menu, _("Exit"), MENUTYPE_SIMPLE, NULL);
@@ -522,14 +521,6 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
         FcitxInstanceRestart(instance);
     } else if (index == length - 3) { /* Configuration */
         fcitx_utils_launch_configure_tool();
-    } else if (index == length - 4) { /* Configuration */
-        FcitxIM* im = FcitxInstanceGetCurrentIM(classicui->owner);
-        if (im && im->owner) {
-            fcitx_utils_launch_configure_tool_for_addon(im->uniqueName);
-        }
-        else {
-            fcitx_utils_launch_configure_tool();
-        }
     } else {
         FcitxMenuItem* item = (FcitxMenuItem*) utarray_eltptr(&menu->shell, index);
         if (item && item->type == MENUTYPE_SIMPLE && item->data) {
