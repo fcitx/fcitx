@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:05-0700\n"
-"PO-Revision-Date: 2018-06-13 07:09+0000\n"
-"Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
+"POT-Creation-Date: 2020-05-08 10:12-0700\n"
+"PO-Revision-Date: 2020-05-08 17:05+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -2715,14 +2715,12 @@ msgid "Switch Full Width Punc Mode"
 msgstr "Canvia a mode de puntuació d'amplada completa"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
-#, fuzzy
 msgid "Switch to Simplified Chinese"
-msgstr "Xinès simplificat"
+msgstr ""
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
-#, fuzzy
 msgid "Switch to Traditional Chinese"
-msgstr "Xinès tradicional"
+msgstr ""
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
@@ -3382,6 +3380,3 @@ msgstr "ordre xmodmap"
 #, c-format
 msgid "your current font is: %s"
 msgstr "la vostra lletra actual és: %s"
-
-#~ msgid "Configure Current Input Method"
-#~ msgstr "Configura el mètode actual d'entrada"

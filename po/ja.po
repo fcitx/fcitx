@@ -26,9 +26,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:05-0700\n"
-"PO-Revision-Date: 2017-11-23 06:45+0000\n"
-"Last-Translator: ABE Tsunehiko\n"
+"POT-Creation-Date: 2020-05-08 10:12-0700\n"
+"PO-Revision-Date: 2020-05-08 17:05+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -2686,14 +2686,12 @@ msgid "Switch Full Width Punc Mode"
 msgstr "全角句読点モードに切り替え"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
-#, fuzzy
 msgid "Switch to Simplified Chinese"
-msgstr "中国語簡体字"
+msgstr ""
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
-#, fuzzy
 msgid "Switch to Traditional Chinese"
-msgstr "中国語繁体字"
+msgstr ""
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
@@ -3329,6 +3327,3 @@ msgstr "xmodmap コマンド"
 #, c-format
 msgid "your current font is: %s"
 msgstr "あなたの現在のフォントは %s です"
-
-#~ msgid "Configure Current Input Method"
-#~ msgstr "現在の入力メソッドの設定"

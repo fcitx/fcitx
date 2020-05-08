@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:05-0700\n"
-"PO-Revision-Date: 2017-11-27 15:26+0000\n"
-"Last-Translator: TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>\n"
+"POT-Creation-Date: 2020-05-08 10:12-0700\n"
+"PO-Revision-Date: 2020-05-08 17:05+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -2700,14 +2700,12 @@ msgid "Switch Full Width Punc Mode"
 msgstr "Переключение режима ввода полноширинных знаков пунктуации"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
-#, fuzzy
 msgid "Switch to Simplified Chinese"
-msgstr "Упрощенный китайский"
+msgstr ""
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
-#, fuzzy
 msgid "Switch to Traditional Chinese"
-msgstr "Традиционный китайский"
+msgstr ""
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
@@ -3357,6 +3355,3 @@ msgstr "команда xmodmap"
 #, c-format
 msgid "your current font is: %s"
 msgstr "ваш текущий шрифт: %s"
-
-#~ msgid "Configure Current Input Method"
-#~ msgstr "Настроить текущий метод ввода"

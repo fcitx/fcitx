@@ -8,7 +8,7 @@
 # csslayer <wengxt@gmail.com>, 2013
 # Cynthia Young <cynthia.young0512@gmail.com>, 2013
 # marguerite su <i@marguerite.su>, 2012-2014
-# csslayer <wengxt@gmail.com>, 2013-2015,2017
+# csslayer <wengxt@gmail.com>, 2013-2015,2017,2020
 # csslayer <wengxt@gmail.com>, 2010-2012
 # csslayer <wengxt@gmail.com>, 2013
 # wwj402 <wwj402@gmail.com>, 2013-2016
@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:05-0700\n"
-"PO-Revision-Date: 2017-12-16 04:51+0000\n"
+"POT-Creation-Date: 2020-05-08 10:12-0700\n"
+"PO-Revision-Date: 2020-05-08 17:09+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_CN/)\n"
@@ -2661,14 +2661,12 @@ msgid "Switch Full Width Punc Mode"
 msgstr "切换全角标点"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
-#, fuzzy
 msgid "Switch to Simplified Chinese"
-msgstr "简体中文"
+msgstr "切换为简体中文"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
-#, fuzzy
 msgid "Switch to Traditional Chinese"
-msgstr "繁体中文"
+msgstr "切换为繁体中文"
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
@@ -3297,6 +3295,3 @@ msgstr "xmodmap 命令"
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
-
-#~ msgid "Configure Current Input Method"
-#~ msgstr "配置当前输入法"

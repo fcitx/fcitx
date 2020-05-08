@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:05-0700\n"
-"PO-Revision-Date: 2017-10-17 04:04+0000\n"
+"POT-Creation-Date: 2020-05-08 10:12-0700\n"
+"PO-Revision-Date: 2020-05-08 17:05+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/fcitx/fcitx/language/es/)\n"
 "Language: es\n"
@@ -2645,9 +2645,8 @@ msgid "Switch to Simplified Chinese"
 msgstr ""
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
-#, fuzzy
 msgid "Switch to Traditional Chinese"
-msgstr "Convertir chino simplificado a chino tradicional"
+msgstr ""
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99

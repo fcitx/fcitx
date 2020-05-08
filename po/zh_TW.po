@@ -16,7 +16,7 @@
 # Pellaeon Lin <nfsmwlin@gmail.com>, 2013
 # Pellaeon Lin <nfsmwlin@gmail.com>, 2013
 # PHLin <Cypressyew@gmail.com>, 2017
-# csslayer <wengxt@gmail.com>, 2013,2015
+# csslayer <wengxt@gmail.com>, 2013,2015,2020
 # csslayer <wengxt@gmail.com>, 2012-2013
 # csslayer <wengxt@gmail.com>, 2013
 # yyc1992 <yyc1992@gmail.com>, 2015
@@ -25,9 +25,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:05-0700\n"
-"PO-Revision-Date: 2019-12-06 14:37+0000\n"
-"Last-Translator: byStarTW (pan93412) <pan93412@gmail.com>\n"
+"POT-Creation-Date: 2020-05-08 10:12-0700\n"
+"PO-Revision-Date: 2020-05-08 17:10+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -2667,14 +2667,12 @@ msgid "Switch Full Width Punc Mode"
 msgstr "切換全形標點符號"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
-#, fuzzy
 msgid "Switch to Simplified Chinese"
-msgstr "簡體中文"
+msgstr "切換至簡體中文"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
-#, fuzzy
 msgid "Switch to Traditional Chinese"
-msgstr "正體中文"
+msgstr "切換至正體中文"
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
@@ -3302,6 +3300,3 @@ msgstr "xmodmap 指令"
 #, c-format
 msgid "your current font is: %s"
 msgstr "目前使用的字型：%s"
-
-#~ msgid "Configure Current Input Method"
-#~ msgstr "設定目前輸入法"
