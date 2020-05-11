@@ -4,14 +4,14 @@
 #
 # Translators:
 # scootergrisen, 2017,2019
-# scootergrisen, 2017,2019
+# scootergrisen, 2017,2019-2020
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:12-0700\n"
-"PO-Revision-Date: 2020-05-08 17:05+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2020-05-11 00:02-0700\n"
+"PO-Revision-Date: 2020-05-10 11:53+0000\n"
+"Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -2684,11 +2684,11 @@ msgstr "Skift tilstand for tegnsætning med fuld bredde"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
 msgid "Switch to Simplified Chinese"
-msgstr ""
+msgstr "Skift til forenklet kinesisk"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 msgid "Switch to Traditional Chinese"
-msgstr ""
+msgstr "Skift til traditionel kinesisk"
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
