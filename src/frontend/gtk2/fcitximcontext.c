@@ -90,6 +90,8 @@ struct _FcitxIMContext {
     gint last_cursor_pos;
     gint last_anchor_pos;
     struct xkb_compose_state *xkbComposeState;
+
+    GdkEvent *gdk_event;
 };
 
 struct _FcitxIMContextClass {
@@ -201,16 +203,16 @@ static struct xkb_context *xkbContext = NULL;
 static struct xkb_compose_table *xkbComposeTable = NULL;
 
 /* Copied from gtk+2.0-2.20.1/modules/input/imcedilla.c to fix
-* crosbug.com/11421.
-* Overwrite the original Gtk+'s compose table in
-* gtk+-2.x.y/gtk/gtkimcontextsimple.c. */
+ * crosbug.com/11421.
+ * Overwrite the original Gtk+'s compose table in
+ * gtk+-2.x.y/gtk/gtkimcontextsimple.c. */
 
 /* The difference between this and the default input method is the handling
-* of C+acute - this method produces C WITH CEDILLA rather than C WITH ACUTE.
-* For languages that use CCedilla and not acute, this is the preferred mapping,
-* and is particularly important for pt_BR, where the us-intl keyboard is
-* used extensively.
-*/
+ * of C+acute - this method produces C WITH CEDILLA rather than C WITH ACUTE.
+ * For languages that use CCedilla and not acute, this is the preferred mapping,
+ * and is particularly important for pt_BR, where the us-intl keyboard is
+ * used extensively.
+ */
 static guint16 cedilla_compose_seqs[] = {
 #ifdef DEPRECATED_GDK_KEYSYMS
     GDK_dead_acute,
@@ -536,33 +538,20 @@ static void fcitx_im_context_finalize(GObject *obj) {
                                          0, NULL, NULL, (data))
 #endif
 
-    if (context->xkbComposeState) {
-        xkb_compose_state_unref(context->xkbComposeState);
-        context->xkbComposeState = NULL;
-    }
-
+    g_clear_pointer(&context->xkbComposeState, xkb_compose_state_unref);
     if (context->client) {
         g_signal_handlers_disconnect_by_data(context->client, context);
-        g_object_unref(context->client);
-        context->client = NULL;
     }
-
+    g_clear_object(&context->client);
     if (context->slave) {
         g_signal_handlers_disconnect_by_data(context->slave, context);
-        g_object_unref(context->slave);
-        context->slave = NULL;
     }
+    g_clear_object(&context->slave);
 
-    g_free(context->preedit_string);
-    context->preedit_string = NULL;
-
-    g_free(context->surrounding_text);
-    context->surrounding_text = NULL;
-
-    if (context->attrlist) {
-        pango_attr_list_unref(context->attrlist);
-        context->attrlist = NULL;
-    }
+    g_clear_pointer(&context->preedit_string, g_free);
+    g_clear_pointer(&context->surrounding_text, g_free);
+    g_clear_pointer(&context->attrlist, pango_attr_list_unref);
+    g_clear_pointer(&context->gdk_event, gdk_event_free);
 
     G_OBJECT_CLASS(parent_class)->finalize(obj);
 }
@@ -643,7 +632,7 @@ static gboolean fcitx_im_context_filter_keypress(GtkIMContext *context,
                                              event->window);
 
             /* set_cursor_location_internal() will get origin from X server,
-            * it blocks UI. So delay it to idle callback. */
+             * it blocks UI. So delay it to idle callback. */
             gdk_threads_add_idle_full(
                 G_PRIORITY_DEFAULT_IDLE,
                 (GSourceFunc)_set_cursor_location_internal,
@@ -665,6 +654,9 @@ static gboolean fcitx_im_context_filter_keypress(GtkIMContext *context,
 
         fcitxcontext->time = event->time;
 
+        // Keep a copy of latest event.
+        g_clear_pointer(&fcitxcontext->gdk_event, gdk_event_free);
+        fcitxcontext->gdk_event = gdk_event_copy((GdkEvent *)event);
         if (_use_sync_mode) {
             int ret = fcitx_client_process_key_sync(
                 fcitxcontext->client, event->keyval, event->hardware_keycode,
@@ -1427,7 +1419,7 @@ static GdkEventKey *_create_gdk_event(FcitxIMContext *fcitxcontext,
         gint len;
 
         /* Apply the control key - Taken from Xlib
-        */
+         */
         if (event->state & GDK_CONTROL_MASK) {
             if ((c >= '@' && c < '\177') || c == ' ')
                 c &= 0x1F;
@@ -1472,13 +1464,23 @@ static GdkEventKey *_create_gdk_event(FcitxIMContext *fcitxcontext,
         event->length = 0;
         event->string = g_strdup("");
     }
+#if GTK_CHECK_VERSION(3, 0, 0)
+    // Set the event device to be the same device.
+    if (fcitxcontext->gdk_event) {
+        gdk_event_set_device((GdkEvent *)event,
+                             gdk_event_get_device(fcitxcontext->gdk_event));
+        gdk_event_set_source_device(
+            (GdkEvent *)event,
+            gdk_event_get_source_device(fcitxcontext->gdk_event));
+    }
+#endif
 out:
     return event;
 }
 
 static gboolean _key_is_modifier(guint keyval) {
     /* See gdkkeys-x11.c:_gdk_keymap_key_is_modifier() for how this
-    * really should be implemented */
+     * really should be implemented */
 
     switch (keyval) {
 #ifdef DEPRECATED_GDK_KEYSYMS
@@ -1608,6 +1610,9 @@ static gint _key_snooper_cb(GtkWidget *widget, GdkEventKey *event,
             return FALSE;
         fcitxcontext->time = event->time;
 
+        // Keep a copy of latest event.
+        g_clear_pointer(&fcitxcontext->gdk_event, gdk_event_free);
+        fcitxcontext->gdk_event = gdk_event_copy((GdkEvent *)event);
         if (_use_sync_mode) {
 
             int ret = fcitx_client_process_key_sync(

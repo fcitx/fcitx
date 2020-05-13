@@ -23,8 +23,8 @@
 #include <gtk/gtk.h>
 
 /*
-* Type macros.
-*/
+ * Type macros.
+ */
 #define FCITX_TYPE_IM_CONTEXT (fcitx_im_context_get_type())
 #define FCITX_IM_CONTEXT(obj)                                                  \
     (G_TYPE_CHECK_INSTANCE_CAST((obj), FCITX_TYPE_IM_CONTEXT, FcitxIMContext))
