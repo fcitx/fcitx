@@ -97,11 +97,11 @@ static XimFrameRec xpcs_fr[] = {
 };
 
 static XimFrameRec ext_fr[] = {
-    _FRAME(BIT16),      /* extension major-opcode */
-    _FRAME(BIT16),      /* extension minor-opcode */
+    _FRAME(BIT8),      /* extension major-opcode */
+    _FRAME(BIT8),      /* extension minor-opcode */
     _FRAME(BIT16),      /* length of extension name */
     _FRAME(BARRAY),         /* extension name */
-    _PAD4(2),
+    _PAD4(1),
     _FRAME(EOL),
 };
 
