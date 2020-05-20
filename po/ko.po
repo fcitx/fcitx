@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:12-0700\n"
-"PO-Revision-Date: 2020-05-08 17:05+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2020-05-20 00:02-0700\n"
+"PO-Revision-Date: 2020-05-19 17:37+0000\n"
+"Last-Translator: MarongHappy <daemul72@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -2138,7 +2138,7 @@ msgstr "Preedit의 위치"
 
 #: src/module/spell/fcitx-spell.desc:14
 msgid "Possible Providers: presage, custom, enchant (separate with comma)"
-msgstr "가능한 제공자: 사전 설정, 사용자 지정, 인챈트 (쉼표로 구분)"
+msgstr "가능한 제공도구: 사전 설정, 사용자 지정, 인챈트 (쉼표로 구분)"
 
 #: src/module/spell/fcitx-spell.desc:8
 msgid "Preferred Enchant provider"
@@ -2667,11 +2667,11 @@ msgstr "전각 부호 모드 전환"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
 msgid "Switch to Simplified Chinese"
-msgstr ""
+msgstr "중국어 간체로 전환"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 msgid "Switch to Traditional Chinese"
-msgstr ""
+msgstr "중국어 번체로 전환"
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
@@ -2771,7 +2771,9 @@ msgstr "스크립트는 ${1} (${2}) 계정으로 실행됩니다."
 msgid ""
 "This is only a soft limit, the actually number of candidate words may be "
 "larger than this when multiple characters have the same order of strokes."
-msgstr "이것은 약한 제한으로, 실제 후보 단어의 수는 더 많을 수 있습니다."
+msgstr ""
+"이것은 약한 제한으로, 여러 문자가 동일한 필획 순서를 갖는 경우 실제로 후보 단"
+"어의 수가 이 수보다 클 수 있습니다."
 
 #: data/config.desc:156
 msgid ""
