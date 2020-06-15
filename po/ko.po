@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-20 00:02-0700\n"
-"PO-Revision-Date: 2020-05-19 17:37+0000\n"
+"POT-Creation-Date: 2020-06-15 00:02-0700\n"
+"PO-Revision-Date: 2020-06-14 08:50+0000\n"
 "Last-Translator: MarongHappy <daemul72@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -889,7 +889,7 @@ msgstr "비활성상태"
 
 #: data/config.desc:217
 msgid "Do not commit preedit text when unfocus a window"
-msgstr "창이 비활성화될 때 편집된 문자열 보내지 않기"
+msgstr "창이 비활성화될 때 텍스트 사전편집 보내지 않기"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:620
 msgid "Do not show again"
@@ -901,11 +901,11 @@ msgstr "GUI에 표시 안함"
 
 #: data/config.desc:259
 msgid "Do not show input window if there is only one candidate and preedit"
-msgstr "단어 후보가 하나뿐일 때 입력창 표시 않음"
+msgstr "후보가 하나만 있는 경우 입력 창을 표시하지 않고 사전편집"
 
 #: data/config.desc:253
 msgid "Do not show input window if there is only preedit string"
-msgstr "사전 편집 문자열만 있는 경우 입력 창을 표시하지 않음"
+msgstr "문자열 사전편집만 있는 경우 입력 창 표시 안함"
 
 #: src/module/autoeng/fcitx-autoeng.desc:12
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
@@ -1152,7 +1152,7 @@ msgstr "첫 번째 후보 색"
 
 #: src/im/table/table.desc:198
 msgid "First Candidate Display as Preedit"
-msgstr "사전 편집을 첫 후보로 표시"
+msgstr "첫 번째 후보 사전편집으로 표시"
 
 #: src/im/pinyin/fcitx-pinyin.desc:140
 msgid "Fix misstype gn/ng"
@@ -1164,7 +1164,7 @@ msgstr "jv, qv, xv, yv 등의 잘못 입력된 v/u 수정"
 
 #: src/im/pinyin/fcitx-pinyin.desc:18
 msgid "Fix preedit cursor at head"
-msgstr "사전편집 커서를 앞에 수정"
+msgstr "사전편집 커서를 헤드 위에 고정"
 
 #: src/ui/classic/fcitx-classic-ui.desc:23
 msgid "Font"
@@ -1858,7 +1858,7 @@ msgstr "필획 입력 가능한 최대 길이"
 
 #: src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
-msgstr "preedit에 보관될 최대 단어 수"
+msgstr "사전편집에 보관될 최대 단어 수"
 
 #: src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
@@ -2134,7 +2134,7 @@ msgstr "LookupTable의 위치"
 
 #: src/ui/classic/skin.desc:261
 msgid "Position or offset of Preedit"
-msgstr "Preedit의 위치"
+msgstr "사전편집의 위치 또는 오프셋"
 
 #: src/module/spell/fcitx-spell.desc:14
 msgid "Possible Providers: presage, custom, enchant (separate with comma)"
@@ -2430,7 +2430,7 @@ msgstr "세미콜론"
 
 #: src/im/table/table.desc:64
 msgid "Send Raw Preedit"
-msgstr "수정되지 않은 문자열 입력"
+msgstr "원시 사전편집 전송"
 
 #: data/config.desc:199
 msgid "Send typed raw text if Switch to inactive Mode"
@@ -2469,7 +2469,7 @@ msgstr "입력 속도 표시"
 
 #: data/profile.desc:29
 msgid "Show Preedit String in Client Window"
-msgstr "클라이언트 창에 사전 편집 문자열 표시"
+msgstr "클라이언트 창에 사전편집 문자열 표시"
 
 #: data/config.desc:247
 msgid "Show Version"
@@ -2659,17 +2659,19 @@ msgstr "Super+오른쪽 Ctrl"
 
 #: data/config.desc:142
 msgid "Switch Embedded Preedit"
-msgstr "내장 사전 전환"
+msgstr "내장된 사전편집 전환"
 
 #: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
 msgstr "전각 부호 모드 전환"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#: src/module/chttrans/chttrans.c:244
 msgid "Switch to Simplified Chinese"
 msgstr "중국어 간체로 전환"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:245
 msgid "Switch to Traditional Chinese"
 msgstr "중국어 번체로 전환"
 
@@ -2820,6 +2822,7 @@ msgid "Toggle Remind"
 msgstr "알림 젼환"
 
 #: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
+#: src/module/chttrans/chttrans.c:246
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "간체/번체 변환 전환"
 
