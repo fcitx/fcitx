@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-06-15 00:02-0700\n"
-"PO-Revision-Date: 2020-06-14 08:50+0000\n"
+"POT-Creation-Date: 2020-06-16 00:02-0700\n"
+"PO-Revision-Date: 2020-06-15 09:01+0000\n"
 "Last-Translator: MarongHappy <daemul72@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -683,7 +683,7 @@ msgstr "커서의 색"
 
 #: data/addon.desc:12
 msgid "Comment"
-msgstr "댓글"
+msgstr "주석"
 
 #: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
@@ -991,8 +991,8 @@ msgid ""
 "Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
 "you have exported it incorrectly in any of your init files."
 msgstr ""
-"환경변수 ${1}은 \"${3}\"이 아니라 \"${2}\"입니다. 초기설정 파일에서 잘못 설정"
-"하지 않았는지 확인하세요."
+"${1} 환경변수는 \"${3}\"이(가) 아닌 \"${2}\"입니다. 초초기화 파일에서 해당 파"
+"일을 잘못 내보냈는지 확인하십시오."
 
 #: data/script/fcitx-diagnose.sh:825
 msgid "Environment variable ${1} is not set."
@@ -1488,9 +1488,8 @@ msgid ""
 "order to use any input method other than ${2}. See ${link} for more detail "
 "as well as alternative solutions."
 msgstr ""
-"${1}을 사용하는 경우 ${2} 이외의 입력기를 사용하려면 ${2}을 제거하거나 ${3}"
-"을 제거 할 수 있습니다.  대체 솔루션뿐 아니라 자세한 내용은 ${link}를 참조하"
-"십시오."
+"${1}을 사용하는 경우, ${2} 이외의 입력기를 사용하려면 ${2}을(를) 제거하거나 "
+"${3}을(를) 제거하십시오.  자세한 내용은 ${link}와 다른 솔루션을 참조하십시오."
 
 #: data/script/fcitx-diagnose.sh:689
 msgid ""
@@ -1498,8 +1497,8 @@ msgid ""
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
-"${1}을 사용하는 경우 ${2} 이외의 입력기를 사용하기 위해 ${2}를 제거하거나 "
-"${3}을 제거하거나 ${g36_disable_ibus} 명령을 사용하여 IBus 통합을 비활성화 "
+"${1}을 사용하는 경우 ${2} 이외의 입력기를 사용하기 위해 ${2}를 제거하거나, "
+"${3}을 제거하거나, ${g36_disable_ibus} 명령을 사용하여 IBus 통합을 비활성화 "
 "할 수 있습니다. 자세한 내용은 ${link}를 참조하십시오."
 
 #: src/im/table/table.desc:218
@@ -1963,7 +1962,7 @@ msgstr "알림 없음"
 #: src/lib/fcitx-utils/desktop-parse.c:587
 #, c-format
 msgid "Non-comment doesn't belongs to any group @ %d %s"
-msgstr "댓글없음은 어느 그룹 @ %d %s에도 속하지 않습니다  "
+msgstr "주석없음은 어떤 그룹 @ %d %s에도 속하지 않습니다  "
 
 #: src/im/keyboard/fcitx-keyboard.desc:11 src/im/table/table.desc:145
 #: src/module/autoeng/fcitx-autoeng.desc:6
