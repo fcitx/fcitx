@@ -63,7 +63,6 @@ target_link_libraries(
   optimized ${QT_QTCORE_LIBRARY_RELEASE}
   optimized ${QT_QTDBUS_LIBRARY_RELEASE}
   optimized ${QT_QTGUI_LIBRARY_RELEASE}
-  fcitx-config
   XKBCommon::XKBCommon
   )
 

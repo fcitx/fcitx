@@ -6,3 +6,5 @@ framework (which means the add-on is directly loaded by libfcitx), Fcitx's
 copyright holders grant you additional permission to use the header of libfcitx,
 libfcitx-config, libfcitx-utils, and access to the data structure of libfcitx,
 libfcitx-config, and libfcitx-utils. 
+
+src/frontend/qt is released under 3 clause BSD, see COPYING.BSD.

@@ -1,22 +1,22 @@
 /*
- * Copyright (C) 2017~2017 by CSSlayer
+ * Copyright (C) 2017~2020 by CSSlayer
  * wengxt@gmail.com
  *
- * This library is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * 1. Redistributions of source code must retain the above Copyright
+ *    notice, this list of conditions and the following disclaimer.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; see the file COPYING. If not,
- * see <http://www.gnu.org/licenses/>.
+ * 2. Redistributions in binary form must reproduce the above Copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the authors nor the names of its contributors
+ *    may be used to endorse or promote products derived from this
+ *    software without specific prior written permission.
  */
-
 #include <QDBusMetaType>
 
 #include "fcitxqtdbustypes.h"

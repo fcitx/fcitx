@@ -1,22 +1,22 @@
-/***************************************************************************
- *   Copyright (C) 2011~2012 by CSSlayer                                   *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
- ***************************************************************************/
-
+/*
+ * Copyright (C) 2011~2020 by CSSlayer
+ * wengxt@gmail.com
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above Copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above Copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the authors nor the names of its contributors
+ *    may be used to endorse or promote products derived from this
+ *    software without specific prior written permission.
+ */
 #include <QApplication>
 #include <QInputContextFactory>
 #include <QTextCharFormat>
@@ -79,6 +79,21 @@ struct xkb_context *_xkb_context_new_helper() {
     return context;
 }
 
+static bool get_boolean_env(const char *name, bool defval) {
+    const char *value = getenv(name);
+
+    if (value == nullptr)
+        return defval;
+
+    if (strcmp(value, "") == 0 || strcmp(value, "0") == 0 ||
+        strcmp(value, "false") == 0 || strcmp(value, "False") == 0 ||
+        strcmp(value, "FALSE") == 0)
+        return false;
+
+    return true;
+}
+
+
 typedef QInputMethodEvent::Attribute QAttribute;
 
 QFcitxInputContext::QFcitxInputContext()
@@ -100,7 +115,7 @@ QFcitxInputContext::QFcitxInputContext()
     /*
      * event loop will cause some problem, so we tries to use async way.
      */
-    m_syncMode = fcitx_utils_get_boolean_env("FCITX_QT_USE_SYNC", false);
+    m_syncMode = get_boolean_env("FCITX_QT_USE_SYNC", false);
     m_watcher->watch();
 }
 
@@ -140,6 +155,14 @@ void QFcitxInputContext::commitPreedit() {
         sendEvent(e);
         m_preeditList.clear();
     }
+}
+
+bool checkUtf8(const QByteArray &byteArray) {
+    QTextCodec::ConverterState state;
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    const QString text =
+        codec->toUnicode(byteArray.constData(), byteArray.size(), &state);
+    return state.invalidChars == 0;
 }
 
 void QFcitxInputContext::reset() {
@@ -191,7 +214,7 @@ void QFcitxInputContext::update() {
 /* we don't want to waste too much memory here */
 #define SURROUNDING_THRESHOLD 4096
             if (text.length() < SURROUNDING_THRESHOLD) {
-                if (fcitx_utf8_check_string(text.toUtf8().data())) {
+                if (checkUtf8(text.toUtf8())) {
                     addCapacity(data, CAPACITY_SURROUNDING_TEXT);
 
                     int cursor = var1.toInt();
@@ -452,20 +475,8 @@ void QFcitxInputContext::createInputContextFinished() {
     flag |= CAPACITY_PREEDIT;
     flag |= CAPACITY_FORMATTED_PREEDIT;
     flag |= CAPACITY_CLIENT_UNFOCUS_COMMIT;
-/*
- * The only problem I found with surrounding text is Katepart, which I fixed in
- * KDE 4.9. However, we cannot test KDE version that "will" insttalled on the
- * system.
- * So we use "Qt" version to "Guess" that what's the newest KDE version
- * avaiable.
- */
-#if QT_VERSION < QT_VERSION_CHECK(4, 8, 2)
     m_useSurroundingText =
-        fcitx_utils_get_boolean_env("FCITX_QT_ENABLE_SURROUNDING_TEXT", false);
-#else
-    m_useSurroundingText =
-        fcitx_utils_get_boolean_env("FCITX_QT_ENABLE_SURROUNDING_TEXT", true);
-#endif
+        get_boolean_env("FCITX_QT_ENABLE_SURROUNDING_TEXT", true);
     if (m_useSurroundingText)
         flag |= CAPACITY_SURROUNDING_TEXT;
 
