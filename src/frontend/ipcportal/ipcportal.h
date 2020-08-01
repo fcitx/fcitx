@@ -24,6 +24,7 @@
 extern "C" {
 #endif
 
+#define FCITX_IM_DBUS_PORTAL_PATH_OLD "/inputmethod"
 #define FCITX_IM_DBUS_PORTAL_PATH "/org/freedesktop/portal/inputmethod"
 #define FCITX_IC_DBUS_PORTAL_PATH "/org/freedesktop/portal/inputcontext/%d"
 

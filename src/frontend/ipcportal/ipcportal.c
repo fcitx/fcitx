@@ -235,6 +235,7 @@ void* PortalCreate(FcitxInstance* instance, int frontendid)
 
     DBusObjectPathVTable fcitxPortalVTable = {NULL, &PortalDBusEventHandler, NULL, NULL, NULL, NULL };
     dbus_connection_register_object_path(ipc->_conn,  FCITX_IM_DBUS_PORTAL_PATH, &fcitxPortalVTable, ipc);
+    dbus_connection_register_object_path(ipc->_conn,  FCITX_IM_DBUS_PORTAL_PATH_OLD, &fcitxPortalVTable, ipc);
     dbus_connection_flush(ipc->_conn);
 
     FcitxIMEventHook hook;
