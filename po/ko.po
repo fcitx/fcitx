@@ -4,16 +4,17 @@
 #
 # Translators:
 # Bon Keun Seo <scobyseo@gmail.com>, 2017
-# MarongHappy <daemul72@gmail.com>, 2020
+# JungHee Lee <daemul72@gmail.com>, 2020
 # heavyuser <heavyuser73@gmail.com>, 2014,2016-2017
 # JeongHun Kim <jhkim@hancom.com>, 2014
+# JungHee Lee <daemul72@gmail.com>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-06-16 00:02-0700\n"
-"PO-Revision-Date: 2020-06-15 09:01+0000\n"
-"Last-Translator: MarongHappy <daemul72@gmail.com>\n"
+"POT-Creation-Date: 2020-08-01 00:01-0700\n"
+"PO-Revision-Date: 2020-08-01 06:42+0000\n"
+"Last-Translator: JungHee Lee <daemul72@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -731,12 +732,12 @@ msgstr "환경설정:"
 
 #: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:501
 msgid "Configure"
-msgstr "설정"
+msgstr "구성하기"
 
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
 msgid "Configure group name error: line %d"
-msgstr "그룹 이름 설정 오류 : 라인 %d"
+msgstr "그룹 이름 구성하기 오류 : 라인 %d"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
@@ -1090,7 +1091,7 @@ msgstr "Fcitx 환경설정"
 
 #: data/script/fcitx-diagnose.sh:1027
 msgid "Fcitx Configure UI:"
-msgstr "Fcitx 설정UI:"
+msgstr "Fcitx 구성하기 UI:"
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -2113,7 +2114,8 @@ msgid ""
 "Please check the Configure link of your distribution in ${1} for how to "
 "setup fcitx autostart."
 msgstr ""
-"fcitx가 자동실행되게 하려면, ${1}에서 해당 배포판의 설정 정보를 확인하세요."
+"fcitx의 자동 시작을 설정하는 방법은 ${1}에서 배포판의 구성 링크를 확인하십시"
+"오."
 
 #: src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
@@ -2353,11 +2355,11 @@ msgstr "후보 문구 순서 규칙"
 
 #: src/im/pinyin/fcitx-pinyin.desc:62
 msgid "Rule of Candidate Word Order"
-msgstr "후보 단어 순서 룰"
+msgstr "후보 단어 순서 규칙"
 
 #: src/im/pinyin/fcitx-pinyin.desc:80
 msgid "Rule of Frequent Word Order"
-msgstr "자주사용하는 단어 순서 룰"
+msgstr "자주사용하는 단어 순서 규칙"
 
 #: data/script/fcitx-diagnose.sh:866
 msgid "Running as root:"
