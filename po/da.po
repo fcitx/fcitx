@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-11 00:02-0700\n"
-"PO-Revision-Date: 2020-05-10 11:53+0000\n"
+"POT-Creation-Date: 2020-09-21 00:02-0700\n"
+"PO-Revision-Date: 2020-09-20 13:32+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -1879,7 +1879,7 @@ msgstr "Skriftstørrelse for menu"
 
 #: src/im/pinyin/py.c:2141
 msgid "Migrate the old file path to the new one"
-msgstr "Migrer den gamle filsti til den nye"
+msgstr "Flyt den gamle filsti til den nye"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
@@ -2683,10 +2683,12 @@ msgid "Switch Full Width Punc Mode"
 msgstr "Skift tilstand for tegnsætning med fuld bredde"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#: src/module/chttrans/chttrans.c:244
 msgid "Switch to Simplified Chinese"
 msgstr "Skift til forenklet kinesisk"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:245
 msgid "Switch to Traditional Chinese"
 msgstr "Skift til traditionel kinesisk"
 
@@ -2841,6 +2843,7 @@ msgid "Toggle Remind"
 msgstr "Påmindelse til/fra"
 
 #: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
+#: src/module/chttrans/chttrans.c:246
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "Konvertering af forenklet/traditionel kinesisk til/fra"
 
