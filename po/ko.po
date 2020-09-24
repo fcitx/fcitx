@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-08-01 00:01-0700\n"
-"PO-Revision-Date: 2020-08-01 06:42+0000\n"
+"POT-Creation-Date: 2020-09-15 00:02-0700\n"
+"PO-Revision-Date: 2020-09-15 00:13+0000\n"
 "Last-Translator: JungHee Lee <daemul72@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
@@ -32,11 +32,11 @@ msgstr "${1} 환경변수값:"
 
 #: data/script/fcitx-diagnose.sh:859
 msgid "${1} is not set."
-msgstr "${1}은 설정되지 않았습니다."
+msgstr "${1}이(가) 지정되지 않았습니다."
 
 #: data/script/fcitx-diagnose.sh:856
 msgid "${1} is set to ${2}."
-msgstr "${1}은 ${2}로 설정되었습니다."
+msgstr "${1}이(가) ${2}로 지정되었습니다."
 
 #: data/script/fcitx-diagnose.sh:514
 msgid "${1} not found."
@@ -52,7 +52,7 @@ msgstr "닫기(&C)"
 
 #: tools/gui/wrapper/mainwindow.cpp:41
 msgid "&Reset"
-msgstr "초기화(&R)"
+msgstr "재설정(&R)"
 
 #: tools/gui/wrapper/mainwindow.cpp:40
 msgid "&Save"
@@ -778,7 +778,7 @@ msgstr "현재 입력기 이름"
 
 #: data/script/fcitx-diagnose.sh:839
 msgid "Current fcitx settings directory is ${1} (${2})."
-msgstr "현재 fcitx 설정 경로는 ${1} (${2}) 입니다."
+msgstr "현재 fcitx 설정 디렉토리는 ${1} (${2}) 입니다."
 
 #: src/module/imselector/imselector.c:312
 msgid "Current local input method is "
@@ -997,15 +997,15 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:825
 msgid "Environment variable ${1} is not set."
-msgstr "환경 변수 ${1}이 설정 안됨."
+msgstr "환경 변수 ${1}이(가) 지정되지 않았습니다."
 
 #: data/script/fcitx-diagnose.sh:1053
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
-msgstr "환경변수 ${1}이 ${2}로 올바로 설정되었습니다."
+msgstr "환경변수 ${1}이(가) ${2}로 올바로 지정되었습니다."
 
 #: data/script/fcitx-diagnose.sh:829
 msgid "Environment variable ${1} is set to ${2}."
-msgstr "환경 변수 ${1}이 ${2}로 설정됨."
+msgstr "환경 변수 ${1}이(가) ${2}로 지정되었습니다."
 
 #: data/script/fcitx-diagnose.sh:784
 msgid "Environment:"
@@ -1025,7 +1025,7 @@ msgid ""
 "Error: $HOME or $XDG_CONFIG_HOME is not set, cannot determine the install "
 "path"
 msgstr ""
-"오류: $HOME 또는 $XDG_CONFIG_HOME이 설정되지 않았습니다. 설치 경로를 결정할 "
+"오류: $HOME 또는 $XDG_CONFIG_HOME이 지정되지 않았습니다. 설치 경로를 결정할 "
 "수 없습니다."
 
 #: src/ui/cairostuff/font.c:46
@@ -1107,7 +1107,7 @@ msgstr "Fcitx Lua 지원"
 
 #: data/script/fcitx-diagnose.sh:837
 msgid "Fcitx Settings Directory:"
-msgstr "Fcitx 설정 경로:"
+msgstr "Fcitx 설정 디렉토리:"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:3
 msgid "Fcitx Skin Installer"
@@ -1874,7 +1874,7 @@ msgstr "오래된 파일 경로를 새로운 곳으로 이전하기"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
-msgstr "필획 입력을 전환할 최소 입력 문자 수 (끄기: -1)"
+msgstr "필획 입력을 전환할 최소 입력 문자 수 (비활성화하려면 -1로 지정)"
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
@@ -1975,7 +1975,7 @@ msgstr "없음"
 
 #: src/im/table/table.desc:121
 msgid "Not Set"
-msgstr "설정되지 않음"
+msgstr "지정되지 않음"
 
 #: data/script/fcitx-diagnose.sh:682
 msgid "Note for GNOME Later than 3.6"
@@ -2119,19 +2119,19 @@ msgstr ""
 
 #: src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
-msgstr "XMODIFIERS를 설정하세요."
+msgstr "XMODIFIERS를 지정하십시오."
 
 #: data/script/fcitx-diagnose.sh:663
 msgid ""
 "Please set environment variable ${env_name} to \"${value}\" using the tool "
 "your distribution provides or add ${1} to your ${2}. See ${link}."
 msgstr ""
-"배포판에서 제공하는 도구를 사용하여 환경 변수 ${env_name}을 \"${value}\"로 설"
-"정하거나 ${2}에 ${1}를 추가하십시오. $ {link} 참조하십시오."
+"배포판에서 제공하는 도구를 사용하여 환경 변수 ${env_name}을 \"${value}\"로 지"
+"정하거나 ${2}에 ${1}를 추가하십시오. $ {link} 참조."
 
 #: src/ui/classic/skin.desc:265
 msgid "Position or offset of LookupTable"
-msgstr "LookupTable의 위치"
+msgstr "LookupTable의 위치 또는 오프셋"
 
 #: src/ui/classic/skin.desc:261
 msgid "Position or offset of Preedit"
@@ -3131,7 +3131,7 @@ msgstr "XMODIFIERS 오류."
 
 #: data/script/fcitx-diagnose.sh:1068
 msgid "XMODIFIERS is not set"
-msgstr "XMODIFIERS가 설정되지 않음"
+msgstr "XMODIFIERS가 지정되지 않음"
 
 #: src/im/pinyin/fcitx-pinyin.desc:10
 msgid "XiaoHe"
@@ -3147,13 +3147,13 @@ msgstr "환경변수의 Xim 서버 이름은 ${1}입니다."
 
 #: data/script/fcitx-diagnose.sh:1101
 msgid "Xim server name is the same with that set in the environment variable."
-msgstr "Xim 서버 이름이 환경변수값과 일치합니다."
+msgstr "Xim 서버 이름이 환경 변수에 지정된 것과 동일합니다."
 
 #: data/script/fcitx-diagnose.sh:1103
 msgid ""
 "Xim server name: \"${1}\" is different from that set in the environment "
 "variable: \"${2}\"."
-msgstr "Xim 서버 이름: \"${1}\"은 환경변수에 설정된 \"${2}\"와 다릅니다."
+msgstr "Xim 서버 이름: \"${1}\"은 환경 변수: \"${2}\"에 지정된 것과 다릅니다."
 
 #: data/script/fcitx-diagnose.sh:874
 msgid ""
@@ -3233,7 +3233,7 @@ msgid ""
 "able to use input method in emacs because of an really old emacs bug that "
 "upstream refuse to fix for years."
 msgstr ""
-"LC_CTYPE이 zh, ja, ko가 아닌 ${1}으로 설정되어 있습니다. Emacs에서 입력 도구"
+"LC_CTYPE이 zh, ja, ko가 아닌 ${1}으로 지정되어 있습니다. Emacs에서 입력 도구"
 "를 사용할 수 없을지도 모릅니다. 이것은 수년간 수정하지 않고 버티고 있는 emacs"
 "의 매우 오랜 버그 때문입니다."
 
@@ -3242,7 +3242,7 @@ msgid ""
 "Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have "
 "trouble committing strings using XIM."
 msgstr ""
-"LC_CTYPE이 UTF-8을 사용하지 않는 ${1}으로 설정되었습니다. XIM으로 문자열을 전"
+"LC_CTYPE이 UTF-8을 사용하지 않는 ${1}으로 지정되었습니다. XIM으로 문자열을 전"
 "송하는데 문제가 발생할 수 있습니다."
 
 #: data/script/fcitx-diagnose.sh:1594
