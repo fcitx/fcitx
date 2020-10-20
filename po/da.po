@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-09-25 00:03-0700\n"
-"PO-Revision-Date: 2020-09-24 19:04+0000\n"
+"POT-Creation-Date: 2020-10-15 00:02-0700\n"
+"PO-Revision-Date: 2020-10-14 12:48+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -89,23 +89,23 @@ msgstr "0 for at udføre med det samme, -1 for at beholde alle ord"
 
 #: src/module/unicode/charselectdata.c:249
 msgid "<Low Surrogate>"
-msgstr "<Low Surrogate>"
+msgstr "<Lav surrogat>"
 
 #: src/module/unicode/charselectdata.c:245
 msgid "<Non Private Use High Surrogate>"
-msgstr "<Non Private Use High Surrogate>"
+msgstr "<Høj surrogat for ikke privat brug>"
 
 #: src/module/unicode/charselectdata.c:247
 msgid "<Private Use High Surrogate>"
-msgstr "<Private Use High Surrogate>"
+msgstr "<Høj surrogat for privat brug>"
 
 #: src/module/unicode/charselectdata.c:251
 msgid "<Private Use>"
-msgstr "<Private Use>"
+msgstr "<Privat brug>"
 
 #: src/module/unicode/charselectdata.c:279
 msgid "<not assigned>"
-msgstr "<not assigned>"
+msgstr "<ikke tildelt>"
 
 #: src/im/keyboard/fcitx-keyboard.desc:33
 msgid ""
@@ -2952,7 +2952,7 @@ msgstr "Ukendt type, tag den som en streng: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr "Ikke-understøttet tast"
+msgstr "Ikkeunderstøttet tast"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
