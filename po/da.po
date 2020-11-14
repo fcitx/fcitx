@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-10-15 00:02-0700\n"
-"PO-Revision-Date: 2020-10-14 12:48+0000\n"
+"POT-Creation-Date: 2020-11-14 00:02-0800\n"
+"PO-Revision-Date: 2020-11-13 21:47+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -1599,7 +1599,7 @@ msgstr "Valg af inputmetode"
 #: data/inputmethod.desc:9 data/inputmethod.desc:13 data/inputmethod.desc:17
 #: data/inputmethod.desc:21
 msgid "InputMethod"
-msgstr "InputMetode"
+msgstr "Inputmetode"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:4
 msgid "Installer Script for Fcitx Skin"
@@ -2772,7 +2772,7 @@ msgstr "Farve for tabelkode"
 
 #: src/im/table/fcitx-table.conf.in:4
 msgid "Table Input Method for Fcitx"
-msgstr "Tabelinputmetode til Fcitx"
+msgstr "Tabel-inputmetode til Fcitx"
 
 #: src/module/vk/vk.c:61
 msgid "Table Symbol"
