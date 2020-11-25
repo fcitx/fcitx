@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-25 10:36+0100\n"
-"PO-Revision-Date: 2020-11-25 09:34+0000\n"
+"POT-Creation-Date: 2020-11-25 10:43+0100\n"
+"PO-Revision-Date: 2020-11-25 09:39+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
@@ -619,7 +619,7 @@ msgstr "Klassik Oberfläche"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
-msgstr ""
+msgstr "Löschen"
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
@@ -954,7 +954,7 @@ msgstr "Doppelte Option, überschreibe Zeile %d"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr ""
+msgstr "Leer"
 
 #: src/im/table/table.desc:156
 msgid "Enable"
@@ -1736,7 +1736,7 @@ msgstr "Lateinische Satzzeichen werden verwendet."
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
-msgstr ""
+msgstr "Links"
 
 #: data/config.desc:27
 msgid "Left Super"
@@ -2368,7 +2368,7 @@ msgstr "Neustart"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
-msgstr ""
+msgstr "Rechts"
 
 #: data/config.desc:28
 msgid "Right Super"
@@ -2798,7 +2798,7 @@ msgstr "Tabellen Symbol"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
-msgstr ""
+msgstr "Die Taste wird von Qt nicht unterstützt."
 
 #: data/script/fcitx-diagnose.sh:845
 msgid "The script is run as ${1} (${2})."
@@ -2971,7 +2971,7 @@ msgstr "Unbekannter Typ, als String verwenden: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr ""
+msgstr "Nicht unterstützte Taste"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"

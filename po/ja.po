@@ -26,8 +26,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-25 10:36+0100\n"
-"PO-Revision-Date: 2020-11-25 09:34+0000\n"
+"POT-Creation-Date: 2020-11-25 10:43+0100\n"
+"PO-Revision-Date: 2020-11-25 09:39+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "Language: ja\n"
@@ -629,7 +629,7 @@ msgstr "クラシックUI"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
-msgstr ""
+msgstr "クリア"
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
@@ -962,7 +962,7 @@ msgstr "設定が重複しており、上書きします: %d 行目"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr ""
+msgstr "空"
 
 #: src/im/table/table.desc:156
 msgid "Enable"
@@ -1738,7 +1738,7 @@ msgstr "ラテン語の字句が使われています。"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
-msgstr ""
+msgstr "左"
 
 #: data/config.desc:27
 msgid "Left Super"
@@ -2356,7 +2356,7 @@ msgstr "再起動"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
-msgstr ""
+msgstr "右"
 
 #: data/config.desc:28
 msgid "Right Super"
@@ -2783,7 +2783,7 @@ msgstr "罫線文字"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
-msgstr ""
+msgstr "押されたキーはQtでサポートされていません。"
 
 #: data/script/fcitx-diagnose.sh:845
 msgid "The script is run as ${1} (${2})."
@@ -2949,7 +2949,7 @@ msgstr "不明な型です。文字列として扱います: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr ""
+msgstr "サポートされていないキー"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"

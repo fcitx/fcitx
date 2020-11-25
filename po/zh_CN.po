@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-25 10:36+0100\n"
-"PO-Revision-Date: 2020-11-25 09:34+0000\n"
+"POT-Creation-Date: 2020-11-25 10:43+0100\n"
+"PO-Revision-Date: 2020-11-25 09:39+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_CN/)\n"
@@ -616,7 +616,7 @@ msgstr "经典界面"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
-msgstr ""
+msgstr "清空"
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
@@ -945,7 +945,7 @@ msgstr "重复的配置项，覆盖: 行%d"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr ""
+msgstr "空"
 
 #: src/im/table/table.desc:156
 msgid "Enable"
@@ -1717,7 +1717,7 @@ msgstr "已启用半角标点。"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
-msgstr ""
+msgstr "左"
 
 #: data/config.desc:27
 msgid "Left Super"
@@ -2332,7 +2332,7 @@ msgstr "重新启动"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
-msgstr ""
+msgstr "右"
 
 #: data/config.desc:28
 msgid "Right Super"
@@ -2759,7 +2759,7 @@ msgstr "制表符"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
-msgstr ""
+msgstr "你刚刚按下的按键不被 Qt 支持。"
 
 #: data/script/fcitx-diagnose.sh:845
 msgid "The script is run as ${1} (${2})."
@@ -2926,7 +2926,7 @@ msgstr "未知类型，作为字符串处理: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr ""
+msgstr "不支持的按键"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"

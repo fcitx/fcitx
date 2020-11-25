@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-25 10:36+0100\n"
-"PO-Revision-Date: 2020-11-25 09:34+0000\n"
+"POT-Creation-Date: 2020-11-25 10:43+0100\n"
+"PO-Revision-Date: 2020-11-25 09:39+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "Language: ca\n"
@@ -621,7 +621,7 @@ msgstr "Interfície d'usuari clàssica"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
-msgstr ""
+msgstr "Neteja"
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
@@ -957,7 +957,7 @@ msgstr "Opció duplicada, overwrite: línia %d"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr ""
+msgstr "Buit"
 
 #: src/im/table/table.desc:156
 msgid "Enable"
@@ -1746,7 +1746,7 @@ msgstr "S'usen les puntuacions llatines"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
-msgstr ""
+msgstr "Esquerra"
 
 #: data/config.desc:27
 msgid "Left Super"
@@ -2378,7 +2378,7 @@ msgstr "Reinicia"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
-msgstr ""
+msgstr "Dreta"
 
 #: data/config.desc:28
 msgid "Right Super"
@@ -2812,7 +2812,7 @@ msgstr "Símbol de taula"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
-msgstr ""
+msgstr "La tecla que acabeu de prémer no té suport de Qt."
 
 #: data/script/fcitx-diagnose.sh:845
 msgid "The script is run as ${1} (${2})."
@@ -2985,7 +2985,7 @@ msgstr "Tipus desconegut, agafa'l com a caràcter: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr ""
+msgstr "Tecla sense suport"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
