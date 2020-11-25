@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-09-15 00:02-0700\n"
-"PO-Revision-Date: 2020-09-15 00:13+0000\n"
-"Last-Translator: JungHee Lee <daemul72@gmail.com>\n"
+"POT-Creation-Date: 2020-11-25 10:36+0100\n"
+"PO-Revision-Date: 2020-11-25 09:34+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -612,7 +612,7 @@ msgstr "클래식UI"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
-msgstr "지우기"
+msgstr ""
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
@@ -941,7 +941,7 @@ msgstr "중복된 옵션, 덮어씀 : 라인 %d"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr "비어있음"
+msgstr ""
 
 #: src/im/table/table.desc:156
 msgid "Enable"
@@ -1715,7 +1715,7 @@ msgstr "로마자 부호 입력 사용중."
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
-msgstr "왼쪽"
+msgstr ""
 
 #: data/config.desc:27
 msgid "Left Super"
@@ -2335,7 +2335,7 @@ msgstr "재시작"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
-msgstr "오른쪽"
+msgstr ""
 
 #: data/config.desc:28
 msgid "Right Super"
@@ -2764,7 +2764,7 @@ msgstr "표 기호"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
-msgstr "방금 누른 키는 Qt가 지원하지 않습니다."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:845
 msgid "The script is run as ${1} (${2})."
@@ -2932,7 +2932,7 @@ msgstr "알 수 없는 유형, 문자열로 간주: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr "지원하지 않는 키"
+msgstr ""
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"

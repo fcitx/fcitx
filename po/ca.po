@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:12-0700\n"
-"PO-Revision-Date: 2020-05-08 17:05+0000\n"
+"POT-Creation-Date: 2020-11-25 10:36+0100\n"
+"PO-Revision-Date: 2020-11-25 09:34+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
 "Language: ca\n"
@@ -621,7 +621,7 @@ msgstr "Interfície d'usuari clàssica"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
-msgstr "Neteja"
+msgstr ""
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
@@ -957,7 +957,7 @@ msgstr "Opció duplicada, overwrite: línia %d"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr "Buit"
+msgstr ""
 
 #: src/im/table/table.desc:156
 msgid "Enable"
@@ -1746,7 +1746,7 @@ msgstr "S'usen les puntuacions llatines"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
-msgstr "Esquerra"
+msgstr ""
 
 #: data/config.desc:27
 msgid "Left Super"
@@ -2378,7 +2378,7 @@ msgstr "Reinicia"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
-msgstr "Dreta"
+msgstr ""
 
 #: data/config.desc:28
 msgid "Right Super"
@@ -2715,10 +2715,12 @@ msgid "Switch Full Width Punc Mode"
 msgstr "Canvia a mode de puntuació d'amplada completa"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#: src/module/chttrans/chttrans.c:244
 msgid "Switch to Simplified Chinese"
 msgstr ""
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:245
 msgid "Switch to Traditional Chinese"
 msgstr ""
 
@@ -2810,7 +2812,7 @@ msgstr "Símbol de taula"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
-msgstr "La tecla que acabeu de prémer no té suport de Qt."
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:845
 msgid "The script is run as ${1} (${2})."
@@ -2874,6 +2876,7 @@ msgid "Toggle Remind"
 msgstr "Commuta el recordatori"
 
 #: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
+#: src/module/chttrans/chttrans.c:246
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "Commuta la conversió xinès simple/tradicional"
 
@@ -2982,7 +2985,7 @@ msgstr "Tipus desconegut, agafa'l com a caràcter: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr "Tecla sense suport"
+msgstr ""
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"

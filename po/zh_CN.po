@@ -5,6 +5,7 @@
 # Translators:
 # Christopher M <i@cicku.me>, 2012
 # Christopher M <i@cicku.me>, 2012
+# Christopher M <i@cicku.me>, 2012
 # csslayer <wengxt@gmail.com>, 2013
 # Cynthia Young <cynthia.young0512@gmail.com>, 2013
 # marguerite su <i@marguerite.su>, 2012-2014
@@ -12,15 +13,15 @@
 # csslayer <wengxt@gmail.com>, 2010-2012
 # csslayer <wengxt@gmail.com>, 2013
 # wwj402 <wwj402@gmail.com>, 2013-2016
-# yyc1992 <yyc1992@gmail.com>, 2012
-# yyc1992 <yyc1992@gmail.com>, 2013-2015
-# yyc1992 <yyc1992@gmail.com>, 2012
+# Yichao Yu <yyc1992@gmail.com>, 2012
+# Yichao Yu <yyc1992@gmail.com>, 2013-2015
+# Yichao Yu <yyc1992@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:12-0700\n"
-"PO-Revision-Date: 2020-05-08 17:09+0000\n"
+"POT-Creation-Date: 2020-11-25 10:36+0100\n"
+"PO-Revision-Date: 2020-11-25 09:34+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_CN/)\n"
@@ -615,7 +616,7 @@ msgstr "经典界面"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:161
 msgid "Clear"
-msgstr "清空"
+msgstr ""
 
 #: src/im/table/fcitx-table.desc:19
 msgid "Clear Frequency"
@@ -944,7 +945,7 @@ msgstr "重复的配置项，覆盖: 行%d"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:358
 msgid "Empty"
-msgstr "空"
+msgstr ""
 
 #: src/im/table/table.desc:156
 msgid "Enable"
@@ -1716,7 +1717,7 @@ msgstr "已启用半角标点。"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
-msgstr "左"
+msgstr ""
 
 #: data/config.desc:27
 msgid "Left Super"
@@ -2331,7 +2332,7 @@ msgstr "重新启动"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
-msgstr "右"
+msgstr ""
 
 #: data/config.desc:28
 msgid "Right Super"
@@ -2661,10 +2662,12 @@ msgid "Switch Full Width Punc Mode"
 msgstr "切换全角标点"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#: src/module/chttrans/chttrans.c:244
 msgid "Switch to Simplified Chinese"
 msgstr "切换为简体中文"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:245
 msgid "Switch to Traditional Chinese"
 msgstr "切换为繁体中文"
 
@@ -2756,7 +2759,7 @@ msgstr "制表符"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:401
 msgid "The key you just pressed is not supported by Qt."
-msgstr "你刚刚按下的按键不被 Qt 支持。"
+msgstr ""
 
 #: data/script/fcitx-diagnose.sh:845
 msgid "The script is run as ${1} (${2})."
@@ -2814,6 +2817,7 @@ msgid "Toggle Remind"
 msgstr "切换联想"
 
 #: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
+#: src/module/chttrans/chttrans.c:246
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "切换简繁转换"
 
@@ -2922,7 +2926,7 @@ msgstr "未知类型，作为字符串处理: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr "不支持的按键"
+msgstr ""
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
