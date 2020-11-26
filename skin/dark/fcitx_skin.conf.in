@@ -1,8 +1,8 @@
 [SkinInfo]
-Name=Dark
+_Name=Dark
 Version=0.8
 Author=jarryson
-Desc=Dark
+_Desc=Dark
 
 [SkinFont]
 RespectDPI=True

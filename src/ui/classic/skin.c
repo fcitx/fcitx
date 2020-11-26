@@ -72,7 +72,7 @@ CONFIG_DESC_DEFINE(GetSkinDesc, "skin.desc")
 /**
 @加载皮肤配置文件
 */
-int LoadSkinConfig(FcitxSkin* sc, char** skinType)
+int LoadSkinConfig(FcitxSkin* sc, char** skinType, boolean fallback)
 {
     FILE    *fp;
     boolean    isreload = False;
@@ -117,6 +117,10 @@ reload:
     }
 
     if (!fp) {
+        if (!fallback) {
+            return 1;
+        }
+
         if (isreload) {
             FcitxLog(FATAL, _("Cannot load default skin, is installation correct?"));
             perror("fopen");
@@ -579,7 +583,7 @@ void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
     if (pivot)
         free(pivot);
 
-    if (LoadSkinConfig(&classicui->skin, &classicui->skinType))
+    if (LoadSkinConfig(&classicui->skin, &classicui->skinType, /*fallback=*/true))
         FcitxInstanceEnd(classicui->owner);
 
 #ifndef _ENABLE_PANGO
@@ -637,7 +641,9 @@ void UnloadSingleImage(FcitxSkin* sc, const char* name)
 void LoadSkinDirectory(FcitxClassicUI* classicui)
 {
     UT_array* skinBuf = &classicui->skinBuf;
+    UT_array* skinNameBuf = &classicui->skinNameBuf;
     utarray_clear(skinBuf);
+    utarray_clear(skinNameBuf);
     int i ;
     DIR *dir;
     struct dirent *drt;
@@ -665,8 +671,22 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
                         break;
                 }
                 if (j == skinBuf->i) {
-                    char *temp = drt->d_name;
-                    utarray_push_back(skinBuf, &temp);
+                    // For reading skin name.
+                    FcitxSkin tempSkin;
+                    char* skinName = strdup(drt->d_name);
+                    memset(&tempSkin, 0, sizeof(tempSkin));
+                    if (LoadSkinConfig(&tempSkin, &skinName, /*fallback=*/false) == 0) {
+                        if (fcitx_utf8_check_string(tempSkin.skinInfo.skinName)) {
+                            char *temp = drt->d_name;
+                            char *tempName = tempSkin.skinInfo.skinName;
+                            utarray_push_back(skinBuf, &temp);
+                            utarray_push_back(skinNameBuf, &tempName);
+                        }
+                    }
+                    fcitx_utils_free(skinName);
+
+                    utarray_done(&tempSkin.skinMainBar.skinPlacement);
+                    FcitxConfigFree(&tempSkin.config);
                 }
             }
         }
@@ -682,6 +702,7 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
 void InitSkinMenu(FcitxClassicUI* classicui)
 {
     utarray_init(&classicui->skinBuf, fcitx_str_icd);
+    utarray_init(&classicui->skinNameBuf, fcitx_str_icd);
     FcitxMenuInit(&classicui->skinMenu);
     classicui->skinMenu.candStatusBind = NULL;
     classicui->skinMenu.name =  strdup(_("Skin"));
@@ -696,8 +717,10 @@ boolean SkinMenuAction(FcitxUIMenu* menu, int index)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) menu->priv;
     FcitxMenuItem* shell = (FcitxMenuItem*) utarray_eltptr(&menu->shell, index);
-    if (shell)
-        DisplaySkin(classicui, shell->tipstr);
+    if (shell) {
+        char** name = (char**) utarray_eltptr(&classicui->skinBuf, index);
+        DisplaySkin(classicui, *name);
+    }
     return true;
 }
 
@@ -715,7 +738,8 @@ void UpdateSkinMenu(FcitxUIMenu* menu)
         if (strcmp(*s, classicui->skinType) == 0) {
             menu->mark = i;
         }
-        FcitxMenuAddMenuItem(menu, *s, MENUTYPE_SIMPLE, NULL);
+        char** name = (char**) utarray_eltptr(&classicui->skinNameBuf, i);
+        FcitxMenuAddMenuItem(menu, *name, MENUTYPE_SIMPLE, NULL);
         i ++;
     }
 

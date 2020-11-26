@@ -133,7 +133,7 @@ void* ClassicUICreate(FcitxInstance* instance)
         }
     }
 
-    if (LoadSkinConfig(&classicui->skin, &classicui->skinType)) {
+    if (LoadSkinConfig(&classicui->skin, &classicui->skinType, /*fallback=*/true)) {
         free(classicui);
         return NULL;
     }
