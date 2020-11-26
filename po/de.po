@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-25 10:43+0100\n"
+"POT-Creation-Date: 2020-11-27 00:01+0100\n"
 "PO-Revision-Date: 2020-11-25 09:39+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
@@ -531,13 +531,13 @@ msgstr "Pinyin kann nicht gefunden werden"
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "Kann  XMODIFIERS: ${1} nicht richtig interpretieren"
 
-#: src/ui/classic/skin.c:121
+#: src/ui/classic/skin.c:125
 msgid "Cannot load default skin, is installation correct?"
 msgstr ""
 "die Standardoberfläche kann nicht geladen werden, ist die Installation "
 "vollständig?"
 
-#: src/ui/classic/skin.c:126
+#: src/ui/classic/skin.c:130
 #, c-format
 msgid "Cannot load skin %s, return to default"
 msgstr "Kann die Oberfläche %s nicht finden, zurück zu Default"
@@ -596,8 +596,13 @@ msgstr "Phrase zum nach vorne bringen auswählen, ESC zum Abrrechen"
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "Phrase auswählen um den Eingabeverlauf zu löschen. ESC zum Abbrechen"
 
-#: src/ui/classic/fcitx-classic-ui.conf.in:3
+#: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
+msgstr "CLASSIC (Fcitx Benutzeroberfläche)"
+
+#: skin/classic/fcitx_skin.conf.in:5
+#, fuzzy
+msgid "Classic Skin"
 msgstr "CLASSIC (Fcitx Benutzeroberfläche)"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
@@ -828,7 +833,11 @@ msgstr "DBus basiertes, neues Trayicon von Freedesktop.org"
 msgid "DBus interface:"
 msgstr "DBus Interface:"
 
-#: src/module/spell/fcitx-spell.desc:5
+#: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
+msgid "Dark"
+msgstr ""
+
+#: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
 msgid "Default"
 msgstr "Standard"
 
@@ -839,6 +848,11 @@ msgstr "Standard Status Eingabemethode"
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
 msgstr "Standard Shuangpin Schema"
+
+#: skin/default/fcitx_skin.conf.in:5
+#, fuzzy
+msgid "Default Skin"
+msgstr "Standard"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
@@ -2531,7 +2545,7 @@ msgstr "Kurz-/Langzeichen"
 msgid "Simplified Chinese is enabled."
 msgstr "Vereinfachte Zeichen aktiviert."
 
-#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:708 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "Oberfläche"
 

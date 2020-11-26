@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-25 10:43+0100\n"
+"POT-Creation-Date: 2020-11-27 00:01+0100\n"
 "PO-Revision-Date: 2020-11-25 09:39+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/fcitx/fcitx/language/ca/)\n"
@@ -532,12 +532,12 @@ msgstr "No s'ha pogut trobar el pinyin"
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "No es pot interpretar XMODiFIERS: ${1}."
 
-#: src/ui/classic/skin.c:121
+#: src/ui/classic/skin.c:125
 msgid "Cannot load default skin, is installation correct?"
 msgstr ""
 "No es pot carregar l'aparença predeterminada, és correcta la instal·lació?"
 
-#: src/ui/classic/skin.c:126
+#: src/ui/classic/skin.c:130
 #, c-format
 msgid "Cannot load skin %s, return to default"
 msgstr "No es pot carregar l'aparença %s, torna a la predeterminada"
@@ -598,8 +598,13 @@ msgstr ""
 "Escolliu la frase per netejar l'historial d'escriptura, premeu Esc per "
 "cancel·lar"
 
-#: src/ui/classic/fcitx-classic-ui.conf.in:3
+#: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
+msgstr "Clàssic"
+
+#: skin/classic/fcitx_skin.conf.in:5
+#, fuzzy
+msgid "Classic Skin"
 msgstr "Clàssic"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
@@ -830,7 +835,11 @@ msgstr "Nova icona d'indicador del freedesktop.org basat al DBus"
 msgid "DBus interface:"
 msgstr "Interfície DBus:"
 
-#: src/module/spell/fcitx-spell.desc:5
+#: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
+msgid "Dark"
+msgstr ""
+
+#: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
 msgid "Default"
 msgstr "Per defecte"
 
@@ -841,6 +850,11 @@ msgstr "Estat predeterminat del mètode d'entrada"
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
 msgstr "Esquema Shuangpin predeterminat"
+
+#: skin/default/fcitx_skin.conf.in:5
+#, fuzzy
+msgid "Default Skin"
+msgstr "Per defecte"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
@@ -2544,7 +2558,7 @@ msgstr "Xinès simplificat a xinès tradicional"
 msgid "Simplified Chinese is enabled."
 msgstr "El xinès simplificat està habilitat."
 
-#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:708 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "Aparença"
 

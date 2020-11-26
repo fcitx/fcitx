@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:05-0700\n"
+"POT-Creation-Date: 2020-11-27 00:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1031,14 +1031,17 @@ msgid "Press Enter to input text"
 msgstr ""
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#: src/module/chttrans/chttrans.c:244
 msgid "Switch to Simplified Chinese"
 msgstr ""
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:245
 msgid "Switch to Traditional Chinese"
 msgstr ""
 
 #: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
+#: src/module/chttrans/chttrans.c:246
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr ""
 
@@ -1297,16 +1300,16 @@ msgstr ""
 msgid "Error: skin failed to install"
 msgstr ""
 
-#: src/ui/classic/skin.c:121
+#: src/ui/classic/skin.c:125
 msgid "Cannot load default skin, is installation correct?"
 msgstr ""
 
-#: src/ui/classic/skin.c:126
+#: src/ui/classic/skin.c:130
 #, c-format
 msgid "Cannot load skin %s, return to default"
 msgstr ""
 
-#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:708 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr ""
 
@@ -1350,6 +1353,26 @@ msgstr ""
 
 #: data/fcitx-configtool.desktop.in:4
 msgid "Change Fcitx Configuration"
+msgstr ""
+
+#: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
+msgid "Classic"
+msgstr ""
+
+#: skin/classic/fcitx_skin.conf.in:5
+msgid "Classic Skin"
+msgstr ""
+
+#: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
+msgid "Dark"
+msgstr ""
+
+#: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
+msgid "Default"
+msgstr ""
+
+#: skin/default/fcitx_skin.conf.in:5
+msgid "Default Skin"
 msgstr ""
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
@@ -1585,10 +1608,6 @@ msgstr ""
 
 #: src/module/xkb/fcitx-xkb.conf.in:3 src/module/xkb/fcitx-xkb.conf.in:4
 msgid "X Keyboard Integration"
-msgstr ""
-
-#: src/ui/classic/fcitx-classic-ui.conf.in:3
-msgid "Classic"
 msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
@@ -2791,10 +2810,6 @@ msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:1 src/module/spell/fcitx-spell.desc:10
 msgid "Spell Hint"
-msgstr ""
-
-#: src/module/spell/fcitx-spell.desc:5
-msgid "Default"
 msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:6

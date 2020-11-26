@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-25 10:43+0100\n"
+"POT-Creation-Date: 2020-11-27 00:01+0100\n"
 "PO-Revision-Date: 2020-11-25 09:39+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
@@ -526,11 +526,11 @@ msgstr "병음을 찾을 수 없음"
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "XMODIFIERS를 해석할 수 없음: ${1}"
 
-#: src/ui/classic/skin.c:121
+#: src/ui/classic/skin.c:125
 msgid "Cannot load default skin, is installation correct?"
 msgstr "기본 스킨을 적재할 수 없습니다. 올바로 설치되었나요?"
 
-#: src/ui/classic/skin.c:126
+#: src/ui/classic/skin.c:130
 #, c-format
 msgid "Cannot load skin %s, return to default"
 msgstr "스킨 %s을 읽을 수 없어서, 기본으로 돌아갑니다."
@@ -589,8 +589,13 @@ msgstr "앞에 넣기 위해 문장을 선택하고, 취소를 위해서 ESC를 
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "입력 기록을 삭제하기 위한 문구를 선택하세요 (취소는 ESC)"
 
-#: src/ui/classic/fcitx-classic-ui.conf.in:3
+#: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
+msgstr "전통"
+
+#: skin/classic/fcitx_skin.conf.in:5
+#, fuzzy
+msgid "Classic Skin"
 msgstr "전통"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
@@ -821,7 +826,11 @@ msgstr "DBus 기반 새 Freedesktop.org 트레이 아이콘"
 msgid "DBus interface:"
 msgstr "DBus 인터페이스:"
 
-#: src/module/spell/fcitx-spell.desc:5
+#: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
+msgid "Dark"
+msgstr ""
+
+#: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
 msgid "Default"
 msgstr "기본값"
 
@@ -832,6 +841,11 @@ msgstr "기본 입력기 상태"
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
 msgstr "기본 이중병음 스키마"
+
+#: skin/default/fcitx_skin.conf.in:5
+#, fuzzy
+msgid "Default Skin"
+msgstr "기본값"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
@@ -2497,7 +2511,7 @@ msgstr "간체를 번체로"
 msgid "Simplified Chinese is enabled."
 msgstr "중국어 간체가 활성화되었습니다."
 
-#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:708 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "스킨"
 

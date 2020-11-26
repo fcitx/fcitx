@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-25 10:43+0100\n"
+"POT-Creation-Date: 2020-11-27 00:01+0100\n"
 "PO-Revision-Date: 2020-11-25 09:39+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
@@ -543,11 +543,11 @@ msgstr "Pinyin が見つかりません"
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "XMODIFIERSを解釈できません: ${1}"
 
-#: src/ui/classic/skin.c:121
+#: src/ui/classic/skin.c:125
 msgid "Cannot load default skin, is installation correct?"
 msgstr "デフォルトのスキンが読み込めません。インストールに間違いはないですか？"
 
-#: src/ui/classic/skin.c:126
+#: src/ui/classic/skin.c:130
 #, c-format
 msgid "Cannot load skin %s, return to default"
 msgstr "スキン %s を読み込めません。デフォルトのスキンに戻します。"
@@ -606,8 +606,13 @@ msgstr ""
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "入力履歴を削除するフレーズを選択、Escapeでキャンセル"
 
-#: src/ui/classic/fcitx-classic-ui.conf.in:3
+#: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
+msgstr "クラシック"
+
+#: skin/classic/fcitx_skin.conf.in:5
+#, fuzzy
+msgid "Classic Skin"
 msgstr "クラシック"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
@@ -838,7 +843,11 @@ msgstr "新しい Freedesktop.org の DBus のトレイアイコン"
 msgid "DBus interface:"
 msgstr "DBus インターフェース:"
 
-#: src/module/spell/fcitx-spell.desc:5
+#: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
+msgid "Dark"
+msgstr ""
+
+#: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
 msgid "Default"
 msgstr "既定"
 
@@ -849,6 +858,11 @@ msgstr "既定の入力メソッドの状態"
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
 msgstr "既定のShuangpinのスキーマー"
+
+#: skin/default/fcitx_skin.conf.in:5
+#, fuzzy
+msgid "Default Skin"
+msgstr "既定"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
@@ -2516,7 +2530,7 @@ msgstr "簡体字中国語から繁体字中国語へ"
 msgid "Simplified Chinese is enabled."
 msgstr "簡体字は有効です。"
 
-#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:708 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "スキン"
 

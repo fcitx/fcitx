@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-25 10:43+0100\n"
+"POT-Creation-Date: 2020-11-27 00:01+0100\n"
 "PO-Revision-Date: 2020-11-25 09:39+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
@@ -527,11 +527,11 @@ msgstr "Kan ikke finde Pinyin"
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "Kan ikke fortolke XMODIFIERS: ${1}."
 
-#: src/ui/classic/skin.c:121
+#: src/ui/classic/skin.c:125
 msgid "Cannot load default skin, is installation correct?"
 msgstr "Kan ikke indlæse standardskin - er installationen korrekt?"
 
-#: src/ui/classic/skin.c:126
+#: src/ui/classic/skin.c:130
 #, c-format
 msgid "Cannot load skin %s, return to default"
 msgstr "Kan ikke indlæse skinnet %s, falder tilbage til standard"
@@ -591,8 +591,13 @@ msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 "Vælg frasen for at rydde skrivehistorik. Tryk på Escape for at annullere"
 
-#: src/ui/classic/fcitx-classic-ui.conf.in:3
+#: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
+msgstr "Klassisk"
+
+#: skin/classic/fcitx_skin.conf.in:5
+#, fuzzy
+msgid "Classic Skin"
 msgstr "Klassisk"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
@@ -823,7 +828,11 @@ msgstr "DBus-baseret nyt Freedesktop.org-bakkeikon"
 msgid "DBus interface:"
 msgstr "DBus-grænseflade:"
 
-#: src/module/spell/fcitx-spell.desc:5
+#: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
+msgid "Dark"
+msgstr ""
+
+#: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
 msgid "Default"
 msgstr "Standard"
 
@@ -834,6 +843,11 @@ msgstr "Standardtilstand for inputmetode"
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
 msgstr "Standard Shuangpin-skema"
+
+#: skin/default/fcitx_skin.conf.in:5
+#, fuzzy
+msgid "Default Skin"
+msgstr "Standard"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
@@ -2513,7 +2527,7 @@ msgstr "Forenklet kinesisk til traditionel kinesisk"
 msgid "Simplified Chinese is enabled."
 msgstr "Forenklet kinesisk er aktiveret."
 
-#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:708 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "Skin"
 

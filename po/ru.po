@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:12-0700\n"
-"PO-Revision-Date: 2020-05-08 17:05+0000\n"
+"POT-Creation-Date: 2020-11-27 00:01+0100\n"
+"PO-Revision-Date: 2020-11-25 09:34+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
 "Language: ru\n"
@@ -531,11 +531,11 @@ msgstr "Не удалось найти пиньинь"
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "Не удалось интерпретировать XMODIFIERS: ${1}."
 
-#: src/ui/classic/skin.c:121
+#: src/ui/classic/skin.c:125
 msgid "Cannot load default skin, is installation correct?"
 msgstr "Невозможно загрузить скин, он установлен корректно?"
 
-#: src/ui/classic/skin.c:126
+#: src/ui/classic/skin.c:130
 #, c-format
 msgid "Cannot load skin %s, return to default"
 msgstr "Не удалось загрузить скин %s; возврат к стандартному скину"
@@ -594,8 +594,13 @@ msgstr "Выберите фразу для помещения в начало. �
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "Выберите фразу для очистки истории ввода. Нажмите Esc для отмены"
 
-#: src/ui/classic/fcitx-classic-ui.conf.in:3
+#: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
+msgstr "Классический"
+
+#: skin/classic/fcitx_skin.conf.in:5
+#, fuzzy
+msgid "Classic Skin"
 msgstr "Классический"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
@@ -826,7 +831,11 @@ msgstr "Новый значок области уведомлений DBus, ос
 msgid "DBus interface:"
 msgstr "Интерфейс DBus:"
 
-#: src/module/spell/fcitx-spell.desc:5
+#: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
+msgid "Dark"
+msgstr ""
+
+#: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
 msgid "Default"
 msgstr "По умолчанию"
 
@@ -837,6 +846,11 @@ msgstr "Состояние метода ввода по умолчанию"
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
 msgstr "Схема шуанпинь по умолчанию"
+
+#: skin/default/fcitx_skin.conf.in:5
+#, fuzzy
+msgid "Default Skin"
+msgstr "По умолчанию"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
@@ -2530,7 +2544,7 @@ msgstr "Преобразовать упрощенный китайский в т
 msgid "Simplified Chinese is enabled."
 msgstr "Упрощенный китайский включен."
 
-#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:708 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "Скин"
 
@@ -2700,10 +2714,12 @@ msgid "Switch Full Width Punc Mode"
 msgstr "Переключение режима ввода полноширинных знаков пунктуации"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#: src/module/chttrans/chttrans.c:244
 msgid "Switch to Simplified Chinese"
 msgstr ""
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:245
 msgid "Switch to Traditional Chinese"
 msgstr ""
 
@@ -2858,6 +2874,7 @@ msgid "Toggle Remind"
 msgstr "Вкл./выкл. напоминания"
 
 #: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
+#: src/module/chttrans/chttrans.c:246
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "Переключить преобразование упрощенного китайского в традиционный"
 
