@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-27 00:01+0100\n"
-"PO-Revision-Date: 2020-11-25 09:39+0000\n"
+"POT-Creation-Date: 2020-11-28 00:01+0100\n"
+"PO-Revision-Date: 2020-11-26 23:02+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_CN/)\n"
@@ -598,9 +598,8 @@ msgid "Classic"
 msgstr "经典界面"
 
 #: skin/classic/fcitx_skin.conf.in:5
-#, fuzzy
 msgid "Classic Skin"
-msgstr "经典界面"
+msgstr ""
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
@@ -847,9 +846,8 @@ msgid "Default Shuangpin Schema"
 msgstr "默认双拼方案"
 
 #: skin/default/fcitx_skin.conf.in:5
-#, fuzzy
 msgid "Default Skin"
-msgstr "默认"
+msgstr ""
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
