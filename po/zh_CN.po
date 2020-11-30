@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
+# chenshijie-uos <chenshijie@uniontech.com>, 2020
 # Christopher M <i@cicku.me>, 2012
 # Christopher M <i@cicku.me>, 2012
 # Christopher M <i@cicku.me>, 2012
@@ -20,9 +21,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-29 00:01+0100\n"
-"PO-Revision-Date: 2020-11-28 19:12+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2020-12-01 00:01+0100\n"
+"PO-Revision-Date: 2020-11-30 08:21+0000\n"
+"Last-Translator: chenshijie-uos <chenshijie@uniontech.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
@@ -595,7 +596,7 @@ msgstr "选择要清理输入频率的词组，按Escape 取消"
 
 #: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
-msgstr "经典界面"
+msgstr "经典"
 
 #: skin/classic/fcitx_skin.conf.in:5
 msgid "Classic Skin"

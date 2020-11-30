@@ -7,6 +7,7 @@
 # Alisha <alisha.4m@gmail.com>, 2012
 # BrLi <rainman59118@gmail.com>, 2014
 # byStarTW (pan93412) <pan93412@gmail.com>, 2019
+# chenshijie-uos <chenshijie@uniontech.com>, 2020
 # csslayer <wengxt@gmail.com>, 2013,2015,2020
 # PHLin <Cypressyew@gmail.com>, 2017
 # fhoshino <fh@pinchia.com>, 2014,2017
@@ -25,9 +26,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-28 00:01+0100\n"
-"PO-Revision-Date: 2020-11-26 23:02+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2020-12-01 00:01+0100\n"
+"PO-Revision-Date: 2020-11-30 08:28+0000\n"
+"Last-Translator: chenshijie-uos <chenshijie@uniontech.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -604,7 +605,7 @@ msgstr "經典介面"
 
 #: skin/classic/fcitx_skin.conf.in:5
 msgid "Classic Skin"
-msgstr ""
+msgstr "經典皮膚"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
@@ -836,7 +837,7 @@ msgstr "DBus 介面："
 
 #: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
 msgid "Dark"
-msgstr ""
+msgstr "暗色"
 
 #: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
 msgid "Default"
@@ -852,7 +853,7 @@ msgstr "預設雙拼方案"
 
 #: skin/default/fcitx_skin.conf.in:5
 msgid "Default Skin"
-msgstr ""
+msgstr "默認皮膚"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
