@@ -16,6 +16,7 @@
 # mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>, 2012
 # shirou - しろう <shirou.faw@gmail.com>, 2013
 # usingsystem8 <yuta.ooka@gmail.com>, 2013
+# UTUMI Hirosi <utuhiro78@yahoo.co.jp>, 2020
 # shirou - しろう <shirou.faw@gmail.com>, 2013
 # csslayer <wengxt@gmail.com>, 2013,2015
 # csslayer <wengxt@gmail.com>, 2013
@@ -26,9 +27,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-28 00:01+0100\n"
-"PO-Revision-Date: 2020-11-26 23:02+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2020-12-04 00:01+0100\n"
+"PO-Revision-Date: 2020-12-03 19:05+0000\n"
+"Last-Translator: UTUMI Hirosi <utuhiro78@yahoo.co.jp>\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -106,15 +107,15 @@ msgstr "0 の場合すぐに確定し、 -1 の場合すべての単語を保持
 
 #: src/module/unicode/charselectdata.c:249
 msgid "<Low Surrogate>"
-msgstr ""
+msgstr "<Low Surrogate>"
 
 #: src/module/unicode/charselectdata.c:245
 msgid "<Non Private Use High Surrogate>"
-msgstr ""
+msgstr "<Non Private Use High Surrogate>"
 
 #: src/module/unicode/charselectdata.c:247
 msgid "<Private Use High Surrogate>"
-msgstr ""
+msgstr "<Private Use High Surrogate>"
 
 #: src/module/unicode/charselectdata.c:251
 msgid "<Private Use>"
@@ -612,7 +613,7 @@ msgstr "クラシック"
 
 #: skin/classic/fcitx_skin.conf.in:5
 msgid "Classic Skin"
-msgstr ""
+msgstr "クラシックスキン"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
@@ -844,7 +845,7 @@ msgstr "DBus インターフェース:"
 
 #: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
 msgid "Dark"
-msgstr ""
+msgstr "ダーク"
 
 #: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
 msgid "Default"
@@ -860,7 +861,7 @@ msgstr "既定のShuangpinのスキーマー"
 
 #: skin/default/fcitx_skin.conf.in:5
 msgid "Default Skin"
-msgstr ""
+msgstr "デフォルトスキン"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
@@ -1132,7 +1133,7 @@ msgstr "Fcitx DBusフロントエンド"
 
 #: src/frontend/ipcportal/fcitx-ipcportal.conf.in:3
 msgid "Fcitx DBus Frontend (Portal version)"
-msgstr ""
+msgstr "Fcitx DBusフロントエンド (ポータル版)"
 
 #: src/module/lua/fcitx-lua.conf.in:3
 msgid "Fcitx Lua Support"
@@ -1222,6 +1223,9 @@ msgid ""
 "list, then English (US) will be applied to all other non keyboard input "
 "method layout"
 msgstr ""
+"たとえば、Keyboard - English (US) がリストの最初のインプットメソッドである場"
+"合、English (US) が他のすべてのインプットメソッド不使用時のキーボードレイアウ"
+"トとして適用されます。"
 
 #: data/script/fcitx-diagnose.sh:1005
 msgid "Found ${1} at ${2}."
