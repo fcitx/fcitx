@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-28 00:01+0100\n"
-"PO-Revision-Date: 2020-11-26 23:02+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2020-12-05 00:02+0100\n"
+"PO-Revision-Date: 2020-12-04 09:07+0000\n"
+"Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -597,7 +597,7 @@ msgstr "Klassisk"
 
 #: skin/classic/fcitx_skin.conf.in:5
 msgid "Classic Skin"
-msgstr ""
+msgstr "Klassisk skin"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
@@ -829,7 +829,7 @@ msgstr "DBus-grænseflade:"
 
 #: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
 msgid "Dark"
-msgstr ""
+msgstr "Mørk"
 
 #: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
 msgid "Default"
@@ -845,7 +845,7 @@ msgstr "Standard Shuangpin-skema"
 
 #: skin/default/fcitx_skin.conf.in:5
 msgid "Default Skin"
-msgstr ""
+msgstr "Standardskin"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"

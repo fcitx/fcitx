@@ -15,6 +15,7 @@
 # ISHIKAWA Mutsumi <ishikawa@hanzubon.jp>, 2014
 # mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>, 2012
 # shirou - しろう <shirou.faw@gmail.com>, 2013
+# Takuro Onoue <kusanaginoturugi@gmail.com>, 2020
 # usingsystem8 <yuta.ooka@gmail.com>, 2013
 # UTUMI Hirosi <utuhiro78@yahoo.co.jp>, 2020
 # shirou - しろう <shirou.faw@gmail.com>, 2013
@@ -27,9 +28,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-12-04 00:01+0100\n"
-"PO-Revision-Date: 2020-12-03 19:05+0000\n"
-"Last-Translator: UTUMI Hirosi <utuhiro78@yahoo.co.jp>\n"
+"POT-Creation-Date: 2020-12-05 00:02+0100\n"
+"PO-Revision-Date: 2020-12-04 03:12+0000\n"
+"Last-Translator: Takuro Onoue <kusanaginoturugi@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -167,7 +168,7 @@ msgstr "有効"
 
 #: src/ui/classic/skin.desc:387
 msgid "Active Menu Color"
-msgstr ""
+msgstr "有効なメニューの色"
 
 #: src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
@@ -311,7 +312,7 @@ msgstr "レイアウト変更後にこの独自 xmodmap スクリプトを適用
 
 #: data/addon.desc:67
 msgid "Argument for InputMethod Register"
-msgstr ""
+msgstr "入力メソッドのレジスタの引数"
 
 #: src/module/spell/fcitx-spell.desc:6
 msgid "Aspell"
@@ -597,11 +598,11 @@ msgstr "修飾キーを選択"
 
 #: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
-msgstr ""
+msgstr "削除するフレーズを選択し、Escapeでキャンセル"
 
 #: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
-msgstr ""
+msgstr "前面に配置するフレーズを選択し、Escapeでキャンセル"
 
 #: src/im/table/table.c:721
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
@@ -948,7 +949,7 @@ msgstr "スペルヒントを表示しない"
 
 #: src/im/table/table.desc:29
 msgid "Do not sort word with code less than this level"
-msgstr ""
+msgstr "このレベル未満のコードで単語を並べ替えないでください"
 
 #: src/lib/fcitx-utils/desktop-parse.c:603
 #, c-format
@@ -1104,7 +1105,7 @@ msgstr "${1} の出力に fcitx が見つかりません。"
 
 #: data/addon.desc:72
 msgid "Fallback UI Addon"
-msgstr ""
+msgstr "UIアドオンをフォールバック"
 
 #: src/ui/kimpanel/kimpanel.c:398 data/fcitx-autostart.desktop.in:2
 #: data/fcitx.desktop.in:2
@@ -1174,12 +1175,12 @@ msgstr "Fcitx のバージョン: ${1}"
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
 #: src/ui/classic/skin.desc:403
 msgid "Fill Background Horizontal rule"
-msgstr ""
+msgstr "背景を塗りつぶす水平方向のルール"
 
 #: src/ui/classic/skin.desc:151 src/ui/classic/skin.desc:293
 #: src/ui/classic/skin.desc:395
 msgid "Fill Background Vertical rule"
-msgstr ""
+msgstr "背景を塗りつぶす垂直方向のルール"
 
 #: src/ui/classic/skin.desc:45
 msgid "First Candidate Color"
@@ -1340,7 +1341,7 @@ msgstr "全角句読点"
 
 #: src/module/punc/punc.c:586
 msgid "Full width punctuations are used."
-msgstr ""
+msgstr "全幅の句読点が使用されています。"
 
 #: src/module/vk/vk.c:52
 msgid "Fullwidth"
@@ -1549,7 +1550,7 @@ msgstr "空白の選択を無視"
 
 #: src/im/table/table.desc:223
 msgid "Ignore some Punctuation, if it is empty, then ignore all punctuation"
-msgstr ""
+msgstr "一部の句読点を無視します。空の場合は、すべての句読点を無視します。"
 
 #: data/config.desc:56
 msgid "Inactivate Input Method"
@@ -1682,7 +1683,7 @@ msgstr "キー"
 
 #: src/ui/classic/skin.desc:416
 msgid "Key Color On Virtual Keyboard"
-msgstr ""
+msgstr "仮想キーボードのキーカラー"
 
 #: src/im/keyboard/keyboard.c:359 src/im/keyboard/keyboard.c:376
 #: src/im/keyboard/keyboard.c:424 src/im/keyboard/keyboard.c:437
@@ -1891,7 +1892,7 @@ msgstr "Quick Phraseでの最大スペルヒントリスト数"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
 msgid "Maximum results from stroke input."
-msgstr ""
+msgstr "ストローク入力からの最大の結果。"
 
 #: src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
@@ -1911,7 +1912,7 @@ msgstr "古いファイルパスから新しいファイルパスへ移動"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
-msgstr ""
+msgstr "サジェスト機能を開始する最小文字数(-1をセットすると無効)"
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
@@ -2012,7 +2013,7 @@ msgstr "なし"
 
 #: src/im/table/table.desc:121
 msgid "Not Set"
-msgstr ""
+msgstr "未設定"
 
 #: data/script/fcitx-diagnose.sh:682
 msgid "Note for GNOME Later than 3.6"
@@ -2128,7 +2129,7 @@ msgstr "Pinyin 拡張"
 
 #: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
-msgstr ""
+msgstr "ピンインインデックスのマジックナンバーが一致しません"
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
@@ -2181,17 +2182,18 @@ msgstr "可能なプロバイダー: eresage, eustom, enchant (カンマ区切�
 
 #: src/module/spell/fcitx-spell.desc:8
 msgid "Preferred Enchant provider"
-msgstr ""
+msgstr "優先エンチャントプロバイダー"
 
 #: src/im/pinyin/py.c:769
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
-msgstr ""
+msgstr "1 を押して、煩雑なリストの %s を削除します。(キャンセルの場合はESC)"
 
 #: src/im/pinyin/py.c:771
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
+"1 から %d を押して、煩雑なリストの %s を削除します (キャンセルの場合はESC)"
 
 #: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:456
 msgid "Press Enter to input text"
@@ -2200,10 +2202,11 @@ msgstr "文字を入力するには Enter を押してください"
 #: src/im/pinyin/py.c:729
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr ""
+"インデックスを押してユーザーフレーズを削除します（キャンセルの場合はESC）"
 
 #: src/im/pinyin/py.c:743
 msgid "Press number to make word in frequent list"
-msgstr ""
+msgstr "番号を押して、頻繁なリストに単語を作成します"
 
 #: data/config.desc:120
 msgid "Prev Page"
@@ -2383,6 +2386,8 @@ msgid ""
 "Roughly the same length with this number of english letters, the actual "
 "length depends on the font and the content"
 msgstr ""
+"この英語の文字数とほぼ同じ長さで、実際の長さはフォントとコンテンツによって異"
+"なります"
 
 #: src/im/pinyin/fcitx-pinyin.desc:71
 msgid "Rule of Candidate Phrase Order"
@@ -2458,7 +2463,7 @@ msgstr "貼り付けを選択"
 
 #: data/addon.desc:60
 msgid "Self"
-msgstr ""
+msgstr "Self"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:6
 msgid "Semicolon"
@@ -2579,7 +2584,7 @@ msgstr "入力バーのスキン"
 
 #: src/ui/classic/skin.desc:409 src/ui/classic/skin.desc:414
 msgid "SkinKeyboard"
-msgstr ""
+msgstr "キーボードのスキン"
 
 #: src/ui/classic/skin.desc:67 src/ui/classic/skin.desc:71
 #: src/ui/classic/skin.desc:75 src/ui/classic/skin.desc:79
@@ -2605,7 +2610,7 @@ msgstr "メインバーのスキン"
 #: src/ui/classic/skin.desc:389 src/ui/classic/skin.desc:393
 #: src/ui/classic/skin.desc:401
 msgid "SkinMenu"
-msgstr ""
+msgstr "スキンメニュー"
 
 #: src/ui/classic/skin.desc:307 src/ui/classic/skin.desc:311
 msgid "SkinTrayIcon"
@@ -2613,12 +2618,12 @@ msgstr "スキントレイアイコン"
 
 #: src/ui/classic/skin.desc:391
 msgid "Space Line Color"
-msgstr ""
+msgstr "区切り線の色"
 
 #: src/module/quickphrase/quickphrase.c:247
 #, c-format
 msgid "Space for %s Enter for %s"
-msgstr ""
+msgstr "Space for %s Enter for %s"
 
 #: src/module/vk/vk.c:58
 msgid "Special"
@@ -2671,7 +2676,7 @@ msgstr "状態パネルの Y 座標"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
-msgstr ""
+msgstr "ストローク入力トリガーの長さ"
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
@@ -2695,7 +2700,7 @@ msgstr "Super+右Ctrl"
 
 #: data/config.desc:142
 msgid "Switch Embedded Preedit"
-msgstr ""
+msgstr "埋め込みプリエディットをスイッチ"
 
 #: data/config.desc:114
 msgid "Switch Full Width Punc Mode"
@@ -2704,12 +2709,12 @@ msgstr "全角句読点モードに切り替え"
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
 #: src/module/chttrans/chttrans.c:244
 msgid "Switch to Simplified Chinese"
-msgstr ""
+msgstr "中国語簡体字にスイッチ"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 #: src/module/chttrans/chttrans.c:245
 msgid "Switch to Traditional Chinese"
-msgstr ""
+msgstr "中国語繁体字にスイッチ"
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
@@ -2810,6 +2815,8 @@ msgid ""
 "This is only a soft limit, the actually number of candidate words may be "
 "larger than this when multiple characters have the same order of strokes."
 msgstr ""
+"これはソフト制限にすぎません。複数の文字のストロークの順序が同じである場合、"
+"実際の候補単語の数はこれより多くなる可能性があります。"
 
 #: data/config.desc:156
 msgid ""
@@ -2981,7 +2988,7 @@ msgstr "完全なPinyinを使用"
 
 #: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
-msgstr ""
+msgstr "テーブルで定義されたカスタムプロンプト文字列を使用する"
 
 #: src/ui/classic/skin.desc:167
 msgid "Use Custom text icon color"
@@ -3095,7 +3102,7 @@ msgstr "仮想キーボード"
 
 #: src/ui/classic/skin.desc:411
 msgid "Virtual Keyboard Image"
-msgstr ""
+msgstr "仮想キーボードの画像"
 
 #: src/module/vk/vk.c:154
 msgid "Virtual Keyboard State"
