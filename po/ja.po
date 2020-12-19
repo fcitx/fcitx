@@ -28,9 +28,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-12-05 00:02+0100\n"
-"PO-Revision-Date: 2020-12-04 03:12+0000\n"
-"Last-Translator: Takuro Onoue <kusanaginoturugi@gmail.com>\n"
+"POT-Creation-Date: 2020-12-19 20:26+0000\n"
+"PO-Revision-Date: 2020-12-19 07:44+0000\n"
+"Last-Translator: UTUMI Hirosi <utuhiro78@yahoo.co.jp>\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -370,7 +370,7 @@ msgstr "可能な値:"
 #: src/ui/classic/skin.desc:69 src/ui/classic/skin.desc:187
 #: src/ui/classic/skin.desc:317
 msgid "Background Image"
-msgstr "背景"
+msgstr "背景画像"
 
 #: data/script/fcitx-diagnose.sh:779
 msgid "Bash Version:"
