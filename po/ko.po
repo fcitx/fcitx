@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-28 00:01+0100\n"
-"PO-Revision-Date: 2020-11-26 23:02+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2020-12-26 20:26+0000\n"
+"PO-Revision-Date: 2020-12-26 05:06+0000\n"
+"Last-Translator: JungHee Lee <daemul72@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -1764,7 +1764,7 @@ msgstr "자동 문구 로딩 OK"
 
 #: src/im/table/tabledict.c:248
 msgid "Load Table Dict OK"
-msgstr "표 사전 로딩 OK"
+msgstr "표 사전 불러오기 완료"
 
 #: src/im/table/tabledict.c:285
 msgid "Loading Autophrase."
@@ -1772,7 +1772,7 @@ msgstr "자동 문구 로딩"
 
 #: src/im/table/tabledict.c:41
 msgid "Loading Table Dict"
-msgstr "표 사전 로딩"
+msgstr "표 사전 불러오기"
 
 #: src/module/imselector/fcitx-imselector.desc:4
 msgid "Local Input Method SelectKey"
@@ -1890,7 +1890,7 @@ msgstr "필획 입력을 전환할 최소 입력 문자 수 (비활성화하려�
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
-msgstr "단어 힌트 전환할 최소 문자 수"
+msgstr "단어 힌트를 전환할 최소 문자 수"
 
 #: src/im/table/table.desc:59
 msgid ""
@@ -2890,7 +2890,7 @@ msgstr "병음 약어를 영어로 취급"
 
 #: data/config.desc:5
 msgid "Trigger Input Method"
-msgstr "입력기 변환"
+msgstr "입력기 전환"
 
 #: src/module/clipboard/fcitx-clipboard.desc:25
 msgid "Trigger Key for Clipboard History List"
