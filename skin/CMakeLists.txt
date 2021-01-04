@@ -1,8 +1,6 @@
 
 foreach(skin default classic dark)
-    install(DIRECTORY ${skin} DESTINATION ${pkgdatadir}/skin
-             PATTERN .* EXCLUDE
-             PATTERN *~ EXCLUDE)
+    add_subdirectory(${skin})
 endforeach(skin default classic dark)
 
 install(DIRECTORY imicon DESTINATION ${pkgdatadir}

@@ -193,7 +193,7 @@ typedef struct _FcitxSkin {
 } FcitxSkin;
 
 FcitxConfigFileDesc* GetSkinDesc();
-int LoadSkinConfig(FcitxSkin* sc, char** skinType);
+int LoadSkinConfig(FcitxSkin* sc, char** skinType, boolean fallback);
 void DrawImage(cairo_t* c, cairo_surface_t* png, int x, int y, MouseE mouse);
 void DrawInputBar(struct _InputWindow* inputWindow, boolean vertical, int iCursorPos);
 SkinImage* LoadImage(FcitxSkin* sc, const char* name, int fallback);

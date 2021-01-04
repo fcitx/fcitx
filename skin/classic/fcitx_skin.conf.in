@@ -1,8 +1,8 @@
 [SkinInfo]
-Name=Classic
+_Name=Classic
 Version=0.2
 Author=CSSlayer
-Desc=Classic Skin
+_Desc=Classic Skin
 
 [SkinFont]
 RespectDPI=True

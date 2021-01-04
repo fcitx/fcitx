@@ -1,8 +1,8 @@
 [SkinInfo]
-Name=Default
+_Name=Default
 Version=0.2
 Author=marguerite
-Desc=Default Skin
+_Desc=Default Skin
 
 [SkinFont]
 FontSize=13

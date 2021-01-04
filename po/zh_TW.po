@@ -7,7 +7,8 @@
 # Alisha <alisha.4m@gmail.com>, 2012
 # BrLi <rainman59118@gmail.com>, 2014
 # byStarTW (pan93412) <pan93412@gmail.com>, 2019
-# csslayer <wengxt@gmail.com>, 2013,2015
+# chenshijie-uos <chenshijie@uniontech.com>, 2020
+# csslayer <wengxt@gmail.com>, 2013,2015,2020
 # PHLin <Cypressyew@gmail.com>, 2017
 # fhoshino <fh@pinchia.com>, 2014,2017
 # fhoshino <fh@pinchia.com>, 2014,2017
@@ -19,15 +20,15 @@
 # csslayer <wengxt@gmail.com>, 2013,2015,2020
 # csslayer <wengxt@gmail.com>, 2012-2013
 # csslayer <wengxt@gmail.com>, 2013
-# yyc1992 <yyc1992@gmail.com>, 2015
-# yyc1992 <yyc1992@gmail.com>, 2015
+# Yichao Yu <yyc1992@gmail.com>, 2015
+# Yichao Yu <yyc1992@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-08 10:12-0700\n"
-"PO-Revision-Date: 2020-05-08 17:10+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2020-12-01 00:01+0100\n"
+"PO-Revision-Date: 2020-11-30 08:28+0000\n"
+"Last-Translator: chenshijie-uos <chenshijie@uniontech.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -535,11 +536,11 @@ msgstr "找不到拼音"
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "無法解析 XMODIFIERS：${1}。"
 
-#: src/ui/classic/skin.c:121
+#: src/ui/classic/skin.c:125
 msgid "Cannot load default skin, is installation correct?"
 msgstr "無法載入預設佈景，安裝正確嗎？"
 
-#: src/ui/classic/skin.c:126
+#: src/ui/classic/skin.c:130
 #, c-format
 msgid "Cannot load skin %s, return to default"
 msgstr "無法載入佈景 %s，使用預設"
@@ -598,9 +599,13 @@ msgstr "選擇放在前面的字詞，Escape 鍵取消"
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr "選擇要清理輸入頻率的字詞，Escape 鍵取消"
 
-#: src/ui/classic/fcitx-classic-ui.conf.in:3
+#: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
 msgstr "經典介面"
+
+#: skin/classic/fcitx_skin.conf.in:5
+msgid "Classic Skin"
+msgstr "經典皮膚"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
@@ -830,7 +835,11 @@ msgstr "基於 DBus 的新 Freedesktop.org 系統匣圖示"
 msgid "DBus interface:"
 msgstr "DBus 介面："
 
-#: src/module/spell/fcitx-spell.desc:5
+#: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
+msgid "Dark"
+msgstr "暗色"
+
+#: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
 msgid "Default"
 msgstr "預設"
 
@@ -841,6 +850,10 @@ msgstr "預設輸入法狀態"
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
 msgstr "預設雙拼方案"
+
+#: skin/default/fcitx_skin.conf.in:5
+msgid "Default Skin"
+msgstr "默認皮膚"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
@@ -2497,7 +2510,7 @@ msgstr "正簡轉換"
 msgid "Simplified Chinese is enabled."
 msgstr "已啟用簡體中文。"
 
-#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:708 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "佈景"
 
@@ -2667,10 +2680,12 @@ msgid "Switch Full Width Punc Mode"
 msgstr "切換全形標點符號"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#: src/module/chttrans/chttrans.c:244
 msgid "Switch to Simplified Chinese"
 msgstr "切換至簡體中文"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:245
 msgid "Switch to Traditional Chinese"
 msgstr "切換至正體中文"
 
@@ -2820,6 +2835,7 @@ msgid "Toggle Remind"
 msgstr "切換聯想"
 
 #: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
+#: src/module/chttrans/chttrans.c:246
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "切換正簡轉換"
 

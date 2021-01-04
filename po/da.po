@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-05-11 00:02-0700\n"
-"PO-Revision-Date: 2020-05-10 11:53+0000\n"
+"POT-Creation-Date: 2020-12-05 00:02+0100\n"
+"PO-Revision-Date: 2020-12-04 09:07+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/fcitx/fcitx/language/da/)\n"
 "Language: da\n"
@@ -89,23 +89,23 @@ msgstr "0 for at udføre med det samme, -1 for at beholde alle ord"
 
 #: src/module/unicode/charselectdata.c:249
 msgid "<Low Surrogate>"
-msgstr "<Low Surrogate>"
+msgstr "<Lav surrogat>"
 
 #: src/module/unicode/charselectdata.c:245
 msgid "<Non Private Use High Surrogate>"
-msgstr "<Non Private Use High Surrogate>"
+msgstr "<Høj surrogat for ikke privat brug>"
 
 #: src/module/unicode/charselectdata.c:247
 msgid "<Private Use High Surrogate>"
-msgstr "<Private Use High Surrogate>"
+msgstr "<Høj surrogat for privat brug>"
 
 #: src/module/unicode/charselectdata.c:251
 msgid "<Private Use>"
-msgstr "<Private Use>"
+msgstr "<Privat brug>"
 
 #: src/module/unicode/charselectdata.c:279
 msgid "<not assigned>"
-msgstr "<not assigned>"
+msgstr "<ikke tildelt>"
 
 #: src/im/keyboard/fcitx-keyboard.desc:33
 msgid ""
@@ -527,11 +527,11 @@ msgstr "Kan ikke finde Pinyin"
 msgid "Cannot interpret XMODIFIERS: ${1}."
 msgstr "Kan ikke fortolke XMODIFIERS: ${1}."
 
-#: src/ui/classic/skin.c:121
+#: src/ui/classic/skin.c:125
 msgid "Cannot load default skin, is installation correct?"
 msgstr "Kan ikke indlæse standardskin - er installationen korrekt?"
 
-#: src/ui/classic/skin.c:126
+#: src/ui/classic/skin.c:130
 #, c-format
 msgid "Cannot load skin %s, return to default"
 msgstr "Kan ikke indlæse skinnet %s, falder tilbage til standard"
@@ -591,9 +591,13 @@ msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 "Vælg frasen for at rydde skrivehistorik. Tryk på Escape for at annullere"
 
-#: src/ui/classic/fcitx-classic-ui.conf.in:3
+#: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
 msgstr "Klassisk"
+
+#: skin/classic/fcitx_skin.conf.in:5
+msgid "Classic Skin"
+msgstr "Klassisk skin"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
@@ -823,7 +827,11 @@ msgstr "DBus-baseret nyt Freedesktop.org-bakkeikon"
 msgid "DBus interface:"
 msgstr "DBus-grænseflade:"
 
-#: src/module/spell/fcitx-spell.desc:5
+#: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
+msgid "Dark"
+msgstr "Mørk"
+
+#: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
 msgid "Default"
 msgstr "Standard"
 
@@ -834,6 +842,10 @@ msgstr "Standardtilstand for inputmetode"
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
 msgstr "Standard Shuangpin-skema"
+
+#: skin/default/fcitx_skin.conf.in:5
+msgid "Default Skin"
+msgstr "Standardskin"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
@@ -1599,7 +1611,7 @@ msgstr "Valg af inputmetode"
 #: data/inputmethod.desc:9 data/inputmethod.desc:13 data/inputmethod.desc:17
 #: data/inputmethod.desc:21
 msgid "InputMethod"
-msgstr "InputMetode"
+msgstr "Inputmetode"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:4
 msgid "Installer Script for Fcitx Skin"
@@ -1879,7 +1891,7 @@ msgstr "Skriftstørrelse for menu"
 
 #: src/im/pinyin/py.c:2141
 msgid "Migrate the old file path to the new one"
-msgstr "Migrer den gamle filsti til den nye"
+msgstr "Overfør den gamle filsti til den nye"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
@@ -2513,7 +2525,7 @@ msgstr "Forenklet kinesisk til traditionel kinesisk"
 msgid "Simplified Chinese is enabled."
 msgstr "Forenklet kinesisk er aktiveret."
 
-#: src/ui/classic/skin.c:687 src/ui/classic/fcitx-classic-ui.conf.in:10
+#: src/ui/classic/skin.c:708 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
 msgstr "Skin"
 
@@ -2683,10 +2695,12 @@ msgid "Switch Full Width Punc Mode"
 msgstr "Skift tilstand for tegnsætning med fuld bredde"
 
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
+#: src/module/chttrans/chttrans.c:244
 msgid "Switch to Simplified Chinese"
 msgstr "Skift til forenklet kinesisk"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
+#: src/module/chttrans/chttrans.c:245
 msgid "Switch to Traditional Chinese"
 msgstr "Skift til traditionel kinesisk"
 
@@ -2770,7 +2784,7 @@ msgstr "Farve for tabelkode"
 
 #: src/im/table/fcitx-table.conf.in:4
 msgid "Table Input Method for Fcitx"
-msgstr "Tabelinputmetode til Fcitx"
+msgstr "Tabel-inputmetode til Fcitx"
 
 #: src/module/vk/vk.c:61
 msgid "Table Symbol"
@@ -2841,6 +2855,7 @@ msgid "Toggle Remind"
 msgstr "Påmindelse til/fra"
 
 #: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
+#: src/module/chttrans/chttrans.c:246
 msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr "Konvertering af forenklet/traditionel kinesisk til/fra"
 
@@ -2949,7 +2964,7 @@ msgstr "Ukendt type, tag den som en streng: %s"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:402
 msgid "Unsupported Key"
-msgstr "Ikke-understøttet tast"
+msgstr "Ikkeunderstøttet tast"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
