@@ -1113,12 +1113,12 @@ void FcitxInstanceSwitchIMByIndex(FcitxInstance* instance, int index)
         if (ic)
             FcitxInstanceSetLocalIMName(instance, ic, NULL);
         FcitxInstanceSwitchIMInternal(instance, index, true, true, true);
-        FcitxInstanceShowInputSpeed(instance, false);
 
         if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
             FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
         }
     }
+    FcitxInstanceShowInputSpeed(instance, false);
 }
 
 FCITX_EXPORT_API
