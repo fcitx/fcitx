@@ -17,7 +17,7 @@
 # shirou - しろう <shirou.faw@gmail.com>, 2013
 # Takuro Onoue <kusanaginoturugi@gmail.com>, 2020
 # usingsystem8 <yuta.ooka@gmail.com>, 2013
-# UTUMI Hirosi <utuhiro78@yahoo.co.jp>, 2020
+# UTUMI Hirosi <utuhiro78@yahoo.co.jp>, 2020-2021
 # shirou - しろう <shirou.faw@gmail.com>, 2013
 # csslayer <wengxt@gmail.com>, 2013,2015
 # csslayer <wengxt@gmail.com>, 2013
@@ -28,9 +28,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-12-24 20:26+0000\n"
-"PO-Revision-Date: 2020-12-24 15:23+0000\n"
-"Last-Translator: Takuro Onoue <kusanaginoturugi@gmail.com>\n"
+"POT-Creation-Date: 2021-01-06 20:26+0000\n"
+"PO-Revision-Date: 2021-01-06 17:56+0000\n"
+"Last-Translator: UTUMI Hirosi <utuhiro78@yahoo.co.jp>\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -1224,9 +1224,9 @@ msgid ""
 "list, then English (US) will be applied to all other non keyboard input "
 "method layout"
 msgstr ""
-"たとえば、Keyboard - English (US) がリストの最初のインプットメソッドである場"
-"合、English (US) が他のすべてのインプットメソッド不使用時のキーボードレイアウ"
-"トとして適用されます。"
+"たとえば、Keyboard - English (US) がリストの第1入力メソッドである場合、"
+"English (US) が他の入力メソッド不使用時のキーボードレイアウトとして適用されま"
+"す。"
 
 #: data/script/fcitx-diagnose.sh:1005
 msgid "Found ${1} at ${2}."
@@ -3049,8 +3049,7 @@ msgstr "リマインドを使用"
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Use the layout of first keyboard input method in list as default layout"
 msgstr ""
-"リストの最初のキーボードインプットメソッドのレイアウトが既定のレイアウトとし"
-"て使用されます。"
+"リストの第1キーボード入力メソッドをデフォルトのレイアウトとして使用します。"
 
 #: src/module/remote/fcitx-remote-module.conf.in:4
 msgid "Used by fcitx-remote to change Fcitx state from console"
