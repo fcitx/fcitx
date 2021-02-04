@@ -4,17 +4,17 @@
 #
 # Translators:
 # Bon Keun Seo <scobyseo@gmail.com>, 2017
-# JungHee Lee <daemul72@gmail.com>, 2020
-# heavyuser <heavyuser73@gmail.com>, 2014,2016-2017
+# Bruce Lee <daemul72@gmail.com>, 2020
+# heavyuser <heavyuser73@gmail.com>, 2014,2016-2017,2021
 # JeongHun Kim <jhkim@hancom.com>, 2014
-# JungHee Lee <daemul72@gmail.com>, 2020
+# Bruce Lee <daemul72@gmail.com>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-12-26 20:26+0000\n"
-"PO-Revision-Date: 2020-12-26 05:06+0000\n"
-"Last-Translator: JungHee Lee <daemul72@gmail.com>\n"
+"POT-Creation-Date: 2021-02-04 20:26+0000\n"
+"PO-Revision-Date: 2021-02-04 02:07+0000\n"
+"Last-Translator: heavyuser <heavyuser73@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -595,7 +595,7 @@ msgstr "전통"
 
 #: skin/classic/fcitx_skin.conf.in:5
 msgid "Classic Skin"
-msgstr ""
+msgstr "클래식 스킨"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
@@ -827,7 +827,7 @@ msgstr "DBus 인터페이스:"
 
 #: skin/dark/fcitx_skin.conf.in:2 skin/dark/fcitx_skin.conf.in:5
 msgid "Dark"
-msgstr ""
+msgstr "다크"
 
 #: skin/default/fcitx_skin.conf.in:2 src/module/spell/fcitx-spell.desc:5
 msgid "Default"
@@ -843,7 +843,7 @@ msgstr "기본 이중병음 스키마"
 
 #: skin/default/fcitx_skin.conf.in:5
 msgid "Default Skin"
-msgstr ""
+msgstr "기본 스킨"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
