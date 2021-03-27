@@ -1,10 +1,9 @@
 set(FCITX_XKBDBUS_LINK_LIBS)
 if(_ENABLE_XKBDBUS)
   include_directories(
-    ${DBUS_INCLUDE_DIRS}
-    ${LIBXML2_INCLUDE_DIR})
+    ${DBUS_INCLUDE_DIRS})
   set(FCITX_XKBDBUS_LINK_LIBS ${FCITX_XKBDBUS_LINK_LIBS}
-    ${DBUS_LIBRARIES} ${LIBXML2_LIBRARIES})
+    ${DBUS_LIBRARIES})
   link_directories(${DBUS_LIBRARY_DIRS})
   set(xkbdbus_noinstall)
 else()
