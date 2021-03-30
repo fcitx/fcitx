@@ -471,6 +471,18 @@ void FcitxInstanceSetWindowOffset(FcitxInstance* instance, FcitxInputContext *ic
 }
 
 FCITX_EXPORT_API
+int FcitxInstanceGetWindowOverrideXPosition(FcitxInstance* instance)
+{
+   return instance->overrideXPosition; 
+}
+
+FCITX_EXPORT_API
+int FcitxInstanceGetWindowOverrideYPosition(FcitxInstance* instance)
+{
+   return instance->overrideYPosition; 
+}
+
+FCITX_EXPORT_API
 void FcitxInstanceGetWindowPosition(FcitxInstance* instance, FcitxInputContext* ic, int* x, int* y)
 {
     if (ic == NULL)

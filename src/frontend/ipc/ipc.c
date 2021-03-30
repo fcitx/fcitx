@@ -1022,10 +1022,10 @@ static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 
 static void IPCICSetCursorRect(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int x, int y, int w, int h)
 {
-	if(ipc->owner->overrideXPosition != -1)
-		x = ipc->owner->overrideXPosition;
-	if(ipc->owner->overrideYPosition != -1)
-		y = ipc->owner->overrideYPosition;
+	if(FcitxInstanceGetWindowOverrideXPosition(ipc->owner) != -1)
+		x = FcitxInstanceGetWindowOverrideXPosition(ipc->owner);
+	if(FcitxInstanceGetWindowOverrideYPosition(ipc->owner) != -1)
+		y = FcitxInstanceGetWindowOverrideYPosition(ipc->owner);
 	
     ic->offset_x = x;
     ic->offset_y = y;
