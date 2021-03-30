@@ -162,6 +162,8 @@ struct _FcitxInstance {
     volatile boolean restart;
     int fd;
     int overrideDelay;
+	int overrideXPosition;
+	int overrideYPosition;
     
     UT_array eventQueue;
     UT_array* no_preedit_app_list;
