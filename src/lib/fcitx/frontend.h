@@ -228,7 +228,7 @@ extern "C" {
      * @param instance fcitx instance
      * @return X position
      **/	
-	int FcitxInstanceGetWindowOverrideXPosition(FcitxInstance* instance);
+	int FcitxInstanceGetWindowOverrideXPosition(struct _FcitxInstance* instance);
 	
     /**
      * Get Override Cursor Position Y
@@ -236,7 +236,7 @@ extern "C" {
      * @param instance fcitx instance
      * @return Y position
      **/		
-	int FcitxInstanceGetWindowOverrideYPosition(FcitxInstance* instance);	
+	int FcitxInstanceGetWindowOverrideYPosition(struct _FcitxInstance* instance);	
 
     /**
      * Get Cursor Position

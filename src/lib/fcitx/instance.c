@@ -586,7 +586,7 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
 	instance->overrideXPosition = -1;
 	instance->overrideYPosition = -1;
 	
-    while ((c = getopt_long(argc, argv, "ru:dDsXY:hv", longOptions, &optionIndex)) != EOF) {
+    while ((c = getopt_long(argc, argv, "ru:dDs:X:Y:hv", longOptions, &optionIndex)) != EOF) {
         switch (c) {
         case 0: {
             switch (optionIndex) {
