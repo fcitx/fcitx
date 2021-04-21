@@ -63,9 +63,6 @@ const char * kimpanel_introspection_xml =
     "</method>"
     "</interface>"
     "<interface name=\"" FCITX_KIMPANEL_INTERFACE "\">"
-    "<signal name=\"ExecDialog\">"
-    "<arg name=\"prop\" direction=\"in\" type=\"s\"/>"
-    "</signal>"
     "<signal name=\"ExecMenu\">"
     "<arg name=\"prop\" direction=\"in\" type=\"as\"/>"
     "</signal>"
@@ -906,31 +903,6 @@ void KimpanelOwnerChanged(void* user_data, void* arg, const char* serviceName, c
             FcitxUISwitchToFallback(kimpanel->owner);
         }
     }
-}
-
-void KimExecDialog(FcitxKimpanelUI* kimpanel, char *prop)
-{
-    dbus_uint32_t serial = 0; // unique number to associate replies with requests
-    DBusMessage* msg;
-
-    // create a signal and check for errors
-    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-                                  FCITX_KIMPANEL_INTERFACE, // interface name of the signal
-                                  "ExecDialog"); // name of the signal
-    if (NULL == msg) {
-        FcitxLog(DEBUG, "Message Null");
-        return;
-    }
-
-    if (dbus_message_append_args(msg, DBUS_TYPE_STRING, &prop, DBUS_TYPE_INVALID)) {
-        dbus_connection_send(kimpanel->conn, msg, &serial);
-    }
-
-    dbus_connection_flush(kimpanel->conn);
-
-    // free the message
-    dbus_message_unref(msg);
-
 }
 
 void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[], int n)
