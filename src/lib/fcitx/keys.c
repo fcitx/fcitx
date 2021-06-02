@@ -94,7 +94,7 @@ FcitxHotkey FCITX_LCTRL_LSHIFT[2] = {
 FCITX_EXPORT_API
 FcitxHotkey FCITX_LCTRL_LSHIFT2[2] = {
     {NULL, FcitxKey_Shift_L, FcitxKeyState_Ctrl},
-    {NULL, 0, 0},
+    {NULL, FcitxKey_Control_L, FcitxKeyState_Shift},
 };
 
 FCITX_EXPORT_API
@@ -118,7 +118,7 @@ FcitxHotkey FCITX_LALT_LSHIFT[2] = {
 FCITX_EXPORT_API
 FcitxHotkey FCITX_LALT_LSHIFT2[2] = {
     {NULL, FcitxKey_Shift_L, FcitxKeyState_Alt},
-    {NULL, 0, 0},
+    {NULL, FcitxKey_Alt_L, FcitxKeyState_Shift},
 };
 
 FCITX_EXPORT_API
@@ -142,7 +142,7 @@ FcitxHotkey FCITX_LCTRL_LSUPER[2] = {
 FCITX_EXPORT_API
 FcitxHotkey FCITX_LCTRL_LSUPER2[2] = {
     {NULL, FcitxKey_Super_L, FcitxKeyState_Ctrl},
-    {NULL, 0, 0},
+    {NULL, FcitxKey_Control_L, FcitxKeyState_Super},
 };
 
 FCITX_EXPORT_API
@@ -160,13 +160,13 @@ FcitxHotkey FCITX_RCTRL_RSUPER2[2] = {
 FCITX_EXPORT_API
 FcitxHotkey FCITX_LALT_LSUPER[2] = {
     {NULL, FcitxKey_Super_L, FcitxKeyState_Alt | FcitxKeyState_Super},
-    {NULL, FcitxKey_Alt_L, FcitxKeyState_Alt | FcitxKeyState_Super},
+    {NULL, FcitxKey_Alt_L,   FcitxKeyState_Alt | FcitxKeyState_Super},
 };
 
 FCITX_EXPORT_API
 FcitxHotkey FCITX_LALT_LSUPER2[2] = {
     {NULL, FcitxKey_Super_L, FcitxKeyState_Alt},
-    {NULL, 0, 0},
+    {NULL, FcitxKey_Alt_L, FcitxKeyState_Super},
 };
 
 FCITX_EXPORT_API
