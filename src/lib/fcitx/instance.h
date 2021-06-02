@@ -148,6 +148,14 @@ extern "C" {
     void FcitxInstanceEnd(FcitxInstance* instance);
 
     /**
+     * notify the instance is end and kill all sub threads
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
+    void FcitxInstanceEndWithKill(FcitxInstance* instance);
+
+    /**
      * check whether FcitxInstanceEnd is called or not
      *
      * @param instance fcitx instance

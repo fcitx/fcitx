@@ -450,8 +450,37 @@ void FcitxInstanceEnd(FcitxInstance* instance)
         return;
     }
 
+    if (instance->pid) {
+        FcitxInstanceWaitForEnd(instance);
+    }
+
     instance->destroy = true;
 }
+
+FCITX_EXPORT_API
+void FcitxInstanceEndWithKill(FcitxInstance* instance)
+{
+    /* avoid duplicate destroy */
+    if (instance->destroy)
+        return;
+
+    raise(SIGKILL);
+    if (!instance->initialized) {
+        if (!instance->loadingFatalError) {
+            if (!instance->quietQuit)
+                FcitxLog(ERROR, "Exiting.");
+            instance->loadingFatalError = true;
+
+            if (instance->sem) {
+                sem_post(instance->sem);
+            }
+        }
+        return;
+    }
+
+    instance->destroy = true;
+}
+
 
 FCITX_EXPORT_API
 void FcitxInstanceRealEnd(FcitxInstance* instance) {

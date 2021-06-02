@@ -645,7 +645,7 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         dbus_connection_send(connection, reply, NULL);
         dbus_message_unref(reply);
         dbus_connection_flush(connection);
-        FcitxInstanceEnd(instance);
+        FcitxInstanceEndWithKill(instance);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetCurrentIM")) {
         reply = dbus_message_new_method_return(msg);
