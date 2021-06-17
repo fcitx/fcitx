@@ -63,9 +63,6 @@ const char * kimpanel_introspection_xml =
     "</method>"
     "</interface>"
     "<interface name=\"" FCITX_KIMPANEL_INTERFACE "\">"
-    "<signal name=\"ExecDialog\">"
-    "<arg name=\"prop\" direction=\"in\" type=\"s\"/>"
-    "</signal>"
     "<signal name=\"ExecMenu\">"
     "<arg name=\"prop\" direction=\"in\" type=\"as\"/>"
     "</signal>"
@@ -73,9 +70,6 @@ const char * kimpanel_introspection_xml =
     "<arg name=\"prop\" direction=\"in\" type=\"as\"/>"
     "</signal>"
     "<signal name=\"UpdateProperty\">"
-    "<arg name=\"prop\" direction=\"in\" type=\"s\"/>"
-    "</signal>"
-    "<signal name=\"RemoveProperty\">"
     "<arg name=\"prop\" direction=\"in\" type=\"s\"/>"
     "</signal>"
     "<signal name=\"ShowAux\">"
@@ -908,31 +902,6 @@ void KimpanelOwnerChanged(void* user_data, void* arg, const char* serviceName, c
     }
 }
 
-void KimExecDialog(FcitxKimpanelUI* kimpanel, char *prop)
-{
-    dbus_uint32_t serial = 0; // unique number to associate replies with requests
-    DBusMessage* msg;
-
-    // create a signal and check for errors
-    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-                                  FCITX_KIMPANEL_INTERFACE, // interface name of the signal
-                                  "ExecDialog"); // name of the signal
-    if (NULL == msg) {
-        FcitxLog(DEBUG, "Message Null");
-        return;
-    }
-
-    if (dbus_message_append_args(msg, DBUS_TYPE_STRING, &prop, DBUS_TYPE_INVALID)) {
-        dbus_connection_send(kimpanel->conn, msg, &serial);
-    }
-
-    dbus_connection_flush(kimpanel->conn);
-
-    // free the message
-    dbus_message_unref(msg);
-
-}
-
 void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[], int n)
 {
 
@@ -1030,41 +999,6 @@ void KimUpdateProperty(FcitxKimpanelUI* kimpanel, char *prop)
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
                                   FCITX_KIMPANEL_INTERFACE, // interface name of the signal
                                   "UpdateProperty"); // name of the signal
-    if (NULL == msg) {
-        FcitxLog(DEBUG, "Message Null");
-        return;
-    }
-
-    if (!fcitx_utf8_check_string(prop))
-        return;
-
-    // append arguments onto signal
-    dbus_message_iter_init_append(msg, &args);
-    if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &prop)) {
-        FcitxLog(DEBUG, "Out Of Memory!");
-    }
-
-    // send the message and flush the connection
-    if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
-        FcitxLog(DEBUG, "Out Of Memory!");
-    }
-
-    // free the message
-    dbus_message_unref(msg);
-
-}
-
-void KimRemoveProperty(FcitxKimpanelUI* kimpanel, char *prop)
-{
-
-    dbus_uint32_t serial = 0; // unique number to associate replies with requests
-    DBusMessage* msg;
-    DBusMessageIter args;
-
-    // create a signal and check for errors
-    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-                                  FCITX_KIMPANEL_INTERFACE, // interface name of the signal
-                                  "RemoveProperty"); // name of the signal
     if (NULL == msg) {
         FcitxLog(DEBUG, "Message Null");
         return;
