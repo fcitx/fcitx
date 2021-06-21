@@ -223,6 +223,22 @@ extern "C" {
     void FcitxInstanceSetWindowOffset(struct _FcitxInstance* instance, FcitxInputContext* ic, int x, int y);
 
     /**
+     * Get Override Cursor Position X
+     *
+     * @param instance fcitx instance
+     * @return X position
+     **/	
+	int FcitxInstanceGetWindowOverrideXPosition(struct _FcitxInstance* instance);
+	
+    /**
+     * Get Override Cursor Position Y
+     *
+     * @param instance fcitx instance
+     * @return Y position
+     **/		
+	int FcitxInstanceGetWindowOverrideYPosition(struct _FcitxInstance* instance);	
+
+    /**
      * Get Cursor Position
      *
      * @param instance fcitx instance
