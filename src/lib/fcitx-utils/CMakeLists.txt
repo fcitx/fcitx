@@ -34,12 +34,21 @@ if(LIBKVM_FOUND)
 endif()
 
 add_library(fcitx-utils SHARED ${FCITX_UTILS_SOURCES})
-set_target_properties(fcitx-utils
-  PROPERTIES VERSION 0.1
-  SOVERSION 0
-  COMPILE_FLAGS "-fvisibility=hidden"
-  LINK_FLAGS "-Wl,--no-undefined"
-  )
+if(APPLE)
+    set_target_properties(fcitx-utils
+        PROPERTIES VERSION 0.1
+        SOVERSION 0
+        COMPILE_FLAGS "-fvisibility=hidden"
+        LINK_FLAGS "-flat_namespace"
+        )
+else()
+    set_target_properties(fcitx-utils
+        PROPERTIES VERSION 0.1
+        SOVERSION 0
+        COMPILE_FLAGS "-fvisibility=hidden"
+        LINK_FLAGS "-Wl,--no-undefined"
+        )
+endif()
 target_link_libraries(fcitx-utils ${LIBINTL_LIBRARIES}
   ${LIBICONV_LIBRARIES} ${LIBEXECINFO_LIBRARIES})
 
