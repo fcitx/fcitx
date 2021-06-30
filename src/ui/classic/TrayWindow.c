@@ -268,6 +268,7 @@ boolean TrayEventHandler(void *arg, XEvent* event)
                 mainMenuWindow->trayX = event->xbutton.x_root - event->xbutton.x;
                 mainMenuWindow->trayY = event->xbutton.y_root - event->xbutton.y;
                 XlibMenuShow(mainMenuWindow);
+                XSetInputFocus(mainMenuWindow->parent.owner->dpy, mainMenuWindow->parent.wId,RevertToParent,CurrentTime);
             }
             break;
             }
