@@ -21,6 +21,7 @@
 
 
 #include "table.h"
+#include "assocdict.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -71,6 +72,7 @@ FCITX_DEFINE_PLUGIN(fcitx_table, ime2, FcitxIMClass2) =  {
 
 static boolean LoadTableConfig(TableConfig* config);
 static void SaveTableConfig(TableConfig* config);
+static void LoadAssocDictList(FcitxTableState* tbl);
 
 static inline unsigned int GetTableMod(TableMetaData* table)
 {
@@ -113,6 +115,14 @@ void SaveTableConfig(TableConfig *config)
     FCITX_UNUSED(config);
 }
 
+/*
+ * Load all built-in associative phrase dictionaries
+ */
+void LoadAssocDictList(FcitxTableState* tbl)
+{
+    tbl->assocDictList = TableCreateAssocDictList();
+}
+
 void *TableCreate(FcitxInstance* instance)
 {
     FcitxTableState *tbl = fcitx_utils_malloc0(sizeof(FcitxTableState));
@@ -121,6 +131,7 @@ void *TableCreate(FcitxInstance* instance)
         free(tbl);
         return NULL;
     }
+    LoadAssocDictList(tbl);
     LoadTableInfo(tbl);
 
 
@@ -169,6 +180,9 @@ static inline void TableMetaDataRemove(TableMetaData** tableSet, TableMetaData* 
 
 static inline void TableMetaDataRegister(FcitxTableState* tbl, TableMetaData* table)
 {
+    /* Find built-in associative dictionary */
+    table->assocDict = TableFindAssocDictFromLangCode(
+        tbl->assocDictList, table->langCode);
     table->status = TABLE_REGISTERED;
     FcitxInstanceRegisterIM(
         tbl->owner,
@@ -1254,32 +1268,41 @@ INPUT_RETURN_VALUE TableGetRemindCandWords(TableMetaData* table)
     FcitxInputStateSetRawInputBufferSize(input, 0);
     FcitxCandidateWordReset(cand_list);
 
-    iLength = fcitx_utf8_strlen(tbl->strTableRemindSource);
-    tableRemind = table->tableDict->recordHead->next;
+    if (table->bUseAssocDict)
+    {
+        int count = -1;
+        if (bDisablePagingInRemind)
+            count = FcitxCandidateWordGetPageSize(cand_list);
+        TableGetAssocPhrases(instance, cand_list, count,
+                table->assocDict, tbl->strTableRemindSource);
+    } else {
+        iLength = fcitx_utf8_strlen(tbl->strTableRemindSource);
+        tableRemind = table->tableDict->recordHead->next;
 
-    while (tableRemind != table->tableDict->recordHead) {
-        if (bDisablePagingInRemind &&
-            FcitxCandidateWordGetListSize(cand_list) >=
-            FcitxCandidateWordGetPageSize(cand_list))
-            break;
+        while (tableRemind != table->tableDict->recordHead) {
+            if (bDisablePagingInRemind &&
+                FcitxCandidateWordGetListSize(cand_list) >=
+                FcitxCandidateWordGetPageSize(cand_list))
+                break;
 
-        if (((iLength + 1) == fcitx_utf8_strlen(tableRemind->strHZ))) {
-            if (!fcitx_utf8_strncmp(tableRemind->strHZ,
-                                    tbl->strTableRemindSource, iLength) &&
-                fcitx_utf8_get_nth_char(tableRemind->strHZ, iLength)) {
-                TABLECANDWORD *tableCandWord = fcitx_utils_new(TABLECANDWORD);
-                TableAddRemindCandWord(tableRemind, tableCandWord);
-                FcitxCandidateWord candWord;
-                candWord.callback = TableGetCandWord;
-                candWord.owner = table;
-                candWord.priv = tableCandWord;
-                candWord.strExtra = NULL;
-                candWord.strWord = strdup(tableCandWord->candWord.record->strHZ + strlen(tbl->strTableRemindSource));
-                candWord.wordType = MSG_OTHER;
-                FcitxCandidateWordAppend(cand_list, &candWord);
+            if (((iLength + 1) == fcitx_utf8_strlen(tableRemind->strHZ))) {
+                if (!fcitx_utf8_strncmp(tableRemind->strHZ,
+                                        tbl->strTableRemindSource, iLength) &&
+                    fcitx_utf8_get_nth_char(tableRemind->strHZ, iLength)) {
+                    TABLECANDWORD *tableCandWord = fcitx_utils_new(TABLECANDWORD);
+                    TableAddRemindCandWord(tableRemind, tableCandWord);
+                    FcitxCandidateWord candWord;
+                    candWord.callback = TableGetCandWord;
+                    candWord.owner = table;
+                    candWord.priv = tableCandWord;
+                    candWord.strExtra = NULL;
+                    candWord.strWord = strdup(tableCandWord->candWord.record->strHZ + strlen(tbl->strTableRemindSource));
+                    candWord.wordType = MSG_OTHER;
+                    FcitxCandidateWordAppend(cand_list, &candWord);
+                }
             }
+            tableRemind = tableRemind->next;
         }
-        tableRemind = tableRemind->next;
     }
 
     FcitxInstanceCleanInputWindowUp(instance);
