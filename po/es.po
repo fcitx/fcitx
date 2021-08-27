@@ -6,13 +6,14 @@
 # Adolfo Jayme Barrientos, 2012
 # Adolfo Jayme-Barrientos, 2012
 # Adolfo Jayme-Barrientos, 2012
+# Adolfo Jayme-Barrientos, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-27 00:01+0100\n"
-"PO-Revision-Date: 2020-11-25 09:34+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2021-08-27 20:25+0000\n"
+"PO-Revision-Date: 2021-08-27 06:04+0000\n"
+"Last-Translator: Adolfo Jayme-Barrientos\n"
 "Language-Team: Spanish (http://www.transifex.com/fcitx/fcitx/language/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -352,11 +353,11 @@ msgstr "Imagen de fondo"
 
 #: data/script/fcitx-diagnose.sh:779
 msgid "Bash Version:"
-msgstr ""
+msgstr "Versión de Bash:"
 
 #: data/script/fcitx-diagnose.sh:655
 msgid "Beginner's Guide"
-msgstr ""
+msgstr "Guía para principiantes"
 
 #: src/im/table/data/qxm.conf.in:3
 msgid "Bingchan"
@@ -439,7 +440,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:774
 msgid "Cannot determine desktop environment."
-msgstr ""
+msgstr "No se puede determinar el entorno de escritorio."
 
 #: data/script/fcitx-diagnose.sh:1317
 msgid "Cannot find ${2} for gtk ${1}"
@@ -860,7 +861,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:771
 msgid "Desktop Environment:"
-msgstr ""
+msgstr "Entorno de escritorio:"
 
 #: data/script/fcitx-diagnose.sh:776
 msgid "Desktop environment is ${1}."
@@ -872,7 +873,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:819
 msgid "Directories:"
-msgstr ""
+msgstr "Directorios:"
 
 #: data/config.desc:192
 msgid "Disable Paging in Remind Mode"
@@ -1012,7 +1013,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:784
 msgid "Environment:"
-msgstr ""
+msgstr "Entorno:"
 
 #: src/im/table/data/erbi.conf.in:3
 msgid "Erbi"
@@ -1132,7 +1133,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:910
 msgid "Fcitx is not running."
-msgstr ""
+msgstr "Fcitx no se está ejecutando."
 
 #: data/script/fcitx-diagnose.sh:899
 msgid "Fcitx version: ${1}"
@@ -1661,7 +1662,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:787
 msgid "Keyboard Layout:"
-msgstr ""
+msgstr "Disposición de teclado:"
 
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:3
 msgid "Kimpanel"
@@ -2731,7 +2732,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:743
 msgid "System Info:"
-msgstr ""
+msgstr "Información del sistema:"
 
 #: src/im/table/fcitx-table.conf.in:3 src/im/table/fcitx-table.conf.in:10
 msgid "Table"
@@ -3231,7 +3232,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:706
 msgid "here"
-msgstr ""
+msgstr "aquí"
 
 #: src/lib/fcitx/ime.c:1806
 msgid "min Num of Characters: "
@@ -3248,7 +3249,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:900
 msgid "process:"
-msgstr ""
+msgstr "proceso:"
 
 #: src/lib/fcitx/instance.c:531
 msgid "pthread mutex init failed"
