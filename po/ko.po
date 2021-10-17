@@ -3,21 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Bon Keun Seo <scobyseo@gmail.com>, 2017
-# Jung Hee Lee <daemul72@gmail.com>, 2021
-# Jung Hee Lee <daemul72@gmail.com>, 2020
+# Bon Keun Seo <scobyseo@gmail.com>, 2017,2021
+# 이정희 <daemul72@gmail.com>, 2021
+# 이정희 <daemul72@gmail.com>, 2020
 # heavyuser <heavyuser73@gmail.com>, 2014,2016-2017,2021
 # JeongHun Kim <jhkim@hancom.com>, 2014
-# Jung Hee Lee <daemul72@gmail.com>, 2021
-# Jung Hee Lee <daemul72@gmail.com>, 2020
+# 이정희 <daemul72@gmail.com>, 2021
+# 이정희 <daemul72@gmail.com>, 2020
 # perillamint <perillamint@quendi.moe>, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2021-06-05 20:26+0000\n"
-"PO-Revision-Date: 2021-06-05 07:27+0000\n"
-"Last-Translator: Jung Hee Lee <daemul72@gmail.com>\n"
+"POT-Creation-Date: 2021-10-17 20:25+0000\n"
+"PO-Revision-Date: 2021-10-17 02:46+0000\n"
+"Last-Translator: Bon Keun Seo <scobyseo@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -71,7 +71,7 @@ msgstr "/Beginner%27s_Guide"
 
 #: data/script/fcitx-diagnose.sh:703
 msgid "/Hall_of_Shame_for_Linux_IME_Support"
-msgstr "/Linux_ME_지원에_대한_불명예의_전당"
+msgstr "/Hall_of_Shame_for_Linux_IME_Support"
 
 #: data/script/fcitx-diagnose.sh:667
 msgid "/Input_method_related_environment_variables"
@@ -874,7 +874,7 @@ msgstr "데스크톱 환경:"
 
 #: data/script/fcitx-diagnose.sh:776
 msgid "Desktop environment is ${1}."
-msgstr "데스크톱 환경은 ${1}."
+msgstr "데스크톱 환경은 ${1}입니다."
 
 #: src/im/table/data/db.conf.in:3
 msgid "Dianbaoma"
@@ -1682,7 +1682,7 @@ msgstr "사용되는 키보드 자판"
 
 #: data/script/fcitx-diagnose.sh:787
 msgid "Keyboard Layout:"
-msgstr "키보드 자판:"
+msgstr "키보드 배열:"
 
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:3
 msgid "Kimpanel"
