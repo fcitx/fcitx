@@ -4,6 +4,7 @@
 #
 # Translators:
 # csslayer <wengxt@gmail.com>, 2013,2015
+# Ettore Atalan <atalanttore@googlemail.com>, 2022
 # mar well <m.wellendorf@gmx.de>, 2012-2013
 # mar well <m.wellendorf@gmx.de>, 2014,2017-2018
 # Tim Hofstede <timhofstede.va@gmail.com>, 2018
@@ -13,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-28 00:01+0100\n"
-"PO-Revision-Date: 2020-11-26 23:02+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"POT-Creation-Date: 2022-01-14 20:25+0000\n"
+"PO-Revision-Date: 2022-01-14 13:59+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -654,11 +655,11 @@ msgstr "Virtuelle Tastatur schließen"
 
 #: src/im/table/table.desc:15
 msgid "Code Table File"
-msgstr ""
+msgstr "Codetabellendatei"
 
 #: src/im/table/table.desc:7
 msgid "Code Table Name"
-msgstr ""
+msgstr "Codetabellenname"
 
 #: src/im/table/table.c:1399
 msgid "Code is "
