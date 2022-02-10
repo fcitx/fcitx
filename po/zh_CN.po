@@ -4,13 +4,13 @@
 #
 # Translators:
 # chenshijie-uos <chenshijie@uniontech.com>, 2020
-# Christopher M <i@cicku.me>, 2012
-# Christopher M <i@cicku.me>, 2012
-# Christopher M <i@cicku.me>, 2012
+# ᴄʜʀɪsᴛᴏᴘʜᴇʀ ᴍᴇɴɢ <i@cicku.me>, 2012
+# ᴄʜʀɪsᴛᴏᴘʜᴇʀ ᴍᴇɴɢ <i@cicku.me>, 2012
+# ᴄʜʀɪsᴛᴏᴘʜᴇʀ ᴍᴇɴɢ <i@cicku.me>, 2012
 # csslayer <wengxt@gmail.com>, 2013
 # Cynthia Young <cynthia.young0512@gmail.com>, 2013
 # marguerite su <i@marguerite.su>, 2012-2014
-# csslayer <wengxt@gmail.com>, 2013-2015,2017,2020
+# csslayer <wengxt@gmail.com>, 2013-2015,2017,2020,2022
 # csslayer <wengxt@gmail.com>, 2010-2012
 # csslayer <wengxt@gmail.com>, 2013
 # wwj402 <wwj402@gmail.com>, 2013-2016
@@ -21,9 +21,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-12-01 00:01+0100\n"
-"PO-Revision-Date: 2020-11-30 08:21+0000\n"
-"Last-Translator: chenshijie-uos <chenshijie@uniontech.com>\n"
+"POT-Creation-Date: 2022-02-10 02:24+0000\n"
+"PO-Revision-Date: 2022-01-26 02:05+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/fcitx/fcitx/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
@@ -1285,7 +1285,7 @@ msgstr "找到了未知的 fcitx qt 模块: ${1}."
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:3
 msgid "Freedesktop.org Notification Support"
-msgstr "Freedesktop.org 桌面提示支持"
+msgstr "Freedesktop.org 桌面通知支持"
 
 #: data/addon.desc:19
 msgid "Frontend"
@@ -2226,7 +2226,7 @@ msgstr "提供 DBus 支持 (由其他插件使用)"
 
 #: src/module/freedesktop-notify/fcitx-freedesktop-notify.conf.in:4
 msgid "Provides Freedesktop.org Notification Support (Used by other Addon)"
-msgstr "提供 Freedesktop.org 桌面提示支持 (供其它插件使用)"
+msgstr "提供 Freedesktop.org 桌面通知支持 (供其它插件使用)"
 
 #: src/module/fullwidthchar/fcitx-fullwidth-char.conf.in:4
 msgid "Provides Fullwidth Character Input Support"
