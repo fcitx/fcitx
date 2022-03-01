@@ -4,20 +4,20 @@
 #
 # Translators:
 # Bon Keun Seo <scobyseo@gmail.com>, 2017,2021
-# 이정희 <daemul72@gmail.com>, 2021
-# 이정희 <daemul72@gmail.com>, 2020
+# JungHee Lee <daemul72@gmail.com>, 2021
+# JungHee Lee <daemul72@gmail.com>, 2020
 # heavyuser <heavyuser73@gmail.com>, 2014,2016-2017,2021
 # JeongHun Kim <jhkim@hancom.com>, 2014
-# 이정희 <daemul72@gmail.com>, 2021
-# 이정희 <daemul72@gmail.com>, 2020
+# JungHee Lee <daemul72@gmail.com>, 2021
+# JungHee Lee <daemul72@gmail.com>, 2020,2022
 # perillamint <perillamint@quendi.moe>, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2021-10-17 20:25+0000\n"
-"PO-Revision-Date: 2021-10-17 02:46+0000\n"
-"Last-Translator: Bon Keun Seo <scobyseo@gmail.com>\n"
+"POT-Creation-Date: 2022-03-01 20:27+0000\n"
+"PO-Revision-Date: 2022-03-01 15:07+0000\n"
+"Last-Translator: JungHee Lee <daemul72@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -201,11 +201,11 @@ msgstr "애드온"
 #: src/lib/fcitx/addon.c:138
 #, c-format
 msgid "Addon Config %s is %s"
-msgstr "%s 애드온 설정은 %s"
+msgstr "%s 애드온 구성은 %s입니다"
 
 #: data/script/fcitx-diagnose.sh:1438
 msgid "Addon Config Dir:"
-msgstr "애드온 설정 디렉토리:"
+msgstr "애드온 구성 디렉토리:"
 
 #: data/script/fcitx-diagnose.sh:1491
 msgid "Addon Libraries:"
@@ -464,7 +464,7 @@ msgstr "병음 시스템 데이터 베이스를 찾을 수 없습니다!"
 msgid ""
 "Cannot find a GUI config tool, please install one of ${1}, ${2}, or ${3}."
 msgstr ""
-"GUI 설정 도구를 찾을 수 없습니다. ${1}, ${2}, ${3} 중 하나를 설치해 주세요."
+"GUI 구성 도구를 찾을 수 없습니다. ${1}, ${2}, ${3} 중 하나를 설치해 주세요."
 
 #: data/script/fcitx-diagnose.sh:1520
 msgid "Cannot find enabled fcitx user interface!"
@@ -472,7 +472,7 @@ msgstr "활성화된 Fcitx 사용자 인터페이스를 찾을 수 없습니다!
 
 #: data/script/fcitx-diagnose.sh:1440
 msgid "Cannot find fcitx addon config directory."
-msgstr "Fcitx 애드온 설정 디렉토리를 찾을 수 없습니다."
+msgstr "Fcitx 애드온 구성 디렉토리를 찾을 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:888
 msgid "Cannot find fcitx executable!"
@@ -563,7 +563,7 @@ msgstr "오른쪽가운데"
 
 #: data/fcitx-configtool.desktop.in:4
 msgid "Change Fcitx Configuration"
-msgstr "Fcitx 환경설정 변경"
+msgstr "Fcitx 구성 변경"
 
 #: src/im/table/table.desc:136
 msgid "Choose"
@@ -715,27 +715,27 @@ msgstr "후보 단어를 선택할 때 추가 공백으로 입력완료"
 
 #: data/script/fcitx-diagnose.sh:996
 msgid "Config GUI for gtk${1} not found."
-msgstr "gtk${1}에 대한 GUI 설정을 찾지 못했습니다."
+msgstr "gtk${1}에 대한 GUI 구성을 찾지 못했습니다."
 
 #: data/script/fcitx-diagnose.sh:992
 msgid "Config GUI for gtk${1}:"
-msgstr "gtk${1}에 대한 GUI 설정:"
+msgstr "gtk${1}에 대한 GUI 구성:"
 
 #: data/script/fcitx-diagnose.sh:1012
 msgid "Config GUI for kde:"
-msgstr "kde에 대한 GUI 설정:"
+msgstr "kde에 대한 GUI 구성:"
 
 #: data/script/fcitx-diagnose.sh:1028
 msgid "Config Tool Wrapper:"
-msgstr "설정 도구 Wrapper:"
+msgstr "구성 도구 래퍼:"
 
 #: data/addon.desc:62
 msgid "ConfigFile"
-msgstr "설정 파일"
+msgstr "구성파일"
 
 #: data/script/fcitx-diagnose.sh:1683
 msgid "Configuration:"
-msgstr "환경설정:"
+msgstr "구성:"
 
 #: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:501
 msgid "Configure"
@@ -1040,8 +1040,8 @@ msgid ""
 "Error: $HOME or $XDG_CONFIG_HOME is not set, cannot determine the install "
 "path"
 msgstr ""
-"오류: $HOME 또는 $XDG_CONFIG_HOME이 지정되지 않았습니다. 설치 경로를 결정할 "
-"수 없습니다."
+"오류: $HOME 또는 $XDG_CONFIG_HOME이 지정되지 않았으므로 설치 경로를 결정할 "
+"수 없습니다"
 
 #: src/ui/cairostuff/font.c:46
 msgid "Error: Load fontconfig failed"
@@ -1053,7 +1053,7 @@ msgstr "오류: 스킨 설치 실패"
 
 #: src/ui/classic/fcitx-skin-installer.sh:55
 msgid "Error: skin file doesn't contain skin config."
-msgstr "오류: 스킨 파일에 스킨 설정이 없습니다."
+msgstr "오류: 스킨 파일에 스킨 구성이 포함되어 있지 않습니다."
 
 #: src/ui/classic/fcitx-skin-installer.sh:50
 msgid "Error: skin file should only contain one directory."
@@ -1102,7 +1102,7 @@ msgstr "Fcitx 클립보드 접근"
 
 #: data/fcitx-configtool.desktop.in:2
 msgid "Fcitx Configuration"
-msgstr "Fcitx 환경설정"
+msgstr "Fcitx 구성"
 
 #: data/script/fcitx-diagnose.sh:1027
 msgid "Fcitx Configure UI:"
@@ -1245,7 +1245,7 @@ msgstr "GTK ${1}에 대한 ${3}을 ${2}에서 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1450
 msgid "Found fcitx addon config directory: ${1}."
-msgstr "Fcitx 애드온 설정 디렉토리를 찾았습니다: ${1}."
+msgstr "Fcitx 애드온 구성 디렉토리를 찾았습니다: ${1}."
 
 #: data/script/fcitx-diagnose.sh:894
 msgid "Found fcitx at ${1}."
@@ -1576,7 +1576,7 @@ msgstr "입력기"
 
 #: data/fcitx-configtool.desktop.in:3
 msgid "Input Method Configuration"
-msgstr "입력기 환경설정"
+msgstr "입력기 구성"
 
 #: src/module/notificationitem/notificationitem.c:461
 #: src/ui/kimpanel/kimpanel.c:283 src/ui/kimpanel/kimpanel.c:288
@@ -1624,7 +1624,7 @@ msgstr "잘못된 입력 : 라인 %d '=' 빠짐"
 
 #: data/script/fcitx-diagnose.sh:1456
 msgid "Invalid addon config file ${1}."
-msgstr "잘못된 애드온 설정 파일 ${1}."
+msgstr "잘못된 애드온 구성 파일 ${1}."
 
 #: src/lib/fcitx-utils/desktop-parse.c:593
 #, c-format
@@ -1759,7 +1759,7 @@ msgstr "라이브러리"
 #: src/lib/fcitx/addon.c:151
 #, c-format
 msgid "Load Addon Config File:%s"
-msgstr "애드온 설정 파일 불러오기: %s"
+msgstr "애드온 구성 파일 불러오기: %s"
 
 #: src/im/table/tabledict.c:341
 msgid "Load Autophrase OK"
@@ -2129,7 +2129,7 @@ msgid ""
 "Please check the Configure link of your distribution in ${1} for how to "
 "setup fcitx autostart."
 msgstr ""
-"Fcitx의 자동 시작을 설정하는 방법은 ${1}에서 배포판의 구성 링크를 확인하십시"
+"Fcitx의 자동 시작을 구성하는 방법은 ${1}에서 배포판의 구성 링크를 확인하십시"
 "오."
 
 #: src/frontend/xim/xim.c:161
@@ -2299,7 +2299,7 @@ msgstr "IM 등록"
 
 #: data/config.desc:84
 msgid "Reload configuration"
-msgstr "환경설정 다시읽기"
+msgstr "구성 다시읽기"
 
 #: src/im/table/table.c:1287
 msgid "Remind:"
@@ -2406,7 +2406,7 @@ msgstr "사전 저장 오류"
 
 #: data/config.desc:136
 msgid "Saving All Config and Input History"
-msgstr "모든 입력정보 및 설정 저장"
+msgstr "모든 구성 및 입력 기록 저장"
 
 #: data/config.desc:79
 msgid "Scroll between Input Method"
@@ -2655,7 +2655,7 @@ msgstr "필획 입력 전환 문자 수"
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
-msgstr "모듈을 위한 하위 환경설정"
+msgstr "모듈의 하위 구성"
 
 #: src/ui/classic/fcitx-skin-installer.sh:74
 msgid "Successfully Installed skin"
@@ -3230,7 +3230,7 @@ msgid ""
 msgstr ""
 "당신은 GUI 환경에서 Fcitx을 실행하고 있지만,  Fcitx-configtool을 찾을 수 없습"
 "니다.  패키지 이름은 일반적으로 Fcitx-config-gtk, Fcitx-config-gtk3 또는 "
-"Fcitx-configtool입니다.  지금은 기본 텍스트 편집기로 설정 파일을 엽니다."
+"Fcitx-configtool입니다.  지금은 기본 텍스트 편집기로 구성 파일을 엽니다."
 
 #: data/script/fcitx-configtool.sh:144
 msgid ""
