@@ -38,7 +38,7 @@ typedef struct _FcitxDBus {
     DBusConnection *conn;
     DBusConnection *privconn;
     FcitxInstance* owner;
-    FcitxDBusWatch* watches;
+    FcitxDBusWatchList watches;
     DBusDaemonProperty daemon;
     char* serviceName;
     FcitxHandlerTable* handler;
@@ -426,7 +426,7 @@ void DBusSetFD(void* arg)
     fd_set *wfds =  FcitxInstanceGetWriteFDSet(instance);
     fd_set *efds =  FcitxInstanceGetExceptFDSet(instance);
 
-    int maxfd = DBusUpdateFDSet(dbusmodule->watches, rfds, wfds, efds);
+    int maxfd = DBusUpdateFDSet(&dbusmodule->watches, rfds, wfds, efds);
 
     if (FcitxInstanceGetMaxFD(instance) < maxfd) {
         FcitxInstanceSetMaxFD(instance, maxfd);
@@ -442,7 +442,7 @@ void DBusProcessEvent(void* arg)
     fd_set *wfds =  FcitxInstanceGetWriteFDSet(instance);
     fd_set *efds =  FcitxInstanceGetExceptFDSet(instance);
 
-    DBusProcessEventForWatches(dbusmodule->watches, rfds, wfds, efds);
+    DBusProcessEventForWatches(&dbusmodule->watches, rfds, wfds, efds);
     DBusProcessEventForConnection(dbusmodule->conn);
     DBusProcessEventForConnection(dbusmodule->privconn);
     utarray_foreach(connection, &dbusmodule->extraconns, DBusConnection *) {

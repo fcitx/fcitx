@@ -68,7 +68,8 @@ int main (int argc, char* argv[])
     if (!conn)
         goto some_error;
 
-    FcitxDBusWatch* watches = NULL;
+    FcitxDBusWatchList watches;
+    memset(&watches, 0, sizeof(watches));
 
     if (!dbus_connection_set_watch_functions(conn, DBusAddWatch, DBusRemoveWatch, NULL, &watches, NULL)) {
         goto some_error;
@@ -102,7 +103,7 @@ int main (int argc, char* argv[])
     FD_ZERO(&wfds);
     FD_ZERO(&efds);
     do {
-        DBusProcessEventForWatches(watches, &rfds, &wfds, &efds);
+        DBusProcessEventForWatches(&watches, &rfds, &wfds, &efds);
         DBusProcessEventForConnection(conn);
 
         if (status != WATCHER_WAITING)
@@ -111,7 +112,7 @@ int main (int argc, char* argv[])
         FD_ZERO(&rfds);
         FD_ZERO(&wfds);
         FD_ZERO(&efds);
-        int maxfd = DBusUpdateFDSet(watches, &rfds, &wfds, &efds);
+        int maxfd = DBusUpdateFDSet(&watches, &rfds, &wfds, &efds);
         if (maxfd == 0)
             break;
         select(maxfd + 1, &rfds, &wfds, &efds, NULL);
