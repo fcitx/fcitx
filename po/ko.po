@@ -4,20 +4,21 @@
 #
 # Translators:
 # Bon Keun Seo <scobyseo@gmail.com>, 2017,2021
-# JungHee Lee <daemul72@gmail.com>, 2021
-# JungHee Lee <daemul72@gmail.com>, 2020
+# Junghee Lee <daemul72@gmail.com>, 2021
+# Junghee Lee <daemul72@gmail.com>, 2020
 # heavyuser <heavyuser73@gmail.com>, 2014,2016-2017,2021
 # JeongHun Kim <jhkim@hancom.com>, 2014
-# JungHee Lee <daemul72@gmail.com>, 2021
-# JungHee Lee <daemul72@gmail.com>, 2020,2022
+# Junghee Lee <daemul72@gmail.com>, 2022
+# Junghee Lee <daemul72@gmail.com>, 2021
+# Junghee Lee <daemul72@gmail.com>, 2020,2022
 # perillamint <perillamint@quendi.moe>, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-03-01 20:27+0000\n"
-"PO-Revision-Date: 2022-03-01 15:07+0000\n"
-"Last-Translator: JungHee Lee <daemul72@gmail.com>\n"
+"POT-Creation-Date: 2022-04-09 20:27+0000\n"
+"PO-Revision-Date: 2011-11-16 01:54+0000\n"
+"Last-Translator: Junghee Lee <daemul72@gmail.com>, 2022\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -117,7 +118,7 @@ msgstr "<할당 안됨>"
 msgid ""
 "A different value from the global one may be useful when using horizontal "
 "candidate list"
-msgstr "수평 후보 목록을 사용할 때 전역 값과 다른 값이 유용할 수 있음"
+msgstr "가로 후보 목록을 사용할 때 전역 값과 다른 값이 유용할 수 있음"
 
 #: src/im/pinyin/fcitx-pinyin.desc:7
 msgid "ABC"
@@ -255,8 +256,8 @@ msgid ""
 "Allow Pinyin Enhance to replace the first candidate word when the input "
 "string is very closed to English."
 msgstr ""
-"입력 문자열이 영어에 매우 가까울 때, 병음 개선 기능이 첫 후보 단어를 대체할 "
-"수 있도록 합니다."
+"입력 문자열이 영어에 매우 가까울 때, Pinyin 개선 기능이 첫 후보 단어를 대체"
+"할 수 있도록 합니다."
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
 msgid "Allow replacing the first candidate"
@@ -313,7 +314,7 @@ msgstr "특정 문자열 입력 시 영어 모드로 자동 변경"
 
 #: src/im/pinyin/fcitx-pinyin.desc:33
 msgid "Auto Create Phrase"
-msgstr "자동 문장 생성"
+msgstr "자동 생성 문구"
 
 #: src/module/autoeng/fcitx-autoeng.desc:1
 #: src/module/autoeng/fcitx-autoeng.desc:11
@@ -433,12 +434,12 @@ msgstr "자주 사용되는 단어를 저장할 수 없음: %s"
 #: src/im/pinyin/py.c:1798
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
-msgstr "병음 일련번호를 저장할 수 없음: %s"
+msgstr "Pinyin 일련번호를 저장할 수 없음: %s"
 
 #: src/im/pinyin/py.c:1672
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
-msgstr "사용자 병음 데이터 베이스를 저장할 수 없음: %s"
+msgstr "사용자 Pinyin 데이터 베이스를 저장할 수 없음: %s"
 
 #: data/script/fcitx-diagnose.sh:925
 msgid "Cannot connect to fcitx correctly."
@@ -458,7 +459,7 @@ msgstr "DBus ${1}의 소유자를 찾을 수 없습니다."
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
-msgstr "병음 시스템 데이터 베이스를 찾을 수 없습니다!"
+msgstr "Pinyin 시스템 데이터 베이스를 찾을 수 없습니다!"
 
 #: data/script/fcitx-diagnose.sh:1040
 msgid ""
@@ -523,7 +524,7 @@ msgstr "루트 창에서 xim_server를 찾을 수 없습니다."
 
 #: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
-msgstr "병음을 찾을 수 없음"
+msgstr "Pinyin을 찾을 수 없음"
 
 #: data/script/fcitx-diagnose.sh:1081
 msgid "Cannot interpret XMODIFIERS: ${1}."
@@ -544,7 +545,7 @@ msgstr "Fcitx 프로필에서 입력기 목록을 읽을 수 없습니다."
 
 #: data/addon.desc:22
 msgid "Category"
-msgstr "카테고리"
+msgstr "범주"
 
 #: src/ui/classic/skin.desc:132 src/ui/classic/skin.desc:238
 #: src/ui/classic/skin.desc:368
@@ -586,7 +587,7 @@ msgstr "삭제할 문구를 선택하고, Esc 키를 눌러 취소하십시오"
 
 #: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
-msgstr "앞에 넣기 위해 문장을 선택하고, 취소를 위해서 ESC를 누르세요"
+msgstr "앞에 넣기 위해 문구을 선택하고, 취소를 위해서 ESC를 누르세요"
 
 #: src/im/table/table.c:721
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
@@ -594,7 +595,7 @@ msgstr "입력 기록을 삭제하기 위한 문구를 선택하세요 (취소�
 
 #: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
-msgstr "전통"
+msgstr "클래식"
 
 #: skin/classic/fcitx_skin.conf.in:5
 msgid "Classic Skin"
@@ -602,7 +603,7 @@ msgstr "클래식 스킨"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
-msgstr "스킨을 지원하는 전통 사용자 인터페이스"
+msgstr "스킨을 지원하는 클래식 사용자 인터페이스"
 
 #: src/ui/classic/fcitx-classic-ui.desc:1
 #: src/ui/classic/fcitx-classic-ui.desc:7
@@ -691,7 +692,7 @@ msgstr "커서의 색"
 
 #: data/addon.desc:12
 msgid "Comment"
-msgstr "해설"
+msgstr "주석"
 
 #: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
@@ -752,7 +753,7 @@ msgstr "영어나 사용자 정의 단순 표를 손쉽게 입력"
 
 #: src/module/chttrans/fcitx-chttrans.conf.in:4
 msgid "Convert Simplified Chinese To Traditional Chinese"
-msgstr "간체를 번체로 변환"
+msgstr "간화자를 정체자로 변환"
 
 #: src/ui/classic/skin.desc:153 src/ui/classic/skin.desc:161
 #: src/ui/classic/skin.desc:295 src/ui/classic/skin.desc:303
@@ -842,7 +843,7 @@ msgstr "기본 입력기 상태"
 
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
-msgstr "기본 이중병음 스키마"
+msgstr "기본 이중자획 스키마"
 
 #: skin/default/fcitx_skin.conf.in:5
 msgid "Default Skin"
@@ -890,7 +891,7 @@ msgstr "다시 알림 모드에서 페이징 사용 안 함"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
 msgid "Disable Pinyin Symbol"
-msgstr "병음 기호 비활성화"
+msgstr "Pinyin 기호 비활성화"
 
 #: src/lib/fcitx/addon.c:298
 #, c-format
@@ -976,7 +977,7 @@ msgstr "입력기에 대한 활성화 상태"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
 msgid "Enchance pinyin input in Fcitx"
-msgstr "향상된 Fcitx 병음 입력"
+msgstr "향상된 Fcitx Pinyin 입력"
 
 #: src/im/table/table.desc:69
 msgid "End Key"
@@ -1155,7 +1156,7 @@ msgstr "Fcitx 버전: ${1}"
 #: src/ui/classic/skin.desc:159 src/ui/classic/skin.desc:301
 #: src/ui/classic/skin.desc:403
 msgid "Fill Background Horizontal rule"
-msgstr "배경 수평 채우기 규칙"
+msgstr "배경 채우기 가로 규칙"
 
 #: src/ui/classic/skin.desc:151 src/ui/classic/skin.desc:293
 #: src/ui/classic/skin.desc:395
@@ -1690,7 +1691,7 @@ msgstr "Kimpanel"
 
 #: src/ui/kimpanel/fcitx-kimpanel-ui.conf.in:4
 msgid "Kimpanel Support for Fcitx"
-msgstr "Fcitx를 위한 kimpanel 지원"
+msgstr "Fcitx용 kimpanel 지원"
 
 #: data/script/fcitx-diagnose.sh:1531
 msgid "Kimpanel process:"
@@ -1807,7 +1808,7 @@ msgstr "로고 아이콘"
 
 #: src/im/table/fcitx-table.desc:24
 msgid "Lookup Pinyin"
-msgstr "병음 검색"
+msgstr "Pinyin 검색"
 
 #: src/im/pinyin/fcitx-pinyin.desc:5
 msgid "MS"
@@ -1861,7 +1862,7 @@ msgstr "자동 영어 입력을 위한 철자 힌트 목록의 최대 문자 수
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 msgid "Maximum length of spell hint list for Pinyin Enhance"
-msgstr "병음 개선을 위한 철자 힌트 목록의 최대 문자 수"
+msgstr "Pinyin 개선을 위한 철자 힌트 목록의 최대 문자 수"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:37
 msgid "Maximum length of spell hint list for Quick Phrase"
@@ -1898,11 +1899,11 @@ msgstr "단어 힌트를 전환할 최소 문자 수"
 #: src/im/table/table.desc:59
 msgid ""
 "Minimum length trigger auto send candidate when there will be no candidate"
-msgstr "후보가 없을 때, 전환 자동 전송 후보 최소 문자 수"
+msgstr "후보가 없을 때, 최소 문자 수 전환 자동 전송 후보"
 
 #: src/im/table/table.desc:54
 msgid "Minimum length trigger auto send candidate word when only one candidate"
-msgstr "하나의 후보만 있을 때, 전환 자동 전송 후보 단어 최소 문자 수"
+msgstr "후보가 하나만 있을 때, 최소 문자 수 전환 자동 전송 후보 단어"
 
 #: src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
@@ -2073,7 +2074,7 @@ msgstr "프로그램별"
 
 #: src/im/table/table.c:1395
 msgid "Phrase is already in Dict "
-msgstr "문장이 이미 사전에 있습니다"
+msgstr "문구이 이미 사전에 있습니다"
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -2090,7 +2091,7 @@ msgstr "문장이 이미 사전에 있습니다"
 #: src/im/pinyin/fcitx-pinyin.desc:127 src/im/pinyin/fcitx-pinyin.desc:132
 #: src/im/pinyin/fcitx-pinyin.desc:137 src/im/pinyin/fcitx-pinyin.desc:142
 msgid "Pinyin"
-msgstr "병음"
+msgstr "Pinyin"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:1
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:7
@@ -2102,19 +2103,19 @@ msgstr "병음"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:42
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:50
 msgid "Pinyin Enhance"
-msgstr "병음 개선"
+msgstr "Pinyin 개선"
 
 #: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
-msgstr "병음 일련번호 매직 번호가 일치하지 않음"
+msgstr "Pinyin 일련번호 매직 번호가 일치하지 않음"
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
-msgstr "병음 키"
+msgstr "Pinyin 키"
 
 #: src/im/table/table.c:621
 msgid "Pinyin: "
-msgstr "병음:"
+msgstr "Pinyin:"
 
 #: src/im/pinyin/fcitx-pinyin.desc:9
 msgid "PinyinJiaJia"
@@ -2223,7 +2224,7 @@ msgstr "입력 후 문구 확인"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:4
 msgid "Provide extra feature for pinyin in Fcitx"
-msgstr "Fcitx에서 병음입력 추가기능 제공"
+msgstr "Fcitx에서 Pinyin입력 추가기능 제공"
 
 #: src/module/dbus/fcitx-dbus.conf.in:4
 msgid "Provides DBus Support (Used by other Addon)"
@@ -2390,7 +2391,7 @@ msgstr "양쪽 시프트"
 
 #: src/im/pinyin/fcitx-pinyin.desc:38
 msgid "Save Auto Created Phrase"
-msgstr "자동 생성 문장 저장"
+msgstr "자동 생성된 문구 저장"
 
 #: src/im/table/table.desc:108
 msgid "Save Auto Phrase"
@@ -2497,20 +2498,20 @@ msgstr "Shuang Pin 스키마"
 
 #: src/im/pinyin/py.c:121 src/im/pinyin/shuangpin.conf.in:3
 msgid "Shuangpin"
-msgstr "이중병음"
+msgstr "이중자획"
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:4
 msgid "Simple Pinyin support for Fcitx"
-msgstr "Fcitx를 위한 단순 병음 지원"
+msgstr "Fcitx용 Simple Pinyin 지원"
 
 #: src/module/chttrans/chttrans.c:177
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
-msgstr "간체를 번체로"
+msgstr "간화자를 정체자로"
 
 #: src/module/chttrans/chttrans.c:179
 msgid "Simplified Chinese is enabled."
-msgstr "중국어 간체가 활성화되었습니다."
+msgstr "간화자가 활성화되었습니다."
 
 #: src/ui/classic/skin.c:708 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
@@ -2684,12 +2685,12 @@ msgstr "전각 부호 모드 전환"
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
 #: src/module/chttrans/chttrans.c:244
 msgid "Switch to Simplified Chinese"
-msgstr "중국어 간체로 전환"
+msgstr "간화자로 전환"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 #: src/module/chttrans/chttrans.c:245
 msgid "Switch to Traditional Chinese"
-msgstr "중국어 번체로 전환"
+msgstr "정체자로 전환"
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
@@ -2875,21 +2876,21 @@ msgstr "오른쪽위"
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
-msgstr "중국어 번체 번역 엔진"
+msgstr "정체자 번역 엔진"
 
 #: src/module/chttrans/chttrans.c:178
 msgid "Traditional Chinese is enabled."
-msgstr "중국어 번체가 활성화되었습니다."
+msgstr "정체자가 활성화되었습니다."
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
 #: src/module/chttrans/fcitx-chttrans.desc:14
 msgid "TraditionalChinese"
-msgstr "중국어 번체"
+msgstr "정체자"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
 msgid "Treating abbreviated Pinyin as English"
-msgstr "병음 약어를 영어로 취급"
+msgstr "Pinyin 약어를 영어로 취급"
 
 #: data/config.desc:5
 msgid "Trigger Input Method"
@@ -2917,7 +2918,7 @@ msgstr "사용자 인터페이스"
 
 #: src/lib/fcitx/ui.c:205
 msgid "UI: bad ui"
-msgstr "UI: 문제있는 사용자 인터페이스"
+msgstr "UI: 잘못된 UI"
 
 #: src/lib/fcitx/ui.c:192
 #, c-format
@@ -2959,7 +2960,7 @@ msgstr "페이지 이동을 위한 대체 키 사용"
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
-msgstr "완성형 병음 사용"
+msgstr "완성형 Pinyin 사용"
 
 #: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
@@ -2987,7 +2988,7 @@ msgstr "XIM의 스팟 스타일에 사용 (실행 중에는 변경할 수 없음
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
-msgstr "병음 사용"
+msgstr "Pinyin 사용"
 
 #: data/addon.desc:77
 msgid "Use RTLD_LOCAL to load library"
@@ -3031,7 +3032,7 @@ msgstr "콘솔에서 Fcitx 상태를 변경하기 위해 Fcitx-remote 사용"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
 msgid "Useful when you hardly ever use abbreviated pinyin."
-msgstr "병음 약어를 거의 사용하지 않을 때 유용합니다."
+msgstr "Pinyin 약어를 거의 사용하지 않을 때 유용합니다."
 
 #: src/im/pinyin/fcitx-pinyin.desc:11
 msgid "User Defined"
@@ -3059,7 +3060,7 @@ msgstr "세로"
 
 #: src/ui/classic/fcitx-classic-ui.desc:54
 msgid "Vertical Candidate Word List"
-msgstr "수직 후보 단어 목록"
+msgstr " 세로 후보 단어 목록"
 
 #: src/module/vk/fcitx-vk.conf.in:3 src/module/vk/fcitx-vk.conf.in:10
 msgid "Virtual Key Board"
@@ -3228,9 +3229,9 @@ msgid ""
 "found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
 "fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
-"당신은 GUI 환경에서 Fcitx을 실행하고 있지만,  Fcitx-configtool을 찾을 수 없습"
-"니다.  패키지 이름은 일반적으로 Fcitx-config-gtk, Fcitx-config-gtk3 또는 "
-"Fcitx-configtool입니다.  지금은 기본 텍스트 편집기로 구성 파일을 엽니다."
+"당신은 GUI 환경에서 Fcitx을 실행하고 있지만,  fcitx-configtool을 찾을 수 없습"
+"니다.  패키지 이름은 일반적으로 fcitx-config-gtk, fcitx-config-gtk3 또는 "
+"fcitx-configtool입니다.  지금은 기본 텍스트 편집기로 구성 파일을 엽니다."
 
 #: data/script/fcitx-configtool.sh:144
 msgid ""
