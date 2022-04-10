@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-04-09 20:27+0000\n"
+"POT-Creation-Date: 2022-04-10 20:28+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
 "Last-Translator: Junghee Lee <daemul72@gmail.com>, 2022\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
@@ -130,11 +130,11 @@ msgstr "양쪽 Alt"
 
 #: data/config.desc:20
 msgid "ALT_L_SHIFT"
-msgstr "Alt+왼쪽 시프트"
+msgstr "ALT+L_SHIFT"
 
 #: data/config.desc:21
 msgid "ALT_R_SHIFT"
-msgstr "Alt+오른쪽 시프트"
+msgstr "ALT+R_SHIFT"
 
 #: data/config.desc:75
 msgid "ALT_SHIFT"
@@ -241,7 +241,7 @@ msgstr "모두"
 
 #: data/script/fcitx-diagnose.sh:1256
 msgid "All found Gtk ${1} immodule files exist."
-msgstr "발견한 GTK ${1} 입력모듈 파일이 모두 존재합니다."
+msgstr "발견된 모든 GTK ${1} 입력기모듈 파일이 존재합니다."
 
 #: data/script/fcitx-diagnose.sh:1517
 msgid "All libraries for all addons are found."
@@ -330,7 +330,7 @@ msgstr "자동 영어 모드"
 
 #: src/module/autoeng/fcitx-autoeng.conf.in:9
 msgid "Auto English Trigger Word"
-msgstr "자동 영어 전환 단어"
+msgstr "자동 영어 트리거 단어"
 
 #: src/im/table/table.desc:88
 msgid "Auto Phrase"
@@ -481,11 +481,11 @@ msgstr "Fcitx 실행 파일을 찾을 수 없습니다!"
 
 #: data/script/fcitx-diagnose.sh:1405
 msgid "Cannot find fcitx im module for gtk ${1} in cache."
-msgstr "캐시에서 GTK ${1}의 Fcitx 입력 모듈을 찾을 수 없습니다."
+msgstr "캐시에서 GTK ${1}용 Fcitx 입력기 모듈을 찾을 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:1323
 msgid "Cannot find fcitx im module for gtk ${1}."
-msgstr "GTK ${1}의 Fcitx 입력 모듈을 찾을 수 없습니다."
+msgstr "GTK ${1}용 Fcitx 입력기 모듈을 찾을 수 없습니다."
 
 #: data/script/fcitx-diagnose.sh:1197 data/script/fcitx-diagnose.sh:1202
 msgid "Cannot find fcitx input method module for ${1}."
@@ -505,7 +505,7 @@ msgstr "${2} 애드온의 ${1}을 위한 다음 라이브러리를 찾을 수 �
 
 #: data/script/fcitx-diagnose.sh:1400
 msgid "Cannot find immodules cache for gtk ${1}"
-msgstr "GTK ${1}의 입력모듈 캐시를 찾을 수 없음"
+msgstr "GTK ${1}용 입력기모듈 캐시를 찾을 수 없습니다"
 
 #: data/script/fcitx-diagnose.sh:1539
 msgid ""
@@ -583,15 +583,15 @@ msgstr "변환 키 선택"
 
 #: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
-msgstr "삭제할 문구를 선택하고, Esc 키를 눌러 취소하십시오"
+msgstr "삭제할 문구를 선택하고, Esc 키를 눌러 취소합니다"
 
 #: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
-msgstr "앞에 넣기 위해 문구을 선택하고, 취소를 위해서 ESC를 누르세요"
+msgstr "앞에 넣을 문구를 선택하고, 취소하려면 Esc 키를 눌러 취소합니다."
 
 #: src/im/table/table.c:721
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
-msgstr "입력 기록을 삭제하기 위한 문구를 선택하세요 (취소는 ESC)"
+msgstr "입력 기록을 지우려면 문구를 선택하고, Esc 키를 눌러 취소합니다"
 
 #: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
@@ -932,7 +932,7 @@ msgstr "철자 힌트 표시 않음"
 
 #: src/im/table/table.desc:29
 msgid "Do not sort word with code less than this level"
-msgstr "이 수준보다 낮은 코드로 단어는 고르지 않음"
+msgstr "코드가 이 수준보다 짧은 단어를 정렬하지 않음"
 
 #: src/lib/fcitx-utils/desktop-parse.c:603
 #, c-format
@@ -1008,8 +1008,8 @@ msgid ""
 "Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
 "you have exported it incorrectly in any of your init files."
 msgstr ""
-"환경변수 ${1} 는 \"${3}\"이(가) 아닌 \"${2}\"입니다. init 파일에서 해당 환경"
-"변수를 잘못 설정했는지 확인하십시오."
+"환경 변수 ${1}는 \"${3}\" 대신 \"${2}\"입니다. 사용자의 init 파일에서 잘못 내"
+"보낸 것이 있는지 확인합니다."
 
 #: data/script/fcitx-diagnose.sh:825
 msgid "Environment variable ${1} is not set."
@@ -1033,7 +1033,7 @@ msgstr "Erbi"
 
 #: data/script/fcitx-diagnose.sh:811
 msgid "Error occurs when running ${1}. Please check your locale settings."
-msgstr "${1}을 실행하는 중 오류가 발생하였습니다. 로케일 설정을 확인하십시오."
+msgstr "${1}를 실행하는 중 오류가 발생하였습니다. 로케일 설정을 확인합니다."
 
 #: src/ui/classic/fcitx-skin-installer.sh:64
 #, sh-format
@@ -1078,7 +1078,7 @@ msgstr "트리거 입력 방법을 위한 추가 키"
 
 #: data/script/fcitx-diagnose.sh:1394
 msgid "Failed to find fcitx in immodule cache at ${1}"
-msgstr "${1}의 입력모듈 캐시에서 Fcitx를 찾을 수 없습니다."
+msgstr "${1}의 입력기모듈 캐시에서 Fcitx를 찾지 못했습니다."
 
 #: data/script/fcitx-diagnose.sh:1311
 msgid "Failed to find fcitx in the output of ${1}"
@@ -1254,11 +1254,11 @@ msgstr "${1}에서 Fcitx를 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1178 data/script/fcitx-diagnose.sh:1183
 msgid "Found fcitx im module for ${2}: ${1}."
-msgstr "${2}의 Fcitx 입력 모듈을 찾았습니다: ${1}"
+msgstr "${2}용 Fcitx 입력기 모듈을 찾았습니다: ${1}"
 
 #: data/script/fcitx-diagnose.sh:1305 data/script/fcitx-diagnose.sh:1388
 msgid "Found fcitx im modules for gtk ${1}."
-msgstr "GTK ${1}의 Fcitx 입력 모듈을 찾았습니다."
+msgstr "GTK ${1}용 Fcitx 입력기 모듈을 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1018
 msgid "Found fcitx kcm module."
@@ -1274,11 +1274,11 @@ msgstr "${1}에서 fcitx-configtool을 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1381
 msgid "Found immodule cache for unknown gtk version at ${1}."
-msgstr "알 수 없는 GTK 버전의 입력모듈 캐시를 ${1}에서 찾았습니다."
+msgstr "${1}에서 알 수 없는 GTK 버전용 입력기모듈 캐시를 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1373
 msgid "Found immodules cache for gtk ${1} at ${2}."
-msgstr "GTK ${1}의 입력모듈 캐시를 ${2}에서 찾았습니다."
+msgstr "GTK ${1}용 입력기모듈 캐시를 ${2}에서 찾았습니다."
 
 #: data/script/fcitx-diagnose.sh:1190
 msgid "Found unknown fcitx qt module: ${1}."
@@ -1295,7 +1295,7 @@ msgstr "프론트엔드"
 #: src/frontend/ipc/fcitx-ipc.conf.in:4
 #: src/frontend/ipcportal/fcitx-ipcportal.conf.in:4
 msgid "Frontend Used by IM Modules"
-msgstr "IM 모듈이 사용하는 프론트엔드"
+msgstr "입력기 모듈에서 사용하는 프런트엔드"
 
 #: src/lib/fcitx/frontend.c:542
 msgid "Frontend: bad frontend"
@@ -1405,15 +1405,15 @@ msgstr "그리스어"
 
 #: data/script/fcitx-diagnose.sh:1250
 msgid "Gtk ${1} immodule file ${2} does not exist."
-msgstr "GTK ${1} 입력모듈 파일 ${2}이 존재하지 않습니다."
+msgstr "GTK ${1} 입력기모듈 파일 ${2}이 존재하지 않습니다."
 
 #: data/script/fcitx-diagnose.sh:1418
 msgid "Gtk IM module cache:"
-msgstr "GTK 입력 모듈 캐시:"
+msgstr "GTK 입력기 모듈 캐시:"
 
 #: data/script/fcitx-diagnose.sh:1423
 msgid "Gtk IM module files:"
-msgstr "GTK 입력 모듈 파일:"
+msgstr "GTK 입력기 모듈 파일:"
 
 #: src/module/fullwidthchar/fullwidthchar.c:114
 #: src/module/fullwidthchar/fullwidthchar.c:191
@@ -1422,7 +1422,7 @@ msgstr "반각 문자"
 
 #: data/script/fcitx-diagnose.sh:702
 msgid "Hall of Shame for Linux IME Support"
-msgstr "Linux IME 지원에 대한 불명예의 전당"
+msgstr "Linux IME 지원에 대한 불명예 전당"
 
 #: src/ui/classic/fcitx-classic-ui.desc:47
 msgid "Hide"
@@ -1478,18 +1478,18 @@ msgstr "자주사용하는 단어 지우는 단축키"
 #: src/lib/fcitx/ime.c:322
 #, c-format
 msgid "IM: bad im %s"
-msgstr "IM: 문제있는 입력기 %s"
+msgstr "입력기: 문제있는 입력기 %s"
 
 #: src/lib/fcitx/ime.c:303
 #, c-format
 msgid "IM: open %s fail %s"
-msgstr "IM: %s 열기 실패 (%s)"
+msgstr "입력기: %s 열기 %s 실패"
 
 #: src/module/imselector/fcitx-imselector.desc:1
 #: src/module/imselector/fcitx-imselector.desc:6
 #: src/module/imselector/fcitx-imselector.desc:11
 msgid "IMSelector"
-msgstr "입력기 선택"
+msgstr "입력기 선택도구"
 
 #: src/im/table/table.desc:11
 msgid "Icon Name"
@@ -1506,7 +1506,7 @@ msgid ""
 "as well as alternative solutions."
 msgstr ""
 "${1}을 사용하는 경우, ${2} 이외의 입력기를 사용하려면 ${2}을(를) 제거하거나 "
-"${3}을(를) 제거하십시오.  자세한 내용은 ${link}와 다른 솔루션을 참조하십시오."
+"${3}을(를) 제거합니다.  자세한 내용은 ${link}와 다른 솔루션을 참조합니다."
 
 #: data/script/fcitx-diagnose.sh:689
 msgid ""
@@ -1516,7 +1516,7 @@ msgid ""
 msgstr ""
 "${1}을 사용하는 경우 ${2} 이외의 입력기를 사용하기 위해 ${2}를 제거하거나, "
 "${3}을 제거하거나, ${g36_disable_ibus} 명령을 사용하여 IBus 통합을 비활성화 "
-"할 수 있습니다. 자세한 내용은 ${link}를 참조하십시오."
+"할 수 있습니다. 자세한 내용은 ${link}를 참조합니다."
 
 #: src/im/table/table.desc:218
 msgid "Ignore Punctuation"
@@ -1612,7 +1612,7 @@ msgstr "입력기"
 
 #: src/ui/classic/fcitx-skin-installer.desktop.in:4
 msgid "Installer Script for Fcitx Skin"
-msgstr "Fcitx 스킨을 위한 설치 스크립트"
+msgstr "Fcitx 스킨용 설치 프로그램 스크립트"
 
 #: data/config.desc:90
 msgid "Interval of Two Key Input"
@@ -1707,7 +1707,7 @@ msgstr "오른쪽 Ctrl"
 
 #: data/config.desc:18
 msgid "L_SHIFT"
-msgstr "왼쪽 시프트"
+msgstr "L_SHIFT"
 
 #: data/inputmethod.desc:19
 msgid "LangCode"
@@ -1742,8 +1742,8 @@ msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr ""
-"선택된 문자를 고르기위해 좌/우키를, 확인을 위해 엔터키를, 취소를 위해 ESC키"
-"를 선택하세요"
+"왼쪽/오른쪽에서 선택한 문자를 선택하고, Enter 키를 눌러 확인하고, Esc 키를 눌"
+"러 취소합니다"
 
 #: src/module/clipboard/fcitx-clipboard.desc:11
 msgid "Length of Clipboard History to Save"
@@ -1870,7 +1870,7 @@ msgstr "상용구용 철자 힌트 목록의 최대 문자 수"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:55
 msgid "Maximum results from stroke input."
-msgstr "필획 입력 가능한 최대 길이"
+msgstr "필획 입력의 최대 길이입니다."
 
 #: src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
@@ -1890,20 +1890,20 @@ msgstr "오래된 파일 경로를 새로운 곳으로 이전하기"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
-msgstr "필획 입력을 전환할 최소 입력 문자 수 (비활성화하려면 -1로 지정)"
+msgstr "필획 입력을 트리거할 최소 입력 문자 수 (비활성화하려면 -1로 지정)"
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
-msgstr "단어 힌트를 전환할 최소 문자 수"
+msgstr "단어 힌트를 트리거할 최소 문자 수"
 
 #: src/im/table/table.desc:59
 msgid ""
 "Minimum length trigger auto send candidate when there will be no candidate"
-msgstr "후보가 없을 때, 최소 문자 수 전환 자동 전송 후보"
+msgstr "후보가 없을 때, 최소 문자 수 트리거 자동 전송 후보"
 
 #: src/im/table/table.desc:54
 msgid "Minimum length trigger auto send candidate word when only one candidate"
-msgstr "후보가 하나만 있을 때, 최소 문자 수 전환 자동 전송 후보 단어"
+msgstr "후보가 하나만 있을 때, 최소 문자 수 트리거 자동 전송 후보 단어"
 
 #: src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
@@ -2107,7 +2107,7 @@ msgstr "Pinyin 개선"
 
 #: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
-msgstr "Pinyin 일련번호 매직 번호가 일치하지 않음"
+msgstr "Pinyin 색인 마법 번호가 일치하지 않음"
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
@@ -2130,12 +2130,11 @@ msgid ""
 "Please check the Configure link of your distribution in ${1} for how to "
 "setup fcitx autostart."
 msgstr ""
-"Fcitx의 자동 시작을 구성하는 방법은 ${1}에서 배포판의 구성 링크를 확인하십시"
-"오."
+"Fcitx의 자동 시작을 구성하는 방법은 ${1}에서 배포판의 구성 링크를 확인합니다."
 
 #: src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
-msgstr "XMODIFIERS를 지정하십시오."
+msgstr "XMODIFIERS를 지정합니다."
 
 #: data/script/fcitx-diagnose.sh:663
 msgid ""
@@ -2143,7 +2142,7 @@ msgid ""
 "your distribution provides or add ${1} to your ${2}. See ${link}."
 msgstr ""
 "배포판에서 제공하는 도구를 사용하여 환경 변수 ${env_name}을 \"${value}\"로 지"
-"정하거나 ${2}에 ${1}를 추가하십시오. $ {link} 참조."
+"정하거나 ${2}에 ${1}를 추가합니다. $ {link} 참조."
 
 #: src/ui/classic/skin.desc:265
 msgid "Position or offset of LookupTable"
@@ -2164,25 +2163,24 @@ msgstr "선호하는 인챈트 제공자"
 #: src/im/pinyin/py.c:769
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
-msgstr "1 키를 눌러 자주 사용하는 목록에서 %s을(를) 삭제하십시오 (취소는 ESC)"
+msgstr "1 키를 눌러 자주 사용하는 목록에서 %s을(를) 삭제합니다 (취소는 ESC)"
 
 #: src/im/pinyin/py.c:771
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
-msgstr ""
-"1-%d 키를 눌러 자주 사용하는 목록에서 %s을(를) 삭제하십시오 (취소는 ESC)"
+msgstr "1-%d 키를 눌러 자주 사용하는 목록에서 %s을(를) 삭제합니다 (취소는 ESC)"
 
 #: src/module/autoeng/AutoEng.c:686 src/module/quickphrase/quickphrase.c:456
 msgid "Press Enter to input text"
-msgstr "텍스트를 입력하기위해 엔터를 누르세요"
+msgstr "Enter 키를 눌러 텍스트 입력"
 
 #: src/im/pinyin/py.c:729
 msgid "Press index to delete user phrase (ESC for cancel)"
-msgstr "사용자 문구를 삭제하려면 일련번호를 누르십시오 (취소는 ESC)"
+msgstr "사용자 문구를 삭제하려면 일련번호를 누릅니다 (취소는 ESC)"
 
 #: src/im/pinyin/py.c:743
 msgid "Press number to make word in frequent list"
-msgstr "단어를 자주 사용하는 목록에 넣으려면 숫자를 누르세요"
+msgstr "번호를 눌러 자주 사용하는 단어로 만들기"
 
 #: data/config.desc:120
 msgid "Prev Page"
@@ -2252,7 +2250,7 @@ msgstr "문장부호 지원"
 
 #: data/script/fcitx-diagnose.sh:1171
 msgid "Qt IM module files:"
-msgstr "Qt 입력 모듈 파일:"
+msgstr "Qt 입력기 모듈 파일:"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:9
 msgid "Quick Phrase List"
@@ -2280,7 +2278,7 @@ msgstr "Quwei"
 
 #: src/im/qw/fcitx-qw.conf.in:4
 msgid "Quwei Input Method for Fcitx"
-msgstr "Fcitx를 위한 Quwei 입력기"
+msgstr "Fcitx용 Quwei 입력기"
 
 #: data/config.desc:25
 msgid "R_ALT"
@@ -2292,11 +2290,11 @@ msgstr "오른쪽 Ctrl"
 
 #: data/config.desc:17
 msgid "R_SHIFT"
-msgstr "오른쪽 시프트"
+msgstr "R_SHIFT"
 
 #: data/addon.desc:58
 msgid "Register IM"
-msgstr "IM 등록"
+msgstr "입력기 등록"
 
 #: data/config.desc:84
 msgid "Reload configuration"
@@ -2419,7 +2417,7 @@ msgstr "유니코드 찾기"
 
 #: data/config.desc:162
 msgid "Seconds sleep before fcitx really start"
-msgstr "Fcitx가 실제 시작하기 전 대기하는 초단위 시간"
+msgstr "Fcitx가 실제로 시작하기 전 지연시간(초)"
 
 #: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
@@ -2431,7 +2429,7 @@ msgstr "로컬 입력기 선택:"
 
 #: src/module/imselector/fcitx-imselector.conf.in:4
 msgid "Select specific input method via keyboard"
-msgstr "키보드를 이용하여 특정 입력기 선택"
+msgstr "키보드를 통해 특정 입력기 선택"
 
 #: src/module/clipboard/clipboard.c:372
 msgid "Select to paste"
@@ -2652,7 +2650,7 @@ msgstr "상태 패널 위치 Y"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:47
 msgid "Stroke input trigger length"
-msgstr "필획 입력 전환 문자 수"
+msgstr "필획 입력 트리거 문자 수"
 
 #: data/addon.desc:53
 msgid "Sub Configuration for Module"
@@ -2772,7 +2770,7 @@ msgstr "표 코드 색"
 
 #: src/im/table/fcitx-table.conf.in:4
 msgid "Table Input Method for Fcitx"
-msgstr "Fcitx를 위한 표 입력기"
+msgstr "Fcitx용 표 입력기"
 
 #: src/module/vk/vk.c:61
 msgid "Table Symbol"
@@ -2798,13 +2796,15 @@ msgstr ""
 msgid ""
 "This is used in some modules and input methods to navigate to the next "
 "candidate word"
-msgstr "일부 모듈이나 입력기가 다음 단어 후보를 선택하기 위해 사용합니다."
+msgstr ""
+"이것은 다음 후보 단어로 이동하기 위해 일부 모듈 및 입력기에서 사용됩니다"
 
 #: data/config.desc:149
 msgid ""
 "This is used in some modules and input methods to navigate to the previous "
 "candidate word"
-msgstr "일부 모듈이나 입력기가 이전 단어 후보를 선택하기 위해 사용합니다."
+msgstr ""
+"이것은 이전 후보 단어로 이동하기 위해 일부 모듈 및 입력기에서 사용됩니다"
 
 #: src/ui/classic/skin.desc:33
 msgid "Tip Message Color"
@@ -2818,8 +2818,8 @@ msgid ""
 "freezing, see ${link2}."
 msgstr ""
 "XIM을 사용할 때 발생할 수있는 응용 프로그램 특정 문제점을 보려면 ${link1}을 "
-"확인하십시오.  응용 프로그램 멈춤을 포함하여 XIM을 사용하는 다른 일반적인 문"
-"제는 ${link2}를 참조하십시오."
+"확인합니다.  응용 프로그램 멈춤을 포함하여 XIM을 사용하는 다른 일반적인 문제"
+"는 ${link2}를 참조합니다."
 
 #: src/module/punc/punc.c:150 src/module/punc/punc.c:569
 msgid "Toggle Full Width Punctuation"
@@ -2894,7 +2894,7 @@ msgstr "Pinyin 약어를 영어로 취급"
 
 #: data/config.desc:5
 msgid "Trigger Input Method"
-msgstr "입력기 전환"
+msgstr "트리거 입력기"
 
 #: src/module/clipboard/fcitx-clipboard.desc:25
 msgid "Trigger Key for Clipboard History List"
@@ -2918,7 +2918,7 @@ msgstr "사용자 인터페이스"
 
 #: src/lib/fcitx/ui.c:205
 msgid "UI: bad ui"
-msgstr "UI: 잘못된 UI"
+msgstr "UI: 문제있는 UI"
 
 #: src/lib/fcitx/ui.c:192
 #, c-format
@@ -2952,7 +2952,7 @@ msgstr "지원하지 않는 키"
 
 #: src/im/table/table.desc:171
 msgid "Use Alternative Candidate Word Number"
-msgstr "대체 후보 단어 수 사용"
+msgstr "대체 후보 단어 번호 사용"
 
 #: src/im/table/table.desc:183
 msgid "Use Alternative Key for paging"
@@ -2992,7 +2992,7 @@ msgstr "Pinyin 사용"
 
 #: data/addon.desc:77
 msgid "Use RTLD_LOCAL to load library"
-msgstr "라이브러리 적재를 위해 RTLD_LOCAL 사용"
+msgstr "RTLD_LOCAL을 사용하여 라이브러리 불러오기"
 
 #: src/module/clipboard/fcitx-clipboard.desc:30
 msgid "Use Selection Text"
@@ -3004,7 +3004,7 @@ msgstr "시스템 트레이 아이콘 사용"
 
 #: src/im/pinyin/fcitx-pinyin.desc:23
 msgid "Use V to trigger quickphrase"
-msgstr "상용구 전환을 위해 V 사용"
+msgstr "V 키를 사용하여 상용구 트리거"
 
 #: data/profile.desc:7
 msgid "Use Wide Punctuation"
@@ -3028,7 +3028,7 @@ msgstr "목록의 첫 번째 키보드 입력기 자판을 기본 배열로 사�
 
 #: src/module/remote/fcitx-remote-module.conf.in:4
 msgid "Used by fcitx-remote to change Fcitx state from console"
-msgstr "콘솔에서 Fcitx 상태를 변경하기 위해 Fcitx-remote 사용"
+msgstr "콘솔에서 Fcitx 상태를 변경하기 위해 fcitx-remote로 사용됨"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
 msgid "Useful when you hardly ever use abbreviated pinyin."
@@ -3048,7 +3048,7 @@ msgstr "사용자 문구 색"
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
-msgstr "dbus 체크를 위해 ${1}를 이용하십시오."
+msgstr "{1}를 사용하여 dbus를 확인합니다."
 
 #: data/script/fcitx-diagnose.sh:1294 data/script/fcitx-diagnose.sh:1377
 msgid "Version Line:"
@@ -3088,7 +3088,7 @@ msgstr "Wanfeng"
 
 #: data/script/fcitx-diagnose.sh:876
 msgid "Why is it bad to run as root"
-msgstr "루트 계정으로 실행하는 게 좋지 않은 이유"
+msgstr "루트로 실행하는 것이 문제있는 이유"
 
 #: src/im/table/data/wbx.conf.in:3
 msgid "Wubi"
@@ -3110,7 +3110,7 @@ msgstr "X 키보드 통합"
 #: src/module/xkbdbus/fcitx-xkbdbus.conf.in:3
 #: src/module/xkbdbus/fcitx-xkbdbus.conf.in:4
 msgid "X Keyboard Integration export with DBus"
-msgstr "DBus를 통해 X 키보드 통합"
+msgstr "DBus를 사용한 X 키보드 통합 내보내기"
 
 #: src/ui/classic/tray.c:160
 #, c-format
@@ -3159,11 +3159,11 @@ msgstr "Xim"
 
 #: data/script/fcitx-diagnose.sh:1089
 msgid "Xim Server Name from Environment variable is ${1}."
-msgstr "환경변수의 Xim 서버 이름은 ${1}입니다."
+msgstr "환경 변수의 Xim 서버 이름은 ${1}입니다."
 
 #: data/script/fcitx-diagnose.sh:1101
 msgid "Xim server name is the same with that set in the environment variable."
-msgstr "Xim 서버 이름이 환경변수값과 일치합니다."
+msgstr "Xim 서버 이름이 환경 변수에 설정된 이름과 동일합니다."
 
 #: data/script/fcitx-diagnose.sh:1103
 msgid ""
@@ -3220,8 +3220,8 @@ msgid ""
 "You only have one keyboard input method enabled. You may want to add another "
 "input method to input other languages."
 msgstr ""
-"하나의 키보드 입력기만 활성화되었습니다. 다른 언어를 입력하기 위해 새로운 입"
-"력기를 추가할 수 있습니다."
+"하나의 키보드 입력기만 사용할 수 있습니다. 다른 입력기를 추가하여 다른 언어"
+"를 입력할 수 있습니다."
 
 #: data/script/fcitx-configtool.sh:147
 msgid ""
