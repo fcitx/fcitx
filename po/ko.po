@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-04-10 20:28+0000\n"
+"POT-Creation-Date: 2022-04-13 20:27+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
 "Last-Translator: Junghee Lee <daemul72@gmail.com>, 2022\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
@@ -182,7 +182,7 @@ msgstr "Fcitx를 위한 Lua 스크립스 지원 추가"
 
 #: src/im/table/fcitx-table.desc:4
 msgid "Add Phrase"
-msgstr "문구 추가"
+msgstr "구문 추가"
 
 #: src/module/unicode/fcitx-unicode.conf.in:4
 msgid "Add Unicode Typing Support"
@@ -314,7 +314,7 @@ msgstr "특정 문자열 입력 시 영어 모드로 자동 변경"
 
 #: src/im/pinyin/fcitx-pinyin.desc:33
 msgid "Auto Create Phrase"
-msgstr "자동 생성 문구"
+msgstr "자동 생성 구문"
 
 #: src/module/autoeng/fcitx-autoeng.desc:1
 #: src/module/autoeng/fcitx-autoeng.desc:11
@@ -334,15 +334,15 @@ msgstr "자동 영어 트리거 단어"
 
 #: src/im/table/table.desc:88
 msgid "Auto Phrase"
-msgstr "자동 문구"
+msgstr "자동 구문"
 
 #: src/im/table/table.desc:98
 msgid "Auto Phrase Length"
-msgstr "자동 문구 문자 수"
+msgstr "자동 구문 문자 수"
 
 #: src/im/table/table.desc:103
 msgid "Auto Phrase Phrase"
-msgstr "자동 문구 문구"
+msgstr "자동 구문 구문"
 
 #: src/im/table/table.desc:49
 msgid "Auto Send Candidate Word"
@@ -583,15 +583,15 @@ msgstr "변환 키 선택"
 
 #: src/im/table/table.c:713
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
-msgstr "삭제할 문구를 선택하고, Esc 키를 눌러 취소합니다"
+msgstr "삭제할 구문을 선택하고, Esc 키를 눌러 취소합니다"
 
 #: src/im/table/table.c:705
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
-msgstr "앞에 넣을 문구를 선택하고, 취소하려면 Esc 키를 눌러 취소합니다."
+msgstr "앞에 넣을 구문을 선택하고, 취소하려면 Esc 키를 눌러 취소합니다."
 
 #: src/im/table/table.c:721
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
-msgstr "입력 기록을 지우려면 문구를 선택하고, Esc 키를 눌러 취소합니다"
+msgstr "입력 기록을 지우려면 구문을 선택하고, Esc 키를 눌러 취소합니다"
 
 #: skin/classic/fcitx_skin.conf.in:2 src/ui/classic/fcitx-classic-ui.conf.in:3
 msgid "Classic"
@@ -859,7 +859,7 @@ msgstr "기본 입력기:"
 
 #: src/im/table/fcitx-table.desc:9
 msgid "Delete Phrase"
-msgstr "문구 삭제"
+msgstr "구문 삭제"
 
 #: data/addon.desc:43
 msgid "Dependency"
@@ -1469,7 +1469,7 @@ msgstr "자주사용하는 단어 입력하는 단축키"
 
 #: src/im/pinyin/fcitx-pinyin.desc:53
 msgid "Hotkey of Delete User Phrase"
-msgstr "사용자 문구 삭제 단축키"
+msgstr "사용자 구문 삭제 단축키"
 
 #: src/im/pinyin/fcitx-pinyin.desc:48
 msgid "Hotkey of Deleting Frequent Word"
@@ -1764,7 +1764,7 @@ msgstr "애드온 구성 파일 불러오기: %s"
 
 #: src/im/table/tabledict.c:341
 msgid "Load Autophrase OK"
-msgstr "자동 문구 로딩 OK"
+msgstr "자동 구문 로딩 OK"
 
 #: src/im/table/tabledict.c:248
 msgid "Load Table Dict OK"
@@ -1772,7 +1772,7 @@ msgstr "표 사전 불러오기 완료"
 
 #: src/im/table/tabledict.c:285
 msgid "Loading Autophrase."
-msgstr "자동 문구 로딩"
+msgstr "자동 구문 로딩"
 
 #: src/im/table/tabledict.c:41
 msgid "Loading Table Dict"
@@ -1974,7 +1974,7 @@ msgstr "로컬 입력기 없음"
 
 #: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:555
 msgid "No remind"
-msgstr "알림 없음"
+msgstr "다시 알림 안함"
 
 #: src/lib/fcitx-utils/desktop-parse.c:587
 #, c-format
@@ -2074,7 +2074,7 @@ msgstr "프로그램별"
 
 #: src/im/table/table.c:1395
 msgid "Phrase is already in Dict "
-msgstr "문구이 이미 사전에 있습니다"
+msgstr "구문이 이미 사전에 있습니다"
 
 #: src/im/pinyin/py.c:106 src/im/pinyin/fcitx-pinyin.conf.in:3
 #: src/im/pinyin/pinyin.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:1
@@ -2176,7 +2176,7 @@ msgstr "Enter 키를 눌러 텍스트 입력"
 
 #: src/im/pinyin/py.c:729
 msgid "Press index to delete user phrase (ESC for cancel)"
-msgstr "사용자 문구를 삭제하려면 일련번호를 누릅니다 (취소는 ESC)"
+msgstr "사용자 구문을 삭제하려면 일련번호를 누릅니다 (취소는 ESC)"
 
 #: src/im/pinyin/py.c:743
 msgid "Press number to make word in frequent list"
@@ -2218,7 +2218,7 @@ msgstr "표 코드 묻기"
 
 #: data/profile.desc:12
 msgid "Prompt the phrases after input"
-msgstr "입력 후 문구 확인"
+msgstr "입력 후 구문 확인"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:4
 msgid "Provide extra feature for pinyin in Fcitx"
@@ -2302,11 +2302,11 @@ msgstr "구성 다시읽기"
 
 #: src/im/table/table.c:1287
 msgid "Remind:"
-msgstr "알림:"
+msgstr "다시 알림:"
 
 #: src/im/pinyin/py.c:2059
 msgid "Remind: "
-msgstr "알림: "
+msgstr "다시 알림: "
 
 #: src/module/remote/fcitx-remote-module.conf.in:3
 msgid "Remote"
@@ -2365,7 +2365,7 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:71
 msgid "Rule of Candidate Phrase Order"
-msgstr "후보 문구 순서 규칙"
+msgstr "후보 구문 순서 규칙"
 
 #: src/im/pinyin/fcitx-pinyin.desc:62
 msgid "Rule of Candidate Word Order"
@@ -2389,11 +2389,11 @@ msgstr "양쪽 시프트"
 
 #: src/im/pinyin/fcitx-pinyin.desc:38
 msgid "Save Auto Created Phrase"
-msgstr "자동 생성된 문구 저장"
+msgstr "자동 생성된 구문 저장"
 
 #: src/im/table/table.desc:108
 msgid "Save Auto Phrase"
-msgstr "자동 문구 저장"
+msgstr "자동 구문 저장"
 
 #: src/module/clipboard/fcitx-clipboard.desc:4
 msgid "Save Clipboard History To File"
@@ -2836,7 +2836,7 @@ msgstr "입력기 전환"
 
 #: src/lib/fcitx/instance.c:287 src/lib/fcitx/instance.c:556
 msgid "Toggle Remind"
-msgstr "알림 젼환"
+msgstr "다시 알림 젼환"
 
 #: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
 #: src/module/chttrans/chttrans.c:246
@@ -3020,7 +3020,7 @@ msgstr "트리거 키를 사용하여 비활성화 한 후에 만 ​​추가 �
 
 #: src/lib/fcitx/instance.c:286 src/lib/fcitx/instance.c:555
 msgid "Use remind"
-msgstr "알림 사용"
+msgstr "다시 알림 사용"
 
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Use the layout of first keyboard input method in list as default layout"
@@ -3044,7 +3044,7 @@ msgstr "사용자 인터페이스:"
 
 #: src/ui/classic/skin.desc:49
 msgid "User Phrase Color"
-msgstr "사용자 문구 색"
+msgstr "사용자 구문 색"
 
 #: data/script/fcitx-diagnose.sh:935
 msgid "Using ${1} to check dbus."
