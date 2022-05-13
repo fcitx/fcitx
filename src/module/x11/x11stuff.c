@@ -77,6 +77,8 @@ FCITX_DEFINE_PLUGIN(fcitx_x11, module, FcitxModule) = {
 
 void* X11Create(FcitxInstance* instance)
 {
+    XInitThreads();
+
     FcitxX11 *x11priv = fcitx_utils_new(FcitxX11);
     x11priv->dpy = XOpenDisplay(NULL);
     if (x11priv->dpy == NULL)
