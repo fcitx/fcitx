@@ -7,13 +7,16 @@
 
 int main()
 {
-    FcitxDBusWatch* watches = NULL;
+    FcitxDBusWatchList watches;
+    watches.head = NULL;
+    watches.listModified = 0;
     DBusAddWatch((void *)0x1, &watches);
+    assert(watches.head != NULL);
+    DBusRemoveWatch((void *)0x1, &watches);
+    assert(watches.head == NULL);
+
     DBusRemoveWatch((void *)0x1, &watches);
 
-    assert(watches == NULL);
-    DBusRemoveWatch((void *)0x1, &watches);
-
-    assert(watches == NULL);
+    assert(watches.head == NULL);
     return 0;
 }
