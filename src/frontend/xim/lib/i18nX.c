@@ -253,7 +253,7 @@ static char *MakeNewAtom(CARD16 connect_id, char *atomName)
     sprintf(atomName,
             "_server%d_%d",
             connect_id,
-            ((sequence > 20)  ? (sequence = 0)  :  sequence++));
+            ((sequence > 300)  ? (sequence = 0)  :  sequence++));
     return atomName;
 }
 
