@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-10-22 20:27+0000\n"
+"POT-Creation-Date: 2022-10-23 20:27+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
 "Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
@@ -416,7 +416,7 @@ msgstr "Цвет индекса кандидата"
 
 #: src/im/table/table.desc:117
 msgid "Candidate Table Layout"
-msgstr "Раскладка таблицы слов-кандидатов"
+msgstr "Расположение таблицы слов-кандидатов"
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
