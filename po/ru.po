@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-11-20 06:36+0000\n"
+"POT-Creation-Date: 2022-11-20 20:28+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
 "Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
@@ -27,7 +27,7 @@ msgstr "Ctrl+Delete для удаления"
 
 #: data/script/fcitx-diagnose.sh:850
 msgid "${1} Environment Variables:"
-msgstr "${1} Переменные среды:"
+msgstr "${1} Переменные окружения:"
 
 #: data/script/fcitx-diagnose.sh:859
 msgid "${1} is not set."
@@ -71,7 +71,7 @@ msgstr "/Зал_позора_за_поддержку_IME_в_Linux"
 
 #: data/script/fcitx-diagnose.sh:667
 msgid "/Input_method_related_environment_variables"
-msgstr "/Относящиеся_к_методу_ввода_переменные_среды"
+msgstr "/Относящиеся_к_методу_ввода_переменные_окружения"
 
 #: data/script/fcitx-diagnose.sh:683
 msgid "/Note_for_GNOME_Later_than_3.6"
@@ -1015,20 +1015,20 @@ msgid ""
 "Environment variable ${1} is \"${2}\" instead of \"${3}\". Please check if "
 "you have exported it incorrectly in any of your init files."
 msgstr ""
-"Переменной среды ${1} вместо значения \"${3}\" присвоено \"${2}\". "
+"Переменной окружения ${1} вместо значения \"${3}\" присвоено \"${2}\". "
 "Убедитесь, что вы правильно экспортировали её в соответствующие init-файлы."
 
 #: data/script/fcitx-diagnose.sh:825
 msgid "Environment variable ${1} is not set."
-msgstr "Переменная среды ${1} не задана."
+msgstr "Переменная окружения ${1} не задана."
 
 #: data/script/fcitx-diagnose.sh:1053
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
-msgstr "Переменной среды ${1} правильно присвоено значение \"${2}\"."
+msgstr "Переменной окружения ${1} правильно присвоено значение \"${2}\"."
 
 #: data/script/fcitx-diagnose.sh:829
 msgid "Environment variable ${1} is set to ${2}."
-msgstr "Переменной среды ${1} присвоено значение ${2}."
+msgstr "Переменной окружения ${1} присвоено значение ${2}."
 
 #: data/script/fcitx-diagnose.sh:784
 msgid "Environment:"
@@ -1603,7 +1603,7 @@ msgstr "Подсказка метода ввода будет отображат
 
 #: data/script/fcitx-diagnose.sh:666
 msgid "Input Method Related Environment Variables: "
-msgstr "Относящиеся к методу ввода переменные среды: "
+msgstr "Относящиеся к методу ввода переменные окружения: "
 
 #: data/script/fcitx-diagnose.sh:1545
 msgid "Input Methods:"
@@ -2165,9 +2165,9 @@ msgid ""
 "Please set environment variable ${env_name} to \"${value}\" using the tool "
 "your distribution provides or add ${1} to your ${2}. See ${link}."
 msgstr ""
-"Пожалуйста, присвойте переменной среды ${env_name} значение \\\"${value}\\"
-"\", используя инструменты вашего дистрибутива, или добавьте ${1}  в ваш "
-"${2}. См. ${link}."
+"Пожалуйста, присвойте переменной окружения ${env_name} значение \\"
+"\"${value}\\\", используя инструменты вашего дистрибутива, или добавьте "
+"${1}  в ваш ${2}. См. ${link}."
 
 #: src/ui/classic/skin.desc:265
 msgid "Position or offset of LookupTable"
@@ -3197,19 +3197,20 @@ msgstr "Xim"
 
 #: data/script/fcitx-diagnose.sh:1089
 msgid "Xim Server Name from Environment variable is ${1}."
-msgstr "Указанное в переменных среды имя сервера Xim: ${1}."
+msgstr "Указанное в переменной окружения имя сервера Xim: ${1}."
 
 #: data/script/fcitx-diagnose.sh:1101
 msgid "Xim server name is the same with that set in the environment variable."
-msgstr "Имя сервера Xim совпадает с тем, которое задано в переменных среды."
+msgstr ""
+"Имя сервера Xim совпадает с тем, которое задано в переменной окружения."
 
 #: data/script/fcitx-diagnose.sh:1103
 msgid ""
 "Xim server name: \"${1}\" is different from that set in the environment "
 "variable: \"${2}\"."
 msgstr ""
-"Имя сервера Xim (\"${1}\") отличается от того, которое задано в переменных "
-"среды (\"${2}\")."
+"Имя сервера Xim \"${1}\" отличается от того, которое задано в переменной "
+"окружения \"${2}\"."
 
 #: data/script/fcitx-diagnose.sh:874
 msgid ""
@@ -3358,7 +3359,7 @@ msgstr "ошибка pthread mutex init"
 
 #: data/script/fcitx-diagnose.sh:871 data/script/fcitx-diagnose.sh:877
 msgid "sudo environment variables"
-msgstr "переменные среды суперпользователя"
+msgstr "переменные окружения sudo"
 
 #: data/script/fcitx-diagnose.sh:896
 msgid "version:"
