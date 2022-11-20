@@ -4,21 +4,21 @@
 #
 # Translators:
 # Bon Keun Seo <scobyseo@gmail.com>, 2017,2021
-# Junghee Lee <daemul72@gmail.com>, 2021
-# Junghee Lee <daemul72@gmail.com>, 2020
+# JungHee Lee <daemul72@gmail.com>, 2021
+# JungHee Lee <daemul72@gmail.com>, 2020
 # heavyuser <heavyuser73@gmail.com>, 2014,2016-2017,2021
 # JeongHun Kim <jhkim@hancom.com>, 2014
-# Junghee Lee <daemul72@gmail.com>, 2022
-# Junghee Lee <daemul72@gmail.com>, 2021
-# Junghee Lee <daemul72@gmail.com>, 2020,2022
+# JungHee Lee <daemul72@gmail.com>, 2022
+# JungHee Lee <daemul72@gmail.com>, 2021
+# JungHee Lee <daemul72@gmail.com>, 2020,2022
 # perillamint <perillamint@quendi.moe>, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-04-13 20:27+0000\n"
+"POT-Creation-Date: 2022-11-20 06:36+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
-"Last-Translator: Junghee Lee <daemul72@gmail.com>, 2022\n"
+"Last-Translator: JungHee Lee <daemul72@gmail.com>, 2020,2022\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -36,7 +36,7 @@ msgstr "${1} 환경변수값:"
 
 #: data/script/fcitx-diagnose.sh:859
 msgid "${1} is not set."
-msgstr "${1}이(가) 지정되지 않았습니다."
+msgstr "${1}이(가) 설정되지 않았습니다."
 
 #: data/script/fcitx-diagnose.sh:856
 msgid "${1} is set to ${2}."
@@ -1013,7 +1013,7 @@ msgstr ""
 
 #: data/script/fcitx-diagnose.sh:825
 msgid "Environment variable ${1} is not set."
-msgstr "환경 변수 ${1}이(가) 지정되지 않았습니다."
+msgstr "환경 변수 ${1}이(가) 설정되지 않았습니다."
 
 #: data/script/fcitx-diagnose.sh:1053
 msgid "Environment variable ${1} is set to \"${2}\" correctly."
@@ -1041,7 +1041,7 @@ msgid ""
 "Error: $HOME or $XDG_CONFIG_HOME is not set, cannot determine the install "
 "path"
 msgstr ""
-"오류: $HOME 또는 $XDG_CONFIG_HOME이 지정되지 않았으므로 설치 경로를 결정할 "
+"오류: $HOME 또는 $XDG_CONFIG_HOME이 설정되지 않았으므로 설치 경로를 결정할 "
 "수 없습니다"
 
 #: src/ui/cairostuff/font.c:46
@@ -1991,7 +1991,7 @@ msgstr "없음"
 
 #: src/im/table/table.desc:121
 msgid "Not Set"
-msgstr "지정되지 않음"
+msgstr "설정되지 않음"
 
 #: data/script/fcitx-diagnose.sh:682
 msgid "Note for GNOME Later than 3.6"

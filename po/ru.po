@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-10-23 20:27+0000\n"
+"POT-Creation-Date: 2022-11-20 06:36+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
 "Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
@@ -253,7 +253,7 @@ msgid ""
 "Allow Pinyin Enhance to replace the first candidate word when the input "
 "string is very closed to English."
 msgstr ""
-"Разрешать расширенному пиньинь заменять первое слово-кандидат, когда строка "
+"Разрешать расширенному Пиньинь заменять первое слово-кандидат, когда строка "
 "ввода очень похожа на английский."
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
@@ -292,7 +292,7 @@ msgstr "Внешний вид"
 #: src/module/xkb/fcitx-xkb.desc:20
 msgid "Apply this custom xmodmap script after layout change"
 msgstr ""
-"Применить данный пользовательский скрипт xmodmap после изменения подложки"
+"Применить данный пользовательский скрипт xmodmap после изменения раскладки"
 
 #: data/addon.desc:67
 msgid "Argument for InputMethod Register"
@@ -434,12 +434,12 @@ msgstr "Не удалось сохранить часто используемо
 #: src/im/pinyin/py.c:1798
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
-msgstr "Не удается сохранить индекс пиньинь: %s"
+msgstr "Не удается сохранить индекс Пиньинь: %s"
 
 #: src/im/pinyin/py.c:1672
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
-msgstr "Не удалось сохранить пользовательскую базу данных пиньинь: %s"
+msgstr "Не удалось сохранить пользовательскую базу данных Пиньинь: %s"
 
 #: data/script/fcitx-diagnose.sh:925
 msgid "Cannot connect to fcitx correctly."
@@ -459,7 +459,7 @@ msgstr "Не удается найти владельца имени DBus ${1}."
 
 #: src/im/pinyin/py.c:393
 msgid "Cannot find System Database of Pinyin!"
-msgstr "Не удалось найти системную базу данных пиньинь!"
+msgstr "Не удалось найти системную базу данных Пиньинь!"
 
 #: data/script/fcitx-diagnose.sh:1040
 msgid ""
@@ -526,7 +526,7 @@ msgstr "Не удалось найти xim_server в окне суперполь
 
 #: src/im/table/table.c:645
 msgid "Cannot found Pinyin"
-msgstr "Не удалось найти пиньинь"
+msgstr "Не удалось найти Пиньинь"
 
 #: data/script/fcitx-diagnose.sh:1081
 msgid "Cannot interpret XMODIFIERS: ${1}."
@@ -984,7 +984,7 @@ msgstr "Включено состояние для im"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:3
 msgid "Enchance pinyin input in Fcitx"
-msgstr "Улучшение ввода пиньинь в Fcitx"
+msgstr "Улучшение ввода Пиньинь в Fcitx"
 
 #: src/im/table/table.desc:69
 msgid "End Key"
@@ -1403,7 +1403,7 @@ msgstr "Клавиша выбора глобального метода ввод
 #: src/module/imselector/fcitx-imselector.desc:51
 #: src/module/imselector/fcitx-imselector.desc:56
 msgid "GlobalSelector"
-msgstr "GlobalSelector"
+msgstr "Глобальный переключатель"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:7
 msgid "Grave"
@@ -1694,7 +1694,7 @@ msgstr "Раскладка клавиатуры"
 
 #: src/im/table/table.desc:166
 msgid "Keyboard Layout to be used"
-msgstr "Подложка клавиатуры для использования"
+msgstr "Раскладка клавиатуры для использования"
 
 #: data/script/fcitx-diagnose.sh:787
 msgid "Keyboard Layout:"
@@ -1807,7 +1807,7 @@ msgstr "Клавиша выбора локального метода ввода
 #: src/module/imselector/fcitx-imselector.desc:96
 #: src/module/imselector/fcitx-imselector.desc:101
 msgid "LocalSelector"
-msgstr "LocalSelector"
+msgstr "Локальный переключатель"
 
 #: data/script/fcitx-diagnose.sh:802
 msgid "Locale:"
@@ -1823,7 +1823,7 @@ msgstr "Значок логотипа"
 
 #: src/im/table/fcitx-table.desc:24
 msgid "Lookup Pinyin"
-msgstr "Исследовать пиньинь"
+msgstr "Изучение Пиньинь"
 
 #: src/im/pinyin/fcitx-pinyin.desc:5
 msgid "MS"
@@ -1879,7 +1879,7 @@ msgstr ""
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 msgid "Maximum length of spell hint list for Pinyin Enhance"
-msgstr "Максимальная длина подсказки по написанию для расширенного пиньинь"
+msgstr "Максимальная длина подсказки по написанию для расширенного Пиньинь"
 
 #: src/module/quickphrase/fcitx-quickphrase.desc:37
 msgid "Maximum length of spell hint list for Quick Phrase"
@@ -2126,15 +2126,15 @@ msgstr "Пиньинь"
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:42
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:50
 msgid "Pinyin Enhance"
-msgstr "Расширенный пиньинь"
+msgstr "Расширенный Пиньинь"
 
 #: src/im/pinyin/py.c:457
 msgid "Pinyin Index Magic Number Doesn't match"
-msgstr "Магическое число индекса пиньинь не совпадает"
+msgstr "Магическое число индекса Пиньинь не совпадает"
 
 #: src/im/table/table.desc:44
 msgid "Pinyin Key"
-msgstr "Клавиша пиньинь"
+msgstr "Клавиша Пиньинь"
 
 #: src/im/table/table.c:621
 msgid "Pinyin: "
@@ -2250,7 +2250,7 @@ msgstr "Подсказывать фразы после ввода"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in:4
 msgid "Provide extra feature for pinyin in Fcitx"
-msgstr "Добавление в Fcitx дополнительных функций для пиньинь"
+msgstr "Добавление в Fcitx дополнительных функций для Пиньинь"
 
 #: src/module/dbus/fcitx-dbus.conf.in:4
 msgid "Provides DBus Support (Used by other Addon)"
@@ -2532,7 +2532,7 @@ msgstr "Шуанпинь"
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:4
 msgid "Simple Pinyin support for Fcitx"
-msgstr "Поддержка простого пиньинь в Fcitx"
+msgstr "Поддержка простого Пиньинь в Fcitx"
 
 #: src/module/chttrans/chttrans.c:177
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
@@ -2994,7 +2994,7 @@ msgstr "Использовать альтернативную клавишу д�
 
 #: src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Use Complete Pinyin"
-msgstr "Использовать полный пиньинь"
+msgstr "Использовать полный Пиньинь"
 
 #: src/im/table/table.desc:161
 msgid "Use Custom Prompt String defined in table"
@@ -3022,7 +3022,7 @@ msgstr "Использовать стиль Spot для XIM (необходим 
 
 #: src/im/table/table.desc:39
 msgid "Use Pinyin"
-msgstr "Использовать пиньинь"
+msgstr "Использовать Пиньинь"
 
 #: data/addon.desc:77
 msgid "Use RTLD_LOCAL to load library"
@@ -3061,7 +3061,8 @@ msgstr "Напоминать"
 #: src/module/xkb/fcitx-xkb.desc:9
 msgid "Use the layout of first keyboard input method in list as default layout"
 msgstr ""
-"Использовать подложку метода ввода первой клавиатуры в списке как стандартную"
+"Использовать раскладку первого метода ввода с клавиатуры в списке в качестве "
+"раскладки по умолчанию"
 
 #: src/module/remote/fcitx-remote-module.conf.in:4
 msgid "Used by fcitx-remote to change Fcitx state from console"
@@ -3069,7 +3070,7 @@ msgstr "Используется fcitx-remote для изменения сост
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
 msgid "Useful when you hardly ever use abbreviated pinyin."
-msgstr "Полезно при трудностях с использованием сокращенного пиньинь."
+msgstr "Полезно при трудностях с использованием сокращенного Пиньинь."
 
 #: src/im/pinyin/fcitx-pinyin.desc:11
 msgid "User Defined"
