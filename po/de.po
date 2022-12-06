@@ -6,7 +6,7 @@
 # csslayer <wengxt@gmail.com>, 2013,2015
 # Ettore Atalan <atalanttore@googlemail.com>, 2022
 # mar well <m.wellendorf@gmx.de>, 2012-2013
-# mar well <m.wellendorf@gmx.de>, 2014,2017-2018
+# mar well <m.wellendorf@gmx.de>, 2014,2017-2018,2022
 # Tim Hofstede <timhofstede.va@gmail.com>, 2018
 # csslayer <wengxt@gmail.com>, 2013,2015
 # csslayer <wengxt@gmail.com>, 2013
@@ -14,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-01-15 20:26+0000\n"
-"PO-Revision-Date: 2022-01-15 15:15+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"POT-Creation-Date: 2022-12-06 20:28+0000\n"
+"PO-Revision-Date: 2011-11-16 01:54+0000\n"
+"Last-Translator: mar well <m.wellendorf@gmx.de>, 2014,2017-2018,2022\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -603,7 +603,7 @@ msgstr "CLASSIC (Fcitx Benutzeroberfläche)"
 
 #: skin/classic/fcitx_skin.conf.in:5
 msgid "Classic Skin"
-msgstr ""
+msgstr "Klassische Oberfläche"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
@@ -2716,12 +2716,12 @@ msgstr "Wechsel zum Modus Vollbreite Interpunktion"
 #: src/module/chttrans/chttrans.c:151 src/module/chttrans/chttrans.c:197
 #: src/module/chttrans/chttrans.c:244
 msgid "Switch to Simplified Chinese"
-msgstr ""
+msgstr "Zu Kurzzeichen wechseln"
 
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 #: src/module/chttrans/chttrans.c:245
 msgid "Switch to Traditional Chinese"
-msgstr ""
+msgstr "Zu Langzeichen wechseln"
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
