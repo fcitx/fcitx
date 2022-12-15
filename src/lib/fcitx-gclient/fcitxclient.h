@@ -88,6 +88,9 @@ void fcitx_client_set_capacity(FcitxClient *self, guint flags);
 
 void fcitx_client_reset(FcitxClient *self);
 
+void fcitx_client_enable_ic(FcitxClient *self);
+void fcitx_client_close_ic(FcitxClient *self);
+
 G_END_DECLS
 
 #endif // CLIENT_IM_H
