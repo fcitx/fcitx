@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Dmitry <dmitrydmitry761@gmail.com>, 2022
+# Dmitry <dmitrydmitry761@gmail.com>, 2022-2023
 # TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>, 2016-2017
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-11-20 20:28+0000\n"
+"POT-Creation-Date: 2023-03-23 20:26+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
-"Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022\n"
+"Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022-2023\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -2142,7 +2142,7 @@ msgstr "Пиньинь:"
 
 #: src/im/pinyin/fcitx-pinyin.desc:9
 msgid "PinyinJiaJia"
-msgstr "PinyinJiaJia"
+msgstr "ПиньиньЦзяЦзя"
 
 #: data/script/fcitx-diagnose.sh:890
 msgid "Please check ${1} for how to install fcitx."
@@ -2443,7 +2443,7 @@ msgstr "Пролистывание методов ввода"
 
 #: src/module/unicode/unicode.c:272
 msgid "Search unicode"
-msgstr "Поиск unicode"
+msgstr "Поиск в Юникоде"
 
 #: data/config.desc:162
 msgid "Seconds sleep before fcitx really start"
@@ -2965,7 +2965,7 @@ msgstr "Не удается найти программу для проверк�
 
 #: src/module/unicode/fcitx-unicode.desc:1
 msgid "Unicode"
-msgstr "Unicode"
+msgstr "Юникод"
 
 #: src/im/table/table.desc:2
 msgid "Unique Name for Table"
