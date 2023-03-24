@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2023-03-23 20:26+0000\n"
+"POT-Creation-Date: 2023-03-24 20:26+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
 "Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022-2023\n"
 "Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
@@ -845,7 +845,7 @@ msgstr "Состояние метода ввода по умолчанию"
 
 #: src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
-msgstr "Схема шуанпинь по умолчанию"
+msgstr "Схема Шуанпинь по умолчанию"
 
 #: skin/default/fcitx_skin.conf.in:5
 msgid "Default Skin"
@@ -3189,7 +3189,7 @@ msgstr "XMODIFIERS не заданы"
 
 #: src/im/pinyin/fcitx-pinyin.desc:10
 msgid "XiaoHe"
-msgstr "XiaoHe"
+msgstr "СяоХэ"
 
 #: src/frontend/xim/fcitx-xim.desc:1
 msgid "Xim"
@@ -3318,11 +3318,11 @@ msgstr ""
 
 #: src/im/pinyin/fcitx-pinyin.desc:8
 msgid "Zhongwenzhixing"
-msgstr "Zhongwenzhixing"
+msgstr "Чжунвэньчжисин"
 
 #: src/im/pinyin/fcitx-pinyin.desc:6
 msgid "Ziguang"
-msgstr "Ziguang"
+msgstr "Цзыгуан"
 
 #: src/im/table/data/zrm.conf.in:3 src/im/pinyin/fcitx-pinyin.desc:4
 msgid "Ziranma"
