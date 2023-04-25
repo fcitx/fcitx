@@ -6,7 +6,7 @@
 # Alisha <alisha.4m@gmail.com>, 2012
 # Alisha <alisha.4m@gmail.com>, 2012
 # BrLi <rainman59118@gmail.com>, 2014
-# byStarTW (pan93412) <pan93412@gmail.com>, 2019
+# pan93412 <pan93412@gmail.com>, 2019
 # chenshijie-uos <chenshijie@uniontech.com>, 2020
 # csslayer <wengxt@gmail.com>, 2013,2015,2020
 # PHLin <Cypressyew@gmail.com>, 2017
@@ -14,6 +14,7 @@
 # fhoshino <fh@pinchia.com>, 2014,2017
 # Gerald Du <frozenmouse@gmail.com>, 2015
 # Hiunn-hué <hiunnhue108@ymail.com>, 2012-2013
+# Lau YeeYu, 2023
 # Pellaeon Lin <nfsmwlin@gmail.com>, 2013
 # Pellaeon Lin <nfsmwlin@gmail.com>, 2013
 # PHLin <Cypressyew@gmail.com>, 2017
@@ -26,10 +27,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-12-01 00:01+0100\n"
-"PO-Revision-Date: 2020-11-30 08:28+0000\n"
-"Last-Translator: chenshijie-uos <chenshijie@uniontech.com>\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/fcitx/fcitx/"
+"POT-Creation-Date: 2023-04-25 20:26+0000\n"
+"PO-Revision-Date: 2011-11-16 01:54+0000\n"
+"Last-Translator: Lau YeeYu, 2023\n"
+"Language-Team: Chinese (Taiwan) (http://app.transifex.com/fcitx/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -63,15 +64,15 @@ msgstr "${1} 運作正常。"
 
 #: tools/gui/wrapper/mainwindow.cpp:42
 msgid "&Close"
-msgstr "關閉 (&C)"
+msgstr "關閉(&C)"
 
 #: tools/gui/wrapper/mainwindow.cpp:41
 msgid "&Reset"
-msgstr "重新設定 (&R)"
+msgstr "重新設定(&R)"
 
 #: tools/gui/wrapper/mainwindow.cpp:40
 msgid "&Save"
-msgstr "儲存 (&S)"
+msgstr "儲存(&S)"
 
 #: src/im/keyboard/keyboard.c:426 src/im/keyboard/keyboard.c:443
 msgid "(Unavailable)"
@@ -853,7 +854,7 @@ msgstr "預設雙拼方案"
 
 #: skin/default/fcitx_skin.conf.in:5
 msgid "Default Skin"
-msgstr "默認皮膚"
+msgstr "預設皮膚"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
