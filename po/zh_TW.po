@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2023-04-25 20:26+0000\n"
+"POT-Creation-Date: 2023-04-28 20:26+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
 "Last-Translator: Lau YeeYu, 2023\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/fcitx/fcitx/"
@@ -606,7 +606,7 @@ msgstr "經典介面"
 
 #: skin/classic/fcitx_skin.conf.in:5
 msgid "Classic Skin"
-msgstr "經典皮膚"
+msgstr "經典佈景主題"
 
 #: src/ui/classic/fcitx-classic-ui.conf.in:4
 msgid "Classic User Interface with Skin support"
@@ -854,7 +854,7 @@ msgstr "預設雙拼方案"
 
 #: skin/default/fcitx_skin.conf.in:5
 msgid "Default Skin"
-msgstr "預設皮膚"
+msgstr "預設佈景主題"
 
 #: src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
