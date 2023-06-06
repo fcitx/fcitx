@@ -9,10 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2023-03-24 20:26+0000\n"
+"POT-Creation-Date: 2023-06-06 20:30+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
 "Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022-2023\n"
-"Language-Team: Russian (http://www.transifex.com/fcitx/fcitx/language/ru/)\n"
+"Language-Team: Russian (http://app.transifex.com/fcitx/fcitx/language/ru/)\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1823,7 +1823,7 @@ msgstr "Значок логотипа"
 
 #: src/im/table/fcitx-table.desc:24
 msgid "Lookup Pinyin"
-msgstr "Изучение Пиньинь"
+msgstr "Искать Пиньинь"
 
 #: src/im/pinyin/fcitx-pinyin.desc:5
 msgid "MS"
