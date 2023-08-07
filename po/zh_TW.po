@@ -13,6 +13,7 @@
 # fhoshino <fh@pinchia.com>, 2014,2017
 # fhoshino <fh@pinchia.com>, 2014,2017
 # Gerald Du <frozenmouse@gmail.com>, 2015
+# Haowei Hsu, 2023
 # Hiunn-hué <hiunnhue108@ymail.com>, 2012-2013
 # Lau YeeYu, 2023
 # Pellaeon Lin <nfsmwlin@gmail.com>, 2013
@@ -27,9 +28,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2023-04-28 20:26+0000\n"
+"POT-Creation-Date: 2023-08-07 20:26+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
-"Last-Translator: Lau YeeYu, 2023\n"
+"Last-Translator: Haowei Hsu, 2023\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/fcitx/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -104,7 +105,7 @@ msgstr "/分 經過時間："
 
 #: src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
-msgstr "0 代表立即提交，-1 代表保留所有已選單字"
+msgstr "0 代表立即送交，-1 代表保留所有已選單字"
 
 #: src/module/unicode/charselectdata.c:249
 msgid "<Low Surrogate>"
@@ -218,7 +219,7 @@ msgstr "附加元件設定 %s 為 %s"
 
 #: data/script/fcitx-diagnose.sh:1438
 msgid "Addon Config Dir:"
-msgstr "附加元件設定目錄："
+msgstr "附加元件組態目錄："
 
 #: data/script/fcitx-diagnose.sh:1491
 msgid "Addon Libraries:"
@@ -426,7 +427,7 @@ msgstr "候選字編號顏色"
 
 #: src/im/table/table.desc:117
 msgid "Candidate Table Layout"
-msgstr "候選字表佈局"
+msgstr "候選字表配置"
 
 #: data/config.desc:204 src/im/table/table.desc:176
 msgid "Candidate Word Number"
@@ -474,7 +475,7 @@ msgstr "找不到拼音的系統字庫！"
 #: data/script/fcitx-diagnose.sh:1040
 msgid ""
 "Cannot find a GUI config tool, please install one of ${1}, ${2}, or ${3}."
-msgstr "找不到設定介面，請安裝 ${1}、${2} 或 ${3} 其中之一。"
+msgstr "找不到 GUI 組態工具，請安裝 ${1}、${2} 或 ${3} 其中之一。"
 
 #: data/script/fcitx-diagnose.sh:1520
 msgid "Cannot find enabled fcitx user interface!"
@@ -482,7 +483,7 @@ msgstr "找不到啟用的 fcitx 使用者介面！"
 
 #: data/script/fcitx-diagnose.sh:1440
 msgid "Cannot find fcitx addon config directory."
-msgstr "找不到附加元件設定目錄。"
+msgstr "找不到附加元件組態目錄。"
 
 #: data/script/fcitx-diagnose.sh:888
 msgid "Cannot find fcitx executable!"
@@ -552,7 +553,7 @@ msgstr "無法從 fcitx 設定檔中讀取輸入法清單。"
 
 #: data/addon.desc:22
 msgid "Category"
-msgstr "類別"
+msgstr "分類"
 
 #: src/ui/classic/skin.desc:132 src/ui/classic/skin.desc:238
 #: src/ui/classic/skin.desc:368
@@ -571,7 +572,7 @@ msgstr "右中"
 
 #: data/fcitx-configtool.desktop.in:4
 msgid "Change Fcitx Configuration"
-msgstr "修改 Fcitx 設定"
+msgstr "變更 Fcitx 組態"
 
 #: src/im/table/table.desc:136
 msgid "Choose"
@@ -703,19 +704,19 @@ msgstr "描述"
 
 #: src/im/table/table.desc:203
 msgid "Commit and pass when invalid key of this table pressed"
-msgstr "當輸入碼表中非法的按鍵時，提交輸入並且發送這個按鍵"
+msgstr "當輸入碼表中非法的按鍵時，送交輸入並且發送這個按鍵"
 
 #: src/im/table/table.desc:208
 msgid "Commit key for select first candidate"
-msgstr "第一個候選字的提交鍵"
+msgstr "第一個候選字的送交鍵"
 
 #: src/im/table/table.desc:213
 msgid "Commit string when there is no match"
-msgstr "當無符合時提交輸入"
+msgstr "當無符合時送交輸入"
 
 #: data/config.desc:198
 msgid "Commit when toggle state"
-msgstr "切換狀態時提交"
+msgstr "切換狀態時送交"
 
 #: src/im/keyboard/fcitx-keyboard.desc:4
 msgid "Commit with extra space when choose candidate word"
@@ -723,36 +724,36 @@ msgstr "選擇候選詞時加入額外空格"
 
 #: data/script/fcitx-diagnose.sh:996
 msgid "Config GUI for gtk${1} not found."
-msgstr "找不到 gtk${1} 的設定介面。"
+msgstr "找不到 gtk${1} 的組態介面。"
 
 #: data/script/fcitx-diagnose.sh:992
 msgid "Config GUI for gtk${1}:"
-msgstr "gtk${1} 的設定介面："
+msgstr "gtk${1} 的組態介面："
 
 #: data/script/fcitx-diagnose.sh:1012
 msgid "Config GUI for kde:"
-msgstr "KDE 的設定介面："
+msgstr "KDE 的組態介面："
 
 #: data/script/fcitx-diagnose.sh:1028
 msgid "Config Tool Wrapper:"
-msgstr "設定工具封裝："
+msgstr "組態工具包裝器："
 
 #: data/addon.desc:62
 msgid "ConfigFile"
-msgstr "設定檔"
+msgstr "組態檔"
 
 #: data/script/fcitx-diagnose.sh:1683
 msgid "Configuration:"
-msgstr "設定："
+msgstr "組態："
 
 #: src/module/notificationitem/dbusmenu.c:373 src/ui/classic/classicui.c:501
 msgid "Configure"
-msgstr "設定"
+msgstr "組態"
 
 #: src/lib/fcitx-config/fcitx-config.c:894
 #, c-format
 msgid "Configure group name error: line %d"
-msgstr "設定群組名稱出錯：第 %d 行"
+msgstr "組態群組名稱出錯：第 %d 行"
 
 #: src/module/quickphrase/fcitx-quickphrase.conf.in:4
 msgid "Conveniently Input English or User-Defined Simple Table"
@@ -898,7 +899,7 @@ msgstr "聯想模式停用翻頁"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
 msgid "Disable Pinyin Symbol"
-msgstr "禁用拼音特殊符號"
+msgstr "停用拼音特殊符號"
 
 #: src/lib/fcitx/addon.c:298
 #, c-format
@@ -913,7 +914,7 @@ msgstr "停用"
 
 #: data/config.desc:217
 msgid "Do not commit preedit text when unfocus a window"
-msgstr "未聚焦視窗時，不要提交預編輯文字"
+msgstr "未聚焦視窗時，不要送交預編輯文字"
 
 #: src/module/freedesktop-notify/freedesktop-notify.c:620
 msgid "Do not show again"
@@ -944,7 +945,7 @@ msgstr "比此級別短的碼不進行排序"
 #: src/lib/fcitx-utils/desktop-parse.c:603
 #, c-format
 msgid "Duplicate entry %s in group %s,@ line %d, override previous one."
-msgstr "重複的內容 %s 於群組 %s 中，於第 %d 行，覆寫前一個。"
+msgstr "重複的內容 %s 於群組 %s 中，於第 %d 行，覆蓋前一個。"
 
 #: src/lib/fcitx-utils/desktop-parse.c:563
 #, c-format
@@ -1059,7 +1060,7 @@ msgstr "錯誤：佈景安裝失敗"
 
 #: src/ui/classic/fcitx-skin-installer.sh:55
 msgid "Error: skin file doesn't contain skin config."
-msgstr "錯誤：佈景檔未包含佈景設定。"
+msgstr "錯誤：佈景檔未包含佈景組態。"
 
 #: src/ui/classic/fcitx-skin-installer.sh:50
 msgid "Error: skin file should only contain one directory."
@@ -1108,11 +1109,11 @@ msgstr "Fcitx 的剪貼簿訪問支援"
 
 #: data/fcitx-configtool.desktop.in:2
 msgid "Fcitx Configuration"
-msgstr "Fcitx 設定"
+msgstr "Fcitx 組態"
 
 #: data/script/fcitx-diagnose.sh:1027
 msgid "Fcitx Configure UI:"
-msgstr "Fcitx 設定介面："
+msgstr "Fcitx 組態介面："
 
 #: src/frontend/ipc/fcitx-ipc.conf.in:3
 msgid "Fcitx DBus Frontend"
@@ -1251,7 +1252,7 @@ msgstr "在 ${2} 找到 gtk ${1} 的 ${3}。"
 
 #: data/script/fcitx-diagnose.sh:1450
 msgid "Found fcitx addon config directory: ${1}."
-msgstr "找到 fcitx 附加元件設定目錄：${1}。"
+msgstr "找到 fcitx 附加元件組態目錄：${1}。"
 
 #: data/script/fcitx-diagnose.sh:894
 msgid "Found fcitx at ${1}."
@@ -1520,7 +1521,7 @@ msgid ""
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
 "如果您正在使用 ${1}，您可能需要反安裝 ${2}、移除 ${3} 或使用 "
-"${g36_disable_ibus} 指令停用 IBus 整合以使用 ${2} 以外的任何輸入法。更多細節"
+"${g36_disable_ibus} 命令停用 IBus 整合以使用 ${2} 以外的任何輸入法。更多細節"
 "參見 ${link}。"
 
 #: src/im/table/table.desc:218
@@ -1582,7 +1583,7 @@ msgstr "輸入法"
 
 #: data/fcitx-configtool.desktop.in:3
 msgid "Input Method Configuration"
-msgstr "輸入法設定"
+msgstr "輸入法組態"
 
 #: src/module/notificationitem/notificationitem.c:461
 #: src/ui/kimpanel/kimpanel.c:283 src/ui/kimpanel/kimpanel.c:288
@@ -1630,7 +1631,7 @@ msgstr "無效的內容：第 %d 行缺少「=」"
 
 #: data/script/fcitx-diagnose.sh:1456
 msgid "Invalid addon config file ${1}."
-msgstr "不正確的附加元件設定檔：${1}。"
+msgstr "不正確的附加元件組態檔：${1}。"
 
 #: src/lib/fcitx-utils/desktop-parse.c:593
 #, c-format
@@ -1763,7 +1764,7 @@ msgstr "程式庫"
 #: src/lib/fcitx/addon.c:151
 #, c-format
 msgid "Load Addon Config File:%s"
-msgstr "載入附加元件設定檔：%s"
+msgstr "載入附加元件組態檔：%s"
 
 #: src/im/table/tabledict.c:341
 msgid "Load Autophrase OK"
@@ -2057,7 +2058,7 @@ msgstr "覆蓋圖片"
 
 #: src/ui/classic/fcitx-classic-ui.desc:18
 msgid "Override the skin font size"
-msgstr "覆寫佈景字型大小"
+msgstr "覆蓋佈景字型大小"
 
 #: data/script/fcitx-diagnose.sh:940
 msgid "Owner of DBus name ${1} is ${2}."
@@ -2300,7 +2301,7 @@ msgstr "註冊輸入法方法"
 
 #: data/config.desc:84
 msgid "Reload configuration"
-msgstr "重新載入設定"
+msgstr "重新載入組態"
 
 #: src/im/table/table.c:1287
 msgid "Remind:"
@@ -2405,7 +2406,7 @@ msgstr "儲存碼表出錯"
 
 #: data/config.desc:136
 msgid "Saving All Config and Input History"
-msgstr "保存所有設定及輸入歷史"
+msgstr "儲存所有組態及輸入歷史"
 
 #: data/config.desc:79
 msgid "Scroll between Input Method"
@@ -2421,7 +2422,7 @@ msgstr "Fcitx 真正啟動前延遲的秒數"
 
 #: src/module/imselector/imselector.c:305
 msgid "Select global input method: "
-msgstr "選擇全域輸入法："
+msgstr "選取全域輸入法："
 
 #: src/module/imselector/imselector.c:306
 msgid "Select local input method: "
@@ -2433,7 +2434,7 @@ msgstr "透過鍵盤選擇特定的輸入法"
 
 #: src/module/clipboard/clipboard.c:372
 msgid "Select to paste"
-msgstr "選擇以貼上"
+msgstr "選取以貼上"
 
 #: data/addon.desc:60
 msgid "Self"
@@ -2484,7 +2485,7 @@ msgstr "顯示輸入速度"
 
 #: data/profile.desc:29
 msgid "Show Preedit String in Client Window"
-msgstr "在用戶端視窗中顯示預編輯字串"
+msgstr "在客戶端視窗中顯示預編輯字串"
 
 #: data/config.desc:247
 msgid "Show Version"
@@ -2505,7 +2506,7 @@ msgstr "Fcitx 簡單的拼音支援"
 #: src/module/chttrans/chttrans.c:177
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
-msgstr "正簡轉換"
+msgstr "簡繁轉換"
 
 #: src/module/chttrans/chttrans.c:179
 msgid "Simplified Chinese is enabled."
@@ -2688,7 +2689,7 @@ msgstr "切換至簡體中文"
 #: src/module/chttrans/chttrans.c:152 src/module/chttrans/chttrans.c:198
 #: src/module/chttrans/chttrans.c:245
 msgid "Switch to Traditional Chinese"
-msgstr "切換至正體中文"
+msgstr "切換至繁體中文"
 
 #: src/module/imselector/fcitx-imselector.desc:54
 #: src/module/imselector/fcitx-imselector.desc:99
@@ -2838,7 +2839,7 @@ msgstr "切換聯想"
 #: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
 #: src/module/chttrans/chttrans.c:246
 msgid "Toggle Simp/Trad Chinese Conversion"
-msgstr "切換正簡轉換"
+msgstr "切換簡/繁轉換"
 
 #: src/module/vk/vk.c:154
 msgid "Toggle Virtual Keyboard"
@@ -2877,7 +2878,7 @@ msgstr "正簡轉換引擎"
 
 #: src/module/chttrans/chttrans.c:178
 msgid "Traditional Chinese is enabled."
-msgstr "已啟用正體中文。"
+msgstr "已啟用繁體中文。"
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
@@ -3222,9 +3223,9 @@ msgid ""
 "found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or "
 "fcitx-configtool. Now it will open config file with default text editor."
 msgstr ""
-"您正在 GUI 下執行 Fcitx，但找不到 fcitx-configtool，該套件名稱通常為 fcitx-"
+"您正在 GUI 下執行 Fcitx，但找不到 fcitx-configtool，該軟體包名稱通常為 fcitx-"
 "config-gtx、fcitx-config-gtk3 或 fcitx-configtool。現在將使用預設文字編輯器開"
-"啟設定檔。"
+"啟組態檔。"
 
 #: data/script/fcitx-configtool.sh:144
 msgid ""
@@ -3232,8 +3233,8 @@ msgid ""
 "package name of this KCModule is usually kcm-fcitx or kde-config-fcitx. Now "
 "it will open config file with default text editor."
 msgstr ""
-"您正在執行 KDE，但找不到 fcitx 的 KCModule，此 KCModule 的套件名稱通常為 kcm-"
-"fcitx 或 kde-config-fcitx。現在將使用預設文字編輯器開啟設定檔。"
+"您正在執行 KDE，但找不到 fcitx 的 KCModule，此 KCModule 的軟體包名稱通常為 "
+"kcm-fcitx 或 kde-config-fcitx。現在將使用預設文字編輯器開啟組態檔。"
 
 #: data/script/fcitx-diagnose.sh:1115
 msgid ""
@@ -3249,7 +3250,7 @@ msgid ""
 "Your LC_CTYPE is set to ${1} whose encoding is not UTF-8. You may have "
 "trouble committing strings using XIM."
 msgstr ""
-"您的 LC_CTYPE 設定為 ${1}，它的編碼不是 UTF-8。您可能會在使用 XIM 提交字串時"
+"您的 LC_CTYPE 設定為 ${1}，它的編碼不是 UTF-8。您可能會在使用 XIM 送交字串時"
 "遇到問題。"
 
 #: data/script/fcitx-diagnose.sh:1594
@@ -3311,7 +3312,7 @@ msgstr "版本："
 
 #: src/module/xkb/fcitx-xkb.desc:15
 msgid "xmodmap command"
-msgstr "xmodmap 指令"
+msgstr "xmodmap 命令"
 
 #: src/ui/cairostuff/font.c:119
 #, c-format
