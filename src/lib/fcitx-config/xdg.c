@@ -27,7 +27,7 @@
  */
 
 #define FCITX_CONFIG_XDG_DEPRECATED
-
+#define _FILE_OFFSET_BITS 64
 #include "config.h"
 
 #include <limits.h>

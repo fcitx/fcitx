@@ -17,7 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-
+#define _FILE_OFFSET_BITS 64
 #include "fcitx/fcitx.h"
 #include "config.h"
 

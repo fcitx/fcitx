@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "config.h"
 
+#define _FILE_OFFSET_BITS 64
 #include <libintl.h>
 #include <stdio.h>
 #include <limits.h>

@@ -60,6 +60,7 @@
 #ifndef _FCITX_UTILS_H_
 #define _FCITX_UTILS_H_
 
+#define _FILE_OFFSET_BITS 64
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
