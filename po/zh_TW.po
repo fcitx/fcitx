@@ -13,7 +13,7 @@
 # fhoshino <fh@pinchia.com>, 2014,2017
 # fhoshino <fh@pinchia.com>, 2014,2017
 # Gerald Du <frozenmouse@gmail.com>, 2015
-# Haowei Hsu, 2023
+# Haowei Hsu <hwhsu1231@gmail.com>, 2023
 # Hiunn-hué <hiunnhue108@ymail.com>, 2012-2013
 # Lau YeeYu, 2023
 # Pellaeon Lin <nfsmwlin@gmail.com>, 2013
@@ -28,9 +28,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2023-08-07 20:26+0000\n"
+"POT-Creation-Date: 2023-10-01 20:26+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
-"Last-Translator: Haowei Hsu, 2023\n"
+"Last-Translator: Lau YeeYu, 2023\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/fcitx/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -1511,8 +1511,8 @@ msgid ""
 "order to use any input method other than ${2}. See ${link} for more detail "
 "as well as alternative solutions."
 msgstr ""
-"如果您正在使用 ${1}，您可能需要反安裝 ${2} 或者移除 ${3} 以使用 ${2} 以外的任"
-"何輸入法。更多細節和其它的解決方法參見 ${link}。"
+"如果您正在使用 ${1}，您可能需要解除安裝 ${2} 或者移除 ${3} 以使用 ${2} 以外的"
+"任何輸入法。更多細節和其它的解決方法參見 ${link}。"
 
 #: data/script/fcitx-diagnose.sh:689
 msgid ""
@@ -1520,7 +1520,7 @@ msgid ""
 "the command ${g36_disable_ibus} to disable IBus integration in order to use "
 "any input method other than ${2}. See ${link} for more detail."
 msgstr ""
-"如果您正在使用 ${1}，您可能需要反安裝 ${2}、移除 ${3} 或使用 "
+"如果您正在使用 ${1}，您可能解除安裝 ${2}、移除 ${3} 或使用 "
 "${g36_disable_ibus} 命令停用 IBus 整合以使用 ${2} 以外的任何輸入法。更多細節"
 "參見 ${link}。"
 
