@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2023-06-06 20:30+0000\n"
+"POT-Creation-Date: 2023-11-02 20:26+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
 "Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022-2023\n"
 "Language-Team: Russian (http://app.transifex.com/fcitx/fcitx/language/ru/)\n"
@@ -378,12 +378,12 @@ msgstr "Снизуцентр"
 #: src/ui/classic/skin.desc:134 src/ui/classic/skin.desc:240
 #: src/ui/classic/skin.desc:370
 msgid "BottomLeft"
-msgstr "Снизуслева"
+msgstr "BottomLeft"
 
 #: src/ui/classic/skin.desc:136 src/ui/classic/skin.desc:242
 #: src/ui/classic/skin.desc:372
 msgid "BottomRight"
-msgstr "Снизусправа"
+msgstr "BottomRight"
 
 #: data/config.desc:22
 msgid "CTRL Both"
@@ -557,12 +557,12 @@ msgstr "Центр"
 #: src/ui/classic/skin.desc:131 src/ui/classic/skin.desc:237
 #: src/ui/classic/skin.desc:367
 msgid "CenterLeft"
-msgstr "Центрслева"
+msgstr "CenterLeft"
 
 #: src/ui/classic/skin.desc:133 src/ui/classic/skin.desc:239
 #: src/ui/classic/skin.desc:369
 msgid "CenterRight"
-msgstr "Центрсправа"
+msgstr "CenterRight"
 
 #: data/fcitx-configtool.desktop.in:4
 msgid "Change Fcitx Configuration"
@@ -1746,7 +1746,7 @@ msgstr "Используется латинская пунктуация."
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:314
 msgid "Left"
-msgstr "Влево"
+msgstr "Left"
 
 #: data/config.desc:27
 msgid "Left Super"
@@ -1757,8 +1757,8 @@ msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr ""
-"Нажмите влево/вправо для выбора символа, Enter — для подтверждения, Esc — "
-"для отмены"
+"Нажмите клавиши Left/Right для выбора символа, Enter — для подтверждения, "
+"Esc — для отмены"
 
 #: src/module/clipboard/fcitx-clipboard.desc:11
 msgid "Length of Clipboard History to Save"
@@ -2379,7 +2379,7 @@ msgstr "Перезапустить"
 
 #: src/lib/fcitx-qt/fcitxqtkeysequencewidget.cpp:316
 msgid "Right"
-msgstr "Вправо"
+msgstr "Right"
 
 #: data/config.desc:28
 msgid "Right Super"
@@ -2463,7 +2463,7 @@ msgstr "Выберите конкретный метод ввода с помо�
 
 #: src/module/clipboard/clipboard.c:372
 msgid "Select to paste"
-msgstr "Выберите для вставки"
+msgstr "Выбрать для вставки"
 
 #: data/addon.desc:60
 msgid "Self"
@@ -2901,12 +2901,12 @@ msgstr "СверхуЦентр"
 #: src/ui/classic/skin.desc:128 src/ui/classic/skin.desc:234
 #: src/ui/classic/skin.desc:364
 msgid "TopLeft"
-msgstr "СверхуСлева"
+msgstr "TopLeft"
 
 #: src/ui/classic/skin.desc:130 src/ui/classic/skin.desc:236
 #: src/ui/classic/skin.desc:366
 msgid "TopRight"
-msgstr "СверхуСправа"
+msgstr "TopRight"
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
