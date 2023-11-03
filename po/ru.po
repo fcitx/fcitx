@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2023-11-02 20:26+0000\n"
+"POT-Creation-Date: 2023-11-03 20:26+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
 "Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022-2023\n"
 "Language-Team: Russian (http://app.transifex.com/fcitx/fcitx/language/ru/)\n"
@@ -373,7 +373,7 @@ msgstr "Бинчань (Bingchan)"
 #: src/ui/classic/skin.desc:135 src/ui/classic/skin.desc:241
 #: src/ui/classic/skin.desc:371
 msgid "BottomCenter"
-msgstr "Снизуцентр"
+msgstr "BottomCenter"
 
 #: src/ui/classic/skin.desc:134 src/ui/classic/skin.desc:240
 #: src/ui/classic/skin.desc:370
@@ -552,7 +552,7 @@ msgstr "Категория"
 #: src/ui/classic/skin.desc:132 src/ui/classic/skin.desc:238
 #: src/ui/classic/skin.desc:368
 msgid "Center"
-msgstr "Центр"
+msgstr "Center"
 
 #: src/ui/classic/skin.desc:131 src/ui/classic/skin.desc:237
 #: src/ui/classic/skin.desc:367
@@ -898,7 +898,7 @@ msgstr "Отключить символ пиньинь"
 #: src/lib/fcitx/addon.c:298
 #, c-format
 msgid "Disable addon %s, dependency %s cannot be satisfied."
-msgstr "Отключить аддоны %s, зависимости %s не могут быть удовлетворены."
+msgstr "Отключить дополнения %s, зависимости %s не могут быть удовлетворены."
 
 #: src/module/notificationitem/notificationitem.c:460
 #: src/ui/kimpanel/kimpanel.c:282 src/ui/kimpanel/kimpanel.c:287
@@ -1832,22 +1832,22 @@ msgstr "MS"
 #: src/ui/classic/skin.desc:117 src/ui/classic/skin.desc:223
 #: src/ui/classic/skin.desc:353
 msgid "Margin Bottom for clickable region"
-msgstr "Предел снизу для активной области"
+msgstr "Поле снизу для активной области"
 
 #: src/ui/classic/skin.desc:102 src/ui/classic/skin.desc:208
 #: src/ui/classic/skin.desc:338
 msgid "Margin Left for clickable region"
-msgstr "Предел слева для активной области"
+msgstr "Поле слева для активной области"
 
 #: src/ui/classic/skin.desc:107 src/ui/classic/skin.desc:213
 #: src/ui/classic/skin.desc:343
 msgid "Margin Right for clickable region"
-msgstr "Предел справа для активной области"
+msgstr "Поле справа для активной области"
 
 #: src/ui/classic/skin.desc:112 src/ui/classic/skin.desc:218
 #: src/ui/classic/skin.desc:348
 msgid "Margin Top for clickable region"
-msgstr "Предел сверху для активной области"
+msgstr "Поле сверху для активной области"
 
 #: src/im/table/table.desc:79
 msgid "Matching Key"
@@ -2355,22 +2355,22 @@ msgstr "Изменить размер"
 #: src/ui/classic/skin.desc:97 src/ui/classic/skin.desc:203
 #: src/ui/classic/skin.desc:325
 msgid "Resize Margin Bottom"
-msgstr "Изменить размер предела снизу"
+msgstr "Изменить размер поля снизу"
 
 #: src/ui/classic/skin.desc:85 src/ui/classic/skin.desc:191
 #: src/ui/classic/skin.desc:329
 msgid "Resize Margin Left"
-msgstr "Изменить размер предела слева"
+msgstr "Изменить размер поля слева"
 
 #: src/ui/classic/skin.desc:89 src/ui/classic/skin.desc:195
 #: src/ui/classic/skin.desc:333
 msgid "Resize Margin Right"
-msgstr "Изменить размер предела справа"
+msgstr "Изменить размер поля справа"
 
 #: src/ui/classic/skin.desc:93 src/ui/classic/skin.desc:199
 #: src/ui/classic/skin.desc:321
 msgid "Resize Margin Top"
-msgstr "Изменить размер предела сверху"
+msgstr "Изменить размер поля сверху"
 
 #: src/module/notificationitem/dbusmenu.c:382 src/ui/classic/classicui.c:502
 #: src/ui/kimpanel/kimpanel.c:785
@@ -2896,7 +2896,7 @@ msgstr "Слишком длинный объект для AutoEng"
 #: src/ui/classic/skin.desc:129 src/ui/classic/skin.desc:235
 #: src/ui/classic/skin.desc:365
 msgid "TopCenter"
-msgstr "СверхуЦентр"
+msgstr "TopCenter"
 
 #: src/ui/classic/skin.desc:128 src/ui/classic/skin.desc:234
 #: src/ui/classic/skin.desc:364
