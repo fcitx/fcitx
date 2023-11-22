@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2023-11-03 20:26+0000\n"
+"POT-Creation-Date: 2023-11-22 20:26+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
 "Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022-2023\n"
 "Language-Team: Russian (http://app.transifex.com/fcitx/fcitx/language/ru/)\n"
@@ -630,11 +630,11 @@ msgstr "Очистить последовательность"
 
 #: src/module/imselector/fcitx-imselector.desc:14
 msgid "Clear local Input Method"
-msgstr "Очистить локальный метод ввода"
+msgstr "Очистить локальный Метод Ввода"
 
 #: src/module/imselector/imselector.c:326
 msgid "Clear local input method"
-msgstr "Удалить локальный метод ввода"
+msgstr "Очистить локальный метод ввода"
 
 #: src/module/clipboard/fcitx-clipboard.conf.in:3
 #: src/module/clipboard/fcitx-clipboard.desc:1
