@@ -20,6 +20,8 @@
 #ifndef _PY_H
 #define _PY_H
 
+#include <sys/types.h>
+
 #include "fcitx/ime.h"
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/memory.h"
