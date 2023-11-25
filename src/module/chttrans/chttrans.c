@@ -54,6 +54,7 @@ static char *ConvertGBKTradition2Simple(FcitxChttrans* transState,
                                         const char *strHZ);
 static boolean GetChttransEnabled(void* arg);
 static void ChttransLanguageChanged(void* arg, const void* value);
+static void DisableChttransStateChanged(void* arg, const void* value);
 boolean LoadChttransConfig(FcitxChttrans* transState);
 static FcitxConfigFileDesc* GetChttransConfigDesc();
 static void SaveChttransConfig(FcitxChttrans* transState);
@@ -156,7 +157,8 @@ void *ChttransCreate(FcitxInstance* instance)
 
     FcitxInstanceWatchContext(instance, CONTEXT_IM_LANGUAGE,
                               ChttransLanguageChanged, transState);
-
+    FcitxInstanceRegisterWatchableContext(instance, CONTEXT_DISABLE_CHTTRANS, FCT_Boolean, FCF_ResetOnInputMethodChange);
+    FcitxInstanceWatchContext(instance, CONTEXT_DISABLE_CHTTRANS, DisableChttransStateChanged, transState);
     FcitxChttransAddFunctions(instance);
     return transState;
 }
@@ -166,8 +168,9 @@ INPUT_RETURN_VALUE HotkeyToggleChttransState(void* arg)
     FcitxChttrans *transState = (FcitxChttrans*)arg;
     FcitxInstance *instance = transState->owner;
 
+    boolean disableChtteans = FcitxInstanceGetContextBoolean(instance, CONTEXT_DISABLE_CHTTRANS);
     FcitxUIStatus *status = FcitxUIGetStatusByName(instance, "chttrans");
-    if (status->visible){
+    if (status->visible&&!disableChtteans){
         FcitxUIUpdateStatus(instance, "chttrans");
         boolean enabled = ChttransEnabled(transState);
         FcitxFreeDesktopNotifyShowAddonTip(
@@ -190,6 +193,10 @@ void ToggleChttransState(void* arg)
     FcitxIM* im = FcitxInstanceGetIM(transState->owner, FcitxInstanceGetLastIC(transState->owner));
     if (!im)
         return;
+
+    boolean disableChtteans = FcitxInstanceGetContextBoolean(instance, CONTEXT_DISABLE_CHTTRANS);
+    if (disableChtteans)
+        return ;
     boolean enabled = !ChttransEnabled(transState);
 
     fcitx_string_map_set(transState->enableIM, im->uniqueName, enabled);
@@ -211,6 +218,11 @@ char* ChttransOutputFilter(void* arg, const char *strin)
 {
     FcitxChttrans* transState = (FcitxChttrans*) arg;
     FcitxIM* im = FcitxInstanceGetCurrentIM(transState->owner);
+
+    /* don't trans for CONTEXT_DISABLE_CHTTRANS" */
+    boolean disableChtteans = FcitxInstanceGetContextBoolean(transState->owner, CONTEXT_DISABLE_CHTTRANS);
+    if (disableChtteans)
+        return NULL;
 
     /* don't trans for "zh" */
     if (!im || strncmp(im->langCode, "zh", 2) != 0 || strlen(im->langCode) == 2)
@@ -506,6 +518,13 @@ void ChttransLanguageChanged(void* arg, const void* value)
         visible = true;
 
     FcitxUISetStatusVisable(transState->owner, "chttrans", visible);
+}
+
+void DisableChttransStateChanged(void* arg, const void* value)
+{
+    FcitxChttrans* transState = (FcitxChttrans*) arg;
+    const boolean* b = value;
+    FcitxUISetStatusVisable(transState->owner, "chttrans", !(*b));
 }
 
 #include "fcitx-chttrans-addfunctions.h"
