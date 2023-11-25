@@ -58,7 +58,8 @@ const char* dummyTranslate[] = {
     N_("Special"),
     N_("Hiragana"),
     N_("Katakana"),
-    N_("Table Symbol")
+    N_("Table Symbol"),
+    N_("Taiwan MoE Symbols")
 };
 
 struct _FcitxVKState;
