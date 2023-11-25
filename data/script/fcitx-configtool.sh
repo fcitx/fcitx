@@ -7,14 +7,14 @@ export TEXTDOMAIN=fcitx
 
 if which kdialog > /dev/null 2>&1; then
     message() {
-        kdialog --msgbox "$1"
+        kdialog --yesno "$1"
     }
     error() {
         kdialog --error "$1"
     }
 elif which zenity > /dev/null 2>&1; then
     message() {
-        zenity --info --text="$1"
+        zenity --question --text="$1"
     }
     error() {
         zenity --error --text="$1"
@@ -147,6 +147,11 @@ run_xdg() {
             message "$(_ "You're currently running Fcitx with GUI, but fcitx-configtool couldn't be found, the package name is usually fcitx-config-gtk, fcitx-config-gtk3 or fcitx-configtool. Now it will open config file with default text editor.")"
             ;;
     esac
+
+    # user choose no
+    if [ $? -ne 0 ]; then
+        exit
+    fi
 
     if command="$(which xdg-open 2>/dev/null)"; then
         detect_im_addon $1
