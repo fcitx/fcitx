@@ -39,3 +39,9 @@ foreach(tblname ${TABLE_NAME})
 endforeach()
 
 install(FILES ${TABLE_DATA} DESTINATION ${pkgdatadir}/table )
+
+set(ASSOC_DATA
+  assoc-cht.mb
+  assoc-chs.mb
+  )
+install(FILES ${ASSOC_DATA} DESTINATION ${pkgdatadir}/table )

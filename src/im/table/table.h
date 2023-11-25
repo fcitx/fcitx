@@ -27,6 +27,8 @@
 #include "fcitx/candidate.h"
 #include "fcitx/instance.h"
 
+struct AssocDictList;
+
 typedef union {
     AUTOPHRASE     *autoPhrase;
     RECORD         *record;
@@ -78,9 +80,12 @@ typedef struct _FcitxTableState {
     ADJUSTORDER     PYBaseOrder;
     boolean         isSavingTableDic;
 
+    const struct AssocDictList* assocDictList; /* 内置联想词库 */
+
     FcitxInstance *owner;
     FcitxAddon *pyaddon;
     FcitxCandidateWordCommitCallback pygetcandword;
+
 } FcitxTableState;
 
 boolean         LoadTableInfo(FcitxTableState* tbl);
