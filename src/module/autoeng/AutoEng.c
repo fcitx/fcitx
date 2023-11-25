@@ -593,6 +593,8 @@ boolean SwitchToEng(FcitxAutoEngState *autoEngState, const char *str)
          autoeng = (AUTO_ENG*)utarray_next(autoEngState->autoEng, autoeng))
         if (!strcmp(str, autoeng->str))
             return true;
+    if(strlen(str) > 1 && str[strlen(str) - 1] == '.')
+        return true;
 
     return false;
 }
