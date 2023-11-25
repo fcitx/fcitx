@@ -104,6 +104,8 @@ void Usage()
            "\t-d\t\t\trun as daemon(default)\n"
            "\t-D\t\t\tdon't run as daemon\n"
            "\t-s[sleep time]\t\toverride delay start time in config file, 0 for immediate start\n"
+		   "\t-X[position]\t\toverride X position\n"
+		   "\t-Y[position]\t\toverride Y position\n"
            "\t-v, --version\t\tdisplay the version information and exit\n"
            "\t-u, --ui\t\tspecify the user interface to use\n"
            "\t--enable\t\tspecify a comma separated list for addon that will override the enable option\n"
@@ -580,7 +582,11 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
     char* uiname = NULL;
     boolean runasdaemon = true;
     int             overrideDelay = -1;
-    while ((c = getopt_long(argc, argv, "ru:dDs:hv", longOptions, &optionIndex)) != EOF) {
+	
+	instance->overrideXPosition = -1;
+	instance->overrideYPosition = -1;
+	
+    while ((c = getopt_long(argc, argv, "ru:dDs:X:Y:hv", longOptions, &optionIndex)) != EOF) {
         switch (c) {
         case 0: {
             switch (optionIndex) {
@@ -631,6 +637,12 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
         case 's':
             overrideDelay = atoi(optarg);
             break;
+        case 'X':
+            instance->overrideXPosition = atoi(optarg);
+            break;			
+        case 'Y':
+            instance->overrideYPosition = atoi(optarg);
+            break;						
         case 'h':
             instance->quietQuit = true;
             Usage();
