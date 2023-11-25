@@ -113,7 +113,8 @@ extern "C" {
         boolean dummy; /**< dummy */
         int _defaultIMState; /**< default input method state */
         boolean bDontCommitPreeditWhenUnfocus; /**< commit preedit when unfocus or not */
-        int iIMSwitchKey; /**< the type of input method switch key */
+        FcitxHotkey hkIMSwitchKeyNext[2]; /**< input method scroll next key*/
+        FcitxHotkey hkIMSwitchKeyPrev[2]; /**< input method scroll previous key*/
 
         union {
             FcitxHotkey hkActivate[2];

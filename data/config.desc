@@ -68,15 +68,17 @@ DefaultValue=False
 Description=Include Inactivate when scrolling between Input Method
 Advance=True
 
-[Hotkey/IMSwitchHotkey]
-Type=Enum
-EnumCount=4
-Enum0=CTRL_SHIFT
-Enum1=ALT_SHIFT
-Enum2=CTRL_SUPER
-Enum3=ALT_SUPER
+[Hotkey/IMSwitchHotkeyNext]
+Type=Hotkey
 DefaultValue=CTRL_SHIFT
-Description=Scroll between Input Method
+AllowModifierOnly=True
+Description=Scroll between Input Method (Next)
+
+[Hotkey/IMSwitchHotkeyPrev]
+Type=Hotkey
+DefaultValue=RCTRL_RSHIFT
+AllowModifierOnly=True
+Description=Scroll between Input Method (Prev)
 
 [Hotkey/ReloadConfig]
 Type=Hotkey
