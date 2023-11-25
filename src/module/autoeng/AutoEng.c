@@ -43,6 +43,30 @@ case '/'
 #define case_autoeng_exchange case ',': case '.': case ':': case ';':   \
 case '?': case '!'
 
+#ifdef __APPLE__
+// Workaround for `implicit declaration of function 'memrchr'`
+// https://lists.zx2c4.com/pipermail/cgit/2020-August/004510.html
+#include <sys/types.h>
+/*
+ * Reverse memchr()
+ * Find the last occurrence of 'c' in the buffer 's' of size 'n'.
+ */
+void *
+memrchr(const void *s, int c, size_t n)
+{
+    const unsigned char *cp;
+    if (n != 0) {
+	cp = (unsigned char *)s + n;
+	do {
+	    if (*(--cp) == (unsigned char)c)
+		return (void *)cp;
+	} while (--n != 0);
+    }
+    return (void *)0;
+}
+#endif
+
+
 typedef enum {
     AECM_NONE,
     AECM_ALT,
