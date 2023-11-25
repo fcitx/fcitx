@@ -118,7 +118,7 @@ int main (int argc, char* argv[])
         select(maxfd + 1, &rfds, &wfds, &efds, NULL);
     } while(1);
 
-    if (status == FCITX_DIE) {
+    if (status == FCITX_DIE || status == DBUS_DIE) {
         kill(pid, SIGTERM);
     }
 
