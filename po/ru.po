@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Dmitry <dmitrydmitry761@gmail.com>, 2022-2023
+# Dmitry <dmitrydmitry761@gmail.com>, 2022-2024
 # TotalCaesar659 <x24cm5b8c54q6szxw@yandex.ru>, 2016-2017
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2023-11-22 20:26+0000\n"
+"POT-Creation-Date: 2024-04-18 20:27+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
-"Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022-2023\n"
+"Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022-2024\n"
 "Language-Team: Russian (http://app.transifex.com/fcitx/fcitx/language/ru/)\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -755,7 +755,7 @@ msgstr "Удобный ввод английской или пользовате
 
 #: src/module/chttrans/fcitx-chttrans.conf.in:4
 msgid "Convert Simplified Chinese To Traditional Chinese"
-msgstr "Преобразовать упрощенный китайский в традиционный"
+msgstr "Преобразовать Упрощенный Китайский в Традиционный"
 
 #: src/ui/classic/skin.desc:153 src/ui/classic/skin.desc:161
 #: src/ui/classic/skin.desc:295 src/ui/classic/skin.desc:303
@@ -893,7 +893,7 @@ msgstr "Отключить пейджинг в режиме напоминани
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
 msgid "Disable Pinyin Symbol"
-msgstr "Отключить символ пиньинь"
+msgstr "Отключить Символ Пиньинь"
 
 #: src/lib/fcitx/addon.c:298
 #, c-format
@@ -988,7 +988,7 @@ msgstr "Улучшение ввода Пиньинь в Fcitx"
 
 #: src/im/table/table.desc:69
 msgid "End Key"
-msgstr "Клавиша End"
+msgstr "Клавиша отмены"
 
 #: src/module/xkbdbus/xkbdbus.c:258
 msgid "English (US)"
@@ -2308,7 +2308,7 @@ msgstr "Цюйвэй (Quwei)"
 
 #: src/im/qw/fcitx-qw.conf.in:4
 msgid "Quwei Input Method for Fcitx"
-msgstr "Метод ввода цюйвэй (Quwei) для Fcitx"
+msgstr "Метод ввода Цюйвэй (Quwei) для Fcitx"
 
 #: data/config.desc:25
 msgid "R_ALT"
@@ -2524,7 +2524,7 @@ msgstr "Показывать версию"
 
 #: src/im/pinyin/fcitx-pinyin.conf.in:9
 msgid "Shuang Pin Schema"
-msgstr "Схема шуанпинь"
+msgstr "Схема Шуанпинь"
 
 #: src/im/pinyin/py.c:121 src/im/pinyin/shuangpin.conf.in:3
 msgid "Shuangpin"
@@ -2537,11 +2537,11 @@ msgstr "Поддержка простого Пиньинь в Fcitx"
 #: src/module/chttrans/chttrans.c:177
 #: src/module/chttrans/fcitx-chttrans.conf.in:3
 msgid "Simplified Chinese To Traditional Chinese"
-msgstr "Преобразовать упрощенный китайский в традиционный"
+msgstr "Преобразовать Упрощенный Китайский в Традиционный"
 
 #: src/module/chttrans/chttrans.c:179
 msgid "Simplified Chinese is enabled."
-msgstr "Упрощенный китайский включен."
+msgstr "Упрощенный Китайский включен."
 
 #: src/ui/classic/skin.c:708 src/ui/classic/fcitx-classic-ui.conf.in:10
 msgid "Skin"
@@ -2875,7 +2875,7 @@ msgstr "Вкл./выкл. напоминания"
 #: src/module/chttrans/chttrans.c:153 src/module/chttrans/chttrans.c:199
 #: src/module/chttrans/chttrans.c:246
 msgid "Toggle Simp/Trad Chinese Conversion"
-msgstr "Переключить преобразование упрощенного китайского в традиционный"
+msgstr "Переключить преобразование Упрощенного Китайского в Традиционный"
 
 #: src/module/vk/vk.c:154
 msgid "Toggle Virtual Keyboard"
@@ -2910,17 +2910,17 @@ msgstr "TopRight"
 
 #: src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
-msgstr "Движок перевода на традиционный китайский"
+msgstr "Движок перевода на Традиционный Китайский"
 
 #: src/module/chttrans/chttrans.c:178
 msgid "Traditional Chinese is enabled."
-msgstr "Традиционный китайский включен."
+msgstr "Традиционный Китайский включен."
 
 #: src/module/chttrans/fcitx-chttrans.desc:1
 #: src/module/chttrans/fcitx-chttrans.desc:9
 #: src/module/chttrans/fcitx-chttrans.desc:14
 msgid "TraditionalChinese"
-msgstr "Традиционный китайский"
+msgstr "Традиционный Китайский"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
 msgid "Treating abbreviated Pinyin as English"
