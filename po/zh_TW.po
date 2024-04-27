@@ -24,13 +24,14 @@
 # csslayer <wengxt@gmail.com>, 2013
 # Yichao Yu <yyc1992@gmail.com>, 2015
 # Yichao Yu <yyc1992@gmail.com>, 2015
+# 黃柏諺 <s8321414@gmail.com>, 2024
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2023-10-01 20:26+0000\n"
+"POT-Creation-Date: 2024-04-27 20:27+0000\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
-"Last-Translator: Lau YeeYu, 2023\n"
+"Last-Translator: 黃柏諺 <s8321414@gmail.com>, 2024\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/fcitx/fcitx/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -1894,7 +1895,7 @@ msgstr "移動舊檔案路徑到新檔案路徑"
 
 #: src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:46
 msgid "Minimum input length to trigger stroke input (set to -1 to disable)"
-msgstr "最小觸發筆劃輸入的輸入長度（設為-1禁用筆劃輸入）"
+msgstr "最小觸發筆劃輸入的輸入長度（設為 -1 以停用筆劃輸入）"
 
 #: src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
