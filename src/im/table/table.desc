@@ -224,5 +224,10 @@ Description=Ignore some Punctuation, if it is empty, then ignore all punctuation
 Type=String
 DefaultValue=
 
+[CodeTable/UseAssocDict]
+Description=Use Built-in Associative Phrases
+Type=Boolean
+DefaultValue=False
+
 [DescriptionFile]
 LocaleDomain=fcitx

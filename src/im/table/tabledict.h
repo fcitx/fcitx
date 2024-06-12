@@ -20,6 +20,7 @@
 #define RECORDTYPE_PROMPT 0x3
 
 struct _FcitxTableState;
+struct AssocDict;
 
 typedef enum {
     TABLE_NEW = 0, // thus fcitx_utils_new will set this to default value
@@ -134,6 +135,7 @@ typedef struct {
     boolean         bAutoPhrasePhrase;   //词组是否参与造词
     int32_t         iAutoPhraseLength;    //自动造词长度
     int             iSaveAutoPhraseAfter;   //选择N次后保存自动词组，0-不保存，1-立即保存
+    boolean         bUseAssocDict;       //是否使用内置联想词库
     boolean         bPromptTableCode;    //输入完毕后是否提示编码
     boolean         bNoMatchDontCommit;
     char           *strSymbol;
@@ -162,6 +164,7 @@ typedef struct {
     boolean bUseAutoSend;
     char* confName;
     TableStatus status;
+    const struct AssocDict* assocDict;
 
     UT_hash_handle hh;
 } TableMetaData;
