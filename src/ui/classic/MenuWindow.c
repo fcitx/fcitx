@@ -67,7 +67,7 @@ void XlibMenuInit(XlibMenu* menu)
                         "Fcitx Menu Window",
                         FCITX_WINDOW_MENU,
                         &menu->parent.owner->skin.skinMenu.background,
-                        KeyPressMask | ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask,
+                        KeyPressMask | ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask |FocusChangeMask,
                         XlibMenuMoveWindow,
                         XlibMenuCalculateContentSize,
                         XlibMenuPaint
@@ -124,6 +124,15 @@ boolean MenuWindowEventHandler(void *arg, XEvent* event)
             int x = event->xcrossing.x_root;
             int y = event->xcrossing.y_root;
 
+            if (!IsMouseInOtherMenu(menu, x, y)&&window->wId!=window->owner->mainMenuWindow->parent.wId) {
+                CloseAllSubMenuWindow(menu);
+            }
+        }
+        break;
+        case FocusOut: {
+            int x = event->xcrossing.x_root;
+            int y = event->xcrossing.y_root;
+
             if (!IsMouseInOtherMenu(menu, x, y)) {
                 CloseAllSubMenuWindow(menu);
             }
@@ -158,9 +167,15 @@ boolean MenuWindowEventHandler(void *arg, XEvent* event)
                 }
             }
             break;
-            case Button3:
-                CloseAllMenuWindow(classicui);
-                break;
+            case Button3:{
+                int offseth;
+                int i = SelectShellIndex(menu, event->xmotion.x, event->xmotion.y, &offseth);
+                if (menu->menushell->MenuAction) {
+                    if (menu->menushell->MenuAction(menu->menushell, i))
+                        CloseAllMenuWindow(classicui);
+                }
+            }
+            break;
             }
         }
         break;
