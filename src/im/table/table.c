@@ -202,6 +202,37 @@ static inline char* TableConfigStealTableName(FcitxConfigFile* cfile)
     return NULL;
 }
 
+static char *TableCustomisePromptString(TableMetaData *table, const char *pstr)
+{
+    if (!table->customPrompt)
+        return strdup(pstr);
+
+    size_t codelen = strlen(pstr);
+    int i = 0;
+    int totallen = 0;
+    for (i = 0; i < codelen; i ++) {
+        RECORD* rec = table->tableDict->promptCode[(uint8_t) pstr[i]];
+        if (rec) {
+            totallen += strlen(rec->strHZ);
+        } else
+            totallen += 1;
+    }
+
+    char *result = fcitx_utils_malloc0(sizeof(char) * (totallen + 1 + 3));
+    if (codelen)
+        strcpy(result, "\xef\xbd\x9e");
+    for (i = 0; i < codelen; i ++) {
+        RECORD* rec = table->tableDict->promptCode[(uint8_t) pstr[i]];
+        if (rec) {
+            strcat(result, rec->strHZ);
+        } else {
+            char temp[2] = {pstr[i], '\0'};
+            strcat(result, temp);
+        }
+    }
+    return result;
+}
+
 /*
  * Read table configuration
  * and returns whether table im is really changed.
@@ -933,7 +964,7 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords(TableMetaData* table)
             pstr = (char *) NULL;
 
         if (pstr) {
-            candWord->strExtra = strdup(pstr);
+            candWord->strExtra = TableCustomisePromptString(table, pstr);
             candWord->extraType = MSG_CODE;
         }
         tbl->pygetcandword = candWord->callback;
@@ -1033,34 +1064,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
             pstr = ((tableCandWord->flag == CT_NORMAL) ? tableCandWord->candWord.record->strCode : tableCandWord->candWord.autoPhrase->strCode) + FcitxInputStateGetRawInputBufferSize(input);
 
         if (pstr) {
-            if (table->customPrompt) {
-                size_t codelen = strlen(pstr);
-                int i = 0;
-                int totallen = 0;
-                for (i = 0; i < codelen; i ++) {
-                    RECORD* rec = table->tableDict->promptCode[(uint8_t) pstr[i]];
-                    if (rec) {
-                        totallen += strlen(rec->strHZ);
-                    } else
-                        totallen += 1;
-                }
-
-                candWord.strExtra = fcitx_utils_malloc0(sizeof(char) * (totallen + 1 + 3));
-                if (codelen)
-                    strcpy(candWord.strExtra, "\xef\xbd\x9e");
-                for (i = 0; i < codelen; i ++) {
-                    RECORD* rec = table->tableDict->promptCode[(uint8_t) pstr[i]];
-                    if (rec) {
-                        strcat(candWord.strExtra, rec->strHZ);
-                    } else {
-                        char temp[2] = {pstr[i], '\0'};
-                        strcat(candWord.strExtra, temp);
-                    }
-                }
-            }
-            else {
-                candWord.strExtra = strdup(pstr);
-            }
+            candWord.strExtra = TableCustomisePromptString(table, pstr);
             candWord.extraType = MSG_CODE;
         }
 
